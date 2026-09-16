@@ -37,3 +37,6 @@ Thumbs.db
 
 # Never commit local project preview/scratch
 _preview/
+
+# Local chat-delivery copies (not part of the game project)
+Claude outputs/
