@@ -1,14 +1,23 @@
-# OS files
+node_modules/
+dist/
+MergeRocket.html
+
+# native build output
+android/app/build/
+android/build/
+android/.gradle/
+android/local.properties
+android/.idea/
+android/app/release/
+android/app/debug/
+ios/App/build/
+ios/App/Pods/
+ios/App/output/
+
 .DS_Store
 Thumbs.db
-
-# Editors
-.vs/
+.vscode/
 .idea/
 
-# Local chat-delivery copies (not part of the game project)
+# local chat-delivery copies, not part of the project
 Claude outputs/
-
-# Local scratch/preview
-_preview/
-node_modules/

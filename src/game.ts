@@ -1,10 +1,12 @@
-/* MERGE ROCKET — casual merge game. Earth -> build a rocket -> new worlds. */
-(function () {
-  'use strict';
-  const $ = s => document.querySelector(s);
-  const el = (t, c) => { const e = document.createElement(t); if (c) e.className = c; return e; };
-  const rnd = a => a[Math.floor(Math.random() * a.length)];
-  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+/* MERGE ROCKET - core game loop. Earth -> rebuild a rocket -> new worlds. */
+import { ART } from './art';
+import { haptic } from './native';
+
+export function startGame() {
+  const $ = (s: string): any => document.querySelector(s);
+  const el = (t: string, c?: string) => { const e = document.createElement(t); if (c) e.className = c; return e; };
+  const rnd = (a: any[]) => a[Math.floor(Math.random() * a.length)];
+  const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   const COLS = 6, ROWS = 8, N = COLS * ROWS;
 
   /* ============================================================= CONTENT */
@@ -90,15 +92,16 @@
     { id: 'travel', need: 1, txt: 'Fly to a new world', hint: 'Tank is full! Open 🚀 and LAUNCH!', coins: 500 },
   ];
 
-  const xpNeed = l => 6 + (l - 1) * 5;
+  const xpNeed = (l: number) => 6 + (l - 1) * 5;
   const maxEnergy = () => 50 + (S.lvl - 1) * 5;
-  const nextOf = id => { const d = ITEMS[id]; if (!d) return null; const a = CHAINS[d.c].ids, i = a.indexOf(id); return i >= 0 && i < a.length - 1 ? a[i + 1] : null; };
+  const nextOf = (id: string): string | null => { const d = ITEMS[id]; if (!d) return null; const a = CHAINS[d.c].ids, i = a.indexOf(id); return i >= 0 && i < a.length - 1 ? a[i + 1] : null; };
 
   /* =============================================================== STATE */
   const SAVE = 'mergeRocket_v2';
-  let S, cells = [], view = 'board', drag = null, sel = null, hintPair = null, lastAct = Date.now(), meteorTimer = 0;
+  let S: any, cells: any[] = [], view = 'board', drag: any = null, sel: number | null = null,
+    hintPair: number[] | null = null, lastAct = Date.now(), meteorTimer = 0;
 
-  function freshBoard(world) {
+  function freshBoard(world: string) {
     const w = WORLDS[world], b = new Array(N).fill(null);
     const lvl = (typeof S !== 'undefined' && S && S.lvl) ? S.lvl : 1;
     for (const k in w.locks) if (w.locks[k] > lvl) b[k] = { b: w.locks[k] };
@@ -108,7 +111,7 @@
     [13, 16, 25, 28].forEach((i, k) => { if (!b[i]) b[i] = { id: k % 2 ? c1 : c0 }; });
     return b;
   }
-  function mkProd(k) { const p = PRODS[k], o = { p: k }; if (p.mode === 'timer') { o.ch = 1; o.at = Date.now(); } return o; }
+  function mkProd(k: string) { const p = PRODS[k], o: any = { p: k }; if (p.mode === 'timer') { o.ch = 1; o.at = Date.now(); } return o; }
   function fresh() {
     return {
       v: 2, world: 'earth', lvl: 1, xp: 0, coins: 120, energy: 45, eAt: Date.now(),
@@ -126,11 +129,11 @@
   const W = () => WORLDS[S.world];
 
   /* ================================================================ AUDIO */
-  let actx = null;
-  function beep(freqs, type, dur, vol) {
+  let actx: any = null;
+  function beep(freqs: number[], type?: OscillatorType, dur?: number, vol?: number) {
     if (!S.sound) return;
     try {
-      actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+      actx = actx || new ((window as any).AudioContext || (window as any).webkitAudioContext)();
       freqs.forEach((f, i) => {
         const o = actx.createOscillator(), g = actx.createGain(), t0 = actx.currentTime + i * 0.07;
         o.type = type || 'sine'; o.frequency.setValueAtTime(f, t0);
@@ -150,18 +153,18 @@
   };
 
   /* ==================================================================== FX */
-  let toastT = 0;
-  function toast(msg) {
+  let toastT: any = 0;
+  function toast(msg: string) {
     const t = $('#toast'); t.innerHTML = msg; t.classList.add('show');
     clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2100);
   }
-  function cellRect(i) { const r = cells[i].el.getBoundingClientRect(), s = $('#stage').getBoundingClientRect(); return { x: r.left - s.left + r.width / 2, y: r.top - s.top + r.height / 2 }; }
-  function floatText(i, txt, color) {
+  function cellRect(i: number) { const r = cells[i].el.getBoundingClientRect(), s = $('#stage').getBoundingClientRect(); return { x: r.left - s.left + r.width / 2, y: r.top - s.top + r.height / 2 }; }
+  function floatText(i: number, txt: string, color?: string) {
     const p = cellRect(i), d = el('div', 'ft'); d.textContent = txt; d.style.left = p.x + 'px'; d.style.top = p.y - 6 + 'px';
     if (color) d.style.color = color;
     $('#fx').appendChild(d); setTimeout(() => d.remove(), 1000);
   }
-  function sparkle(i, n, color) {
+  function sparkle(i: number, n?: number, color?: string) {
     const p = cellRect(i);
     for (let k = 0; k < (n || 10); k++) {
       const s = el('div', 'sp'), a = Math.random() * Math.PI * 2, dist = 26 + Math.random() * 34, sz = 5 + Math.random() * 8;
@@ -185,9 +188,9 @@
   /* ================================================================ RENDER */
   function buildBoard() {
     const b = $('#board'); b.innerHTML = ''; cells = [];
-    for (let i = 0; i < N; i++) { const d = el('div', 'cell'); d.dataset.i = i; b.appendChild(d); cells.push({ el: d, sig: null }); }
+    for (let i = 0; i < N; i++) { const d = el('div', 'cell'); d.dataset.i = String(i); b.appendChild(d); cells.push({ el: d, sig: null }); }
   }
-  function paintCell(i, anim) {
+  function paintCell(i: number, anim?: string) {
     const c = B()[i], o = cells[i], e = o.el;
     const sig = !c ? 'e' : c.b ? 'b' + c.b : c.p ? 'p' + c.p : 'i' + c.id;
     if (o.sig !== sig && !(drag && drag.moved && drag.i === i)) {
@@ -242,9 +245,9 @@
   function readyParts() { return !allParts() && Object.keys(S.parts).some(k => !S.parts[k]); }
   const allParts = () => S.parts.hull && S.parts.engine && S.parts.nav && S.parts.tank;
 
-  function countItem(id) { let n = 0; const b = B(); for (let i = 0; i < N; i++) if (b[i] && b[i].id === id) n++; return n; }
+  function countItem(id: string) { let n = 0; const b = B(); for (let i = 0; i < N; i++) if (b[i] && b[i].id === id) n++; return n; }
 
-  function renderOrders(newIds) {
+  function renderOrders(newIds?: string[]) {
     const host = $('#orders'); host.innerHTML = '';
     S.orders.forEach(o => {
       const ready = o.needs.every(nd => countItem(nd.id) >= nd.qty);
@@ -258,12 +261,12 @@
         }).join('')}</div>
          <div class="oFoot"><div class="oRew">${ART.icon('coin')}${o.coins}</div><div class="oRew">${ART.icon('star')}${o.xp}</div>
          <button class="btnDeliver${ready ? ' on' : ''}">${ready ? 'GIVE!' : 'FIND IT'}</button></div>`;
-      card.querySelector('.btnDeliver').onclick = ev => { ev.stopPropagation(); ready ? deliver(o.id) : findFor(o); };
+      (card.querySelector('.btnDeliver') as HTMLElement).onclick = (ev: Event) => { ev.stopPropagation(); ready ? deliver(o.id) : findFor(o); };
       card.onclick = () => findFor(o);
       host.appendChild(card);
     });
   }
-  function findFor(o) {
+  function findFor(o: any) {
     const need = o.needs.find(nd => countItem(nd.id) < nd.qty) || o.needs[0];
     const b = B(); let at = -1;
     for (let i = 0; i < N; i++) if (b[i] && b[i].id === need.id) { at = i; break; }
@@ -273,7 +276,7 @@
       toast('Need <b>' + ITEMS[need.id].n + '</b> — ' + src);
     }
   }
-  function sourceHint(id) {
+  function sourceHint(id: string) {
     const d = ITEMS[id], ids = CHAINS[d.c].ids, base = ids[0];
     for (const k in PRODS) if (PRODS[k].drops.indexOf(base) >= 0) {
       const on = B().some(c => c && c.p === k);
@@ -313,7 +316,7 @@
       S.orders.push(o);
     }
   }
-  function deliver(id) {
+  function deliver(id: string) {
     const o = S.orders.find(x => x.id === id); if (!o) return;
     const b = B();
     o.needs.forEach(nd => { let left = nd.qty; for (let i = 0; i < N && left; i++) if (b[i] && b[i].id === nd.id) { b[i] = null; left--; sparkle(i, 8, '#ffe9a8'); } });
@@ -327,10 +330,10 @@
     addXp(o.xp);
     paintBoard(); renderOrders([nw.id]); renderHUD(); save();
   }
-  function bumpChip(sel2) { const c = $(sel2); c.classList.remove('pop'); void c.offsetWidth; c.classList.add('pop'); }
+  function bumpChip(sel2: string) { const c = $(sel2); c.classList.remove('pop'); void c.offsetWidth; c.classList.add('pop'); }
 
   /* ============================================================ PROGRESSION */
-  function addXp(n) {
+  function addXp(n: number) {
     S.xp += n; let up = false;
     while (S.xp >= xpNeed(S.lvl)) { S.xp -= xpNeed(S.lvl); S.lvl++; up = true; onLevel(); }
     if (up) { levelBanner(); prog('level', 0, S.lvl); }
@@ -346,7 +349,7 @@
     paintBoard();
   }
   function levelBanner() {
-    sfx.big(); confetti();
+    sfx.big(); haptic('medium'); confetti();
     const lu = $('#levelup');
     $('#luTxt').textContent = 'LEVEL ' + S.lvl + '!';
     $('#luSub').textContent = 'Energy refilled • weeds cleared';
@@ -354,7 +357,7 @@
     setTimeout(() => lu.classList.remove('show'), 2100);
     if (S.lvl >= 3 && !S.met) setTimeout(meteorStory, 1800);
   }
-  function prog(id, add, setTo) {
+  function prog(id: string, add?: number, setTo?: number) {
     const m = MISSIONS.find(x => x.id === id); if (!m) return;
     const was = S.mp[id] || 0; if (was >= m.need) return;
     S.mp[id] = setTo !== undefined ? setTo : was + add;
@@ -367,14 +370,14 @@
 
   /* ============================================================== ACTIONS */
   function freeCells() { const b = B(), o = []; for (let i = 0; i < N; i++) if (!b[i]) o.push(i); return o; }
-  function firstFree(list) { const b = B(); for (const i of list) if (!b[i]) return i; return freeCells()[0] ?? -1; }
-  function nearFree(from) {
+  function firstFree(list: number[]) { const b = B(); for (const i of list) if (!b[i]) return i; return freeCells()[0] ?? -1; }
+  function nearFree(from: number) {
     const free = freeCells(); if (!free.length) return -1;
     const fx = from % COLS, fy = (from / COLS) | 0;
     free.sort((a, c) => (Math.abs(a % COLS - fx) + Math.abs(((a / COLS) | 0) - fy)) - (Math.abs(c % COLS - fx) + Math.abs(((c / COLS) | 0) - fy)));
     return free[0];
   }
-  function useProducer(i) {
+  function useProducer(i: number) {
     const b = B(), c = b[i]; if (!c || !c.p) return;
     const p = PRODS[c.p];
     const spot = nearFree(i);
@@ -393,14 +396,14 @@
     if (c.p === 'tree') prog('spawn', 1);
     lastAct = Date.now(); renderHUD(); renderOrders(); save();
   }
-  function tryMerge(from, to) {
+  function tryMerge(from: number, to: number) {
     const b = B(), a = b[from], c = b[to];
     if (!a || !c || !a.id || !c.id || a.id !== c.id) return false;
     const nx = nextOf(a.id);
     if (!nx) { toast(ITEMS[a.id].n + ' is already the best in its chain!'); return false; }
     b[from] = null; b[to] = { id: nx }; S.seen[nx] = 1;
     paintCell(from); paintCell(to, 'pop'); sparkle(to, 14);
-    sfx.merge(); floatText(to, ITEMS[nx].n, '#fff');
+    sfx.merge(); haptic('light'); floatText(to, ITEMS[nx].n, '#fff');
     addXp(1); prog('merge', 1);
     const d = ITEMS[nx];
     if (d.part) installPart(to, d.part);
@@ -408,10 +411,10 @@
     lastAct = Date.now(); renderOrders(); save();
     return true;
   }
-  function installPart(i, part) {
+  function installPart(i: number, part: string) {
     const b = B(); if (!b[i] || !ITEMS[b[i].id] || ITEMS[b[i].id].part !== part) return;
     b[i] = null; S.parts[part] = 1;
-    paintCell(i); sparkle(i, 20, '#bff0ff'); sfx.big(); confetti();
+    paintCell(i); sparkle(i, 20, '#bff0ff'); sfx.big(); haptic('heavy'); confetti();
     const names = { hull: 'HULL', engine: 'ENGINE', nav: 'NAV DISH', tank: 'FUEL TANK' };
     toast('🚀 ' + names[part] + ' installed on the rocket!');
     prog('part', 1);
@@ -425,7 +428,7 @@
     modal('bloop', 'THE ROCKET IS WHOLE!', 'Blorp! She flies again! Now we just need FUEL. I planted a Fuel Pod on your board — merge its ore up into <b>Rocket Fuel</b>. Three of those and we can go visit my moon!', 'Let\'s go!');
     renderRocket(); save();
   }
-  function addFuel(i) {
+  function addFuel(i: number) {
     const b = B(); if (!b[i] || b[i].id !== 'rocketfuel') return;
     b[i] = null; S.fuel++;
     paintCell(i); sparkle(i, 16, '#b6ffd2'); sfx.big();
@@ -434,7 +437,7 @@
     if (S.fuel >= 3) setTimeout(() => { toast('Tank is FULL! Open 🗺️ Map and launch!'); }, 900);
     renderRocket(); renderHUD(); save();
   }
-  function sellItem(i) {
+  function sellItem(i: number) {
     const b = B(), c = b[i]; if (!c || !c.id) return;
     const wanted = S.orders.some(o => o.needs.some(nd => nd.id === c.id));
     if (wanted) { sfx.no(); toast('Someone ordered that! Keep it.'); return; }
@@ -444,7 +447,7 @@
   }
 
   /* =============================================================== METEOR */
-  function flyMeteor(target, cb) {
+  function flyMeteor(target: number, cb: () => void) {
     const stage = $('#stage'), r = stage.getBoundingClientRect(), p = cellRect(target);
     const m = el('div', 'meteorFly'); m.innerHTML = ART.item('scrap');
     m.style.cssText = `left:${r.width + 40}px;top:-70px;transition:transform 1s cubic-bezier(.5,.1,.9,.6)`;
@@ -489,7 +492,7 @@
     }
     return null;
   }
-  function showHint(manual) {
+  function showHint(manual?: boolean) {
     const p = findPair();
     if (!p) {
       if (manual) {
@@ -507,12 +510,12 @@
   }
 
   /* ============================================================== SCREENS */
-  function setView(v) {
+  function setView(v: string) {
     if (v === 'rocket' && !S.met) { sfx.no(); toast('Locked — keep playing, something will fall from the sky!'); return; }
     if (v === 'map' && !allParts()) { sfx.no(); toast('Locked — finish building the rocket first!'); return; }
     view = v;
     ['rocket', 'book', 'map'].forEach(k => $('#sc-' + k).classList.toggle('open', v === k));
-    document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.v === v));
+    document.querySelectorAll<HTMLElement>('.tab').forEach(t => t.classList.toggle('on', t.dataset.v === v));
     if (v === 'rocket') renderRocket(); if (v === 'book') renderBook(); if (v === 'map') renderMap();
   }
   function renderRocket() {
@@ -556,7 +559,7 @@
       `<div class="card"><div class="cardTitle">🏭 Producers</div>${Object.keys(PRODS).filter(k => B().some(c => c && c.p === k) || (k === 'wreck' && S.met)).map(k => {
         const p = PRODS[k];
         return `<div class="mission"><div class="mBox" style="background:#fff;box-shadow:none">${ART.producer(p.art)}</div>
-        <div class="mTxt">${p.n}<div style="font-size:10px;color:#9a7a4e;font-weight:600">${p.mode === 'timer' ? `Free! Refills every ${p.every / 1000}s (holds ${p.cap})` : `Costs ${p.cost} ⚡ per tap`} · makes ${[...new Set(p.drops)].map(d => ITEMS[d].n).join(', ')}</div></div></div>`;
+        <div class="mTxt">${p.n}<div style="font-size:10px;color:#9a7a4e;font-weight:600">${p.mode === 'timer' ? `Free! Refills every ${p.every / 1000}s (holds ${p.cap})` : `Costs ${p.cost} ⚡ per tap`} · makes ${[...new Set(p.drops as string[])].map(d => ITEMS[d].n).join(', ')}</div></div></div>`;
       }).join('')}</div>
       <div class="card"><div class="cardTitle">☄️ Meteors</div><div style="font-size:11.5px;font-weight:600;color:#7a6244">Every now and then a meteor crashes on your board and leaves rare <b>Star Scrap</b>. Keep a few tiles free so it has room to land!</div></div>`;
   }
@@ -580,10 +583,10 @@
   }
 
   /* =============================================================== TRAVEL */
-  function travelTo(w) {
+  function travelTo(w: string) {
     if (S.fuel < 3 || !allParts()) return;
     S.fuel -= 3;
-    const cut = $('#cut'); $('#cutRocket').innerHTML = ART.rocket({ hull: 1, engine: 1, nav: 1, tank: 1 }, { flame: 1 });
+    const cut = $('#cut'); $('#cutRocket').innerHTML = ART.rocket({ hull: 1, engine: 1, nav: 1, tank: 1 }, { flame: true });
     $('#cutTitle').textContent = 'Blasting off!';
     $('#cutSub').textContent = 'Destination: ' + WORLDS[w].n;
     const warpHost = $('#warps'); warpHost.innerHTML = '';
@@ -607,7 +610,7 @@
   }
 
   /* ================================================================ MODALS */
-  function modal(face, title, body, btn) {
+  function modal(face: string, title: string, body: string, btn?: string) {
     $('#mFace').innerHTML = ART.char(face);
     $('#mTitle').textContent = title;
     $('#mBody').innerHTML = body;
@@ -617,8 +620,8 @@
   $('#mBtn') && ($('#mBtn').onclick = () => $('#modal').classList.remove('open'));
 
   /* ============================================================ INPUT/DRAG */
-  function onDown(e) {
-    const t = e.target.closest('.cell'); if (!t) return;
+  function onDown(e: PointerEvent) {
+    const t = (e.target as HTMLElement).closest('.cell') as HTMLElement | null; if (!t) return;
     e.preventDefault();
     const i = +t.dataset.i, c = B()[i];
     if (!c || c.b) { sel = null; paintBoard(); return; }
@@ -626,7 +629,7 @@
     try { $('#board').setPointerCapture(e.pointerId); } catch (_) { }
     if (!actx && S.sound) beep([0], 'sine', 0.01, 0.001); // unlock audio on first gesture
   }
-  function onMove(e) {
+  function onMove(e: PointerEvent) {
     if (!drag) return;
     const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
     if (!drag.moved && Math.hypot(dx, dy) < 7) return;
@@ -640,7 +643,7 @@
     drag.lx = e.clientX; drag.ly = e.clientY;
     drag.g.style.left = e.clientX + 'px'; drag.g.style.top = e.clientY + 'px';
     const over = document.elementFromPoint(e.clientX, e.clientY);
-    const cellEl = over && over.closest ? over.closest('.cell') : null;
+    const cellEl = (over && over.closest ? over.closest('.cell') : null) as HTMLElement | null;
     cells.forEach(o => o.el.classList.remove('tgt', 'move'));
     if (cellEl) {
       const j = +cellEl.dataset.i, tc = B()[j];
@@ -648,7 +651,7 @@
       else if (j !== drag.i && !tc) cellEl.classList.add('move');
     }
   }
-  function onUp(e) {
+  function onUp(e: PointerEvent) {
     if (!drag) return;
     const d = drag; drag = null;
     try { if (d.pid !== undefined) $('#board').releasePointerCapture(d.pid); } catch (_) { }
@@ -657,7 +660,7 @@
     if (!d.moved) { tap(d.i); paintBoard(); return; }
     const ux = e.clientX || d.lx, uy = e.clientY || d.ly;
     const over = document.elementFromPoint(ux, uy);
-    const cellEl = over && over.closest ? over.closest('.cell') : null;
+    const cellEl = (over && over.closest ? over.closest('.cell') : null) as HTMLElement | null;
     const b = B();
     if (cellEl) {
       const j = +cellEl.dataset.i;
@@ -669,7 +672,7 @@
     lastAct = Date.now();
     paintBoard();
   }
-  function tap(i) {
+  function tap(i: number) {
     const c = B()[i];
     lastAct = Date.now();
     if (!c) { sel = null; hideInfo(); return; }
@@ -682,7 +685,7 @@
     sel = i; showInfo(i);
   }
   function hideInfo() { $('#infoBar').classList.remove('on'); }
-  function showInfo(i) {
+  function showInfo(i: number) {
     const c = B()[i]; if (!c || !c.id) return;
     const d = ITEMS[c.id], nx = nextOf(c.id);
     $('#infoBar').classList.add('on');
@@ -722,8 +725,9 @@
   /* ================================================================== INIT */
   function sizeBoard() {
     const app = $('#app'), stage = $('#stage'), head = stage.querySelector('.stageTop');
-    const others = document.querySelector('.hud').offsetHeight + document.querySelector('.guide').offsetHeight
-      + $('#orders').offsetHeight + document.querySelector('.dock').offsetHeight;
+    const others = (document.querySelector('.hud') as HTMLElement).offsetHeight
+      + (document.querySelector('.guide') as HTMLElement).offsetHeight
+      + $('#orders').offsetHeight + (document.querySelector('.dock') as HTMLElement).offsetHeight;
     const availH = app.clientHeight - others - head.offsetHeight - 46;
     const availW = app.clientWidth - 44;
     const gap = 5;
@@ -756,8 +760,8 @@
     window.addEventListener('pointerup', onUp);
     window.addEventListener('pointercancel', e => { if (drag) { drag.cancelled = 1; onUp(e); } });
 
-    document.querySelectorAll('.tab').forEach(t => t.onclick = () => setView(t.dataset.v));
-    document.querySelectorAll('.scClose').forEach(b => b.onclick = () => setView('board'));
+    document.querySelectorAll<HTMLElement>('.tab').forEach(t => t.onclick = () => setView(t.dataset.v as string));
+    document.querySelectorAll<HTMLElement>('.scClose').forEach(b => b.onclick = () => setView('board'));
     $('#btnHint').onclick = () => { showHint(true); lastAct = Date.now(); };
     $('#btnSnack').onclick = () => {
       if (S.energy >= maxEnergy()) { toast('Energy is already full!'); return; }
@@ -783,5 +787,5 @@
       setTimeout(() => modal('pip', 'Hi, I\'m Pip!', 'Welcome to <b>Merge Rocket</b>! Tap the <b>Big Tree</b> to shake out twigs, then <b>drag two matching things together</b> to merge them into something better. Fill orders for your friends to level up!', 'Let\'s play!'), 400);
     }
   }
-  if (document.readyState === 'loading') window.addEventListener('DOMContentLoaded', boot); else setTimeout(boot, 0);
-})();
+  boot();
+}

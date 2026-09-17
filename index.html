@@ -3,8 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#7fd2fb">
+<meta name="mobile-web-app-capable" content="yes">
 <title>Merge Rocket</title>
-<link rel="stylesheet" href="style.css">
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+<link rel="apple-touch-icon" href="./icon-192.png">
 </head>
 <body>
 <div class="app" id="app">
@@ -83,15 +86,6 @@
   </div>
 </div>
 
-<script src="art.js"></script>
-<script src="game.js"></script>
-<script>
-  // paint the two HUD icons once art.js is loaded
-  (function paintIcons() {
-    var a = document.getElementById('icCoin'), b = document.getElementById('icEnergy');
-    if (!a || !b || !window.ART) { return setTimeout(paintIcons, 30); }
-    a.innerHTML = ART.icon('coin'); b.innerHTML = ART.icon('energy');
-  })();
-</script>
+<script type="module" src="/src/main.ts"></script>
 </body>
 </html>

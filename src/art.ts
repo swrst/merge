@@ -1,20 +1,20 @@
-/* ART — all game graphics as inline SVG. Soft-3D casual mobile style:
+/* ART - all game graphics as inline SVG. Soft-3D casual mobile style:
    gradient volume + rim highlight + contact shadow, no flat web-ish icons. */
-window.ART = (function () {
-  const cache = {};
+export const ART = (function () {
+  const cache: Record<string, string> = {};
 
-  const lg = (id, a, b, x1, y1, x2, y2) =>
+  const lg = (id: string, a: string, b: string, x1?: number, y1?: number, x2?: number, y2?: number) =>
     `<linearGradient id="${id}" x1="${x1 ?? 0}" y1="${y1 ?? 0}" x2="${x2 ?? 0}" y2="${y2 ?? 1}"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`;
-  const rg = (id, a, b, cx, cy, r) =>
+  const rg = (id: string, a: string, b: string, cx?: number, cy?: number, r?: number) =>
     `<radialGradient id="${id}" cx="${cx ?? 0.34}" cy="${cy ?? 0.28}" r="${r ?? 0.85}"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></radialGradient>`;
 
   const SHADOW = '<ellipse cx="50" cy="88" rx="25" ry="6" fill="#3a2a16" opacity=".17"/>';
-  const glint = (x, y, r, o) =>
+  const glint = (x: number, y: number, r: number, o?: number) =>
     `<ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r * 0.62}" fill="#fff" opacity="${o ?? 0.55}" transform="rotate(-28 ${x} ${y})"/>`;
-  const spark = (x, y, s, c) =>
+  const spark = (x: number, y: number, s: number, c?: string) =>
     `<path d="M${x} ${y - s} Q${x + s * 0.22} ${y - s * 0.22} ${x + s} ${y} Q${x + s * 0.22} ${y + s * 0.22} ${x} ${y + s} Q${x - s * 0.22} ${y + s * 0.22} ${x - s} ${y} Q${x - s * 0.22} ${y - s * 0.22} ${x} ${y - s}Z" fill="${c || '#fff8c8'}"/>`;
 
-  function svg(defs, body, opt) {
+  function svg(defs: string, body: string, opt?: { cls?: string; noShadow?: boolean }) {
     const o = opt || {};
     return `<svg viewBox="0 0 100 100" class="art${o.cls ? ' ' + o.cls : ''}">${defs ? `<defs>${defs}</defs>` : ''}${o.noShadow ? '' : SHADOW}${body}</svg>`;
   }
@@ -495,7 +495,7 @@ window.ART = (function () {
   };
 
   /* ---------------------------------------------------------------- MISC */
-  function weed(world) {
+  function weed(world: string) {
     if (world === 'luna')
       return `<svg viewBox="0 0 100 100" class="art"><defs>${rg('wdM', '#cfc9e6', '#6f6990')}</defs>
         <path d="M14 78 q2 -22 22 -26 q22 -4 30 8 q10 14 -4 24Z" fill="url(#wdM)"/>
@@ -507,7 +507,7 @@ window.ART = (function () {
       <circle cx="34" cy="70" r="6" fill="#ffd166"/><circle cx="70" cy="64" r="5" fill="#ff9ec4"/></svg>`;
   }
 
-  function rocket(inst, opts) {
+  function rocket(inst: Record<string, any>, opts?: { flame?: boolean }) {
     const o = opts || {};
     const on = k => !!(inst && inst[k]);
     const ghost = 'fill="none" stroke="#ffffff" stroke-opacity=".5" stroke-width="3" stroke-dasharray="7 6"';
@@ -544,7 +544,7 @@ window.ART = (function () {
     </svg>`;
   }
 
-  function planet(kind) {
+  function planet(kind: string) {
     if (kind === 'luna')
       return `<svg viewBox="0 0 100 100" class="planetArt"><defs>${rg('plL', '#efeaff', '#8a83ae')}</defs>
         <circle cx="50" cy="50" r="42" fill="url(#plL)"/>
@@ -569,18 +569,18 @@ window.ART = (function () {
     fuel: `<svg viewBox="0 0 100 100" class="ic"><defs>${rg('icF', '#9ef0bd', '#12a05c')}</defs><circle cx="50" cy="50" r="42" fill="url(#icF)"/><path d="M56 16 L30 58 h16 l-6 28 30 -42 h-18Z" fill="#eafff2"/></svg>`,
   };
 
-  function get(map, k) {
+  function get(map: Record<string, () => string>, k: string) {
     const key = map === ITEM ? 'i' + k : map === PROD ? 'p' + k : 'c' + k;
     if (!cache[key]) cache[key] = (map[k] || (() => '<svg viewBox="0 0 100 100" class="art"></svg>'))();
     return cache[key];
   }
 
   return {
-    item: k => get(ITEM, k),
-    producer: k => get(PROD, k),
-    char: k => get(CHAR, k),
-    icon: k => ICON[k] || '',
+    item: (k: string) => get(ITEM, k),
+    producer: (k: string) => get(PROD, k),
+    char: (k: string) => get(CHAR, k),
+    icon: (k: string) => (ICON as Record<string, string>)[k] || '',
     weed, rocket, planet,
-    hasItem: k => !!ITEM[k],
+    hasItem: (k: string) => !!ITEM[k],
   };
 })();
