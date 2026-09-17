@@ -18,4 +18,5 @@ async function main() {
   startGame();
 }
 
-main();
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => { main(); });
+else main();

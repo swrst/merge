@@ -1,8 +1,9 @@
 /* MERGE ROCKET - core game loop. Earth -> rebuild a rocket -> new worlds. */
 import { ART } from './art';
 import { haptic } from './native';
+import { board } from './board';
 
-export function startGame() {
+export async function startGame() {
   const $ = (s: string): any => document.querySelector(s);
   const el = (t: string, c?: string) => { const e = document.createElement(t); if (c) e.className = c; return e; };
   const rnd = (a: any[]) => a[Math.floor(Math.random() * a.length)];
@@ -158,23 +159,9 @@ export function startGame() {
     const t = $('#toast'); t.innerHTML = msg; t.classList.add('show');
     clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2100);
   }
-  function cellRect(i: number) { const r = cells[i].el.getBoundingClientRect(), s = $('#stage').getBoundingClientRect(); return { x: r.left - s.left + r.width / 2, y: r.top - s.top + r.height / 2 }; }
-  function floatText(i: number, txt: string, color?: string) {
-    const p = cellRect(i), d = el('div', 'ft'); d.textContent = txt; d.style.left = p.x + 'px'; d.style.top = p.y - 6 + 'px';
-    if (color) d.style.color = color;
-    $('#fx').appendChild(d); setTimeout(() => d.remove(), 1000);
-  }
-  function sparkle(i: number, n?: number, color?: string) {
-    const p = cellRect(i);
-    for (let k = 0; k < (n || 10); k++) {
-      const s = el('div', 'sp'), a = Math.random() * Math.PI * 2, dist = 26 + Math.random() * 34, sz = 5 + Math.random() * 8;
-      s.style.cssText = `left:${p.x}px;top:${p.y}px;width:${sz}px;height:${sz}px;transition:transform .55s cubic-bezier(.2,.8,.4,1),opacity .55s`;
-      if (color) s.style.background = color;
-      $('#fx').appendChild(s);
-      requestAnimationFrame(() => { s.style.transform = `translate(${Math.cos(a) * dist}px,${Math.sin(a) * dist}px) scale(.2)`; s.style.opacity = '0'; });
-      setTimeout(() => s.remove(), 600);
-    }
-  }
+  const hex = (c?: string) => c ? parseInt(c.replace('#', ''), 16) : undefined;
+  function floatText(i: number, txt: string, color?: string) { board.floatText(i, txt, hex(color) ?? 0xffffff); }
+  function sparkle(i: number, n?: number, color?: string) { board.burst(i, hex(color) ?? 0xffd45e, n || 12); }
   function confetti() {
     const host = $('#fx'), cols = ['#ffcb3d', '#ff7fb6', '#6ed156', '#56bcff', '#a77bff'];
     for (let i = 0; i < 26; i++) {
@@ -183,45 +170,48 @@ export function startGame() {
       host.appendChild(c); setTimeout(() => c.remove(), 2200);
     }
   }
-  function shake() { const a = $('#app'); a.classList.add('shake'); setTimeout(() => a.classList.remove('shake'), 520); }
+  function shake() { board.shake(); }
 
   /* ================================================================ RENDER */
-  function buildBoard() {
-    const b = $('#board'); b.innerHTML = ''; cells = [];
-    for (let i = 0; i < N; i++) { const d = el('div', 'cell'); d.dataset.i = String(i); b.appendChild(d); cells.push({ el: d, sig: null }); }
+  async function buildBoard() {
+    await board.init($('#board'), COLS, ROWS, {
+      onTap: (i: number) => { if (i < 0) { sel = null; hideInfo(); board.setSelected(null); } else tap(i); },
+      onDrop: (from: number, to: number) => onDrop(from, to),
+      dropKind: (from: number, to: number) => {
+        const b = B(), a = b[from], c = b[to];
+        if (!a || a.b) return null;
+        if (!c) return 'move';
+        if (a.id && c.id && a.id === c.id && nextOf(a.id)) return 'merge';
+        return null;
+      },
+      canDrag: (i: number) => { const c = B()[i]; return !!c && !c.b; },
+    });
+    await board.preload(Object.keys(ITEMS), Object.keys(PRODS).map(k => PRODS[k].art));
+    board.setTheme(S.world as 'earth' | 'luna');
   }
-  function paintCell(i: number, anim?: string) {
-    const c = B()[i], o = cells[i], e = o.el;
-    const sig = !c ? 'e' : c.b ? 'b' + c.b : c.p ? 'p' + c.p : 'i' + c.id;
-    if (o.sig !== sig && !(drag && drag.moved && drag.i === i)) {
-      o.sig = sig;
-      if (!c) e.innerHTML = '';
-      else if (c.b) e.innerHTML = ART.weed(S.world) + `<span class="lock">🔒${c.b}</span>`;
-      else if (c.p) e.innerHTML = ART.producer(PRODS[c.p].art) + '<span class="badge" style="display:none"></span><span class="timer"></span>';
-      else e.innerHTML = ART.item(c.id);
-      if (anim) { e.classList.remove('pop', 'drop'); void e.offsetWidth; e.classList.add(anim); setTimeout(() => e.classList.remove(anim), 500); }
-    }
-    e.dataset.item = c && c.id ? c.id : '';
-    e.dataset.prod = c && c.p ? c.p : '';
-    e.classList.toggle('blocked', !!(c && c.b));
-    e.classList.toggle('sel', sel === i);
-    e.classList.toggle('hintGlow', !!(hintPair && hintPair.indexOf(i) >= 0));
-    e.classList.toggle('dragging', !!(drag && drag.i === i && drag.moved));
+
+  function onDrop(from: number, to: number) {
+    const b = B(), a = b[from], c = b[to];
+    lastAct = Date.now();
+    sel = null; board.setSelected(null); hideInfo();
+    if (!a) return;
+    if (c && c.id && a.id === c.id && nextOf(a.id)) { tryMerge(from, to); return; }
+    if (!c) { b[to] = a; b[from] = null; board.sync(b); sfx.pop(); save(); return; }
+    board.settle(from);
   }
-  function paintBoard() { for (let i = 0; i < N; i++) paintCell(i); }
+  function paintCell(_i?: number, _anim?: string) { board.sync(B()); }
+  function paintBoard() { board.sync(B()); board.setSelected(sel); board.setHint(hintPair); }
 
   function tickProducers() {
     const now = Date.now();
     for (let i = 0; i < N; i++) {
       const c = B()[i]; if (!c || !c.p) continue;
-      const p = PRODS[c.p], e = cells[i].el;
-      if (p.mode !== 'timer') { e.classList.toggle('ready', S.energy >= p.cost); continue; }
+      const p = PRODS[c.p];
+      if (p.mode !== 'timer') { board.setReady(i, S.energy >= p.cost); continue; }
       while (c.ch < p.cap && now - c.at >= p.every) { c.at += p.every; c.ch++; }
       if (c.ch >= p.cap) c.at = now;
-      const badge = e.querySelector('.badge'), tm = e.querySelector('.timer');
-      if (badge) { badge.style.display = c.ch > 0 ? '' : 'none'; badge.textContent = c.ch; }
-      if (tm) tm.textContent = c.ch >= p.cap ? 'FULL' : Math.ceil((p.every - (now - c.at)) / 1000) + 's';
-      e.classList.toggle('ready', c.ch > 0);
+      board.setBadge(i, c.ch, c.ch >= p.cap ? 'FULL' : Math.ceil((p.every - (now - c.at)) / 1000) + 's');
+      board.setReady(i, c.ch > 0);
     }
   }
 
@@ -270,7 +260,7 @@ export function startGame() {
     const need = o.needs.find(nd => countItem(nd.id) < nd.qty) || o.needs[0];
     const b = B(); let at = -1;
     for (let i = 0; i < N; i++) if (b[i] && b[i].id === need.id) { at = i; break; }
-    if (at >= 0) { hintPair = [at]; paintBoard(); setTimeout(() => { hintPair = null; paintBoard(); }, 1800); toast('Here it is! ' + ITEMS[need.id].n); }
+    if (at >= 0) { hintPair = [at]; board.setHint(hintPair); setTimeout(() => { hintPair = null; board.setHint(null); }, 1800); toast('Here it is! ' + ITEMS[need.id].n); }
     else {
       const src = sourceHint(need.id);
       toast('Need <b>' + ITEMS[need.id].n + '</b> — ' + src);
@@ -289,8 +279,16 @@ export function startGame() {
   let oid = 1;
   function rollOrder() {
     const w = W(), maxT = clamp(1 + Math.floor(S.lvl / 2), 1, 4);
-    let pool = [];
-    w.chains.forEach(c => CHAINS[c].ids.forEach(id => { if (ITEMS[id].t <= maxT) pool.push(id); }));
+    // only ask for things the player can actually make right now: a chain counts
+    // if one of its producers is sitting on the board
+    const live: Record<string, boolean> = {};
+    B().forEach(c => {
+      if (!c || !c.p) return;
+      PRODS[c.p].drops.forEach((d: string) => { live[ITEMS[d].c] = true; });
+    });
+    let pool: string[] = [];
+    w.chains.forEach(c => { if (live[c]) CHAINS[c].ids.forEach(id => { if (ITEMS[id].t <= maxT) pool.push(id); }); });
+    if (!pool.length) w.chains.forEach(c => CHAINS[c].ids.forEach(id => { if (ITEMS[id].t <= maxT) pool.push(id); }));
     if (S.seen.scrap && Math.random() < 0.15) pool.push('scrap');
     if (S.met && Math.random() < 0.12) pool.push(rnd(['bolt', 'spring', 'wire', 'glass']));
     const pick = rnd(pool), d = ITEMS[pick];
@@ -392,7 +390,7 @@ export function startGame() {
     }
     const id = rnd(p.drops);
     b[spot] = { id }; S.seen[id] = 1;
-    sfx.pop(); paintCell(i); paintCell(spot, 'drop'); sparkle(spot, 6);
+    sfx.pop(); haptic('light'); board.animSpawn(spot, id, i);
     if (c.p === 'tree') prog('spawn', 1);
     lastAct = Date.now(); renderHUD(); renderOrders(); save();
   }
@@ -402,7 +400,7 @@ export function startGame() {
     const nx = nextOf(a.id);
     if (!nx) { toast(ITEMS[a.id].n + ' is already the best in its chain!'); return false; }
     b[from] = null; b[to] = { id: nx }; S.seen[nx] = 1;
-    paintCell(from); paintCell(to, 'pop'); sparkle(to, 14);
+    board.animMerge(from, to, nx);
     sfx.merge(); haptic('light'); floatText(to, ITEMS[nx].n, '#fff');
     addXp(1); prog('merge', 1);
     const d = ITEMS[nx];
@@ -448,14 +446,7 @@ export function startGame() {
 
   /* =============================================================== METEOR */
   function flyMeteor(target: number, cb: () => void) {
-    const stage = $('#stage'), r = stage.getBoundingClientRect(), p = cellRect(target);
-    const m = el('div', 'meteorFly'); m.innerHTML = ART.item('scrap');
-    m.style.cssText = `left:${r.width + 40}px;top:-70px;transition:transform 1s cubic-bezier(.5,.1,.9,.6)`;
-    $('#fx').appendChild(m);
-    requestAnimationFrame(() => { m.style.transform = `translate(${p.x - r.width - 40 - 20}px,${p.y + 40}px) rotate(160deg)`; });
-    setTimeout(() => {
-      m.remove(); shake(); sfx.boom(); sparkle(target, 26, '#ffc06a'); cb();
-    }, 1000);
+    board.meteor(target, () => { sfx.boom(); haptic('heavy'); cb(); });
   }
   function meteorStory() {
     if (S.met) return;
@@ -498,15 +489,15 @@ export function startGame() {
       if (manual) {
         const b = B(), prod = [];
         for (let i = 0; i < N; i++) if (b[i] && b[i].p) prod.push(i);
-        hintPair = prod.slice(0, 2); paintBoard();
-        setTimeout(() => { hintPair = null; paintBoard(); }, 2200);
+        hintPair = prod.slice(0, 2); board.setHint(hintPair);
+        setTimeout(() => { hintPair = null; board.setHint(null); }, 2200);
         toast('No pairs yet — tap a glowing producer to make more!');
       }
       return;
     }
-    hintPair = p; paintBoard(); if (manual) sfx.pop();
+    hintPair = p; board.setHint(hintPair); if (manual) sfx.pop();
     toast('💡 These two match — drag one onto the other!');
-    setTimeout(() => { hintPair = null; paintBoard(); }, 2400);
+    setTimeout(() => { hintPair = null; board.setHint(null); }, 2400);
   }
 
   /* ============================================================== SCREENS */
@@ -600,7 +591,8 @@ export function startGame() {
       if (!b.some(c => c && c.p === 'fuelpod')) { const i = firstFree([26, 27, 32, 20]); if (i >= 0) b[i] = mkProd('fuelpod'); }
       S.orders = []; fillOrders();
       prog('travel', 1);
-      buildBoard(); paintBoard(); renderHUD(); renderOrders(); setView('board');
+      board.setTheme(w as 'earth' | 'luna');
+      paintBoard(); renderHUD(); renderOrders(); setView('board');
       setTimeout(() => {
         cut.classList.remove('show');
         modal('zib', 'Welcome to Luna!', 'Whoa — new world, new stuff! Moon Rocks and Glow Plants grow here, and the locals pay <b>very</b> well. Your rocket stays with you: gather 3 more fuel any time you want to fly again.', 'Explore!');
@@ -619,70 +611,23 @@ export function startGame() {
   }
   $('#mBtn') && ($('#mBtn').onclick = () => $('#modal').classList.remove('open'));
 
-  /* ============================================================ INPUT/DRAG */
-  function onDown(e: PointerEvent) {
-    const t = (e.target as HTMLElement).closest('.cell') as HTMLElement | null; if (!t) return;
-    e.preventDefault();
-    const i = +t.dataset.i, c = B()[i];
-    if (!c || c.b) { sel = null; paintBoard(); return; }
-    drag = { i, x: e.clientX, y: e.clientY, moved: false, isItem: !!c.id, pid: e.pointerId };
-    try { $('#board').setPointerCapture(e.pointerId); } catch (_) { }
-    if (!actx && S.sound) beep([0], 'sine', 0.01, 0.001); // unlock audio on first gesture
-  }
-  function onMove(e: PointerEvent) {
-    if (!drag) return;
-    const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
-    if (!drag.moved && Math.hypot(dx, dy) < 7) return;
-    if (!drag.moved) {
-      drag.moved = true; hideInfo();
-      const c = B()[drag.i];
-      const g = el('div', 'ghost'); g.innerHTML = c.id ? ART.item(c.id) : ART.producer(PRODS[c.p].art);
-      document.body.appendChild(g); drag.g = g; paintCell(drag.i);
-      sel = null;
-    }
-    drag.lx = e.clientX; drag.ly = e.clientY;
-    drag.g.style.left = e.clientX + 'px'; drag.g.style.top = e.clientY + 'px';
-    const over = document.elementFromPoint(e.clientX, e.clientY);
-    const cellEl = (over && over.closest ? over.closest('.cell') : null) as HTMLElement | null;
-    cells.forEach(o => o.el.classList.remove('tgt', 'move'));
-    if (cellEl) {
-      const j = +cellEl.dataset.i, tc = B()[j];
-      if (j !== drag.i && tc && tc.id && B()[drag.i].id === tc.id && nextOf(tc.id)) cellEl.classList.add('tgt');
-      else if (j !== drag.i && !tc) cellEl.classList.add('move');
-    }
-  }
-  function onUp(e: PointerEvent) {
-    if (!drag) return;
-    const d = drag; drag = null;
-    try { if (d.pid !== undefined) $('#board').releasePointerCapture(d.pid); } catch (_) { }
-    cells.forEach(o => o.el.classList.remove('tgt', 'move'));
-    if (d.g) d.g.remove();
-    if (!d.moved) { tap(d.i); paintBoard(); return; }
-    const ux = e.clientX || d.lx, uy = e.clientY || d.ly;
-    const over = document.elementFromPoint(ux, uy);
-    const cellEl = (over && over.closest ? over.closest('.cell') : null) as HTMLElement | null;
-    const b = B();
-    if (cellEl) {
-      const j = +cellEl.dataset.i;
-      if (j !== d.i) {
-        if (b[j] && b[j].id && b[d.i].id === b[j].id) { if (!tryMerge(d.i, j)) paintBoard(); }
-        else if (!b[j]) { b[j] = b[d.i]; b[d.i] = null; cells[j].sig = null; paintCell(d.i); paintCell(j); sfx.pop(); save(); }
-      }
-    }
-    lastAct = Date.now();
-    paintBoard();
-  }
+  /* ================================================================ INPUT */
+  /* Pointer handling lives in board.ts (Pixi hit-testing): it calls back into
+     tap() / onDrop() above. Nothing here touches the DOM. */
+
   function tap(i: number) {
     const c = B()[i];
     lastAct = Date.now();
-    if (!c) { sel = null; hideInfo(); return; }
-    if (c.b) { sfx.no(); hideInfo(); toast('Clears at Level ' + c.b + ' — keep leveling up!'); return; }
-    if (c.p) { sel = null; hideInfo(); useProducer(i); return; }
-    if (sel === null) { sel = i; showInfo(i); return; }
-    if (sel === i) { sel = null; hideInfo(); return; }
+    if (!actx && S.sound) beep([0], 'sine', 0.01, 0.001);        // unlock audio on first gesture
+    const pick = (k: number | null) => { sel = k; board.setSelected(k); };
+    if (!c) { pick(null); hideInfo(); return; }
+    if (c.b) { sfx.no(); pick(null); hideInfo(); toast('Clears at Level ' + c.b + ' — keep leveling up!'); return; }
+    if (c.p) { pick(null); hideInfo(); useProducer(i); return; }
+    if (sel === null) { pick(i); showInfo(i); return; }
+    if (sel === i) { pick(null); hideInfo(); return; }
     const a = B()[sel];
-    if (a && a.id === c.id) { const f = sel; sel = null; hideInfo(); tryMerge(f, i); return; }
-    sel = i; showInfo(i);
+    if (a && a.id === c.id && nextOf(a.id)) { const f = sel; pick(null); hideInfo(); tryMerge(f, i); return; }
+    pick(i); showInfo(i);
   }
   function hideInfo() { $('#infoBar').classList.remove('on'); }
   function showInfo(i: number) {
@@ -723,19 +668,6 @@ export function startGame() {
   }
 
   /* ================================================================== INIT */
-  function sizeBoard() {
-    const app = $('#app'), stage = $('#stage'), head = stage.querySelector('.stageTop');
-    const others = (document.querySelector('.hud') as HTMLElement).offsetHeight
-      + (document.querySelector('.guide') as HTMLElement).offsetHeight
-      + $('#orders').offsetHeight + (document.querySelector('.dock') as HTMLElement).offsetHeight;
-    const availH = app.clientHeight - others - head.offsetHeight - 46;
-    const availW = app.clientWidth - 44;
-    const gap = 5;
-    const c = Math.floor(Math.max(30, Math.min((availW - gap * (COLS - 1)) / COLS, (availH - gap * (ROWS - 1)) / ROWS)));
-    const b = $('#board');
-    b.style.gridTemplateColumns = `repeat(${COLS},${c}px)`;
-    b.style.gridAutoRows = `${c}px`;
-  }
   function scenery() {
     const sc = $('#scene');
     for (let i = 0; i < 4; i++) {
@@ -744,21 +676,14 @@ export function startGame() {
       sc.appendChild(c);
     }
   }
-  function boot() {
+  async function boot() {
     S = load();
     if (!S.orders || !S.orders.length) { S.orders = []; fillOrders(); }
     oid = S.orders.length + 1;
-    scenery(); buildBoard(); paintBoard(); renderHUD(); renderOrders(); renderRocket();
-    sizeBoard(); window.addEventListener('resize', sizeBoard); setTimeout(sizeBoard, 60);
+    scenery();
+    await buildBoard();
+    paintBoard(); renderHUD(); renderOrders(); renderRocket();
     meteorTimer = Date.now() + 40000;
-
-    const bd = $('#board');
-    bd.addEventListener('pointerdown', onDown);
-    bd.addEventListener('dragstart', e => e.preventDefault());
-    bd.addEventListener('contextmenu', e => e.preventDefault());
-    window.addEventListener('pointermove', onMove);
-    window.addEventListener('pointerup', onUp);
-    window.addEventListener('pointercancel', e => { if (drag) { drag.cancelled = 1; onUp(e); } });
 
     document.querySelectorAll<HTMLElement>('.tab').forEach(t => t.onclick = () => setView(t.dataset.v as string));
     document.querySelectorAll<HTMLElement>('.scClose').forEach(b => b.onclick = () => setView('board'));
@@ -779,6 +704,7 @@ export function startGame() {
     };
     $('#infoClose').onclick = () => { $('#infoBar').classList.remove('on'); sel = null; paintBoard(); };
 
+    if (import.meta.env.DEV) (window as any).__game = { state: () => S, cells: () => B(), prods: PRODS, items: ITEMS };
     setInterval(tick, 500);
     setInterval(save, 8000);
 
@@ -787,5 +713,5 @@ export function startGame() {
       setTimeout(() => modal('pip', 'Hi, I\'m Pip!', 'Welcome to <b>Merge Rocket</b>! Tap the <b>Big Tree</b> to shake out twigs, then <b>drag two matching things together</b> to merge them into something better. Fill orders for your friends to level up!', 'Let\'s play!'), 400);
     }
   }
-  boot();
+  await boot();
 }

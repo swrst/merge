@@ -48,16 +48,28 @@ unchanged there. Apple Developer Program is $99/yr.
 ## Layout
 
 ```
-index.html              app shell (HUD, board, tabs, modals)
+index.html              app shell (HUD, orders, tabs, modals)
 src/main.ts             entry: icons, native setup, starts the game
-src/game.ts             game loop: board, merging, orders, levels, story, worlds
-src/art.ts              all artwork, drawn as inline SVG
+src/game.ts             rules: merging, orders, levels, story, worlds — no sprites
+src/board.ts            the board itself: PixiJS rendering, drag input, GSAP juice
+src/art.ts              all artwork, drawn as inline SVG (rasterised into textures)
 src/native.ts           Capacitor bits: haptics, save mirroring, status bar
-src/style.css           the whole look
+src/style.css           everything outside the board (HUD, cards, screens)
 resources/              source icon + splash (1024 / 2732)
 android/                generated native project (committed, so it builds anywhere)
-scripts/standalone.mjs  inlines dist/ into MergeRocket.html
+scripts/standalone.mjs  inlines the single-bundle build into MergeRocket.html
 ```
+
+## How the board works
+
+`game.ts` owns state and rules and never touches a sprite. It calls `board.sync(cells)`
+plus animation methods (`animSpawn`, `animMerge`, `burst`, `floatText`, `meteor`, `shake`),
+and the board calls back through four hooks (`onTap`, `onDrop`, `dropKind`, `canDrag`).
+Input is hit-tested in Pixi against grid maths, not the DOM — which is also why dragging
+can't be hijacked by the browser's own drag gesture.
+
+Art stays as SVG: `board.preload()` rasterises each ART string into a texture once at
+startup. Swapping in PNG sprite atlases later means changing only that one function.
 
 ## Notes
 

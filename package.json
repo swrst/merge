@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node scripts/standalone.mjs",
+    "build": "vite build && vite build --config vite.standalone.config.ts && node scripts/standalone.mjs",
     "preview": "vite preview --port 4173",
     "check": "tsc --noEmit",
     "sync": "npm run build && cap sync",
@@ -24,6 +24,8 @@
     "@capacitor/core": "^8.5.2",
     "@capacitor/haptics": "^8.0.2",
     "@capacitor/preferences": "^8.0.1",
-    "@capacitor/status-bar": "^8.0.3"
+    "@capacitor/status-bar": "^8.0.3",
+    "gsap": "^3.15.0",
+    "pixi.js": "^8.21.0"
   }
 }
