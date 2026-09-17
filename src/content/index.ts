@@ -36,6 +36,8 @@ export interface ProducerDef {
   cost?: number;
   every?: number;
   cap?: number;
+  /** a producer that runs out: how many times it can be used before it vanishes */
+  uses?: number;
   drops: string[];
 }
 export interface WorldDef {
@@ -93,12 +95,12 @@ export interface Config {
   meteor: { firstAtLevel: number; everyMinMs: number; everyRandomMs: number; chance: number };
   rocket: { fuelToLaunch: number };
   hint: { idleMs: number };
-  /** the level each late-game tab appears at */
-  unlocks: { shopAtLevel: number; labAtLevel: number };
+  /** the level the shop appears at (the lab is built, not unlocked by level) */
+  unlocks: { shopAtLevel: number };
   /** what one level of each shop upgrade is worth */
   upgrades: { energyPerStep: number; speedPerStep: number; ordersPerStep: number; snackPerStep: number };
-  /** research lab: cost of a failed experiment, and how many failures earn a free clue */
-  lab: { failFee: number; clueEvery: number };
+  /** research lab: the build price, the bench fee, and how many duds earn a free clue */
+  lab: { failFee: number; clueEvery: number; build: { coins: number; item: string; qty: number } };
 }
 
 export const ITEMS = itemsJson as Record<string, ItemDef>;
@@ -151,6 +153,7 @@ export function validateContent(): string[] {
     p.drops.forEach(id => { if (!has(ITEMS, id)) errs.push(`producer "${key}" drops unknown item "${id}"`); });
     if (p.mode === 'timer' && (!p.every || !p.cap)) errs.push(`timer producer "${key}" needs "every" and "cap"`);
     if (p.mode === 'tap' && p.cost === undefined) errs.push(`tap producer "${key}" needs "cost"`);
+    if (p.uses !== undefined && !(p.uses > 0)) errs.push(`producer "${key}" has a "uses" of ${p.uses}`);
   }
   const cells = CONFIG.board.cols * CONFIG.board.rows;
   for (const [key, w] of Object.entries(WORLDS)) {
@@ -198,6 +201,7 @@ export function validateContent(): string[] {
     cids.add(c.id);
     if (!(c.price > 0)) errs.push(`crate "${c.id}" needs a price`);
   });
+  if (!has(ITEMS, CONFIG.lab.build.item)) errs.push(`lab build wants unknown item "${CONFIG.lab.build.item}"`);
   if (!(SHOP.supplyStock > 0)) errs.push('shop.supplyStock must be at least 1');
   if (!(SHOP.supplyPriceMultiplier >= 1)) errs.push('shop.supplyPriceMultiplier should be 1 or more');
   return errs;

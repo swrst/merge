@@ -472,6 +472,16 @@ export const ART = (function () {
        <circle cx="64" cy="22" r="9" fill="url(#gyP)" opacity=".6"/>
        ${glint(34, 66, 7, 0.4)}`),
 
+    crater: () => svg(
+      rg('crA', '#6b5a4a', '#2e2620') + rg('crB', '#ffd27a', '#c2540f') + lg('crR', '#c9a678', '#8a6a42'),
+      `<ellipse cx="50" cy="66" rx="42" ry="22" fill="url(#crR)"/>
+       <ellipse cx="50" cy="64" rx="32" ry="16" fill="url(#crA)"/>
+       <ellipse cx="50" cy="60" rx="22" ry="11" fill="#1b1612"/>
+       <path d="M36 56 q-4 -16 12 -20 q18 -4 22 8 q6 12 -6 16 q-16 6 -28 -4Z" fill="url(#crB)"/>
+       ${glint(44, 46, 6, 0.5)}
+       <path d="M14 62 l-8 -6 M86 62 l8 -6 M50 40 l0 -10" stroke="#ffb03c" stroke-width="3" opacity=".55" stroke-linecap="round"/>
+       ${spark(80, 28, 8, '#ffe9a8')}${spark(20, 34, 6, '#ffe9a8')}`),
+
     glowpod: () => svg(
       rg('gpA', '#ffd6f6', '#b03fb0') + rg('gpB', '#d8fff0', '#2bb98c') + lg('gpS', '#8fe0a8', '#3d9a62'),
       `<path d="M50 84 q-5 -22 0 -32" stroke="url(#gpS)" stroke-width="8" fill="none" stroke-linecap="round"/>
@@ -644,6 +654,72 @@ export const ART = (function () {
       ${glint(34, 30, 11, 0.4)}</svg>`;
   }
 
+  /* --------------------------------------------------------- FULL FIGURES
+     Order cards show the whole customer, not a floating head. Each character
+     reuses its portrait as a nested <svg> and gets a body in its own palette. */
+  const FIG: Record<string, { body: string; trim: string; kind?: string }> = {
+    pip: { body: '#ff9f4d', trim: '#d9581a' },
+    grandma: { body: '#b493e6', trim: '#7c5ec4', kind: 'dress' },
+    timmy: { body: '#4fb8ff', trim: '#1f7fd0' },
+    gigi: { body: '#ffd166', trim: '#dc9a0c', kind: 'dress' },
+    biscuit: { body: '#e8a55a', trim: '#b9762f', kind: 'dog' },
+    bloop: { body: '#7fd88f', trim: '#3ea656', kind: 'blob' },
+    zib: { body: '#57d3a0', trim: '#1c8a63', kind: 'blob' },
+    luma: { body: '#ff9ccc', trim: '#d63a92', kind: 'blob' },
+    rokk: { body: '#b7c4da', trim: '#7d8ba1', kind: 'robot' },
+    nix: { body: '#b99aff', trim: '#7c46d8', kind: 'blob' },
+  };
+  /** drop a portrait into a figure as a nested svg at the given box */
+  const head = (k: string, x: number, y: number, s: number) =>
+    get(CHAR, k).replace('<svg viewBox="0 0 100 100" class="face"',
+      `<svg x="${x}" y="${y}" width="${s}" height="${s}" viewBox="0 0 100 100"`);
+
+  function figure(k: string) {
+    const f = FIG[k] || { body: '#9bd0ff', trim: '#4f8ad0' };
+    const shadow = '<ellipse cx="50" cy="143" rx="27" ry="6" fill="#3a2a16" opacity=".16"/>';
+    const arm = (x: number, rot: number) =>
+      `<rect x="${x}" y="80" width="13" height="36" rx="6.5" fill="${f.body}" transform="rotate(${rot} ${x + 6.5} 86)"/>
+       <circle cx="${x + 6.5 + (rot > 0 ? 8 : -8)}" cy="114" r="7.5" fill="#ffdcb5"/>`;
+    let body: string;
+    if (f.kind === 'blob') {
+      body = `${arm(14, 22)}${arm(73, -22)}
+        <path d="M50 58 q30 0 30 40 q0 26 -30 26 q-30 0 -30 -26 q0 -40 30 -40Z" fill="${f.body}"/>
+        <path d="M50 124 q-16 0 -22 -10 q10 6 22 6 q12 0 22 -6 q-6 10 -22 10Z" fill="${f.trim}" opacity=".55"/>
+        <ellipse cx="38" cy="78" rx="9" ry="6" fill="#fff" opacity=".28" transform="rotate(-22 38 78)"/>`;
+    } else if (f.kind === 'dog') {
+      body = `<ellipse cx="52" cy="104" rx="34" ry="24" fill="${f.body}"/>
+        <ellipse cx="40" cy="98" rx="20" ry="14" fill="#ffe0bb" opacity=".6"/>
+        <rect x="26" y="118" width="12" height="24" rx="6" fill="${f.trim}"/>
+        <rect x="44" y="120" width="12" height="22" rx="6" fill="${f.body}"/>
+        <rect x="66" y="118" width="12" height="24" rx="6" fill="${f.trim}"/>
+        <path d="M84 96 q16 -10 10 -24" stroke="${f.trim}" stroke-width="9" fill="none" stroke-linecap="round"/>`;
+    } else if (f.kind === 'robot') {
+      body = `${arm(12, 16)}${arm(75, -16)}
+        <rect x="24" y="60" width="52" height="58" rx="14" fill="${f.body}" stroke="${f.trim}" stroke-width="3"/>
+        <rect x="34" y="72" width="32" height="20" rx="7" fill="#26374f"/>
+        <circle cx="45" cy="82" r="4" fill="#6fd4ff"/><circle cx="57" cy="82" r="4" fill="#ff8a6d"/>
+        <rect x="36" y="100" width="28" height="7" rx="3.5" fill="${f.trim}"/>
+        <rect x="32" y="118" width="14" height="24" rx="6" fill="${f.trim}"/>
+        <rect x="54" y="118" width="14" height="24" rx="6" fill="${f.trim}"/>`;
+    } else if (f.kind === 'dress') {
+      body = `${arm(14, 20)}${arm(73, -20)}
+        <path d="M36 60 h28 l18 58 h-64Z" fill="${f.body}"/>
+        <path d="M18 118 q16 8 32 0 q16 8 32 0 v6 h-64Z" fill="${f.trim}" opacity=".6"/>
+        <rect x="42" y="60" width="16" height="16" rx="6" fill="#fff" opacity=".45"/>
+        <rect x="36" y="126" width="12" height="16" rx="5" fill="#6b5236"/>
+        <rect x="52" y="126" width="12" height="16" rx="5" fill="#6b5236"/>`;
+    } else {
+      body = `${arm(14, 20)}${arm(73, -20)}
+        <rect x="28" y="60" width="44" height="60" rx="18" fill="${f.body}"/>
+        <path d="M28 92 h44 v10 h-44Z" fill="${f.trim}" opacity=".45"/>
+        <rect x="34" y="118" width="13" height="24" rx="6" fill="${f.trim}"/>
+        <rect x="53" y="118" width="13" height="24" rx="6" fill="${f.trim}"/>
+        <ellipse cx="40" cy="142" rx="10" ry="5.5" fill="#6b5236"/>
+        <ellipse cx="60" cy="142" rx="10" ry="5.5" fill="#6b5236"/>`;
+    }
+    return `<svg viewBox="0 0 100 150" class="fig">${shadow}${body}${head(k, 21, 0, 58)}</svg>`;
+  }
+
   const ICON = {
     coin: `<svg viewBox="0 0 100 100" class="ic"><defs>${rg('icC', '#ffe680', '#e09c16')}</defs><circle cx="50" cy="50" r="42" fill="url(#icC)"/><circle cx="50" cy="50" r="31" fill="#ffd84d"/><text x="50" y="68" text-anchor="middle" font-size="46" font-weight="800" fill="#c47f08">$</text></svg>`,
     energy: `<svg viewBox="0 0 100 100" class="ic"><defs>${lg('icE', '#9be8ff', '#2f9ed6')}</defs><circle cx="50" cy="50" r="42" fill="url(#icE)"/><path d="M56 12 L28 56 h18 l-6 34 32 -48 h-20Z" fill="#fff6b0"/></svg>`,
@@ -669,6 +745,7 @@ export const ART = (function () {
     item: (k: string) => get(ITEM, k),
     producer: (k: string) => get(PROD, k),
     char: (k: string) => get(CHAR, k),
+    figure: (k: string) => { const key = 'f' + k; if (!cache[key]) cache[key] = figure(k); return cache[key]; },
     icon: (k: string) => (ICON as Record<string, string>)[k] || '',
     weed, rocket, planet,
     hasItem: (k: string) => !!ITEM[k],

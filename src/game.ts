@@ -31,7 +31,10 @@ export async function startGame() {
   const everyOf = (p: any) =>
     Math.max(3000, Math.round(p.every * Math.max(0.25, 1 - upLv('speed') * CONFIG.upgrades.speedPerStep)));
   const shopOpen = () => S.lvl >= CONFIG.unlocks.shopAtLevel;
-  const labOpen = () => S.lvl >= CONFIG.unlocks.labAtLevel;
+  /* The lab is a building, not a level reward: it stays invisible until Bloop
+     has a rocket to cannibalise and the player pays for the build. */
+  const labOpen = () => !!(S.lab && S.lab.built);
+  const labOffered = () => !!(S.met && allParts());
 
   /* =============================================================== STATE */
   const SAVE = 'mergeRocket_v2';   // key kept; the shape is versioned inside (S.v)
@@ -48,7 +51,12 @@ export async function startGame() {
     [13, 16, 25, 28].forEach((i, k) => { if (!b[i]) b[i] = { id: k % 2 ? c1 : c0 }; });
     return b;
   }
-  function mkProd(k: string) { const p = PRODS[k], o: any = { p: k }; if (p.mode === 'timer') { o.ch = 1; o.at = Date.now(); } return o; }
+  function mkProd(k: string) {
+    const p = PRODS[k], o: any = { p: k };
+    if (p.mode === 'timer') { o.ch = 1; o.at = Date.now(); }
+    if (p.uses) o.u = p.uses;
+    return o;
+  }
   function fresh() {
     return {
       v: 3, world: 'earth', lvl: 1, xp: 0, coins: CONFIG.start.coins, energy: CONFIG.start.energy, eAt: Date.now(),
@@ -126,6 +134,30 @@ export async function startGame() {
     }
   }
   function shake() { board.shake(); }
+  /* Screens are DOM, not Pixi, so spending coins there needs its own float —
+     without it a purchase just silently changes a number in the header. */
+  let lastClick: HTMLElement | null = null;
+  document.addEventListener('pointerdown', (e: any) => {
+    lastClick = (e.target && e.target.closest) ? e.target.closest('button') : null;
+  }, true);
+  function floatOn(target: HTMLElement | null, txt: string, color?: string) {
+    const host = $('#app'); if (!host) return;
+    const t = target && document.body.contains(target) ? target : $('#chipCoins');
+    if (!t) return;
+    const a = host.getBoundingClientRect(), r = t.getBoundingClientRect();
+    const d = el('div', 'domFloat');
+    d.textContent = txt;
+    if (color) d.style.color = color;
+    d.style.left = (r.left - a.left + r.width / 2) + 'px';
+    d.style.top = (r.top - a.top - 6) + 'px';
+    host.appendChild(d);
+    setTimeout(() => d.remove(), 1300);
+  }
+  /** pay coins, and make the payment visible wherever the player pressed */
+  function spend(n: number) {
+    S.coins -= n; bumpChip('#chipCoins');
+    floatOn(lastClick, '−' + n + ' 🪙', '#ffd45e');
+  }
 
   /* ================================================================ RENDER */
   async function buildBoard() {
@@ -186,9 +218,9 @@ export async function startGame() {
     $('#tabRocket').classList.toggle('locked', !S.met);
     $('#tabMap').classList.toggle('locked', !allParts());
     $('#tabShop').classList.toggle('locked', !shopOpen());
-    $('#tabLab').classList.toggle('locked', !labOpen());
+    $('#tabLab').classList.toggle('hide', !labOpen());
     $('#dotRocket').style.display = (S.met && (readyParts() || S.fuel >= CONFIG.rocket.fuelToLaunch)) ? '' : 'none';
-    $('#dotShop').style.display = shopNews() ? '' : 'none';
+    $('#dotShop').style.display = (shopNews() || (labOffered() && !S.lab.built)) ? '' : 'none';
     if (view === 'shop') $('#shopCoins').textContent = S.coins;
     if (view === 'lab') $('#labCoins').textContent = S.coins;
   }
@@ -251,18 +283,25 @@ export async function startGame() {
       const card = el('div', 'order' + (ready ? ' ready' : '') + (newIds && newIds.indexOf(o.id) >= 0 ? ' newin' : ''));
       const ch = CHARS[o.char];
       card.innerHTML =
-        `<div class="oTop"><div class="face">${ART.char(o.char)}</div><div><div class="oName">${ch.name}</div><div class="oSay">${o.say}</div></div></div>
+        `<div class="oTop">
+           <div class="oFig">${ART.figure(o.char)}</div>
+           <div class="oWho"><div class="oName">${ch.name}</div><div class="oSay">${o.say}</div>
+             <div class="oRews"><span class="oRew">${ART.icon('coin')}${o.coins}</span><span class="oRew">${ART.icon('star')}${o.xp}</span>
+             ${o.give ? `<span class="oRew gift" title="Gift: ${ITEMS[o.give].name}">${ART.item(o.give)}</span>` : ''}</div>
+           </div>
+         </div>
          <div class="oNeeds">${o.needs.map(nd => {
           const have = Math.min(countItem(nd.id), nd.qty);
           return `<div class="oNeed${have >= nd.qty ? ' done' : ''}">${ART.item(nd.id)}<b>${have}/${nd.qty}</b></div>`;
         }).join('')}</div>
-         <div class="oFoot"><div class="oRew">${ART.icon('coin')}${o.coins}</div><div class="oRew">${ART.icon('star')}${o.xp}</div>
-         ${o.give ? `<div class="oRew" title="${ITEMS[o.give].name}" style="width:18px">${ART.item(o.give)}</div>` : ''}
-         <button class="btnDeliver${ready ? ' on' : ''}">${ready ? 'GIVE!' : 'FIND IT'}</button></div>`;
+         <button class="btnDeliver${ready ? ' on' : ''}">${ready ? 'GIVE IT!' : 'FIND IT'}</button>`;
       (card.querySelector('.btnDeliver') as HTMLElement).onclick = (ev: Event) => { ev.stopPropagation(); ready ? deliver(o.id) : findFor(o); };
       card.onclick = () => findFor(o);
       host.appendChild(card);
     });
+    // the order row is the tallest variable block above the board; once it has
+    // settled the board re-measures so its last row never hides under the dock
+    board.layout();
   }
   function findFor(o: any) {
     const need = o.needs.find(nd => countItem(nd.id) < nd.qty) || o.needs[0];
@@ -299,7 +338,7 @@ export async function startGame() {
     w.chains.forEach(c => { if (live[c]) CHAINS[c].items.forEach(id => { if (ITEMS[id].tier <= maxT) pool.push(id); }); });
     if (!pool.length) w.chains.forEach(c => CHAINS[c].items.forEach(id => { if (ITEMS[id].tier <= maxT) pool.push(id); }));
     if (S.seen.scrap && Math.random() < 0.15) pool.push('scrap');
-    if (S.met && Math.random() < 0.12) pool.push(rnd(['bolt', 'spring', 'wire', 'glass']));
+    if (S.met && !allParts() && Math.random() < 0.12) pool.push(rnd(['bolt', 'spring', 'wire', 'glass']));
     // collectors start asking for relics once you have made one
     if (S.seen.relic1 && Math.random() < 0.14) pool.push('relic1');
     const pick = rnd(pool), d = ITEMS[pick];
@@ -371,9 +410,6 @@ export async function startGame() {
     if (S.lvl === CONFIG.unlocks.shopAtLevel) setTimeout(() => modal('pip', 'The Trading Post!',
       'A trader rolled into the meadow! Tap 🛒 to spend your coins on materials, salvage crates, and <b>permanent upgrades</b> — a bigger energy backpack, faster plants, an extra order slot. Coins are for spending!',
       'Take my coins!'), 2300);
-    if (S.lvl === CONFIG.unlocks.labAtLevel) setTimeout(() => modal('bloop', 'Research Lab built!',
-      'Blorp! I built a lab out of spare parts. Put <b>two things from your board</b> on the bench and hit EXPERIMENT. Most pairs do nothing... but the right pairs make <b>relics</b>, the rarest treasures in the galaxy. Read the rumours for clues!',
-      'To science!'), 2300);
     paintBoard();
   }
   function levelBanner() {
@@ -424,6 +460,17 @@ export async function startGame() {
     b[spot] = { id }; gotItem(id);
     sfx.pop(); haptic('light'); board.animSpawn(spot, id, i);
     if (c.p === 'tree') prog('spawn', 1);
+    // producers that run out (meteor craters) count down and then collapse
+    if (p.uses) {
+      c.u = (c.u === undefined ? p.uses : c.u) - 1;
+      if (c.u <= 0) {
+        b[i] = null;
+        setTimeout(() => { sparkle(i, 16, '#c9a678'); toast('The crater is empty now — wait for the next meteor.'); paintBoard(); }, 420);
+      } else {
+        floatText(i, c.u + ' left', '#ffe9a8');
+      }
+      paintBoard();
+    }
     lastAct = Date.now(); renderHUD(); renderOrders(); save();
   }
   function tryMerge(from: number, to: number) {
@@ -443,25 +490,39 @@ export async function startGame() {
   }
   function installPart(i: number, part: string) {
     const b = B(); if (!b[i] || !ITEMS[b[i].id] || ITEMS[b[i].id].part !== part) return;
+    const madeId = b[i].id;
     b[i] = null; S.parts[part] = 1;
-    paintCell(i); sparkle(i, 20, '#bff0ff'); sfx.big(); haptic('heavy'); confetti();
+    paintCell(i); board.consume(i, madeId); sparkle(i, 20, '#bff0ff'); sfx.big(); haptic('heavy'); confetti();
     const names = { hull: 'HULL', engine: 'ENGINE', nav: 'NAV DISH', tank: 'FUEL TANK' };
     toast('🚀 ' + names[part] + ' installed on the rocket!');
     prog('part', 1);
     renderRocket(); renderHUD(); save();
     if (allParts()) setTimeout(rocketDone, 900);
   }
+  /** The rocket is a one-time build. Once it stands up, the wreck has nothing
+   *  left to give: it goes away, leftover bits are cashed in, and the part
+   *  chains stop showing up in orders and in the shop. */
   function rocketDone() {
     const b = B();
-    if (!b.some(c => c && c.p === 'fuelpod')) { const i = firstFree([26, 27, 32, 20, 15]); if (i >= 0) b[i] = mkProd('fuelpod'); }
+    let refund = 0, cleared = 0;
+    for (let i = 0; i < N; i++) {
+      const c = b[i]; if (!c) continue;
+      if (c.p === 'wreck') { b[i] = null; sparkle(i, 22, '#cfe4ff'); cleared++; continue; }
+      if (c.id && PART_KEYS.indexOf(ITEMS[c.id]?.chain) >= 0) {
+        refund += ITEMS[c.id].sell; b[i] = null; sparkle(i, 8, '#ffe9a8');
+      }
+    }
+    if (refund) S.coins += refund;
     paintBoard(); confetti(); sfx.big();
-    modal('bloop', 'THE ROCKET IS WHOLE!', 'Blorp! She flies again! Now we just need FUEL. I planted a Fuel Pod on your board — merge its ore up into <b>Rocket Fuel</b>. Three of those and we can go visit my moon!', 'Let\'s go!');
-    renderRocket(); save();
+    modal('bloop', 'THE ROCKET IS WHOLE!',
+      `Blorp! She flies again — and the old wreck is picked clean, so it is gone${refund ? ` (I sold the leftovers: <b>+${refund} coins</b>)` : ''}. Now we need <b>FUEL</b>, and fuel ore only falls from the sky. Watch for <b>meteors</b>: each one leaves a crater you can dig. Three Rocket Fuel and we go visit my moon!`,
+      'Bring on the meteors!');
+    renderRocket(); renderHUD(); save();
   }
   function addFuel(i: number) {
     const b = B(); if (!b[i] || b[i].id !== 'rocketfuel') return;
     b[i] = null; S.fuel++;
-    paintCell(i); sparkle(i, 16, '#b6ffd2'); sfx.big();
+    paintCell(i); board.consume(i, 'rocketfuel'); sparkle(i, 16, '#b6ffd2'); sfx.big(); haptic('medium');
     toast('⛽ Rocket Fuel loaded! ' + S.fuel + '/' + CONFIG.rocket.fuelToLaunch);
     prog('fuelm', 1);
     if (S.fuel >= CONFIG.rocket.fuelToLaunch) setTimeout(() => { toast('Tank is FULL! Open 🗺️ Map and launch!'); }, 900);
@@ -493,16 +554,29 @@ export async function startGame() {
       renderHUD(); renderRocket(); save();
     }), 700);
   }
+  /* A meteor is an event, not background noise: it is rare, it is announced, and
+     it leaves a crater you dig for the two things nothing else gives you —
+     Star Scrap for the lab and Fuel Ore for the rocket. Craters run dry. */
   function randomMeteor() {
-    if (!S.met || view !== 'board') return;
-    const free = freeCells(); if (free.length < 3) return;
+    if (!S.met || view !== 'board') return false;
+    if (B().some(c => c && c.p === 'crater')) return false;   // one crater at a time
+    const free = freeCells(); if (free.length < 3) return false;
     const spot = rnd(free);
-    toast('☄️ Meteor shower! Rare scrap incoming!');
+    toast('☄️ <b>METEOR INCOMING!</b> Take cover!');
     flyMeteor(spot, () => {
-      B()[spot] = { id: 'scrap' }; gotItem('scrap');
-      paintCell(spot, 'drop'); toast('✨ Found <b>Star Scrap</b> — rare and worth a lot!');
-      renderOrders(); save();
+      B()[spot] = mkProd('crater');
+      paintBoard();
+      const uses = PRODS.crater.uses;
+      toast(`💥 A <b>crater</b>! Dig it ${uses} times for Star Scrap and Fuel Ore.`);
+      if (!S.sawCrater) {
+        S.sawCrater = 1;
+        setTimeout(() => modal('bloop', 'Dig it! Dig it!',
+          `Blorp! That is where the good stuff is. A crater gives <b>Star Scrap</b> (the lab loves it) and <b>Fuel Ore</b> — the <i>only</i> place fuel ore comes from. It is good for ${uses} digs and then it is just a hole. Meteors are rare, so never waste one!`,
+          'Digging!'), 900);
+      }
+      renderHUD(); renderOrders(); save();
     });
+    return true;
   }
 
   /* ================================================================= HINTS */
@@ -538,7 +612,7 @@ export async function startGame() {
     if (v === 'rocket' && !S.met) { sfx.no(); toast('Locked — keep playing, something will fall from the sky!'); return; }
     if (v === 'map' && !allParts()) { sfx.no(); toast('Locked — finish building the rocket first!'); return; }
     if (v === 'shop' && !shopOpen()) { sfx.no(); toast('The Trading Post opens at Level ' + CONFIG.unlocks.shopAtLevel + '!'); return; }
-    if (v === 'lab' && !labOpen()) { sfx.no(); toast('The Research Lab opens at Level ' + CONFIG.unlocks.labAtLevel + '!'); return; }
+    if (v === 'lab' && !labOpen()) { sfx.no(); toast('No lab yet — build one in the 🛒 Shop first.'); return; }
     view = v;
     SCREENS.forEach(k => $('#sc-' + k).classList.toggle('open', v === k));
     document.querySelectorAll<HTMLElement>('.tab').forEach(t => t.classList.toggle('on', t.dataset.v === v));
@@ -559,7 +633,7 @@ export async function startGame() {
       const t = ITEMS[id].tier; if (t >= 2 && t <= cap) pool.push(id);
     }));
     partsLeft().forEach(k => { if (S.met) { pool.push(CHAINS[k].items[0]); pool.push(CHAINS[k].items[1]); } });
-    if (S.met) { pool.push('fuelore'); pool.push('fuelcan'); }
+    if (S.seen.scrap) pool.push('scrap');
     const stock: any[] = [];
     for (let n = 0; n < SHOP.supplyStock && pool.length; n++) {
       const id = rnd(pool);
@@ -581,9 +655,9 @@ export async function startGame() {
     const price = supplyPrice(st.id);
     if (S.coins < price) { sfx.no(); toast('Not enough coins — sell a few spares!'); return; }
     if (!freeCells().length) { sfx.no(); toast('No room on the board! Merge something first.'); return; }
-    S.coins -= price; st.left--;
+    spend(price); st.left--;
     giveItem(st.id);
-    sfx.coin(); haptic('light'); bumpChip('#chipCoins');
+    sfx.coin(); haptic('light');
     toast('Bought a <b>' + ITEMS[st.id].name + '</b>!');
     renderShop(); renderHUD(); renderOrders(); save();
   }
@@ -593,7 +667,7 @@ export async function startGame() {
     if (S.coins < c.price) { sfx.no(); toast('Not enough coins yet.'); return; }
     if (!freeCells().length) { sfx.no(); toast('No room on the board! Merge something first.'); return; }
     if (id === 'blueprint') { pickPartFor(c); return; }
-    S.coins -= c.price;
+    spend(c.price);
     openCrate(partPiece(true) as string);
   }
   function pickPartFor(c: any) {
@@ -607,7 +681,7 @@ export async function startGame() {
         const k = btn.dataset.part as string;
         $('#modal').classList.remove('open');
         if (S.coins < c.price) return;
-        S.coins -= c.price;
+        spend(c.price);
         openCrate(CHAINS[k].items[1]);
       });
     }, 30);
@@ -619,13 +693,45 @@ export async function startGame() {
     toast('📦 Crate opened — <b>' + ITEMS[piece].name + '</b>!');
     renderShop(); renderHUD(); renderOrders(); save();
   }
+  /* Once the rocket stands up, part crates are dead weight — the depot takes
+     their place and keeps the shop worth opening for the rest of the game. */
+  const DEPOT = [
+    { id: 'fuelore', mult: 5, note: 'Impatient? Skip a meteor.' },
+    { id: 'fuelcan', mult: 4.5, note: 'Half a tank of ore in one go.' },
+  ];
+  const depotPrice = (d: any) => Math.round(ITEMS[d.id].sell * d.mult);
+  function buyDepot(k: number) {
+    const d = DEPOT[k], price = depotPrice(d);
+    if (S.coins < price) { sfx.no(); toast('Fuel is expensive — that costs ' + price + '.'); return; }
+    if (!freeCells().length) { sfx.no(); toast('No room on the board!'); return; }
+    spend(price); giveItem(d.id);
+    sfx.coin(); haptic('light');
+    toast('⛽ Bought <b>' + ITEMS[d.id].name + '</b>');
+    renderShop(); renderHUD(); renderOrders(); save();
+  }
+  function buildLab() {
+    const bd = CONFIG.lab.build;
+    if (S.lab.built) return;
+    if (countItem(bd.item) < bd.qty) { sfx.no(); toast('Need ' + bd.qty + ' × <b>' + ITEMS[bd.item].name + '</b> on the board.'); return; }
+    if (S.coins < bd.coins) { sfx.no(); toast('The lab costs ' + bd.coins + ' coins.'); return; }
+    spend(bd.coins);
+    for (let n = 0; n < bd.qty; n++) consumeOne(bd.item);
+    S.lab.built = 1;
+    sfx.big(); haptic('heavy'); confetti();
+    prog('lab', 1);
+    toast('🔬 The Research Lab is open!');
+    modal('bloop', 'Blorp! A LAB!',
+      'Look at her! Now put <b>two things from your board</b> on the bench and hit EXPERIMENT. Most pairs do nothing — but the right pairs make <b>relics</b>, the rarest treasures in the galaxy. Read the rumours for clues.',
+      'To science!');
+    paintBoard(); renderShop(); renderHUD(); renderOrders(); save();
+  }
   function buyUpgrade(id: string) {
     const u = SHOP.upgrades.filter(x => x.id === id)[0]; if (!u) return;
     const lv = upLv(id);
     if (lv >= u.max) { toast(u.name + ' is fully upgraded!'); return; }
     const price = upPrice(u);
     if (S.coins < price) { sfx.no(); toast('Not enough coins — that costs ' + price + '.'); return; }
-    S.coins -= price; S.up[id] = lv + 1;
+    spend(price); S.up[id] = lv + 1;
     if (id === 'energy') S.energy = Math.min(maxEnergy(), S.energy + CONFIG.upgrades.energyPerStep);
     if (id === 'orders') { fillOrders(); renderOrders(); }
     sfx.big(); haptic('medium'); confetti();
@@ -653,6 +759,29 @@ export async function startGame() {
     }).join('')}
       <div class="noteLine">${anyStock ? '🔄 Fresh stock in about ' + mins + ' min' : '🔄 Restocking — back in about ' + mins + ' min'}</div></div>`;
 
+    if (labOffered() && !S.lab.built) {
+      const bd = CONFIG.lab.build, have = countItem(bd.item), can = have >= bd.qty && S.coins >= bd.coins;
+      html += `<div class="card build"><div class="cardTitle">🏗️ Build the Research Lab</div>
+        <div class="shopRow"><div class="sArt">${ART.icon('flask')}</div>
+          <div class="sInfo"><div class="sName">Bloop's laboratory</div>
+            <div class="sDesc">Invent relics that no amount of merging can make.</div>
+            <div class="buildNeed"><span class="${have >= bd.qty ? 'ok' : ''}">${ART.item(bd.item)}${have}/${bd.qty}</span>
+              <span class="${S.coins >= bd.coins ? 'ok' : ''}">${coin}${bd.coins}</span></div></div>
+          <button class="buyBtn green" id="btnBuildLab" ${can ? '' : 'disabled'}>BUILD</button></div>
+        <div class="noteLine">${can ? 'Everything is ready — put it up!' : 'Star Scrap comes out of meteor craters.'}</div></div>`;
+    }
+
+    if (allParts()) {
+      html += `<div class="card"><div class="cardTitle">⛽ Fuel depot</div>
+        ${DEPOT.map((d, k) => {
+        const price = depotPrice(d), poor = S.coins < price;
+        return `<div class="shopRow"><div class="sArt">${ART.item(d.id)}</div>
+            <div class="sInfo"><div class="sName">${ITEMS[d.id].name}</div><div class="sDesc">${d.note}</div></div>
+            <button class="buyBtn green" data-depot="${k}" ${poor ? 'disabled' : ''}>${coin}${price}</button></div>`;
+      }).join('')}
+        <div class="noteLine">Fuel ore only falls in meteors, so the depot charges what it likes.</div></div>`;
+    }
+
     if (S.met && !allParts()) {
       html += `<div class="card"><div class="cardTitle">🛠️ Salvage crates</div>
         ${SHOP.crates.map(c => {
@@ -678,6 +807,8 @@ export async function startGame() {
     host.querySelectorAll('[data-buy]').forEach((b: any) => b.onclick = () => buySupply(+b.dataset.buy));
     host.querySelectorAll('[data-crate]').forEach((b: any) => b.onclick = () => buyCrate(b.dataset.crate));
     host.querySelectorAll('[data-up]').forEach((b: any) => b.onclick = () => buyUpgrade(b.dataset.up));
+    host.querySelectorAll('[data-depot]').forEach((b: any) => b.onclick = () => buyDepot(+b.dataset.depot));
+    const bl = $('#btnBuildLab'); if (bl) bl.onclick = () => buildLab();
   }
 
   /* ============================================================ RESEARCH LAB
@@ -726,7 +857,7 @@ export async function startGame() {
     const cost = knew ? r!.coins : CONFIG.lab.failFee;
     if (S.coins < cost) { sfx.no(); toast('That run costs ' + cost + ' coins — sell some spares!'); return; }
     if (!freeCells().length) { sfx.no(); toast('Leave one tile free for the result!'); return; }
-    S.coins -= cost; bumpChip('#chipCoins');
+    spend(cost);
     if (!r) {
       S.lab.tries = (S.lab.tries || 0) + 1;
       sfx.no(); shake(); haptic('light');
@@ -752,8 +883,8 @@ export async function startGame() {
     const r = RECIPES.filter(x => x.id === id)[0]; if (!r || S.lab.disc[id]) return;
     const price = Math.round(r.coins * 1.5);
     if (S.coins < price) { sfx.no(); toast('Bloop wants ' + price + ' coins for that hint.'); return; }
-    S.coins -= price; S.lab.disc[id] = 1;
-    sfx.coin(); bumpChip('#chipCoins');
+    spend(price); S.lab.disc[id] = 1;
+    sfx.coin();
     toast('📘 Recipe bought: <b>' + ITEMS[r.result].name + '</b>');
     renderLab(); renderHUD(); save();
   }
@@ -913,9 +1044,6 @@ export async function startGame() {
     setTimeout(() => {
       if (!S.boards[w]) S.boards[w] = freshBoard(w);
       S.world = w; S.unlocked[w] = 1; sel = null;
-      // carry the fuel pod over so you can refuel anywhere
-      const b = S.boards[w];
-      if (!b.some(c => c && c.p === 'fuelpod')) { const i = firstFree([26, 27, 32, 20]); if (i >= 0) b[i] = mkProd('fuelpod'); }
       S.orders = []; fillOrders();
       prog('travel', 1);
       board.setTheme(w as 'earth' | 'luna');
@@ -987,8 +1115,14 @@ export async function startGame() {
       if (S.shop.at !== before) { renderHUD(); if (view === 'shop') renderShop(); }
     }
     // random meteors
-    if (S.met && now > meteorTimer) { meteorTimer = now + CONFIG.meteor.everyMinMs + Math.random() * CONFIG.meteor.everyRandomMs;
-      if (Math.random() < CONFIG.meteor.chance) randomMeteor(); }
+    // a meteor the player could not receive (wrong screen, no room, crater still
+    // open) is retried shortly instead of burning a whole rare cycle
+    if (S.met && now > meteorTimer) {
+      const fell = Math.random() < CONFIG.meteor.chance ? randomMeteor() : true;
+      meteorTimer = fell
+        ? now + CONFIG.meteor.everyMinMs + Math.random() * CONFIG.meteor.everyRandomMs
+        : now + 20000;
+    }
   }
 
   function sweepSpecials() {

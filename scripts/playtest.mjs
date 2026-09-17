@@ -31,6 +31,14 @@ const tapCell = async (i) => {
   await page.mouse.click(p.x, p.y);
   await page.waitForTimeout(90);
 };
+const pt = (i) => page.evaluate(i => { const c = window.__board.center(i); const r = document.querySelector('#board canvas').getBoundingClientRect(); return { x: r.left + c.x, y: r.top + c.y }; }, i);
+const drag = async (from, to) => {
+  const a = await pt(from), b = await pt(to);
+  await page.mouse.move(a.x, a.y); await page.mouse.down();
+  await page.mouse.move((a.x + b.x) / 2, (a.y + b.y) / 2, { steps: 6 });
+  await page.mouse.move(b.x, b.y, { steps: 6 }); await page.mouse.up();
+  await page.waitForTimeout(500);
+};
 const closeModal = async () => {
   if (await page.locator('#modal.open').count()) { await page.click('#mBtn'); await page.waitForTimeout(250); }
 };
@@ -46,6 +54,9 @@ const curve = await page.evaluate(() => {
 });
 must(curve[0] === 8 && curve[9] > 250, `levels 1..10 cost ${curve.join(', ')}`);
 must(curve.reduce((a, b) => a + b, 0) > 1000, 'over 1000 XP to reach level 11');
+const cfg = await page.evaluate(() => window.__game.config);
+must(cfg.energy.regenMs >= 30000, `energy trickles back every ${cfg.energy.regenMs / 1000}s`);
+must(cfg.meteor.everyMinMs >= 180000, `meteors are at least ${cfg.meteor.everyMinMs / 60000} min apart`);
 
 /* ------------------------------------------------------- merging still works */
 head('Producers and merging');
@@ -112,7 +123,32 @@ const gift = await page.evaluate(() => {
 must(gift.partGift >= 20, `${gift.partGift}/60 rolled orders hand back a rocket piece (${gift.withGift} gifts total)`);
 
 /* ----------------------------------------------------------------- the lab */
+head('The lab has to be built');
+await set(() => {
+  const s = window.__game.state(), b = s.boards.earth;
+  for (let i = 0; i < b.length; i++) if (b[i]) b[i] = null;
+  s.parts = { hull: 1, engine: 1, nav: 1, tank: 1 };
+  s.coins = 4000;
+  b[12] = { id: 'gem' }; b[13] = { id: 'scrap' };
+});
+await page.waitForTimeout(300);
+must(await page.locator('#tabLab.hide').count() === 1, 'the Lab tab is hidden before it exists');
+await page.click('[data-v="shop"]'); await page.waitForTimeout(500);
+must(await page.locator('#btnBuildLab').count() === 1, 'a build card appears once the rocket is whole');
+must(await page.locator('#btnBuildLab[disabled]').count() === 1, 'BUILD is blocked without the materials');
+await set(() => { const b = window.__game.state().boards.earth; b[14] = { id: 'scrap' }; b[15] = { id: 'scrap' }; });
+await page.click('[data-v="board"]'); await page.waitForTimeout(250);
+await page.click('[data-v="shop"]'); await page.waitForTimeout(400);
+before = (await S()).coins;
+await page.click('#btnBuildLab'); await page.waitForTimeout(700); await closeModal(); await page.waitForTimeout(300);
+after = await S();
+must(after.lab.built === 1, 'lab built');
+must(after.coins < before, `the build spent coins (${before} -> ${after.coins}, minus the mission payout)`);
+must(after.boards.earth.filter(c => c && c.id === 'scrap').length === 0, 'the build ate 3 Star Scrap');
+must(await page.locator('#tabLab.hide').count() === 0, 'the Lab tab appears once built');
+
 head('Research Lab');
+await page.click('#sc-shop .scClose'); await page.waitForTimeout(300);
 await set(() => {
   const s = window.__game.state(), b = s.boards.earth;
   for (let i = 0; i < b.length; i++) if (b[i] && b[i].id) b[i] = null;
@@ -153,8 +189,49 @@ await closeModal(); await page.waitForTimeout(400);
 await shot('lab-known');
 must(await page.locator('#labBody [data-load="r1"]').count() === 1, 'the recipe is in the lab book, ready to brew again');
 
+head('Fuel does not leave a ghost tile (regression)');
+await page.click('#sc-lab .scClose'); await page.waitForTimeout(400);
+await set(() => {
+  const s = window.__game.state(), b = s.boards.earth;
+  for (let i = 0; i < b.length; i++) if (b[i]) b[i] = null;
+  s.parts = { hull: 1, engine: 1, nav: 1, tank: 1 }; s.fuel = 0;
+  b[20] = { id: 'fuelcan' }; b[21] = { id: 'fuelcan' };
+  window.__board.sync(b);
+});
+await page.waitForTimeout(400);
+await drag(20, 21);
+await page.waitForTimeout(900);
+let ghost = await page.evaluate(() => ({
+  fuel: window.__game.state().fuel,
+  cell: window.__game.cells()[21],
+  key: window.__board.slots[21].key,
+  sprite: !!window.__board.slots[21].art,
+}));
+must(ghost.fuel === 1, 'the fuel went into the tank');
+must(!ghost.cell, 'the tile is empty in the model');
+must(ghost.key === 'e' && !ghost.sprite, `the tile is empty on screen too (key "${ghost.key}", sprite ${ghost.sprite})`);
+
+head('Meteor craters run dry');
+await set(() => {
+  const s = window.__game.state(), b = s.boards.earth;
+  for (let i = 0; i < b.length; i++) if (b[i]) b[i] = null;
+  s.energy = 60;
+  b[10] = { p: 'crater', u: 6 };
+  window.__board.sync(b);
+});
+await page.waitForTimeout(300);
+for (let n = 0; n < 6; n++) await tapCell(10);
+await page.waitForTimeout(900);
+const crater = await page.evaluate(() => {
+  const g = window.__game, out = { gone: !g.cells()[10], ore: 0, scrap: 0 };
+  g.cells().forEach(c => { if (c && c.id === 'fuelore') out.ore++; if (c && c.id === 'scrap') out.scrap++; });
+  return out;
+});
+must(crater.gone, 'the crater collapses after its last dig');
+must(crater.ore >= 2, `it gave ${crater.ore} Fuel Ore and ${crater.scrap} Star Scrap`);
+must(await page.evaluate(() => !window.__game.prods.fuelpod), 'the free Fuel Pod producer is gone from the game');
+
 head('Catalogue');
-await page.click('#sc-lab .scClose'); await page.waitForTimeout(300);
 await page.click('[data-v="book"]'); await page.waitForTimeout(500);
 must((await page.locator('#bookBody .catBar').count()) === 1, 'collection bar shown');
 must((await page.textContent('#bookBody')).includes('Relics'), 'the Relics chain appears once unlocked');

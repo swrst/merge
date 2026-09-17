@@ -163,19 +163,19 @@
     "name": "Fuel Ore",
     "chain": "fuel",
     "tier": 1,
-    "sell": 6
+    "sell": 25
   },
   "fuelcan": {
     "name": "Fuel Can",
     "chain": "fuel",
     "tier": 2,
-    "sell": 15
+    "sell": 60
   },
   "rocketfuel": {
     "name": "Rocket Fuel",
     "chain": "fuel",
     "tier": 3,
-    "sell": 40,
+    "sell": 150,
     "fuel": true
   },
   "mrock": {

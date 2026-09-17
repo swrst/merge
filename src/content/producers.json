@@ -55,18 +55,6 @@
       "tankglass"
     ]
   },
-  "fuelpod": {
-    "name": "Fuel Pod",
-    "art": "fuelpod",
-    "mode": "timer",
-    "every": 18000,
-    "cap": 3,
-    "drops": [
-      "fuelore",
-      "fuelore",
-      "fuelcan"
-    ]
-  },
   "geyser": {
     "name": "Moon Geyser",
     "art": "geyser",
@@ -89,6 +77,22 @@
       "spore",
       "spore",
       "bulb"
+    ]
+  },
+  "crater": {
+    "name": "Meteor Crater",
+    "art": "crater",
+    "mode": "tap",
+    "cost": 1,
+    "uses": 7,
+    "drops": [
+      "fuelore",
+      "scrap",
+      "fuelore",
+      "fuelore",
+      "scrap",
+      "fuelore",
+      "starcore"
     ]
   }
 }

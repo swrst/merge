@@ -12,10 +12,10 @@
   "energy": {
     "base": 50,
     "perLevel": 5,
-    "regenMs": 15000,
+    "regenMs": 40000,
     "snack": {
       "amount": 20,
-      "cooldownMs": 60000
+      "cooldownMs": 180000
     }
   },
   "xp": {
@@ -34,9 +34,9 @@
   },
   "meteor": {
     "firstAtLevel": 3,
-    "everyMinMs": 55000,
-    "everyRandomMs": 45000,
-    "chance": 0.85
+    "everyMinMs": 210000,
+    "everyRandomMs": 150000,
+    "chance": 1
   },
   "rocket": {
     "fuelToLaunch": 3
@@ -45,8 +45,7 @@
     "idleMs": 17000
   },
   "unlocks": {
-    "shopAtLevel": 4,
-    "labAtLevel": 6
+    "shopAtLevel": 4
   },
   "upgrades": {
     "energyPerStep": 10,
@@ -56,6 +55,11 @@
   },
   "lab": {
     "failFee": 40,
-    "clueEvery": 3
+    "clueEvery": 3,
+    "build": {
+      "coins": 600,
+      "item": "scrap",
+      "qty": 3
+    }
   }
 }

@@ -71,15 +71,19 @@ unchanged. Apple Developer Program is $99/yr.
 ## 2. How to play
 
 - **Tap a producer** (Big Tree, Rock Pile) to shake out an item. Tap producers cost ⚡ energy.
-- **Timer producers** (Berry Bush, Fuel Pod, Glow Pod) fill themselves for free, bank up to 3
+- **Timer producers** (Berry Bush, Glow Pod) fill themselves for free, bank up to 3
   charges, and glow green with a badge when there's something to collect.
 - **Drag one item onto a matching one** to merge into the next tier. Tap-tap works too.
 - **Fill orders** from the cards above the board — they're the main source of XP.
 - **Level up** to refill energy to full and clear weed tiles, growing the board.
 - Tap any item to see what it sells for and what it merges into; sell spares for coins.
+- **Energy is the brake.** It trickles back one every 40 s (plus a 🍪 Snack Break every 3 min),
+  so a tap producer is a real decision, not a button to mash.
+- **Meteors are the event of the session.** One falls every 3½–6 minutes. It leaves a **crater**
+  you can dig 7 times, and that crater is the only source of **Fuel Ore** in the game.
 - **Spend those coins.** The 🛒 Trading Post opens at level 4: materials, salvage crates and
-  four permanent upgrades. The 🔬 Research Lab opens at level 6: put two things on the bench
-  and invent relics nobody can merge their way to.
+  four permanent upgrades. The 🔬 **Research Lab has to be built** — once the rocket flies,
+  Bloop will put one up for 3 Star Scrap and 600 coins, and only then does its tab appear.
 - Stuck? **💡 Hint** highlights a mergeable pair (and fires by itself if you idle).
 
 ---
@@ -106,9 +110,10 @@ unchanged. Apple Developer Program is $99/yr.
 - Every item has a name, tier and sell price; top-tier items are the money makers.
 
 ### Orders (contracts)
-- Three order cards at a time, each from a character with a portrait and a throwaway line.
-- Live `x/y` counters with a green tick per requirement; the card glows and bounces when
-  it can be delivered.
+- Three order cards at a time, each showing the **whole customer** — a full-body figure that
+  hops when the order is ready — their name, a throwaway line, and what they pay.
+- Wanted items are drawn large in their own slots with a live `x/y` counter and a green tick
+  when a requirement is met; the whole card glows and bounces when it can be delivered.
 - Orders only ask for chains whose producer you already have, so you're never sent
   hunting for something that doesn't exist yet.
 - Tapping a card points at the item on the board, or tells you which producer makes it.
@@ -121,7 +126,8 @@ unchanged. Apple Developer Program is $99/yr.
 - The curve is **quadratic** — `8 + (l-1)·7 + 2.6·(l-1)²` — so 8, 18, 32, 52, 78, 108, 144,
   184, 230, 282… Reaching level 11 takes over 1100 XP instead of a few easy minutes.
 - Each level needs more XP, refills energy completely and clears more board tiles.
-- Energy: 50 + 5/level (+10 per Backpack upgrade), +1 every 15 s, plus a 🍪 Snack Break.
+- Energy: 50 + 5/level (+10 per Backpack upgrade), +1 every 40 s, plus a 🍪 Snack Break
+  (+20, 3 minute cooldown). Slow on purpose: it is the pacing brake for the whole game.
 - Ten story missions track the whole arc, each paying coins on completion.
 
 ### 🛒 Trading Post (level 4)
@@ -132,15 +138,22 @@ The answer to "what are the coins even for".
 - **Salvage crates** — only while the rocket is unfinished. *Salvage Crate* (240) gives a
   random piece for a part you still need; *Blueprint Kit* (520) lets you pick the part.
   Either one unsticks a build that has gone cold.
+- **Fuel depot** — replaces the crates the moment the rocket is done, so the shop never
+  becomes dead weight: Fuel Ore and Fuel Cans at 4.5–5× their value.
+- **Build the Research Lab** — a one-off construction card (see below).
 - **Permanent upgrades**, forever and across every world: Bigger Backpack (+10 max energy,
   ×5), Fertiliser (auto producers refill 15 % faster, ×4), Order Board (+1 order slot, ×2),
   Big Cookie (+10 snack energy, ×3). Prices escalate per level.
 
-### 🔬 Research Lab (level 6)
-The twist on top of merging: *some things cannot be merged into existence*.
+### 🔬 Research Lab (built, not unlocked)
+It does not exist until you pay for it. Once the rocket is whole, a build card appears in the
+shop — **3 Star Scrap + 600 coins** — and the 🔬 tab is hidden from the dock until then, so
+the game never shows a locked door it has not explained. The twist on top of merging:
+*some things cannot be merged into existence*.
 - Load **two items from your board** onto the bench and hit EXPERIMENT. Any run costs a flat
   40 coin bench fee — so *discovering* a recipe is cheap, while *brewing a known one again*
-  costs its full price (250 → 1400 coins).
+  costs its full price (250 → 1400 coins). Every coin you spend anywhere floats up from the
+  button you pressed, so a purchase is never a silent number change.
 - A dud costs the fee and keeps your samples. Every third dud, Bloop spots a **clue** and the
   first ingredient of one unknown recipe is revealed.
 - Six recipes across two worlds, shown as riddles in the **Rumours** list until you crack them
@@ -151,14 +164,19 @@ The twist on top of merging: *some things cannot be merged into existence*.
   made your first.
 
 ### Events and story
-- **Meteor crashes** streak in from the sky, shake the board and leave rare Star Scrap.
-  Keep a tile free for them to land on.
 - The first meteor (level 3) is the story beat: Professor Bloop crawls out of the wreck.
-- The wreck becomes a producer dropping broken bits across four chains:
+- The wreck is a **one-time** producer dropping broken bits across four chains:
   Bolt → Bolt Pack → **Hull**, Spring → Coil → **Engine**, Wire → Circuit → **Nav Dish**,
-  Glass → Tank Glass → **Fuel Tank**.
+  Glass → Tank Glass → **Fuel Tank**. It aims its drops at the part you are furthest from
+  finishing, and the moment the rocket is whole it is picked clean and vanishes — leftover
+  bits are cashed in, and the part chains stop appearing in orders and in the shop.
 - Finished parts install themselves onto the rocket, which visually assembles in the 🚀 tab.
-- Then the Fuel Pod appears: Fuel Ore → Fuel Can → **Rocket Fuel**, three to fill the tank.
+- **Meteors after that are the fuel loop.** They are rare (3½–6 minutes apart, announced, one
+  crater at a time) and each leaves a **Meteor Crater**: a producer good for 7 digs of Star
+  Scrap and Fuel Ore, then it collapses. Fuel Ore → Fuel Can → **Rocket Fuel**, three to fill
+  the tank — about three craters per trip. A meteor that arrives while you are on another
+  screen or with a full board is retried a few seconds later rather than lost.
+- The Fuel Depot in the shop sells ore at a steep price for anyone who will not wait.
 - **Launch** plays a warp cutscene and lands you on Luna: new palette, new chains, new
   alien customers. Refuel to fly again.
 
@@ -192,7 +210,7 @@ worlds means editing data — no engine code.
 ```
 src/content/items.json        every item: name, chain, tier, sell price
 src/content/chains.json       merge chains: which items, in which order, which world
-src/content/producers.json    producers: tap or timer, cost, refill, what they drop
+src/content/producers.json    producers: tap or timer, cost, refill, `uses` if it runs out, drops
 src/content/worlds.json       worlds: chains, starting producers, locked tiles, characters
 src/content/characters.json   names and order lines
 src/content/missions.json     the story mission list
@@ -263,10 +281,11 @@ content is consistent.
 | `orders.slots` | how many order cards are visible |
 | `orders.maxTierAtLevel` | how quickly orders start asking for higher tiers |
 | `meteor.*` | when the story meteor fires and how often the random ones land |
+| `lab.build` | what the Research Lab costs to put up |
 | `rocket.fuelToLaunch` | fuel needed per trip |
 | `orders.partRewardChance` | how often an order gifts a rocket piece while the rocket is unfinished |
 | `orders.itemRewardChance` | how often it gifts an ordinary item otherwise |
-| `unlocks.shopAtLevel/labAtLevel` | when the 🛒 and 🔬 tabs open |
+| `unlocks.shopAtLevel` | when the 🛒 tab opens (the 🔬 lab is built, not unlocked) |
 | `upgrades.*PerStep` | what one level of each shop upgrade is worth |
 | `lab.failFee/clueEvery` | bench fee for an experiment, and how many duds earn a clue |
 | `hint.idleMs` | idle time before a hint fires on its own |
@@ -338,7 +357,9 @@ an order payout, instant-finish a producer timer.
 ## 8. Known gaps / next up
 
 - Art is still rasterised SVG. Real PNG/WebP sprite atlases are the biggest visual upgrade
-  available, and they'd also cut CPU at startup.
+  available, and they'd also cut CPU at startup. Order-card figures are composed
+  (`ART.figure()` nests the portrait on a body) rather than drawn one by one — fine for now,
+  a limit later.
 - Characters and celebrations could move to Spine (official Pixi v8 runtime) or Rive.
 - TypeScript is deliberately loose (`strict: false`) since this grew out of a JS prototype.
 - Only two worlds are playable; the third is a "coming soon" card — and it is where the

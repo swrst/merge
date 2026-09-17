@@ -44,8 +44,8 @@
   {
     "id": "fuelm",
     "need": 3,
-    "text": "Brew 3 Rocket Fuel",
-    "hint": "Merge fuel ore up into Rocket Fuel to fill the tank!",
+    "text": "Brew 3 Rocket Fuel from meteor ore",
+    "hint": "Fuel Ore only falls in meteors \u2014 tap the crater, then merge the ore up.",
     "coins": 200
   },
   {
@@ -54,6 +54,13 @@
     "text": "Fly to a new world",
     "hint": "Tank is full! Open \ud83d\ude80 and LAUNCH!",
     "coins": 500
+  },
+  {
+    "id": "lab",
+    "need": 1,
+    "text": "Build the Research Lab",
+    "hint": "Bloop wants a lab: 3 Star Scrap and 600 coins in the \ud83d\uded2 Shop.",
+    "coins": 200
   },
   {
     "id": "upgrade",
@@ -66,7 +73,7 @@
     "id": "research",
     "need": 3,
     "text": "Craft 3 relics in the Lab",
-    "hint": "Try combining things in the \ud83d\udd2c Lab \u2014 rare relics await.",
+    "hint": "Combine two things on the Lab bench \u2014 rare relics are waiting.",
     "coins": 400
   }
 ]

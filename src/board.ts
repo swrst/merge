@@ -28,6 +28,9 @@ type Slot = {
   timer?: Text;
   ring?: Graphics;
   idle?: gsap.core.Tween;
+  /** a merge landing that has not happened yet — killed if the slot is cleared first,
+   *  otherwise it would repaint a tile the game has already emptied (rocket parts, fuel) */
+  pending?: gsap.core.Tween | { kill(): void };
 };
 
 class PixiBoard {
@@ -123,9 +126,19 @@ class PixiBoard {
     this.laying = true;
     const gap = this.gap;
     const w = Math.max(120, this.host.clientWidth);
-    // cells follow the width; the board then claims exactly the height it needs,
-    // so the grid never floats in a half-empty panel
-    this.cell = Math.max(24, Math.floor((w - gap * (this.cols - 1)) / this.cols));
+    // Cells follow the width, but never past the room actually left below the
+    // order cards — otherwise a taller HUD pushes the last row under the dock.
+    const cellW = Math.floor((w - gap * (this.cols - 1)) / this.cols);
+    let cellH = cellW;
+    const shell = this.host.closest('.app') as HTMLElement | null;
+    const dock = shell?.querySelector('.dock') as HTMLElement | null;
+    if (shell) {
+      const top = this.host.getBoundingClientRect().top - shell.getBoundingClientRect().top;
+      const reserve = (dock ? dock.offsetHeight : 62) + 16;   // dock + the stage's own padding
+      const availH = Math.max(150, shell.clientHeight - top - reserve);
+      cellH = Math.floor((availH - gap * (this.rows - 1)) / this.rows);
+    }
+    this.cell = Math.max(24, Math.min(cellW, cellH));
     const gw = this.cols * this.cell + gap * (this.cols - 1);
     const gh = this.rows * this.cell + gap * (this.rows - 1);
     if (Math.abs(this.host.clientHeight - gh) > 1) this.host.style.height = gh + 'px';
@@ -218,6 +231,7 @@ class PixiBoard {
   }
   private clearSlot(i: number) {
     const s = this.slots[i] as any;
+    if (s.pending) { s.pending.kill(); s.pending = undefined; }
     if (s.idle) { s.idle.kill(); s.idle = undefined; }
     [s.art, s.timer, s.badge, s.ring, s.readyRing].forEach((o: any) => {
       if (o) { gsap.killTweensOf(o); o.destroy({ children: true }); }
@@ -290,7 +304,8 @@ class PixiBoard {
       gsap.to(flyer.scale, { x: 0.02, y: 0.02, duration: 0.16, ease: 'power2.in', onComplete: () => flyer.destroy() });
     }
     if (b.art) { gsap.killTweensOf(b.art); gsap.killTweensOf(b.art.scale); }
-    gsap.delayedCall(0.15, () => {
+    b.pending = gsap.delayedCall(0.15, () => {
+      this.slots[to].pending = undefined;
       this.fill(to, { id: newId }, 'i' + newId);
       const s = this.slots[to]; if (!s.art) return;
       if (s.idle) { s.idle.kill(); s.idle = undefined; }
@@ -301,6 +316,23 @@ class PixiBoard {
       this.burst(to, 0xffd45e, 12);
     });
   }
+  /** the item the game just took off the board (a rocket part, a can of fuel)
+   *  appears for a beat and flies away, so it never just blinks out */
+  consume(i: number, id: string) {
+    const p = this.center(i);
+    const sp = new Sprite(this.texture('i:' + id));
+    sp.anchor.set(0.5);
+    sp.position.set(p.x, p.y);
+    sp.width = sp.height = this.cell * 0.92;
+    this.lDrag.addChild(sp);
+    const tl = gsap.timeline({ onComplete: () => sp.destroy() });
+    tl.to(sp.scale, { x: sp.scale.x * 1.35, y: sp.scale.y * 1.35, duration: 0.18, ease: 'back.out(3)' })
+      .to(sp, { y: -this.cell, alpha: 0, duration: 0.5, ease: 'power2.in' })
+      .to(sp.scale, { x: 0.02, y: 0.02, duration: 0.5, ease: 'power2.in' }, '<')
+      .to(sp, { rotation: 0.6, duration: 0.68, ease: 'none' }, 0);
+    this.ringPulse(i, 0xbff0ff);
+  }
+
   /** expanding ring, used for merges and installs */
   ringPulse(i: number, color: number) {
     const p = this.center(i);

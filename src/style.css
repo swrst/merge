@@ -76,28 +76,35 @@ button{font-family:inherit;cursor:pointer;border:none}
 /* ---------------------------------------------------------------- orders */
 .orders{position:relative;z-index:6;display:flex;gap:7px;overflow-x:auto;overflow-y:hidden;padding:2px 10px 7px;scrollbar-width:none}
 .orders::-webkit-scrollbar{display:none}
-.order{flex:none;width:129px;background:linear-gradient(180deg,#fffdf6,#fff0d4);border-radius:16px;padding:6px 6px 7px;
+.order{flex:none;width:158px;background:linear-gradient(180deg,#fffdf6,#fff0d4);border-radius:18px;padding:7px 7px 8px;
   border:3px solid #fff;box-shadow:0 4px 0 rgba(150,105,50,.26),0 6px 12px rgba(0,0,0,.14);position:relative}
 .order.ready{box-shadow:0 4px 0 rgba(60,140,40,.4),0 0 0 3px #8ce46a,0 8px 18px rgba(80,190,60,.4);animation:readyBob 1.1s ease-in-out infinite}
 @keyframes readyBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
 .order.newin{animation:slideIn .4s cubic-bezier(.3,1.5,.6,1)}
 @keyframes slideIn{from{transform:scale(.7) translateY(10px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
-.oTop{display:flex;gap:6px;align-items:center}
-.oTop .face{width:32px;height:32px;flex:none;border-radius:50%;background:#fff;border:2.5px solid #ffe3b0}
-.oName{font-size:11px;font-weight:700;line-height:1.1}
-.oSay{font-size:8.5px;font-weight:500;color:#9a7a4e;line-height:1.15;margin-top:1px}
-.oNeeds{display:flex;gap:4px;margin:5px 0 4px}
-.oNeed{flex:1;background:#fff8e6;border:2px solid #f0dcb4;border-radius:12px;padding:2px;display:flex;align-items:center;justify-content:center;gap:2px;position:relative}
-.oNeed .art{width:26px;height:26px}
-.oNeed b{font-size:11px;font-weight:700;color:#8a6a3c}
+.oTop{display:flex;gap:6px;align-items:flex-end}
+.oFig{width:50px;flex:none;display:flex;align-items:flex-end;justify-content:center;
+  background:radial-gradient(ellipse at 50% 92%,rgba(255,220,150,.75),rgba(255,220,150,0) 70%);border-radius:14px}
+.oFig .fig{width:50px;height:75px;filter:drop-shadow(0 3px 3px rgba(80,50,20,.25));animation:bob 3s ease-in-out infinite}
+.order.ready .oFig .fig{animation:figHop .6s ease-in-out infinite}
+@keyframes figHop{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-5px) rotate(-3deg)}}
+.oWho{flex:1;min-width:0}
+.oName{font-size:12px;font-weight:700;line-height:1.1}
+.oSay{font-size:9px;font-weight:500;color:#9a7a4e;line-height:1.2;margin-top:1px;min-height:22px}
+.oRews{display:flex;align-items:center;gap:6px;margin-top:3px}
+.oNeeds{display:flex;gap:5px;margin:6px 0 6px}
+.oNeed{flex:1;background:#fff8e6;border:2.5px solid #f0dcb4;border-radius:14px;padding:3px 2px 1px;
+  display:flex;flex-direction:column;align-items:center;position:relative}
+.oNeed .art{width:38px;height:38px}
+.oNeed b{font-size:11px;font-weight:700;color:#8a6a3c;line-height:1.1}
 .oNeed.done{background:#e6ffdc;border-color:#8ce46a}
-.oNeed.done:after{content:"✓";position:absolute;top:-6px;right:-5px;width:16px;height:16px;border-radius:50%;background:#5ec93f;
-  color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 0 #3f9a28}
-.oFoot{display:flex;align-items:center;gap:5px}
+.oNeed.done:after{content:"✓";position:absolute;top:-7px;right:-6px;width:18px;height:18px;border-radius:50%;background:#5ec93f;
+  color:#fff;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 0 #3f9a28}
 .oRew{display:flex;align-items:center;gap:1px;font-size:10px;font-weight:700;color:#8a6a3c}
 .oRew .ic{width:14px;height:14px}
-.oRew .art{width:18px;height:18px}
-.btnDeliver{flex:1;border-radius:11px;padding:5px 3px;font-size:10.5px;font-weight:700;color:#fff;
+.oRew .art{width:17px;height:17px}
+.oRew.gift{background:#fff3d8;border-radius:99px;padding:0 3px;box-shadow:inset 0 0 0 1.5px #f0dcb4}
+.btnDeliver{width:100%;border-radius:13px;padding:7px 3px;font-size:12px;font-weight:700;color:#fff;
   background:linear-gradient(180deg,#cfc3ae,#a99b84);box-shadow:0 3px 0 #8d7f6a;text-shadow:0 1px 0 rgba(0,0,0,.18)}
 .btnDeliver.on{background:linear-gradient(180deg,#8fe86d,var(--green));box-shadow:0 3px 0 var(--green-d),0 4px 10px rgba(80,190,60,.45)}
 .btnDeliver:active{transform:translateY(2px);box-shadow:0 1px 0 var(--green-d)}
@@ -161,7 +168,8 @@ button{font-family:inherit;cursor:pointer;border:none}
 
 /* ------------------------------------------------------------------ dock */
 .dock{position:relative;z-index:6;margin-top:auto;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:0 10px 10px}
-.dock.six{grid-template-columns:repeat(6,1fr);gap:4px;padding:0 7px 10px}
+.dock.six{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;padding:0 7px 10px}
+.tab.hide{display:none}
 .tab{background:linear-gradient(180deg,#fffdf7,#ffe9c2);border:3px solid #fff;border-radius:18px;padding:5px 2px 4px;
   box-shadow:0 4px 0 rgba(150,105,50,.3),0 6px 12px rgba(0,0,0,.16);display:flex;flex-direction:column;align-items:center;gap:1px;
   font-size:10px;font-weight:700;color:#8a6a3c;position:relative}
@@ -175,8 +183,9 @@ button{font-family:inherit;cursor:pointer;border:none}
 .tab.locked{opacity:.5}
 
 /* --------------------------------------------------------------- screens */
-.screen{position:absolute;left:0;right:0;top:0;bottom:0;z-index:30;background:linear-gradient(180deg,#fff3dc,#ffe3b8);
-  display:flex;flex-direction:column;transform:translateY(100%);transition:transform .32s cubic-bezier(.4,1.2,.5,1);padding-bottom:66px}
+/* stops above the dock so you can tab straight to another screen */
+.screen{position:absolute;left:0;right:0;top:0;bottom:62px;z-index:30;background:linear-gradient(180deg,#fff3dc,#ffe3b8);
+  display:flex;flex-direction:column;transform:translateY(120%);transition:transform .32s cubic-bezier(.4,1.2,.5,1);padding-bottom:6px}
 .screen.open{transform:translateY(0)}
 .scHead{display:flex;align-items:center;gap:8px;padding:14px 14px 8px}
 .scTitle{font-size:20px;font-weight:700;flex:1}
@@ -325,6 +334,22 @@ button{font-family:inherit;cursor:pointer;border:none}
 .ownTag{display:inline-block;font-size:8px;font-weight:700;color:#fff;background:#b79760;border-radius:99px;padding:0 5px;line-height:13px;margin-top:1px}
 .ownTag.have{background:linear-gradient(180deg,#8fe86d,#4fb63a)}
 .cSell{font-size:8px;font-weight:600;color:#c2a274;line-height:1.1}
+
+.card.build{background:linear-gradient(180deg,#fffaf0,#eaffe2);border-color:#dff5d2}
+.buildNeed{display:flex;gap:8px;margin-top:4px}
+.buildNeed span{display:flex;align-items:center;gap:2px;font-size:10.5px;font-weight:700;color:#b08a4e;
+  background:#fff6e4;border-radius:99px;padding:1px 7px 1px 2px}
+.buildNeed span.ok{color:#3f8f2e;background:#e8ffdc}
+.buildNeed .art,.buildNeed .ic{width:17px;height:17px}
+.domFloat{position:absolute;z-index:220;transform:translate(-50%,0);font-size:19px;font-weight:700;color:#ffd45e;
+  text-shadow:0 2px 0 rgba(80,48,12,.9),0 3px 12px rgba(0,0,0,.45);pointer-events:none;white-space:nowrap;
+  animation:domFloatUp 1.15s cubic-bezier(.2,.75,.3,1) forwards}
+@keyframes domFloatUp{
+  0%{transform:translate(-50%,8px) scale(.55);opacity:0}
+  16%{transform:translate(-50%,-6px) scale(1.18);opacity:1}
+  30%{transform:translate(-50%,-12px) scale(1);opacity:1}
+  72%{transform:translate(-50%,-26px) scale(1);opacity:1}
+  100%{transform:translate(-50%,-48px) scale(.95);opacity:0}}
 
 /* ---------------------------------------------------------------- infoBar */
 .infoBar{position:absolute;left:10px;right:10px;bottom:74px;z-index:45;display:none;align-items:center;gap:7px;
