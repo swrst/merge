@@ -1,25 +1,19 @@
 node_modules/
 dist/
 dist-standalone/
-
-# build byproducts
 MergeRocket.html
-artifact-body.html
 
 # native build output
-android/.gradle/
-android/.idea/
-android/build/
 android/app/build/
-android/app/debug/
-android/app/release/
+android/build/
+android/.gradle/
 android/local.properties
+android/.idea/
+android/app/release/
+android/app/debug/
 ios/App/build/
 ios/App/Pods/
 ios/App/output/
-
-# local chat-delivery copies, not part of the project
-Claude outputs/
 
 .DS_Store
 Thumbs.db

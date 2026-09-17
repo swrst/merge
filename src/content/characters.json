@@ -1,0 +1,78 @@
+{
+  "pip": {
+    "name": "Pip",
+    "lines": []
+  },
+  "grandma": {
+    "name": "Grandma Plum",
+    "lines": [
+      "My pie senses are tingling!",
+      "Be a dear, fetch me this!",
+      "I am too old to climb trees."
+    ]
+  },
+  "timmy": {
+    "name": "Scout Timmy",
+    "lines": [
+      "My fort needs supplies!",
+      "Badge time! Help me out?",
+      "I promise I will share. Maybe."
+    ]
+  },
+  "gigi": {
+    "name": "Chef Gigi",
+    "lines": [
+      "Ze recipe demands it!",
+      "My kitchen is desperate!",
+      "Quickly, before ze soup cools!"
+    ]
+  },
+  "biscuit": {
+    "name": "Biscuit",
+    "lines": [
+      "Woof! (He wants this.)",
+      "*tail wag intensifies*",
+      "Bork bork! (Please?)"
+    ]
+  },
+  "bloop": {
+    "name": "Prof. Bloop",
+    "lines": [
+      "For SCIENCE! And snacks.",
+      "My scanner says: gimme.",
+      "Blorp! I need this thing."
+    ]
+  },
+  "zib": {
+    "name": "Zib",
+    "lines": [
+      "Three eyes, one wish!",
+      "Zib want. Zib pay.",
+      "Trade you space money!"
+    ]
+  },
+  "luma": {
+    "name": "Luma",
+    "lines": [
+      "It would look lovely on my ship.",
+      "Pretty please, star friend?",
+      "I collect these!"
+    ]
+  },
+  "rokk": {
+    "name": "Rokk",
+    "lines": [
+      "BEEP. RESOURCE REQUEST.",
+      "MY CIRCUITS DEMAND IT.",
+      "TRADE = GOOD. YES."
+    ]
+  },
+  "nix": {
+    "name": "Nix",
+    "lines": [
+      "I wandered far for this.",
+      "Shiny. I want it.",
+      "A gift for my home world?"
+    ]
+  }
+}

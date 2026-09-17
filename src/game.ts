@@ -2,100 +2,22 @@
 import { ART } from './art';
 import { haptic } from './native';
 import { board } from './board';
+import { ads } from './ads';
+import {
+  ITEMS, CHAINS, PRODUCERS as PRODS, WORLDS, CHARACTERS as CHARS, MISSIONS, CONFIG,
+  ITEM_IDS, PRODUCER_ARTS, nextOf, validateContent,
+} from './content';
 
 export async function startGame() {
   const $ = (s: string): any => document.querySelector(s);
   const el = (t: string, c?: string) => { const e = document.createElement(t); if (c) e.className = c; return e; };
   const rnd = (a: any[]) => a[Math.floor(Math.random() * a.length)];
   const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
-  const COLS = 6, ROWS = 8, N = COLS * ROWS;
+  const COLS = CONFIG.board.cols, ROWS = CONFIG.board.rows, N = COLS * ROWS;
 
-  /* ============================================================= CONTENT */
-  const ITEMS = {
-    twig: { n: 'Twig', c: 'wood', t: 1, sell: 2 }, branch: { n: 'Branch', c: 'wood', t: 2, sell: 5 },
-    log: { n: 'Log', c: 'wood', t: 3, sell: 14 }, lumber: { n: 'Lumber Pile', c: 'wood', t: 4, sell: 34 },
-    pebble: { n: 'Pebble', c: 'stone', t: 1, sell: 2 }, rock: { n: 'Rock', c: 'stone', t: 2, sell: 6 },
-    geode: { n: 'Geode', c: 'stone', t: 3, sell: 15 }, gem: { n: 'Gemstone', c: 'stone', t: 4, sell: 38 },
-    berry: { n: 'Berry', c: 'berry', t: 1, sell: 3 }, berries: { n: 'Berry Bunch', c: 'berry', t: 2, sell: 7 },
-    jam: { n: 'Jam Jar', c: 'berry', t: 3, sell: 17 }, pie: { n: 'Berry Pie', c: 'berry', t: 4, sell: 42 },
-    scrap: { n: 'Star Scrap', c: 'star', t: 1, sell: 30 }, starcore: { n: 'Star Core', c: 'star', t: 2, sell: 80 },
-    bolt: { n: 'Bolt', c: 'hull', t: 1, sell: 4 }, boltpack: { n: 'Bolt Pack', c: 'hull', t: 2, sell: 10 },
-    hullplate: { n: 'Hull Plate', c: 'hull', t: 3, sell: 28, part: 'hull' },
-    spring: { n: 'Spring', c: 'engine', t: 1, sell: 4 }, coil: { n: 'Coil', c: 'engine', t: 2, sell: 10 },
-    enginecore: { n: 'Engine Core', c: 'engine', t: 3, sell: 28, part: 'engine' },
-    wire: { n: 'Wire', c: 'nav', t: 1, sell: 4 }, circuit: { n: 'Circuit', c: 'nav', t: 2, sell: 10 },
-    navdish: { n: 'Nav Dish', c: 'nav', t: 3, sell: 28, part: 'nav' },
-    glass: { n: 'Glass Shard', c: 'tank', t: 1, sell: 4 }, tankglass: { n: 'Tank Glass', c: 'tank', t: 2, sell: 10 },
-    fueltank: { n: 'Fuel Tank', c: 'tank', t: 3, sell: 28, part: 'tank' },
-    fuelore: { n: 'Fuel Ore', c: 'fuel', t: 1, sell: 6 }, fuelcan: { n: 'Fuel Can', c: 'fuel', t: 2, sell: 15 },
-    rocketfuel: { n: 'Rocket Fuel', c: 'fuel', t: 3, sell: 40, fuel: true },
-    mrock: { n: 'Moon Rock', c: 'moon', t: 1, sell: 4 }, mcrystal: { n: 'Moon Crystal', c: 'moon', t: 2, sell: 9 },
-    mcore: { n: 'Lunar Core', c: 'moon', t: 3, sell: 20 }, mstar: { n: 'Star Crystal', c: 'moon', t: 4, sell: 46 },
-    spore: { n: 'Glow Spore', c: 'glow', t: 1, sell: 4 }, bulb: { n: 'Glow Bulb', c: 'glow', t: 2, sell: 9 },
-    glowflower: { n: 'Glow Flower', c: 'glow', t: 3, sell: 20 }, starbloom: { n: 'Star Bloom', c: 'glow', t: 4, sell: 46 },
-  };
-  const CHAINS = {
-    wood: { n: 'Woodworks', w: 'earth', ids: ['twig', 'branch', 'log', 'lumber'] },
-    stone: { n: 'Rock Quarry', w: 'earth', ids: ['pebble', 'rock', 'geode', 'gem'] },
-    berry: { n: 'Berry Kitchen', w: 'earth', ids: ['berry', 'berries', 'jam', 'pie'] },
-    star: { n: 'Meteor Finds', w: 'any', ids: ['scrap', 'starcore'] },
-    hull: { n: 'Rocket: Hull', w: 'ship', ids: ['bolt', 'boltpack', 'hullplate'] },
-    engine: { n: 'Rocket: Engine', w: 'ship', ids: ['spring', 'coil', 'enginecore'] },
-    nav: { n: 'Rocket: Nav Dish', w: 'ship', ids: ['wire', 'circuit', 'navdish'] },
-    tank: { n: 'Rocket: Fuel Tank', w: 'ship', ids: ['glass', 'tankglass', 'fueltank'] },
-    fuel: { n: 'Rocket Fuel', w: 'ship', ids: ['fuelore', 'fuelcan', 'rocketfuel'] },
-    moon: { n: 'Moon Rocks', w: 'luna', ids: ['mrock', 'mcrystal', 'mcore', 'mstar'] },
-    glow: { n: 'Glow Garden', w: 'luna', ids: ['spore', 'bulb', 'glowflower', 'starbloom'] },
-  };
-  const PRODS = {
-    tree: { n: 'Big Tree', art: 'tree', mode: 'tap', cost: 1, drops: ['twig', 'twig', 'twig', 'branch'] },
-    rocks: { n: 'Rock Pile', art: 'rocks', mode: 'tap', cost: 1, drops: ['pebble', 'pebble', 'pebble', 'rock'] },
-    bush: { n: 'Berry Bush', art: 'bush', mode: 'timer', every: 15000, cap: 3, drops: ['berry', 'berry', 'berries'] },
-    wreck: { n: 'Rocket Wreck', art: 'scrapwreck', mode: 'tap', cost: 1, drops: ['bolt', 'spring', 'wire', 'glass', 'bolt', 'spring', 'wire', 'glass', 'boltpack', 'coil', 'circuit', 'tankglass'] },
-    fuelpod: { n: 'Fuel Pod', art: 'fuelpod', mode: 'timer', every: 18000, cap: 3, drops: ['fuelore', 'fuelore', 'fuelcan'] },
-    geyser: { n: 'Moon Geyser', art: 'geyser', mode: 'tap', cost: 1, drops: ['mrock', 'mrock', 'mrock', 'mcrystal'] },
-    glowpod: { n: 'Glow Pod', art: 'glowpod', mode: 'timer', every: 15000, cap: 3, drops: ['spore', 'spore', 'bulb'] },
-  };
-  const LOCKS_E = { 0: 2, 1: 2, 4: 2, 5: 2, 2: 3, 3: 3, 42: 4, 43: 4, 46: 4, 47: 4, 44: 5, 45: 5 };
-  const LOCKS_L = { 0: 2, 5: 2, 42: 2, 47: 2, 1: 3, 4: 3, 43: 3, 46: 3, 2: 4, 3: 4, 44: 5, 45: 5 };
-  const WORLDS = {
-    earth: {
-      n: 'Sunny Meadow', sub: 'Home planet', planet: 'earth', chains: ['wood', 'stone', 'berry'],
-      start: [{ i: 19, p: 'tree' }, { i: 22, p: 'rocks' }], locks: LOCKS_E,
-      folks: ['grandma', 'timmy', 'gigi', 'biscuit'],
-    },
-    luna: {
-      n: 'Crater Camp', sub: 'Luna', planet: 'luna', chains: ['moon', 'glow'],
-      start: [{ i: 19, p: 'geyser' }, { i: 22, p: 'glowpod' }], locks: LOCKS_L,
-      folks: ['zib', 'luma', 'rokk', 'nix'],
-    },
-  };
-  const CHARS = {
-    pip: { n: 'Pip' },
-    grandma: { n: 'Grandma Plum', say: ['My pie senses are tingling!', 'Be a dear, fetch me this!', 'I am too old to climb trees.'] },
-    timmy: { n: 'Scout Timmy', say: ['My fort needs supplies!', 'Badge time! Help me out?', 'I promise I will share. Maybe.'] },
-    gigi: { n: 'Chef Gigi', say: ['Ze recipe demands it!', 'My kitchen is desperate!', 'Quickly, before ze soup cools!'] },
-    biscuit: { n: 'Biscuit', say: ['Woof! (He wants this.)', '*tail wag intensifies*', 'Bork bork! (Please?)'] },
-    bloop: { n: 'Prof. Bloop', say: ['For SCIENCE! And snacks.', 'My scanner says: gimme.', 'Blorp! I need this thing.'] },
-    zib: { n: 'Zib', say: ['Three eyes, one wish!', 'Zib want. Zib pay.', 'Trade you space money!'] },
-    luma: { n: 'Luma', say: ['It would look lovely on my ship.', 'Pretty please, star friend?', 'I collect these!'] },
-    rokk: { n: 'Rokk', say: ['BEEP. RESOURCE REQUEST.', 'MY CIRCUITS DEMAND IT.', 'TRADE = GOOD. YES.'] },
-    nix: { n: 'Nix', say: ['I wandered far for this.', 'Shiny. I want it.', 'A gift for my home world?'] },
-  };
-  const MISSIONS = [
-    { id: 'spawn', need: 3, txt: 'Shake the Big Tree 3 times', hint: 'Tap the <b>Big Tree</b> to shake out twigs!', coins: 25 },
-    { id: 'merge', need: 2, txt: 'Merge 2 times', hint: '<b>Drag</b> one item onto a matching one to merge!', coins: 25 },
-    { id: 'deliver', need: 2, txt: 'Deliver 2 orders', hint: 'Fill an order up top — orders give the most XP!', coins: 60 },
-    { id: 'level', need: 3, txt: 'Reach Level 3', hint: 'Level up to clear weeds and refill energy.', coins: 80 },
-    { id: 'meteor', need: 1, txt: 'Find what fell from the sky', hint: 'Keep playing... something is coming.', coins: 100 },
-    { id: 'part', need: 4, txt: 'Build all 4 rocket parts', hint: 'Tap the wreck for parts, merge them into rocket pieces!', coins: 250 },
-    { id: 'fuelm', need: 3, txt: 'Brew 3 Rocket Fuel', hint: 'Merge fuel ore up into Rocket Fuel to fill the tank!', coins: 200 },
-    { id: 'travel', need: 1, txt: 'Fly to a new world', hint: 'Tank is full! Open 🚀 and LAUNCH!', coins: 500 },
-  ];
-
-  const xpNeed = (l: number) => 6 + (l - 1) * 5;
-  const maxEnergy = () => 50 + (S.lvl - 1) * 5;
-  const nextOf = (id: string): string | null => { const d = ITEMS[id]; if (!d) return null; const a = CHAINS[d.c].ids, i = a.indexOf(id); return i >= 0 && i < a.length - 1 ? a[i + 1] : null; };
+  /* Content lives in src/content/*.json — see content/index.ts */
+  const xpNeed = (l: number) => CONFIG.xp.base + (l - 1) * CONFIG.xp.perLevel;
+  const maxEnergy = () => CONFIG.energy.base + (S.lvl - 1) * CONFIG.energy.perLevel;
 
   /* =============================================================== STATE */
   const SAVE = 'mergeRocket_v2';
@@ -106,16 +28,16 @@ export async function startGame() {
     const w = WORLDS[world], b = new Array(N).fill(null);
     const lvl = (typeof S !== 'undefined' && S && S.lvl) ? S.lvl : 1;
     for (const k in w.locks) if (w.locks[k] > lvl) b[k] = { b: w.locks[k] };
-    w.start.forEach(s => { b[s.i] = mkProd(s.p); });
+    w.start.forEach(s => { b[s.cell] = mkProd(s.producer); });
     // a few starter items so the board isn't bare
-    const c0 = CHAINS[w.chains[0]].ids[0], c1 = CHAINS[w.chains[1]].ids[0];
+    const c0 = CHAINS[w.chains[0]].items[0], c1 = CHAINS[w.chains[1]].items[0];
     [13, 16, 25, 28].forEach((i, k) => { if (!b[i]) b[i] = { id: k % 2 ? c1 : c0 }; });
     return b;
   }
   function mkProd(k: string) { const p = PRODS[k], o: any = { p: k }; if (p.mode === 'timer') { o.ch = 1; o.at = Date.now(); } return o; }
   function fresh() {
     return {
-      v: 2, world: 'earth', lvl: 1, xp: 0, coins: 120, energy: 45, eAt: Date.now(),
+      v: 2, world: 'earth', lvl: 1, xp: 0, coins: CONFIG.start.coins, energy: CONFIG.start.energy, eAt: Date.now(),
       boards: { earth: freshBoard('earth'), luna: null },
       orders: [], seen: { twig: 1, pebble: 1 }, parts: { hull: 0, engine: 0, nav: 0, tank: 0 },
       fuel: 0, mp: {}, met: 0, unlocked: { luna: 0 }, snackAt: 0, sound: 1, tut: 0,
@@ -186,7 +108,7 @@ export async function startGame() {
       },
       canDrag: (i: number) => { const c = B()[i]; return !!c && !c.b; },
     });
-    await board.preload(Object.keys(ITEMS), Object.keys(PRODS).map(k => PRODS[k].art));
+    await board.preload(ITEM_IDS, PRODUCER_ARTS);
     board.setTheme(S.world as 'earth' | 'luna');
   }
 
@@ -222,14 +144,14 @@ export async function startGame() {
     $('#xpTxt').textContent = S.xp + '/' + xpNeed(S.lvl);
     $('#xpFill').style.width = clamp(S.xp / xpNeed(S.lvl) * 100, 0, 100) + '%';
     $('#app').classList.toggle('luna', S.world === 'luna');
-    $('#worldName').textContent = W().n;
+    $('#worldName').textContent = W().name;
     $('#worldIcon').innerHTML = ART.planet(W().planet);
     const m = curMission();
     $('#guideFace').innerHTML = ART.char(S.met ? 'bloop' : 'pip');
     $('#guideTxt').innerHTML = m ? m.hint : '<b>Nice!</b> Keep merging, trading and exploring — more worlds are waiting.';
     $('#tabRocket').classList.toggle('locked', !S.met);
     $('#tabMap').classList.toggle('locked', !allParts());
-    $('#dotRocket').style.display = (S.met && (readyParts() || S.fuel >= 3)) ? '' : 'none';
+    $('#dotRocket').style.display = (S.met && (readyParts() || S.fuel >= CONFIG.rocket.fuelToLaunch)) ? '' : 'none';
   }
   function curMission() { return MISSIONS.find(m => (S.mp[m.id] || 0) < m.need); }
   function readyParts() { return !allParts() && Object.keys(S.parts).some(k => !S.parts[k]); }
@@ -244,7 +166,7 @@ export async function startGame() {
       const card = el('div', 'order' + (ready ? ' ready' : '') + (newIds && newIds.indexOf(o.id) >= 0 ? ' newin' : ''));
       const ch = CHARS[o.char];
       card.innerHTML =
-        `<div class="oTop"><div class="face">${ART.char(o.char)}</div><div><div class="oName">${ch.n}</div><div class="oSay">${o.say}</div></div></div>
+        `<div class="oTop"><div class="face">${ART.char(o.char)}</div><div><div class="oName">${ch.name}</div><div class="oSay">${o.say}</div></div></div>
          <div class="oNeeds">${o.needs.map(nd => {
           const have = Math.min(countItem(nd.id), nd.qty);
           return `<div class="oNeed${have >= nd.qty ? ' done' : ''}">${ART.item(nd.id)}<b>${have}/${nd.qty}</b></div>`;
@@ -260,17 +182,17 @@ export async function startGame() {
     const need = o.needs.find(nd => countItem(nd.id) < nd.qty) || o.needs[0];
     const b = B(); let at = -1;
     for (let i = 0; i < N; i++) if (b[i] && b[i].id === need.id) { at = i; break; }
-    if (at >= 0) { hintPair = [at]; board.setHint(hintPair); setTimeout(() => { hintPair = null; board.setHint(null); }, 1800); toast('Here it is! ' + ITEMS[need.id].n); }
+    if (at >= 0) { hintPair = [at]; board.setHint(hintPair); setTimeout(() => { hintPair = null; board.setHint(null); }, 1800); toast('Here it is! ' + ITEMS[need.id].name); }
     else {
       const src = sourceHint(need.id);
-      toast('Need <b>' + ITEMS[need.id].n + '</b> — ' + src);
+      toast('Need <b>' + ITEMS[need.id].name + '</b> — ' + src);
     }
   }
   function sourceHint(id: string) {
-    const d = ITEMS[id], ids = CHAINS[d.c].ids, base = ids[0];
+    const d = ITEMS[id], ids = CHAINS[d.chain].items, base = ids[0];
     for (const k in PRODS) if (PRODS[k].drops.indexOf(base) >= 0) {
       const on = B().some(c => c && c.p === k);
-      return (on ? 'tap the ' : 'find the ') + PRODS[k].n + (d.t > 1 ? ' and merge up' : '');
+      return (on ? 'tap the ' : 'find the ') + PRODS[k].name + (d.tier > 1 ? ' and merge up' : '');
     }
     return 'merge smaller ones together';
   }
@@ -284,15 +206,15 @@ export async function startGame() {
     const live: Record<string, boolean> = {};
     B().forEach(c => {
       if (!c || !c.p) return;
-      PRODS[c.p].drops.forEach((d: string) => { live[ITEMS[d].c] = true; });
+      PRODS[c.p].drops.forEach((d: string) => { live[ITEMS[d].chain] = true; });
     });
     let pool: string[] = [];
-    w.chains.forEach(c => { if (live[c]) CHAINS[c].ids.forEach(id => { if (ITEMS[id].t <= maxT) pool.push(id); }); });
-    if (!pool.length) w.chains.forEach(c => CHAINS[c].ids.forEach(id => { if (ITEMS[id].t <= maxT) pool.push(id); }));
+    w.chains.forEach(c => { if (live[c]) CHAINS[c].items.forEach(id => { if (ITEMS[id].tier <= maxT) pool.push(id); }); });
+    if (!pool.length) w.chains.forEach(c => CHAINS[c].items.forEach(id => { if (ITEMS[id].tier <= maxT) pool.push(id); }));
     if (S.seen.scrap && Math.random() < 0.15) pool.push('scrap');
     if (S.met && Math.random() < 0.12) pool.push(rnd(['bolt', 'spring', 'wire', 'glass']));
     const pick = rnd(pool), d = ITEMS[pick];
-    const needs = [{ id: pick, qty: d.t >= 3 ? 1 : 1 + Math.floor(Math.random() * 2) }];
+    const needs = [{ id: pick, qty: d.tier >= 3 ? 1 : 1 + Math.floor(Math.random() * 2) }];
     if (S.lvl >= 4 && Math.random() < 0.3) {
       const p2 = rnd(pool.filter(x => x !== pick));
       if (p2) needs.push({ id: p2, qty: 1 });
@@ -301,14 +223,14 @@ export async function startGame() {
     const folks = W().folks.concat(S.met ? ['bloop'] : []);
     const char = rnd(folks);
     return {
-      id: 'o' + (oid++), char, say: rnd(CHARS[char].say),
+      id: 'o' + (oid++), char, say: rnd(CHARS[char].lines),
       needs, coins: Math.round(worth * (2 + Math.random())) + 8,
-      xp: 3 + needs.reduce((a, nd) => a + ITEMS[nd.id].t * 2 + nd.qty, 0),
+      xp: 3 + needs.reduce((a, nd) => a + ITEMS[nd.id].tier * 2 + nd.qty, 0),
     };
   }
   function fillOrders() {
     let guard = 0;
-    while (S.orders.length < 3 && guard++ < 40) {
+    while (S.orders.length < CONFIG.orders.slots && guard++ < 40) {
       const o = rollOrder();
       if (S.orders.some(x => x.char === o.char) && guard < 30) continue;
       S.orders.push(o);
@@ -323,7 +245,7 @@ export async function startGame() {
     let nw = rollOrder(), guard = 0;
     while (guard++ < 25 && S.orders.some((x, k) => k !== idx && x.char === nw.char)) nw = rollOrder();
     S.orders[idx] = nw;
-    sfx.coin(); toast(`${CHARS[o.char].n}: thank you! +${o.coins} coins`);
+    sfx.coin(); toast(`${CHARS[o.char].name}: thank you! +${o.coins} coins`);
     prog('deliver', 1);
     addXp(o.xp);
     paintBoard(); renderOrders([nw.id]); renderHUD(); save();
@@ -353,7 +275,7 @@ export async function startGame() {
     $('#luSub').textContent = 'Energy refilled • weeds cleared';
     lu.classList.remove('show'); void lu.offsetWidth; lu.classList.add('show');
     setTimeout(() => lu.classList.remove('show'), 2100);
-    if (S.lvl >= 3 && !S.met) setTimeout(meteorStory, 1800);
+    if (S.lvl >= CONFIG.meteor.firstAtLevel && !S.met) setTimeout(meteorStory, 1800);
   }
   function prog(id: string, add?: number, setTo?: number) {
     const m = MISSIONS.find(x => x.id === id); if (!m) return;
@@ -361,7 +283,7 @@ export async function startGame() {
     S.mp[id] = setTo !== undefined ? setTo : was + add;
     if (S.mp[id] >= m.need) {
       S.coins += m.coins; bumpChip('#chipCoins'); sfx.coin();
-      setTimeout(() => toast('✅ ' + m.txt + ' — +' + m.coins + ' coins!'), 600);
+      setTimeout(() => toast('✅ ' + m.text + ' — +' + m.coins + ' coins!'), 600);
     }
     renderHUD(); renderRocket();
   }
@@ -381,7 +303,7 @@ export async function startGame() {
     const spot = nearFree(i);
     if (spot < 0) { sfx.no(); toast('No space! Merge some items first.'); return; }
     if (p.mode === 'timer') {
-      if (!c.ch) { sfx.no(); toast(p.n + ' is still growing — ' + Math.ceil((p.every - (Date.now() - c.at)) / 1000) + 's'); return; }
+      if (!c.ch) { sfx.no(); toast(p.name + ' is still growing — ' + Math.ceil((p.every - (Date.now() - c.at)) / 1000) + 's'); return; }
       c.ch--; if (c.ch === 0) c.at = Date.now();
     } else {
       if (S.energy < p.cost) { sfx.no(); toast('Out of energy! Wait a bit or take a Snack Break 🍪'); return; }
@@ -398,10 +320,10 @@ export async function startGame() {
     const b = B(), a = b[from], c = b[to];
     if (!a || !c || !a.id || !c.id || a.id !== c.id) return false;
     const nx = nextOf(a.id);
-    if (!nx) { toast(ITEMS[a.id].n + ' is already the best in its chain!'); return false; }
+    if (!nx) { toast(ITEMS[a.id].name + ' is already the best in its chain!'); return false; }
     b[from] = null; b[to] = { id: nx }; S.seen[nx] = 1;
     board.animMerge(from, to, nx);
-    sfx.merge(); haptic('light'); floatText(to, ITEMS[nx].n, '#fff');
+    sfx.merge(); haptic('light'); floatText(to, ITEMS[nx].name, '#fff');
     addXp(1); prog('merge', 1);
     const d = ITEMS[nx];
     if (d.part) installPart(to, d.part);
@@ -430,9 +352,9 @@ export async function startGame() {
     const b = B(); if (!b[i] || b[i].id !== 'rocketfuel') return;
     b[i] = null; S.fuel++;
     paintCell(i); sparkle(i, 16, '#b6ffd2'); sfx.big();
-    toast('⛽ Rocket Fuel loaded! ' + S.fuel + '/3');
+    toast('⛽ Rocket Fuel loaded! ' + S.fuel + '/' + CONFIG.rocket.fuelToLaunch);
     prog('fuelm', 1);
-    if (S.fuel >= 3) setTimeout(() => { toast('Tank is FULL! Open 🗺️ Map and launch!'); }, 900);
+    if (S.fuel >= CONFIG.rocket.fuelToLaunch) setTimeout(() => { toast('Tank is FULL! Open 🗺️ Map and launch!'); }, 900);
     renderRocket(); renderHUD(); save();
   }
   function sellItem(i: number) {
@@ -517,7 +439,7 @@ export async function startGame() {
         ${MISSIONS.map(m => {
         const p = S.mp[m.id] || 0, done = p >= m.need;
         return `<div class="mission${done ? ' done' : ''}"><div class="mBox">${done ? '✓' : ''}</div>
-          <div class="mTxt">${m.txt}${!done && m.need > 1 ? ` <span style="color:#b59158">(${Math.min(p, m.need)}/${m.need})</span>` : ''}</div>
+          <div class="mTxt">${m.text}${!done && m.need > 1 ? ` <span style="color:#b59158">(${Math.min(p, m.need)}/${m.need})</span>` : ''}</div>
           <div class="mRew">${ART.icon('coin')}${m.coins}</div></div>`;
       }).join('')}</div>
        <div class="card"><div class="cardTitle">🚀 Rocket workshop</div>
@@ -527,7 +449,7 @@ export async function startGame() {
           <div class="fuelDots">${[0, 1, 2].map(k => `<div class="fuelDot${S.fuel > k ? ' on' : ''}">${ART.icon('fuel')}</div>`).join('')}</div>
           <div style="font-size:11px;color:#9a7a4e;font-weight:600">${S.fuel}/3</div></div>
         ${allParts()
-        ? `<button class="big${S.fuel >= 3 ? '' : ' '}" id="btnLaunch" ${S.fuel >= 3 ? '' : 'disabled'}>${S.fuel >= 3 ? '🚀 OPEN THE MAP' : 'Need 3 Rocket Fuel'}</button>`
+        ? `<button class="big${S.fuel >= CONFIG.rocket.fuelToLaunch ? '' : ' '}" id="btnLaunch" ${S.fuel >= CONFIG.rocket.fuelToLaunch ? '' : 'disabled'}>${S.fuel >= CONFIG.rocket.fuelToLaunch ? '🚀 OPEN THE MAP' : 'Need 3 Rocket Fuel'}</button>`
         : `<div style="font-size:11.5px;color:#9a7a4e;font-weight:600;margin-top:8px;text-align:center">Merge scrap from the wreck into all 4 parts to finish the rocket.</div>`}
        </div>`;
     const bl = $('#btnLaunch'); if (bl) bl.onclick = () => setView('map');
@@ -535,22 +457,22 @@ export async function startGame() {
   function renderBook() {
     const host = $('#bookBody');
     const groups = Object.keys(CHAINS).filter(k => {
-      const w = CHAINS[k].w;
-      return w === 'any' ? !!S.seen.scrap : w === 'ship' ? !!S.met : (w === S.world || CHAINS[k].ids.some(id => S.seen[id]));
+      const w = CHAINS[k].world;
+      return w === 'any' ? !!S.seen.scrap : w === 'ship' ? !!S.met : (w === S.world || CHAINS[k].items.some(id => S.seen[id]));
     });
     host.innerHTML = groups.map(k => {
       const ch = CHAINS[k];
-      return `<div class="card"><div class="cardTitle">${ch.n}</div><div class="chainRow">${ch.ids.map((id, n) => {
+      return `<div class="card"><div class="cardTitle">${ch.name}</div><div class="chainRow">${ch.items.map((id, n) => {
         const kn = S.seen[id];
-        return `<div class="cStep"><div class="cArt${kn ? '' : ' unk'}">${kn ? ART.item(id) : '?'}</div><div class="cLab">${kn ? ITEMS[id].n : '???'}</div></div>`
-          + (n < ch.ids.length - 1 ? '<div class="arrow">➜</div>' : '');
+        return `<div class="cStep"><div class="cArt${kn ? '' : ' unk'}">${kn ? ART.item(id) : '?'}</div><div class="cLab">${kn ? ITEMS[id].name : '???'}</div></div>`
+          + (n < ch.items.length - 1 ? '<div class="arrow">➜</div>' : '');
       }).join('')}</div>
       <div style="font-size:10.5px;color:#9a7a4e;font-weight:600;margin-top:4px">Drag 2 identical items together to make the next one.</div></div>`;
     }).join('') +
       `<div class="card"><div class="cardTitle">🏭 Producers</div>${Object.keys(PRODS).filter(k => B().some(c => c && c.p === k) || (k === 'wreck' && S.met)).map(k => {
         const p = PRODS[k];
         return `<div class="mission"><div class="mBox" style="background:#fff;box-shadow:none">${ART.producer(p.art)}</div>
-        <div class="mTxt">${p.n}<div style="font-size:10px;color:#9a7a4e;font-weight:600">${p.mode === 'timer' ? `Free! Refills every ${p.every / 1000}s (holds ${p.cap})` : `Costs ${p.cost} ⚡ per tap`} · makes ${[...new Set(p.drops as string[])].map(d => ITEMS[d].n).join(', ')}</div></div></div>`;
+        <div class="mTxt">${p.name}<div style="font-size:10px;color:#9a7a4e;font-weight:600">${p.mode === 'timer' ? `Free! Refills every ${p.every / 1000}s (holds ${p.cap})` : `Costs ${p.cost} ⚡ per tap`} · makes ${[...new Set(p.drops as string[])].map(d => ITEMS[d].name).join(', ')}</div></div></div>`;
       }).join('')}</div>
       <div class="card"><div class="cardTitle">☄️ Meteors</div><div style="font-size:11.5px;font-weight:600;color:#7a6244">Every now and then a meteor crashes on your board and leaves rare <b>Star Scrap</b>. Keep a few tiles free so it has room to land!</div></div>`;
   }
@@ -563,7 +485,7 @@ export async function startGame() {
     ];
     host.innerHTML = cards.map(c => {
       const here = c.k === S.world;
-      const can = c.k !== 'x' && !here && allParts() && S.fuel >= 3;
+      const can = c.k !== 'x' && !here && allParts() && S.fuel >= CONFIG.rocket.fuelToLaunch;
       return `<div class="worldCard${here ? ' here' : ''}">${ART.planet(c.p)}
         <div style="flex:1"><div class="wName">${c.n}</div><div class="wSub">${c.s}</div></div>
         ${here ? '<div class="wSub" style="font-weight:700;color:#4fa332">You are here</div>'
@@ -575,11 +497,11 @@ export async function startGame() {
 
   /* =============================================================== TRAVEL */
   function travelTo(w: string) {
-    if (S.fuel < 3 || !allParts()) return;
-    S.fuel -= 3;
+    if (S.fuel < CONFIG.rocket.fuelToLaunch || !allParts()) return;
+    S.fuel -= CONFIG.rocket.fuelToLaunch;
     const cut = $('#cut'); $('#cutRocket').innerHTML = ART.rocket({ hull: 1, engine: 1, nav: 1, tank: 1 }, { flame: true });
     $('#cutTitle').textContent = 'Blasting off!';
-    $('#cutSub').textContent = 'Destination: ' + WORLDS[w].n;
+    $('#cutSub').textContent = 'Destination: ' + WORLDS[w].name;
     const warpHost = $('#warps'); warpHost.innerHTML = '';
     for (let i = 0; i < 22; i++) { const s = el('div', 'warp'); s.style.cssText = `left:${Math.random() * 100}%;height:${30 + Math.random() * 90}px;animation-delay:${-Math.random()}s`; warpHost.appendChild(s); }
     cut.classList.add('show'); sfx.big();
@@ -634,7 +556,7 @@ export async function startGame() {
     const c = B()[i]; if (!c || !c.id) return;
     const d = ITEMS[c.id], nx = nextOf(c.id);
     $('#infoBar').classList.add('on');
-    $('#infoTxt').innerHTML = `<b>${d.n}</b> · sells for ${d.sell} 🪙${nx ? ` · 2 make a ${ITEMS[nx].n}` : ' · top tier!'}`;
+    $('#infoTxt').innerHTML = `<b>${d.name}</b> · sells for ${d.sell} 🪙${nx ? ` · 2 make a ${ITEMS[nx].name}` : ' · top tier!'}`;
     $('#btnSell').onclick = () => { sellItem(i); $('#infoBar').classList.remove('on'); };
   }
 
@@ -642,19 +564,20 @@ export async function startGame() {
   function tick() {
     const now = Date.now();
     // energy regen
-    const per = 15000;
+    const per = CONFIG.energy.regenMs;
     while (S.energy < maxEnergy() && now - S.eAt >= per) { S.eAt += per; S.energy++; renderHUD(); }
     if (S.energy >= maxEnergy()) S.eAt = now;
     tickProducers();
     sweepSpecials();
     // snack cooldown
-    const cd = Math.max(0, 60000 - (now - S.snackAt));
+    const cd = Math.max(0, CONFIG.energy.snack.cooldownMs - (now - S.snackAt));
     const sb = $('#btnSnack'); sb.disabled = cd > 0 || S.energy >= maxEnergy();
-    sb.textContent = cd > 0 ? Math.ceil(cd / 1000) + 's' : '🍪 +20';
+    sb.textContent = cd > 0 ? Math.ceil(cd / 1000) + 's' : '🍪 +' + CONFIG.energy.snack.amount;
     // idle hint
-    if (view === 'board' && now - lastAct > 17000 && !hintPair) { showHint(false); lastAct = now; }
+    if (view === 'board' && now - lastAct > CONFIG.hint.idleMs && !hintPair) { showHint(false); lastAct = now; }
     // random meteors
-    if (S.met && now > meteorTimer) { meteorTimer = now + 55000 + Math.random() * 45000; if (Math.random() < 0.85) randomMeteor(); }
+    if (S.met && now > meteorTimer) { meteorTimer = now + CONFIG.meteor.everyMinMs + Math.random() * CONFIG.meteor.everyRandomMs;
+      if (Math.random() < CONFIG.meteor.chance) randomMeteor(); }
   }
 
   function sweepSpecials() {
@@ -677,6 +600,10 @@ export async function startGame() {
     }
   }
   async function boot() {
+    if (import.meta.env.DEV) {
+      const problems = validateContent();
+      if (problems.length) console.error('[content]\n' + problems.join('\n'));
+    }
     S = load();
     if (!S.orders || !S.orders.length) { S.orders = []; fillOrders(); }
     oid = S.orders.length + 1;
@@ -688,10 +615,14 @@ export async function startGame() {
     document.querySelectorAll<HTMLElement>('.tab').forEach(t => t.onclick = () => setView(t.dataset.v as string));
     document.querySelectorAll<HTMLElement>('.scClose').forEach(b => b.onclick = () => setView('board'));
     $('#btnHint').onclick = () => { showHint(true); lastAct = Date.now(); };
-    $('#btnSnack').onclick = () => {
+    $('#btnSnack').onclick = async () => {
       if (S.energy >= maxEnergy()) { toast('Energy is already full!'); return; }
-      S.snackAt = Date.now(); S.energy = Math.min(maxEnergy(), S.energy + 20);
-      bumpChip('#chipEnergy'); sfx.coin(); toast('🍪 Yum! +20 energy'); renderHUD(); save();
+      // once an ad network is wired up this becomes "watch to refill"; until then
+      // ads.rewarded() resolves false and the snack is simply free
+      const watched = ads.available ? await ads.rewarded('energy') : false;
+      if (ads.available && !watched) { toast('No snack right now — try again in a moment.'); return; }
+      S.snackAt = Date.now(); S.energy = Math.min(maxEnergy(), S.energy + CONFIG.energy.snack.amount);
+      bumpChip('#chipEnergy'); sfx.coin(); toast('🍪 Yum! +' + CONFIG.energy.snack.amount + ' energy'); renderHUD(); save();
     };
     $('#btnGear').onclick = () => {
       modal('pip', 'Settings', `Sound is <b>${S.sound ? 'ON' : 'OFF'}</b>.<br><br><button class="big blue" id="sndBtn" style="margin-top:4px">${S.sound ? 'Turn sound OFF' : 'Turn sound ON'}</button>

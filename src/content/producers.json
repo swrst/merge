@@ -1,0 +1,94 @@
+{
+  "tree": {
+    "name": "Big Tree",
+    "art": "tree",
+    "mode": "tap",
+    "cost": 1,
+    "drops": [
+      "twig",
+      "twig",
+      "twig",
+      "branch"
+    ]
+  },
+  "rocks": {
+    "name": "Rock Pile",
+    "art": "rocks",
+    "mode": "tap",
+    "cost": 1,
+    "drops": [
+      "pebble",
+      "pebble",
+      "pebble",
+      "rock"
+    ]
+  },
+  "bush": {
+    "name": "Berry Bush",
+    "art": "bush",
+    "mode": "timer",
+    "every": 15000,
+    "cap": 3,
+    "drops": [
+      "berry",
+      "berry",
+      "berries"
+    ]
+  },
+  "wreck": {
+    "name": "Rocket Wreck",
+    "art": "scrapwreck",
+    "mode": "tap",
+    "cost": 1,
+    "drops": [
+      "bolt",
+      "spring",
+      "wire",
+      "glass",
+      "bolt",
+      "spring",
+      "wire",
+      "glass",
+      "boltpack",
+      "coil",
+      "circuit",
+      "tankglass"
+    ]
+  },
+  "fuelpod": {
+    "name": "Fuel Pod",
+    "art": "fuelpod",
+    "mode": "timer",
+    "every": 18000,
+    "cap": 3,
+    "drops": [
+      "fuelore",
+      "fuelore",
+      "fuelcan"
+    ]
+  },
+  "geyser": {
+    "name": "Moon Geyser",
+    "art": "geyser",
+    "mode": "tap",
+    "cost": 1,
+    "drops": [
+      "mrock",
+      "mrock",
+      "mrock",
+      "mcrystal"
+    ]
+  },
+  "glowpod": {
+    "name": "Glow Pod",
+    "art": "glowpod",
+    "mode": "timer",
+    "every": 15000,
+    "cap": 3,
+    "drops": [
+      "spore",
+      "spore",
+      "bulb"
+    ]
+  }
+}

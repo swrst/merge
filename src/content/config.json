@@ -1,0 +1,44 @@
+{
+  "board": {
+    "cols": 6,
+    "rows": 8,
+    "starterItems": 4
+  },
+  "start": {
+    "coins": 120,
+    "energy": 45,
+    "world": "earth"
+  },
+  "energy": {
+    "base": 50,
+    "perLevel": 5,
+    "regenMs": 15000,
+    "snack": {
+      "amount": 20,
+      "cooldownMs": 60000
+    }
+  },
+  "xp": {
+    "base": 6,
+    "perLevel": 5,
+    "perMerge": 1,
+    "orderBase": 3
+  },
+  "orders": {
+    "slots": 3,
+    "maxTierAtLevel": 2,
+    "twoItemChanceFromLevel": 4
+  },
+  "meteor": {
+    "firstAtLevel": 3,
+    "everyMinMs": 55000,
+    "everyRandomMs": 45000,
+    "chance": 0.85
+  },
+  "rocket": {
+    "fuelToLaunch": 3
+  },
+  "hint": {
+    "idleMs": 17000
+  }
+}

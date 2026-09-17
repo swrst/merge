@@ -1,0 +1,58 @@
+[
+  {
+    "id": "spawn",
+    "need": 3,
+    "text": "Shake the Big Tree 3 times",
+    "hint": "Tap the <b>Big Tree</b> to shake out twigs!",
+    "coins": 25
+  },
+  {
+    "id": "merge",
+    "need": 2,
+    "text": "Merge 2 times",
+    "hint": "<b>Drag</b> one item onto a matching one to merge!",
+    "coins": 25
+  },
+  {
+    "id": "deliver",
+    "need": 2,
+    "text": "Deliver 2 orders",
+    "hint": "Fill an order up top — orders give the most XP!",
+    "coins": 60
+  },
+  {
+    "id": "level",
+    "need": 3,
+    "text": "Reach Level 3",
+    "hint": "Level up to clear weeds and refill energy.",
+    "coins": 80
+  },
+  {
+    "id": "meteor",
+    "need": 1,
+    "text": "Find what fell from the sky",
+    "hint": "Keep playing... something is coming.",
+    "coins": 100
+  },
+  {
+    "id": "part",
+    "need": 4,
+    "text": "Build all 4 rocket parts",
+    "hint": "Tap the wreck for parts, merge them into rocket pieces!",
+    "coins": 250
+  },
+  {
+    "id": "fuelm",
+    "need": 3,
+    "text": "Brew 3 Rocket Fuel",
+    "hint": "Merge fuel ore up into Rocket Fuel to fill the tank!",
+    "coins": 200
+  },
+  {
+    "id": "travel",
+    "need": 1,
+    "text": "Fly to a new world",
+    "hint": "Tank is full! Open 🚀 and LAUNCH!",
+    "coins": 500
+  }
+]

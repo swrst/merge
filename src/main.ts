@@ -2,6 +2,7 @@ import './style.css';
 import { ART } from './art';
 import { startGame } from './game';
 import { hydrateSave, startSaveMirror, setupChrome } from './native';
+import { ads } from './ads';
 
 function paintHudIcons() {
   const coin = document.getElementById('icCoin');
@@ -15,6 +16,7 @@ async function main() {
   paintHudIcons();
   setupChrome();
   startSaveMirror();
+  ads.init();
   startGame();
 }
 

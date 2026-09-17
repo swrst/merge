@@ -1,0 +1,229 @@
+{
+  "twig": {
+    "name": "Twig",
+    "chain": "wood",
+    "tier": 1,
+    "sell": 2
+  },
+  "branch": {
+    "name": "Branch",
+    "chain": "wood",
+    "tier": 2,
+    "sell": 5
+  },
+  "log": {
+    "name": "Log",
+    "chain": "wood",
+    "tier": 3,
+    "sell": 14
+  },
+  "lumber": {
+    "name": "Lumber Pile",
+    "chain": "wood",
+    "tier": 4,
+    "sell": 34
+  },
+  "pebble": {
+    "name": "Pebble",
+    "chain": "stone",
+    "tier": 1,
+    "sell": 2
+  },
+  "rock": {
+    "name": "Rock",
+    "chain": "stone",
+    "tier": 2,
+    "sell": 6
+  },
+  "geode": {
+    "name": "Geode",
+    "chain": "stone",
+    "tier": 3,
+    "sell": 15
+  },
+  "gem": {
+    "name": "Gemstone",
+    "chain": "stone",
+    "tier": 4,
+    "sell": 38
+  },
+  "berry": {
+    "name": "Berry",
+    "chain": "berry",
+    "tier": 1,
+    "sell": 3
+  },
+  "berries": {
+    "name": "Berry Bunch",
+    "chain": "berry",
+    "tier": 2,
+    "sell": 7
+  },
+  "jam": {
+    "name": "Jam Jar",
+    "chain": "berry",
+    "tier": 3,
+    "sell": 17
+  },
+  "pie": {
+    "name": "Berry Pie",
+    "chain": "berry",
+    "tier": 4,
+    "sell": 42
+  },
+  "scrap": {
+    "name": "Star Scrap",
+    "chain": "star",
+    "tier": 1,
+    "sell": 30
+  },
+  "starcore": {
+    "name": "Star Core",
+    "chain": "star",
+    "tier": 2,
+    "sell": 80
+  },
+  "bolt": {
+    "name": "Bolt",
+    "chain": "hull",
+    "tier": 1,
+    "sell": 4
+  },
+  "boltpack": {
+    "name": "Bolt Pack",
+    "chain": "hull",
+    "tier": 2,
+    "sell": 10
+  },
+  "hullplate": {
+    "name": "Hull Plate",
+    "chain": "hull",
+    "tier": 3,
+    "sell": 28,
+    "part": "hull"
+  },
+  "spring": {
+    "name": "Spring",
+    "chain": "engine",
+    "tier": 1,
+    "sell": 4
+  },
+  "coil": {
+    "name": "Coil",
+    "chain": "engine",
+    "tier": 2,
+    "sell": 10
+  },
+  "enginecore": {
+    "name": "Engine Core",
+    "chain": "engine",
+    "tier": 3,
+    "sell": 28,
+    "part": "engine"
+  },
+  "wire": {
+    "name": "Wire",
+    "chain": "nav",
+    "tier": 1,
+    "sell": 4
+  },
+  "circuit": {
+    "name": "Circuit",
+    "chain": "nav",
+    "tier": 2,
+    "sell": 10
+  },
+  "navdish": {
+    "name": "Nav Dish",
+    "chain": "nav",
+    "tier": 3,
+    "sell": 28,
+    "part": "nav"
+  },
+  "glass": {
+    "name": "Glass Shard",
+    "chain": "tank",
+    "tier": 1,
+    "sell": 4
+  },
+  "tankglass": {
+    "name": "Tank Glass",
+    "chain": "tank",
+    "tier": 2,
+    "sell": 10
+  },
+  "fueltank": {
+    "name": "Fuel Tank",
+    "chain": "tank",
+    "tier": 3,
+    "sell": 28,
+    "part": "tank"
+  },
+  "fuelore": {
+    "name": "Fuel Ore",
+    "chain": "fuel",
+    "tier": 1,
+    "sell": 6
+  },
+  "fuelcan": {
+    "name": "Fuel Can",
+    "chain": "fuel",
+    "tier": 2,
+    "sell": 15
+  },
+  "rocketfuel": {
+    "name": "Rocket Fuel",
+    "chain": "fuel",
+    "tier": 3,
+    "sell": 40,
+    "fuel": true
+  },
+  "mrock": {
+    "name": "Moon Rock",
+    "chain": "moon",
+    "tier": 1,
+    "sell": 4
+  },
+  "mcrystal": {
+    "name": "Moon Crystal",
+    "chain": "moon",
+    "tier": 2,
+    "sell": 9
+  },
+  "mcore": {
+    "name": "Lunar Core",
+    "chain": "moon",
+    "tier": 3,
+    "sell": 20
+  },
+  "mstar": {
+    "name": "Star Crystal",
+    "chain": "moon",
+    "tier": 4,
+    "sell": 46
+  },
+  "spore": {
+    "name": "Glow Spore",
+    "chain": "glow",
+    "tier": 1,
+    "sell": 4
+  },
+  "bulb": {
+    "name": "Glow Bulb",
+    "chain": "glow",
+    "tier": 2,
+    "sell": 9
+  },
+  "glowflower": {
+    "name": "Glow Flower",
+    "chain": "glow",
+    "tier": 3,
+    "sell": 20
+  },
+  "starbloom": {
+    "name": "Star Bloom",
+    "chain": "glow",
+    "tier": 4,
+    "sell": 46
+  }
+}

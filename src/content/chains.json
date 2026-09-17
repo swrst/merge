@@ -1,0 +1,105 @@
+{
+  "wood": {
+    "name": "Woodworks",
+    "world": "earth",
+    "items": [
+      "twig",
+      "branch",
+      "log",
+      "lumber"
+    ]
+  },
+  "stone": {
+    "name": "Rock Quarry",
+    "world": "earth",
+    "items": [
+      "pebble",
+      "rock",
+      "geode",
+      "gem"
+    ]
+  },
+  "berry": {
+    "name": "Berry Kitchen",
+    "world": "earth",
+    "items": [
+      "berry",
+      "berries",
+      "jam",
+      "pie"
+    ]
+  },
+  "star": {
+    "name": "Meteor Finds",
+    "world": "any",
+    "items": [
+      "scrap",
+      "starcore"
+    ]
+  },
+  "hull": {
+    "name": "Rocket: Hull",
+    "world": "ship",
+    "items": [
+      "bolt",
+      "boltpack",
+      "hullplate"
+    ]
+  },
+  "engine": {
+    "name": "Rocket: Engine",
+    "world": "ship",
+    "items": [
+      "spring",
+      "coil",
+      "enginecore"
+    ]
+  },
+  "nav": {
+    "name": "Rocket: Nav Dish",
+    "world": "ship",
+    "items": [
+      "wire",
+      "circuit",
+      "navdish"
+    ]
+  },
+  "tank": {
+    "name": "Rocket: Fuel Tank",
+    "world": "ship",
+    "items": [
+      "glass",
+      "tankglass",
+      "fueltank"
+    ]
+  },
+  "fuel": {
+    "name": "Rocket Fuel",
+    "world": "ship",
+    "items": [
+      "fuelore",
+      "fuelcan",
+      "rocketfuel"
+    ]
+  },
+  "moon": {
+    "name": "Moon Rocks",
+    "world": "luna",
+    "items": [
+      "mrock",
+      "mcrystal",
+      "mcore",
+      "mstar"
+    ]
+  },
+  "glow": {
+    "name": "Glow Garden",
+    "world": "luna",
+    "items": [
+      "spore",
+      "bulb",
+      "glowflower",
+      "starbloom"
+    ]
+  }
+}
