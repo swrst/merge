@@ -47,13 +47,27 @@
     <button class="xBtn" id="infoClose">✕</button>
   </div>
 
-  <div class="dock">
+  <div class="dock six">
     <button class="tab on" data-v="board"><span class="ti">🧩</span>Board</button>
+    <button class="tab" data-v="shop" id="tabShop"><span class="ti">🛒</span>Shop<span class="dot" id="dotShop" style="display:none"></span></button>
+    <button class="tab" data-v="lab" id="tabLab"><span class="ti">🔬</span>Lab</button>
     <button class="tab" data-v="rocket" id="tabRocket"><span class="ti">🚀</span>Rocket<span class="dot" id="dotRocket" style="display:none"></span></button>
     <button class="tab" data-v="book"><span class="ti">📖</span>Guide</button>
     <button class="tab" data-v="map" id="tabMap"><span class="ti">🗺️</span>Map</button>
   </div>
 
+  <div class="screen" id="sc-shop">
+    <div class="scHead"><div class="scTitle">🛒 Trading Post</div>
+      <div class="scCoins"><span id="shopCoinIc"></span><span id="shopCoins">0</span></div>
+      <button class="iconBtn scClose">✕</button></div>
+    <div class="scBody" id="shopBody"></div>
+  </div>
+  <div class="screen" id="sc-lab">
+    <div class="scHead"><div class="scTitle">🔬 Research Lab</div>
+      <div class="scCoins"><span id="labCoinIc"></span><span id="labCoins">0</span></div>
+      <button class="iconBtn scClose">✕</button></div>
+    <div class="scBody" id="labBody"></div>
+  </div>
   <div class="screen" id="sc-rocket">
     <div class="scHead"><div class="scTitle">🚀 Rocket &amp; Missions</div><button class="iconBtn scClose">✕</button></div>
     <div class="scBody" id="rocketBody"></div>

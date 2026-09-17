@@ -1,0 +1,59 @@
+{
+  "supplyStock": 3,
+  "supplyRestockMs": 180000,
+  "supplyPriceMultiplier": 3,
+  "upgrades": [
+    {
+      "id": "energy",
+      "name": "Bigger Backpack",
+      "desc": "+10 max energy",
+      "icon": "energy",
+      "basePrice": 300,
+      "step": 260,
+      "max": 5
+    },
+    {
+      "id": "speed",
+      "name": "Fertiliser",
+      "desc": "Auto producers refill 15% faster",
+      "icon": "speed",
+      "basePrice": 420,
+      "step": 380,
+      "max": 4
+    },
+    {
+      "id": "orders",
+      "name": "Order Board",
+      "desc": "One more order slot",
+      "icon": "orders",
+      "basePrice": 900,
+      "step": 1100,
+      "max": 2
+    },
+    {
+      "id": "snack",
+      "name": "Big Cookie",
+      "desc": "Snack break gives +10 more energy",
+      "icon": "snack",
+      "basePrice": 350,
+      "step": 320,
+      "max": 3
+    }
+  ],
+  "crates": [
+    {
+      "id": "salvage",
+      "name": "Salvage Crate",
+      "desc": "A random piece for a rocket part you still need",
+      "icon": "crate",
+      "price": 240
+    },
+    {
+      "id": "blueprint",
+      "name": "Blueprint Kit",
+      "desc": "A guaranteed piece for the part you pick",
+      "icon": "blueprint",
+      "price": 520
+    }
+  ]
+}

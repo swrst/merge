@@ -10,7 +10,8 @@
     "check": "tsc --noEmit",
     "sync": "npm run build && cap sync",
     "android": "npm run build && cap sync android && cap open android",
-    "icons": "capacitor-assets generate --android"
+    "icons": "capacitor-assets generate --android",
+    "test": "node scripts/playtest.mjs"
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",

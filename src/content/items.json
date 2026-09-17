@@ -225,5 +225,53 @@
     "chain": "glow",
     "tier": 4,
     "sell": 46
+  },
+  "cart": {
+    "name": "Wooden Cart",
+    "chain": "wood",
+    "tier": 5,
+    "sell": 80
+  },
+  "statue": {
+    "name": "Crystal Statue",
+    "chain": "stone",
+    "tier": 5,
+    "sell": 88
+  },
+  "cake": {
+    "name": "Berry Cake",
+    "chain": "berry",
+    "tier": 5,
+    "sell": 95
+  },
+  "moonorb": {
+    "name": "Moon Orb",
+    "chain": "moon",
+    "tier": 5,
+    "sell": 100
+  },
+  "glowtree": {
+    "name": "Glow Tree",
+    "chain": "glow",
+    "tier": 5,
+    "sell": 104
+  },
+  "relic1": {
+    "name": "Star Gem",
+    "chain": "relic",
+    "tier": 1,
+    "sell": 120
+  },
+  "relic2": {
+    "name": "Sun Amber",
+    "chain": "relic",
+    "tier": 2,
+    "sell": 260
+  },
+  "relic3": {
+    "name": "Prism Heart",
+    "chain": "relic",
+    "tier": 3,
+    "sell": 560
   }
 }

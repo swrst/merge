@@ -1,0 +1,62 @@
+[
+  {
+    "id": "r1",
+    "result": "relic1",
+    "inputs": [
+      "gem",
+      "scrap"
+    ],
+    "coins": 250,
+    "note": "Something precious, and something that fell out of the sky."
+  },
+  {
+    "id": "r2",
+    "result": "relic1",
+    "inputs": [
+      "mstar",
+      "scrap"
+    ],
+    "coins": 250,
+    "note": "Moon crystal works just as well as an Earth gem."
+  },
+  {
+    "id": "r3",
+    "result": "relic2",
+    "inputs": [
+      "cake",
+      "relic1"
+    ],
+    "coins": 600,
+    "note": "Bake the gem into something sweet. Yes, really."
+  },
+  {
+    "id": "r4",
+    "result": "relic3",
+    "inputs": [
+      "glowtree",
+      "relic2"
+    ],
+    "coins": 1400,
+    "note": "Grow the amber inside a glow tree until it hardens."
+  },
+  {
+    "id": "r5",
+    "result": "relic1",
+    "inputs": [
+      "cart",
+      "statue"
+    ],
+    "coins": 300,
+    "note": "Haul the heaviest thing you own in the sturdiest thing you own."
+  },
+  {
+    "id": "r6",
+    "result": "relic3",
+    "inputs": [
+      "moonorb",
+      "relic2"
+    ],
+    "coins": 1400,
+    "note": "A whole little moon, squeezed around the amber."
+  }
+]

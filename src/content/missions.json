@@ -17,7 +17,7 @@
     "id": "deliver",
     "need": 2,
     "text": "Deliver 2 orders",
-    "hint": "Fill an order up top — orders give the most XP!",
+    "hint": "Fill an order up top \u2014 orders give the most XP!",
     "coins": 60
   },
   {
@@ -52,7 +52,21 @@
     "id": "travel",
     "need": 1,
     "text": "Fly to a new world",
-    "hint": "Tank is full! Open 🚀 and LAUNCH!",
+    "hint": "Tank is full! Open \ud83d\ude80 and LAUNCH!",
     "coins": 500
+  },
+  {
+    "id": "upgrade",
+    "need": 2,
+    "text": "Buy 2 shop upgrades",
+    "hint": "Coins piling up? Spend them in the \ud83d\uded2 Shop.",
+    "coins": 150
+  },
+  {
+    "id": "research",
+    "need": 3,
+    "text": "Craft 3 relics in the Lab",
+    "hint": "Try combining things in the \ud83d\udd2c Lab \u2014 rare relics await.",
+    "coins": 400
   }
 ]

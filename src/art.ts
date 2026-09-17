@@ -335,6 +335,88 @@ export const ART = (function () {
        ${[0, 60, 120, 180, 240, 300].map(a => `<path d="M50 12 q10 20 0 34 q-10 -14 0 -34Z" fill="url(#sbA)" transform="rotate(${a} 50 46)"/>`).join('')}
        <circle cx="50" cy="46" r="14" fill="url(#sbB)"/>
        ${spark(84, 20, 8, '#fffce8')}${glint(45, 40, 5, 0.75)}`),
+
+    /* --- Tier 5 masterpieces --- */
+    cart: () => svg(
+      lg('ctA', '#f0cf9c', '#b8853f') + lg('ctB', '#d6a469', '#8a5729') + rg('ctW', '#8a5f31', '#523618'),
+      `<path d="M18 40 h58 l-6 26 h-46Z" fill="url(#ctA)"/>
+       <rect x="16" y="34" width="62" height="10" rx="5" fill="url(#ctB)"/>
+       <path d="M26 44 v20 M40 44 v20 M54 44 v20 M68 44 v20" stroke="#a9773c" stroke-width="2" opacity=".45"/>
+       <rect x="30" y="22" width="34" height="13" rx="6" fill="#d6a469"/>
+       <rect x="36" y="14" width="24" height="12" rx="6" fill="#f0cf9c"/>
+       <circle cx="30" cy="74" r="11" fill="url(#ctW)"/><circle cx="30" cy="74" r="4" fill="#e0b57a"/>
+       <circle cx="66" cy="74" r="11" fill="url(#ctW)"/><circle cx="66" cy="74" r="4" fill="#e0b57a"/>
+       <rect x="72" y="36" width="16" height="6" rx="3" fill="#b8853f"/>
+       ${glint(34, 38, 6, 0.45)}`),
+
+    statue: () => svg(
+      lg('stA', '#eaf6ff', '#7fa8d6') + lg('stB', '#d9dce6', '#9aa0b4') + rg('stC', '#ffffff', '#b9dcff'),
+      `<rect x="24" y="74" width="52" height="12" rx="6" fill="url(#stB)"/>
+       <rect x="32" y="64" width="36" height="12" rx="5" fill="#c9cede"/>
+       <polygon points="50,10 66,34 62,64 38,64 34,34" fill="url(#stA)"/>
+       <polygon points="50,10 58,34 50,64 42,34" fill="url(#stC)" opacity=".85"/>
+       <polygon points="34,34 50,44 66,34 62,48 38,48" fill="#fff" opacity=".35"/>
+       ${spark(82, 24, 8, '#eaffff')}${glint(43, 30, 6, 0.8)}`),
+
+    cake: () => svg(
+      lg('ckA', '#fff3dc', '#e8c088') + lg('ckB', '#ff9ec4', '#e0407f') + rg('ckC', '#ff7fa8', '#c81f57'),
+      `<rect x="20" y="56" width="60" height="24" rx="10" fill="url(#ckA)"/>
+       <rect x="27" y="36" width="46" height="24" rx="10" fill="url(#ckA)"/>
+       <path d="M20 58 q8 10 16 0 q8 10 16 0 q8 10 16 0 q6 8 12 0 v6 a8 8 0 0 1 -8 8 h-44 a8 8 0 0 1 -8 -8Z" fill="url(#ckB)"/>
+       <path d="M27 38 q7 9 14 0 q7 9 14 0 q7 9 14 0 v5 a8 8 0 0 1 -8 8 h-26 a8 8 0 0 1 -8 -8Z" fill="url(#ckB)"/>
+       <circle cx="38" cy="34" r="6" fill="url(#ckC)"/><circle cx="50" cy="30" r="7" fill="url(#ckC)"/><circle cx="62" cy="34" r="6" fill="url(#ckC)"/>
+       <circle cx="36" cy="32" r="2" fill="#fff" opacity=".7"/><circle cx="48" cy="28" r="2.2" fill="#fff" opacity=".7"/>
+       <rect x="47" y="10" width="6" height="14" rx="3" fill="#fff"/>
+       <path d="M50 4 q5 5 0 8 q-5 -3 0 -8Z" fill="#ffd45e"/>
+       ${glint(32, 62, 6, 0.4)}`),
+
+    moonorb: () => svg(
+      rg('moA2', '#ffffff', '#8f86c4') + rg('moB2', '#e9e2ff', '#6f63b8') + lg('moR', '#ffe9a0', '#e0a52a'),
+      `<circle cx="50" cy="48" r="38" fill="#cdc4ff" opacity=".28"/>
+       <circle cx="50" cy="48" r="28" fill="url(#moB2)"/>
+       <circle cx="42" cy="40" r="6" fill="#fff" opacity=".35"/><circle cx="60" cy="56" r="4.5" fill="#fff" opacity=".25"/>
+       <ellipse cx="50" cy="52" rx="42" ry="12" fill="none" stroke="url(#moR)" stroke-width="5" opacity=".9" transform="rotate(-16 50 52)"/>
+       <ellipse cx="50" cy="52" rx="42" ry="12" fill="none" stroke="#fff6cc" stroke-width="1.6" opacity=".7" transform="rotate(-16 50 52)"/>
+       ${spark(84, 18, 9, '#ffffff')}${glint(40, 36, 7, 0.8)}`),
+
+    glowtree: () => svg(
+      lg('gtT', '#9d7bd6', '#5b3f96') + rg('gtC', '#b6ffe6', '#18a88a') + rg('gtC2', '#ffe4ff', '#c65fd6'),
+      `<path d="M46 84 L46 50 q0 -6 8 -6 v40Z" fill="url(#gtT)"/>
+       <path d="M50 62 q-12 -4 -18 -14 M50 56 q12 -5 18 -14" stroke="url(#gtT)" stroke-width="6" fill="none" stroke-linecap="round"/>
+       <circle cx="50" cy="34" r="24" fill="url(#gtC)"/>
+       <circle cx="30" cy="42" r="13" fill="url(#gtC2)" opacity=".92"/>
+       <circle cx="70" cy="42" r="13" fill="url(#gtC2)" opacity=".92"/>
+       <circle cx="38" cy="26" r="4" fill="#fff" opacity=".8"/><circle cx="58" cy="22" r="3" fill="#fff" opacity=".7"/>
+       <circle cx="66" cy="38" r="3" fill="#fff" opacity=".6"/>
+       ${spark(84, 20, 8, '#ccfff0')}${glint(42, 28, 6, 0.65)}`),
+
+    /* --- Relics (research lab) --- */
+    relic1: () => svg(
+      rg('r1A', '#fffbe0', '#f0a91e') + rg('r1B', '#e9fbff', '#49b9e8'),
+      `<circle cx="50" cy="48" r="36" fill="#ffd45e" opacity=".22"/>
+       <polygon points="50,8 60,38 92,44 68,62 75,92 50,75 25,92 32,62 8,44 40,38" fill="url(#r1A)"/>
+       <polygon points="50,24 56,42 72,46 58,56 62,74 50,63 38,74 42,56 28,46 44,42" fill="url(#r1B)"/>
+       <polygon points="50,24 54,42 50,63 46,42" fill="#fff" opacity=".6"/>
+       ${spark(86, 18, 9, '#ffffff')}${glint(43, 36, 6, 0.85)}`),
+
+    relic2: () => svg(
+      rg('r2A', '#ffe9a8', '#e07a10') + rg('r2B', '#fff8d0', '#ffb02e') + lg('r2C', '#fff3c8', '#e8a020'),
+      `<circle cx="50" cy="52" r="38" fill="#ffb02e" opacity=".2"/>
+       <path d="M50 8 q26 26 26 48 a26 26 0 0 1 -52 0 q0 -22 26 -48Z" fill="url(#r2A)"/>
+       <circle cx="50" cy="58" r="17" fill="url(#r2B)"/>
+       ${[0, 45, 90, 135].map(a => `<rect x="47" y="34" width="6" height="48" rx="3" fill="#fff8d0" opacity=".55" transform="rotate(${a} 50 58)"/>`).join('')}
+       <circle cx="50" cy="58" r="9" fill="#fffdf0"/>
+       <path d="M36 32 q10 -12 18 -16" stroke="#fff" stroke-width="5" opacity=".5" fill="none" stroke-linecap="round"/>
+       ${spark(84, 20, 8, '#fff6d8')}`),
+
+    relic3: () => svg(
+      lg('r3A', '#ff8fd0', '#8a3fd8') + lg('r3B', '#9be8ff', '#2f7ed6') + rg('r3C', '#ffffff', '#ffe9ff'),
+      `<circle cx="50" cy="50" r="40" fill="#c78fff" opacity=".22"/>
+       <path d="M50 86 C18 62 12 42 26 28 C38 16 50 26 50 34 C50 26 62 16 74 28 C88 42 82 62 50 86Z" fill="url(#r3A)"/>
+       <path d="M50 86 C18 62 12 42 26 28 C38 16 50 26 50 34Z" fill="url(#r3B)" opacity=".85"/>
+       <path d="M50 34 C50 26 62 16 74 28 C82 36 82 48 72 60Z" fill="url(#r3C)" opacity=".45"/>
+       <polygon points="50,38 60,54 50,70 40,54" fill="#fffdf6" opacity=".9"/>
+       ${spark(82, 20, 9, '#ffffff')}${spark(22, 30, 6, '#ffe6ff')}${glint(38, 38, 6, 0.6)}`),
   };
 
   /* ------------------------------------------------------------ PRODUCERS */
@@ -567,6 +649,14 @@ export const ART = (function () {
     energy: `<svg viewBox="0 0 100 100" class="ic"><defs>${lg('icE', '#9be8ff', '#2f9ed6')}</defs><circle cx="50" cy="50" r="42" fill="url(#icE)"/><path d="M56 12 L28 56 h18 l-6 34 32 -48 h-20Z" fill="#fff6b0"/></svg>`,
     star: `<svg viewBox="0 0 100 100" class="ic"><defs>${rg('icS', '#fff3a8', '#f0a91e')}</defs><polygon points="50,8 62,38 94,42 70,63 77,94 50,77 23,94 30,63 6,42 38,38" fill="url(#icS)"/></svg>`,
     fuel: `<svg viewBox="0 0 100 100" class="ic"><defs>${rg('icF', '#9ef0bd', '#12a05c')}</defs><circle cx="50" cy="50" r="42" fill="url(#icF)"/><path d="M56 16 L30 58 h16 l-6 28 30 -42 h-18Z" fill="#eafff2"/></svg>`,
+
+    /* shop + lab */
+    speed: `<svg viewBox="0 0 100 100" class="ic"><defs>${rg('icSp', '#c8ffd8', '#2f9e5c')}</defs><circle cx="50" cy="50" r="42" fill="url(#icSp)"/><path d="M28 62 q6 -26 24 -30 q-4 10 -2 16 q10 -2 18 2 q-10 20 -30 24Z" fill="#fff"/><path d="M24 74 q10 -8 18 -10" stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none" opacity=".8"/></svg>`,
+    orders: `<svg viewBox="0 0 100 100" class="ic"><defs>${lg('icOr', '#ffd98a', '#e08a12')}</defs><circle cx="50" cy="50" r="42" fill="url(#icOr)"/><rect x="26" y="20" width="48" height="60" rx="9" fill="#fffaf0"/><rect x="34" y="32" width="32" height="6" rx="3" fill="#e0a52a"/><rect x="34" y="46" width="32" height="6" rx="3" fill="#e0a52a"/><rect x="34" y="60" width="20" height="6" rx="3" fill="#e0a52a"/></svg>`,
+    snack: `<svg viewBox="0 0 100 100" class="ic"><defs>${rg('icSn', '#f0c078', '#b06e22')}</defs><circle cx="50" cy="50" r="40" fill="url(#icSn)"/><circle cx="38" cy="40" r="6" fill="#6a3f16"/><circle cx="60" cy="36" r="5" fill="#6a3f16"/><circle cx="56" cy="60" r="6" fill="#6a3f16"/><circle cx="34" cy="62" r="4.5" fill="#6a3f16"/><ellipse cx="38" cy="30" rx="10" ry="6" fill="#fff" opacity=".28" transform="rotate(-25 38 30)"/></svg>`,
+    crate: `<svg viewBox="0 0 100 100" class="ic"><defs>${lg('icCr', '#e8b273', '#a3661f')}</defs><rect x="14" y="26" width="72" height="56" rx="10" fill="url(#icCr)"/><rect x="14" y="26" width="72" height="14" rx="7" fill="#f3cb96"/><path d="M42 40 v42 M58 40 v42" stroke="#8a5320" stroke-width="5" opacity=".55"/><rect x="40" y="46" width="20" height="14" rx="5" fill="#ffd45e"/></svg>`,
+    blueprint: `<svg viewBox="0 0 100 100" class="ic"><defs>${lg('icBp', '#7fc9ff', '#1d63ad')}</defs><rect x="14" y="20" width="72" height="62" rx="11" fill="url(#icBp)"/><path d="M26 34 h48 M26 48 h30 M26 62 h38" stroke="#ddf1ff" stroke-width="5" stroke-linecap="round" opacity=".85"/><path d="M62 52 l12 12 l-12 12" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/></svg>`,
+    flask: `<svg viewBox="0 0 100 100" class="ic"><defs>${lg('icFl', '#c8f6ff', '#4fb6e0')}${rg('icFl2', '#ffb3f0', '#a63fd0')}</defs><path d="M40 14 h20 v26 l18 32 a10 10 0 0 1 -9 15 h-38 a10 10 0 0 1 -9 -15 l18 -32Z" fill="url(#icFl)"/><path d="M33 60 h34 l10 18 a8 8 0 0 1 -7 9 h-40 a8 8 0 0 1 -7 -9Z" fill="url(#icFl2)"/><rect x="36" y="10" width="28" height="9" rx="4.5" fill="#fff"/><circle cx="44" cy="74" r="4" fill="#fff" opacity=".7"/><circle cx="58" cy="68" r="3" fill="#fff" opacity=".6"/></svg>`,
   };
 
   function get(map: Record<string, () => string>, k: string) {

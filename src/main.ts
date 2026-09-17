@@ -5,11 +5,14 @@ import { hydrateSave, startSaveMirror, setupChrome } from './native';
 import { ads } from './ads';
 
 function paintHudIcons() {
-  const coin = document.getElementById('icCoin');
+  ['icCoin', 'shopCoinIc', 'labCoinIc'].forEach(id => {
+    const e = document.getElementById(id); if (e) e.innerHTML = ART.icon('coin');
+  });
   const energy = document.getElementById('icEnergy');
-  if (coin) coin.innerHTML = ART.icon('coin');
   if (energy) energy.innerHTML = ART.icon('energy');
 }
+
+if (import.meta.env.DEV) (window as any).__art = ART;   // test hook, dev builds only
 
 async function main() {
   await hydrateSave();      // pull a native save back into localStorage before boot

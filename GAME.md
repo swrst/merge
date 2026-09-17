@@ -35,6 +35,7 @@ Vite also prints a `Network:` address — open that on your phone (same Wi-Fi) t
 | `npm run dev` | dev server with hot reload |
 | `npm run build` | production build into `dist/` **and** the single-file `MergeRocket.html` |
 | `npm run check` | TypeScript check (no emit) |
+| `npm test` | headless regression run against `npm run dev` (needs Playwright) |
 | `npm run android` | build + sync + open Android Studio |
 | `npm run sync` | build + copy the web build into the native projects |
 | `npm run icons` | regenerate launcher icons and splash from `resources/` |
@@ -76,6 +77,9 @@ unchanged. Apple Developer Program is $99/yr.
 - **Fill orders** from the cards above the board — they're the main source of XP.
 - **Level up** to refill energy to full and clear weed tiles, growing the board.
 - Tap any item to see what it sells for and what it merges into; sell spares for coins.
+- **Spend those coins.** The 🛒 Trading Post opens at level 4: materials, salvage crates and
+  four permanent upgrades. The 🔬 Research Lab opens at level 6: put two things on the bench
+  and invent relics nobody can merge their way to.
 - Stuck? **💡 Hint** highlights a mergeable pair (and fires by itself if you idle).
 
 ---
@@ -92,8 +96,13 @@ unchanged. Apple Developer Program is $99/yr.
 - Locked weed/rock tiles show the level that clears them.
 
 ### Resources and chains
-- Four-tier chains per world (Woodworks, Rock Quarry, Berry Kitchen on Earth;
+- Five-tier chains per world (Woodworks, Rock Quarry, Berry Kitchen on Earth;
   Moon Rocks and Glow Garden on Luna), plus rocket-part and fuel chains.
+- The fifth tier is a *masterpiece* — Wooden Cart, Crystal Statue, Berry Cake, Moon Orb,
+  Glow Tree. They sell for 80–104 and every one of them is an ingredient in the lab.
+- A three-tier **Relic** chain (Star Gem → Sun Amber → Prism Heart, 120 → 560 coins) sits on
+  top. No producer makes relics: they only come out of the Research Lab, and once you own
+  one, two of them still merge into the next like anything else.
 - Every item has a name, tier and sell price; top-tier items are the money makers.
 
 ### Orders (contracts)
@@ -103,13 +112,43 @@ unchanged. Apple Developer Program is $99/yr.
 - Orders only ask for chains whose producer you already have, so you're never sent
   hunting for something that doesn't exist yet.
 - Tapping a card points at the item on the board, or tells you which producer makes it.
-- Rewards scale with tier and quantity: coins, XP, sometimes fuel.
+- Rewards scale with tier and quantity: coins, XP, and a **gift item**. While the rocket is
+  unfinished, most customers hand back a piece for the part you are furthest from finishing —
+  orders are the steady drip that keeps the build moving.
 
 ### Progression
 - Levels start at 1. XP mostly comes from orders (`3 + tier·2 + qty`), a trickle from merges.
+- The curve is **quadratic** — `8 + (l-1)·7 + 2.6·(l-1)²` — so 8, 18, 32, 52, 78, 108, 144,
+  184, 230, 282… Reaching level 11 takes over 1100 XP instead of a few easy minutes.
 - Each level needs more XP, refills energy completely and clears more board tiles.
-- Energy: 50 + 5/level, +1 every 15 s, plus a 🍪 Snack Break (+20, 60 s cooldown).
-- Eight story missions track the whole arc, each paying coins on completion.
+- Energy: 50 + 5/level (+10 per Backpack upgrade), +1 every 15 s, plus a 🍪 Snack Break.
+- Ten story missions track the whole arc, each paying coins on completion.
+
+### 🛒 Trading Post (level 4)
+The answer to "what are the coins even for".
+- **Today's supplies** — a shelf of three materials drawn from the chains you are actually
+  playing, at 3× their sell price, restocked every 3 minutes. Buying drops the item straight
+  onto your board.
+- **Salvage crates** — only while the rocket is unfinished. *Salvage Crate* (240) gives a
+  random piece for a part you still need; *Blueprint Kit* (520) lets you pick the part.
+  Either one unsticks a build that has gone cold.
+- **Permanent upgrades**, forever and across every world: Bigger Backpack (+10 max energy,
+  ×5), Fertiliser (auto producers refill 15 % faster, ×4), Order Board (+1 order slot, ×2),
+  Big Cookie (+10 snack energy, ×3). Prices escalate per level.
+
+### 🔬 Research Lab (level 6)
+The twist on top of merging: *some things cannot be merged into existence*.
+- Load **two items from your board** onto the bench and hit EXPERIMENT. Any run costs a flat
+  40 coin bench fee — so *discovering* a recipe is cheap, while *brewing a known one again*
+  costs its full price (250 → 1400 coins).
+- A dud costs the fee and keeps your samples. Every third dud, Bloop spots a **clue** and the
+  first ingredient of one unknown recipe is revealed.
+- Six recipes across two worlds, shown as riddles in the **Rumours** list until you crack them
+  ("Bake the gem into something sweet. Yes, really."). Impatient? Buy the rumour outright for
+  1.5× the brew price.
+- Discovered recipes land in the **Lab book** with a one-tap *brew again* button.
+- Relics pay for the next round of upgrades, and collectors start ordering them once you have
+  made your first.
 
 ### Events and story
 - **Meteor crashes** streak in from the sky, shake the board and leave rare Star Scrap.
@@ -125,9 +164,12 @@ unchanged. Apple Developer Program is $99/yr.
 
 ### Screens
 - **🧩 Board** — the game.
+- **🛒 Shop** — supplies, crates and upgrades (level 4).
+- **🔬 Lab** — the experiment bench, lab book and rumours (level 6).
 - **🚀 Rocket** — mission list with progress and the rocket assembling part by part.
-- **📖 Guide** — every chain as picture rows, with `???` for what you haven't discovered,
-  plus what each producer makes and costs.
+- **📖 Guide** — the **catalogue**: a collection bar (`11/45` found), every chain as picture
+  rows with sell price and how many you own right now, `???` for the undiscovered, plus what
+  each producer makes and costs.
 - **🗺️ Map** — the worlds, travel costs, and the launch button.
 
 ### Presentation and feel
@@ -154,7 +196,9 @@ src/content/producers.json    producers: tap or timer, cost, refill, what they d
 src/content/worlds.json       worlds: chains, starting producers, locked tiles, characters
 src/content/characters.json   names and order lines
 src/content/missions.json     the story mission list
-src/content/config.json       tuning: board size, energy, XP curve, meteor timings
+src/content/research.json     lab recipes: two inputs -> one relic, price, riddle
+src/content/shop.json          shelf settings, upgrades and crates
+src/content/config.json       tuning: board size, energy, XP curve, meteor timings, unlocks
 src/content/index.ts          types + lookups + the validator
 ```
 
@@ -173,6 +217,19 @@ src/content/index.ts          types + lookups + the validator
 ```
 Then draw `beehive` under `PROD` in `src/art.ts`, and place it in a world's `start` array
 (or spawn it from code for a story beat).
+
+### Add a lab recipe
+```json
+{ "id": "r7", "result": "relic3", "inputs": ["statue", "relic2"], "coins": 1400,
+  "note": "Something carved, and something that glows." }
+```
+No code: the bench, the lab book and the rumour riddle all read from this file. Two recipes
+may share a result but never the same pair of inputs — the validator says so if they do.
+
+### Add a shop upgrade
+Add it to `shop.json` **and** give it a `<id>PerStep` value in `config.json`'s `upgrades`
+block, then apply it wherever it belongs in `game.ts` (the existing four are one-liners:
+`maxEnergy()`, `everyOf()`, `orderSlots()`, `snackAmt()`).
 
 ### Add a world
 ```json
@@ -201,12 +258,17 @@ content is consistent.
 | `start.coins/energy` | what a new save begins with |
 | `energy.base/perLevel/regenMs` | energy ceiling and refill rate |
 | `energy.snack` | the 🍪 button's amount and cooldown |
-| `xp.base/perLevel` | level curve: `base + (level-1) × perLevel` |
+| `xp.base/perLevel/growth` | level curve: `base + (l-1)·perLevel + growth·(l-1)²` |
 | `xp.perMerge/orderBase` | XP from a merge / the flat part of an order reward |
 | `orders.slots` | how many order cards are visible |
 | `orders.maxTierAtLevel` | how quickly orders start asking for higher tiers |
 | `meteor.*` | when the story meteor fires and how often the random ones land |
 | `rocket.fuelToLaunch` | fuel needed per trip |
+| `orders.partRewardChance` | how often an order gifts a rocket piece while the rocket is unfinished |
+| `orders.itemRewardChance` | how often it gifts an ordinary item otherwise |
+| `unlocks.shopAtLevel/labAtLevel` | when the 🛒 and 🔬 tabs open |
+| `upgrades.*PerStep` | what one level of each shop upgrade is worth |
+| `lab.failFee/clueEvery` | bench fee for an experiment, and how many duds earn a clue |
 | `hint.idleMs` | idle time before a hint fires on its own |
 
 ---
@@ -224,6 +286,7 @@ src/native.ts           Capacitor: haptics, save mirroring, status bar
 src/ads.ts              ad seam — no-ops until a network is wired in
 src/style.css           everything outside the board
 scripts/standalone.mjs  inlines the single-bundle build into MergeRocket.html
+scripts/playtest.mjs    the headless regression run (npm test)
 resources/              1024 icon + 2732 splash, source for the launcher art
 android/                generated native project
 ```
@@ -245,9 +308,13 @@ Dev builds expose `window.__board` and `window.__game` (state, cells, content ta
 production strips them. That's enough to drive the whole game from Playwright: compute a
 cell centre from `__board.center(i)`, click or drag, then assert on `__game.state()`.
 
-The regression that matters runs the entire arc headlessly: spawn → merge → deliver →
-level 3 → meteor → four rocket parts → three fuel → launch → Luna, asserting no console
-errors along the way.
+`scripts/playtest.mjs` is that regression, wired to `npm test`. Start `npm run dev` in one
+shell, run `npm test` in another, and it drives the whole arc headlessly: the XP curve,
+producers and merging, buying supplies and upgrades (and checking max energy and the extra
+order card actually changed), the wreck spreading pieces across every unfinished part chain,
+60 rolled orders to confirm the part-gift rate, a dud experiment that costs the fee but keeps
+its samples, a real discovery that consumes both, the catalogue, and finally a launch to
+Luna — asserting no console errors throughout.
 
 ---
 
@@ -274,6 +341,9 @@ an order payout, instant-finish a producer timer.
   available, and they'd also cut CPU at startup.
 - Characters and celebrations could move to Spine (official Pixi v8 runtime) or Rive.
 - TypeScript is deliberately loose (`strict: false`) since this grew out of a JS prototype.
-- Only two worlds are playable; the third is a "coming soon" card.
+- Only two worlds are playable; the third is a "coming soon" card — and it is where the
+  relic chain wants to lead.
 - Orders are all "fetch N of X" — timed and bundle orders would add variety.
+- Relics sell and fill orders, but a relic *sink* (a museum? decorating your camp?) would
+  give the lab a longer tail.
 - Sound is synthesised blips; real effects and music are still missing.

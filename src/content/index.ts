@@ -8,6 +8,8 @@ import worldsJson from './worlds.json';
 import charactersJson from './characters.json';
 import missionsJson from './missions.json';
 import configJson from './config.json';
+import researchJson from './research.json';
+import shopJson from './shop.json';
 
 export interface ItemDef {
   name: string;
@@ -51,15 +53,52 @@ export interface WorldDef {
 export interface CharacterDef { name: string; lines: string[] }
 export interface MissionDef { id: string; need: number; text: string; hint: string; coins: number }
 
+/** A lab recipe: two items + coins -> one rare item. Discovered by experimenting. */
+export interface RecipeDef {
+  id: string;
+  /** item produced */
+  result: string;
+  /** the two item ids that go in the slots, in any order */
+  inputs: string[];
+  coins: number;
+  /** riddle shown before the recipe is discovered */
+  note: string;
+}
+export interface UpgradeDef {
+  id: string; name: string; desc: string; icon: string;
+  basePrice: number; step: number; max: number;
+}
+export interface CrateDef { id: string; name: string; desc: string; icon: string; price: number }
+export interface ShopDef {
+  supplyStock: number;
+  supplyRestockMs: number;
+  supplyPriceMultiplier: number;
+  upgrades: UpgradeDef[];
+  crates: CrateDef[];
+}
+
 export interface Config {
   board: { cols: number; rows: number; starterItems: number };
   start: { coins: number; energy: number; world: string };
   energy: { base: number; perLevel: number; regenMs: number; snack: { amount: number; cooldownMs: number } };
-  xp: { base: number; perLevel: number; perMerge: number; orderBase: number };
-  orders: { slots: number; maxTierAtLevel: number; twoItemChanceFromLevel: number };
+  /** level curve: base + (l-1)·perLevel + growth·(l-1)² */
+  xp: { base: number; perLevel: number; growth: number; perMerge: number; orderBase: number };
+  orders: {
+    slots: number; maxTierAtLevel: number; twoItemChanceFromLevel: number;
+    /** chance an order also hands back a rocket piece while the rocket is unfinished */
+    partRewardChance: number;
+    /** chance an order hands back a regular item otherwise */
+    itemRewardChance: number;
+  };
   meteor: { firstAtLevel: number; everyMinMs: number; everyRandomMs: number; chance: number };
   rocket: { fuelToLaunch: number };
   hint: { idleMs: number };
+  /** the level each late-game tab appears at */
+  unlocks: { shopAtLevel: number; labAtLevel: number };
+  /** what one level of each shop upgrade is worth */
+  upgrades: { energyPerStep: number; speedPerStep: number; ordersPerStep: number; snackPerStep: number };
+  /** research lab: cost of a failed experiment, and how many failures earn a free clue */
+  lab: { failFee: number; clueEvery: number };
 }
 
 export const ITEMS = itemsJson as Record<string, ItemDef>;
@@ -69,6 +108,8 @@ export const WORLDS = worldsJson as Record<string, WorldDef>;
 export const CHARACTERS = charactersJson as Record<string, CharacterDef>;
 export const MISSIONS = missionsJson as MissionDef[];
 export const CONFIG = configJson as Config;
+export const RECIPES = researchJson as RecipeDef[];
+export const SHOP = shopJson as ShopDef;
 
 /* ------------------------------------------------------------- lookups */
 
@@ -128,5 +169,36 @@ export function validateContent(): string[] {
     if (ids.has(m.id)) errs.push(`duplicate mission id "${m.id}"`);
     ids.add(m.id);
   });
+  const rids = new Set<string>();
+  const pairs = new Set<string>();
+  RECIPES.forEach(r => {
+    if (rids.has(r.id)) errs.push(`duplicate recipe id "${r.id}"`);
+    rids.add(r.id);
+    if (!has(ITEMS, r.result)) errs.push(`recipe "${r.id}" makes unknown item "${r.result}"`);
+    if (r.inputs.length !== 2) errs.push(`recipe "${r.id}" needs exactly 2 inputs`);
+    r.inputs.forEach(id => { if (!has(ITEMS, id)) errs.push(`recipe "${r.id}" wants unknown item "${id}"`); });
+    if (r.inputs.indexOf(r.result) >= 0) errs.push(`recipe "${r.id}" uses its own result as an input`);
+    const key = r.inputs.slice().sort().join('+');
+    if (pairs.has(key)) errs.push(`two recipes share the input pair "${key}"`);
+    pairs.add(key);
+    if (!(r.coins > 0)) errs.push(`recipe "${r.id}" needs a positive coin cost`);
+  });
+  const uids = new Set<string>();
+  SHOP.upgrades.forEach(u => {
+    if (uids.has(u.id)) errs.push(`duplicate upgrade id "${u.id}"`);
+    uids.add(u.id);
+    if (!(u.max > 0)) errs.push(`upgrade "${u.id}" needs a max above 0`);
+    if (!(u.basePrice > 0)) errs.push(`upgrade "${u.id}" needs a price`);
+    if (!Object.prototype.hasOwnProperty.call(CONFIG.upgrades, u.id + 'PerStep'))
+      errs.push(`upgrade "${u.id}" has no "${u.id}PerStep" value in config.upgrades`);
+  });
+  const cids = new Set<string>();
+  SHOP.crates.forEach(c => {
+    if (cids.has(c.id)) errs.push(`duplicate crate id "${c.id}"`);
+    cids.add(c.id);
+    if (!(c.price > 0)) errs.push(`crate "${c.id}" needs a price`);
+  });
+  if (!(SHOP.supplyStock > 0)) errs.push('shop.supplyStock must be at least 1');
+  if (!(SHOP.supplyPriceMultiplier >= 1)) errs.push('shop.supplyPriceMultiplier should be 1 or more');
   return errs;
 }

@@ -6,7 +6,8 @@
       "twig",
       "branch",
       "log",
-      "lumber"
+      "lumber",
+      "cart"
     ]
   },
   "stone": {
@@ -16,7 +17,8 @@
       "pebble",
       "rock",
       "geode",
-      "gem"
+      "gem",
+      "statue"
     ]
   },
   "berry": {
@@ -26,7 +28,8 @@
       "berry",
       "berries",
       "jam",
-      "pie"
+      "pie",
+      "cake"
     ]
   },
   "star": {
@@ -89,7 +92,8 @@
       "mrock",
       "mcrystal",
       "mcore",
-      "mstar"
+      "mstar",
+      "moonorb"
     ]
   },
   "glow": {
@@ -99,7 +103,17 @@
       "spore",
       "bulb",
       "glowflower",
-      "starbloom"
+      "starbloom",
+      "glowtree"
+    ]
+  },
+  "relic": {
+    "name": "Relics",
+    "world": "any",
+    "items": [
+      "relic1",
+      "relic2",
+      "relic3"
     ]
   }
 }

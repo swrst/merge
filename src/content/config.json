@@ -19,15 +19,18 @@
     }
   },
   "xp": {
-    "base": 6,
-    "perLevel": 5,
+    "base": 8,
+    "perLevel": 7,
+    "growth": 2.6,
     "perMerge": 1,
     "orderBase": 3
   },
   "orders": {
     "slots": 3,
     "maxTierAtLevel": 2,
-    "twoItemChanceFromLevel": 4
+    "twoItemChanceFromLevel": 4,
+    "partRewardChance": 0.6,
+    "itemRewardChance": 0.25
   },
   "meteor": {
     "firstAtLevel": 3,
@@ -40,5 +43,19 @@
   },
   "hint": {
     "idleMs": 17000
+  },
+  "unlocks": {
+    "shopAtLevel": 4,
+    "labAtLevel": 6
+  },
+  "upgrades": {
+    "energyPerStep": 10,
+    "speedPerStep": 0.15,
+    "ordersPerStep": 1,
+    "snackPerStep": 10
+  },
+  "lab": {
+    "failFee": 40,
+    "clueEvery": 3
   }
 }
