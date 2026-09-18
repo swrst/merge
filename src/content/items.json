@@ -273,5 +273,71 @@
     "chain": "relic",
     "tier": 3,
     "sell": 560
+  },
+  "ember": {
+    "name": "Ember",
+    "chain": "magma",
+    "tier": 1,
+    "sell": 5
+  },
+  "cinder": {
+    "name": "Cinder Rock",
+    "chain": "magma",
+    "tier": 2,
+    "sell": 12
+  },
+  "lavablob": {
+    "name": "Lava Blob",
+    "chain": "magma",
+    "tier": 3,
+    "sell": 26
+  },
+  "fireopal": {
+    "name": "Fire Opal",
+    "chain": "magma",
+    "tier": 4,
+    "sell": 56
+  },
+  "suncore": {
+    "name": "Sun Core",
+    "chain": "magma",
+    "tier": 5,
+    "sell": 112
+  },
+  "sporecap": {
+    "name": "Ash Cap",
+    "chain": "shroom",
+    "tier": 1,
+    "sell": 5
+  },
+  "shroom": {
+    "name": "Ash Shroom",
+    "chain": "shroom",
+    "tier": 2,
+    "sell": 11
+  },
+  "bigshroom": {
+    "name": "Giant Shroom",
+    "chain": "shroom",
+    "tier": 3,
+    "sell": 24
+  },
+  "glowcap": {
+    "name": "Ember Cap",
+    "chain": "shroom",
+    "tier": 4,
+    "sell": 52
+  },
+  "shroomtree": {
+    "name": "Shroom Tree",
+    "chain": "shroom",
+    "tier": 5,
+    "sell": 108
+  },
+  "rainbow": {
+    "name": "Rainbow Gem",
+    "chain": "wild",
+    "tier": 1,
+    "sell": 60
   }
 }

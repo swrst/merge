@@ -58,5 +58,25 @@
     ],
     "coins": 1400,
     "note": "A whole little moon, squeezed around the amber."
+  },
+  {
+    "id": "r7",
+    "result": "relic2",
+    "inputs": [
+      "suncore",
+      "relic1"
+    ],
+    "coins": 600,
+    "note": "Drop the gem into something that is still a little bit on fire."
+  },
+  {
+    "id": "r8",
+    "result": "relic3",
+    "inputs": [
+      "shroomtree",
+      "relic2"
+    ],
+    "coins": 1400,
+    "note": "Let the amber ripen inside something that grows in ash."
   }
 ]

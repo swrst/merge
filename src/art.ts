@@ -390,6 +390,102 @@ export const ART = (function () {
        <circle cx="66" cy="38" r="3" fill="#fff" opacity=".6"/>
        ${spark(84, 20, 8, '#ccfff0')}${glint(42, 28, 6, 0.65)}`),
 
+    /* --- Cindra: magma works --- */
+    ember: () => svg(
+      rg('emA', '#fff3b0', '#e04a12'),
+      `<path d="M50 20 q18 20 14 36 q-3 16 -14 22 q-11 -6 -14 -22 q-4 -16 14 -36Z" fill="url(#emA)"/>
+       <path d="M50 38 q8 12 6 22 q-2 9 -6 12 q-4 -3 -6 -12 q-2 -10 6 -22Z" fill="#fff8d0" opacity=".85"/>
+       ${spark(76, 28, 7, '#ffd58a')}`),
+
+    cinder: () => svg(
+      rg('ciA2', '#6d5a52', '#2c2320') + rg('ciB2', '#ffb03c', '#d13b0d'),
+      `<path d="M22 68 q-6 -22 16 -28 q24 -6 34 8 q10 16 -8 26 q-24 12 -42 -6Z" fill="url(#ciA2)"/>
+       <path d="M36 58 q6 -10 16 -8 q10 2 10 10 q-2 8 -14 8 q-12 0 -12 -10Z" fill="url(#ciB2)"/>
+       <circle cx="66" cy="50" r="4" fill="#ff8a3c" opacity=".8"/>
+       ${glint(36, 46, 6, 0.3)}${spark(80, 26, 6, '#ffc97a')}`),
+
+    lavablob: () => svg(
+      rg('lbA', '#ffdc7a', '#d1300a') + lg('lbB', '#ff8a3c', '#a11f05'),
+      `<path d="M50 14 q26 14 26 40 q0 26 -26 32 q-26 -6 -26 -32 q0 -26 26 -40Z" fill="url(#lbB)"/>
+       <path d="M50 26 q16 10 16 28 q0 17 -16 22 q-16 -5 -16 -22 q0 -18 16 -28Z" fill="url(#lbA)"/>
+       <path d="M40 76 q10 8 20 0 q-4 10 -10 10 q-6 0 -10 -10Z" fill="#ff9d4d"/>
+       ${glint(44, 34, 6, 0.6)}${spark(80, 22, 8, '#ffe1a8')}`),
+
+    fireopal: () => svg(
+      rg('foA2', '#fff0c0', '#ff6a1e') + lg('foB2', '#ffd07a', '#c62d05'),
+      `<circle cx="50" cy="50" r="38" fill="#ff8a3c" opacity=".22"/>
+       <polygon points="50,12 80,34 70,76 30,76 20,34" fill="url(#foB2)"/>
+       <polygon points="50,12 66,34 50,52 34,34" fill="url(#foA2)"/>
+       <polygon points="34,34 50,52 36,76 20,34" fill="#fff" opacity=".2"/>
+       <path d="M20 34 h60" stroke="#fff" stroke-width="2.4" opacity=".45"/>
+       ${spark(84, 22, 9, '#fff6e0')}${glint(42, 30, 6, 0.7)}`),
+
+    suncore: () => svg(
+      rg('scA2', '#fffbe0', '#ff8a12') + rg('scB2', '#ffffff', '#ffd45e'),
+      `<circle cx="50" cy="50" r="42" fill="#ffb03c" opacity=".28"/>
+       ${[0, 45, 90, 135].map(a => `<rect x="46" y="4" width="8" height="92" rx="4" fill="#ffd45e" opacity=".55" transform="rotate(${a} 50 50)"/>`).join('')}
+       <circle cx="50" cy="50" r="26" fill="url(#scA2)"/>
+       <circle cx="50" cy="50" r="15" fill="url(#scB2)"/>
+       ${glint(43, 42, 7, 0.8)}${spark(86, 18, 8, '#ffffff')}`),
+
+    /* --- Cindra: ash garden --- */
+    sporecap: () => svg(
+      rg('spA3', '#c9b8d6', '#6b5a7a') + lg('spB3', '#efe6f5', '#b8a8c6'),
+      `<rect x="45" y="54" width="10" height="24" rx="5" fill="url(#spB3)"/>
+       <path d="M26 56 q4 -22 24 -22 q20 0 24 22Z" fill="url(#spA3)"/>
+       <circle cx="40" cy="46" r="4" fill="#fff" opacity=".55"/><circle cx="58" cy="44" r="3" fill="#fff" opacity=".45"/>
+       ${glint(38, 42, 5, 0.3)}`),
+
+    shroom: () => svg(
+      rg('shA', '#ff9d7a', '#b03a1e') + lg('shB', '#ffe9d8', '#d9b9a8'),
+      `<rect x="42" y="50" width="16" height="30" rx="8" fill="url(#shB)"/>
+       <path d="M18 52 q6 -28 32 -28 q26 0 32 28Z" fill="url(#shA)"/>
+       <ellipse cx="36" cy="40" rx="7" ry="5" fill="#fff" opacity=".55"/>
+       <ellipse cx="60" cy="36" rx="5" ry="4" fill="#fff" opacity=".45"/>
+       <path d="M18 52 q32 8 64 0" stroke="#8a2a12" stroke-width="2" opacity=".35" fill="none"/>`),
+
+    bigshroom: () => svg(
+      rg('bshA', '#ffb07a', '#a33112') + lg('bshB', '#fff0e0', '#d6b6a2') + rg('bshC', '#ff8a5c', '#8a2a10'),
+      `<rect x="40" y="48" width="20" height="34" rx="10" fill="url(#bshB)"/>
+       <ellipse cx="50" cy="80" rx="20" ry="6" fill="#c9a892" opacity=".6"/>
+       <path d="M10 50 q8 -32 40 -32 q32 0 40 32Z" fill="url(#bshA)"/>
+       <circle cx="30" cy="38" r="7" fill="#fff" opacity=".55"/><circle cx="52" cy="30" r="6" fill="#fff" opacity=".5"/>
+       <circle cx="70" cy="40" r="5" fill="#fff" opacity=".45"/>
+       <path d="M26 66 q-10 4 -12 12" stroke="url(#bshC)" stroke-width="6" fill="none" stroke-linecap="round"/>
+       ${glint(30, 34, 6, 0.4)}`),
+
+    glowcap: () => svg(
+      rg('gcA', '#ffd06a', '#d1470d') + lg('gcB', '#fff3dc', '#d6b6a2'),
+      `<rect x="40" y="46" width="20" height="36" rx="10" fill="url(#gcB)"/>
+       <ellipse cx="50" cy="82" rx="22" ry="6" fill="#c9a892" opacity=".55"/>
+       <circle cx="50" cy="38" r="34" fill="#ffb03c" opacity=".2"/>
+       <path d="M10 48 q8 -34 40 -34 q32 0 40 34Z" fill="url(#gcA)"/>
+       <circle cx="30" cy="36" r="6" fill="#fffbe0"/><circle cx="50" cy="26" r="7" fill="#fffbe0"/>
+       <circle cx="70" cy="38" r="5" fill="#fffbe0"/>
+       ${spark(84, 22, 8, '#fff2c8')}${glint(32, 30, 6, 0.55)}`),
+
+    shroomtree: () => svg(
+      lg('stT2', '#e0c6b0', '#9a7a62') + rg('stC3', '#ffbe7a', '#c2400f') + rg('stC4', '#ffd89a', '#d9650f'),
+      `<path d="M44 86 L44 42 q0 -8 12 -8 v52Z" fill="url(#stT2)"/>
+       <path d="M50 58 q-14 -4 -20 -14 M50 52 q14 -5 20 -14" stroke="url(#stT2)" stroke-width="7" fill="none" stroke-linecap="round"/>
+       <path d="M12 36 q10 -26 38 -26 q28 0 38 26Z" fill="url(#stC3)"/>
+       <path d="M22 54 q6 -14 20 -14 q14 0 20 14Z" fill="url(#stC4)" opacity=".9"/>
+       <circle cx="32" cy="24" r="6" fill="#fff6dc"/><circle cx="52" cy="18" r="7" fill="#fff6dc"/>
+       <circle cx="72" cy="26" r="5" fill="#fff6dc"/>
+       ${spark(88, 46, 7, '#ffd9a8')}${glint(34, 20, 6, 0.5)}`),
+
+    /* --- Wildcard --- */
+    rainbow: () => svg(
+      lg('rbA', '#ff8ac0', '#ffd45e', 0, 0, 1, 1) + lg('rbB', '#7fe0ff', '#a77bff', 0, 0, 1, 1)
+      + rg('rbC', '#ffffff', '#ffe9ff'),
+      `<circle cx="50" cy="50" r="40" fill="#fff" opacity=".2"/>
+       <polygon points="50,10 78,32 68,74 32,74 22,32" fill="url(#rbA)"/>
+       <polygon points="50,10 64,32 50,52 36,32" fill="url(#rbB)"/>
+       <polygon points="36,32 50,52 38,74 22,32" fill="url(#rbC)" opacity=".7"/>
+       <polygon points="64,32 78,32 68,74 50,52" fill="#8ef0d0" opacity=".65"/>
+       <path d="M22 32 h56" stroke="#fff" stroke-width="2.6" opacity=".6"/>
+       ${spark(84, 20, 9, '#ffffff')}${spark(18, 62, 6, '#ffffff')}${glint(42, 28, 6, 0.85)}`),
+
     /* --- Relics (research lab) --- */
     relic1: () => svg(
       rg('r1A', '#fffbe0', '#f0a91e') + rg('r1B', '#e9fbff', '#49b9e8'),
@@ -471,6 +567,29 @@ export const ART = (function () {
        <circle cx="36" cy="24" r="8" fill="url(#gyP)" opacity=".7"/>
        <circle cx="64" cy="22" r="9" fill="url(#gyP)" opacity=".6"/>
        ${glint(34, 66, 7, 0.4)}`),
+
+    lavavent: () => svg(
+      rg('lvA', '#6b4a3c', '#2a1b16') + rg('lvB', '#fff0a8', '#e0400d') + lg('lvC', '#8a5a44', '#4a2e22'),
+      `<path d="M10 82 q6 -26 40 -30 q34 4 40 30Z" fill="url(#lvC)"/>
+       <ellipse cx="50" cy="52" rx="24" ry="11" fill="url(#lvA)"/>
+       <ellipse cx="50" cy="52" rx="17" ry="7" fill="url(#lvB)"/>
+       <path d="M42 46 q4 -16 8 -22 q4 8 8 22Z" fill="#ffb03c" opacity=".8"/>
+       <circle cx="38" cy="22" r="6" fill="#ffd58a" opacity=".65"/>
+       <circle cx="58" cy="14" r="5" fill="#ffd58a" opacity=".5"/>
+       <circle cx="66" cy="28" r="4" fill="#ffd58a" opacity=".45"/>
+       ${spark(82, 40, 7, '#ffd9a0')}${glint(34, 68, 8, 0.2)}`),
+
+    shroomlog: () => svg(
+      lg('slA', '#c9a98e', '#7a5a46') + rg('slB', '#ff9d7a', '#a33112') + rg('slC', '#ffc9a8', '#c2603c'),
+      `<rect x="10" y="56" width="80" height="28" rx="14" fill="url(#slA)"/>
+       <ellipse cx="16" cy="70" rx="7" ry="14" fill="#e0c4a8"/>
+       <ellipse cx="16" cy="70" rx="4" ry="8" fill="none" stroke="#a8836a" stroke-width="2"/>
+       <path d="M30 58 q-2 -16 12 -18 q14 -2 14 14Z" fill="url(#slB)"/>
+       <rect x="40" y="52" width="6" height="12" rx="3" fill="#f2ddc8"/>
+       <path d="M58 56 q0 -12 10 -13 q10 -1 10 11Z" fill="url(#slC)"/>
+       <rect x="66" y="52" width="5" height="10" rx="2.5" fill="#f2ddc8"/>
+       <circle cx="38" cy="46" r="3" fill="#fff" opacity=".6"/>
+       ${glint(26, 62, 7, 0.28)}`),
 
     crater: () => svg(
       rg('crA', '#6b5a4a', '#2e2620') + rg('crB', '#ffd27a', '#c2540f') + lg('crR', '#c9a678', '#8a6a42'),
@@ -588,6 +707,11 @@ export const ART = (function () {
 
   /* ---------------------------------------------------------------- MISC */
   function weed(world: string) {
+    if (world === 'cindra')
+      return `<svg viewBox="0 0 100 100" class="art"><defs>${rg('wdC', '#8a5a44', '#3a231a')}</defs>
+        <path d="M12 80 q4 -24 24 -28 q24 -4 32 8 q10 14 -4 24Z" fill="url(#wdC)"/>
+        <path d="M34 62 q4 -12 12 -12 q8 0 10 12Z" fill="#d1470d"/>
+        <circle cx="72" cy="44" r="10" fill="#6b4438"/><circle cx="70" cy="41" r="3" fill="#ffb03c" opacity=".6"/></svg>`;
     if (world === 'luna')
       return `<svg viewBox="0 0 100 100" class="art"><defs>${rg('wdM', '#cfc9e6', '#6f6990')}</defs>
         <path d="M14 78 q2 -22 22 -26 q22 -4 30 8 q10 14 -4 24Z" fill="url(#wdM)"/>
@@ -637,6 +761,13 @@ export const ART = (function () {
   }
 
   function planet(kind: string) {
+    if (kind === 'cinder')
+      return `<svg viewBox="0 0 100 100" class="planetArt"><defs>${rg('plC', '#ffb877', '#8a2f10')}</defs>
+        <circle cx="50" cy="50" r="42" fill="url(#plC)"/>
+        <path d="M14 46 q14 -8 26 0 q12 8 22 -2 q10 -8 18 2 q-8 16 -32 18 q-26 0 -34 -18Z" fill="#c2400f"/>
+        <path d="M24 72 q16 -8 30 0 q12 6 20 -2 q-8 16 -28 16 q-16 0 -22 -14Z" fill="#a8330a"/>
+        <circle cx="38" cy="40" r="5" fill="#ffd58a" opacity=".8"/><circle cx="66" cy="62" r="4" fill="#ffd58a" opacity=".7"/>
+        ${glint(34, 30, 11, 0.35)}</svg>`;
     if (kind === 'luna')
       return `<svg viewBox="0 0 100 100" class="planetArt"><defs>${rg('plL', '#efeaff', '#8a83ae')}</defs>
         <circle cx="50" cy="50" r="42" fill="url(#plL)"/>
@@ -732,6 +863,12 @@ export const ART = (function () {
     snack: `<svg viewBox="0 0 100 100" class="ic"><defs>${rg('icSn', '#f0c078', '#b06e22')}</defs><circle cx="50" cy="50" r="40" fill="url(#icSn)"/><circle cx="38" cy="40" r="6" fill="#6a3f16"/><circle cx="60" cy="36" r="5" fill="#6a3f16"/><circle cx="56" cy="60" r="6" fill="#6a3f16"/><circle cx="34" cy="62" r="4.5" fill="#6a3f16"/><ellipse cx="38" cy="30" rx="10" ry="6" fill="#fff" opacity=".28" transform="rotate(-25 38 30)"/></svg>`,
     crate: `<svg viewBox="0 0 100 100" class="ic"><defs>${lg('icCr', '#e8b273', '#a3661f')}</defs><rect x="14" y="26" width="72" height="56" rx="10" fill="url(#icCr)"/><rect x="14" y="26" width="72" height="14" rx="7" fill="#f3cb96"/><path d="M42 40 v42 M58 40 v42" stroke="#8a5320" stroke-width="5" opacity=".55"/><rect x="40" y="46" width="20" height="14" rx="5" fill="#ffd45e"/></svg>`,
     blueprint: `<svg viewBox="0 0 100 100" class="ic"><defs>${lg('icBp', '#7fc9ff', '#1d63ad')}</defs><rect x="14" y="20" width="72" height="62" rx="11" fill="url(#icBp)"/><path d="M26 34 h48 M26 48 h30 M26 62 h38" stroke="#ddf1ff" stroke-width="5" stroke-linecap="round" opacity=".85"/><path d="M62 52 l12 12 l-12 12" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/></svg>`,
+    bag: `<svg viewBox="0 0 100 100" class="ic"><defs>${lg('icBg', '#e8b273', '#a3661f')}${lg('icBg2', '#ffd9a8', '#c98a3c')}</defs><path d="M36 30 q0 -16 14 -16 q14 0 14 16" fill="none" stroke="#8a5320" stroke-width="7" stroke-linecap="round"/><path d="M16 32 h68 l-7 50 a10 10 0 0 1 -10 9 h-34 a10 10 0 0 1 -10 -9Z" fill="url(#icBg)"/><rect x="16" y="32" width="68" height="13" rx="6" fill="url(#icBg2)"/><circle cx="50" cy="62" r="10" fill="#ffd45e"/></svg>`,
+    wand: `<svg viewBox="0 0 100 100" class="ic"><defs>${lg('icWd', '#c9a06a', '#7a4f28')}${rg('icWd2', '#fffbe0', '#ffb02e')}</defs><rect x="46" y="38" width="10" height="54" rx="5" fill="url(#icWd)" transform="rotate(20 50 64)"/><polygon points="38,10 46,28 66,30 51,43 56,62 38,51 21,62 26,43 11,30 31,28" fill="url(#icWd2)"/><circle cx="38" cy="33" r="6" fill="#fffdf0"/>${spark(76, 18, 8, '#fff6c8')}</svg>`,
+    bomb: `<svg viewBox="0 0 100 100" class="ic"><defs>${rg('icBm', '#6c7486', '#232833')}${lg('icBm2', '#ffd166', '#e04a12')}</defs><circle cx="46" cy="60" r="32" fill="url(#icBm)"/><ellipse cx="34" cy="48" rx="9" ry="6" fill="#fff" opacity=".28" transform="rotate(-28 34 48)"/><rect x="56" y="20" width="14" height="14" rx="4" fill="#4a5162" transform="rotate(28 63 27)"/><path d="M68 22 q14 -10 10 -18" stroke="#c9a06a" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="80" cy="6" r="7" fill="url(#icBm2)"/>${spark(80, 6, 9, '#fff3b0')}</svg>`,
+    rainbow: `<svg viewBox="0 0 100 100" class="ic"><defs>${lg('icRb', '#ff8ac0', '#ffd45e', 0, 0, 1, 1)}${lg('icRb2', '#7fe0ff', '#a77bff', 0, 0, 1, 1)}</defs><polygon points="50,8 80,32 68,80 32,80 20,32" fill="url(#icRb)"/><polygon points="50,8 64,32 50,54 36,32" fill="url(#icRb2)"/><polygon points="36,32 50,54 38,80 20,32" fill="#fff" opacity=".55"/><path d="M20 32 h60" stroke="#fff" stroke-width="3" opacity=".65"/>${spark(84, 18, 8, '#ffffff')}</svg>`,
+    gift: `<svg viewBox="0 0 100 100" class="ic"><defs>${lg('icGf', '#ff9ec4', '#d63a92')}${lg('icGf2', '#ffe07a', '#e0a021')}</defs><rect x="14" y="40" width="72" height="48" rx="10" fill="url(#icGf)"/><rect x="10" y="30" width="80" height="18" rx="8" fill="url(#icGf2)"/><rect x="42" y="30" width="16" height="58" fill="#fff" opacity=".55"/><path d="M50 30 q-22 -4 -18 -14 q4 -10 18 14Z" fill="url(#icGf2)"/><path d="M50 30 q22 -4 18 -14 q-4 -10 -18 14Z" fill="url(#icGf2)"/></svg>`,
+    ship: `<svg viewBox="0 0 100 100" class="ic"><defs>${lg('icSh', '#cfe0f0', '#5d7a9a')}${lg('icSh2', '#ffd166', '#e0821c')}</defs><path d="M12 54 h76 l-10 28 a8 8 0 0 1 -7 4 h-42 a8 8 0 0 1 -7 -4Z" fill="url(#icSh)"/><rect x="26" y="30" width="48" height="24" rx="6" fill="url(#icSh2)"/><rect x="34" y="36" width="12" height="12" rx="3" fill="#fffaf0"/><rect x="54" y="36" width="12" height="12" rx="3" fill="#fffaf0"/><rect x="44" y="12" width="12" height="20" rx="5" fill="#8fa6bd"/></svg>`,
     flask: `<svg viewBox="0 0 100 100" class="ic"><defs>${lg('icFl', '#c8f6ff', '#4fb6e0')}${rg('icFl2', '#ffb3f0', '#a63fd0')}</defs><path d="M40 14 h20 v26 l18 32 a10 10 0 0 1 -9 15 h-38 a10 10 0 0 1 -9 -15 l18 -32Z" fill="url(#icFl)"/><path d="M33 60 h34 l10 18 a8 8 0 0 1 -7 9 h-40 a8 8 0 0 1 -7 -9Z" fill="url(#icFl2)"/><rect x="36" y="10" width="28" height="9" rx="4.5" fill="#fff"/><circle cx="44" cy="74" r="4" fill="#fff" opacity=".7"/><circle cx="58" cy="68" r="3" fill="#fff" opacity=".6"/></svg>`,
   };
 

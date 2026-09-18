@@ -4,6 +4,15 @@
   "supplyPriceMultiplier": 3,
   "upgrades": [
     {
+      "id": "bag",
+      "name": "Storage Bag",
+      "desc": "Stash items off the board (+2 slots)",
+      "icon": "bag",
+      "basePrice": 380,
+      "step": 340,
+      "max": 4
+    },
+    {
       "id": "energy",
       "name": "Bigger Backpack",
       "desc": "+10 max energy",
@@ -54,6 +63,29 @@
       "desc": "A guaranteed piece for the part you pick",
       "icon": "blueprint",
       "price": 520
+    }
+  ],
+  "boosters": [
+    {
+      "id": "wand",
+      "name": "Merge Wand",
+      "desc": "Instantly merges every matching pair on the board",
+      "icon": "wand",
+      "price": 260
+    },
+    {
+      "id": "bomb",
+      "name": "Tidy Bomb",
+      "desc": "Sells every small leftover for coins and frees the board",
+      "icon": "bomb",
+      "price": 180
+    },
+    {
+      "id": "rainbow",
+      "name": "Rainbow Gem",
+      "desc": "A wildcard tile that merges with anything",
+      "icon": "rainbow",
+      "price": 420
     }
   ]
 }

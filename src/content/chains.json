@@ -115,5 +115,34 @@
       "relic2",
       "relic3"
     ]
+  },
+  "magma": {
+    "name": "Magma Works",
+    "world": "cindra",
+    "items": [
+      "ember",
+      "cinder",
+      "lavablob",
+      "fireopal",
+      "suncore"
+    ]
+  },
+  "shroom": {
+    "name": "Ash Garden",
+    "world": "cindra",
+    "items": [
+      "sporecap",
+      "shroom",
+      "bigshroom",
+      "glowcap",
+      "shroomtree"
+    ]
+  },
+  "wild": {
+    "name": "Wildcards",
+    "world": "any",
+    "items": [
+      "rainbow"
+    ]
   }
 }

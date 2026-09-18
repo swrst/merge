@@ -32,17 +32,23 @@
   <div class="stage" id="stage">
     <div class="stageTop">
       <div class="worldTag"><span id="worldIcon"></span><span id="worldName">Sunny Meadow</span></div>
-      <div style="display:flex;gap:6px">
+      <div class="tools" id="tools">
         <button class="hintTag" id="btnSnack">🍪 +20</button>
         <button class="hintTag" id="btnHint">💡 Hint</button>
       </div>
     </div>
     <div class="board" id="board"></div>
     <div class="fx" id="fx"></div>
+    <div class="tray" id="bagTray">
+      <div class="trayHead"><b id="bagTitle">Storage bag</b><button class="xBtn" id="bagClose">✕</button></div>
+      <div class="traySlots" id="bagSlots"></div>
+      <div class="trayNote">Tap a board item, then <b>Stash</b> — tap it here to bring it back.</div>
+    </div>
   </div>
 
   <div class="infoBar" id="infoBar">
     <div id="infoTxt"></div>
+    <button class="sellBtn alt" id="btnStash">Stash</button>
     <button class="sellBtn" id="btnSell">Sell</button>
     <button class="xBtn" id="infoClose">✕</button>
   </div>

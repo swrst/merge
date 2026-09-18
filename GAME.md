@@ -39,6 +39,7 @@ Vite also prints a `Network:` address — open that on your phone (same Wi-Fi) t
 | `npm run android` | build + sync + open Android Studio |
 | `npm run sync` | build + copy the web build into the native projects |
 | `npm run icons` | regenerate launcher icons and splash from `resources/` |
+| `python3 scripts/make-audio.py` | regenerate the whole sound pack (needs numpy + ffmpeg) |
 
 ### On an Android phone
 Needs Android Studio (it brings the SDK and Gradle).
@@ -84,7 +85,13 @@ unchanged. Apple Developer Program is $99/yr.
 - **Spend those coins.** The 🛒 Trading Post opens at level 4: materials, salvage crates and
   four permanent upgrades. The 🔬 **Research Lab has to be built** — once the rocket flies,
   Bloop will put one up for 3 Star Scrap and 600 coins, and only then does its tab appear.
+- **Stash** anything into the 🎒 bag to get it off the board, and take it back whenever.
+- **Boosters** sit above the board: a Merge Wand that clears every pair at once, a Tidy Bomb
+  that sells the small leftovers, and a Rainbow Gem that merges with *anything*.
+- A **cargo ship** docks now and then with a timed manifest and a big payout.
 - Stuck? **💡 Hint** highlights a mergeable pair (and fires by itself if you idle).
+  If the board ever fills with nothing to merge, Bloop turns up and clears it for you —
+  the game cannot be soft-locked.
 
 ---
 
@@ -180,6 +187,33 @@ the game never shows a locked door it has not explained. The twist on top of mer
 - **Launch** plays a warp cutscene and lands you on Luna: new palette, new chains, new
   alien customers. Refuel to fly again.
 
+### 🎒 Storage bag
+The board is the scarce resource in a merge game, so the bag is the release valve. It does
+not exist until you buy the Storage Bag upgrade; each level adds two slots. Tap an item,
+press **Stash**, and it waits in a tray you can pull down from the button row.
+
+### Boosters
+One-shot helpers bought with coins, shown as buttons above the board with a count:
+- **Merge Wand** — merges every matching pair on the board, lowest tier first.
+- **Tidy Bomb** — sells every tier-1 leftover nobody has ordered and frees the tiles.
+- **Rainbow Gem** — a wildcard tile. Drop it on anything and it becomes that thing's next
+  tier; every merge check in the game runs through one function so the wildcard works with
+  drag, tap-tap, the hint finder and the wand alike.
+
+### Combos, dailies and the cargo ship
+- **Combo streaks**: merges inside 3.5 s of each other chain up, and from the third one on
+  each merge pays bonus coins with a rising ping and a `COMBO ×N` label.
+- **Daily rewards**: a seven-day calendar, escalating from coins to boosters, shown on the
+  first launch of each day. Miss a day and it restarts at day one.
+- **Cargo ship**: every so often a ship docks with a three-item manifest and a real
+  countdown. Fill it before it sails for several times the usual payout plus a booster.
+
+### Worlds
+Three playable worlds, each with its own sky, board palette, chains, producers, customers
+and music: **Sunny Meadow** (Earth), **Crater Camp** (Luna) and **Ember Hollow** (Cindra,
+volcanic, with Magma Works and an Ash Garden and embers drifting up the screen). They open
+in order and each trip costs fuel.
+
 ### Screens
 - **🧩 Board** — the game.
 - **🛒 Shop** — supplies, crates and upgrades (level 4).
@@ -192,9 +226,19 @@ the game never shows a locked door it has not explained. The twist on top of mer
 
 ### Presentation and feel
 - All artwork is hand-written SVG (`src/art.ts`), rasterised into GPU textures at startup.
-- Characters are round cartoon portraits used in cards, the guide bubble and story modals.
-- Sound: small WebAudio blips (toggle in ⚙️). Haptics on merge, part install and level-up.
-- Level-up banner with confetti, floating labels, screen shake, toasts.
+- Characters are round cartoon portraits, and order cards show the **whole customer** as a
+  full-body figure (`ART.figure()` nests the portrait on a body built from a per-character
+  palette) that hops when the order is ready.
+- **Rarity reads at a glance**: tier-3 tiles get a blue frame, tier-4 a violet one, and
+  tier-5 items and relics a gold frame, a breathing halo and three orbiting motes.
+- Tiles are drawn with a seated shadow, an inset floor and a top light, so the board reads
+  as physical rather than as flat rounded rectangles.
+- **Sound is a real audio pack**, not blips: 27 effects and three music beds, all synthesised
+  by `scripts/make-audio.py` (no sampled material, nothing to license) and encoded to ~510 kB
+  of Ogg Vorbis. Merges are pitched by tier, repeats get slight pitch drift, music crossfades
+  between worlds and ducks under the big moments. Effects and music toggle separately in ⚙️.
+- Level-up banner with confetti, floating labels, screen shake, toasts, and a `−N 🪙` that
+  floats up from whichever button you pressed.
 
 ### Saving
 - Progress lives in `localStorage`, mirrored into Capacitor Preferences on device so the OS
@@ -216,7 +260,8 @@ src/content/characters.json   names and order lines
 src/content/missions.json     the story mission list
 src/content/research.json     lab recipes: two inputs -> one relic, price, riddle
 src/content/shop.json          shelf settings, upgrades and crates
-src/content/config.json       tuning: board size, energy, XP curve, meteor timings, unlocks
+src/content/config.json       tuning: board size, energy, XP curve, meteors, unlocks,
+                              combo streaks, the daily calendar and the cargo ship
 src/content/index.ts          types + lookups + the validator
 ```
 
@@ -282,6 +327,10 @@ content is consistent.
 | `orders.maxTierAtLevel` | how quickly orders start asking for higher tiers |
 | `meteor.*` | when the story meteor fires and how often the random ones land |
 | `lab.build` | what the Research Lab costs to put up |
+| `streak.*` | combo window, when bonuses start, and what a step pays |
+| `daily.rewards` | the seven-day login calendar |
+| `ship.*` | when the cargo ship first docks, how often, how long it waits |
+| `upgrades.bagPerStep` | slots added per Storage Bag level |
 | `rocket.fuelToLaunch` | fuel needed per trip |
 | `orders.partRewardChance` | how often an order gifts a rocket piece while the rocket is unfinished |
 | `orders.itemRewardChance` | how often it gifts an ordinary item otherwise |
@@ -304,11 +353,20 @@ src/content/            all game data as JSON + types + validator
 src/native.ts           Capacitor: haptics, save mirroring, status bar
 src/ads.ts              ad seam — no-ops until a network is wired in
 src/style.css           everything outside the board
+src/audio.ts            the WebAudio mixer: buses, crossfades, ducking
+src/audio/*.ogg         the generated sound pack (see scripts/make-audio.py)
 scripts/standalone.mjs  inlines the single-bundle build into MergeRocket.html
 scripts/playtest.mjs    the headless regression run (npm test)
 resources/              1024 icon + 2732 splash, source for the launcher art
 android/                generated native project
 ```
+
+**Layout**: the shell is locked to a phone aspect (never wider than 0.489 × its height), the
+stage and board host are flex-grow, and `board.layout()` simply measures the host and takes
+the smaller of the width fit and the height fit. No arithmetic in the board knows what else
+is on screen, so the grid can never spill under the dock however tall the HUD gets. Every
+overlay is `pointer-events:none` unless open — a closed screen that still swallowed taps was
+what made the game feel frozen.
 
 **The split that matters:** `game.ts` owns state and rules and never touches a sprite.
 It calls `board.sync(cells)` plus animation methods (`animSpawn`, `animMerge`, `burst`,
@@ -362,8 +420,7 @@ an order payout, instant-finish a producer timer.
   a limit later.
 - Characters and celebrations could move to Spine (official Pixi v8 runtime) or Rive.
 - TypeScript is deliberately loose (`strict: false`) since this grew out of a JS prototype.
-- Only two worlds are playable; the third is a "coming soon" card — and it is where the
-  relic chain wants to lead.
+- Three worlds are playable; the map already teases a fourth.
 - Orders are all "fetch N of X" — timed and bundle orders would add variety.
 - Relics sell and fill orders, but a relic *sink* (a museum? decorating your camp?) would
   give the lab a longer tail.

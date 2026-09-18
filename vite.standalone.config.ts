@@ -7,6 +7,9 @@ export default defineConfig({
   build: {
     target: 'es2020',
     outDir: 'dist-standalone',
+    // the audio pack has to travel inside the HTML too, so nothing stays a
+    // separate file: every asset becomes a data: URI regardless of size
+    assetsInlineLimit: 40 * 1024 * 1024,
     rollupOptions: { output: { inlineDynamicImports: true } },
   },
 });

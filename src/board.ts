@@ -4,6 +4,7 @@
 import { Application, Container, Graphics, Sprite, Text, Texture } from 'pixi.js';
 import gsap from 'gsap';
 import { ART } from './art';
+import { ITEMS } from './content';
 
 export type Cell = { b?: number; p?: string; id?: string; ch?: number; at?: number } | null;
 
@@ -17,6 +18,7 @@ export type Hooks = {
 const THEME = {
   earth: { tile: 0xfff6e0, tileLo: 0xf3e1bd, lock: 0xd0a469, lockLo: 0xb98f52, txt: 0x9a7a4e },
   luna: { tile: 0xf3f0ff, tileLo: 0xdcd5f2, lock: 0x9a92bd, lockLo: 0x827aa6, txt: 0x5a4f86 },
+  cindra: { tile: 0xfff0e2, tileLo: 0xf2d6bd, lock: 0xa8654a, lockLo: 0x8a4a33, txt: 0x8a4a2a },
 };
 
 const TEX = 168;                              // texture resolution per tile art
@@ -31,6 +33,9 @@ type Slot = {
   /** a merge landing that has not happened yet — killed if the slot is cleared first,
    *  otherwise it would repaint a tile the game has already emptied (rocket parts, fuel) */
   pending?: gsap.core.Tween | { kill(): void };
+  /** halo and orbiting motes behind a rare item */
+  aura?: Graphics;
+  spin?: Graphics;
 };
 
 class PixiBoard {
@@ -111,8 +116,7 @@ class PixiBoard {
     };
     itemIds.forEach(id => add('i:' + id, ART.item(id)));
     producerArts.forEach(a => add('p:' + a, ART.producer(a)));
-    add('w:earth', ART.weed('earth'));
-    add('w:luna', ART.weed('luna'));
+    ['earth', 'luna', 'cindra'].forEach(w => add('w:' + w, ART.weed(w)));
     add('coin', ART.icon('coin'));
     await Promise.all(jobs);
   }
@@ -125,28 +129,22 @@ class PixiBoard {
     if (!this.ready || this.laying) return;
     this.laying = true;
     const gap = this.gap;
+    // The host is a flex child, so CSS has already worked out how much room is
+    // left after the HUD, the order row and the dock. Measure it and take the
+    // smaller of the two fits — the grid then cannot spill past the panel, and
+    // no arithmetic here has to know what else is on screen.
     const w = Math.max(120, this.host.clientWidth);
-    // Cells follow the width, but never past the room actually left below the
-    // order cards — otherwise a taller HUD pushes the last row under the dock.
+    const h = Math.max(120, this.host.clientHeight);
     const cellW = Math.floor((w - gap * (this.cols - 1)) / this.cols);
-    let cellH = cellW;
-    const shell = this.host.closest('.app') as HTMLElement | null;
-    const dock = shell?.querySelector('.dock') as HTMLElement | null;
-    if (shell) {
-      const top = this.host.getBoundingClientRect().top - shell.getBoundingClientRect().top;
-      const reserve = (dock ? dock.offsetHeight : 62) + 16;   // dock + the stage's own padding
-      const availH = Math.max(150, shell.clientHeight - top - reserve);
-      cellH = Math.floor((availH - gap * (this.rows - 1)) / this.rows);
-    }
-    this.cell = Math.max(24, Math.min(cellW, cellH));
+    const cellH = Math.floor((h - gap * (this.rows - 1)) / this.rows);
+    this.cell = Math.max(18, Math.min(cellW, cellH));
     const gw = this.cols * this.cell + gap * (this.cols - 1);
     const gh = this.rows * this.cell + gap * (this.rows - 1);
-    if (Math.abs(this.host.clientHeight - gh) > 1) this.host.style.height = gh + 'px';
-    if (Math.abs(this.app.screen.width - w) > 1 || Math.abs(this.app.screen.height - gh) > 1) {
-      this.app.renderer.resize(w, gh);          // Pixi only self-measures on window resize
+    if (Math.abs(this.app.screen.width - w) > 1 || Math.abs(this.app.screen.height - h) > 1) {
+      this.app.renderer.resize(w, h);           // Pixi only self-measures on window resize
     }
     this.ox = Math.round((w - gw) / 2);
-    this.oy = 0;
+    this.oy = Math.round((h - gh) / 2);
     for (let i = 0; i < this.tiles.length; i++) this.drawTile(i);
     for (let i = 0; i < this.slots.length; i++) this.placeSlot(i);
     this.laying = false;
@@ -175,16 +173,42 @@ class PixiBoard {
     return r * this.cols + c;
   }
 
-  setTheme(t: 'earth' | 'luna') { this.theme = t; this.layout(); }
+  setTheme(t: keyof typeof THEME) { this.theme = t; this.layout(); }
 
+  /** how precious the thing on this tile is: 0 none, 1 good, 2 rare, 3 legendary */
+  private rarity(i: number): number {
+    const k = this.slots[i]?.key;
+    if (!k || !k.startsWith('i')) return 0;
+    const d = ITEMS[k.slice(1)];
+    if (!d) return 0;
+    if (d.chain === 'relic' || d.chain === 'wild') return 3;
+    if (d.tier >= 5) return 3;
+    if (d.tier === 4) return 2;
+    if (d.tier === 3) return 1;
+    return 0;
+  }
   private drawTile(i: number) {
     const g = this.tiles[i], p = this.pos(i), c = this.cell, th = THEME[this.theme];
     const locked = this.slots[i] && this.slots[i].key.startsWith('b');
+    const r = locked ? 0 : this.rarity(i);
+    const R = c * 0.24;
     g.clear();
-    g.roundRect(p.x, p.y, c, c, c * 0.24).fill({ color: locked ? th.lock : th.tile });
-    g.roundRect(p.x + c * 0.08, p.y + c * 0.62, c * 0.84, c * 0.3, c * 0.16)
-      .fill({ color: locked ? th.lockLo : th.tileLo, alpha: 0.75 });
-    g.roundRect(p.x, p.y, c, c, c * 0.24).stroke({ color: 0xffffff, alpha: locked ? 0.18 : 0.55, width: 2 });
+    // seated shadow, so tiles read as pressed into the board rather than painted on
+    g.roundRect(p.x + c * 0.03, p.y + c * 0.07, c * 0.94, c * 0.96, R)
+      .fill({ color: 0x000000, alpha: 0.12 });
+    g.roundRect(p.x, p.y, c, c, R).fill({ color: locked ? th.lock : th.tile });
+    // inset floor + a soft top light
+    g.roundRect(p.x + c * 0.07, p.y + c * 0.58, c * 0.86, c * 0.34, c * 0.18)
+      .fill({ color: locked ? th.lockLo : th.tileLo, alpha: 0.7 });
+    g.roundRect(p.x + c * 0.1, p.y + c * 0.07, c * 0.8, c * 0.26, c * 0.13)
+      .fill({ color: 0xffffff, alpha: locked ? 0.1 : 0.45 });
+    g.roundRect(p.x, p.y, c, c, R).stroke({ color: 0xffffff, alpha: locked ? 0.18 : 0.6, width: 2 });
+    if (r) {
+      // rarity frame: quietly gold for good, hot for legendary
+      const col = r === 3 ? 0xffb02e : r === 2 ? 0xc78cff : 0x8fd6ff;
+      g.roundRect(p.x + 1, p.y + 1, c - 2, c - 2, R - 1)
+        .stroke({ color: col, alpha: r === 3 ? 0.95 : 0.65, width: r === 3 ? 3 : 2.2 });
+    }
   }
 
   /* ---------------------------------------------------------------- sync */
@@ -217,9 +241,40 @@ class PixiBoard {
       this.idleBob(i);
     } else if (c.id) {
       s.art = this.sprite('i:' + c.id, i, 0.92);
+      this.addAura(i);
       this.idleBob(i);
     }
+    this.drawTile(i);
   }
+  /** a soft halo behind anything rare, so the good stuff reads at a glance */
+  private addAura(i: number) {
+    const r = this.rarity(i);
+    if (r < 2) return;
+    const s = this.slots[i] as any;
+    const p = this.center(i);
+    const col = r === 3 ? 0xffcf5e : 0xc78cff;
+    const g = new Graphics();
+    for (let k = 3; k >= 1; k--) {
+      g.circle(0, 0, this.cell * (0.22 + k * 0.1)).fill({ color: col, alpha: 0.07 * (4 - k) });
+    }
+    g.position.set(p.x, p.y);
+    this.lItem.addChildAt(g, 0);
+    s.aura = g;
+    gsap.to(g.scale, { x: 1.12, y: 1.12, duration: 1.5, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+    if (r === 3) {
+      const spin = new Graphics();
+      for (let k = 0; k < 3; k++) {
+        const a2 = (k / 3) * Math.PI * 2;
+        spin.circle(Math.cos(a2) * this.cell * 0.44, Math.sin(a2) * this.cell * 0.44, this.cell * 0.045)
+          .fill({ color: 0xfff6c8, alpha: 0.9 });
+      }
+      spin.position.set(p.x, p.y);
+      this.lFx.addChild(spin);
+      s.spin = spin;
+      gsap.to(spin, { rotation: Math.PI * 2, duration: 6, repeat: -1, ease: 'none' });
+    }
+  }
+
   private sprite(texKey: string, i: number, scale: number) {
     const sp = new Sprite(this.texture(texKey));
     sp.anchor.set(0.5);
@@ -233,14 +288,18 @@ class PixiBoard {
     const s = this.slots[i] as any;
     if (s.pending) { s.pending.kill(); s.pending = undefined; }
     if (s.idle) { s.idle.kill(); s.idle = undefined; }
-    [s.art, s.timer, s.badge, s.ring, s.readyRing].forEach((o: any) => {
-      if (o) { gsap.killTweensOf(o); o.destroy({ children: true }); }
+    [s.art, s.timer, s.badge, s.ring, s.readyRing, s.aura, s.spin].forEach((o: any) => {
+      if (o) { gsap.killTweensOf(o); gsap.killTweensOf(o.scale); o.destroy({ children: true }); }
     });
     s.art = s.timer = undefined; s.badge = undefined; s.ring = undefined;
+    s.aura = undefined; s.spin = undefined;
     s.readyRing = null; s.hinting = false;
   }
   private placeSlot(i: number) {
-    const s = this.slots[i]; if (!s.art) return;
+    const s = this.slots[i] as any;
+    if (s.aura) { const q = this.center(i); s.aura.position.set(q.x, q.y); }
+    if (s.spin) { const q = this.center(i); s.spin.position.set(q.x, q.y); }
+    if (!s.art) return;
     const p = this.center(i);
     const scale = s.key.startsWith('p') ? 0.96 : s.key.startsWith('b') ? 0.78 : 0.92;
     s.art.position.set(p.x, p.y);
@@ -291,12 +350,17 @@ class PixiBoard {
   }
   /** dragged item flies into the target, pops into the next tier */
   animMerge(from: number, to: number, newId: string) {
-    const a = this.slots[from], b = this.slots[to];
+    const a = this.slots[from] as any, b = this.slots[to];
     const target = this.center(to);
     const flyer = a.art;
     a.art = undefined;
     if (a.idle) { a.idle.kill(); a.idle = undefined; }
+    // the sprite flies away by hand here, so its halo has to go with it —
+    // otherwise a rare item leaves a glow sitting on an empty tile
+    [a.aura, a.spin].forEach((o: any) => { if (o) { gsap.killTweensOf(o); gsap.killTweensOf(o.scale); o.destroy(); } });
+    a.aura = a.spin = undefined;
     a.key = 'e';
+    this.drawTile(from);
     if (flyer) {
       this.lDrag.addChild(flyer);
       gsap.killTweensOf(flyer); gsap.killTweensOf(flyer.scale);

@@ -94,5 +94,29 @@
       "fuelore",
       "starcore"
     ]
+  },
+  "lavavent": {
+    "name": "Lava Vent",
+    "art": "lavavent",
+    "mode": "tap",
+    "cost": 1,
+    "drops": [
+      "ember",
+      "ember",
+      "ember",
+      "cinder"
+    ]
+  },
+  "shroomlog": {
+    "name": "Shroom Log",
+    "art": "shroomlog",
+    "mode": "timer",
+    "every": 16000,
+    "cap": 3,
+    "drops": [
+      "sporecap",
+      "sporecap",
+      "shroom"
+    ]
   }
 }

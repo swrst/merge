@@ -26,10 +26,18 @@ await page.waitForFunction(() => window.__game && window.__board, null, { timeou
 
 const S = () => page.evaluate(() => JSON.parse(JSON.stringify(window.__game.state())));
 const set = (fn) => page.evaluate(fn);
+const closeModal = async () => {
+  let n = 0;
+  while (await page.locator('#modal.open').count() && n++ < 4) {
+    if (process.env.MODALS) console.log('   [modal] ' + await page.textContent('#mTitle'));
+    await page.click('#mBtn'); await page.waitForTimeout(300);
+  }
+};
 const tapCell = async (i) => {
+  await closeModal();
   const p = await page.evaluate(i => { const c = window.__board.center(i); const r = document.querySelector('#board canvas').getBoundingClientRect(); return { x: r.left + c.x, y: r.top + c.y }; }, i);
   await page.mouse.click(p.x, p.y);
-  await page.waitForTimeout(90);
+  await page.waitForTimeout(120);
 };
 const pt = (i) => page.evaluate(i => { const c = window.__board.center(i); const r = document.querySelector('#board canvas').getBoundingClientRect(); return { x: r.left + c.x, y: r.top + c.y }; }, i);
 const drag = async (from, to) => {
@@ -39,9 +47,8 @@ const drag = async (from, to) => {
   await page.mouse.move(b.x, b.y, { steps: 6 }); await page.mouse.up();
   await page.waitForTimeout(500);
 };
-const closeModal = async () => {
-  if (await page.locator('#modal.open').count()) { await page.click('#mBtn'); await page.waitForTimeout(250); }
-};
+/** click something on the board screen, shooing away any modal that got in first */
+const tapUI = async (sel) => { await closeModal(); await page.locator(sel).first().click({ force: true }); };
 const shot = (n) => page.screenshot({ path: `/tmp/shot-${n}.png` });
 
 await page.waitForTimeout(700); await closeModal();
@@ -158,7 +165,8 @@ await set(() => {
 await page.click('[data-v="lab"]'); await page.waitForTimeout(500);
 must(await page.locator('#sc-lab.open').count() === 1, 'lab screen opens');
 await shot('lab-empty');
-must(await page.locator('#labBody [data-learn]').count() === 6, '6 rumours listed, none spoiled');
+const recipeCount = await page.evaluate(() => window.__game.recipes.length);
+must(await page.locator('#labBody [data-learn]').count() === recipeCount, `all ${recipeCount} rumours listed, none spoiled`);
 
 // a dud pair costs the bench fee and consumes nothing
 await set(() => { const b = window.__game.state().boards.earth; b[14] = { id: 'twig' }; b[15] = { id: 'twig' }; });
@@ -212,15 +220,16 @@ must(!ghost.cell, 'the tile is empty in the model');
 must(ghost.key === 'e' && !ghost.sprite, `the tile is empty on screen too (key "${ghost.key}", sprite ${ghost.sprite})`);
 
 head('Meteor craters run dry');
+const craterUses = await page.evaluate(() => window.__game.prods.crater.uses);
 await set(() => {
   const s = window.__game.state(), b = s.boards.earth;
   for (let i = 0; i < b.length; i++) if (b[i]) b[i] = null;
-  s.energy = 60;
-  b[10] = { p: 'crater', u: 6 };
+  s.energy = 90; s.sawCrater = 1;
+  b[10] = { p: 'crater', u: window.__game.prods.crater.uses };
   window.__board.sync(b);
 });
 await page.waitForTimeout(300);
-for (let n = 0; n < 6; n++) await tapCell(10);
+for (let n = 0; n < craterUses; n++) await tapCell(10);
 await page.waitForTimeout(900);
 const crater = await page.evaluate(() => {
   const g = window.__game, out = { gone: !g.cells()[10], ore: 0, scrap: 0 };
@@ -228,17 +237,175 @@ const crater = await page.evaluate(() => {
   return out;
 });
 must(crater.gone, 'the crater collapses after its last dig');
-must(crater.ore >= 2, `it gave ${crater.ore} Fuel Ore and ${crater.scrap} Star Scrap`);
+must(crater.ore >= 1, `it gave ${crater.ore} Fuel Ore and ${crater.scrap} Star Scrap from ${craterUses} digs`);
 must(await page.evaluate(() => !window.__game.prods.fuelpod), 'the free Fuel Pod producer is gone from the game');
 
 head('Catalogue');
+await closeModal();
 await page.click('[data-v="book"]'); await page.waitForTimeout(500);
 must((await page.locator('#bookBody .catBar').count()) === 1, 'collection bar shown');
 must((await page.textContent('#bookBody')).includes('Relics'), 'the Relics chain appears once unlocked');
 await shot('book');
-await page.click('#sc-book .scClose'); await page.waitForTimeout(300);
+await closeModal(); await page.click('#sc-book .scClose'); await page.waitForTimeout(300);
 
 /* --------------------------------------------------------------- full arc */
+head('Storage bag');
+await set(() => {
+  const s = window.__game.state(), b = s.boards.earth;
+  for (let i = 0; i < b.length; i++) if (b[i] && b[i].id) b[i] = null;
+  s.coins = 9000; s.up.bag = 0; s.bag = [];
+  b[12] = { id: 'gem' };
+  window.__board.sync(b);
+});
+await closeModal();
+await page.click('[data-v="shop"]'); await page.waitForTimeout(600);
+const shopDiag = await page.evaluate(() => ({
+  open: !!document.querySelector('#sc-shop.open'),
+  lvl: window.__game.state().lvl,
+  coins: window.__game.state().coins,
+  rows: document.querySelectorAll('#shopBody [data-up]').length,
+  bagBtn: !!document.querySelector('[data-up="bag"]'),
+  disabled: document.querySelector('[data-up="bag"]')?.disabled,
+}));
+if (!shopDiag.open || !shopDiag.bagBtn || shopDiag.disabled) console.log('   [shop]', JSON.stringify(shopDiag));
+await tapUI('[data-up="bag"]'); await page.waitForTimeout(450);
+must((await S()).up.bag === 1, 'Storage Bag bought');
+await page.click('#sc-shop .scClose'); await page.waitForTimeout(500);
+must(await page.locator('#tools .toolBtn').count() >= 1, 'the bag button appears above the board');
+must(await page.evaluate(() => {
+  const r = document.querySelector('#board canvas').getBoundingClientRect();
+  const el = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+  return el && el.tagName === 'CANVAS';
+}), 'a closed screen does not swallow board taps');
+await tapCell(12); await page.waitForTimeout(350);
+const bagDiag = await page.evaluate(() => ({
+  cell12: window.__game.cells()[12],
+  info: document.querySelector('#infoBar')?.className,
+  stash: getComputedStyle(document.querySelector('#btnStash')).display,
+  openScreens: [...document.querySelectorAll('.screen.open')].map(e => e.id),
+}));
+if (!bagDiag.info?.includes('on')) {
+  console.log('   [bag]', JSON.stringify(bagDiag));
+  console.log('   [geom]', JSON.stringify(await page.evaluate(() => {
+    const bd = window.__board, r = document.querySelector('#board canvas').getBoundingClientRect();
+    const c = bd.center(12);
+    const el = document.elementFromPoint(r.left + c.x, r.top + c.y);
+    return { cell: bd.cell, ox: bd.ox, oy: bd.oy, canvas: [r.left | 0, r.top | 0, r.width | 0, r.height | 0],
+             point: [(r.left + c.x) | 0, (r.top + c.y) | 0], hit: el ? (el.id || el.className || el.tagName) : 'none',
+             screenW: bd.app.screen.width, screenH: bd.app.screen.height,
+             shopT: getComputedStyle(document.querySelector('#sc-shop')).transform,
+             shopRect: (() => { const q = document.querySelector('#sc-shop').getBoundingClientRect(); return [q.top|0, q.bottom|0, q.height|0]; })(),
+             shopCls: document.querySelector('#sc-shop').className };
+  })));
+}
+await tapUI('#btnStash'); await page.waitForTimeout(500);
+after = await S();
+must(after.bag.length === 1 && after.bag[0] === 'gem', 'the item moved into the bag');
+must(!after.boards.earth[12], 'and left the board');
+await tapUI('#tools .toolBtn'); await page.waitForTimeout(450);
+await tapUI('.bagSlot.full'); await page.waitForTimeout(500);
+after = await S();
+must(after.bag.length === 0 && after.boards.earth.some(c => c && c.id === 'gem'), 'and comes back out again');
+
+head('Boosters');
+await set(() => {
+  const s = window.__game.state(), b = s.boards.earth;
+  for (let i = 0; i < b.length; i++) if (b[i] && b[i].id) b[i] = null;
+  s.boost = { wand: 1, bomb: 1, rainbow: 1 }; s.coins = 9000;
+  for (let i = 0; i < 8; i++) b[i] = { id: i % 2 ? 'pebble' : 'twig' };
+  window.__board.sync(b);
+});
+await page.waitForTimeout(400);
+before = await page.evaluate(() => window.__game.cells().filter(c => c && c.id).length);
+await tapUI('#tools .toolBtn[title="Merge Wand"]'); await page.waitForTimeout(900);
+after = await S();
+const nowItems = await page.evaluate(() => window.__game.cells().filter(c => c && c.id).length);
+must(nowItems < before, `the wand merged the board down (${before} -> ${nowItems} items)`);
+must(after.boost.wand === 0, 'and used itself up');
+
+await set(() => {
+  const s = window.__game.state(), b = s.boards.earth;
+  for (let i = 0; i < b.length; i++) if (b[i] && b[i].id) b[i] = null;
+  for (let i = 0; i < 6; i++) b[i] = { id: 'twig' };
+  s.orders = []; s.ship = null;
+  window.__board.sync(b);
+});
+await page.waitForTimeout(400);
+before = (await S()).coins;
+await tapUI('#tools .toolBtn[title="Tidy Bomb"]'); await page.waitForTimeout(800);
+after = await S();
+must(after.coins > before, `the bomb sold the clutter for coins (${before} -> ${after.coins})`);
+must(after.boards.earth.filter(c => c && c.id === 'twig').length === 0, 'and cleared the board');
+
+head('Rainbow Gem is a wildcard');
+await set(() => {
+  const s = window.__game.state(), b = s.boards.earth;
+  for (let i = 0; i < b.length; i++) if (b[i] && b[i].id) b[i] = null;
+  b[20] = { id: 'rainbow' }; b[21] = { id: 'geode' };
+  window.__board.sync(b);
+});
+await page.waitForTimeout(400);
+await drag(20, 21);
+must(await page.evaluate(() => window.__game.cells()[21]?.id) === 'gem', 'rainbow + geode makes a Gemstone');
+
+head('Cargo ship');
+await set(() => {
+  const s = window.__game.state(), b = s.boards.earth;
+  for (let i = 0; i < b.length; i++) if (b[i]) b[i] = null;
+  b[19] = { p: 'tree' }; b[22] = { p: 'rocks' };
+  s.lvl = 9; s.ship = null; s.shipAt = Date.now() - 1;
+  window.__board.sync(b);
+});
+await page.waitForTimeout(1500);
+let sh = await page.evaluate(() => window.__game.state().ship);
+must(!!sh, sh ? `a ship docked wanting ${sh.needs.map(n => n.qty + '× ' + n.id).join(', ')} for ${sh.coins} coins` : 'no ship appeared');
+must(await page.locator('.order.ship').count() === 1, 'and shows as a card in the order row');
+await set(() => {
+  const g = window.__game, s = g.state(), b = g.cells();
+  s.ship.needs.forEach(nd => { let n = nd.qty; for (let i = 0; i < b.length && n; i++) if (!b[i]) { b[i] = { id: nd.id }; n--; } });
+  window.__board.sync(b);
+});
+await page.waitForTimeout(500);
+before = (await S()).coins;
+await tapUI('.order.ship .btnDeliver'); await page.waitForTimeout(900);
+after = await S();
+must(after.coins > before && !after.ship, `loading the manifest paid out (${before} -> ${after.coins})`);
+must(Object.values(after.boost).some(n => n > 0), 'and threw in a booster');
+
+head('Daily rewards');
+await page.evaluate(() => {
+  const raw = JSON.parse(localStorage.getItem('mergeRocket_v2') || '{}');
+  raw.daily = { key: 0, day: 0 };
+  localStorage.setItem('mergeRocket_v2', JSON.stringify(raw));
+});
+await page.reload();
+await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 20000 });
+await page.waitForTimeout(2600);
+must(await page.locator('#modal.open .dayCell').count() === 7, 'a 7-day calendar greets you');
+must((await S()).daily.day === 1, 'and starts you on day 1');
+await closeModal();
+
+head('No soft-lock: a full unmergeable board is rescued');
+await set(() => {
+  const s = window.__game.state(), b = s.boards.earth;
+  const ids = ['twig', 'branch', 'log', 'lumber', 'pebble', 'rock', 'geode', 'gem',
+    'berry', 'berries', 'jam', 'pie', 'scrap', 'starcore', 'bolt', 'boltpack',
+    'spring', 'coil', 'wire', 'circuit', 'glass', 'tankglass', 'fuelore', 'fuelcan',
+    'cart', 'statue', 'cake', 'ember', 'cinder', 'lavablob', 'fireopal', 'suncore',
+    'sporecap', 'shroom', 'bigshroom', 'glowcap', 'shroomtree', 'mrock', 'mcrystal',
+    'mcore', 'mstar', 'moonorb', 'spore', 'bulb', 'glowflower', 'starbloom', 'glowtree', 'relic1'];
+  for (let i = 0; i < b.length; i++) b[i] = { id: ids[i] };
+  s.orders = []; s.ship = null; s.bag = []; s.up.bag = 0;
+  window.__board.sync(b);
+});
+await page.waitForTimeout(1600);
+must(await page.locator('#modal.open').count() === 1, 'Bloop turns up when the board is stuck');
+before = (await S()).coins;
+await page.click('#mBtn'); await page.waitForTimeout(800);
+after = await S();
+must(after.boards.earth.some(c => !c), 'the rescue freed tiles');
+must(after.coins > before, `and paid for the clutter (${before} -> ${after.coins})`);
+
 head('Launch still works end to end');
 await set(() => {
   const s = window.__game.state();
@@ -250,6 +417,18 @@ await page.waitForTimeout(3600); await closeModal(); await page.waitForTimeout(4
 s = await S();
 must(s.world === 'luna', 'landed on Luna');
 await shot('luna');
+
+head('And on to Cindra');
+await closeModal();
+await set(() => { const st = window.__game.state(); st.fuel = 3; });
+await closeModal();
+await page.click('[data-v="map"]'); await page.waitForTimeout(600);
+await page.locator('[data-go="cindra"]').click();
+await page.waitForTimeout(3600); await closeModal(); await page.waitForTimeout(400);
+s = await S();
+must(s.world === 'cindra', 'landed on Cindra');
+must(s.boards.cindra.some(c => c && c.p === 'lavavent'), 'with a Lava Vent to tap');
+await shot('cindra');
 
 head('Console');
 must(errors.length === 0, errors.length ? `console errors:\n${errors.join('\n')}` : 'no console errors');

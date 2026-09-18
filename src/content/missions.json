@@ -75,5 +75,19 @@
     "text": "Craft 3 relics in the Lab",
     "hint": "Combine two things on the Lab bench \u2014 rare relics are waiting.",
     "coins": 400
+  },
+  {
+    "id": "ship",
+    "need": 1,
+    "text": "Load a cargo ship",
+    "hint": "A cargo ship docks now and then \u2014 fill its manifest before it leaves!",
+    "coins": 250
+  },
+  {
+    "id": "cindra",
+    "need": 1,
+    "text": "Reach the third world",
+    "hint": "Refuel and fly on \u2014 Cindra is out there.",
+    "coins": 800
   }
 ]

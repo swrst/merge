@@ -71,12 +71,15 @@ export interface UpgradeDef {
   basePrice: number; step: number; max: number;
 }
 export interface CrateDef { id: string; name: string; desc: string; icon: string; price: number }
+/** a one-shot helper bought with coins and fired from the board */
+export interface BoosterDef { id: string; name: string; desc: string; icon: string; price: number }
 export interface ShopDef {
   supplyStock: number;
   supplyRestockMs: number;
   supplyPriceMultiplier: number;
   upgrades: UpgradeDef[];
   crates: CrateDef[];
+  boosters: BoosterDef[];
 }
 
 export interface Config {
@@ -98,7 +101,19 @@ export interface Config {
   /** the level the shop appears at (the lab is built, not unlocked by level) */
   unlocks: { shopAtLevel: number };
   /** what one level of each shop upgrade is worth */
-  upgrades: { energyPerStep: number; speedPerStep: number; ordersPerStep: number; snackPerStep: number };
+  upgrades: {
+    energyPerStep: number; speedPerStep: number; ordersPerStep: number;
+    snackPerStep: number; bagPerStep: number;
+  };
+  /** merge combos: how close together merges must be, and what a step pays */
+  streak: { windowMs: number; minFor: number; coinPerStep: number; maxStep: number };
+  /** the login calendar, one entry per day of the streak */
+  daily: { rewards: { kind: string; n?: number; id?: string; label: string }[] };
+  /** the timed cargo event */
+  ship: {
+    firstAtLevel: number; everyMs: number; windowMs: number;
+    slots: number; coinMult: number; xpMult: number;
+  };
   /** research lab: the build price, the bench fee, and how many duds earn a free clue */
   lab: { failFee: number; clueEvery: number; build: { coins: number; item: string; qty: number } };
 }
@@ -196,6 +211,19 @@ export function validateContent(): string[] {
       errs.push(`upgrade "${u.id}" has no "${u.id}PerStep" value in config.upgrades`);
   });
   const cids = new Set<string>();
+  SHOP.boosters.forEach(b => {
+    if (!(b.price > 0)) errs.push(`booster "${b.id}" needs a price`);
+  });
+  const bids = new Set<string>();
+  SHOP.boosters.forEach(b => {
+    if (bids.has(b.id)) errs.push(`duplicate booster id "${b.id}"`);
+    bids.add(b.id);
+  });
+  CONFIG.daily.rewards.forEach((r, i) => {
+    if (r.kind === 'booster' && !SHOP.boosters.some(b => b.id === r.id))
+      errs.push(`daily reward ${i + 1} gives unknown booster "${r.id}"`);
+  });
+  if (!(CONFIG.ship.slots > 0)) errs.push('ship.slots must be at least 1');
   SHOP.crates.forEach(c => {
     if (cids.has(c.id)) errs.push(`duplicate crate id "${c.id}"`);
     cids.add(c.id);

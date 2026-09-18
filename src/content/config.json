@@ -51,7 +51,8 @@
     "energyPerStep": 10,
     "speedPerStep": 0.15,
     "ordersPerStep": 1,
-    "snackPerStep": 10
+    "snackPerStep": 10,
+    "bagPerStep": 2
   },
   "lab": {
     "failFee": 40,
@@ -61,5 +62,64 @@
       "item": "scrap",
       "qty": 3
     }
+  },
+  "streak": {
+    "windowMs": 3500,
+    "minFor": 3,
+    "coinPerStep": 6,
+    "maxStep": 8
+  },
+  "daily": {
+    "rewards": [
+      {
+        "kind": "coins",
+        "n": 120,
+        "label": "120 coins"
+      },
+      {
+        "kind": "energy",
+        "n": 30,
+        "label": "+30 energy"
+      },
+      {
+        "kind": "booster",
+        "id": "bomb",
+        "n": 1,
+        "label": "Tidy Bomb"
+      },
+      {
+        "kind": "coins",
+        "n": 320,
+        "label": "320 coins"
+      },
+      {
+        "kind": "booster",
+        "id": "wand",
+        "n": 1,
+        "label": "Merge Wand"
+      },
+      {
+        "kind": "coins",
+        "n": 600,
+        "label": "600 coins"
+      },
+      {
+        "kind": "booster",
+        "id": "rainbow",
+        "n": 2,
+        "label": "2 Rainbow Gems"
+      }
+    ]
+  },
+  "ship": {
+    "firstAtLevel": 5,
+    "everyMs": 900000,
+    "windowMs": 420000,
+    "slots": 3,
+    "coinMult": 6,
+    "xpMult": 3
+  },
+  "bag": {
+    "base": 0
   }
 }

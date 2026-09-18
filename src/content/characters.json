@@ -74,5 +74,21 @@
       "Shiny. I want it.",
       "A gift for my home world?"
     ]
+  },
+  "vulk": {
+    "name": "Vulk",
+    "lines": [
+      "Hot rock. Good rock.",
+      "I eat these. Do not judge.",
+      "Bring me the warm one!"
+    ]
+  },
+  "ember": {
+    "name": "Ember",
+    "lines": [
+      "Ooh, shiny and toasty!",
+      "My garden needs this.",
+      "Pretty please, with ash on top?"
+    ]
   }
 }
