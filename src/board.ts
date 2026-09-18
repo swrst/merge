@@ -295,16 +295,37 @@ class PixiBoard {
     s.aura = undefined; s.spin = undefined;
     s.readyRing = null; s.hinting = false;
   }
+  /** Re-seat everything on tile `i` after the grid has moved or resized.
+   *  Rings, badges and running tweens all hold coordinates from the layout they
+   *  were made in, so leaving them alone leaves sprites and highlights sitting
+   *  a tile away from the board they belong to. */
   private placeSlot(i: number) {
     const s = this.slots[i] as any;
-    if (s.aura) { const q = this.center(i); s.aura.position.set(q.x, q.y); }
-    if (s.spin) { const q = this.center(i); s.spin.position.set(q.x, q.y); }
-    if (!s.art) return;
     const p = this.center(i);
+    if (s.aura) s.aura.position.set(p.x, p.y);
+    if (s.spin) s.spin.position.set(p.x, p.y);
+    // highlights are cheap and redrawn every tick, so throw the stale ones away
+    ['ring', 'readyRing'].forEach(k => {
+      if (s[k]) { gsap.killTweensOf(s[k]); s[k].destroy(); s[k] = k === 'readyRing' ? null : undefined; }
+    });
+    if (s.badge) { gsap.killTweensOf(s.badge); s.badge.destroy({ children: true }); s.badge = undefined; }
+    if (!s.art) return;
+    if (s.timer && s.key.startsWith('b')) {
+      s.timer.style.fontSize = this.cell * 0.26;
+      s.timer.position.set(p.x + this.cell * 0.28, p.y + this.cell * 0.3);
+    }
+    // a tween started under the old geometry would drag the sprite back off its
+    // tile on the next frame, so it goes too and the idle bob starts afresh
+    if (s.idle) { s.idle.kill(); s.idle = undefined; }
+    s.hinting = false;
+    gsap.killTweensOf(s.art);
+    gsap.killTweensOf(s.art.scale);
     const scale = s.key.startsWith('p') ? 0.96 : s.key.startsWith('b') ? 0.78 : 0.92;
     s.art.position.set(p.x, p.y);
     s.art.width = s.art.height = this.cell * scale;
-    if (s.timer && s.key.startsWith('b')) s.timer.position.set(p.x + this.cell * 0.28, p.y + this.cell * 0.3);
+    s.art.alpha = 1;
+    s.art.rotation = 0;
+    if (!s.key.startsWith('b')) this.idleBob(i);
   }
   private idleBob(i: number) {
     const s = this.slots[i]; if (!s.art) return;
