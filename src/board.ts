@@ -318,6 +318,7 @@ class PixiBoard {
     // tile on the next frame, so it goes too and the idle bob starts afresh
     if (s.idle) { s.idle.kill(); s.idle = undefined; }
     s.hinting = false;
+    if (s.art.parent !== this.lItem) this.lItem.addChild(s.art);
     gsap.killTweensOf(s.art);
     gsap.killTweensOf(s.art.scale);
     const scale = s.key.startsWith('p') ? 0.96 : s.key.startsWith('b') ? 0.78 : 0.92;
@@ -328,7 +329,7 @@ class PixiBoard {
     if (!s.key.startsWith('b')) this.idleBob(i);
   }
   private idleBob(i: number) {
-    const s = this.slots[i]; if (!s.art) return;
+    const s = this.slots[i]; if (!s.art || s.art.destroyed) return;
     s.idle = gsap.to(s.art, {
       y: '+=' + (this.cell * 0.035), duration: 1.6 + Math.random() * 0.8,
       repeat: -1, yoyo: true, ease: 'sine.inOut', delay: Math.random(),
@@ -613,8 +614,16 @@ class PixiBoard {
     const kind = to >= 0 && to !== d.i ? this.hooks.dropKind(d.i, to) : null;
     const sc = this.spriteScale(d.i);
     if (!kind) {                                   // snap back
+      // Re-home the sprite NOW, not when the tween ends: while it sat in the
+      // drag layer it floated above every tile, and a sync() landing in that
+      // window destroyed it out from under the tween — which is how an item
+      // could overlap its neighbour and then vanish.
+      this.lItem.addChild(d.sprite);
       gsap.to(d.sprite, { x: home.x, y: home.y, duration: 0.25, ease: 'back.out(2)' });
-      gsap.to(d.sprite.scale, { x: sc, y: sc, duration: 0.2, onComplete: () => { this.lItem.addChild(d.sprite); this.idleBob(d.i); } });
+      gsap.to(d.sprite.scale, {
+        x: sc, y: sc, duration: 0.2,
+        onComplete: () => { if (!d.sprite.destroyed) this.idleBob(d.i); },
+      });
       return;
     }
     this.lItem.addChild(d.sprite);
@@ -641,7 +650,8 @@ class PixiBoard {
 
   /** snap a sprite back home after the game refuses a drop */
   settle(i: number) {
-    const s = this.slots[i]; if (!s.art) return;
+    const s = this.slots[i]; if (!s.art || s.art.destroyed) return;
+    if (s.art.parent !== this.lItem) this.lItem.addChild(s.art);
     const p = this.center(i);
     gsap.to(s.art, { x: p.x, y: p.y, duration: 0.2, ease: 'back.out(2)' });
   }

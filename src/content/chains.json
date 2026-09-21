@@ -144,5 +144,27 @@
     "items": [
       "rainbow"
     ]
+  },
+  "water": {
+    "name": "Waterworks",
+    "world": "earth",
+    "items": [
+      "dew",
+      "puddle",
+      "jug",
+      "barrel",
+      "fountain"
+    ]
+  },
+  "grass": {
+    "name": "Hay Meadow",
+    "world": "earth",
+    "items": [
+      "grass",
+      "hay",
+      "bale",
+      "hat",
+      "scarecrow"
+    ]
   }
 }

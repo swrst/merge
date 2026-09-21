@@ -390,6 +390,85 @@ export const ART = (function () {
        <circle cx="66" cy="38" r="3" fill="#fff" opacity=".6"/>
        ${spark(84, 20, 8, '#ccfff0')}${glint(42, 28, 6, 0.65)}`),
 
+    /* --- Waterworks --- */
+    dew: () => svg(
+      rg('dwA', '#eafcff', '#4fb6e0'),
+      `<path d="M50 20 q16 22 16 34 a16 16 0 0 1 -32 0 q0 -12 16 -34Z" fill="url(#dwA)"/>
+       <ellipse cx="43" cy="52" rx="5" ry="7" fill="#fff" opacity=".7"/>
+       ${glint(44, 44, 5, 0.5)}`),
+    puddle: () => svg(
+      rg('pdA', '#d6f6ff', '#3fa8d6'),
+      `<ellipse cx="50" cy="62" rx="36" ry="17" fill="url(#pdA)"/>
+       <ellipse cx="50" cy="59" rx="26" ry="11" fill="#eafcff" opacity=".6"/>
+       <ellipse cx="38" cy="56" rx="8" ry="3.5" fill="#fff" opacity=".7"/>
+       ${spark(78, 34, 6, '#dff6ff')}`),
+    jug: () => svg(
+      lg('jgA', '#cfe4f2', '#7f9db5') + rg('jgB', '#bdf0ff', '#2f9ed6'),
+      `<path d="M34 34 h32 l6 38 a12 12 0 0 1 -12 13 h-20 a12 12 0 0 1 -12 -13Z" fill="url(#jgA)"/>
+       <path d="M34 50 h34 l4 22 a12 12 0 0 1 -12 13 h-20 a12 12 0 0 1 -12 -13Z" fill="url(#jgB)"/>
+       <rect x="36" y="22" width="28" height="14" rx="7" fill="#e8f3fa"/>
+       <path d="M66 38 q14 4 12 16 q-2 10 -12 10" stroke="#9db4c8" stroke-width="6" fill="none" stroke-linecap="round"/>
+       ${glint(40, 40, 6, 0.5)}`),
+    barrel: () => svg(
+      lg('brA2', '#d6a06a', '#8a5a2e') + lg('brB2', '#8d9bb4', '#5d6a82') + rg('brC2', '#bdf0ff', '#2f9ed6'),
+      `<rect x="20" y="30" width="60" height="54" rx="16" fill="url(#brA2)"/>
+       <rect x="20" y="40" width="60" height="8" rx="4" fill="url(#brB2)"/>
+       <rect x="20" y="66" width="60" height="8" rx="4" fill="url(#brB2)"/>
+       <ellipse cx="50" cy="32" rx="30" ry="9" fill="url(#brC2)"/>
+       <ellipse cx="44" cy="31" rx="10" ry="3.5" fill="#fff" opacity=".6"/>
+       <path d="M34 30 v54 M66 30 v54" stroke="#6b4420" stroke-width="2" opacity=".3"/>
+       ${spark(84, 22, 7, '#dff6ff')}`),
+    fountain: () => svg(
+      lg('ftA2', '#e6ecf2', '#93a3b5') + rg('ftB2', '#c8f2ff', '#2f9ed6'),
+      `<ellipse cx="50" cy="76" rx="40" ry="14" fill="url(#ftA2)"/>
+       <ellipse cx="50" cy="73" rx="32" ry="10" fill="url(#ftB2)"/>
+       <rect x="44" y="44" width="12" height="30" rx="6" fill="url(#ftA2)"/>
+       <ellipse cx="50" cy="46" rx="20" ry="7" fill="url(#ftA2)"/>
+       <ellipse cx="50" cy="44" rx="14" ry="4.5" fill="url(#ftB2)"/>
+       <path d="M50 12 q-14 16 -14 28 M50 12 q14 16 14 28" stroke="#9fe0ff" stroke-width="6" fill="none" stroke-linecap="round" opacity=".9"/>
+       <circle cx="50" cy="12" r="7" fill="#dff6ff"/>
+       ${spark(84, 26, 8, '#eafcff')}${glint(40, 42, 6, 0.5)}`),
+
+    /* --- Hay Meadow --- */
+    grass: () => svg(
+      lg('grA', '#9ade63', '#3f9a33'),
+      `<path d="M50 84 q-6 -24 -18 -34 q16 6 18 34Z" fill="url(#grA)"/>
+       <path d="M50 84 q8 -26 22 -34 q-14 10 -22 34Z" fill="#6cc65a"/>
+       <path d="M50 86 q-3 -26 2 -40 q4 22 -2 40Z" fill="#7fd463"/>
+       ${glint(58, 46, 5, 0.3)}`),
+    hay: () => svg(
+      lg('hyA', '#ffe08a', '#c9982e') + lg('hyR', '#e07b3d', '#b1531f'),
+      `<path d="M22 74 q6 -34 28 -40 q22 6 28 40Z" fill="url(#hyA)"/>
+       <path d="M32 72 q6 -26 18 -32 M50 40 q10 8 14 32" stroke="#d9ab45" stroke-width="2.4" fill="none" opacity=".6"/>
+       <rect x="20" y="56" width="60" height="9" rx="4.5" fill="url(#hyR)"/>
+       ${glint(40, 46, 6, 0.4)}`),
+    bale: () => svg(
+      rg('blA', '#ffe9a8', '#c2912b') + lg('blR', '#e07b3d', '#a84c1c'),
+      `<rect x="14" y="34" width="72" height="48" rx="22" fill="url(#blA)"/>
+       <ellipse cx="22" cy="58" rx="9" ry="22" fill="#fff0bd"/>
+       <path d="M34 38 q10 20 0 42 M52 36 q10 22 0 46 M70 38 q8 20 0 42" stroke="#d9ab45" stroke-width="2.6" fill="none" opacity=".55"/>
+       <rect x="12" y="50" width="76" height="8" rx="4" fill="url(#blR)"/>
+       ${glint(30, 44, 7, 0.4)}`),
+    hat: () => svg(
+      lg('htA', '#ffe9a8', '#c9982e') + lg('htB', '#ffd166', '#b8892a') + lg('htR', '#ff8ac0', '#d63a92'),
+      `<ellipse cx="50" cy="66" rx="42" ry="16" fill="url(#htA)"/>
+       <ellipse cx="50" cy="63" rx="30" ry="10" fill="url(#htB)"/>
+       <path d="M28 62 q2 -30 22 -32 q20 2 22 32Z" fill="url(#htB)"/>
+       <rect x="26" y="52" width="48" height="10" rx="5" fill="url(#htR)"/>
+       <path d="M36 40 q14 -6 28 0" stroke="#d9ab45" stroke-width="2.4" fill="none" opacity=".6"/>
+       ${glint(40, 34, 6, 0.45)}`),
+    scarecrow: () => svg(
+      lg('scA3', '#c9a06a', '#7a4f28') + lg('scB3', '#ffe9a8', '#c9982e') + lg('scC3', '#7fc4ff', '#2f7ed0'),
+      `<rect x="45" y="46" width="10" height="44" rx="5" fill="url(#scA3)"/>
+       <rect x="16" y="44" width="68" height="9" rx="4.5" fill="url(#scA3)"/>
+       <path d="M30 40 q-6 14 -2 22 M70 40 q6 14 2 22" stroke="url(#scB3)" stroke-width="5" fill="none" stroke-linecap="round"/>
+       <rect x="32" y="48" width="36" height="30" rx="10" fill="url(#scC3)"/>
+       <circle cx="50" cy="28" r="17" fill="url(#scB3)"/>
+       <circle cx="44" cy="26" r="3" fill="#3c2a1c"/><circle cx="56" cy="26" r="3" fill="#3c2a1c"/>
+       <path d="M44 34 q6 5 12 0" stroke="#8a5a2a" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+       <ellipse cx="50" cy="14" rx="24" ry="8" fill="url(#scB3)"/>
+       ${glint(42, 22, 5, 0.4)}`),
+
     /* --- Cindra: magma works --- */
     ember: () => svg(
       rg('emA', '#fff3b0', '#e04a12'),
@@ -567,6 +646,29 @@ export const ART = (function () {
        <circle cx="36" cy="24" r="8" fill="url(#gyP)" opacity=".7"/>
        <circle cx="64" cy="22" r="9" fill="url(#gyP)" opacity=".6"/>
        ${glint(34, 66, 7, 0.4)}`),
+
+    well: () => svg(
+      lg('wlA', '#b9bfd0', '#71788c') + lg('wlB', '#c9a06a', '#7a4f28') + rg('wlC', '#bdf0ff', '#2f7ed0'),
+      `<rect x="18" y="52" width="64" height="30" rx="10" fill="url(#wlA)"/>
+       <ellipse cx="50" cy="52" rx="32" ry="11" fill="#5d6577"/>
+       <ellipse cx="50" cy="53" rx="24" ry="7" fill="url(#wlC)"/>
+       <path d="M24 54 h8 v28 h-8Z M68 54 h8 v28 h-8Z" fill="#8d94a8" opacity=".6"/>
+       <rect x="26" y="22" width="7" height="32" rx="3.5" fill="url(#wlB)"/>
+       <rect x="67" y="22" width="7" height="32" rx="3.5" fill="url(#wlB)"/>
+       <path d="M16 26 h68 l-8 -12 h-52Z" fill="url(#wlB)"/>
+       <rect x="44" y="28" width="12" height="14" rx="4" fill="#8d94a8"/>
+       ${glint(36, 50, 6, 0.35)}`),
+
+    meadow: () => svg(
+      rg('mdA', '#9ade63', '#357f2c') + lg('mdB', '#6cc65a', '#2f7a28'),
+      `<ellipse cx="50" cy="72" rx="42" ry="18" fill="url(#mdA)"/>
+       <path d="M24 70 q-4 -22 6 -30 q4 20 -6 30Z" fill="url(#mdB)"/>
+       <path d="M40 72 q-4 -26 4 -34 q6 22 -4 34Z" fill="#7fd463"/>
+       <path d="M58 72 q4 -26 -2 -36 q10 20 2 36Z" fill="url(#mdB)"/>
+       <path d="M74 70 q6 -20 0 -28 q-2 18 0 28Z" fill="#7fd463"/>
+       <circle cx="32" cy="64" r="4.5" fill="#ffd166"/><circle cx="66" cy="60" r="4" fill="#ff9ec4"/>
+       <circle cx="52" cy="66" r="3.5" fill="#fff6d8"/>
+       ${glint(44, 56, 7, 0.28)}`),
 
     lavavent: () => svg(
       rg('lvA', '#6b4a3c', '#2a1b16') + rg('lvB', '#fff0a8', '#e0400d') + lg('lvC', '#8a5a44', '#4a2e22'),

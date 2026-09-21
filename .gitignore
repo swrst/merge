@@ -25,3 +25,7 @@ Claude outputs/
 Thumbs.db
 .vscode/
 .idea/
+
+# iOS build output
+ios/App/Pods/
+ios/App/App.xcworkspace/xcuserdata/

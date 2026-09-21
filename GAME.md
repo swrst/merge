@@ -39,6 +39,8 @@ Vite also prints a `Network:` address — open that on your phone (same Wi-Fi) t
 | `npm run android` | build + sync + open Android Studio |
 | `npm run sync` | build + copy the web build into the native projects |
 | `npm run icons` | regenerate launcher icons and splash from `resources/` |
+| `npm run apk` | build a debug APK you can sideload (see **MOBILE.md**) |
+| `npm run ios` | build and open the Xcode project (macOS only) |
 | `python3 scripts/make-audio.py` | regenerate the whole sound pack (needs numpy + ffmpeg) |
 
 ### On an Android phone
@@ -187,6 +189,22 @@ the game never shows a locked door it has not explained. The twist on top of mer
 - **Launch** plays a warp cutscene and lands you on Luna: new palette, new chains, new
   alien customers. Refuel to fly again.
 
+### 📋 Tasks
+Three small goals at a time — merge fifteen things, fill two contracts, dig a crater —
+each paying coins and a Star Scrap. They live at the top of the 🚀 tab, refresh as you finish
+them, and exist so the next ten minutes always have a shape.
+
+### 🏛️ Relic Vault
+What relics are *for*. Six permanent perks bought with Star Gems, Sun Ambers and Prism
+Hearts: +15 % coins, +25 % XP, faster energy, an extra contract slot, more bag slots, and
+meteors that arrive sooner. Each stacks two or three times, applies in every world, and is
+the only sink big enough to keep the lab worth running.
+
+### ✨ Star Forge
+What meteor stars are for. Star Scrap and Star Cores buy instant favours in the shop:
+refill energy, fill every timer producer at once, swap the whole contract board, or pull a
+meteor down on demand.
+
 ### 🎒 Storage bag
 The board is the scarce resource in a merge game, so the bag is the release valve. It does
 not exist until you buy the Storage Bag upgrade; each level adds two slots. Tap an item,
@@ -200,6 +218,11 @@ One-shot helpers bought with coins, shown as buttons above the board with a coun
   tier; every merge check in the game runs through one function so the wildcard works with
   drag, tap-tap, the hint finder and the wand alike.
 
+### Contracts
+The row holds between two and five cards depending on how busy the world is, and new ones
+drift in on a timer rather than replacing a delivery instantly — so the board is never quite
+the same three faces. Arrows appear at the edges when there are more than fit.
+
 ### Combos, dailies and the cargo ship
 - **Combo streaks**: merges inside 3.5 s of each other chain up, and from the third one on
   each merge pays bonus coins with a rising ping and a `COMBO ×N` label.
@@ -210,9 +233,18 @@ One-shot helpers bought with coins, shown as buttons above the board with a coun
 
 ### Worlds
 Three playable worlds, each with its own sky, board palette, chains, producers, customers
-and music: **Sunny Meadow** (Earth), **Crater Camp** (Luna) and **Ember Hollow** (Cindra,
-volcanic, with Magma Works and an Ash Garden and embers drifting up the screen). They open
-in order and each trip costs fuel.
+and music. They open in order and each trip costs fuel — and each one **plays** differently:
+
+| | Sunny Meadow (Earth) | Crater Camp (Luna) | Ember Hollow (Cindra) |
+| --- | --- | --- | --- |
+| chains | Woodworks, Rock Quarry, Berry Kitchen, Waterworks, Hay Meadow | Moon Rocks, Glow Garden | Magma Works, Ash Garden |
+| a tap costs | 1 ⚡ | 2 ⚡ | 3 ⚡ |
+| its own event | **rain** fills every timer producer at once | **low gravity** bounces an input back on roughly one merge in five | **eruptions** throw hot rocks onto free tiles |
+
+A world keeps its own board, and travelling resets the shop shelf, the cargo ship and the
+contract board, so nothing from the last planet leaks into the next one. The Guide only
+lists what you can make where you are standing; the bag is what carries goods between
+worlds.
 
 ### Screens
 - **🧩 Board** — the game.
@@ -353,6 +385,7 @@ src/content/            all game data as JSON + types + validator
 src/native.ts           Capacitor: haptics, save mirroring, status bar
 src/ads.ts              ad seam — no-ops until a network is wired in
 src/style.css           everything outside the board
+MOBILE.md               getting the game onto an Android phone or an iPhone
 src/audio.ts            the WebAudio mixer: buses, crossfades, ducking
 src/audio/*.ogg         the generated sound pack (see scripts/make-audio.py)
 scripts/standalone.mjs  inlines the single-bundle build into MergeRocket.html
@@ -421,6 +454,8 @@ an order payout, instant-finish a producer timer.
 - Characters and celebrations could move to Spine (official Pixi v8 runtime) or Rive.
 - TypeScript is deliberately loose (`strict: false`) since this grew out of a JS prototype.
 - Three worlds are playable; the map already teases a fourth.
+- Minigames (a proper crater-digging or fuel-brewing interaction) are still an idea rather
+  than a feature.
 - Orders are all "fetch N of X" — timed and bundle orders would add variety.
 - Relics sell and fill orders, but a relic *sink* (a museum? decorating your camp?) would
   give the lab a longer tail.

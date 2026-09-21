@@ -12,7 +12,10 @@ npm run dev        # http://localhost:5173, hot reload
 npm test           # headless regression run (with dev running)
 npm run build      # dist/ + a fresh MergeRocket.html
 npm run android    # build, sync, open Android Studio
+npm run apk        # build a debug APK to sideload
 ```
+
+📱 **[MOBILE.md](MOBILE.md)** — putting it on a phone, Android and iOS.
 
 📖 **[GAME.md](GAME.md)** is the handbook: every feature, how to play, how to run it on a
 phone, how to add items/producers/worlds (all content is JSON), the tuning knobs, the

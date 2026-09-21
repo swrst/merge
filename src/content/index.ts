@@ -51,7 +51,18 @@ export interface WorldDef {
   locks: Record<string, number>;
   /** characters who place orders here */
   folks: string[];
+  /** producers that turn up as the player levels, instead of being hard-coded */
+  grow?: { producer: string; atLevel: number; cells: number[] }[];
+  /** energy a tap producer costs in this world */
+  tapCost?: number;
+  /** the one thing that only happens here */
+  perk?: 'rain' | 'gravity' | 'eruption';
 }
+/** a permanent upgrade paid for with relics */
+export interface VaultDef { id: string; name: string; desc: string; icon: string; item: string; qty: number; max: number }
+/** an instant favour paid for with meteor stars */
+export interface ForgeDef { id: string; name: string; desc: string; icon: string; item: string; qty: number }
+export interface TaskDef { kind: string; label: string; min: number; max: number; coins: number }
 export interface CharacterDef { name: string; lines: string[] }
 export interface MissionDef { id: string; need: number; text: string; hint: string; coins: number }
 
@@ -90,6 +101,8 @@ export interface Config {
   xp: { base: number; perLevel: number; growth: number; perMerge: number; orderBase: number };
   orders: {
     slots: number; maxTierAtLevel: number; twoItemChanceFromLevel: number;
+    /** contracts trickle in rather than all appearing at once */
+    minSlots: number; refillMs: number;
     /** chance an order also hands back a rocket piece while the rocket is unfinished */
     partRewardChance: number;
     /** chance an order hands back a regular item otherwise */
@@ -116,6 +129,11 @@ export interface Config {
   };
   /** research lab: the build price, the bench fee, and how many duds earn a free clue */
   lab: { failFee: number; clueEvery: number; build: { coins: number; item: string; qty: number } };
+  /** how often a world's own event fires, and how strong it is */
+  perk: { everyMs: number; spreadMs: number; gravityChance: number; eruptionItems: number };
+  vault: VaultDef[];
+  forge: ForgeDef[];
+  tasks: { slots: number; refreshMs: number; pool: TaskDef[] };
 }
 
 export const ITEMS = itemsJson as Record<string, ItemDef>;
@@ -230,6 +248,12 @@ export function validateContent(): string[] {
     if (!(c.price > 0)) errs.push(`crate "${c.id}" needs a price`);
   });
   if (!has(ITEMS, CONFIG.lab.build.item)) errs.push(`lab build wants unknown item "${CONFIG.lab.build.item}"`);
+  CONFIG.vault.forEach(v => { if (!has(ITEMS, v.item)) errs.push(`vault perk "${v.id}" wants unknown item "${v.item}"`); });
+  CONFIG.forge.forEach(f => { if (!has(ITEMS, f.item)) errs.push(`forge favour "${f.id}" wants unknown item "${f.item}"`); });
+  Object.entries(WORLDS).forEach(([k, w]) => (w.grow || []).forEach(g => {
+    if (!has(PRODUCERS, g.producer)) errs.push(`world "${k}" grows unknown producer "${g.producer}"`);
+    g.cells.forEach(c => { if (c < 0 || c >= cells) errs.push(`world "${k}" grows "${g.producer}" on cell ${c}, outside the board`); });
+  }));
   if (!(SHOP.supplyStock > 0)) errs.push('shop.supplyStock must be at least 1');
   if (!(SHOP.supplyPriceMultiplier >= 1)) errs.push('shop.supplyPriceMultiplier should be 1 or more');
   return errs;

@@ -339,5 +339,65 @@
     "chain": "wild",
     "tier": 1,
     "sell": 60
+  },
+  "dew": {
+    "name": "Dew Drop",
+    "chain": "water",
+    "tier": 1,
+    "sell": 3
+  },
+  "puddle": {
+    "name": "Puddle",
+    "chain": "water",
+    "tier": 2,
+    "sell": 8
+  },
+  "jug": {
+    "name": "Water Jug",
+    "chain": "water",
+    "tier": 3,
+    "sell": 18
+  },
+  "barrel": {
+    "name": "Rain Barrel",
+    "chain": "water",
+    "tier": 4,
+    "sell": 40
+  },
+  "fountain": {
+    "name": "Fountain",
+    "chain": "water",
+    "tier": 5,
+    "sell": 86
+  },
+  "grass": {
+    "name": "Grass Tuft",
+    "chain": "grass",
+    "tier": 1,
+    "sell": 3
+  },
+  "hay": {
+    "name": "Hay Bundle",
+    "chain": "grass",
+    "tier": 2,
+    "sell": 8
+  },
+  "bale": {
+    "name": "Hay Bale",
+    "chain": "grass",
+    "tier": 3,
+    "sell": 18
+  },
+  "hat": {
+    "name": "Straw Hat",
+    "chain": "grass",
+    "tier": 4,
+    "sell": 40
+  },
+  "scarecrow": {
+    "name": "Scarecrow",
+    "chain": "grass",
+    "tier": 5,
+    "sell": 92
   }
 }

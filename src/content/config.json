@@ -30,7 +30,9 @@
     "maxTierAtLevel": 2,
     "twoItemChanceFromLevel": 4,
     "partRewardChance": 0.6,
-    "itemRewardChance": 0.25
+    "itemRewardChance": 0.25,
+    "minSlots": 2,
+    "refillMs": 45000
   },
   "meteor": {
     "firstAtLevel": 3,
@@ -121,5 +123,156 @@
   },
   "bag": {
     "base": 0
+  },
+  "perk": {
+    "everyMs": 110000,
+    "spreadMs": 70000,
+    "gravityChance": 0.22,
+    "eruptionItems": 3
+  },
+  "vault": [
+    {
+      "id": "rich",
+      "name": "Golden Ledger",
+      "desc": "+15% coins from every contract",
+      "icon": "coin",
+      "item": "relic1",
+      "qty": 2,
+      "max": 3
+    },
+    {
+      "id": "wise",
+      "name": "Star Charts",
+      "desc": "+25% XP from every contract",
+      "icon": "star",
+      "item": "relic1",
+      "qty": 3,
+      "max": 3
+    },
+    {
+      "id": "brisk",
+      "name": "Solar Battery",
+      "desc": "Energy comes back 20% faster",
+      "icon": "energy",
+      "item": "relic2",
+      "qty": 1,
+      "max": 3
+    },
+    {
+      "id": "crowd",
+      "name": "Trade Charter",
+      "desc": "One more contract at a time",
+      "icon": "orders",
+      "item": "relic2",
+      "qty": 2,
+      "max": 2
+    },
+    {
+      "id": "deep",
+      "name": "Deep Pockets",
+      "desc": "+2 storage bag slots",
+      "icon": "bag",
+      "item": "relic2",
+      "qty": 1,
+      "max": 3
+    },
+    {
+      "id": "comet",
+      "name": "Comet Caller",
+      "desc": "Meteors arrive 30% sooner",
+      "icon": "crate",
+      "item": "relic3",
+      "qty": 1,
+      "max": 2
+    }
+  ],
+  "forge": [
+    {
+      "id": "charge",
+      "name": "Star Charge",
+      "desc": "Refill your energy to full",
+      "icon": "energy",
+      "item": "scrap",
+      "qty": 2
+    },
+    {
+      "id": "rush",
+      "name": "Time Warp",
+      "desc": "Fill every timer producer at once",
+      "icon": "speed",
+      "item": "scrap",
+      "qty": 3
+    },
+    {
+      "id": "reroll",
+      "name": "Fresh Contracts",
+      "desc": "Swap every contract for a new one",
+      "icon": "orders",
+      "item": "starcore",
+      "qty": 1
+    },
+    {
+      "id": "call",
+      "name": "Comet Call",
+      "desc": "Pull a meteor down right now",
+      "icon": "crate",
+      "item": "starcore",
+      "qty": 2
+    }
+  ],
+  "tasks": {
+    "slots": 3,
+    "refreshMs": 600000,
+    "pool": [
+      {
+        "kind": "merge",
+        "label": "Merge {n} times",
+        "min": 10,
+        "max": 24,
+        "coins": 9
+      },
+      {
+        "kind": "deliver",
+        "label": "Fill {n} contracts",
+        "min": 2,
+        "max": 5,
+        "coins": 55
+      },
+      {
+        "kind": "spawn",
+        "label": "Use producers {n} times",
+        "min": 8,
+        "max": 18,
+        "coins": 8
+      },
+      {
+        "kind": "tier4",
+        "label": "Make {n} big items (tier 4+)",
+        "min": 1,
+        "max": 3,
+        "coins": 130
+      },
+      {
+        "kind": "sell",
+        "label": "Sell {n} spare things",
+        "min": 4,
+        "max": 10,
+        "coins": 12
+      },
+      {
+        "kind": "dig",
+        "label": "Dig a meteor crater {n} times",
+        "min": 4,
+        "max": 7,
+        "coins": 26
+      },
+      {
+        "kind": "stash",
+        "label": "Stash {n} things in the bag",
+        "min": 2,
+        "max": 5,
+        "coins": 30
+      }
+    ]
   }
 }

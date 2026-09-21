@@ -118,5 +118,30 @@
       "sporecap",
       "shroom"
     ]
+  },
+  "well": {
+    "name": "Old Well",
+    "art": "well",
+    "mode": "timer",
+    "every": 14000,
+    "cap": 4,
+    "drops": [
+      "dew",
+      "dew",
+      "dew",
+      "puddle"
+    ]
+  },
+  "meadow": {
+    "name": "Grass Patch",
+    "art": "meadow",
+    "mode": "tap",
+    "cost": 1,
+    "drops": [
+      "grass",
+      "grass",
+      "grass",
+      "hay"
+    ]
   }
 }

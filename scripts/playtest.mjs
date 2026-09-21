@@ -96,8 +96,10 @@ must(after.up.energy === 1, 'Bigger Backpack bought');
 must(after.coins < before, 'upgrade cost coins');
 const maxTxt = await page.locator('#energy').textContent();
 must(maxTxt.endsWith('/85'), `max energy grew to ${maxTxt.split('/')[1]} (50 + 5x5 + 10)`);
+before = await page.evaluate(() => window.__game.orderSlots());
 await page.locator('#shopBody [data-up="orders"]').click(); await page.waitForTimeout(500);
-must((await page.locator('.order').count()) === 4, 'Order Board adds a 4th order card');
+must(await page.evaluate(() => window.__game.orderSlots()) === before + 1,
+  `Order Board raises the contract cap (${before} -> ${before + 1}); cards now trickle in`);
 
 /* ----------------------------------------------------------- rocket unstick */
 head('The wreck hands out the pieces you need');
@@ -142,7 +144,10 @@ await page.waitForTimeout(300);
 must(await page.locator('#tabLab.hide').count() === 1, 'the Lab tab is hidden before it exists');
 await page.click('[data-v="shop"]'); await page.waitForTimeout(500);
 must(await page.locator('#btnBuildLab').count() === 1, 'a build card appears once the rocket is whole');
-must(await page.locator('#btnBuildLab[disabled]').count() === 1, 'BUILD is blocked without the materials');
+await page.locator('#btnBuildLab').click(); await page.waitForTimeout(400);
+must((await S()).lab.built !== 1, 'BUILD refuses without the materials');
+must((await page.textContent('#toast')).toLowerCase().includes('star scrap'),
+  'and says exactly what is missing instead of doing nothing');
 await set(() => { const b = window.__game.state().boards.earth; b[14] = { id: 'scrap' }; b[15] = { id: 'scrap' }; });
 await page.click('[data-v="board"]'); await page.waitForTimeout(250);
 await page.click('[data-v="shop"]'); await page.waitForTimeout(400);
@@ -373,15 +378,15 @@ must(after.coins > before && !after.ship, `loading the manifest paid out (${befo
 must(Object.values(after.boost).some(n => n > 0), 'and threw in a booster');
 
 head('Daily rewards');
-await page.evaluate(() => {
-  const raw = JSON.parse(localStorage.getItem('mergeRocket_v2') || '{}');
-  raw.daily = { key: 0, day: 0 };
-  localStorage.setItem('mergeRocket_v2', JSON.stringify(raw));
-});
+// clear it in memory: the game now saves when the tab hides, so a reload would
+// otherwise write the live state straight back over a localStorage edit
+await set(() => { const s = window.__game.state(); s.daily = { key: 0, day: 0 }; });
 await page.reload();
 await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 20000 });
 await page.waitForTimeout(2600);
-must(await page.locator('#modal.open .dayCell').count() === 7, 'a 7-day calendar greets you');
+const dayCells = await page.locator('#modal.open .dayCell').count();
+if (dayCells !== 7) console.log('   [daily] modal title is now: ' + (await page.textContent('#mTitle')) + ' | cells ' + dayCells);
+must(dayCells === 7, 'a 7-day calendar greets you');
 must((await S()).daily.day === 1, 'and starts you on day 1');
 await closeModal();
 

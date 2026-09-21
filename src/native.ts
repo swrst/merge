@@ -39,9 +39,28 @@ export function startSaveMirror() {
 
 export async function setupChrome() {
   if (!isNative) return;
+  // on a phone the game is the whole screen, so the shell drops its card chrome
+  document.body.classList.add('native');
   try {
     await StatusBar.setStyle({ style: Style.Dark });     // dark icons on the light sky
     await StatusBar.setOverlaysWebView({ overlay: false });
     await StatusBar.setBackgroundColor({ color: '#7fd2fb' });
   } catch (e) { /* iOS ignores some of these */ }
+  try {
+    // Android's back button should step out of a screen, not kill the app
+    const { App } = await import('@capacitor/app');
+    App.addListener('backButton', () => {
+      const modal = document.querySelector('#modal.open') as HTMLElement | null;
+      if (modal) { (document.querySelector('#mBtn') as HTMLElement)?.click(); return; }
+      const tray = document.querySelector('.tray.open') as HTMLElement | null;
+      if (tray) { (document.querySelector('#bagClose') as HTMLElement)?.click(); return; }
+      const open = document.querySelector('.screen.open') as HTMLElement | null;
+      if (open) { (open.querySelector('.scClose') as HTMLElement)?.click(); return; }
+      App.minimizeApp();
+    });
+    // save the moment the player switches away, never on the way to being killed
+    App.addListener('appStateChange', ({ isActive }) => {
+      if (!isActive) window.dispatchEvent(new Event('mr:save'));
+    });
+  } catch (e) { /* the plugin is optional */ }
 }
