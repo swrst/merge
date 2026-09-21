@@ -2,18 +2,17 @@
   {
     "id": "s1",
     "at": {
-      "world": "earth",
-      "lvl": 1
+      "flag": "met"
     },
     "who": "bloop",
     "title": "The Last Vault",
-    "text": "Every growing thing that ever was is asleep inside this ship. I am its curator — the last one. You are its gardener, apparently. Congratulations. Start with a twig."
+    "text": "Blorp. Right. Where to start. That ship is a <b>Seed Vault</b> — every growing thing that ever was, asleep inside it. I am its curator. The last one. And you, judging by that meadow, are its gardener. Congratulations. Fix my rocket and I will show you what that means."
   },
   {
     "id": "s2",
     "at": {
       "world": "earth",
-      "lvl": 3
+      "lvl": 4
     },
     "who": "bloop",
     "title": "What the Bloom Was",
@@ -23,7 +22,7 @@
     "id": "s3",
     "at": {
       "world": "earth",
-      "lvl": 5
+      "lvl": 6
     },
     "who": "bloop",
     "title": "The Heart",

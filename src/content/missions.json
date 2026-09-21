@@ -77,6 +77,13 @@
     "coins": 150
   },
   {
+    "id": "grow",
+    "need": 2,
+    "text": "Grow 2 producers",
+    "hint": "Tap a producer in the \ud83c\udf0d World tab and spend coins to level it up \u2014 it holds more and drops rarer things.",
+    "coins": 250
+  },
+  {
     "id": "research",
     "need": 3,
     "text": "Craft 3 relics in the Lab",

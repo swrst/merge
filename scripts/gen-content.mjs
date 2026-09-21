@@ -61,15 +61,13 @@ for (const [world, at, line] of PRODUCERS) {
   } else {
     p.art = artPart;                               // a hand-drawn piece in art.ts
   }
-  if (modePart.startsWith('tap')) {
-    const [, costUses] = modePart.split(':');
-    const [cost, uses] = costUses.split('/');
-    p.mode = 'tap'; p.cost = +cost;
-    if (uses) p.uses = +uses;
+  if (modePart.startsWith('once')) {
+    p.mode = 'once'; p.uses = +modePart.split(':')[1];
   } else {
-    const [, spec] = modePart.split(':');
-    const [secs, cap] = spec.split('/');
-    p.mode = 'timer'; p.every = +secs * 1000; p.cap = +cap;
+    // bat:<charges>/<minutes to refill from empty>
+    const [cap, mins] = modePart.split(':')[1].split('/');
+    p.mode = 'battery'; p.cap = +cap;
+    p.every = Math.round(+mins * 60000 / +cap);
   }
   producers[id] = p;
 

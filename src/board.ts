@@ -31,6 +31,10 @@ type Slot = {
   key: string;
   art?: Sprite;
   badge?: Container;
+  /** the charge battery under a producer, and the numbers it was last drawn for */
+  bar?: Container;
+  barW?: number;
+  barFrac?: number;
   timer?: Text;
   ring?: Graphics;
   idle?: gsap.core.Tween;
@@ -178,6 +182,8 @@ class PixiBoard {
   }
 
   setTheme(t: string) { this.theme = THEME[t] ? t : 'earth'; this.layout(); }
+  /** the on-canvas size of one tile, for anything that has to draw over us */
+  cellSize() { return this.cell; }
 
   /** how precious the thing on this tile is: 0 none, 1 good, 2 rare, 3 legendary */
   private rarity(i: number): number {
@@ -292,10 +298,11 @@ class PixiBoard {
     const s = this.slots[i] as any;
     if (s.pending) { s.pending.kill(); s.pending = undefined; }
     if (s.idle) { s.idle.kill(); s.idle = undefined; }
-    [s.art, s.timer, s.badge, s.ring, s.readyRing, s.aura, s.spin].forEach((o: any) => {
+    [s.art, s.timer, s.badge, s.bar, s.ring, s.readyRing, s.aura, s.spin].forEach((o: any) => {
       if (o) { gsap.killTweensOf(o); gsap.killTweensOf(o.scale); o.destroy({ children: true }); }
     });
     s.art = s.timer = undefined; s.badge = undefined; s.ring = undefined;
+    s.bar = undefined; s.barW = undefined; s.barFrac = undefined;
     s.aura = undefined; s.spin = undefined;
     s.readyRing = null; s.hinting = false;
   }
@@ -313,10 +320,15 @@ class PixiBoard {
       if (s[k]) { gsap.killTweensOf(s[k]); s[k].destroy(); s[k] = k === 'readyRing' ? null : undefined; }
     });
     if (s.badge) { gsap.killTweensOf(s.badge); s.badge.destroy({ children: true }); s.badge = undefined; }
+    // the battery bar is drawn against the old cell size — throw it away and let
+    // the next tick redraw it, the same as the rings above
+    if (s.bar) { s.bar.destroy({ children: true }); s.bar = undefined; s.barW = undefined; s.barFrac = undefined; }
     if (!s.art) return;
     if (s.timer && s.key.startsWith('b')) {
       s.timer.style.fontSize = this.cell * 0.26;
       s.timer.position.set(p.x + this.cell * 0.28, p.y + this.cell * 0.3);
+    } else if (s.timer) {
+      s.timer.destroy(); s.timer = undefined;
     }
     // a tween started under the old geometry would drag the sprite back off its
     // tile on the next frame, so it goes too and the idle bob starts afresh
@@ -547,34 +559,57 @@ class PixiBoard {
       const g = (s as any).readyRing; gsap.killTweensOf(g); g.destroy(); (s as any).readyRing = null;
     }
   }
-  /** charge count + countdown under a timer producer */
-  setBadge(i: number, charges: number, label: string) {
-    const s = this.slots[i]; if (!s.art) return;
-    const p = this.center(i);
+  /** charge battery under a producer: a bar you can watch empty, and the count */
+  setCharge(i: number, charges: number, cap: number, label: string) {
+    const s = this.slots[i] as any; if (!s.art) return;
+    const p = this.center(i), w = this.cell * 0.74, h = this.cell * 0.115;
+    if (!s.bar) {
+      const c = new Container();
+      const back = new Graphics(); back.label = 'back';
+      const fill = new Graphics(); fill.label = 'fill';
+      c.addChild(back, fill);
+      this.lItem.addChild(c);
+      s.bar = c;
+    }
+    s.bar.position.set(p.x - w / 2, p.y + this.cell * 0.31);
+    const back = s.bar.children[0] as Graphics, fill = s.bar.children[1] as Graphics;
+    const frac = cap > 0 ? Math.max(0, Math.min(1, charges / cap)) : 0;
+    if (s.barW !== w) {
+      back.clear().roundRect(0, 0, w, h, h / 2).fill({ color: 0x2e1f10, alpha: 0.38 });
+      s.barW = w;
+    }
+    if (s.barFrac !== frac) {
+      const col = frac > 0.5 ? 0x6ee04a : frac > 0.2 ? 0xffc23d : 0xff7a5e;
+      fill.clear();
+      if (frac > 0) fill.roundRect(1, 1, Math.max(h - 2, (w - 2) * frac), h - 2, (h - 2) / 2).fill({ color: col });
+      s.barFrac = frac;
+    }
     if (!s.badge) {
       const c = new Container();
       const g = new Graphics();
-      g.circle(0, 0, this.cell * 0.17).fill({ color: 0x4fb63a }).stroke({ color: 0xffffff, width: 2 });
-      const t = new Text({ text: '', style: { fontFamily: 'Fredoka, sans-serif', fontSize: this.cell * 0.22, fontWeight: '700', fill: 0xffffff } });
+      g.roundRect(-this.cell * 0.2, -this.cell * 0.13, this.cell * 0.4, this.cell * 0.26, this.cell * 0.13)
+        .fill({ color: 0x4fb63a }).stroke({ color: 0xffffff, width: 2 });
+      const t = new Text({ text: '', style: { fontFamily: 'Fredoka, sans-serif', fontSize: this.cell * 0.19, fontWeight: '700', fill: 0xffffff } });
       t.anchor.set(0.5); t.label = 'n';
       c.addChild(g, t);
-      c.position.set(p.x + this.cell * 0.34, p.y - this.cell * 0.34);
       this.lItem.addChild(c);
       s.badge = c;
     }
-    s.badge.visible = charges > 0;
-    const nt = s.badge.children.find(ch => (ch as any).label === 'n') as Text;
+    s.badge.position.set(p.x + this.cell * 0.3, p.y - this.cell * 0.34);
+    const nt = s.badge.children.find((ch: any) => ch.label === 'n') as Text;
     if (nt && nt.text !== String(charges)) {
       nt.text = String(charges);
-      gsap.fromTo(s.badge.scale, { x: 1.5, y: 1.5 }, { x: 1, y: 1, duration: 0.35, ease: 'back.out(3)' });
+      gsap.fromTo(s.badge.scale, { x: 1.35, y: 1.35 }, { x: 1, y: 1, duration: 0.3, ease: 'back.out(3)' });
     }
+    (s.badge.children[0] as Graphics).tint = charges > 0 ? 0xffffff : 0xbfb6a6;
     if (!s.timer) {
-      const t = new Text({ text: '', style: { fontFamily: 'Fredoka, sans-serif', fontSize: this.cell * 0.2, fontWeight: '700', fill: themeOf(this.theme).txt } });
+      const t = new Text({ text: '', style: { fontFamily: 'Fredoka, sans-serif', fontSize: this.cell * 0.17, fontWeight: '700', fill: themeOf(this.theme).txt } });
       t.anchor.set(0.5);
-      t.position.set(p.x, p.y + this.cell * 0.4);
       this.lItem.addChild(t);
       s.timer = t;
     }
+    s.timer.position.set(p.x, p.y + this.cell * 0.47);
+    s.timer.visible = !!label;
     s.timer.text = label;
   }
 

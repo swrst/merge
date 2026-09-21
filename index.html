@@ -31,6 +31,7 @@
     <button class="oArrow l" id="oLeft">‹</button>
     <div class="orders" id="orders"></div>
     <button class="oArrow r" id="oRight">›</button>
+    <button class="questBtn" id="btnQuests"><span class="qIc">📜</span><span class="qTxt" id="questTxt">Quests</span><span class="dot" id="dotQuest" style="display:none"></span></button>
   </div>
 
   <div class="stage" id="stage">
@@ -61,7 +62,7 @@
     <button class="tab on" data-v="board"><span class="ti">🧩</span>Board</button>
     <button class="tab" data-v="shop" id="tabShop"><span class="ti">🛒</span>Shop<span class="dot" id="dotShop" style="display:none"></span></button>
     <button class="tab" data-v="lab" id="tabLab"><span class="ti">🔬</span>Lab</button>
-    <button class="tab" data-v="rocket" id="tabRocket"><span class="ti">🚀</span>Rocket<span class="dot" id="dotRocket" style="display:none"></span></button>
+    <button class="tab" data-v="rocket" id="tabRocket"><span class="ti">🏛️</span>Vault<span class="dot" id="dotRocket" style="display:none"></span></button>
     <button class="tab" data-v="book"><span class="ti">📖</span>Guide</button>
     <button class="tab" data-v="map" id="tabMap"><span class="ti">🌍</span>World<span class="dot" id="dotWorld" style="display:none"></span></button>
   </div>
@@ -79,7 +80,7 @@
     <div class="scBody" id="labBody"></div>
   </div>
   <div class="screen" id="sc-rocket">
-    <div class="scHead"><div class="scTitle">🚀 Rocket &amp; Missions</div><button class="iconBtn scClose">✕</button></div>
+    <div class="scHead"><div class="scTitle">🏛️ Vault &amp; Tasks</div><button class="iconBtn scClose">✕</button></div>
     <div class="scBody" id="rocketBody"></div>
   </div>
   <div class="screen" id="sc-book">
@@ -99,6 +100,20 @@
       <div class="miniSub" id="miniSub"></div>
       <div class="miniBody" id="miniBody"></div>
       <div class="miniFoot" id="miniFoot"></div>
+    </div>
+  </div>
+
+  <!-- the guided intro: four dimmers leave a live hole over whatever you should
+       tap next, so the thing you are told to press is the only thing you can -->
+  <div class="tut" id="tut">
+    <i class="tDim" id="tTop"></i><i class="tDim" id="tBot"></i>
+    <i class="tDim" id="tLeft"></i><i class="tDim" id="tRight"></i>
+    <div class="tRing" id="tRing"></div>
+    <div class="tHand" id="tHand">👆</div>
+    <div class="tBubble" id="tBubble">
+      <div class="face" id="tFace"></div>
+      <div class="tSay" id="tSay"></div>
+      <div class="tRow"><button class="tSkip" id="tSkip">Skip intro</button><button class="tNext" id="tNext">Got it</button></div>
     </div>
   </div>
 

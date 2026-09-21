@@ -42,7 +42,7 @@ export async function startGame() {
   };
 
   /* ------------------------------------------------- shop upgrade effects */
-  const upLv = (id: string) => (S.up && S.up[id]) || 0;
+  const upLv = (id: string) => (typeof S !== 'undefined' && S && S.up && S.up[id]) || 0;
   const upPrice = (u: any) => u.basePrice + u.step * upLv(u.id);
   const maxEnergy = () =>
     CONFIG.energy.base + (S.lvl - 1) * CONFIG.energy.perLevel + upLv('energy') * CONFIG.upgrades.energyPerStep;
@@ -54,7 +54,7 @@ export async function startGame() {
       * (starPerk('seed') ? 0.8 : 1)));
   /* Relic Vault perks feed straight into the numbers the rest of the game reads,
      so a perk is bought once and then never has to be remembered again. */
-  const vaultLv = (id: string) => (S.vault && S.vault[id]) || 0;
+  const vaultLv = (id: string) => (typeof S !== 'undefined' && S && S.vault && S.vault[id]) || 0;
   const coinMult = () => 1 + vaultLv('rich') * 0.15 + (starPerk('plough') ? 0.1 : 0);
   const xpMult = () => 1 + vaultLv('wise') * 0.25;
   const regenMs = () => Math.round(CONFIG.energy.regenMs / (1 + vaultLv('brisk') * 0.2));
@@ -81,8 +81,9 @@ export async function startGame() {
     return b;
   }
   function mkProd(k: string) {
-    const p = PRODS[k], o: any = { p: k };
-    if (p.mode === 'timer') { o.ch = 1; o.at = Date.now(); }
+    const p = PRODS[k], o: any = { p: k, lv: 1 };
+    // a new producer arrives charged: nothing about a fresh thing should be a wait
+    if (p.mode === 'battery') { o.ch = capOf(p, 1); o.at = Date.now(); }
     if (p.uses) o.u = p.uses;
     return o;
   }
@@ -203,8 +204,8 @@ export async function startGame() {
     streak: (n: number) => audio.play('streak' + clamp(n, 1, 5)),
   };
   /** the music bed a world plays */
-  const worldMusic = (w: string) =>
-    'music_' + (w === 'earth' ? 'earth' : (w === 'luna' || w === 'vela') ? 'luna' : 'cindra');
+  /** every world has its own bed now (see scripts/make-audio.py) */
+  const worldMusic = (w: string) => 'music_' + (WORLDS[w] ? w : 'earth');
 
   /* ==================================================================== FX */
   let toastT: any = 0;
@@ -284,11 +285,15 @@ export async function startGame() {
     for (let i = 0; i < N; i++) {
       const c = B()[i]; if (!c || !c.p) continue;
       const p = PRODS[c.p];
-      if (p.mode !== 'timer') { board.setReady(i, S.energy >= tapCost(p)); continue; }
-      const ev = everyOf(p);
-      while (c.ch < p.cap && now - c.at >= ev) { c.at += ev; c.ch++; }
-      if (c.ch >= p.cap) c.at = now;
-      board.setBadge(i, c.ch, c.ch >= p.cap ? 'FULL' : Math.ceil((ev - (now - c.at)) / 1000) + 's');
+      if (p.mode !== 'battery') { board.setReady(i, true); continue; }
+      const cap = capOf(p, plv(c)), ev = everyOf(p);
+      if (c.ch === undefined) { c.ch = cap; c.at = now; }
+      while (c.ch < cap && now - c.at >= ev) { c.at += ev; c.ch++; }
+      if (c.ch >= cap) c.at = now;
+      // the countdown is only interesting when the battery is nearly out —
+      // a ticking clock under a full tree is just noise
+      const low = c.ch === 0 || c.ch <= cap * 0.2;
+      board.setCharge(i, c.ch, cap, low && c.ch < cap ? mmss(ev - (now - c.at)) : '');
       board.setReady(i, c.ch > 0);
     }
   }
@@ -312,7 +317,10 @@ export async function startGame() {
     $('#dotWorld').style.display = essence && !worldAwake() ? '' : 'none';
     $('#tabShop').classList.toggle('locked', !shopOpen());
     $('#tabLab').classList.toggle('hide', !labOpen());
-    $('#dotRocket').style.display = (tasksDone() > 0 || (S.met && (readyParts() || S.fuel >= CONFIG.rocket.fuelToLaunch))) ? '' : 'none';
+    $('#dotRocket').style.display = tasksDone() > 0 ? '' : 'none';
+    const cur = curMission();
+    $('#questTxt').textContent = cur ? cur.text : 'All done!';
+    $('#dotQuest').style.display = cur && (S.mp[cur.id] || 0) >= cur.need ? '' : 'none';
     $('#dotShop').style.display = (shopNews() || (labOffered() && !S.lab.built)) ? '' : 'none';
     renderTools();
     if (view === 'shop') $('#shopCoins').textContent = S.coins;
@@ -405,10 +413,15 @@ export async function startGame() {
          </div>
          <div class="oNeeds">${o.needs.map(nd => {
           const have = Math.min(ready ? nd.qty : held(nd.id), nd.qty);
-          return `<div class="oNeed${have >= nd.qty ? ' done' : ''}">${ART.item(nd.id)}<b>${have}/${nd.qty}</b></div>`;
+          return `<div class="oNeed${have >= nd.qty ? ' done' : ''}" data-need="${nd.id}">${ART.item(nd.id)}<b>${have}/${nd.qty}</b></div>`;
         }).join('')}</div>
          <button class="btnDeliver${ready ? ' on' : ''}">${ready ? 'GIVE IT!' : 'FIND IT'}</button>`;
       (card.querySelector('.btnDeliver') as HTMLElement).onclick = (ev: Event) => { ev.stopPropagation(); ready ? deliver(o.id) : findFor(o); };
+      // tapping the thing they want explains where it comes from, which is the
+      // question a new player actually has
+      card.querySelectorAll('[data-need]').forEach((n: any) => n.onclick = (ev: Event) => {
+        ev.stopPropagation(); chainPanel(n.dataset.need);
+      });
       card.onclick = () => findFor(o);
       host.appendChild(card);
     });
@@ -448,6 +461,55 @@ export async function startGame() {
        <button class="btnDeliver${ready ? ' on' : ''}">${ready ? 'LOAD IT!' : 'FILL THE HOLD'}</button>`;
     (card.querySelector('.btnDeliver') as HTMLElement).onclick = (ev: Event) => { ev.stopPropagation(); deliverShip(); };
     return card;
+  }
+
+  /* ---------------------------------------------------- "where do I get one?"
+     Tapping the item on a contract opens its whole chain, marks how many of
+     each you are holding, and points at the thing on your board that makes the
+     first one. It is the single question a new player has, every time. */
+  function chainPanel(id: string) {
+    const d = ITEMS[id]; if (!d) return;
+    tutFire('chain');
+    const ch = CHAINS[d.chain], inv = inventory();
+    const src = producerFor(id);
+    const steps = ch.items.map((x, n) => {
+      const have = inv[x] || 0, known = S.seen[x];
+      return `<div class="chStep${x === id ? ' want' : ''}${n + 1 > d.tier ? ' above' : ''}">
+        <div class="chArt${known ? '' : ' unk'}">${known ? ART.item(x) : '?'}</div>
+        <div class="chLab">${known ? ITEMS[x].name : '???'}</div>
+        <span class="chHave${have ? ' on' : ''}">×${have}</span></div>`
+        + (n < ch.items.length - 1 ? '<div class="chArrow">+</div>' : '');
+    }).join('');
+    const where = d.chain === 'relic' ? `Relics are not grown — invent them in the 🔬 <b>Research Lab</b>.`
+      : d.chain === 'bloom' ? `Bloom Essence comes from finishing a merge chain for the first time.`
+        : src ? `Start with <b>${ITEMS[ch.items[0]].name}</b> from the <b>${PRODS[src.k].name}</b>${src.on ? ' on your board' : ' — you do not have one here yet'}, then merge two of each into the next.`
+          : `Merge two of the one before it. ${ITEMS[ch.items[0]].name} is the bottom of this chain.`;
+    modal(S.met ? 'bloop' : 'pip', ITEMS[id].name,
+      `<div class="chainWrap">${steps}</div>
+       <div class="noteLine" style="text-align:left">${where}</div>
+       ${src && src.on ? `<div class="srcBox">${ART.producer(PRODS[src.k].art)}
+          <div><b>${PRODS[src.k].name}</b><i>${(B()[src.i].ch ?? 0)}/${capOf(PRODS[src.k], plv(B()[src.i]))} charges</i></div></div>
+         <button class="big" id="showSrc">Show me on the board</button>` : ''}`,
+      'Got it');
+    setTimeout(() => {
+      const b2 = $('#showSrc');
+      if (b2 && src && src.on) b2.onclick = () => {
+        closeModal(); setView('board');
+        hintPair = [src.i]; board.setHint(hintPair);
+        setTimeout(() => { hintPair = null; board.setHint(null); }, 2600);
+      };
+    }, 30);
+  }
+  /** the producer that starts this item's chain, and whether one is on the board */
+  function producerFor(id: string) {
+    const base = CHAINS[ITEMS[id].chain].items[0];
+    for (const k in PRODS) {
+      if (PRODS[k].drops.indexOf(base) < 0) continue;
+      const b = B();
+      for (let i = 0; i < N; i++) if (b[i] && b[i].p === k) return { k, i, on: true };
+      return { k, i: -1, on: false };
+    }
+    return null;
   }
 
   function findFor(o: any) {
@@ -569,7 +631,8 @@ export async function startGame() {
     }
     prog('deliver', 1); tally('deliver');
     addXp(o.xp);
-    paintBoard(); renderOrders(); renderHUD(); save();
+    paintBoard(); tutFire('deliver');
+    renderOrders(); renderHUD(); save();
   }
   function bumpChip(sel2: string) { const c = $(sel2); c.classList.remove('pop'); void c.offsetWidth; c.classList.add('pop'); }
 
@@ -654,23 +717,22 @@ export async function startGame() {
     const p = PRODS[c.p];
     const spot = nearFree(i);
     if (spot < 0) { sfx.no(); toast('No space! Merge some items first.'); return; }
-    if (p.mode === 'timer') {
-      if (!c.ch) { sfx.no(); toast(p.name + ' is still growing — ' + Math.ceil((everyOf(p) - (Date.now() - c.at)) / 1000) + 's'); return; }
-      c.ch--; if (c.ch === 0) c.at = Date.now();
-    } else {
-      const cost = tapCost(p);
-      if (S.energy < cost) { sfx.no(); toast('Out of energy! Wait a bit or take a Snack Break 🍪'); return; }
-      S.energy -= cost; bumpChip('#chipEnergy');
-      floatText(i, '-' + cost + '⚡', '#bfe9ff');
+    if (p.mode === 'battery') {
+      if (!c.ch) { sfx.no(); offerRecharge(i); return; }
+      const cap = capOf(p, plv(c));
+      if (c.ch >= cap) c.at = Date.now();          // start the clock on the first tap
+      c.ch--;
     }
     // The wreck is not a slot machine: it hands out pieces for the part you are
     // furthest from finishing, so the rocket always creeps forward.
-    const id = (c.p === 'wreck' && !allParts() ? partPiece() : null) || rnd(p.drops);
+    const id = (c.p === 'wreck' && !allParts() ? partPiece() : null) || rnd(dropsOf(p, plv(c)));
     b[spot] = { id }; gotItem(id);
     (c.p === 'crater' || c.p === 'wreck' ? sfx.dig : sfx.pop)();
     haptic('light'); board.animSpawn(spot, id, i);
     if (c.p === 'tree') prog('spawn', 1);
+    tutFire('spawn');
     tally(c.p === 'crater' ? 'dig' : 'spawn');
+    if (plv(c) >= PMAX) retireTick(i);
     // producers that run out (meteor craters) count down and then collapse
     if (p.uses) {
       c.u = (c.u === undefined ? p.uses : c.u) - 1;
@@ -695,7 +757,7 @@ export async function startGame() {
     b[from] = null; b[to] = { id: nx }; gotItem(nx);
     board.animMerge(from, to, nx);
     sfx.merge(ITEMS[nx].tier); haptic('light'); floatText(to, ITEMS[nx].name, '#fff');
-    addXp(CONFIG.xp.perMerge); prog('merge', 1); tally('merge');
+    addXp(CONFIG.xp.perMerge); prog('merge', 1); tally('merge'); tutFire('merge');
     if (ITEMS[nx].tier >= 4) tally('tier4');
     lunaBounce(a.id, to);
     bumpStreak(Date.now(), to);
@@ -768,7 +830,8 @@ export async function startGame() {
       B()[spot] = mkProd('wreck');
       const s2 = nearFree(spot); if (s2 >= 0) { B()[s2] = { id: 'scrap' }; gotItem('scrap'); }
       paintBoard(); prog('meteor', 1);
-      modal('bloop', 'Blorp! Hello!', 'My rocket hit your meadow — oopsie! I am <b>Professor Bloop</b>. Tap the wreck to dig out broken bits, then merge them into the 4 rocket parts: <b>Hull, Engine, Nav Dish, Fuel Tank</b>. Fix my ship and I will take you to the stars!', 'Deal!');
+      modal('bloop', 'Blorp! Hello!', 'My ship hit your meadow — oopsie. I am <b>Bloop</b>. Tap the wreck to dig out broken bits, then merge each pile up into the four rocket parts: <b>Hull, Engine, Nav Dish, Fuel Tank</b>.', 'Deal!');
+      checkStory('met');
       renderHUD(); renderRocket(); save();
     }), 700);
   }
@@ -837,6 +900,7 @@ export async function startGame() {
     if (v === 'shop' && !shopOpen()) { sfx.no(); toast('The Trading Post opens at Level ' + CONFIG.unlocks.shopAtLevel + '!'); return; }
     if (v === 'lab' && !labOpen()) { sfx.no(); toast('No lab yet — build one in the 🛒 Shop first.'); return; }
     view = v;
+    if (v === 'map') tutFire('world');
     openBag(false);
     if (v !== 'board') sfx.whoosh();
     SCREENS.forEach(k => $('#sc-' + k).classList.toggle('open', v === k));
@@ -1224,9 +1288,12 @@ export async function startGame() {
     const br = $('#btnResearch'); if (br) br.onclick = () => doResearch();
     const bc = $('#btnClearSlots'); if (bc) bc.onclick = () => { S.lab.slots = [null, null]; sfx.tap(); renderLab(); save(); };
   }
+  /* ============================================================ VAULT TAB
+     What used to be the Rocket tab. The rocket itself now lives in your camp,
+     where you can see it being built, so this is the progression drawer: the
+     rotating task board, the relic perks and the star favours. */
   function renderRocket() {
     const host = $('#rocketBody'); if (!host) return;
-    const parts = [['hull', 'Hull', 'hullplate'], ['engine', 'Engine', 'enginecore'], ['nav', 'Nav Dish', 'navdish'], ['tank', 'Fuel Tank', 'fueltank']];
     const coin = ART.icon('coin');
     host.innerHTML =
       `<div class="card"><div class="cardTitle">📋 Tasks<span style="margin-left:auto;font-size:10px;color:#9a7a4e;font-weight:600">refresh as you finish them</span></div>
@@ -1239,27 +1306,43 @@ export async function startGame() {
           </div>`;
       }).join('')}
        </div>
-       <div class="card"><div class="cardTitle">🎯 Missions</div>
-        ${MISSIONS.map(m => {
-        const p = S.mp[m.id] || 0, done = p >= m.need;
-        return `<div class="mission${done ? ' done' : ''}"><div class="mBox">${done ? '✓' : ''}</div>
-          <div class="mTxt">${m.text}${!done && m.need > 1 ? ` <span style="color:#b59158">(${Math.min(p, m.need)}/${m.need})</span>` : ''}</div>
-          <div class="mRew">${ART.icon('coin')}${m.coins}</div></div>`;
-      }).join('')}</div>
-       <div class="card"><div class="cardTitle">🚀 Rocket workshop</div>
-        <div class="rocketWrap">${ART.rocket(S.parts)}</div>
-        <div class="partGrid">${parts.map(p => `<div class="part${S.parts[p[0]] ? ' on' : ''}">${ART.item(p[2])}<div class="pl">${p[1]}</div></div>`).join('')}</div>
-        <div class="fuelRow"><div style="font-size:12px;font-weight:700">Fuel tank</div>
-          <div class="fuelDots">${[0, 1, 2].map(k => `<div class="fuelDot${S.fuel > k ? ' on' : ''}">${ART.icon('fuel')}</div>`).join('')}</div>
-          <div style="font-size:11px;color:#9a7a4e;font-weight:600">${S.fuel}/3</div></div>
-        ${allParts()
-        ? `<button class="big${S.fuel >= CONFIG.rocket.fuelToLaunch ? '' : ' '}" id="btnLaunch" ${S.fuel >= CONFIG.rocket.fuelToLaunch ? '' : 'disabled'}>${S.fuel >= CONFIG.rocket.fuelToLaunch ? '🚀 OPEN THE MAP' : 'Need 3 Rocket Fuel'}</button>`
-        : `<div style="font-size:11.5px;color:#9a7a4e;font-weight:600;margin-top:8px;text-align:center">Merge scrap from the wreck into all 4 parts to finish the rocket.</div>`}
-       </div>` + vaultCard();
-    const bl = $('#btnLaunch'); if (bl) bl.onclick = () => setView('map');
+       <div class="card"><div class="cardTitle">🎯 Your quests</div>
+        <div class="noteLine" style="margin-top:0">The story so far, and what Bloop wants next.</div>
+        <button class="big blue" id="openQuests">📜 Open the quest list</button></div>`
+      + vaultCard();
     host.querySelectorAll('[data-task]').forEach((b: any) => b.onclick = () => claimTask(b.dataset.task));
     host.querySelectorAll('[data-vault]').forEach((b: any) => b.onclick = () => vaultBuy(b.dataset.vault));
+    const q = $('#openQuests'); if (q) q.onclick = questPanel;
   }
+
+  /* --------------------------------------------------------------- quests
+     A list of twenty missions buried three taps deep is a list nobody reads.
+     It lives on a button under the contracts now, it shows the one you are on
+     first, and every line says what to actually do. */
+  const questsLeft = () => MISSIONS.filter(m => (S.mp[m.id] || 0) < m.need).length;
+  function questPanel() {
+    tutFire('quests');
+    const cur = curMission();
+    const done = MISSIONS.length - questsLeft();
+    const row = (m: any) => {
+      const p = S.mp[m.id] || 0, ok = p >= m.need, now = cur && cur.id === m.id;
+      return `<div class="questRow${ok ? ' done' : ''}${now ? ' now' : ''}">
+        <div class="qBox">${ok ? '✓' : now ? '➤' : ''}</div>
+        <div class="qMain"><b>${m.text}</b>
+          ${now ? `<i>${m.hint}</i>` : ''}
+          ${!ok && m.need > 1 ? `<div class="qBar"><i style="width:${Math.round(Math.min(1, p / m.need) * 100)}%"></i></div>
+            <span class="qNum">${Math.min(p, m.need)}/${m.need}</span>` : ''}</div>
+        <div class="qRew">${ART.icon('coin')}${m.coins}</div></div>`;
+    };
+    // the one you are on first, then the rest in order, finished ones at the end
+    const open = MISSIONS.filter(m => (S.mp[m.id] || 0) < m.need);
+    const shut = MISSIONS.filter(m => (S.mp[m.id] || 0) >= m.need);
+    modal(S.met ? 'bloop' : 'pip', 'Quests',
+      `<div class="qHead">${done}/${MISSIONS.length} done</div>
+       <div class="catBar"><i style="width:${Math.round(done / MISSIONS.length * 100)}%"></i></div>
+       <div class="questList">${open.map(row).join('')}${shut.map(row).join('')}</div>`, 'Close');
+  }
+
   /** the relic sink, shown once the player has actually seen a relic */
   function vaultCard() {
     if (!S.seen.relic1 && !labOpen()) return '';
@@ -1322,7 +1405,7 @@ export async function startGame() {
       `<div class="card"><div class="cardTitle">🏭 Producers</div>${Object.keys(PRODS).filter(k => B().some(c => c && c.p === k) || (k === 'wreck' && S.met)).map(k => {
         const p = PRODS[k];
         return `<div class="mission"><div class="mBox" style="background:#fff;box-shadow:none">${ART.producer(p.art)}</div>
-        <div class="mTxt">${p.name}<div style="font-size:10px;color:#9a7a4e;font-weight:600">${p.mode === 'timer' ? `Free! Refills every ${(everyOf(p) / 1000).toFixed(0)}s (holds ${p.cap})` : `Costs ${tapCost(p)} ⚡ per tap`} · makes ${[...new Set(p.drops as string[])].map(d => ITEMS[d].name).join(', ')}</div></div></div>`;
+        <div class="mTxt">${p.name}<div style="font-size:10px;color:#9a7a4e;font-weight:600">${p.mode === 'battery' ? `Holds ${capOf(p, 1)} taps · a full battery takes ${mmss(everyOf(p) * capOf(p, 1))}` : `${p.uses} digs, then it collapses`} · makes ${[...new Set(p.drops as string[])].map(d => ITEMS[d].name).join(', ')}</div></div></div>`;
       }).join('')}</div>` +
       (elsewhere.length ? `<div class="card"><div class="cardTitle">🌍 Other worlds</div>
         <div style="font-size:11.5px;font-weight:600;color:#7a6244">${elsewhere.map(k => `<b>${CHAINS[k].name}</b> (${WORLDS[CHAINS[k].world].name})`).join(', ')} — only on their own planet. Your bag carries things between worlds.</div></div>` : '') +
@@ -1632,8 +1715,113 @@ export async function startGame() {
   /* ============================================================ WORLD FLAVOUR
      Each world costs a different amount of energy to work and has one event of
      its own, so landing somewhere new changes how you play, not just the palette. */
-  /* The Lantern constellation makes every world's taps a little kinder. */
-  const tapCost = (p: any) => Math.max(1, (W().tapCost || p.cost || 1) - (starPerk('lantern') ? 1 : 0));
+  /* ==================================================== PRODUCER BATTERIES
+     Producers are not on a drip. Each one is a battery you can empty as fast as
+     you can tap, which then refills on its own over about half an hour — while
+     you merge, and while the game is closed. Waiting fifteen seconds between
+     two berries was the single worst thing about playing this. */
+  const PMAX = 4;                                   // upgrade levels per producer
+  const plv = (c: any) => (c && c.lv) || 1;
+  /** charges at this level; the Lantern constellation makes every battery bigger */
+  const capOf = (p: any, lv: number) =>
+    Math.round(((p.cap || 12) + (lv - 1) * 5) * (starPerk('lantern') ? 1.2 : 1));
+  /** an upgraded producer keeps its old drops and adds the next tier of every
+   *  chain it feeds — the reason to spend coins on it is rarer stuff, not more */
+  function dropsOf(p: any, lv: number): string[] {
+    if (lv <= 1) return p.drops;
+    const out = p.drops.slice();
+    // start from the best thing it already drops, so every level really does
+    // hand you something you have not had out of it before
+    const top: Record<string, number> = {};
+    p.drops.forEach((d: string) => {
+      const it = ITEMS[d]; if (!it) return;
+      top[it.chain] = Math.max(top[it.chain] || 0, it.tier);
+    });
+    for (let step = 1; step < lv; step++) {
+      Object.keys(top).forEach(ch => {
+        const ids = CHAINS[ch].items;
+        const id = ids[Math.min(top[ch] - 1 + step, ids.length - 1)];
+        if (id) out.push(id);
+      });
+    }
+    return out;
+  }
+  const upCost = (p: any, lv: number) => Math.round((p.upCost || 350) * Math.pow(2.1, lv - 1) / 10) * 10;
+  /** how long a producer at max level keeps going before it goes to seed */
+  const RETIRE_AT = 45;
+
+  /** out of charges — offer the impatient player a way through, for energy */
+  function offerRecharge(i: number) {
+    const c = B()[i], p = PRODS[c.p], cap = capOf(p, plv(c));
+    const per = Math.max(1, Math.round(cap / 4));         // a quarter tank
+    const cost = 12;
+    const full = mmss(everyOf(p) * cap);
+    modal(W().folks[0] || 'bloop', p.name + ' is empty',
+      `It refills on its own — a full battery takes about <b>${full}</b>, and it keeps filling while the game is shut.`
+      + `<div class="rechargeBox">In a hurry? Spend <b>${cost} ⚡</b> for <b>${per}</b> charges right now.</div>`
+      + `<button class="big blue" id="rechargeBtn"${S.energy >= cost ? '' : ' disabled'}>Recharge (${cost} ⚡)</button>`,
+      'I can wait');
+    setTimeout(() => {
+      const b2 = $('#rechargeBtn');
+      if (b2) b2.onclick = () => {
+        if (S.energy < cost) return;
+        S.energy -= cost; bumpChip('#chipEnergy');
+        const cc = B()[i];
+        if (cc && cc.p) { cc.ch = Math.min(capOf(PRODS[cc.p], plv(cc)), (cc.ch || 0) + per); cc.at = Date.now(); }
+        sfx.boost(); floatText(i, '+' + per, '#8fe86d'); sparkle(i, 14, '#8fe86d');
+        closeModal(); renderHUD(); save();
+      };
+    }, 30);
+  }
+
+  /* ------------------------------------------------------ growing a producer
+     Coins finally buy something you can feel every single tap: a bigger battery
+     and rarer drops. A Big Tree at level 4 hands out Lumber Piles. */
+  function upgradeProducer(i: number) {
+    const c = B()[i]; if (!c || !c.p) return;
+    const p = PRODS[c.p], lv = plv(c);
+    if (lv >= PMAX) { sfx.no(); toast(p.name + ' is as good as it gets.'); return; }
+    const price = upCost(p, lv);
+    if (S.coins < price) { sfx.no(); toast('Needs ' + price + ' 🪙 — you have ' + S.coins + '.'); return; }
+    spend(price);
+    c.lv = lv + 1;
+    c.ch = capOf(p, c.lv);                                  // a fresh battery, on the house
+    c.at = Date.now();
+    sfx.build(); haptic('medium'); confetti();
+    sparkle(i, 22, '#ffd45e'); floatText(i, 'LEVEL ' + c.lv, '#ffd45e');
+    const added = dropsOf(p, c.lv).filter(d => dropsOf(p, lv).indexOf(d) < 0);
+    toast('🌟 <b>' + p.name + '</b> is now level ' + c.lv
+      + (added.length ? ' — it can drop <b>' + [...new Set(added)].map(d => ITEMS[d].name).join('</b>, <b>') + '</b> now!' : ''));
+    prog('grow', 1); tally('grow');
+    paintBoard(); renderHUD(); renderWorldScreen(); save();
+  }
+
+  /* A producer at max level does not last forever: it gives what it has and then
+     goes to seed, and something else takes root in its place. Keeps a late board
+     from settling into the same four taps for good. */
+  function retireTick(i: number) {
+    const c = B()[i]; if (!c || !c.p) return;
+    c.spent = (c.spent || 0) + 1;
+    const left = RETIRE_AT - c.spent;
+    if (left === 10 || left === 3) floatText(i, left + ' left', '#ffb8a0');
+    if (left > 0) return;
+    const old = PRODS[c.p];
+    // prefer something this world has unlocked that is not already on the board
+    const here = B().filter((x: any) => x && x.p).map((x: any) => x.p);
+    const pool = (W().grow || []).filter(g => wlv() >= g.atLevel).map(g => g.producer)
+      .concat(W().start.map(s2 => s2.producer))
+      .filter(k => here.indexOf(k) < 0);
+    const next = pool.length ? rnd(pool) : null;
+    const payout = 400 * PMAX;
+    S.coins += payout; bumpChip('#chipCoins');
+    B()[i] = next ? mkProd(next) : mkProd(c.p);
+    sfx.discover(); sparkle(i, 24, '#8fe86d'); paintBoard(); renderHUD(); save();
+    setTimeout(() => modal(W().folks[0] || 'bloop', old.name + ' has gone to seed',
+      `It gave everything it had. ${next
+        ? `A <b>${PRODS[next].name}</b> has taken root in its place.`
+        : `A young <b>${old.name}</b> is already coming up in its place.`}`
+      + `<div class="rewardLine">+${payout} 🪙 from the last harvest</div>`, 'Lovely'), 500);
+  }
 
   /** producers that appear as you level, listed per world in worlds.json */
   function growProducers() {
@@ -1657,8 +1845,9 @@ export async function startGame() {
       const b = B(); let n = 0;
       for (let i = 0; i < N; i++) {
         const c = b[i]; if (!c || !c.p) continue;
-        const p = PRODS[c.p]; if (p.mode !== 'timer') continue;
-        if (c.ch < p.cap) { c.ch = p.cap; c.at = now; n++; }
+        const p = PRODS[c.p]; if (p.mode !== 'battery') continue;
+        const cap = capOf(p, plv(c));
+        if (c.ch < cap) { c.ch = cap; c.at = now; n++; }
       }
       if (!n) return;
       rainBurst();
@@ -1727,8 +1916,8 @@ export async function startGame() {
       const b = B(), now = Date.now(); let n = 0;
       for (let i = 0; i < N; i++) {
         const c = b[i]; if (!c || !c.p) continue;
-        const p = PRODS[c.p]; if (p.mode !== 'timer' || c.ch >= p.cap) continue;
-        c.ch = p.cap; c.at = now; n++;
+        const p = PRODS[c.p]; if (p.mode !== 'battery' || c.ch >= capOf(p, plv(c))) continue;
+        c.ch = capOf(p, plv(c)); c.at = now; n++;
       }
       if (!n) { toast('Nothing is waiting to refill.'); return; }
       toast('⏩ <b>' + n + '</b> producer' + (n > 1 ? 's' : '') + ' topped right up!');
@@ -2187,11 +2376,11 @@ export async function startGame() {
      tapping its stars in order; light it and keep the bonus for good. */
   const CONSTS = [
     { id: 'plough', name: 'The Plough', cost: 2, perk: '+10% coins from every sale and contract', pts: [[18, 70], [34, 58], [50, 52], [66, 46], [74, 30], [58, 22], [44, 30]] },
-    { id: 'lantern', name: 'The Lantern', cost: 3, perk: 'Tap producers cost 1 less energy (never below 1)', pts: [[30, 26], [70, 26], [78, 52], [50, 76], [22, 52]] },
-    { id: 'seed', name: 'The Seed', cost: 4, perk: 'Timer producers refill 20% faster', pts: [[50, 18], [72, 36], [64, 66], [36, 66], [28, 36], [50, 44]] },
+    { id: 'lantern', name: 'The Lantern', cost: 3, perk: 'Every producer holds 20% more charges', pts: [[30, 26], [70, 26], [78, 52], [50, 76], [22, 52]] },
+    { id: 'seed', name: 'The Seed', cost: 4, perk: 'Producers recharge 20% faster', pts: [[50, 18], [72, 36], [64, 66], [36, 66], [28, 36], [50, 44]] },
     { id: 'vault', name: 'The Vault', cost: 6, perk: 'Every Bloom Essence you feed a Heart counts double', pts: [[24, 34], [50, 22], [76, 34], [76, 64], [50, 78], [24, 64], [50, 50]] },
   ];
-  const lit = (id: string) => !!(S.stars && S.stars[id]);
+  const lit = (id: string) => !!(typeof S !== 'undefined' && S && S.stars && S.stars[id]);
   const starPerk = (id: string) => lit(id);
   function playStars(id: string) {
     const co = CONSTS.find(c => c.id === id); if (!co) return;
@@ -2259,28 +2448,103 @@ export async function startGame() {
   }
 
   /* ============================================================ WORLD SCREEN
-     One hub for "where am I": the Heart and its bloom, the side games, the
-     constellations and the galaxy map. */
+     Two views behind one tab. The **camp** is the world you are standing in,
+     drawn as a little diorama: the rocket, the lab once it is built, the Heart,
+     and every producer you own, each one tappable. The **galaxy** is the map
+     between worlds. Everything that used to be a list of cards is now a place. */
+  let worldTab: 'camp' | 'galaxy' = 'camp';
+
+  /** where each thing stands in the diorama, so nothing ever jumps about */
+  const CAMP_SLOTS = [
+    [16, 10], [42, 8], [68, 12], [12, 34], [38, 32], [62, 34],
+    [24, 54], [50, 52], [76, 54], [88, 32], [36, 68], [64, 68],
+  ];
+  function campEnt(kind: string, x: number, y: number, art: string, label: string, sub: string, cls = '') {
+    // y is "how far back" — further back means smaller and higher up
+    const depth = 1 - y / 100;
+    const scale = (0.66 + depth * 0.5).toFixed(2);
+    return `<button class="campEnt ${cls}" data-ent="${kind}"
+      style="left:${x}%;bottom:${8 + y * 0.62}%;transform:translateX(-50%) scale(${scale});z-index:${Math.round(y)}">
+      <span class="entArt">${art}</span>
+      <span class="entTag"><b>${label}</b>${sub ? `<i>${sub}</i>` : ''}</span></button>`;
+  }
+
+  function campHTML() {
+    const w = W(), b = B();
+    const prods: { i: number; k: string }[] = [];
+    for (let i = 0; i < N; i++) if (b[i] && b[i].p) prods.push({ i, k: b[i].p });
+
+    let ents = '';
+    // the rocket always stands at the back right; before the crash it is a dream
+    const built = Object.keys(S.parts).filter(k => S.parts[k]).length;
+    ents += campEnt('rocket', 85, 90, S.met
+      ? ART.rocket(S.parts)
+      : `<div class="entGhost">🚀</div>`,
+      S.met ? 'Rocket' : '???',
+      S.met ? (allParts() ? 'Ready · ⛽' + S.fuel + '/3' : built + '/4 parts') : 'not here yet', 'ship');
+    if (labOpen()) ents += campEnt('lab', 55, 90, ART.icon('flask'), 'Lab', 'Invent relics', 'lab');
+    ents += campEnt('heart', 15, 90, ART.item(worldAwake() ? 'bloomheart' : 'bloomcore'),
+      w.heart, worldAwake() ? 'Awake' : fed() + '/' + bloomGoal() + ' Bloom', 'heart');
+
+    prods.slice(0, CAMP_SLOTS.length).forEach((pr, n) => {
+      const p = PRODS[pr.k], c = b[pr.i], lv = plv(c);
+      const slot = CAMP_SLOTS[n];
+      const cap = capOf(p, lv);
+      const can = lv < PMAX && S.coins >= upCost(p, lv);
+      ents += campEnt('p' + pr.i, slot[0], slot[1], ART.producer(p.art), p.name,
+        `${c.ch ?? cap}/${cap}${lv > 1 ? ' · Lv' + lv : ''}`, can ? 'canUp' : '');
+    });
+
+    return `<div class="camp">
+      <div class="campSky"></div><div class="campStars"></div><div class="campSun"></div>
+      <div class="campHills"></div><div class="campFloor"></div>
+      ${ents}
+      <div class="campName">${w.name}<i>lv ${wlv()}</i></div>
+    </div>`;
+  }
+
+  function galaxyHTML() {
+    const fuelOk = S.fuel >= CONFIG.rocket.fuelToLaunch;
+    const spots = [[50, 78], [22, 58], [74, 52], [34, 28], [66, 14]];
+    const nodes = WORLD_ORDER.map((k, i) => {
+      const ww = WORLDS[k], here = k === S.world;
+      const reached = k === 'earth' || S.unlocked[k] || S.unlocked[WORLD_ORDER[i - 1]] || WORLD_ORDER[i - 1] === S.world;
+      const can = !here && reached && allParts() && fuelOk;
+      const sp = spots[i] || [50, 50];
+      const state = here ? 'here' : reached ? (can ? 'go' : 'wait') : 'locked';
+      return `<button class="galNode ${state}" data-world="${k}" style="left:${sp[0]}%;top:${sp[1]}%">
+        <span class="galArt">${reached ? ART.planet(ww.planet) : ART.planet('mystery')}</span>
+        <span class="galName">${reached ? ww.name : '???'}</span>
+        <span class="galSub">${here ? 'You are here'
+          : !reached ? '🔒 Locked'
+            : can ? 'LAUNCH 🚀' : worldAwake(k) ? '🌱 Awake' : 'Need ⛽' + CONFIG.rocket.fuelToLaunch}</span>
+        ${reached && worldAwake(k) ? '<span class="galBloom">🌱</span>' : ''}</button>`;
+    }).join('');
+    const lines = WORLD_ORDER.slice(1).map((k, i) => {
+      const a = spots[i], c = spots[i + 1];
+      if (!a || !c) return '';
+      const dx = c[0] - a[0], dy = c[1] - a[1];
+      const len = Math.hypot(dx * 3.2, dy * 4.4);
+      return `<i class="galLink${S.unlocked[k] ? ' on' : ''}" style="left:${a[0]}%;top:${a[1]}%;width:${len}%;
+        transform:rotate(${Math.atan2(dy * 4.4, dx * 3.2) * 180 / Math.PI}deg)"></i>`;
+    }).join('');
+    return `<div class="galaxy">${lines}${nodes}
+      <div class="galFoot">Each trip costs <b>${CONFIG.rocket.fuelToLaunch} ⛽</b> · you have <b>${S.fuel}</b></div></div>`;
+  }
+
   function renderWorldScreen() {
     const host = $('#mapBody'); if (!host) return;
     const w = W(), st = stage(), goal = bloomGoal(), have = fed();
     const done = worldAwake();
     const pct = done ? 100 : clamp(have / goal * 100, 0, 100);
     const onBoard = B().reduce((a: number, c: any) => a + (c && c.id ? bloomValue(c.id) : 0), 0);
-    const next = done ? null : w.bloom[st];
 
     const heart = `<div class="card heartCard">
       <div class="cardTitle">🌱 ${w.heart}<span class="stagePill">${done ? 'Awake' : 'Stage ' + (st + 1) + '/' + w.bloom.length}</span></div>
-      <div class="heartRow">
-        <div class="heartOrb${done ? ' awake' : ''}">${ART.item(done ? 'bloomheart' : 'bloomcore')}</div>
-        <div style="flex:1">
-          <div class="noteLine">${done ? 'This world is awake. Its Heart beats on its own now.' : next.title + ' — ' + have + '/' + goal + ' Bloom'}</div>
-          <div class="catBar"><i style="width:${pct}%"></i></div>
-          <div class="noteLine">Finish a merge chain anywhere in ${w.name} and the Vault pays you a <b>Bloom Spark</b>. Merge Sparks up — bigger essence is worth more.</div>
-        </div></div>
+      <div class="catBar"><i style="width:${pct}%"></i></div>
+      <div class="noteLine">${done ? 'This world is awake. Its Heart beats on its own now.'
+        : `<b>${w.bloom[st].title}</b> — ${have}/${goal} Bloom. Finish any merge chain here and the Vault pays you a Spark.`}</div>
       <button class="big" id="btnFeed"${onBoard ? '' : ' disabled'}>${onBoard ? 'Feed the Heart (' + onBoard + ' Bloom)' : 'No essence on the board'}</button>
-      <div class="stageList">${w.bloom.map((b: any, i: number) =>
-      `<div class="stageRow${i < st ? ' done' : ''}"><b>${i < st ? '✓' : b.need}</b><span>${b.title}</span></div>`).join('')}</div>
     </div>`;
 
     const games = `<div class="card"><div class="cardTitle">🎲 Things to do</div>
@@ -2291,31 +2555,23 @@ export async function startGame() {
       </div></div>`;
 
     const sky = `<div class="card"><div class="cardTitle">✨ Constellations<span style="font-size:10px;color:#9a7a4e;font-weight:600;margin-left:auto">${CONSTS.filter(c => lit(c.id)).length}/${CONSTS.length} lit</span></div>
-      <div class="noteLine">This is what Star Cores are for. Trace one and its blessing is permanent, across every world.</div>
+      <div class="noteLine">This is what Star Cores are for. Trace one and its blessing is permanent, in every world.</div>
       ${CONSTS.map(c => `<button class="constRow${lit(c.id) ? ' lit' : ''}" data-c="${c.id}">
         <span class="constIc">${lit(c.id) ? '✦' : '✧'}</span>
         <span class="constTxt"><b>${c.name}</b><i>${c.perk}</i></span>
         <span class="constCost">${lit(c.id) ? 'Lit' : c.cost + ' ⭐'}</span></button>`).join('')}</div>`;
 
-    const fuelOk = S.fuel >= CONFIG.rocket.fuelToLaunch;
-    const cards = WORLD_ORDER.map((k, i) => {
-      const ww = WORLDS[k], here = k === S.world;
-      const reached = k === 'earth' || S.unlocked[k] || S.unlocked[WORLD_ORDER[i - 1]] || WORLD_ORDER[i - 1] === S.world;
-      const can = !here && reached && allParts() && fuelOk;
-      const tag = worldAwake(k) ? '<div class="wSub" style="color:#3f9a4f;font-weight:700">🌱 Awake</div>' : '';
-      return `<div class="worldCard${here ? ' here' : ''}">${ART.planet(ww.planet)}
-        <div style="flex:1"><div class="wName">${ww.name}</div><div class="wSub">${WORLD_BLURB[k] || ww.subtitle}</div>
-          ${S.unlocked[k] || here ? `<div class="wSub">World level ${wlv(k)} · ${liveChains(k).length}/${ww.chains.length} chains awake</div>` : ''}</div>
-        ${here ? '<div class="wSub" style="font-weight:700;color:#4fa332">You are here</div>' + tag
-          : !reached ? '<div class="wSub">🔒 Fly the one before it first</div>'
-            : `<button class="goBtn" data-go="${k}" ${can ? '' : 'disabled'}>${can ? 'LAUNCH 🚀' : 'Need ⛽' + CONFIG.rocket.fuelToLaunch}</button>${tag}`}</div>`;
-    }).join('');
+    host.innerHTML = `<div class="wSwitch">
+        <button class="wsBtn${worldTab === 'camp' ? ' on' : ''}" data-wt="camp">🏕️ ${w.name}</button>
+        <button class="wsBtn${worldTab === 'galaxy' ? ' on' : ''}" data-wt="galaxy">🌌 Galaxy</button>
+      </div>`
+      + (worldTab === 'camp' ? campHTML() + heart + games + sky : galaxyHTML());
 
-    host.innerHTML = heart + games + sky
-      + `<div class="card"><div class="cardTitle">🗺️ Galaxy</div></div>` + cards
-      + `<div class="card"><div class="cardTitle">⛽ Fuel</div><div class="noteLine">Each trip costs <b>${CONFIG.rocket.fuelToLaunch} Rocket Fuel</b>. Fuel Ore falls in <b>meteors</b> and comes out of the <b>brewing</b> game — merge it up. You have <b>${S.fuel}</b>.</div></div>`;
-
-    host.querySelectorAll('[data-go]').forEach((b: any) => b.onclick = () => travelTo(b.dataset.go));
+    host.querySelectorAll('[data-wt]').forEach((b: any) => b.onclick = () => {
+      worldTab = b.dataset.wt; sfx.tap(); renderWorldScreen();
+    });
+    host.querySelectorAll('[data-world]').forEach((b: any) => b.onclick = () => galaxyTap(b.dataset.world));
+    host.querySelectorAll('[data-ent]').forEach((b: any) => b.onclick = () => campTap(b.dataset.ent));
     host.querySelectorAll('[data-c]').forEach((b: any) => b.onclick = () => playStars(b.dataset.c));
     host.querySelectorAll('[data-game]').forEach((b: any) => b.onclick = () => {
       const k = b.dataset.game;
@@ -2323,12 +2579,285 @@ export async function startGame() {
     });
     const f = $('#btnFeed'); if (f) f.onclick = feedHeart;
   }
+
+  function galaxyTap(k: string) {
+    if (k === S.world) { worldTab = 'camp'; sfx.tap(); renderWorldScreen(); return; }
+    const i = WORLD_ORDER.indexOf(k);
+    const reached = S.unlocked[k] || S.unlocked[WORLD_ORDER[i - 1]] || WORLD_ORDER[i - 1] === S.world;
+    if (!reached) { sfx.no(); toast('🔒 Fly to ' + WORLDS[WORLD_ORDER[i - 1]].name + ' first.'); return; }
+    if (!allParts()) { sfx.no(); toast('The rocket is not finished — tap it in your camp.'); return; }
+    if (S.fuel < CONFIG.rocket.fuelToLaunch) {
+      sfx.no();
+      toast('Needs <b>' + CONFIG.rocket.fuelToLaunch + ' Rocket Fuel</b> — you have ' + S.fuel + '.');
+      return;
+    }
+    travelTo(k);
+  }
+
+  /** tapping something in the camp opens the panel for that thing */
+  function campTap(kind: string) {
+    sfx.tap();
+    if (kind === 'rocket') { rocketPanel(); return; }
+    if (kind === 'lab') { setView('lab'); return; }
+    if (kind === 'heart') { heartPanel(); return; }
+    if (kind[0] === 'p') producerPanel(+kind.slice(1));
+  }
+
+  function rocketPanel() {
+    if (!S.met) {
+      modal('pip', 'Nothing there yet',
+        'Just meadow, for now. Keep merging — something is going to fall out of that sky, and when it does this is where it lands.', 'OK');
+      return;
+    }
+    const parts = [['hull', 'Hull', 'hullplate'], ['engine', 'Engine', 'enginecore'], ['nav', 'Nav Dish', 'navdish'], ['tank', 'Fuel Tank', 'fueltank']];
+    modal(S.met ? 'bloop' : 'pip', allParts() ? 'Your rocket' : 'Building the rocket',
+      `<div class="rocketWrap">${ART.rocket(S.parts)}</div>
+       <div class="partGrid">${parts.map(p => `<div class="part${S.parts[p[0]] ? ' on' : ''}">${ART.item(p[2])}<div class="pl">${p[1]}</div></div>`).join('')}</div>
+       <div class="fuelRow"><div style="font-size:12px;font-weight:700">Fuel</div>
+         <div class="fuelDots">${[0, 1, 2].map(k => `<div class="fuelDot${S.fuel > k ? ' on' : ''}">${ART.icon('fuel')}</div>`).join('')}</div>
+         <div style="font-size:11px;color:#9a7a4e;font-weight:600">${S.fuel}/3</div></div>
+       <div class="noteLine">${allParts()
+        ? 'She flies. Open the galaxy and pick somewhere to go.'
+        : 'Tap the <b>wreck</b> on your board for parts, then merge each pile up three times.'}</div>
+       ${allParts() ? `<button class="big" id="toGalaxy">🌌 Open the galaxy</button>` : ''}`, 'Close');
+    setTimeout(() => {
+      const g = $('#toGalaxy');
+      if (g) g.onclick = () => { closeModal(); worldTab = 'galaxy'; setView('map'); renderWorldScreen(); };
+    }, 30);
+  }
+
+  function heartPanel() {
+    const w = W(), st = stage(), done = worldAwake();
+    const onBoard = B().reduce((a: number, c: any) => a + (c && c.id ? bloomValue(c.id) : 0), 0);
+    modal(w.folks[0] || 'bloop', w.heart,
+      `<div class="noteLine" style="margin-top:0">${done ? 'Awake, and beating on its own.'
+        : `<b>${w.bloom[st].title}</b> — ${fed()}/${bloomGoal()} Bloom`}</div>
+       <div class="catBar"><i style="width:${done ? 100 : clamp(fed() / bloomGoal() * 100, 0, 100)}%"></i></div>
+       <div class="stageList">${w.bloom.map((b: any, i: number) =>
+        `<div class="stageRow${i < st ? ' done' : ''}"><b>${i < st ? '✓' : b.need}</b><span>${b.title}</span></div>`).join('')}</div>
+       <div class="noteLine">Finish a merge chain anywhere in ${w.name} and the Vault pays a <b>Bloom Spark</b>. Sparks merge into bigger essence, worth more.</div>
+       <button class="big" id="feed2"${onBoard ? '' : ' disabled'}>${onBoard ? 'Feed it (' + onBoard + ' Bloom)' : 'No essence on the board'}</button>`,
+      'Close');
+    setTimeout(() => { const f = $('#feed2'); if (f) f.onclick = () => { closeModal(); feedHeart(); }; }, 30);
+  }
+
+  function producerPanel(cell: number) {
+    tutFire('prodpanel');
+    const c = B()[cell];
+    if (!c || !c.p) { renderWorldScreen(); return; }
+    const p = PRODS[c.p], lv = plv(c), cap = capOf(p, lv);
+    const price = lv < PMAX ? upCost(p, lv) : 0;
+    const now = dropsOf(p, lv), next = lv < PMAX ? dropsOf(p, lv + 1) : now;
+    const added = [...new Set(next.filter(d => now.indexOf(d) < 0))];
+    const uniq = [...new Set(now)];
+    modal(W().folks[0] || 'bloop', p.name,
+      `<div class="prodHead">${ART.producer(p.art)}</div>
+       <div class="pipsRow">${Array.from({ length: PMAX }, (_, i) => `<i class="pip${i < lv ? ' on' : ''}"></i>`).join('')}
+         <span>Level ${lv}${lv >= PMAX ? ' · max' : ''}</span></div>
+       <div class="chargeLine"><b>${c.ch ?? cap}/${cap}</b> charges<i>${c.ch >= cap ? 'full' : 'a full battery takes ' + mmss(everyOf(p) * cap)}</i></div>
+       <div class="dropRow">${uniq.map(d => `<span class="dropChip">${ART.item(d)}<b>${ITEMS[d].name}</b></span>`).join('')}</div>
+       ${lv >= PMAX
+        ? `<div class="noteLine">Fully grown. It will keep going for a while yet, then go to seed and let something else take root.</div>`
+        : `<div class="noteLine">Level ${lv + 1}: <b>+5</b> charges${added.length
+          ? ` and it starts dropping <b>${added.map(d => ITEMS[d].name).join('</b>, <b>')}</b>`
+          : ' and better odds on the rarer drops'}.</div>
+           <button class="big gold" id="upProd"${S.coins >= price ? '' : ' disabled'}>Grow it — ${price} 🪙</button>`}`,
+      'Close');
+    setTimeout(() => {
+      const u = $('#upProd');
+      if (u) u.onclick = () => { upgradeProducer(cell); closeModal(); };
+    }, 30);
+  }
+
   function gameBtn(k: string, icon: string, name: string, blurb: string) {
     const c = miniCfg(k), left = miniLeft(k);
     const ok = !left && S.energy >= c.cost;
     return `<button class="gameBtn${ok ? '' : ' cool'}" data-game="${k}"${left ? ' disabled' : ''}>
       <span class="gIc">${icon}</span><b>${name}</b><i>${blurb}</i>
       <span class="gCost">${left ? mmss(left) : c.cost ? c.cost + ' ⚡' : 'Free'}</span></button>`;
+  }
+
+  /* ============================================================ GUIDED INTRO
+     A merge game is obvious once you have played one and baffling if you have
+     not. This walks the first ten minutes: it dims everything except the one
+     thing to press, says why in the story's voice, and waits for you to
+     actually do it rather than for a timer. Every step is skippable, and the
+     whole thing runs once. */
+  type TutStep = {
+    id: string;
+    who?: string;
+    say: string;
+    /** what to light up: a board cell (or several), a CSS selector, or nothing */
+    at?: () => number | number[] | string | null;
+    /** the event that finishes this step; absent means "press Got it" */
+    on?: string;
+    /** how many of that event */
+    need?: number;
+    /** skip the step entirely if this is false */
+    when?: () => boolean;
+  };
+
+  const cellWith = (fn: (c: any) => boolean) => {
+    const b = B();
+    for (let i = 0; i < N; i++) if (b[i] && fn(b[i])) return i;
+    return null;
+  };
+  /** every cell matching — the merge step has to light up both twigs */
+  const cellsWith = (fn: (c: any) => boolean, max = 2) => {
+    const b = B(), out: number[] = [];
+    for (let i = 0; i < N && out.length < max; i++) if (b[i] && fn(b[i])) out.push(i);
+    return out.length ? out : null;
+  };
+  const TUT: TutStep[] = [
+    { id: 'hello', who: 'pip', say: "Oh — hello! I'm <b>Pip</b>. You picked a quiet morning to arrive. Nothing much grows here any more, but the old meadow still remembers how. Let me show you." },
+    {
+      id: 'tap', who: 'pip', say: "That's the <b>Big Tree</b>. Give it a tap and it drops a twig.",
+      at: () => cellWith(c => c.p === 'tree'), on: 'spawn',
+    },
+    {
+      id: 'tap2', who: 'pip', say: "Again! You want <b>two</b> of a thing before anything interesting happens.",
+      at: () => cellWith(c => c.p === 'tree'), on: 'spawn',
+    },
+    {
+      id: 'merge', who: 'pip', say: "Now <b>drag one twig onto the other</b>. Two of the same thing always make the next thing up.",
+      at: () => cellsWith(c => c.id === 'twig'), on: 'merge',
+    },
+    { id: 'merged', who: 'pip', say: "A <b>Branch</b>! That is the whole game, really. Two twigs make a branch, two branches make a log, and it keeps going — seven steps in this chain alone." },
+    {
+      id: 'order', who: 'pip', say: "See the cards up top? Those are your neighbours asking for things. Tap the <b>picture</b> on one to find out where it comes from.",
+      at: () => '#orders [data-need]', on: 'chain',
+    },
+    {
+      id: 'deliver', who: 'pip', say: "When a card turns green you have what they want. <b>Give it</b> — contracts are where the coins and the XP come from.",
+      at: () => '#orders .order.ready .btnDeliver', on: 'deliver',
+      when: () => S.orders.some((o: any) => o.needs.every((nd: any) => countItem(nd.id) >= nd.qty)),
+    },
+    {
+      id: 'battery', who: 'pip', say: "Every producer has a <b>battery</b> — the little bar under it. Empty it as fast as you like; it fills itself back up over about half an hour, even while the game is shut.",
+      at: () => cellWith(c => c.p === 'tree'),
+    },
+    {
+      id: 'quests', who: 'pip', say: "Lost? This button always says the one thing to do next. Give it a tap.",
+      at: () => '#btnQuests', on: 'quests',
+    },
+    {
+      id: 'world', who: 'pip', say: "And this is your <b>camp</b> — the meadow itself. Your tree, your rocks, and a few things that are not here yet.",
+      at: () => '[data-v="map"]', on: 'world',
+    },
+    {
+      id: 'grow', who: 'pip', say: "Tap anything in the camp to look after it. Coins make a producer <b>bigger and rarer</b> — that is what they are for.",
+      at: () => '.campEnt[data-ent^="p"]', on: 'prodpanel',
+    },
+    { id: 'done', who: 'pip', say: "That's everything. Merge, fill contracts, grow the meadow. And keep an eye on the sky — something is going to fall out of it, and it is going to change your week." },
+  ];
+
+  let tutAt = -1, tutHave = 0, tutTimer: any = 0;
+  const tutOn = () => tutAt >= 0 && tutAt < TUT.length;
+
+  function tutStart() {
+    if (S.tut) return;
+    tutAt = -1; tutNext();
+  }
+  function tutNext() {
+    tutHave = 0;
+    do { tutAt++; } while (tutAt < TUT.length && TUT[tutAt].when && !TUT[tutAt].when!());
+    if (tutAt >= TUT.length) { tutEnd(); return; }
+    tutShow();
+  }
+  function tutEnd() {
+    const wasOn = tutAt >= 0;
+    tutAt = -1;
+    S.tut = 1; save();
+    // the daily calendar and the story beats queue up behind the intro rather
+    // than popping a modal over the one button you were told to press
+    if (wasOn) setTimeout(() => { checkDaily(); setTimeout(() => checkStory(), 900); }, 700);
+    $('#tut').classList.remove('on');
+    setTimeout(() => { if (!tutOn()) $('#tut').style.display = 'none'; }, 300);
+    clearInterval(tutTimer); tutTimer = 0;
+  }
+  /** where on screen the current step points, in page pixels */
+  function tutRect(): { x: number; y: number; w: number; h: number } | null {
+    const st = TUT[tutAt]; if (!st.at) return null;
+    const target = st.at();
+    if (target === null || target === undefined) return null;
+    const app = $('#app').getBoundingClientRect();
+    const cells = typeof target === 'number' ? [target] : Array.isArray(target) ? target : null;
+    if (cells) {
+      const cv = $('#board canvas'); if (!cv) return null;
+      const r = cv.getBoundingClientRect(), s = board.cellSize();
+      let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+      cells.forEach(i => {
+        const c = board.center(i);
+        x0 = Math.min(x0, c.x - s / 2); y0 = Math.min(y0, c.y - s / 2);
+        x1 = Math.max(x1, c.x + s / 2); y1 = Math.max(y1, c.y + s / 2);
+      });
+      return { x: r.left - app.left + x0, y: r.top - app.top + y0, w: x1 - x0, h: y1 - y0 };
+    }
+    const e = document.querySelector(target as string) as HTMLElement;
+    if (!e || !e.offsetParent) return null;
+    const r = e.getBoundingClientRect();
+    return { x: r.left - app.left, y: r.top - app.top, w: r.width, h: r.height };
+  }
+  function tutShow() {
+    const st = TUT[tutAt], host = $('#tut');
+    host.style.display = '';
+    void host.offsetWidth;
+    host.classList.add('on');
+    $('#tFace').innerHTML = ART.char(st.who || 'pip');
+    $('#tSay').innerHTML = st.say;
+    $('#tNext').classList.toggle('hide', !!st.on);
+    tutPlace();
+    clearInterval(tutTimer);
+    // the board relays out, screens open, cards move — keep the hole on target
+    tutTimer = setInterval(() => { if (tutOn()) tutPlace(); }, 260);
+  }
+  function tutPlace() {
+    const host = $('#tut'), app = $('#app').getBoundingClientRect();
+    const r = tutRect();
+    const pad = 7;
+    const set = (id: string, x: number, y: number, w: number, h: number) => {
+      const e = $(id);
+      e.style.left = Math.max(0, x) + 'px'; e.style.top = Math.max(0, y) + 'px';
+      e.style.width = Math.max(0, w) + 'px'; e.style.height = Math.max(0, h) + 'px';
+    };
+    host.classList.toggle('noHole', !r);
+    if (!r) {
+      set('#tTop', 0, 0, app.width, app.height);
+      set('#tBot', 0, 0, 0, 0); set('#tLeft', 0, 0, 0, 0); set('#tRight', 0, 0, 0, 0);
+      $('#tRing').style.opacity = '0'; $('#tHand').style.opacity = '0';
+      $('#tBubble').style.top = (app.height * 0.32) + 'px';
+      return;
+    }
+    const x = r.x - pad, y = r.y - pad, w = r.w + pad * 2, h = r.h + pad * 2;
+    set('#tTop', 0, 0, app.width, y);
+    set('#tBot', 0, y + h, app.width, app.height - y - h);
+    set('#tLeft', 0, y, x, h);
+    set('#tRight', x + w, y, app.width - x - w, h);
+    const ring = $('#tRing');
+    ring.style.opacity = '1';
+    ring.style.left = x + 'px'; ring.style.top = y + 'px';
+    ring.style.width = w + 'px'; ring.style.height = h + 'px';
+    const hand = $('#tHand');
+    hand.style.opacity = '1';
+    hand.style.left = (x + w / 2) + 'px';
+    hand.style.top = (y + h + 4) + 'px';
+    // put the bubble on whichever side has room
+    // sit the bubble wherever there is more room, and never on top of the target
+    const bub = $('#tBubble');
+    const bh = bub.offsetHeight || 190;
+    const roomBelow = app.height - (y + h) - 64;
+    const roomAbove = y - 34;
+    bub.style.top = (roomBelow >= bh || roomBelow >= roomAbove
+      ? Math.min(app.height - bh - 66, y + h + 52)
+      : Math.max(36, y - bh - 26)) + 'px';
+  }
+  /** the game tells the tutorial what just happened */
+  function tutFire(ev: string) {
+    if (!tutOn()) return;
+    const st = TUT[tutAt];
+    if (st.on !== ev) return;
+    tutHave++;
+    if (tutHave >= (st.need || 1)) setTimeout(tutNext, 420);
   }
 
   /* ================================================================ MODALS */
@@ -2501,14 +3030,14 @@ export async function startGame() {
     renderTools();
     if (bagHas()) renderBag();
     $('#miniClose').onclick = closeMini;
+    $('#btnQuests').onclick = questPanel;
     applyBloomSkin();
-    setTimeout(checkDaily, 1200);
-    setTimeout(() => checkStory(), 1800);
 
     if (import.meta.env.DEV) (window as any).__game = {
       state: () => S, cells: () => B(),
       prods: PRODS, items: ITEMS, chains: CHAINS, config: CONFIG, recipes: RECIPES, shop: SHOP,
       hud: () => renderHUD(), world: () => renderWorldScreen(), wlv, bloomValue,
+      grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
     };
     setInterval(tick, 500);
@@ -2517,9 +3046,14 @@ export async function startGame() {
     window.addEventListener('mr:save', () => save());
     document.addEventListener('visibilitychange', () => { if (document.hidden) save(); });
 
+    $('#tNext').onclick = () => { sfx.tap(); tutNext(); };
+    $('#tSkip').onclick = () => { sfx.tap(); tutEnd(); toast('Intro skipped — the 📜 button always says what to do next.'); };
     if (!S.tut) {
-      S.tut = 1; save();
-      setTimeout(() => modal('pip', 'Hi, I\'m Pip!', 'Welcome to <b>Merge Rocket</b>! Tap the <b>Big Tree</b> to shake out twigs, then <b>drag two matching things together</b> to merge them into something better. Fill orders for your friends to level up!', 'Let\'s play!'), 400);
+      setTimeout(tutStart, 700);
+    } else {
+      $('#tut').style.display = 'none';
+      setTimeout(checkDaily, 1200);
+      setTimeout(() => checkStory(), 1800);
     }
   }
   await boot();

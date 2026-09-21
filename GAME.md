@@ -107,6 +107,31 @@ unchanged. Apple Developer Program is $99/yr.
 
 ## 3. Features
 
+### The first ten minutes
+A merge game is obvious once you have played one and baffling if you have not, so
+there is a proper **guided intro**. It dims the whole screen except the one thing to
+press, says why in Pip's voice, and waits for you to actually do it — tap the tree,
+tap it again, drag the two twigs together, look up where a contract item comes from,
+open your camp, grow a producer. Every step is skippable, the daily calendar and the
+story beats queue up behind it instead of popping over it, and it runs once.
+
+After that the **📜 quest button** under the contracts always says the single next
+thing to do, and opens the full list when you tap it.
+
+### Producers are batteries
+No drip feed. Every producer holds **20–25 taps** that you can spend as fast as you
+can tap, and then refills itself over about half an hour — while you merge, and while
+the game is shut. Tapping costs no energy at all; the bar under each producer is the
+whole story, and when it runs dry you can wait, or spend 12 ⚡ for a quarter tank.
+
+**They grow.** Coins buy a producer four levels, and each one adds five charges *and
+the next tier up its chain*: a level-4 Big Tree hands out Timber Crates as well as
+twigs. You buy the upgrade by tapping the thing itself in your camp.
+
+**And they end.** A producer at max level keeps going for another 45 taps, then goes
+to seed: it pays out a last harvest and something else takes root in its place, so a
+late board never settles into the same four taps forever.
+
 ### Board and merging
 - 6 × 8 board, rendered on a **WebGL canvas** (PixiJS) with **GSAP** motion.
 - Drag-and-drop merging with a lifted, scaled-up tile and a coloured drop ring —
@@ -204,7 +229,7 @@ Four small games in the 🌍 World tab, each a different verb, each on its own c
   haggle your prize up a tier for coins.
 - **✨ Constellations** (free) — the permanent one, and what Star Cores are finally *for*.
   Trace a shape by tapping its stars in order and it stays lit for the rest of the game: The
-  Plough (+10 % coins), The Lantern (taps cost 1 less energy), The Seed (timers 20 % faster),
+  Plough (+10 % coins), The Lantern (20 % bigger batteries), The Seed (20 % faster recharge),
   The Vault (Bloom Essence counts double). They apply in every world.
 
 ### 🛒 Trading Post (level 4)
@@ -270,7 +295,7 @@ the only sink big enough to keep the lab worth running.
 
 ### ✨ Star Forge
 What meteor stars are for. Star Scrap and Star Cores buy instant favours in the shop:
-refill energy, fill every timer producer at once, swap the whole contract board, or pull a
+refill energy, top up every producer at once, swap the whole contract board, or pull a
 meteor down on demand.
 
 ### 🎒 Storage bag
@@ -305,7 +330,7 @@ music and Heart. They open in order and each trip costs fuel.
 
 | world | chains | opens with | its own event |
 | --- | --- | --- | --- |
-| **Sunny Meadow** (Earth) | 12 — wood, stone, berries, water, hay, flowers, honey, fungi, weaving, nesting, pottery, butterflies | Woodworks + Rock Quarry | **rain** fills every timer producer at once |
+| **Sunny Meadow** (Earth) | 12 — wood, stone, berries, water, hay, flowers, honey, fungi, weaving, nesting, pottery, butterflies | Woodworks + Rock Quarry | **rain** tops up every producer at once |
 | **Crater Camp** (Luna) | 9 — moon rock, glow garden, dust, ice, crystal, lanterns, silver, comets, moths | Moon Rocks + Glow Garden | **low gravity** bounces an input back on roughly one merge in five |
 | **Ember Hollow** (Cindra) | 9 — magma, ash garden, iron, obsidian, glass, the smithy, spice, copper, phoenix | Magma Works + Ash Garden | **eruptions** throw hot rocks onto free tiles |
 | **Tidal Shallows** (Nerith) | 9 — shells, kelp, pearls, coral, fish, tide pools, salt, sunken finds, deep lights | Shell Bed + Kelp Forest | tides |
@@ -321,13 +346,30 @@ between worlds.
 - **🧩 Board** — the game.
 - **🛒 Shop** — supplies, crates and upgrades (level 4).
 - **🔬 Lab** — the experiment bench, lab book and rumours (level 6).
-- **🚀 Rocket** — mission list with progress and the rocket assembling part by part.
+- **🏛️ Vault** — the progression drawer: the rotating task board, the relic perks and
+  the star favours. The rocket moved to your camp, where you can watch it being built.
 - **📖 Guide** — the **catalogue**: a collection bar (`38/286` found), every awake chain as
   picture rows with sell price and how many you own right now, `???` for the undiscovered,
   a silhouette row for the chains still sleeping in this world, plus what each producer makes
   and costs.
-- **🌍 World** — the hub for *where am I*: the Heart and its bloom progress, the four side
-  games, the constellations, and the galaxy map with travel costs and the launch button.
+- **🌍 World** — two views behind one tab. The **camp** is the world you are standing
+  in, drawn as a little diorama: your rocket assembling itself at the back, the lab once
+  it is built, the Heart, and every producer you own — tap any of them to open its panel.
+  The **galaxy** is the map between worlds: planets on a starfield, locked ones dark, a
+  line lighting up behind you as you go.
+
+### Sound
+Everything is synthesised by `scripts/make-audio.py` — no samples, nothing to license.
+The palette is warm and wooden: a **marimba** (fundamental plus the 4th and 10th
+partials a real bar has, with a beater knock on the front) and a **kalimba** (almost a
+pure tone with a slightly sharp second partial) do most of the work, over **detuned-saw
+pads** through a gentle filter. A tap is a quiet low tok; a merge is two marimba notes a
+fourth apart, climbing a pentatonic step for every tier you reach.
+
+Each of the five worlds has its own 23–31 second bed: a pad holding the chord, a soft
+bass on the downbeat, a kalimba arpeggio keeping time instead of a drum kit, and a
+melody **with rests in it** — a note on every beat is a ringtone, not a soundtrack. The
+reverb tail is wrapped back onto the head so the loop has no seam.
 
 ### Presentation and feel
 - All artwork is hand-written SVG (`src/art.ts`), rasterised into GPU textures at startup.
@@ -372,7 +414,7 @@ npm run content                 <- run this after editing any of the above
 ```
 src/content/items.json        GENERATED  every item: name, chain, tier, sell price, art spec
 src/content/chains.json       GENERATED  merge chains: items in order, world, unlock level
-src/content/producers.json    GENERATED  tap or timer, cost, refill, `uses`, drops, art spec
+src/content/producers.json    GENERATED  battery size, refill rate, `uses`, drops, art spec
 src/content/worlds.json       GENERATED  chains, starting producers, locks, folks, Heart, bloom
 src/content/characters.json   GENERATED  names, order lines, generated-face specs
 src/content/story.json        GENERATED  the story beats and when they fire
@@ -408,13 +450,15 @@ build if you name one that does not exist. Decorations are `glow`, `ring`, `cres
 One line in `scripts/content/producers.mjs`:
 
 ```js
-['earth', 4, 'hive|Wild Hive|honey:honey/bark|timer:18/3|nectar nectar honeydrop'],
+['earth', 4, 'hive|Wild Hive|honey:honey/bark|bat:20/30|nectar nectar honeydrop'],
 // world, world level it appears at, id|name|art|mode|drops
 ```
 
 `art` is either a hand-drawn key from `src/art.ts` (`tree`, `rocks`, `well`…) or
-`shape:material/ground` to compose one. `mode` is `tap:<energy>` or
-`timer:<seconds>/<charges>`. Cells are assigned from the `CELLS` table in the same file.
+`shape:material/ground` to compose one. `mode` is `bat:<charges>/<minutes to refill from
+empty>`, or `once:<uses>` for something that runs dry and vanishes. Upgrade levels and
+their extra drops are derived, not authored — see *Producers are batteries*. Cells are
+assigned from the `CELLS` table in the same file.
 
 ### Add a lab recipe
 ```json
@@ -562,7 +606,7 @@ npm i @capacitor-community/admob && npx cap sync
 then fill in `init()` / `rewarded()` and swap Google's test ad unit ids for real ones.
 Use **AdMob mediation** to reach AppLovin, Meta, Unity Ads and the rest through that single
 SDK rather than integrating each network. Natural rewarded placements: refill energy, double
-an order payout, instant-finish a producer timer.
+an order payout, top a producer's battery back up.
 
 ---
 

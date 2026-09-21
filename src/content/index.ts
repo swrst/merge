@@ -40,12 +40,12 @@ export interface ProducerDef {
   art: string;
   /** generated art, when `art` is not a hand-drawn key */
   spec?: ArtSpec & { ground?: string };
-  /** 'tap' spends energy on demand, 'timer' refills itself and banks charges */
-  mode: 'tap' | 'timer';
-  cost?: number;
-  every?: number;
+  /** 'battery' banks charges and refills itself; 'once' runs dry and vanishes */
+  mode: 'battery' | 'once';
+  /** battery: charges at level 1, and how long one charge takes to come back */
   cap?: number;
-  /** a producer that runs out: how many times it can be used before it vanishes */
+  every?: number;
+  /** once: how many times it can be used before it collapses */
   uses?: number;
   drops: string[];
 }
@@ -209,8 +209,8 @@ export function validateContent(): string[] {
   }
   for (const [key, p] of Object.entries(PRODUCERS)) {
     p.drops.forEach(id => { if (!has(ITEMS, id)) errs.push(`producer "${key}" drops unknown item "${id}"`); });
-    if (p.mode === 'timer' && (!p.every || !p.cap)) errs.push(`timer producer "${key}" needs "every" and "cap"`);
-    if (p.mode === 'tap' && p.cost === undefined) errs.push(`tap producer "${key}" needs "cost"`);
+    if (p.mode === 'battery' && (!p.every || !p.cap)) errs.push(`battery producer "${key}" needs "every" and "cap"`);
+    if (p.mode === 'once' && !p.uses) errs.push(`one-shot producer "${key}" needs "uses"`);
     if (p.uses !== undefined && !(p.uses > 0)) errs.push(`producer "${key}" has a "uses" of ${p.uses}`);
   }
   const cells = CONFIG.board.cols * CONFIG.board.rows;

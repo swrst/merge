@@ -97,11 +97,11 @@ export const CHARACTERS = {
 
 /* The through-line. Beats fire on world level or on story flags. */
 export const STORY = [
-  { id: 's1', at: { world: 'earth', lvl: 1 }, who: 'bloop', title: 'The Last Vault',
-    text: 'Every growing thing that ever was is asleep inside this ship. I am its curator — the last one. You are its gardener, apparently. Congratulations. Start with a twig.' },
-  { id: 's2', at: { world: 'earth', lvl: 3 }, who: 'bloop', title: 'What the Bloom Was',
+  { id: 's1', at: { flag: 'met' }, who: 'bloop', title: 'The Last Vault',
+    text: 'Blorp. Right. Where to start. That ship is a <b>Seed Vault</b> — every growing thing that ever was, asleep inside it. I am its curator. The last one. And you, judging by that meadow, are its gardener. Congratulations. Fix my rocket and I will show you what that means.' },
+  { id: 's2', at: { world: 'earth', lvl: 4 }, who: 'bloop', title: 'What the Bloom Was',
     text: 'The Bloom was not a plant. It was every world holding hands. When it let go, the worlds forgot how to grow. Merging is remembering — two small things recalling what they add up to.' },
-  { id: 's3', at: { world: 'earth', lvl: 5 }, who: 'bloop', title: 'The Heart',
+  { id: 's3', at: { world: 'earth', lvl: 6 }, who: 'bloop', title: 'The Heart',
     text: 'Under this meadow is a Heart — dormant, not dead. Feed it Bloom Essence and the world wakes around it. Every world has one. Every one of them is cold right now.' },
   { id: 's4', at: { world: 'luna', lvl: 1 }, who: 'luma', title: 'Somebody Came Back',
     text: 'Nobody has landed here since the quiet. We stopped watching the sky. Then a ship full of seeds falls out of it. Forgive me if I follow you around a bit.' },

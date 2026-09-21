@@ -8,8 +8,9 @@
       "twig",
       "branch"
     ],
-    "mode": "tap",
-    "cost": 1
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "rocks": {
     "name": "Rock Pile",
@@ -20,8 +21,9 @@
       "pebble",
       "rock"
     ],
-    "mode": "tap",
-    "cost": 1
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "bush": {
     "name": "Berry Bush",
@@ -31,9 +33,9 @@
       "berry",
       "berries"
     ],
-    "mode": "timer",
-    "every": 15000,
-    "cap": 3
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "well": {
     "name": "Old Well",
@@ -44,9 +46,9 @@
       "dew",
       "puddle"
     ],
-    "mode": "timer",
-    "every": 14000,
-    "cap": 4
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "meadow": {
     "name": "Hay Meadow",
@@ -57,8 +59,9 @@
       "grass",
       "hay"
     ],
-    "mode": "tap",
-    "cost": 1
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "flowerbed": {
     "name": "Flower Bed",
@@ -73,9 +76,9 @@
       "mat": "rose",
       "ground": "moss"
     },
-    "mode": "timer",
-    "every": 16000,
-    "cap": 3
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "hive": {
     "name": "Wild Hive",
@@ -90,9 +93,9 @@
       "mat": "honey",
       "ground": "bark"
     },
-    "mode": "timer",
-    "every": 18000,
-    "cap": 3
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "mosslog": {
     "name": "Mossy Log",
@@ -107,9 +110,9 @@
       "mat": "moss",
       "ground": "moss"
     },
-    "mode": "timer",
-    "every": 17000,
-    "cap": 3
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "cottonpatch": {
     "name": "Cotton Patch",
@@ -125,8 +128,9 @@
       "mat": "cream",
       "ground": "moss"
     },
-    "mode": "tap",
-    "cost": 1
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "nestbox": {
     "name": "Nest Box",
@@ -141,9 +145,9 @@
       "mat": "bark",
       "ground": "moss"
     },
-    "mode": "timer",
-    "every": 20000,
-    "cap": 2
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "claypit": {
     "name": "Clay Pit",
@@ -159,8 +163,9 @@
       "mat": "clay",
       "ground": "clay"
     },
-    "mode": "tap",
-    "cost": 1
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "grubmound": {
     "name": "Grub Mound",
@@ -175,9 +180,9 @@
       "mat": "cream",
       "ground": "moss"
     },
-    "mode": "timer",
-    "every": 22000,
-    "cap": 2
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "geyser": {
     "name": "Moon Geyser",
@@ -188,8 +193,9 @@
       "mrock",
       "mcrystal"
     ],
-    "mode": "tap",
-    "cost": 1
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "glowpod": {
     "name": "Glow Pod",
@@ -199,9 +205,9 @@
       "spore",
       "bulb"
     ],
-    "mode": "timer",
-    "every": 15000,
-    "cap": 3
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "dustflat": {
     "name": "Dust Flat",
@@ -217,8 +223,9 @@
       "mat": "sand",
       "ground": "slate"
     },
-    "mode": "tap",
-    "cost": 1
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "icevein": {
     "name": "Ice Vein",
@@ -233,9 +240,9 @@
       "mat": "ice",
       "ground": "slate"
     },
-    "mode": "timer",
-    "every": 16000,
-    "cap": 3
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "crystalspire": {
     "name": "Crystal Spire",
@@ -251,8 +258,9 @@
       "mat": "crystal",
       "ground": "slate"
     },
-    "mode": "tap",
-    "cost": 2
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "wickpod": {
     "name": "Wick Pod",
@@ -267,9 +275,9 @@
       "mat": "gold",
       "ground": "slate"
     },
-    "mode": "timer",
-    "every": 18000,
-    "cap": 3
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "silverseam": {
     "name": "Silver Seam",
@@ -285,8 +293,9 @@
       "mat": "silver",
       "ground": "slate"
     },
-    "mode": "tap",
-    "cost": 2
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "comettrail": {
     "name": "Comet Trail",
@@ -301,9 +310,9 @@
       "mat": "star",
       "ground": "slate"
     },
-    "mode": "timer",
-    "every": 24000,
-    "cap": 2
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "mothpod": {
     "name": "Moth Pod",
@@ -318,9 +327,9 @@
       "mat": "mint",
       "ground": "slate"
     },
-    "mode": "timer",
-    "every": 22000,
-    "cap": 2
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "lavavent": {
     "name": "Lava Vent",
@@ -331,8 +340,9 @@
       "ember",
       "cinder"
     ],
-    "mode": "tap",
-    "cost": 1
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "shroomlog": {
     "name": "Shroom Log",
@@ -342,9 +352,9 @@
       "sporecap",
       "ashroom"
     ],
-    "mode": "timer",
-    "every": 16000,
-    "cap": 3
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "ironseam": {
     "name": "Iron Seam",
@@ -360,8 +370,9 @@
       "mat": "iron",
       "ground": "obsidian"
     },
-    "mode": "tap",
-    "cost": 2
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "obsidslab": {
     "name": "Obsidian Slab",
@@ -377,8 +388,9 @@
       "mat": "obsidian",
       "ground": "obsidian"
     },
-    "mode": "tap",
-    "cost": 2
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "sandpit": {
     "name": "Hot Sand Pit",
@@ -393,9 +405,9 @@
       "mat": "sand",
       "ground": "obsidian"
     },
-    "mode": "timer",
-    "every": 15000,
-    "cap": 4
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "coalpit": {
     "name": "Coal Pit",
@@ -411,8 +423,9 @@
       "mat": "coal",
       "ground": "obsidian"
     },
-    "mode": "tap",
-    "cost": 1
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "spicevine": {
     "name": "Spice Vine",
@@ -427,9 +440,9 @@
       "mat": "rust",
       "ground": "obsidian"
     },
-    "mode": "timer",
-    "every": 18000,
-    "cap": 3
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "copperseam": {
     "name": "Copper Seam",
@@ -445,8 +458,9 @@
       "mat": "copper",
       "ground": "obsidian"
     },
-    "mode": "tap",
-    "cost": 2
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "ashnest": {
     "name": "Ash Nest",
@@ -461,9 +475,9 @@
       "mat": "smoke",
       "ground": "obsidian"
     },
-    "mode": "timer",
-    "every": 24000,
-    "cap": 2
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "shellbed": {
     "name": "Shell Bed",
@@ -479,8 +493,9 @@
       "mat": "shell",
       "ground": "sand"
     },
-    "mode": "tap",
-    "cost": 1
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "kelpbed": {
     "name": "Kelp Bed",
@@ -495,9 +510,9 @@
       "mat": "kelp",
       "ground": "sand"
     },
-    "mode": "timer",
-    "every": 15000,
-    "cap": 3
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "oysterbed": {
     "name": "Oyster Bed",
@@ -512,9 +527,9 @@
       "mat": "pearl",
       "ground": "sand"
     },
-    "mode": "timer",
-    "every": 18000,
-    "cap": 3
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "coralhead": {
     "name": "Coral Head",
@@ -530,8 +545,9 @@
       "mat": "coral",
       "ground": "sand"
     },
-    "mode": "tap",
-    "cost": 1
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "fishtrap": {
     "name": "Fish Trap",
@@ -546,9 +562,9 @@
       "mat": "rope",
       "ground": "sand"
     },
-    "mode": "timer",
-    "every": 17000,
-    "cap": 3
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "tidepool": {
     "name": "Tide Pool",
@@ -564,8 +580,9 @@
       "mat": "water",
       "ground": "sand"
     },
-    "mode": "tap",
-    "cost": 1
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "saltpan": {
     "name": "Salt Pan",
@@ -580,9 +597,9 @@
       "mat": "cream",
       "ground": "sand"
     },
-    "mode": "timer",
-    "every": 16000,
-    "cap": 4
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "wrecksite": {
     "name": "Wreck Site",
@@ -598,8 +615,9 @@
       "mat": "bone",
       "ground": "sand"
     },
-    "mode": "tap",
-    "cost": 2
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "lightvent": {
     "name": "Light Vent",
@@ -614,9 +632,9 @@
       "mat": "spore",
       "ground": "deepsea"
     },
-    "mode": "timer",
-    "every": 22000,
-    "cap": 2
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "cloudbank": {
     "name": "Cloud Bank",
@@ -632,8 +650,9 @@
       "mat": "cloud",
       "ground": "cloud"
     },
-    "mode": "tap",
-    "cost": 1
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "auroraloom": {
     "name": "Aurora Loom",
@@ -648,9 +667,9 @@
       "mat": "aurora",
       "ground": "dusk"
     },
-    "mode": "timer",
-    "every": 16000,
-    "cap": 3
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "starcradle": {
     "name": "Star Cradle",
@@ -666,8 +685,9 @@
       "mat": "star",
       "ground": "dusk"
     },
-    "mode": "tap",
-    "cost": 2
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "windvanep": {
     "name": "Wind Vane",
@@ -682,9 +702,9 @@
       "mat": "silver",
       "ground": "cloud"
     },
-    "mode": "timer",
-    "every": 15000,
-    "cap": 4
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "skytree": {
     "name": "Sky Orchard",
@@ -699,9 +719,9 @@
       "mat": "topaz",
       "ground": "cloud"
     },
-    "mode": "timer",
-    "every": 18000,
-    "cap": 3
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "chimepost": {
     "name": "Chime Post",
@@ -717,8 +737,9 @@
       "mat": "silver",
       "ground": "cloud"
     },
-    "mode": "tap",
-    "cost": 1
+    "mode": "battery",
+    "cap": 25,
+    "every": 72000
   },
   "prismstand": {
     "name": "Prism Stand",
@@ -733,9 +754,9 @@
       "mat": "glass",
       "ground": "cloud"
     },
-    "mode": "timer",
-    "every": 20000,
-    "cap": 3
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "skynestp": {
     "name": "Sky Nest",
@@ -750,9 +771,9 @@
       "mat": "cream",
       "ground": "cloud"
     },
-    "mode": "timer",
-    "every": 22000,
-    "cap": 2
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "silkloom": {
     "name": "Silk Loom",
@@ -767,9 +788,9 @@
       "mat": "rose",
       "ground": "cloud"
     },
-    "mode": "timer",
-    "every": 20000,
-    "cap": 3
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
   },
   "wreck": {
     "name": "Rocket Wreck",
@@ -788,8 +809,9 @@
       "circuit",
       "tankglass"
     ],
-    "mode": "tap",
-    "cost": 1
+    "mode": "battery",
+    "cap": 12,
+    "every": 100000
   },
   "crater": {
     "name": "Meteor Crater",
@@ -803,8 +825,7 @@
       "fuelore",
       "starcore"
     ],
-    "mode": "tap",
-    "cost": 1,
+    "mode": "once",
     "uses": 7
   }
 }
