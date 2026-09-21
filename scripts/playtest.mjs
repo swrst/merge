@@ -592,6 +592,50 @@ const art = await page.evaluate(() => {
 must(art.n > 250, `${art.n} items across ${art.chains} chains`);
 must(art.bad.length === 0, art.bad.length ? `items with no art: ${art.bad.join(', ')}` : 'all of them have art');
 
+head('An old save survives the rewrite');
+{
+  // A v5 save is planted before the app boots (reloading a live page lets its
+  // own unload handler write the current state back over the plant) and carries
+  // item ids the v6 catalogue no longer has.
+  const ctx = await browser.newContext({ viewport: { width: 430, height: 880 } });
+  await ctx.addInitScript(() => {
+    const board = new Array(48).fill(null);
+    board[19] = { p: 'tree' }; board[22] = { p: 'rocks' }; board[20] = { p: 'goneProducer' };
+    ['twig', 'branch', 'shroom', 'jam', 'ghostItem', 'dew'].forEach((id, i) => { board[i] = { id }; });
+    localStorage.setItem('mergeRocket_v2', JSON.stringify({
+      v: 5, world: 'earth', lvl: 12, xp: 30, coins: 2500, energy: 40, eAt: Date.now(),
+      boards: { earth: board, luna: null, cindra: null }, orders: [], seen: { twig: 1 },
+      parts: { hull: 1, engine: 1, nav: 1, tank: 1 }, fuel: 1, mp: {}, met: 1,
+      unlocked: { luna: 1, cindra: 0 }, snackAt: 0, sound: 0, music: 0, tut: 1,
+      up: { energy: 2 }, shop: { stock: null, at: 0 },
+      lab: { disc: {}, clue: {}, slots: ['shroom', 'twig'], tries: 3, made: 1 },
+      made: {}, bag: ['shroom', 'twig'], boost: {}, daily: { key: 0, day: 2 },
+      streak: 0, streakAt: 0, ship: null, shipAt: 0, vault: { rich: 1 }, tasks: [], tasksAt: 0, tc: {},
+      perkAt: 0, ordersAt: 0,
+    }));
+  });
+  const old = await ctx.newPage();
+  const oldErrs = [];
+  old.on('pageerror', e => oldErrs.push(e.message));
+  await old.goto(URL);
+  await old.waitForFunction(() => window.__game, null, { timeout: 20000 });
+  await old.waitForTimeout(2000);
+  const m = await old.evaluate(() => {
+    const g = window.__game, st = g.state(), b = g.cells();
+    return {
+      v: st.v, lvl: st.lvl, wlv: g.wlv('earth'), coins: st.coins, rich: st.vault.rich,
+      ghosts: b.filter(c => c && ((c.id && !g.items[c.id]) || (c.p && !g.prods[c.p]))).length,
+      bag: st.bag.length, slots: st.lab.slots.filter(x => x && !g.items[x]).length,
+    };
+  });
+  must(m.v === 6 && m.lvl === 12 && m.coins >= 2500 && m.rich === 1, 'level, coins and vault perks come through');
+  must(m.wlv > 1 && m.wlv <= 4, `its world level is seeded to ${m.wlv} — progress kept, something still to unlock`);
+  must(m.ghosts === 0, 'items and producers that no longer exist are swept off the board');
+  must(m.bag === 1 && m.slots === 0, 'and out of the bag and the lab bench');
+  must(oldErrs.length === 0, oldErrs.length ? 'migration threw: ' + oldErrs[0] : 'with nothing thrown on the way');
+  await ctx.close();
+}
+
 head('Console');
 must(errors.length === 0, errors.length ? `console errors:\n${errors.join('\n')}` : 'no console errors');
 

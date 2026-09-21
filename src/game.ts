@@ -138,14 +138,30 @@ export async function startGame() {
     p.fed = p.fed || {}; p.stage = p.stage || {};
     p.story = p.story || {}; p.mini = p.mini || {}; p.stars = p.stars || {};
     p.firsts = p.firsts || {};
-    // a pre-v6 save had one global level; seed each visited world from it so
-    // nobody who already flew to Cindra lands back on a beginner board
+    // A pre-v6 save had one global level. Seed each visited world from it so
+    // nobody who already flew to Cindra lands back on a beginner board — but cap
+    // it low enough that there is still something left to unlock. Dropping a
+    // world level never re-blocks a cell: only onWorldLevel() touches locks, and
+    // it only ever clears them.
     Object.keys(p.boards || {}).forEach(w => {
       if (!p.boards[w]) return;
-      if (!p.wlv[w]) p.wlv[w] = clamp(p.lvl || 1, 1, WMAX);
+      if (!p.wlv[w]) p.wlv[w] = clamp(p.lvl || 1, 1, 4);
       if (p.wxp[w] === undefined) p.wxp[w] = 0;
     });
     if (!p.wlv[p.world]) p.wlv[p.world] = 1;
+    // The catalogue was rewritten between v5 and v6, so an old board can be
+    // holding an item id that no longer exists. Sweep those out rather than
+    // crashing the first time something asks for their sell price.
+    Object.keys(p.boards || {}).forEach(w => {
+      const b = p.boards[w]; if (!Array.isArray(b)) return;
+      for (let i = 0; i < b.length; i++) {
+        const c = b[i]; if (!c) continue;
+        if (c.id && !ITEMS[c.id]) b[i] = null;
+        else if (c.p && !PRODS[c.p]) b[i] = null;
+      }
+    });
+    if (Array.isArray(p.bag)) p.bag = p.bag.filter((id: string) => !!ITEMS[id]);
+    if (Array.isArray(p.lab && p.lab.slots)) p.lab.slots = p.lab.slots.map((id: any) => (id && ITEMS[id]) ? id : null);
     p.v = 6;
     return p;
   }

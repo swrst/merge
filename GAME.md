@@ -531,7 +531,7 @@ production strips them. That's enough to drive the whole game from Playwright: c
 cell centre from `__board.center(i)`, click or drag, then assert on `__game.state()`.
 
 `scripts/playtest.mjs` is that regression, wired to `npm test`. Start `npm run dev` in one
-shell, run `npm test` in another, and it drives the whole arc headlessly in **28 sections**:
+shell, run `npm test` in another, and it drives the whole arc headlessly in **29 sections**:
 the XP curve, producers and merging, buying supplies and upgrades (and checking max energy
 and the extra order card actually changed), the wreck spreading pieces across every
 unfinished part chain, 60 rolled orders to confirm the part-gift rate, a dud experiment that
@@ -542,7 +542,9 @@ and then the v6 systems: that a fresh world really does start with two chains an
 board, that **no contract ever asks for something that has not woken up yet**, that world
 levels unlock chains, that finishing a chain pays a Bloom Spark, that feeding the Heart wakes
 a stage and fires its story beat, all four side games end to end, tracing a constellation and
-paying its Star Cores, and that all 286 items can be drawn — asserting no console errors
+paying its Star Cores, that all 286 items can be drawn, and that a planted v5 save survives
+the rewrite — keeping its level, coins and vault perks while the items that no longer exist
+are swept off the board, out of the bag and off the lab bench — asserting no console errors
 throughout.
 
 ---
