@@ -63,6 +63,13 @@
     "coins": 200
   },
   {
+    "id": "chain",
+    "need": 3,
+    "text": "Finish 3 merge chains",
+    "hint": "Merge a chain all the way to its last item \u2014 the Vault pays a Bloom Spark for it.",
+    "coins": 300
+  },
+  {
     "id": "upgrade",
     "need": 2,
     "text": "Buy 2 shop upgrades",
@@ -77,6 +84,13 @@
     "coins": 400
   },
   {
+    "id": "mini",
+    "need": 3,
+    "text": "Play 3 side games",
+    "hint": "Crater Dig, Fuel Brewing and the Alien Market are in the \ud83c\udf0d World tab.",
+    "coins": 180
+  },
+  {
     "id": "ship",
     "need": 1,
     "text": "Load a cargo ship",
@@ -84,10 +98,45 @@
     "coins": 250
   },
   {
+    "id": "bloom",
+    "need": 1,
+    "text": "Wake a world's Heart",
+    "hint": "Feed Bloom Essence to the Heart in the \ud83c\udf0d World tab.",
+    "coins": 350
+  },
+  {
     "id": "cindra",
     "need": 1,
     "text": "Reach the third world",
     "hint": "Refuel and fly on \u2014 Cindra is out there.",
     "coins": 800
+  },
+  {
+    "id": "star",
+    "need": 1,
+    "text": "Light a constellation",
+    "hint": "Star Cores buy constellations \u2014 trace one in the \ud83c\udf0d World tab for a permanent blessing.",
+    "coins": 400
+  },
+  {
+    "id": "nerith",
+    "need": 1,
+    "text": "Reach the drowned world",
+    "hint": "Refuel and fly on \u2014 Nerith is out there under the shallows.",
+    "coins": 1200
+  },
+  {
+    "id": "vela",
+    "need": 1,
+    "text": "Reach Aurora Reach",
+    "hint": "The last place the Bloom was seen alive. Fly on.",
+    "coins": 2000
+  },
+  {
+    "id": "allbloom",
+    "need": 5,
+    "text": "Wake every world",
+    "hint": "Five Hearts, five worlds. That is the whole job.",
+    "coins": 5000
   }
 ]

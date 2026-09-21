@@ -6,7 +6,7 @@ import { ads } from './ads';
 import { audio } from './audio';
 import {
   ITEMS, CHAINS, PRODUCERS as PRODS, WORLDS, CHARACTERS as CHARS, MISSIONS, CONFIG,
-  RECIPES, SHOP, ITEM_IDS, PRODUCER_ARTS, nextOf, validateContent,
+  RECIPES, SHOP, STORY, ITEM_IDS, PRODUCER_ARTS, nextOf, validateContent,
 } from './content';
 
 export async function startGame() {
@@ -21,6 +21,26 @@ export async function startGame() {
   const xpNeed = (l: number) =>
     Math.round(CONFIG.xp.base + (l - 1) * CONFIG.xp.perLevel + CONFIG.xp.growth * (l - 1) * (l - 1));
 
+  /* ------------------------------------------------------- world progress
+     Every world has its OWN level. Land somewhere new and you start small: two
+     chains, two producers, a cramped board — then it opens up as you play there.
+     The account level (S.lvl) still drives energy, order tiers and the shop, so
+     a veteran is not punished, they just get a fresh little world to unwrap. */
+  const WMAX = 8;
+  const wNeed = (l: number) => Math.round(CONFIG.world.base + (l - 1) * CONFIG.world.perLevel
+    + CONFIG.world.growth * (l - 1) * (l - 1));
+  const wlv = (w?: string) => (S.wlv && S.wlv[w || S.world]) || 1;
+  const wxp = (w?: string) => (S.wxp && S.wxp[w || S.world]) || 0;
+  /** the chains actually available in a world right now */
+  const liveChains = (w?: string) => {
+    const k = w || S.world, lv = wlv(k);
+    return WORLDS[k].chains.filter(c => (CHAINS[c].unlock || 1) <= lv);
+  };
+  const lockedChains = (w?: string) => {
+    const k = w || S.world, lv = wlv(k);
+    return WORLDS[k].chains.filter(c => (CHAINS[c].unlock || 1) > lv);
+  };
+
   /* ------------------------------------------------- shop upgrade effects */
   const upLv = (id: string) => (S.up && S.up[id]) || 0;
   const upPrice = (u: any) => u.basePrice + u.step * upLv(u.id);
@@ -30,11 +50,12 @@ export async function startGame() {
   const snackAmt = () => CONFIG.energy.snack.amount + upLv('snack') * CONFIG.upgrades.snackPerStep;
   /** a timer producer's refill time, sped up by the Fertiliser upgrade */
   const everyOf = (p: any) =>
-    Math.max(3000, Math.round(p.every * Math.max(0.25, 1 - upLv('speed') * CONFIG.upgrades.speedPerStep)));
+    Math.max(3000, Math.round(p.every * Math.max(0.25, 1 - upLv('speed') * CONFIG.upgrades.speedPerStep)
+      * (starPerk('seed') ? 0.8 : 1)));
   /* Relic Vault perks feed straight into the numbers the rest of the game reads,
      so a perk is bought once and then never has to be remembered again. */
   const vaultLv = (id: string) => (S.vault && S.vault[id]) || 0;
-  const coinMult = () => 1 + vaultLv('rich') * 0.15;
+  const coinMult = () => 1 + vaultLv('rich') * 0.15 + (starPerk('plough') ? 0.1 : 0);
   const xpMult = () => 1 + vaultLv('wise') * 0.25;
   const regenMs = () => Math.round(CONFIG.energy.regenMs / (1 + vaultLv('brisk') * 0.2));
   const meteorScale = () => 1 - vaultLv('comet') * 0.3;
@@ -51,11 +72,11 @@ export async function startGame() {
 
   function freshBoard(world: string) {
     const w = WORLDS[world], b = new Array(N).fill(null);
-    const lvl = (typeof S !== 'undefined' && S && S.lvl) ? S.lvl : 1;
-    for (const k in w.locks) if (w.locks[k] > lvl) b[k] = { b: w.locks[k] };
+    for (const k in w.locks) if (w.locks[k] > 1) b[k] = { b: w.locks[k] };
     w.start.forEach(s => { b[s.cell] = mkProd(s.producer); });
     // a few starter items so the board isn't bare
-    const c0 = CHAINS[w.chains[0]].items[0], c1 = CHAINS[w.chains[1]].items[0];
+    const open = w.chains.filter(c => (CHAINS[c].unlock || 1) <= 1);
+    const c0 = CHAINS[open[0]].items[0], c1 = CHAINS[open[1] || open[0]].items[0];
     [13, 16, 25, 28].forEach((i, k) => { if (!b[i]) b[i] = { id: k % 2 ? c1 : c0 }; });
     return b;
   }
@@ -67,10 +88,10 @@ export async function startGame() {
   }
   function fresh() {
     return {
-      v: 5, world: 'earth', lvl: 1, xp: 0, coins: CONFIG.start.coins, energy: CONFIG.start.energy, eAt: Date.now(),
-      boards: { earth: freshBoard('earth'), luna: null, cindra: null },
+      v: 6, world: 'earth', lvl: 1, xp: 0, coins: CONFIG.start.coins, energy: CONFIG.start.energy, eAt: Date.now(),
+      boards: { earth: freshBoard('earth') },
       orders: [], seen: { twig: 1, pebble: 1 }, parts: { hull: 0, engine: 0, nav: 0, tank: 0 },
-      fuel: 0, mp: {}, met: 0, unlocked: { luna: 0, cindra: 0 }, snackAt: 0, sound: 1, music: 1, tut: 0,
+      fuel: 0, mp: {}, met: 0, unlocked: {}, snackAt: 0, sound: 1, music: 1, tut: 0,
       /* v3: coin sinks */
       up: {},                                   // upgrade id -> level bought
       shop: { stock: null, at: 0 },             // rotating supply shelf
@@ -86,6 +107,12 @@ export async function startGame() {
       vault: {},                                // permanent perk id -> level
       tasks: [], tasksAt: 0, tc: {},            // the rotating goal board + counters
       perkAt: 0, ordersAt: 0,
+      /* v6: per-world progress, the Seed Vault story, minigames */
+      wlv: { earth: 1 }, wxp: { earth: 0 },   // each world levels on its own
+      fed: {}, stage: {},                     // Bloom value delivered / stages woken
+      story: {},                              // story beats already played
+      mini: {}, stars: {},                    // minigame cooldowns, lit constellations
+      firsts: {},                             // chains whose finale you have made
     };
   }
   /** Old saves keep their progress — missing fields are simply filled in. */
@@ -107,14 +134,25 @@ export async function startGame() {
     if (!Array.isArray(p.tasks)) p.tasks = [];
     p.tasksAt = p.tasksAt || 0; p.tc = p.tc || {};
     p.perkAt = p.perkAt || 0; p.ordersAt = p.ordersAt || 0;
-    if (!p.boards.cindra) p.boards.cindra = null;
-    p.v = 5;
+    p.wlv = p.wlv || {}; p.wxp = p.wxp || {};
+    p.fed = p.fed || {}; p.stage = p.stage || {};
+    p.story = p.story || {}; p.mini = p.mini || {}; p.stars = p.stars || {};
+    p.firsts = p.firsts || {};
+    // a pre-v6 save had one global level; seed each visited world from it so
+    // nobody who already flew to Cindra lands back on a beginner board
+    Object.keys(p.boards || {}).forEach(w => {
+      if (!p.boards[w]) return;
+      if (!p.wlv[w]) p.wlv[w] = clamp(p.lvl || 1, 1, WMAX);
+      if (p.wxp[w] === undefined) p.wxp[w] = 0;
+    });
+    if (!p.wlv[p.world]) p.wlv[p.world] = 1;
+    p.v = 6;
     return p;
   }
   function load() {
     try {
       const r = localStorage.getItem(SAVE);
-      if (r) { const p = JSON.parse(r); if (p && p.v >= 2 && p.v <= 5 && p.boards) return migrate(p); }
+      if (r) { const p = JSON.parse(r); if (p && p.v >= 2 && p.v <= 6 && p.boards) return migrate(p); }
     } catch (e) { }
     return fresh();
   }
@@ -149,7 +187,8 @@ export async function startGame() {
     streak: (n: number) => audio.play('streak' + clamp(n, 1, 5)),
   };
   /** the music bed a world plays */
-  const worldMusic = (w: string) => 'music_' + (w === 'earth' ? 'earth' : w === 'luna' ? 'luna' : 'cindra');
+  const worldMusic = (w: string) =>
+    'music_' + (w === 'earth' ? 'earth' : (w === 'luna' || w === 'vela') ? 'luna' : 'cindra');
 
   /* ==================================================================== FX */
   let toastT: any = 0;
@@ -209,7 +248,7 @@ export async function startGame() {
       canDrag: (i: number) => { const c = B()[i]; return !!c && !c.b; },
     });
     await board.preload(ITEM_IDS, PRODUCER_ARTS);
-    board.setTheme(S.world as any);
+    board.setTheme(S.world);
   }
 
   function onDrop(from: number, to: number) {
@@ -245,14 +284,16 @@ export async function startGame() {
     $('#xpTxt').textContent = S.xp + '/' + xpNeed(S.lvl);
     $('#xpFill').style.width = clamp(S.xp / xpNeed(S.lvl) * 100, 0, 100) + '%';
     const app = $('#app');
-    ['earth', 'luna', 'cindra'].forEach(w => app.classList.toggle(w, S.world === w));
+    WORLD_ORDER.forEach(w => app.classList.toggle(w, S.world === w));
     $('#worldName').textContent = W().name;
     $('#worldIcon').innerHTML = ART.planet(W().planet);
     const m = curMission();
     $('#guideFace').innerHTML = ART.char(S.met ? 'bloop' : 'pip');
     $('#guideTxt').innerHTML = m ? m.hint : '<b>Nice!</b> Keep merging, trading and exploring — more worlds are waiting.';
     $('#tabRocket').classList.toggle('locked', false);
-    $('#tabMap').classList.toggle('locked', !allParts());
+    $('#tabMap').classList.toggle('locked', false);
+    const essence = B().some((c: any) => c && c.id && bloomValue(c.id) > 0);
+    $('#dotWorld').style.display = essence && !worldAwake() ? '' : 'none';
     $('#tabShop').classList.toggle('locked', !shopOpen());
     $('#tabLab').classList.toggle('hide', !labOpen());
     $('#dotRocket').style.display = (tasksDone() > 0 || (S.met && (readyParts() || S.fuel >= CONFIG.rocket.fuelToLaunch))) ? '' : 'none';
@@ -425,8 +466,9 @@ export async function startGame() {
       PRODS[c.p].drops.forEach((d: string) => { live[ITEMS[d].chain] = true; });
     });
     let pool: string[] = [];
-    w.chains.forEach(c => { if (live[c]) CHAINS[c].items.forEach(id => { if (ITEMS[id].tier <= maxT) pool.push(id); }); });
-    if (!pool.length) w.chains.forEach(c => CHAINS[c].items.forEach(id => { if (ITEMS[id].tier <= maxT) pool.push(id); }));
+    const open = liveChains();
+    open.forEach(c => { if (live[c]) CHAINS[c].items.forEach(id => { if (ITEMS[id].tier <= maxT) pool.push(id); }); });
+    if (!pool.length) open.forEach(c => CHAINS[c].items.forEach(id => { if (ITEMS[id].tier <= maxT) pool.push(id); }));
     if (S.seen.scrap && Math.random() < 0.15) pool.push('scrap');
     if (S.met && !allParts() && Math.random() < 0.12) pool.push(rnd(['bolt', 'spring', 'wire', 'glass']));
     // collectors start asking for relics once you have made one
@@ -520,17 +562,47 @@ export async function startGame() {
     S.xp += n; let up = false;
     while (S.xp >= xpNeed(S.lvl)) { S.xp -= xpNeed(S.lvl); S.lvl++; up = true; onLevel(); }
     if (up) { levelBanner(); prog('level', 0, S.lvl); }
+    addWorldXp(n);
     renderHUD();
+  }
+  /** XP earned here also grows *this world*, which is what opens its content */
+  function addWorldXp(n: number) {
+    const w = S.world;
+    if (wlv(w) >= WMAX) return;
+    S.wxp[w] = wxp(w) + n;
+    while (wlv(w) < WMAX && S.wxp[w] >= wNeed(wlv(w))) {
+      S.wxp[w] -= wNeed(wlv(w));
+      S.wlv[w] = wlv(w) + 1;
+      onWorldLevel();
+    }
   }
   function onLevel() {
     S.energy = maxEnergy();
-    const b = B(), locks = W().locks; let cleared = 0;
-    for (const k in locks) if (locks[k] <= S.lvl && b[k] && b[k].b) { b[k] = null; cleared++; }
-    growProducers();
     if (S.lvl === CONFIG.unlocks.shopAtLevel) setTimeout(() => modal('pip', 'The Trading Post!',
       'A trader rolled into the meadow! Tap 🛒 to spend your coins on materials, salvage crates, and <b>permanent upgrades</b> — a bigger energy backpack, faster plants, an extra order slot. Coins are for spending!',
       'Take my coins!'), 2300);
     paintBoard();
+  }
+  /** the good bit: a world level is what actually hands you new things to merge */
+  function onWorldLevel() {
+    const lv = wlv(), b = B(), locks = W().locks;
+    for (const k in locks) if (locks[k] <= lv && b[k] && b[k].b) b[k] = null;
+    const opened = W().chains.filter(c => (CHAINS[c].unlock || 1) === lv);
+    growProducers();
+    paintBoard();
+    if (opened.length) {
+      const names = opened.map(c => CHAINS[c].name);
+      setTimeout(() => {
+        sfx.discover(); confetti();
+        modal(W().folks[0] || 'bloop', 'Something new is growing!',
+          `The ${W().name} remembers a little more of itself. <b>${names.join('</b> and <b>')}</b> ${names.length > 1 ? 'have' : 'has'} come back — look for the new patch on your board.`,
+          'Show me!');
+      }, 900);
+    } else {
+      setTimeout(() => toast('🌍 <b>' + W().name + '</b> reached world level ' + lv + '!'), 700);
+    }
+    checkStory();
+    renderHUD();
   }
   function levelBanner() {
     sfx.big(); haptic('medium'); confetti();
@@ -614,6 +686,7 @@ export async function startGame() {
     const d = ITEMS[nx];
     if (d.part) installPart(to, d.part);
     else if (d.fuel) addFuel(to);
+    else checkChainFinale(nx, to);
     lastAct = Date.now(); renderOrders(); save();
     return true;
   }
@@ -745,7 +818,6 @@ export async function startGame() {
   /* ============================================================== SCREENS */
   const SCREENS = ['shop', 'lab', 'rocket', 'book', 'map'];
   function setView(v: string) {
-    if (v === 'map' && !allParts()) { sfx.no(); toast('Locked — finish building the rocket first!'); return; }
     if (v === 'shop' && !shopOpen()) { sfx.no(); toast('The Trading Post opens at Level ' + CONFIG.unlocks.shopAtLevel + '!'); return; }
     if (v === 'lab' && !labOpen()) { sfx.no(); toast('No lab yet — build one in the 🛒 Shop first.'); return; }
     view = v;
@@ -755,7 +827,7 @@ export async function startGame() {
     document.querySelectorAll<HTMLElement>('.tab').forEach(t => t.classList.toggle('on', t.dataset.v === v));
     if (v === 'rocket') renderRocket();
     if (v === 'book') renderBook();
-    if (v === 'map') renderMap();
+    if (v === 'map') renderWorldScreen();
     if (v === 'shop') { S.shop.seenAt = S.shop.at; renderShop(); renderHUD(); }
     if (v === 'lab') renderLab();
   }
@@ -766,7 +838,7 @@ export async function startGame() {
   function rollShop() {
     const pool: string[] = [];
     const cap = clamp(1 + Math.floor(S.lvl / 2), 2, 4);
-    W().chains.forEach(c => CHAINS[c].items.forEach(id => {
+    liveChains().forEach(c => CHAINS[c].items.forEach(id => {
       const t = ITEMS[id].tier; if (t >= 2 && t <= cap) pool.push(id);
     }));
     partsLeft().forEach(k => { if (S.met) { pool.push(CHAINS[k].items[0]); pool.push(CHAINS[k].items[1]); } });
@@ -1197,8 +1269,12 @@ export async function startGame() {
       if (k === 'wild') return !!S.seen.rainbow;
       if (w === 'any') return !!S.seen.scrap;
       if (w === 'ship') return !!S.met && !allParts();
-      return w === S.world;
+      if (k === 'bloom') return !!S.seen.bloomspark;
+      return w === S.world && (CHAINS[k].unlock || 1) <= wlv();
     });
+    // the locked ones stay visible as silhouettes: knowing what is coming is
+    // half the pull of a collection game
+    const soon = lockedChains().map(k => ({ k, at: CHAINS[k].unlock }));
     const elsewhere = Object.keys(CHAINS).filter(k => {
       const w = CHAINS[k].world;
       return w !== 'any' && w !== 'ship' && w !== S.world && WORLDS[w] && CHAINS[k].items.some(id => S.seen[id]);
@@ -1223,6 +1299,10 @@ export async function startGame() {
           ? 'Relics are not merged from producers — they are invented in the 🔬 Lab.'
           : 'Drag 2 identical items together to make the next one.'}</div></div>`;
     }).join('') +
+      (soon.length ? `<div class="card"><div class="cardTitle">🔒 Still sleeping here</div>
+        <div class="soonRow">${soon.map(x => `<div class="soonChain"><div class="soonArt">${CHAINS[x.k].items.map(() => '<i></i>').join('')}</div>
+          <div class="soonName">${CHAINS[x.k].name}</div><div class="soonAt">World level ${x.at}</div></div>`).join('')}</div>
+        <div class="noteLine">Keep playing in ${W().name} and these come back on their own.</div></div>` : '') +
       `<div class="card"><div class="cardTitle">🏭 Producers</div>${Object.keys(PRODS).filter(k => B().some(c => c && c.p === k) || (k === 'wreck' && S.met)).map(k => {
         const p = PRODS[k];
         return `<div class="mission"><div class="mBox" style="background:#fff;box-shadow:none">${ART.producer(p.art)}</div>
@@ -1233,33 +1313,14 @@ export async function startGame() {
       `<div class="card"><div class="cardTitle">☄️ Meteors</div><div style="font-size:11.5px;font-weight:600;color:#7a6244">Every now and then a meteor crashes on your board and leaves rare <b>Star Scrap</b>. Keep a few tiles free so it has room to land!</div></div>`;
   }
   /** every world in the content, in order, plus a teaser for what comes next */
-  const WORLD_ORDER = ['earth', 'luna', 'cindra'];
+  const WORLD_ORDER = ['earth', 'luna', 'cindra', 'nerith', 'vela'];
   const WORLD_BLURB: Record<string, string> = {
-    earth: 'Home planet · wood, rocks & berries',
-    luna: 'Luna · moon rocks & glow plants',
-    cindra: 'Cindra · magma and ash gardens',
+    earth: 'Home world · wood, rocks & berries',
+    luna: 'Luna · moon rocks & glow gardens',
+    cindra: 'Cindra · magma, ash and forges',
+    nerith: 'Nerith · a drowned world of reefs',
+    vela: 'Vela · no ground, only light',
   };
-  function renderMap() {
-    const host = $('#mapBody');
-    const fuelOk = S.fuel >= CONFIG.rocket.fuelToLaunch;
-    const cards = WORLD_ORDER.map((k, i) => {
-      const w = WORLDS[k], here = k === S.world;
-      // worlds open in order, so there is always exactly one next destination
-      const reached = k === 'earth' || S.unlocked[k] || S.unlocked[WORLD_ORDER[i - 1]] || WORLD_ORDER[i - 1] === S.world;
-      const can = !here && reached && allParts() && fuelOk;
-      return `<div class="worldCard${here ? ' here' : ''}">${ART.planet(w.planet)}
-        <div style="flex:1"><div class="wName">${w.name}</div><div class="wSub">${WORLD_BLURB[k] || w.subtitle}</div></div>
-        ${here ? '<div class="wSub" style="font-weight:700;color:#4fa332">You are here</div>'
-          : !reached ? '<div class="wSub">🔒 Fly the one before it first</div>'
-            : `<button class="goBtn" data-go="${k}" ${can ? '' : 'disabled'}>${can ? 'LAUNCH 🚀' : 'Need ⛽' + CONFIG.rocket.fuelToLaunch}</button>`}</div>`;
-    }).join('');
-    host.innerHTML = cards +
-      `<div class="worldCard"><div style="width:56px;text-align:center;font-size:30px">🌌</div>
-        <div style="flex:1"><div class="wName">Deeper space</div><div class="wSub">More worlds are out there…</div></div>
-        <div class="wSub">🔒</div></div>
-       <div class="card"><div class="cardTitle">⛽ Fuel</div><div style="font-size:11.5px;font-weight:600;color:#7a6244">Each trip costs <b>${CONFIG.rocket.fuelToLaunch} Rocket Fuel</b>. Fuel Ore only falls in <b>meteors</b> — dig the crater, then merge the ore up. You have <b>${S.fuel}</b>.</div></div>`;
-    host.querySelectorAll('[data-go]').forEach((b: any) => b.onclick = () => travelTo(b.dataset.go));
-  }
 
 
   /* ============================================================ STORAGE BAG
@@ -1310,7 +1371,7 @@ export async function startGame() {
      Three one-shot helpers, bought with coins. They exist to rescue a clogged
      board and to give coins a use that is felt immediately. */
   const boostN = (id: string) => (S.boost && S.boost[id]) || 0;
-  function giveBoost(id: string, n = 1) { S.boost[id] = boostN(id) + n; }
+  function giveBoost(id: string, n = 1) { S.boost[id] = boostN(id) + n; renderTools(); }
   function useBoost(id: string) {
     if (boostN(id) <= 0) { sfx.no(); toast('None left — buy more in the 🛒 Shop.'); return; }
     const before = S.coins;
@@ -1440,7 +1501,7 @@ export async function startGame() {
     const live: Record<string, boolean> = {};
     B().forEach(c => { if (c && c.p) PRODS[c.p].drops.forEach((d: string) => { live[ITEMS[d].chain] = true; }); });
     const pool: string[] = [];
-    const gather = (filter: boolean) => w.chains.forEach(c => {
+    const gather = (filter: boolean) => liveChains().forEach(c => {
       if (filter && !live[c]) return;
       CHAINS[c].items.forEach(id => { const t = ITEMS[id].tier; if (t >= 2 && t <= maxT) pool.push(id); });
     });
@@ -1555,13 +1616,14 @@ export async function startGame() {
   /* ============================================================ WORLD FLAVOUR
      Each world costs a different amount of energy to work and has one event of
      its own, so landing somewhere new changes how you play, not just the palette. */
-  const tapCost = (p: any) => Math.max(1, W().tapCost || p.cost || 1);
+  /* The Lantern constellation makes every world's taps a little kinder. */
+  const tapCost = (p: any) => Math.max(1, (W().tapCost || p.cost || 1) - (starPerk('lantern') ? 1 : 0));
 
   /** producers that appear as you level, listed per world in worlds.json */
   function growProducers() {
     const b = B(), grown: string[] = [];
     (W().grow || []).forEach(g => {
-      if (S.lvl < g.atLevel) return;
+      if (wlv() < g.atLevel) return;
       if (b.some(c => c && c.p === g.producer)) return;
       const i = firstFree(g.cells);
       if (i >= 0) { b[i] = mkProd(g.producer); grown.push(PRODS[g.producer].name); }
@@ -1731,6 +1793,8 @@ export async function startGame() {
     setTimeout(() => {
       if (!S.boards[w]) S.boards[w] = freshBoard(w);
       S.world = w; S.unlocked[w] = 1; sel = null;
+      if (!S.wlv[w]) { S.wlv[w] = 1; S.wxp[w] = 0; }
+      applyBloomSkin();
       // the shelf, the ship and the contract board all belong to a world
       S.orders = []; S.orderCap = undefined; S.ordersAt = 0; fillOrders(true);
       S.shop.stock = null; S.shop.at = 0;
@@ -1738,20 +1802,517 @@ export async function startGame() {
       S.perkAt = 0;
       growProducers();
       prog('travel', 1);
-      board.setTheme(w as any);
+      board.setTheme(w);
       audio.playMusic(worldMusic(w));
       paintBoard(); renderHUD(); renderOrders(); setView('board');
       if (w === 'cindra') prog('cindra', 1);
+      if (w === 'nerith') prog('nerith', 1);
+      if (w === 'vela') prog('vela', 1);
       setTimeout(() => {
         cut.classList.remove('show');
         const face = WORLDS[w].folks[0] || 'bloop';
-        const chains = WORLDS[w].chains.map(c => CHAINS[c].name).join(' and ');
-        modal(face, 'Welcome to ' + WORLDS[w].name + '!',
-          `Whoa — new world, new stuff! <b>${chains}</b> grow here, and the locals pay <b>very</b> well. Your rocket stays with you: gather ${CONFIG.rocket.fuelToLaunch} more fuel any time you want to fly on.`,
-          'Explore!');
+        const chains = liveChains(w).map(c => CHAINS[c].name).join(' and ');
+        const asleep = WORLDS[w].chains.length - liveChains(w).length;
+        if (!checkStory()) modal(face, WORLDS[w].name,
+          `${WORLDS[w].intro}<br><br><b>${chains}</b> ${asleep ? `are awake here — ${asleep} more are still sleeping and come back as you play.` : 'grow here.'}`,
+          'Begin');
       }, 900);
       save();
     }, 2100);
+  }
+
+  /* ============================================================ THE STORY
+     Merge Rocket has a spine: the Bloom — the living network that linked every
+     world — collapsed, and your rocket is the last Seed Vault. Beats fire off
+     world levels and one-off flags, and each one is a single modal. */
+  function checkStory(flag?: string) {
+    const beat = STORY.find(b => {
+      if (S.story[b.id]) return false;
+      const at = b.at || {};
+      if (at.flag) return at.flag === flag;
+      if (at.world && at.world !== S.world) return false;
+      return !at.lvl || wlv() >= at.lvl;
+    });
+    if (!beat) return false;
+    S.story[beat.id] = 1; save();
+    setTimeout(() => modal(beat.who, beat.title, beat.text, 'Go on…'), 600);
+    return true;
+  }
+
+  /* ============================================================= THE HEART
+     Every world has a dormant Heart. Feed it Bloom Essence and the world wakes
+     in stages — this is the long goal behind all the merging, and the reason
+     finishing a chain matters beyond the coins. */
+  const BLOOM = () => CHAINS.bloom.items as string[];
+  /** what an essence item is worth to a Heart: 1, 2, 4, 8 up the chain */
+  function bloomValue(id: string) {
+    const i = BLOOM().indexOf(id);
+    return i < 0 ? 0 : Math.pow(2, i);
+  }
+  const fed = (w?: string) => (S.fed && S.fed[w || S.world]) || 0;
+  const stage = (w?: string) => (S.stage && S.stage[w || S.world]) || 0;
+  const bloomGoal = (w?: string) => {
+    const st = WORLDS[w || S.world].bloom, i = stage(w);
+    return i >= st.length ? st[st.length - 1].need : st[i].need;
+  };
+  const worldAwake = (w?: string) => stage(w) >= WORLDS[w || S.world].bloom.length;
+
+  /** completing a chain for the first time is what produces Bloom Essence */
+  function checkChainFinale(id: string, at: number) {
+    const d = ITEMS[id], ch = CHAINS[d.chain];
+    if (!ch || ch.world === 'ship' || ch.world === 'any') return;
+    if (ch.items[ch.items.length - 1] !== id) return;
+    if (S.firsts[d.chain]) return;
+    S.firsts[d.chain] = 1;
+    prog('chain', 1);
+    tally('chain');
+    setTimeout(() => {
+      const spot = giveItem('bloomspark', at);
+      if (spot >= 0) sparkle(spot, 20, '#9ef5d8');
+      sfx.discover();
+      toast('🌱 <b>' + ch.name + '</b> complete! The Vault remembers — a <b>Bloom Spark</b> for the Heart.');
+    }, 700);
+  }
+
+  /** hand every essence tile on the board to the Heart */
+  function feedHeart() {
+    const b = B(), taken: number[] = [];
+    let value = 0;
+    for (let i = 0; i < N; i++) {
+      const c = b[i]; if (!c || !c.id) continue;
+      const v = bloomValue(c.id);
+      if (v) { value += v; taken.push(i); }
+    }
+    if (!value) { sfx.no(); toast('No Bloom Essence on the board — finish a chain to earn a Spark.'); return; }
+    taken.forEach(i => { board.consume(i, b[i].id); b[i] = null; });
+    S.fed[S.world] = fed() + value * (starPerk('vault') ? 2 : 1);
+    sfx.build(); haptic('medium'); confetti();
+    paintBoard();
+    toast('🌱 The ' + W().heart + ' takes <b>' + value + '</b> Bloom.');
+    tally('bloom', value);
+    let woke = false;
+    while (stage() < W().bloom.length && fed() >= W().bloom[stage()].need) {
+      S.stage[S.world] = stage() + 1;
+      woke = true;
+      wakeStage(W().bloom[stage() - 1]);
+    }
+    if (!woke) renderWorldScreen();
+    save();
+  }
+  function wakeStage(st: any) {
+    const r = CONFIG.bloom.reward;
+    prog('bloom', 1);
+    prog('allbloom', 0, WORLD_ORDER.filter(w => worldAwake(w)).length);
+    S.coins += r.coins; S.energy = Math.min(maxEnergy(), S.energy + r.energy);
+    applyBloomSkin();
+    sfx.big(); confetti();
+    setTimeout(() => {
+      modal(W().folks[0] || 'bloop', st.title,
+        st.text + `<div class="rewardLine">+${r.coins} 🪙 · +${r.energy} ⚡</div>`, 'Beautiful');
+    }, 500);
+    if (WORLD_ORDER.every(w => worldAwake(w))) checkStory('allHearts');
+    renderHUD(); renderWorldScreen();
+  }
+  /** the board and the backdrop visibly come back to life, stage by stage */
+  function applyBloomSkin() {
+    const app = $('#app'); if (!app) return;
+    app.classList.remove('bloom1', 'bloom2', 'bloom3');
+    const st = stage();
+    if (st) app.classList.add('bloom' + Math.min(st, 3));
+  }
+
+  /* ============================================================= SIDE GAMES
+     Four small games, each a different verb: press your luck (Dig), timing
+     (Brew), a gamble with information (Market) and a permanent-progress puzzle
+     (Constellations). They share one overlay and one cooldown table. */
+  const miniCfg = (k: string) => CONFIG.mini[k];
+  const miniLeft = (k: string) => Math.max(0, ((S.mini && S.mini[k]) || 0) - Date.now());
+  const setCooldown = (k: string) => { S.mini[k] = Date.now() + miniCfg(k).cooldownMs; };
+  let miniState: any = null;
+
+  function openMini(title: string, sub: string) {
+    $('#miniTitle').innerHTML = title;
+    $('#miniSub').innerHTML = sub;
+    $('#miniBody').innerHTML = '';
+    $('#miniFoot').innerHTML = '';
+    $('#mini').classList.add('open');
+  }
+  function closeMini() {
+    $('#mini').classList.remove('open');
+    if (miniState && miniState.raf) cancelAnimationFrame(miniState.raf);
+    if (miniState && miniState.timer) clearInterval(miniState.timer);
+    miniState = null;
+    renderWorldScreen(); renderHUD(); save();
+  }
+  /** everything a side game can hand out lands on the board the same way */
+  function payout(list: { id?: string; coins?: number; energy?: number }[]) {
+    let coins = 0, energy = 0;
+    const items: string[] = [];
+    list.forEach(r => {
+      if (r.coins) coins += r.coins;
+      if (r.energy) energy += r.energy;
+      if (r.id) items.push(r.id);
+    });
+    if (coins) { S.coins += coins; bumpChip('#chipCoins'); sfx.coin(); }
+    if (energy) { S.energy = Math.min(maxEnergy(), S.energy + energy); bumpChip('#chipEnergy'); }
+    let placed = 0;
+    items.forEach(id => { if (giveItem(id) >= 0) placed++; });
+    paintBoard(); renderHUD(); save();
+    const missed = items.length - placed;
+    return { coins, energy, placed, missed };
+  }
+  function payoutLine(p: { coins: number; energy: number; placed: number; missed: number }) {
+    const bits = [];
+    if (p.coins) bits.push('+' + p.coins + ' 🪙');
+    if (p.energy) bits.push('+' + p.energy + ' ⚡');
+    if (p.placed) bits.push(p.placed + ' item' + (p.placed > 1 ? 's' : '') + ' on the board');
+    if (p.missed) bits.push('<span style="color:#d4643a">' + p.missed + ' lost — board was full</span>');
+    return bits.join(' · ') || 'nothing this time';
+  }
+  /** a believable low-tier prize from the chains that actually grow here */
+  function miniItem(maxTier = 3, minTier = 1) {
+    const pool: string[] = [];
+    liveChains().forEach(c => CHAINS[c].items.forEach(id => {
+      const t = ITEMS[id].tier; if (t >= minTier && t <= maxTier) pool.push(id);
+    }));
+    return pool.length ? rnd(pool) : 'pebble';
+  }
+  function canPlay(k: string) {
+    const c = miniCfg(k);
+    if (miniLeft(k) > 0) { sfx.no(); toast('That one needs a rest — ' + mmss(miniLeft(k)) + ' to go.'); return false; }
+    if (S.energy < c.cost) { sfx.no(); toast('Needs ' + c.cost + ' ⚡.'); return false; }
+    prog('mini', 1); tally('mini');
+    return true;
+  }
+  const mmss = (ms: number) => {
+    const t = Math.ceil(ms / 1000);
+    return t >= 60 ? Math.floor(t / 60) + 'm ' + (t % 60) + 's' : t + 's';
+  };
+
+  /* --------------------------------------------------------- 1. Crater Dig
+     Press-your-luck: six digs, and one of the tiles is a cave-in. Stop early
+     and keep the pile, or go one more and risk it. */
+  function playDig() {
+    if (!canPlay('dig')) return;
+    const c = miniCfg('dig');
+    S.energy -= c.cost; bumpChip('#chipEnergy'); setCooldown('dig'); renderHUD();
+    const n = c.grid || 20, digs = c.digs || 6;
+    const cells: any[] = [];
+    for (let i = 0; i < n; i++) {
+      const r = Math.random();
+      cells.push(r < 0.12 ? { kind: 'cavein' }
+        : r < 0.2 ? { kind: 'coins', coins: 60 + Math.floor(Math.random() * 140) }
+          : r < 0.26 ? { kind: 'item', id: 'scrap' }
+            : r < 0.29 ? { kind: 'item', id: 'bloomspark' }
+              : r < 0.34 ? { kind: 'item', id: 'fuelore' }
+                : { kind: 'item', id: miniItem(3) });
+    }
+    miniState = { cells, left: digs, bank: [] as any[], done: false };
+    openMini('⛏️ Crater Dig', 'Six digs. Every tile pays — except the cave-ins. Cash out whenever you like.');
+    drawDig();
+  }
+  function drawDig() {
+    const st = miniState;
+    $('#miniBody').innerHTML = `<div class="digGrid">${st.cells.map((c: any, i: number) =>
+      `<button class="digCell${c.open ? ' open' : ''}${c.open && c.kind === 'cavein' ? ' bad' : ''}" data-d="${i}"${c.open || st.done ? ' disabled' : ''}>`
+      + (c.open ? (c.kind === 'cavein' ? '💥' : c.kind === 'coins' ? '🪙' : ART.item(c.id)) : '') + '</button>').join('')}</div>`;
+    const total = st.bank.reduce((a: number, r: any) => a + (r.coins || 0), 0);
+    $('#miniFoot').innerHTML = st.done
+      ? `<button class="big" id="digOut">Collect</button>`
+      : `<div class="miniStat">Digs left <b>${st.left}</b> · in the pile <b>${st.bank.length}</b>${total ? ' + ' + total + ' 🪙' : ''}</div>
+         <button class="big alt" id="digOut"${st.bank.length ? '' : ' disabled'}>Cash out</button>`;
+    $('#miniBody').querySelectorAll('[data-d]').forEach((b: any) => b.onclick = () => dig(+b.dataset.d));
+    const out = $('#digOut'); if (out) out.onclick = () => endDig();
+  }
+  function dig(i: number) {
+    const st = miniState, c = st.cells[i];
+    if (!st || st.done || c.open || !st.left) return;
+    c.open = 1; st.left--;
+    if (c.kind === 'cavein') {
+      st.done = true; st.bank = []; sfx.boom(); shake(); haptic('heavy');
+      drawDig();
+      $('#miniSub').innerHTML = '<b style="color:#d4643a">Cave-in!</b> The pile is buried. Next time, quit while you are ahead.';
+      return;
+    }
+    st.bank.push(c.kind === 'coins' ? { coins: c.coins } : { id: c.id });
+    sfx.dig();
+    if (!st.left) { st.done = true; $('#miniSub').innerHTML = 'Out of digs — and out in one piece. Take it all.'; }
+    drawDig();
+  }
+  function endDig() {
+    const st = miniState; if (!st) return;
+    const p = payout(st.bank);
+    closeMini();
+    if (st.bank.length) { confetti(); toast('⛏️ ' + payoutLine(p)); }
+  }
+
+  /* ------------------------------------------------------- 2. Fuel Brewing
+     Pure timing. A needle sweeps the bar; stop it in the green. Five rounds,
+     and the green shrinks each time — the only way to a full brew is nerve. */
+  function playBrew() {
+    if (!canPlay('brew')) return;
+    const c = miniCfg('brew');
+    S.energy -= c.cost; bumpChip('#chipEnergy'); setCooldown('brew'); renderHUD();
+    miniState = { round: 0, hits: 0, rounds: c.rounds || 5, pos: 0, dir: 1, raf: 0, live: true };
+    openMini('⚗️ Fuel Brewing', 'Stop the needle in the green band. Five stirs — the band gets meaner.');
+    $('#miniBody').innerHTML = `<div class="brewWrap">
+        <div class="brewBar"><i class="brewZone" id="brewZone"></i><i class="brewPin" id="brewPin"></i></div>
+        <div class="brewPips" id="brewPips"></div></div>`;
+    $('#miniFoot').innerHTML = '<button class="big" id="brewTap">Stir!</button>';
+    $('#brewTap').onclick = brewTap;
+    nextBrew();
+  }
+  function nextBrew() {
+    const st = miniState; if (!st) return;
+    const tight = st.round;                             // 0..4, band shrinks with it
+    st.w = Math.max(9, 30 - tight * 5);                 // % width of the green zone
+    st.zone = 12 + Math.random() * (76 - st.w);
+    st.speed = 0.85 + tight * 0.28;
+    st.pos = 0; st.dir = 1;
+    const z = $('#brewZone');
+    z.style.left = st.zone + '%'; z.style.width = st.w + '%';
+    $('#brewPips').innerHTML = Array.from({ length: st.rounds }, (_, i) =>
+      `<i class="${i < st.round ? (st.marks && st.marks[i] ? 'hit' : 'miss') : ''}"></i>`).join('');
+    const step = () => {
+      if (!miniState || !st.live) return;
+      st.pos += st.dir * st.speed;
+      if (st.pos >= 100) { st.pos = 100; st.dir = -1; }
+      if (st.pos <= 0) { st.pos = 0; st.dir = 1; }
+      const pin = $('#brewPin'); if (pin) pin.style.left = st.pos + '%';
+      st.raf = requestAnimationFrame(step);
+    };
+    cancelAnimationFrame(st.raf);
+    st.raf = requestAnimationFrame(step);
+  }
+  function brewTap() {
+    const st = miniState; if (!st || !st.live) return;
+    const hit = st.pos >= st.zone && st.pos <= st.zone + st.w;
+    st.marks = st.marks || [];
+    st.marks[st.round] = hit ? 1 : 0;
+    if (hit) { st.hits++; sfx.popHi(); haptic('light'); } else { sfx.no(); }
+    st.round++;
+    if (st.round >= st.rounds) { st.live = false; cancelAnimationFrame(st.raf); endBrew(); return; }
+    nextBrew();
+  }
+  function endBrew() {
+    const st = miniState, hits = st.hits;
+    const rewards: any[] = [];
+    for (let i = 0; i < hits; i++) rewards.push({ id: 'fuelore' });
+    if (hits >= 3) rewards.push({ coins: 150 });
+    if (hits === st.rounds) rewards.push({ id: 'fuelcan' });
+    $('#brewPips').innerHTML = Array.from({ length: st.rounds }, (_, i) =>
+      `<i class="${st.marks[i] ? 'hit' : 'miss'}"></i>`).join('');
+    const p = payout(rewards);
+    $('#miniSub').innerHTML = hits === st.rounds
+      ? '<b>Perfect brew!</b> Bloop is quietly impressed, which is rare.'
+      : hits ? `<b>${hits} of ${st.rounds}.</b> Serviceable.` : 'Not a drop. Steadier hands next time.';
+    $('#miniFoot').innerHTML = `<div class="miniStat">${payoutLine(p)}</div><button class="big" id="brewDone">Done</button>`;
+    $('#brewDone').onclick = closeMini;
+    if (hits === st.rounds) { confetti(); sfx.big(); }
+  }
+
+  /* ------------------------------------------------------- 3. Alien Market
+     A gamble about information: three crates, you may look inside two, and you
+     keep exactly one. Then Zib offers to sweeten it — for coins. */
+  function playMarket() {
+    if (!canPlay('market')) return;
+    setCooldown('market');
+    const crates = [0, 1, 2].map(() => Math.random() < 0.22
+      ? { coins: 120 + Math.floor(Math.random() * 260) }
+      : { id: miniItem(4, 2) });
+    miniState = { crates, flips: 0, kept: -1 };
+    openMini('🛸 Alien Market', 'Zib lets you peek inside <b>two</b> crates. You walk away with <b>one</b>.');
+    drawMarket();
+  }
+  function drawMarket() {
+    const st = miniState;
+    $('#miniBody').innerHTML = `<div class="mktRow">${st.crates.map((c: any, i: number) =>
+      `<button class="mktCrate${c.open ? ' open' : ''}${st.kept === i ? ' kept' : ''}" data-m="${i}">`
+      + (c.open ? `<div class="mktArt">${c.coins ? '🪙' : ART.item(c.id)}</div>
+           <div class="mktLab">${c.coins ? c.coins + ' coins' : ITEMS[c.id].name}</div>`
+        : '<div class="mktArt">📦</div><div class="mktLab">?</div>') + '</button>').join('')}</div>`;
+    $('#miniFoot').innerHTML = st.kept >= 0 ? '' :
+      `<div class="miniStat">${st.flips < 2 ? `Peeks left: <b>${2 - st.flips}</b>` : 'Now choose one to keep.'}</div>`;
+    $('#miniBody').querySelectorAll('[data-m]').forEach((b: any) => b.onclick = () => market(+b.dataset.m));
+  }
+  function market(i: number) {
+    const st = miniState; if (!st || st.kept >= 0) return;
+    const c = st.crates[i];
+    if (!c.open && st.flips < 2) { c.open = 1; st.flips++; sfx.pop(); drawMarket(); return; }
+    // picking is always allowed — an unopened crate is the whole gamble
+    st.kept = i; c.open = 1;
+    sfx.bag(); drawMarket();
+    const up = c.id && nextOf(c.id);
+    const price = c.coins ? 0 : 60 + ITEMS[c.id].sell * 3;
+    $('#miniFoot').innerHTML = (up
+      ? `<div class="miniStat">Zib will trade it up to a <b>${ITEMS[up].name}</b> for <b>${price} 🪙</b>.</div>
+         <button class="big alt" id="mktUp"${S.coins >= price ? '' : ' disabled'}>Haggle (${price} 🪙)</button>` : '')
+      + '<button class="big" id="mktTake">Take it</button>';
+    const u = $('#mktUp');
+    if (u) u.onclick = () => {
+      if (S.coins < price) return;
+      spend(price); st.crates[st.kept] = { id: up, open: 1 };
+      sfx.discover(); drawMarket();
+      $('#miniFoot').innerHTML = '<button class="big" id="mktTake">Take it</button>';
+      $('#mktTake').onclick = takeMarket;
+      renderHUD();
+    };
+    $('#mktTake').onclick = takeMarket;
+  }
+  function takeMarket() {
+    const st = miniState; if (!st || st.kept < 0) return;
+    const p = payout([st.crates[st.kept]]);
+    closeMini();
+    toast('🛸 ' + payoutLine(p));
+  }
+
+  /* ----------------------------------------------------- 4. Constellations
+     The permanent one, and the sink the Star Cores needed. Trace a shape by
+     tapping its stars in order; light it and keep the bonus for good. */
+  const CONSTS = [
+    { id: 'plough', name: 'The Plough', cost: 2, perk: '+10% coins from every sale and contract', pts: [[18, 70], [34, 58], [50, 52], [66, 46], [74, 30], [58, 22], [44, 30]] },
+    { id: 'lantern', name: 'The Lantern', cost: 3, perk: 'Tap producers cost 1 less energy (never below 1)', pts: [[30, 26], [70, 26], [78, 52], [50, 76], [22, 52]] },
+    { id: 'seed', name: 'The Seed', cost: 4, perk: 'Timer producers refill 20% faster', pts: [[50, 18], [72, 36], [64, 66], [36, 66], [28, 36], [50, 44]] },
+    { id: 'vault', name: 'The Vault', cost: 6, perk: 'Every Bloom Essence you feed a Heart counts double', pts: [[24, 34], [50, 22], [76, 34], [76, 64], [50, 78], [24, 64], [50, 50]] },
+  ];
+  const lit = (id: string) => !!(S.stars && S.stars[id]);
+  const starPerk = (id: string) => lit(id);
+  function playStars(id: string) {
+    const co = CONSTS.find(c => c.id === id); if (!co) return;
+    if (lit(id)) { toast('⭐ ' + co.name + ' is already lit — ' + co.perk + '.'); return; }
+    const have = countItem('starcore');
+    if (have < co.cost) { sfx.no(); toast('Needs <b>' + co.cost + ' Star Cores</b> on the board — you have ' + have + '.'); return; }
+    miniState = { co, next: 0 };
+    openMini('✨ ' + co.name, 'Tap the stars <b>in order</b>, starting from the brightest. One slip and the line breaks.');
+    drawStars();
+  }
+  function drawStars() {
+    const st = miniState, co = st.co;
+    const line = co.pts.slice(0, st.next).map((p: number[], i: number) =>
+      i ? `L${p[0]} ${p[1]}` : `M${p[0]} ${p[1]}`).join(' ');
+    const ghost = co.pts.map((p: number[], i: number) => (i ? 'L' : 'M') + p[0] + ' ' + p[1]).join(' ');
+    // a star, not a dot — and the order is printed, because a guessing game with
+    // a full reset on every wrong tap is a chore, while tracing one is a pleasure
+    const star = (x: number, y: number, r: number) => {
+      let d = '';
+      for (let k = 0; k < 10; k++) {
+        const ang = (Math.PI / 5) * k - Math.PI / 2, rr = k % 2 ? r * 0.42 : r;
+        d += (k ? 'L' : 'M') + (x + Math.cos(ang) * rr).toFixed(2) + ' ' + (y + Math.sin(ang) * rr).toFixed(2);
+      }
+      return d + 'Z';
+    };
+    const dust = st.dust || (st.dust = Array.from({ length: 34 }, () => [
+      +(Math.random() * 100).toFixed(1), +(Math.random() * 100).toFixed(1), +(0.4 + Math.random() * 0.8).toFixed(2)]));
+    $('#miniBody').innerHTML = `<div class="skyBox">
+      <svg viewBox="0 0 100 100" class="sky">
+        ${dust.map((d: number[]) => `<circle cx="${d[0]}" cy="${d[1]}" r="${d[2]}" fill="#fff" opacity=".35"/>`).join('')}
+        <path d="${ghost}" fill="none" stroke="#7d84b8" stroke-width="0.8" stroke-dasharray="2 2.6" opacity=".7"/>
+        <path d="${line}" fill="none" stroke="#ffe9a8" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+        ${co.pts.map((p: number[], i: number) => {
+      const on = i < st.next, nextUp = i === st.next;
+      return `<g class="skyPt"><path class="skyStar${on ? ' on' : ''}${nextUp ? ' first' : ''}"
+            d="${star(p[0], p[1], nextUp ? 5.2 : 4.2)}"/>
+          <text class="skyNum${on ? ' on' : ''}" x="${p[0]}" y="${p[1] - 6.4}" text-anchor="middle">${i + 1}</text>
+          <circle cx="${p[0]}" cy="${p[1]}" r="7" fill="transparent" data-s="${i}"/></g>`;
+    }).join('')}
+      </svg></div>`;
+    $('#miniFoot').innerHTML = `<div class="miniStat">${st.next}/${co.pts.length} · costs <b>${co.cost} ⭐ Star Cores</b><br>${co.perk}</div>`;
+    $('#miniBody').querySelectorAll('[data-s]').forEach((c: any) => c.onclick = () => starTap(+c.dataset.s));
+  }
+  function starTap(i: number) {
+    const st = miniState; if (!st) return;
+    if (i !== st.next) { sfx.no(); shake(); st.next = 0; drawStars(); return; }
+    st.next++; sfx.popHi();
+    if (st.next >= st.co.pts.length) {
+      // pay only on success — a failed trace costs nothing but pride
+      for (let k = 0; k < st.co.cost; k++) {
+        const at = B().findIndex((c: any) => c && c.id === 'starcore');
+        if (at >= 0) { board.consume(at, 'starcore'); B()[at] = null; }
+      }
+      S.stars[st.co.id] = 1;
+      prog('star', 1);
+      paintBoard(); sfx.big(); confetti(); haptic('medium');
+      drawStars();
+      $('#miniSub').innerHTML = '<b>Lit.</b> ' + st.co.perk + ' — for good.';
+      $('#miniFoot').innerHTML = '<button class="big" id="skyDone">Wonderful</button>';
+      $('#skyDone').onclick = closeMini;
+      save();
+      return;
+    }
+    drawStars();
+  }
+
+  /* ============================================================ WORLD SCREEN
+     One hub for "where am I": the Heart and its bloom, the side games, the
+     constellations and the galaxy map. */
+  function renderWorldScreen() {
+    const host = $('#mapBody'); if (!host) return;
+    const w = W(), st = stage(), goal = bloomGoal(), have = fed();
+    const done = worldAwake();
+    const pct = done ? 100 : clamp(have / goal * 100, 0, 100);
+    const onBoard = B().reduce((a: number, c: any) => a + (c && c.id ? bloomValue(c.id) : 0), 0);
+    const next = done ? null : w.bloom[st];
+
+    const heart = `<div class="card heartCard">
+      <div class="cardTitle">🌱 ${w.heart}<span class="stagePill">${done ? 'Awake' : 'Stage ' + (st + 1) + '/' + w.bloom.length}</span></div>
+      <div class="heartRow">
+        <div class="heartOrb${done ? ' awake' : ''}">${ART.item(done ? 'bloomheart' : 'bloomcore')}</div>
+        <div style="flex:1">
+          <div class="noteLine">${done ? 'This world is awake. Its Heart beats on its own now.' : next.title + ' — ' + have + '/' + goal + ' Bloom'}</div>
+          <div class="catBar"><i style="width:${pct}%"></i></div>
+          <div class="noteLine">Finish a merge chain anywhere in ${w.name} and the Vault pays you a <b>Bloom Spark</b>. Merge Sparks up — bigger essence is worth more.</div>
+        </div></div>
+      <button class="big" id="btnFeed"${onBoard ? '' : ' disabled'}>${onBoard ? 'Feed the Heart (' + onBoard + ' Bloom)' : 'No essence on the board'}</button>
+      <div class="stageList">${w.bloom.map((b: any, i: number) =>
+      `<div class="stageRow${i < st ? ' done' : ''}"><b>${i < st ? '✓' : b.need}</b><span>${b.title}</span></div>`).join('')}</div>
+    </div>`;
+
+    const games = `<div class="card"><div class="cardTitle">🎲 Things to do</div>
+      <div class="gameGrid">
+        ${gameBtn('dig', '⛏️', 'Crater Dig', 'Six digs, one cave-in')}
+        ${gameBtn('brew', '⚗️', 'Fuel Brewing', 'Stop the needle in the green')}
+        ${gameBtn('market', '🛸', 'Alien Market', 'Peek in two, keep one')}
+      </div></div>`;
+
+    const sky = `<div class="card"><div class="cardTitle">✨ Constellations<span style="font-size:10px;color:#9a7a4e;font-weight:600;margin-left:auto">${CONSTS.filter(c => lit(c.id)).length}/${CONSTS.length} lit</span></div>
+      <div class="noteLine">This is what Star Cores are for. Trace one and its blessing is permanent, across every world.</div>
+      ${CONSTS.map(c => `<button class="constRow${lit(c.id) ? ' lit' : ''}" data-c="${c.id}">
+        <span class="constIc">${lit(c.id) ? '✦' : '✧'}</span>
+        <span class="constTxt"><b>${c.name}</b><i>${c.perk}</i></span>
+        <span class="constCost">${lit(c.id) ? 'Lit' : c.cost + ' ⭐'}</span></button>`).join('')}</div>`;
+
+    const fuelOk = S.fuel >= CONFIG.rocket.fuelToLaunch;
+    const cards = WORLD_ORDER.map((k, i) => {
+      const ww = WORLDS[k], here = k === S.world;
+      const reached = k === 'earth' || S.unlocked[k] || S.unlocked[WORLD_ORDER[i - 1]] || WORLD_ORDER[i - 1] === S.world;
+      const can = !here && reached && allParts() && fuelOk;
+      const tag = worldAwake(k) ? '<div class="wSub" style="color:#3f9a4f;font-weight:700">🌱 Awake</div>' : '';
+      return `<div class="worldCard${here ? ' here' : ''}">${ART.planet(ww.planet)}
+        <div style="flex:1"><div class="wName">${ww.name}</div><div class="wSub">${WORLD_BLURB[k] || ww.subtitle}</div>
+          ${S.unlocked[k] || here ? `<div class="wSub">World level ${wlv(k)} · ${liveChains(k).length}/${ww.chains.length} chains awake</div>` : ''}</div>
+        ${here ? '<div class="wSub" style="font-weight:700;color:#4fa332">You are here</div>' + tag
+          : !reached ? '<div class="wSub">🔒 Fly the one before it first</div>'
+            : `<button class="goBtn" data-go="${k}" ${can ? '' : 'disabled'}>${can ? 'LAUNCH 🚀' : 'Need ⛽' + CONFIG.rocket.fuelToLaunch}</button>${tag}`}</div>`;
+    }).join('');
+
+    host.innerHTML = heart + games + sky
+      + `<div class="card"><div class="cardTitle">🗺️ Galaxy</div></div>` + cards
+      + `<div class="card"><div class="cardTitle">⛽ Fuel</div><div class="noteLine">Each trip costs <b>${CONFIG.rocket.fuelToLaunch} Rocket Fuel</b>. Fuel Ore falls in <b>meteors</b> and comes out of the <b>brewing</b> game — merge it up. You have <b>${S.fuel}</b>.</div></div>`;
+
+    host.querySelectorAll('[data-go]').forEach((b: any) => b.onclick = () => travelTo(b.dataset.go));
+    host.querySelectorAll('[data-c]').forEach((b: any) => b.onclick = () => playStars(b.dataset.c));
+    host.querySelectorAll('[data-game]').forEach((b: any) => b.onclick = () => {
+      const k = b.dataset.game;
+      if (k === 'dig') playDig(); else if (k === 'brew') playBrew(); else playMarket();
+    });
+    const f = $('#btnFeed'); if (f) f.onclick = feedHeart;
+  }
+  function gameBtn(k: string, icon: string, name: string, blurb: string) {
+    const c = miniCfg(k), left = miniLeft(k);
+    const ok = !left && S.energy >= c.cost;
+    return `<button class="gameBtn${ok ? '' : ' cool'}" data-game="${k}"${left ? ' disabled' : ''}>
+      <span class="gIc">${icon}</span><b>${name}</b><i>${blurb}</i>
+      <span class="gCost">${left ? mmss(left) : c.cost ? c.cost + ' ⚡' : 'Free'}</span></button>`;
   }
 
   /* ================================================================ MODALS */
@@ -1863,6 +2424,18 @@ export async function startGame() {
       if (problems.length) console.error('[content]\n' + problems.join('\n'));
     }
     S = load();
+    // a save that names a world it never built a board for would land on nothing
+    if (!WORLDS[S.world]) S.world = CONFIG.start.world;
+    if (!S.boards[S.world]) S.boards[S.world] = freshBoard(S.world);
+    if (!S.wlv[S.world]) { S.wlv[S.world] = 1; S.wxp[S.world] = 0; }
+    // never greet someone with a contract for a thing that does not grow here
+    if (Array.isArray(S.orders)) {
+      const live = liveChains();
+      S.orders = S.orders.filter((o: any) => o.needs.every((n: any) => {
+        const ch = ITEMS[n.id] && ITEMS[n.id].chain;
+        return ch && (CHAINS[ch].world === 'any' || CHAINS[ch].world === 'ship' || live.indexOf(ch) >= 0);
+      }));
+    }
     if (!S.orders || !S.orders.length) { S.orders = []; fillOrders(); }
     if (!S.tasks.length) fillTasks();
     growProducers();
@@ -1911,11 +2484,15 @@ export async function startGame() {
     $('#orders').addEventListener('scroll', orderArrows, { passive: true });
     renderTools();
     if (bagHas()) renderBag();
+    $('#miniClose').onclick = closeMini;
+    applyBloomSkin();
     setTimeout(checkDaily, 1200);
+    setTimeout(() => checkStory(), 1800);
 
     if (import.meta.env.DEV) (window as any).__game = {
       state: () => S, cells: () => B(),
       prods: PRODS, items: ITEMS, chains: CHAINS, config: CONFIG, recipes: RECIPES, shop: SHOP,
+      hud: () => renderHUD(), world: () => renderWorldScreen(), wlv, bloomValue,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
     };
     setInterval(tick, 500);

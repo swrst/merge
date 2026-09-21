@@ -2,44 +2,778 @@
   "tree": {
     "name": "Big Tree",
     "art": "tree",
-    "mode": "tap",
-    "cost": 1,
     "drops": [
       "twig",
       "twig",
       "twig",
       "branch"
-    ]
+    ],
+    "mode": "tap",
+    "cost": 1
   },
   "rocks": {
     "name": "Rock Pile",
     "art": "rocks",
-    "mode": "tap",
-    "cost": 1,
     "drops": [
       "pebble",
       "pebble",
       "pebble",
       "rock"
-    ]
+    ],
+    "mode": "tap",
+    "cost": 1
   },
   "bush": {
     "name": "Berry Bush",
     "art": "bush",
-    "mode": "timer",
-    "every": 15000,
-    "cap": 3,
     "drops": [
       "berry",
       "berry",
       "berries"
-    ]
+    ],
+    "mode": "timer",
+    "every": 15000,
+    "cap": 3
+  },
+  "well": {
+    "name": "Old Well",
+    "art": "well",
+    "drops": [
+      "dew",
+      "dew",
+      "dew",
+      "puddle"
+    ],
+    "mode": "timer",
+    "every": 14000,
+    "cap": 4
+  },
+  "meadow": {
+    "name": "Hay Meadow",
+    "art": "meadow",
+    "drops": [
+      "grass",
+      "grass",
+      "grass",
+      "hay"
+    ],
+    "mode": "tap",
+    "cost": 1
+  },
+  "flowerbed": {
+    "name": "Flower Bed",
+    "art": "flowerbed",
+    "drops": [
+      "bulbseed",
+      "bulbseed",
+      "sprig"
+    ],
+    "spec": {
+      "shape": "flower",
+      "mat": "rose",
+      "ground": "moss"
+    },
+    "mode": "timer",
+    "every": 16000,
+    "cap": 3
+  },
+  "hive": {
+    "name": "Wild Hive",
+    "art": "hive",
+    "drops": [
+      "nectar",
+      "nectar",
+      "honeydrop"
+    ],
+    "spec": {
+      "shape": "honey",
+      "mat": "honey",
+      "ground": "bark"
+    },
+    "mode": "timer",
+    "every": 18000,
+    "cap": 3
+  },
+  "mosslog": {
+    "name": "Mossy Log",
+    "art": "mosslog",
+    "drops": [
+      "caplet",
+      "caplet",
+      "toadstool"
+    ],
+    "spec": {
+      "shape": "log",
+      "mat": "moss",
+      "ground": "moss"
+    },
+    "mode": "timer",
+    "every": 17000,
+    "cap": 3
+  },
+  "cottonpatch": {
+    "name": "Cotton Patch",
+    "art": "cottonpatch",
+    "drops": [
+      "fibre",
+      "fibre",
+      "fibre",
+      "thread"
+    ],
+    "spec": {
+      "shape": "cloud",
+      "mat": "cream",
+      "ground": "moss"
+    },
+    "mode": "tap",
+    "cost": 1
+  },
+  "nestbox": {
+    "name": "Nest Box",
+    "art": "nestbox",
+    "drops": [
+      "down",
+      "down",
+      "plume"
+    ],
+    "spec": {
+      "shape": "house",
+      "mat": "bark",
+      "ground": "moss"
+    },
+    "mode": "timer",
+    "every": 20000,
+    "cap": 2
+  },
+  "claypit": {
+    "name": "Clay Pit",
+    "art": "claypit",
+    "drops": [
+      "mud",
+      "mud",
+      "mud",
+      "claylump"
+    ],
+    "spec": {
+      "shape": "pot",
+      "mat": "clay",
+      "ground": "clay"
+    },
+    "mode": "tap",
+    "cost": 1
+  },
+  "grubmound": {
+    "name": "Grub Mound",
+    "art": "grubmound",
+    "drops": [
+      "grub",
+      "grub",
+      "chrysalis"
+    ],
+    "spec": {
+      "shape": "cocoon",
+      "mat": "cream",
+      "ground": "moss"
+    },
+    "mode": "timer",
+    "every": 22000,
+    "cap": 2
+  },
+  "geyser": {
+    "name": "Moon Geyser",
+    "art": "geyser",
+    "drops": [
+      "mrock",
+      "mrock",
+      "mrock",
+      "mcrystal"
+    ],
+    "mode": "tap",
+    "cost": 1
+  },
+  "glowpod": {
+    "name": "Glow Pod",
+    "art": "glowpod",
+    "drops": [
+      "spore",
+      "spore",
+      "bulb"
+    ],
+    "mode": "timer",
+    "every": 15000,
+    "cap": 3
+  },
+  "dustflat": {
+    "name": "Dust Flat",
+    "art": "dustflat",
+    "drops": [
+      "dustpinch",
+      "dustpinch",
+      "dustpinch",
+      "dustclump"
+    ],
+    "spec": {
+      "shape": "boulder",
+      "mat": "sand",
+      "ground": "slate"
+    },
+    "mode": "tap",
+    "cost": 1
+  },
+  "icevein": {
+    "name": "Ice Vein",
+    "art": "icevein",
+    "drops": [
+      "frostchip",
+      "frostchip",
+      "iceshard"
+    ],
+    "spec": {
+      "shape": "ice",
+      "mat": "ice",
+      "ground": "slate"
+    },
+    "mode": "timer",
+    "every": 16000,
+    "cap": 3
+  },
+  "crystalspire": {
+    "name": "Crystal Spire",
+    "art": "crystalspire",
+    "drops": [
+      "shardlet",
+      "shardlet",
+      "shardlet",
+      "prismlet"
+    ],
+    "spec": {
+      "shape": "crystal",
+      "mat": "crystal",
+      "ground": "slate"
+    },
+    "mode": "tap",
+    "cost": 2
+  },
+  "wickpod": {
+    "name": "Wick Pod",
+    "art": "wickpod",
+    "drops": [
+      "wick",
+      "wick",
+      "lampglass"
+    ],
+    "spec": {
+      "shape": "lantern",
+      "mat": "gold",
+      "ground": "slate"
+    },
+    "mode": "timer",
+    "every": 18000,
+    "cap": 3
+  },
+  "silverseam": {
+    "name": "Silver Seam",
+    "art": "silverseam",
+    "drops": [
+      "silverore",
+      "silverore",
+      "silverore",
+      "silvernug"
+    ],
+    "spec": {
+      "shape": "ore",
+      "mat": "silver",
+      "ground": "slate"
+    },
+    "mode": "tap",
+    "cost": 2
+  },
+  "comettrail": {
+    "name": "Comet Trail",
+    "art": "comettrail",
+    "drops": [
+      "cometdust",
+      "cometdust",
+      "cometice"
+    ],
+    "spec": {
+      "shape": "comet",
+      "mat": "star",
+      "ground": "slate"
+    },
+    "mode": "timer",
+    "every": 24000,
+    "cap": 2
+  },
+  "mothpod": {
+    "name": "Moth Pod",
+    "art": "mothpod",
+    "drops": [
+      "mothegg",
+      "mothegg",
+      "mothcocoon"
+    ],
+    "spec": {
+      "shape": "butterfly",
+      "mat": "mint",
+      "ground": "slate"
+    },
+    "mode": "timer",
+    "every": 22000,
+    "cap": 2
+  },
+  "lavavent": {
+    "name": "Lava Vent",
+    "art": "lavavent",
+    "drops": [
+      "ember",
+      "ember",
+      "ember",
+      "cinder"
+    ],
+    "mode": "tap",
+    "cost": 1
+  },
+  "shroomlog": {
+    "name": "Shroom Log",
+    "art": "shroomlog",
+    "drops": [
+      "sporecap",
+      "sporecap",
+      "ashroom"
+    ],
+    "mode": "timer",
+    "every": 16000,
+    "cap": 3
+  },
+  "ironseam": {
+    "name": "Iron Seam",
+    "art": "ironseam",
+    "drops": [
+      "ironore",
+      "ironore",
+      "ironore",
+      "ironnug"
+    ],
+    "spec": {
+      "shape": "ore",
+      "mat": "iron",
+      "ground": "obsidian"
+    },
+    "mode": "tap",
+    "cost": 2
+  },
+  "obsidslab": {
+    "name": "Obsidian Slab",
+    "art": "obsidslab",
+    "drops": [
+      "obchip",
+      "obchip",
+      "obchip",
+      "obshard"
+    ],
+    "spec": {
+      "shape": "boulder",
+      "mat": "obsidian",
+      "ground": "obsidian"
+    },
+    "mode": "tap",
+    "cost": 2
+  },
+  "sandpit": {
+    "name": "Hot Sand Pit",
+    "art": "sandpit",
+    "drops": [
+      "sandpinch",
+      "sandpinch",
+      "moltenglass"
+    ],
+    "spec": {
+      "shape": "pebble",
+      "mat": "sand",
+      "ground": "obsidian"
+    },
+    "mode": "timer",
+    "every": 15000,
+    "cap": 4
+  },
+  "coalpit": {
+    "name": "Coal Pit",
+    "art": "coalpit",
+    "drops": [
+      "coallump",
+      "coallump",
+      "coallump",
+      "coalbrick"
+    ],
+    "spec": {
+      "shape": "ore",
+      "mat": "coal",
+      "ground": "obsidian"
+    },
+    "mode": "tap",
+    "cost": 1
+  },
+  "spicevine": {
+    "name": "Spice Vine",
+    "art": "spicevine",
+    "drops": [
+      "pepperpod",
+      "pepperpod",
+      "spicepouch"
+    ],
+    "spec": {
+      "shape": "berrycluster",
+      "mat": "rust",
+      "ground": "obsidian"
+    },
+    "mode": "timer",
+    "every": 18000,
+    "cap": 3
+  },
+  "copperseam": {
+    "name": "Copper Seam",
+    "art": "copperseam",
+    "drops": [
+      "copperore",
+      "copperore",
+      "copperore",
+      "coppernug"
+    ],
+    "spec": {
+      "shape": "ore",
+      "mat": "copper",
+      "ground": "obsidian"
+    },
+    "mode": "tap",
+    "cost": 2
+  },
+  "ashnest": {
+    "name": "Ash Nest",
+    "art": "ashnest",
+    "drops": [
+      "ashfeather",
+      "ashfeather",
+      "emberegg"
+    ],
+    "spec": {
+      "shape": "feather",
+      "mat": "smoke",
+      "ground": "obsidian"
+    },
+    "mode": "timer",
+    "every": 24000,
+    "cap": 2
+  },
+  "shellbed": {
+    "name": "Shell Bed",
+    "art": "shellbed",
+    "drops": [
+      "shellchip",
+      "shellchip",
+      "shellchip",
+      "seashell"
+    ],
+    "spec": {
+      "shape": "shell",
+      "mat": "shell",
+      "ground": "sand"
+    },
+    "mode": "tap",
+    "cost": 1
+  },
+  "kelpbed": {
+    "name": "Kelp Bed",
+    "art": "kelpbed",
+    "drops": [
+      "kelpleaf",
+      "kelpleaf",
+      "kelpfrond"
+    ],
+    "spec": {
+      "shape": "fern",
+      "mat": "kelp",
+      "ground": "sand"
+    },
+    "mode": "timer",
+    "every": 15000,
+    "cap": 3
+  },
+  "oysterbed": {
+    "name": "Oyster Bed",
+    "art": "oysterbed",
+    "drops": [
+      "grit",
+      "grit",
+      "seedpearl"
+    ],
+    "spec": {
+      "shape": "shell",
+      "mat": "pearl",
+      "ground": "sand"
+    },
+    "mode": "timer",
+    "every": 18000,
+    "cap": 3
+  },
+  "coralhead": {
+    "name": "Coral Head",
+    "art": "coralhead",
+    "drops": [
+      "coralbud",
+      "coralbud",
+      "coralbud",
+      "coralsprig"
+    ],
+    "spec": {
+      "shape": "coral",
+      "mat": "coral",
+      "ground": "sand"
+    },
+    "mode": "tap",
+    "cost": 1
+  },
+  "fishtrap": {
+    "name": "Fish Trap",
+    "art": "fishtrap",
+    "drops": [
+      "minnow",
+      "minnow",
+      "silverfish"
+    ],
+    "spec": {
+      "shape": "basket",
+      "mat": "rope",
+      "ground": "sand"
+    },
+    "mode": "timer",
+    "every": 17000,
+    "cap": 3
+  },
+  "tidepool": {
+    "name": "Tide Pool",
+    "art": "tidepool",
+    "drops": [
+      "bubblet",
+      "bubblet",
+      "bubblet",
+      "seafoam"
+    ],
+    "spec": {
+      "shape": "bubble",
+      "mat": "water",
+      "ground": "sand"
+    },
+    "mode": "tap",
+    "cost": 1
+  },
+  "saltpan": {
+    "name": "Salt Pan",
+    "art": "saltpan",
+    "drops": [
+      "saltgrain",
+      "saltgrain",
+      "saltcake"
+    ],
+    "spec": {
+      "shape": "ingot",
+      "mat": "cream",
+      "ground": "sand"
+    },
+    "mode": "timer",
+    "every": 16000,
+    "cap": 4
+  },
+  "wrecksite": {
+    "name": "Wreck Site",
+    "art": "wrecksite",
+    "drops": [
+      "driftbit",
+      "driftbit",
+      "driftbit",
+      "driftwood"
+    ],
+    "spec": {
+      "shape": "boat",
+      "mat": "bone",
+      "ground": "sand"
+    },
+    "mode": "tap",
+    "cost": 2
+  },
+  "lightvent": {
+    "name": "Light Vent",
+    "art": "lightvent",
+    "drops": [
+      "glowplankton",
+      "glowplankton",
+      "jellybell"
+    ],
+    "spec": {
+      "shape": "pearl",
+      "mat": "spore",
+      "ground": "deepsea"
+    },
+    "mode": "timer",
+    "every": 22000,
+    "cap": 2
+  },
+  "cloudbank": {
+    "name": "Cloud Bank",
+    "art": "cloudbank",
+    "drops": [
+      "wisp",
+      "wisp",
+      "wisp",
+      "cloudlet"
+    ],
+    "spec": {
+      "shape": "cloud",
+      "mat": "cloud",
+      "ground": "cloud"
+    },
+    "mode": "tap",
+    "cost": 1
+  },
+  "auroraloom": {
+    "name": "Aurora Loom",
+    "art": "auroraloom",
+    "drops": [
+      "aurorathread",
+      "aurorathread",
+      "aurorasilk"
+    ],
+    "spec": {
+      "shape": "spiral",
+      "mat": "aurora",
+      "ground": "dusk"
+    },
+    "mode": "timer",
+    "every": 16000,
+    "cap": 3
+  },
+  "starcradle": {
+    "name": "Star Cradle",
+    "art": "starcradle",
+    "drops": [
+      "stardust",
+      "stardust",
+      "stardust",
+      "starspark"
+    ],
+    "spec": {
+      "shape": "star",
+      "mat": "star",
+      "ground": "dusk"
+    },
+    "mode": "tap",
+    "cost": 2
+  },
+  "windvanep": {
+    "name": "Wind Vane",
+    "art": "windvanep",
+    "drops": [
+      "breeze",
+      "breeze",
+      "gust"
+    ],
+    "spec": {
+      "shape": "compass",
+      "mat": "silver",
+      "ground": "cloud"
+    },
+    "mode": "timer",
+    "every": 15000,
+    "cap": 4
+  },
+  "skytree": {
+    "name": "Sky Orchard",
+    "art": "skytree",
+    "drops": [
+      "skyseed",
+      "skyseed",
+      "skybud"
+    ],
+    "spec": {
+      "shape": "fruit",
+      "mat": "topaz",
+      "ground": "cloud"
+    },
+    "mode": "timer",
+    "every": 18000,
+    "cap": 3
+  },
+  "chimepost": {
+    "name": "Chime Post",
+    "art": "chimepost",
+    "drops": [
+      "chimebit",
+      "chimebit",
+      "chimebit",
+      "chimebell"
+    ],
+    "spec": {
+      "shape": "bell",
+      "mat": "silver",
+      "ground": "cloud"
+    },
+    "mode": "tap",
+    "cost": 1
+  },
+  "prismstand": {
+    "name": "Prism Stand",
+    "art": "prismstand",
+    "drops": [
+      "lightmote",
+      "lightmote",
+      "lightbeam"
+    ],
+    "spec": {
+      "shape": "prism",
+      "mat": "glass",
+      "ground": "cloud"
+    },
+    "mode": "timer",
+    "every": 20000,
+    "cap": 3
+  },
+  "skynestp": {
+    "name": "Sky Nest",
+    "art": "skynestp",
+    "drops": [
+      "skydown",
+      "skydown",
+      "skyfeather"
+    ],
+    "spec": {
+      "shape": "egg",
+      "mat": "cream",
+      "ground": "cloud"
+    },
+    "mode": "timer",
+    "every": 22000,
+    "cap": 2
+  },
+  "silkloom": {
+    "name": "Silk Loom",
+    "art": "silkloom",
+    "drops": [
+      "silkscrap",
+      "silkscrap",
+      "silkbag"
+    ],
+    "spec": {
+      "shape": "cloth",
+      "mat": "rose",
+      "ground": "cloud"
+    },
+    "mode": "timer",
+    "every": 20000,
+    "cap": 3
   },
   "wreck": {
     "name": "Rocket Wreck",
     "art": "scrapwreck",
-    "mode": "tap",
-    "cost": 1,
     "drops": [
       "bolt",
       "spring",
@@ -53,38 +787,13 @@
       "coil",
       "circuit",
       "tankglass"
-    ]
-  },
-  "geyser": {
-    "name": "Moon Geyser",
-    "art": "geyser",
+    ],
     "mode": "tap",
-    "cost": 1,
-    "drops": [
-      "mrock",
-      "mrock",
-      "mrock",
-      "mcrystal"
-    ]
-  },
-  "glowpod": {
-    "name": "Glow Pod",
-    "art": "glowpod",
-    "mode": "timer",
-    "every": 15000,
-    "cap": 3,
-    "drops": [
-      "spore",
-      "spore",
-      "bulb"
-    ]
+    "cost": 1
   },
   "crater": {
     "name": "Meteor Crater",
     "art": "crater",
-    "mode": "tap",
-    "cost": 1,
-    "uses": 7,
     "drops": [
       "fuelore",
       "scrap",
@@ -93,55 +802,9 @@
       "scrap",
       "fuelore",
       "starcore"
-    ]
-  },
-  "lavavent": {
-    "name": "Lava Vent",
-    "art": "lavavent",
+    ],
     "mode": "tap",
     "cost": 1,
-    "drops": [
-      "ember",
-      "ember",
-      "ember",
-      "cinder"
-    ]
-  },
-  "shroomlog": {
-    "name": "Shroom Log",
-    "art": "shroomlog",
-    "mode": "timer",
-    "every": 16000,
-    "cap": 3,
-    "drops": [
-      "sporecap",
-      "sporecap",
-      "shroom"
-    ]
-  },
-  "well": {
-    "name": "Old Well",
-    "art": "well",
-    "mode": "timer",
-    "every": 14000,
-    "cap": 4,
-    "drops": [
-      "dew",
-      "dew",
-      "dew",
-      "puddle"
-    ]
-  },
-  "meadow": {
-    "name": "Grass Patch",
-    "art": "meadow",
-    "mode": "tap",
-    "cost": 1,
-    "drops": [
-      "grass",
-      "grass",
-      "grass",
-      "hay"
-    ]
+    "uses": 7
   }
 }

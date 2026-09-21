@@ -6,8 +6,8 @@
       "gem",
       "scrap"
     ],
-    "coins": 250,
-    "note": "Something precious, and something that fell out of the sky."
+    "coins": 700,
+    "note": "Something hard, and something that fell from the sky."
   },
   {
     "id": "r2",
@@ -16,28 +16,8 @@
       "mstar",
       "scrap"
     ],
-    "coins": 250,
-    "note": "Moon crystal works just as well as an Earth gem."
-  },
-  {
-    "id": "r3",
-    "result": "relic2",
-    "inputs": [
-      "cake",
-      "relic1"
-    ],
-    "coins": 600,
-    "note": "Bake the gem into something sweet. Yes, really."
-  },
-  {
-    "id": "r4",
-    "result": "relic3",
-    "inputs": [
-      "glowtree",
-      "relic2"
-    ],
-    "coins": 1400,
-    "note": "Grow the amber inside a glow tree until it hardens."
+    "coins": 700,
+    "note": "A star found on the ground, and a star that never landed."
   },
   {
     "id": "r5",
@@ -46,18 +26,28 @@
       "cart",
       "statue"
     ],
-    "coins": 300,
-    "note": "Haul the heaviest thing you own in the sturdiest thing you own."
+    "coins": 900,
+    "note": "Wood that carries, stone that stays."
   },
   {
-    "id": "r6",
-    "result": "relic3",
+    "id": "r9",
+    "result": "relic1",
     "inputs": [
-      "moonorb",
-      "relic2"
+      "royaljelly",
+      "honeycomb"
     ],
-    "coins": 1400,
-    "note": "A whole little moon, squeezed around the amber."
+    "coins": 1000,
+    "note": "The sweetest thing a hive makes, twice over."
+  },
+  {
+    "id": "r3",
+    "result": "relic2",
+    "inputs": [
+      "cake",
+      "relic1"
+    ],
+    "coins": 1600,
+    "note": "Warmth, sugar, and a relic to hold the heat."
   },
   {
     "id": "r7",
@@ -66,8 +56,48 @@
       "suncore",
       "relic1"
     ],
-    "coins": 600,
-    "note": "Drop the gem into something that is still a little bit on fire."
+    "coins": 1800,
+    "note": "Fire with a relic's patience wrapped round it."
+  },
+  {
+    "id": "r10",
+    "result": "relic2",
+    "inputs": [
+      "greatforge",
+      "obthrone"
+    ],
+    "coins": 2000,
+    "note": "Where the fire is kept, and where it is ruled from."
+  },
+  {
+    "id": "r11",
+    "result": "relic2",
+    "inputs": [
+      "icecastle",
+      "lighthouse"
+    ],
+    "coins": 2000,
+    "note": "Cold that holds its shape, and a light that refuses to go out."
+  },
+  {
+    "id": "r4",
+    "result": "relic3",
+    "inputs": [
+      "glowtree",
+      "relic2"
+    ],
+    "coins": 3200,
+    "note": "A tree that glows in the dark, and a relic that remembers why."
+  },
+  {
+    "id": "r6",
+    "result": "relic3",
+    "inputs": [
+      "moonorb",
+      "relic2"
+    ],
+    "coins": 3200,
+    "note": "A small moon, and the thing that taught it to turn."
   },
   {
     "id": "r8",
@@ -76,7 +106,67 @@
       "shroomtree",
       "relic2"
     ],
-    "coins": 1400,
-    "note": "Let the amber ripen inside something that grows in ash."
+    "coins": 3200,
+    "note": "Ash that learned to grow, and a relic to prove it."
+  },
+  {
+    "id": "r12",
+    "result": "relic3",
+    "inputs": [
+      "coralpalace",
+      "pearlcrown"
+    ],
+    "coins": 3600,
+    "note": "A palace under the water, and the crown that was lost in it."
+  },
+  {
+    "id": "r13",
+    "result": "relic4",
+    "inputs": [
+      "mossheart",
+      "relic3"
+    ],
+    "coins": 5200,
+    "note": "The meadow's own heart, cut with a relic's edge."
+  },
+  {
+    "id": "r14",
+    "result": "relic4",
+    "inputs": [
+      "tidalheart",
+      "kelpheart"
+    ],
+    "coins": 5600,
+    "note": "Two hearts of one drowned world, beating together."
+  },
+  {
+    "id": "r15",
+    "result": "relic4",
+    "inputs": [
+      "craterheart",
+      "hollowheart"
+    ],
+    "coins": 5600,
+    "note": "The cold heart and the burning one \u2014 hold them still."
+  },
+  {
+    "id": "r16",
+    "result": "relic5",
+    "inputs": [
+      "reachheart",
+      "relic4"
+    ],
+    "coins": 9000,
+    "note": "The last heart, and a sigil old enough to open it."
+  },
+  {
+    "id": "r17",
+    "result": "relic5",
+    "inputs": [
+      "sunsprism",
+      "auroracrown"
+    ],
+    "coins": 9500,
+    "note": "All the light there is, gathered and then worn."
   }
 ]

@@ -15,11 +15,15 @@ export type Hooks = {
   canDrag: (i: number) => boolean;
 };
 
-const THEME = {
+const THEME: Record<string, { tile: number; tileLo: number; lock: number; lockLo: number; txt: number }> = {
   earth: { tile: 0xfff6e0, tileLo: 0xf3e1bd, lock: 0xd0a469, lockLo: 0xb98f52, txt: 0x9a7a4e },
   luna: { tile: 0xf3f0ff, tileLo: 0xdcd5f2, lock: 0x9a92bd, lockLo: 0x827aa6, txt: 0x5a4f86 },
   cindra: { tile: 0xfff0e2, tileLo: 0xf2d6bd, lock: 0xa8654a, lockLo: 0x8a4a33, txt: 0x8a4a2a },
+  nerith: { tile: 0xeafaff, tileLo: 0xc9ecf5, lock: 0x5f9fb0, lockLo: 0x437f90, txt: 0x2f6e80 },
+  vela: { tile: 0xf7f0ff, tileLo: 0xe2d6f7, lock: 0x8f7fc4, lockLo: 0x7264aa, txt: 0x5b4b95 },
 };
+/** an unknown world falls back to Earth rather than throwing mid-landing */
+const themeOf = (k: string) => THEME[k] || THEME.earth;
 
 const TEX = 168;                              // texture resolution per tile art
 
@@ -51,7 +55,7 @@ class PixiBoard {
   lDrag = new Container();
   tiles: Graphics[] = [];
   slots: Slot[] = [];
-  theme: keyof typeof THEME = 'earth';
+  theme: string = 'earth';
   private tex: Record<string, Texture> = {};
   private drag: any = null;
   private ready = false;
@@ -173,7 +177,7 @@ class PixiBoard {
     return r * this.cols + c;
   }
 
-  setTheme(t: keyof typeof THEME) { this.theme = t; this.layout(); }
+  setTheme(t: string) { this.theme = THEME[t] ? t : 'earth'; this.layout(); }
 
   /** how precious the thing on this tile is: 0 none, 1 good, 2 rare, 3 legendary */
   private rarity(i: number): number {
@@ -565,7 +569,7 @@ class PixiBoard {
       gsap.fromTo(s.badge.scale, { x: 1.5, y: 1.5 }, { x: 1, y: 1, duration: 0.35, ease: 'back.out(3)' });
     }
     if (!s.timer) {
-      const t = new Text({ text: '', style: { fontFamily: 'Fredoka, sans-serif', fontSize: this.cell * 0.2, fontWeight: '700', fill: THEME[this.theme].txt } });
+      const t = new Text({ text: '', style: { fontFamily: 'Fredoka, sans-serif', fontSize: this.cell * 0.2, fontWeight: '700', fill: themeOf(this.theme).txt } });
       t.anchor.set(0.5);
       t.position.set(p.x, p.y + this.cell * 0.4);
       this.lItem.addChild(t);

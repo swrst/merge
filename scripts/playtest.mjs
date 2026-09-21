@@ -25,7 +25,9 @@ await page.goto(URL);
 await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 20000 });
 
 const S = () => page.evaluate(() => JSON.parse(JSON.stringify(window.__game.state())));
-const set = (fn) => page.evaluate(fn);
+// A test that pokes state directly has to ask for a repaint; the game itself
+// repaints off its own events.
+const set = async (fn) => { await page.evaluate(fn); await page.evaluate(() => window.__game.hud()); };
 const closeModal = async () => {
   let n = 0;
   while (await page.locator('#modal.open').count() && n++ < 4) {
@@ -50,6 +52,19 @@ const drag = async (from, to) => {
 /** click something on the board screen, shooing away any modal that got in first */
 const tapUI = async (sel) => { await closeModal(); await page.locator(sel).first().click({ force: true }); };
 const shot = (n) => page.screenshot({ path: `/tmp/shot-${n}.png` });
+/** switch tabs; story beats and level-ups can pop a modal at any moment */
+const tab = async (v) => { await closeModal(); await page.click(`[data-v="${v}"]`); await page.waitForTimeout(500); };
+/** fly somewhere and wait for the launch cutscene to finish clearing */
+const travel = async (world) => {
+  await closeModal();
+  await set(() => { window.__game.state().fuel = 3; });
+  await closeModal();
+  await tab('map');
+  await page.locator(`[data-go="${world}"]`).click();
+  await page.waitForFunction(w => window.__game.state().world === w, world, { timeout: 15000 });
+  await page.waitForFunction(() => !document.querySelector('#cut').classList.contains('show'), null, { timeout: 15000 });
+  await page.waitForTimeout(900); await closeModal(); await page.waitForTimeout(300);
+};
 
 await page.waitForTimeout(700); await closeModal();
 
@@ -76,7 +91,7 @@ must(Object.keys(s.made).length > 0, 'the catalogue records what you make');
 /* ---------------------------------------------------------------- the shop */
 head('Trading Post');
 await set(() => { const s = window.__game.state(); s.lvl = 6; s.coins = 6000; s.met = 1; });
-await page.click('[data-v="shop"]'); await page.waitForTimeout(500);
+await tab('shop');
 must(await page.locator('#sc-shop.open').count() === 1, 'shop screen opens at level 6');
 const shelf = await page.locator('#shopBody [data-buy]').count();
 must(shelf >= 1, `${shelf} supplies on the shelf`);
@@ -142,15 +157,15 @@ await set(() => {
 });
 await page.waitForTimeout(300);
 must(await page.locator('#tabLab.hide').count() === 1, 'the Lab tab is hidden before it exists');
-await page.click('[data-v="shop"]'); await page.waitForTimeout(500);
+await tab('shop');
 must(await page.locator('#btnBuildLab').count() === 1, 'a build card appears once the rocket is whole');
 await page.locator('#btnBuildLab').click(); await page.waitForTimeout(400);
 must((await S()).lab.built !== 1, 'BUILD refuses without the materials');
 must((await page.textContent('#toast')).toLowerCase().includes('star scrap'),
   'and says exactly what is missing instead of doing nothing');
 await set(() => { const b = window.__game.state().boards.earth; b[14] = { id: 'scrap' }; b[15] = { id: 'scrap' }; });
-await page.click('[data-v="board"]'); await page.waitForTimeout(250);
-await page.click('[data-v="shop"]'); await page.waitForTimeout(400);
+await tab('board');
+await tab('shop');
 before = (await S()).coins;
 await page.click('#btnBuildLab'); await page.waitForTimeout(700); await closeModal(); await page.waitForTimeout(300);
 after = await S();
@@ -167,7 +182,7 @@ await set(() => {
   b[12] = { id: 'gem' }; b[13] = { id: 'scrap' };
   s.coins = 4000;
 });
-await page.click('[data-v="lab"]'); await page.waitForTimeout(500);
+await tab('lab');
 must(await page.locator('#sc-lab.open').count() === 1, 'lab screen opens');
 await shot('lab-empty');
 const recipeCount = await page.evaluate(() => window.__game.recipes.length);
@@ -247,7 +262,7 @@ must(await page.evaluate(() => !window.__game.prods.fuelpod), 'the free Fuel Pod
 
 head('Catalogue');
 await closeModal();
-await page.click('[data-v="book"]'); await page.waitForTimeout(500);
+await tab('book');
 must((await page.locator('#bookBody .catBar').count()) === 1, 'collection bar shown');
 must((await page.textContent('#bookBody')).includes('Relics'), 'the Relics chain appears once unlocked');
 await shot('book');
@@ -263,7 +278,7 @@ await set(() => {
   window.__board.sync(b);
 });
 await closeModal();
-await page.click('[data-v="shop"]'); await page.waitForTimeout(600);
+await tab('shop');
 const shopDiag = await page.evaluate(() => ({
   open: !!document.querySelector('#sc-shop.open'),
   lvl: window.__game.state().lvl,
@@ -393,13 +408,10 @@ await closeModal();
 head('No soft-lock: a full unmergeable board is rescued');
 await set(() => {
   const s = window.__game.state(), b = s.boards.earth;
-  const ids = ['twig', 'branch', 'log', 'lumber', 'pebble', 'rock', 'geode', 'gem',
-    'berry', 'berries', 'jam', 'pie', 'scrap', 'starcore', 'bolt', 'boltpack',
-    'spring', 'coil', 'wire', 'circuit', 'glass', 'tankglass', 'fuelore', 'fuelcan',
-    'cart', 'statue', 'cake', 'ember', 'cinder', 'lavablob', 'fireopal', 'suncore',
-    'sporecap', 'shroom', 'bigshroom', 'glowcap', 'shroomtree', 'mrock', 'mcrystal',
-    'mcore', 'mstar', 'moonorb', 'spore', 'bulb', 'glowflower', 'starbloom', 'glowtree', 'relic1'];
-  for (let i = 0; i < b.length; i++) b[i] = { id: ids[i] };
+  // one of everything, so nothing on the board can merge with anything else —
+  // taken from the live catalogue rather than a hand-written list that rots
+  const ids = Object.keys(window.__game.items);
+  for (let i = 0; i < b.length; i++) b[i] = { id: ids[i % ids.length] };
   s.orders = []; s.ship = null; s.bag = []; s.up.bag = 0;
   window.__board.sync(b);
 });
@@ -416,24 +428,169 @@ await set(() => {
   const s = window.__game.state();
   s.parts = { hull: 1, engine: 1, nav: 1, tank: 1 }; s.fuel = 3;
 });
-await page.click('[data-v="map"]'); await page.waitForTimeout(500);
-await page.locator('[data-go="luna"]').click();
-await page.waitForTimeout(3600); await closeModal(); await page.waitForTimeout(400);
+await travel('luna');
 s = await S();
 must(s.world === 'luna', 'landed on Luna');
 await shot('luna');
 
 head('And on to Cindra');
-await closeModal();
-await set(() => { const st = window.__game.state(); st.fuel = 3; });
-await closeModal();
-await page.click('[data-v="map"]'); await page.waitForTimeout(600);
-await page.locator('[data-go="cindra"]').click();
-await page.waitForTimeout(3600); await closeModal(); await page.waitForTimeout(400);
+await travel('cindra');
 s = await S();
 must(s.world === 'cindra', 'landed on Cindra');
 must(s.boards.cindra.some(c => c && c.p === 'lavavent'), 'with a Lava Vent to tap');
 await shot('cindra');
+
+/* ------------------------------------------------- the v6 systems */
+head('Nerith and Vela');
+await travel('nerith');
+s = await S();
+must(s.world === 'nerith', 'landed on Nerith');
+must(s.boards.nerith.some(c => c && c.p === 'shellbed'), 'with a Shell Bed to tap');
+await travel('vela');
+s = await S();
+must(s.world === 'vela', 'and on to Vela');
+await shot('vela');
+
+head('A new world starts small and opens up');
+await closeModal();
+let live = await page.evaluate(() => {
+  const g = window.__game, w = g.state().world;
+  return { lv: g.wlv(w), open: g.chains && Object.values(g.chains).filter(c => c.world === w && c.unlock <= g.wlv(w)).length,
+    total: Object.values(g.chains).filter(c => c.world === w).length,
+    locked: g.cells().filter(c => c && c.b).length };
+});
+must(live.lv === 1, 'a fresh world is at world level 1');
+must(live.open === 2 && live.total > 6, `only ${live.open} of ${live.total} chains are awake at first`);
+must(live.locked > 8, `and ${live.locked} board cells are still overgrown`);
+// orders can only ask for things that are actually awake here
+const asked = await page.evaluate(() => {
+  const g = window.__game, out = [];
+  for (let i = 0; i < 40; i++) g.roll().needs.forEach(n => out.push(g.items[n.id].chain));
+  return [...new Set(out)];
+});
+const sleeping = await page.evaluate((cs) => {
+  const g = window.__game, w = g.state().world;
+  return cs.filter(c => g.chains[c].world === w && g.chains[c].unlock > g.wlv(w));
+}, asked);
+must(sleeping.length === 0, 'and no contract asks for something that has not woken up yet');
+
+head('World levels unlock chains');
+await set(() => {
+  const g = window.__game, s = g.state();
+  s.wlv[s.world] = 3; s.wxp[s.world] = 0;
+});
+await page.evaluate(() => {
+  // nudge the world forward the way play would
+  const g = window.__game, s = g.state();
+  s.wxp[s.world] = 9999; g.hud();
+});
+await page.waitForTimeout(200);
+live = await page.evaluate(() => {
+  const g = window.__game, w = g.state().world;
+  return Object.values(g.chains).filter(c => c.world === w && c.unlock <= g.wlv(w)).length;
+});
+must(live > 2, `at world level 3 there are ${live} chains awake`);
+
+head('Finishing a chain pays Bloom Essence');
+await closeModal();
+await set(() => {
+  const g = window.__game, s = g.state(), b = g.cells();
+  for (let i = 0; i < b.length; i++) if (b[i] && b[i].id) b[i] = null;
+  s.firsts = {}; s.fed = {}; s.stage = {};
+  const ch = g.chains.cloudc, last = ch.items[ch.items.length - 1], prev = ch.items[ch.items.length - 2];
+  b[13] = { id: prev }; b[14] = { id: prev };
+  window.__board.sync(b);
+});
+await drag(13, 14);
+await page.waitForTimeout(1400);
+s = await S();
+const spark = await page.evaluate(() => window.__game.cells().some(c => c && c.id === 'bloomspark'));
+must(s.firsts.cloudc === 1, 'the Cloud Bank chain is marked complete');
+must(spark, 'and a Bloom Spark landed on the board');
+
+head('Feeding the Heart wakes the world');
+await closeModal();
+await tab('map');
+let feedTxt = await page.textContent('#btnFeed');
+must(/Feed the Heart/.test(feedTxt), `the Heart offers to eat: "${feedTxt.trim()}"`);
+await set(() => {
+  const g = window.__game, b = g.cells();
+  let n = 0;
+  for (let i = 0; i < b.length && n < 3; i++) if (!b[i]) { b[i] = { id: 'bloomcore' }; n++; }
+  window.__board.sync(b);
+});
+await page.evaluate(() => window.__game.world());
+await page.click('#btnFeed'); await page.waitForTimeout(900);
+s = await S();
+must(s.fed.vela >= 12, `the Heart took ${s.fed.vela} Bloom`);
+must(s.stage.vela >= 1, 'and the world woke a stage');
+must(await page.locator('#modal.open').count() === 1, 'with a story beat to mark it');
+await closeModal();
+
+head('Side games');
+await set(() => { const s = window.__game.state(); s.energy = 60; s.mini = {}; });
+await tab('map');
+await page.locator('[data-game="dig"]').click(); await page.waitForTimeout(400);
+must(await page.locator('#mini.open').count() === 1, 'Crater Dig opens');
+const digCells = await page.locator('.digCell').count();
+must(digCells === 20, `with a ${digCells}-tile crater`);
+let opened = 0;
+for (const i of [0, 1, 2]) {
+  await page.locator(`[data-d="${i}"]`).click({ force: true }).catch(() => {});
+  await page.waitForTimeout(150);
+  opened = await page.locator('.digCell.open').count();
+}
+must(opened >= 1, `digging revealed ${opened} tile(s)`);
+await page.locator('#miniClose').click(); await page.waitForTimeout(300);
+
+await set(() => { const s = window.__game.state(); s.energy = 60; s.mini = {}; });
+await page.evaluate(() => window.__game.world());
+await page.locator('[data-game="brew"]').click(); await page.waitForTimeout(400);
+must(await page.locator('.brewBar').count() === 1, 'Fuel Brewing opens with a needle');
+for (let i = 0; i < 5; i++) { await page.locator('#brewTap').click({ force: true }).catch(() => {}); await page.waitForTimeout(200); }
+must(await page.locator('#brewDone').count() === 1, 'and five stirs finish the brew');
+await page.locator('#brewDone').click(); await page.waitForTimeout(300);
+
+await set(() => { const s = window.__game.state(); s.mini = {}; s.coins = 9000; });
+await page.evaluate(() => window.__game.world());
+await page.locator('[data-game="market"]').click(); await page.waitForTimeout(400);
+must(await page.locator('.mktCrate').count() === 3, 'the Alien Market lays out three crates');
+await page.locator('[data-m="0"]').click(); await page.waitForTimeout(200);
+await page.locator('[data-m="1"]').click(); await page.waitForTimeout(200);
+must(await page.locator('.mktCrate.open').count() === 2, 'two peeks, then no more');
+await page.locator('[data-m="2"]').click(); await page.waitForTimeout(300);
+must(await page.locator('#mktTake').count() === 1, 'and the third can still be taken blind');
+await page.locator('#mktTake').click(); await page.waitForTimeout(500);
+
+head('Constellations spend Star Cores');
+await closeModal();
+await set(() => {
+  const g = window.__game, s = g.state(), b = g.cells();
+  s.stars = {};
+  let n = 0;
+  for (let i = 0; i < b.length && n < 2; i++) if (!b[i]) { b[i] = { id: 'starcore' }; n++; }
+  window.__board.sync(b);
+});
+await tab('map');
+await page.locator('[data-c="plough"]').click(); await page.waitForTimeout(400);
+must(await page.locator('.skyStar').count() === 7, 'the Plough has seven stars');
+for (let i = 0; i < 7; i++) { await page.locator(`[data-s="${i}"]`).click({ force: true }); await page.waitForTimeout(120); }
+s = await S();
+must(s.stars.plough === 1, 'tracing it in order lights it');
+const cores = await page.evaluate(() => window.__game.cells().filter(c => c && c.id === 'starcore').length);
+must(cores === 0, 'and it ate the two Star Cores');
+await page.locator('#skyDone').click().catch(() => {});
+await page.waitForTimeout(300);
+
+head('Catalogue is big and every item can be drawn');
+const art = await page.evaluate(() => {
+  const g = window.__game, ART = window.__art;
+  const bad = [];
+  Object.keys(g.items).forEach(id => { const svg = ART.item(id); if (!svg || svg.length < 120) bad.push(id); });
+  return { n: Object.keys(g.items).length, chains: Object.keys(g.chains).length, bad };
+});
+must(art.n > 250, `${art.n} items across ${art.chains} chains`);
+must(art.bad.length === 0, art.bad.length ? `items with no art: ${art.bad.join(', ')}` : 'all of them have art');
 
 head('Console');
 must(errors.length === 0, errors.length ? `console errors:\n${errors.join('\n')}` : 'no console errors');

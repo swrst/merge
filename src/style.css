@@ -31,25 +31,37 @@ button{font-family:inherit;cursor:pointer;border:none}
   display:flex;flex-direction:column;transition:background .6s ease}
 .app.luna{--sky1:#2a1f52;--sky2:#5b4691}
 .app.cindra{--sky1:#3a1408;--sky2:#8a3510}
+.app.nerith{--sky1:#07405c;--sky2:#2e9fbe}
+.app.vela{--sky1:#1b1440;--sky2:#5c3f96}
 .scene{position:absolute;inset:0;pointer-events:none;overflow:hidden}
 .sun{position:absolute;top:26px;right:26px;width:74px;height:74px;border-radius:50%;
   background:radial-gradient(circle at 40% 36%,#fffbd0,#ffd450 58%,#ffb02e);box-shadow:0 0 44px rgba(255,203,61,.6)}
 .app.luna .sun{background:radial-gradient(circle at 38% 34%,#ffffff,#d9d3f2 60%,#a79fd0);box-shadow:0 0 40px rgba(220,215,255,.45)}
 .app.cindra .sun{background:radial-gradient(circle at 40% 36%,#fff2c8,#ff8a2e 55%,#d1400d);box-shadow:0 0 60px rgba(255,120,40,.7)}
+.app.nerith .sun{background:radial-gradient(circle at 40% 34%,#eafcff,#8fe6ff 58%,#3aa8cc);box-shadow:0 0 50px rgba(150,230,255,.55)}
+.app.vela .sun{background:radial-gradient(circle at 38% 34%,#fff6ff,#c6a8ff 55%,#8f6fe0);box-shadow:0 0 64px rgba(190,150,255,.6)}
 .cloud{position:absolute;background:#fff;border-radius:999px;opacity:.85;filter:blur(.3px);animation:drift linear infinite}
 .cloud:before,.cloud:after{content:"";position:absolute;background:#fff;border-radius:50%}
 .app.luna .cloud{opacity:.12}
 .app.cindra .cloud{opacity:.2;background:#6b3018;filter:blur(2px)}
 .app.cindra .cloud:before,.app.cindra .cloud:after{background:#6b3018}
+.app.nerith .cloud{opacity:.28;background:#bff0ff;filter:blur(1.5px)}
+.app.nerith .cloud:before,.app.nerith .cloud:after{background:#bff0ff}
+.app.vela .cloud{opacity:.5;background:#d9c6ff;filter:blur(1px)}
+.app.vela .cloud:before,.app.vela .cloud:after{background:#d9c6ff}
 @keyframes drift{from{transform:translateX(-150px)}to{transform:translateX(560px)}}
 .hills{position:absolute;left:-10%;right:-10%;bottom:0;height:190px;
   background:radial-gradient(60px 42px at 18% 100%,#79c95d 98%,transparent),radial-gradient(90px 60px at 52% 100%,#6dbd52 98%,transparent),radial-gradient(70px 46px at 86% 100%,#79c95d 98%,transparent),linear-gradient(180deg,transparent 52%,#6cbe52 52%)}
 .app.luna .hills{background:radial-gradient(80px 50px at 22% 100%,#5f5687 98%,transparent),radial-gradient(100px 62px at 66% 100%,#544b7a 98%,transparent),linear-gradient(180deg,transparent 56%,#584f82 56%)}
 .app.cindra .hills{background:radial-gradient(90px 56px at 20% 100%,#7a2c10 98%,transparent),radial-gradient(110px 68px at 64% 100%,#5f2109 98%,transparent),linear-gradient(180deg,transparent 54%,#6b2610 54%)}
+.app.nerith .hills{background:radial-gradient(100px 54px at 24% 100%,#0e7f9c 98%,transparent),radial-gradient(120px 66px at 70% 100%,#0b6a85 98%,transparent),linear-gradient(180deg,transparent 52%,#0d7590 52%)}
+.app.vela .hills{background:radial-gradient(130px 60px at 26% 100%,#7f6ac8 98%,transparent),radial-gradient(150px 72px at 72% 100%,#6a56b0 98%,transparent),linear-gradient(180deg,transparent 58%,#7460ba 58%);opacity:.75}
 .stars{position:absolute;inset:0;opacity:0;transition:opacity .6s ease;
   background-image:radial-gradient(circle,#fff 0 1.3px,transparent 2px),radial-gradient(circle,#fff 0 1px,transparent 1.8px);
   background-size:120px 120px,190px 190px;background-position:0 0,60px 90px}
 .app.luna .stars{opacity:.75}
+.app.vela .stars{opacity:.9}
+.app.nerith .stars{opacity:.25}
 .ember{position:absolute;bottom:-12px;border-radius:50%;background:radial-gradient(circle,#fff0b0,#ff8a2e 60%,rgba(255,110,30,0));
   opacity:0;animation:emberUp linear infinite;filter:blur(.3px)}
 .app.cindra .ember{opacity:1}
@@ -137,9 +149,13 @@ button{font-family:inherit;cursor:pointer;border:none}
   display:flex;flex-direction:column;gap:6px;transition:background .6s ease,border-color .6s ease}
 .app.luna .stage{--board:#b3abd0;--board-d:#8d84b0;border-color:#6f6795;box-shadow:inset 0 3px 0 rgba(255,255,255,.28),inset 0 -6px 12px rgba(40,30,70,.3),0 6px 0 #564f78,0 12px 24px rgba(0,0,0,.35)}
 .app.cindra .stage{--board:#d9a276;--board-d:#b2764a;border-color:#8a4a2a;box-shadow:inset 0 3px 0 rgba(255,235,210,.3),inset 0 -6px 12px rgba(90,35,10,.3),0 6px 0 #6b3618,0 12px 24px rgba(0,0,0,.35)}
+.app.nerith .stage{--board:#7fc6d8;--board-d:#4f9bb0;border-color:#357f95;box-shadow:inset 0 3px 0 rgba(255,255,255,.32),inset 0 -6px 12px rgba(10,60,80,.3),0 6px 0 #276a7d,0 12px 24px rgba(0,0,0,.35)}
+.app.vela .stage{--board:#b8a4e2;--board-d:#8e78c4;border-color:#6d59a8;box-shadow:inset 0 3px 0 rgba(255,255,255,.3),inset 0 -6px 12px rgba(45,30,90,.3),0 6px 0 #54438a,0 12px 24px rgba(0,0,0,.35)}
 .stageTop{display:flex;align-items:center;justify-content:space-between;font-size:11.5px;font-weight:700;color:#8a5f26}
 .app.luna .stageTop{color:#41356e}
 .app.cindra .stageTop{color:#6b2a10}
+.app.nerith .stageTop{color:#12596b}
+.app.vela .stageTop{color:#453279}
 .worldTag{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,.55);border-radius:999px;padding:2px 10px}
 .worldTag .planetArt{width:18px;height:18px}
 .hintTag{background:rgba(255,255,255,.5);border-radius:999px;padding:2px 9px;font-size:10.5px;font-weight:600}
@@ -151,6 +167,10 @@ button{font-family:inherit;cursor:pointer;border:none}
 .cell .art{width:94%;height:94%;filter:drop-shadow(0 2px 2px rgba(80,50,20,.22));pointer-events:none;-webkit-user-drag:none}
 .cell.blocked{background:linear-gradient(180deg,#d9b378,#bb9254);box-shadow:inset 0 2px 0 rgba(255,255,255,.3),inset 0 -3px 6px rgba(100,60,15,.3)}
 .app.luna .cell.blocked{background:linear-gradient(180deg,#9a92bd,#7d75a0)}
+.app.nerith .cell{background:linear-gradient(180deg,#eafaff,#cdeef7);box-shadow:inset 0 2px 0 rgba(255,255,255,.9),inset 0 -3px 4px rgba(30,95,120,.2)}
+.app.nerith .cell.blocked{background:linear-gradient(180deg,#5f9fb0,#47818f)}
+.app.vela .cell{background:linear-gradient(180deg,#f7f0ff,#e4d8f8);box-shadow:inset 0 2px 0 rgba(255,255,255,.9),inset 0 -3px 4px rgba(75,55,140,.2)}
+.app.vela .cell.blocked{background:linear-gradient(180deg,#8f7fc4,#7466aa)}
 .cell.blocked .lock{position:absolute;bottom:1px;right:2px;font-size:8.5px;font-weight:700;color:#fff;
   background:rgba(70,45,15,.55);border-radius:99px;padding:0 5px;line-height:14px}
 .cell.sel{box-shadow:inset 0 0 0 3px var(--gold),0 0 12px rgba(255,203,61,.8)}
@@ -479,6 +499,116 @@ button{font-family:inherit;cursor:pointer;border:none}
 .xBtn{width:28px;height:28px;border-radius:50%;background:#f2e2c2;font-size:12px;color:#8a6a3c;font-weight:700}
 
 /* Short screens (landscape-ish phones, small laptops): trade chrome for board. */
+/* ==================================================== the Heart & bloom */
+.heartCard{background:linear-gradient(180deg,#fdfff5,#f2fae6)}
+.stagePill{margin-left:auto;font-size:10px;font-weight:800;color:#3f9a4f;background:#dcf5d2;
+  border-radius:99px;padding:3px 9px}
+.heartRow{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.heartOrb{width:62px;height:62px;flex:none;filter:drop-shadow(0 4px 6px rgba(60,120,60,.3))}
+.heartOrb.awake{animation:heartBeat 2.6s ease-in-out infinite}
+@keyframes heartBeat{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.heartRow .noteLine{text-align:left;margin-top:0}
+.stageList{margin-top:8px;display:flex;flex-direction:column;gap:3px}
+.stageRow{display:flex;gap:8px;align-items:center;font-size:11px;font-weight:700;color:#9a7a4e}
+.stageRow b{min-width:26px;text-align:center;background:#efe0c4;border-radius:7px;padding:1px 0;color:#7a6244}
+.stageRow.done{color:#3f9a4f}.stageRow.done b{background:#cdf0c2;color:#2f7a3c}
+.rewardLine{margin-top:10px;font-weight:800;color:#e0a01a;font-size:14px}
+
+/* ------------------------------------------------------- locked chains */
+.soonRow{display:flex;gap:8px;overflow-x:auto;padding-bottom:3px}
+.soonChain{flex:none;background:#f3e6cd;border-radius:14px;padding:7px 9px;text-align:center;min-width:92px;opacity:.85}
+.soonArt{display:flex;gap:3px;justify-content:center;margin-bottom:5px}
+.soonArt i{width:12px;height:12px;border-radius:5px;background:#cbb289;display:block}
+.soonName{font-size:10.5px;font-weight:800;color:#8a6f48}
+.soonAt{font-size:9.5px;font-weight:700;color:#a88c63;margin-top:1px}
+
+/* ------------------------------------------------------- the side games */
+.gameGrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px}
+.gameBtn{display:flex;flex-direction:column;align-items:center;gap:2px;background:#fff;border:3px solid #ffe6b8;
+  border-radius:15px;padding:9px 5px;font-family:inherit;cursor:pointer;box-shadow:0 3px 0 rgba(200,160,90,.35)}
+.gameBtn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(200,160,90,.35)}
+.gameBtn.cool{opacity:.55}
+.gameBtn .gIc{font-size:22px;line-height:1}
+.gameBtn b{font-size:10.5px;font-weight:800;color:#6b5330;text-align:center}
+.gameBtn i{font-size:9px;font-style:normal;font-weight:600;color:#a88c63;text-align:center;line-height:1.15}
+.gCost{font-size:9.5px;font-weight:800;color:#e0a01a;margin-top:2px}
+
+.constRow{display:flex;align-items:center;gap:9px;width:100%;background:#fff;border:3px solid #ede0c6;
+  border-radius:14px;padding:8px 10px;margin-top:6px;font-family:inherit;cursor:pointer;text-align:left}
+.constRow.lit{border-color:#ffd977;background:linear-gradient(180deg,#fffaea,#fff1cd)}
+.constIc{font-size:17px;color:#c9b489}.constRow.lit .constIc{color:#f0b429}
+.constTxt{flex:1;display:flex;flex-direction:column}
+.constTxt b{font-size:12px;color:#6b5330}
+.constTxt i{font-size:10px;font-style:normal;font-weight:600;color:#9a7a4e;line-height:1.2}
+.constCost{font-size:11px;font-weight:800;color:#e0a01a}
+
+/* ------------------------------------------------------- the mini overlay */
+.mini{position:absolute;inset:0;background:rgba(30,20,10,.55);backdrop-filter:blur(3px);
+  display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;
+  transition:opacity .18s ease;z-index:60}
+.mini.open{opacity:1;pointer-events:auto}
+.miniBox{background:linear-gradient(180deg,#fffdf6,#fbf0d8);border-radius:22px;border:4px solid #fff;
+  box-shadow:0 14px 0 rgba(120,80,30,.3);padding:12px;width:100%;max-width:340px;max-height:92%;
+  display:flex;flex-direction:column;transform:scale(.9);transition:transform .2s cubic-bezier(.2,1.5,.5,1)}
+.mini.open .miniBox{transform:scale(1)}
+.miniHead{display:flex;align-items:center;gap:8px}
+.miniTitle{font-size:16px;font-weight:800;color:#6b5330;flex:1}
+.miniSub{font-size:11px;font-weight:600;color:#9a7a4e;margin:2px 0 8px;line-height:1.3}
+.miniBody{flex:1;overflow:auto;min-height:0}
+.miniFoot{margin-top:9px}
+.miniStat{font-size:11px;font-weight:700;color:#7a6244;text-align:center;margin-bottom:7px;line-height:1.35}
+
+/* Crater Dig */
+.digGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.digCell{aspect-ratio:1;border-radius:12px;border:3px solid #c9a678;background:linear-gradient(180deg,#b98d55,#8e6636);
+  display:flex;align-items:center;justify-content:center;font-size:19px;cursor:pointer;padding:3px;
+  box-shadow:inset 0 -3px 5px rgba(60,35,10,.3)}
+.digCell:active{transform:translateY(1px)}
+.digCell.open{background:linear-gradient(180deg,#fff8e8,#f0dfbc);border-color:#e6d0a4;box-shadow:none}
+.digCell.open.bad{background:linear-gradient(180deg,#ffd0c0,#e89377);border-color:#d4643a}
+.digCell svg{width:100%;height:100%}
+
+/* Fuel Brewing */
+.brewWrap{padding:14px 2px 4px}
+.brewBar{position:relative;height:34px;border-radius:14px;background:linear-gradient(180deg,#e2d3b4,#cbb68f);
+  box-shadow:inset 0 3px 5px rgba(90,60,20,.3);overflow:hidden}
+.brewZone{position:absolute;top:0;bottom:0;background:linear-gradient(180deg,#95ed7a,#49b53a);
+  box-shadow:0 0 10px rgba(80,200,70,.6)}
+.brewPin{position:absolute;top:-4px;bottom:-4px;width:6px;margin-left:-3px;border-radius:4px;
+  background:#fff;box-shadow:0 0 6px rgba(0,0,0,.4)}
+.brewPips{display:flex;gap:6px;justify-content:center;margin-top:12px}
+.brewPips i{width:16px;height:16px;border-radius:50%;background:#e2d3b4;display:block;
+  box-shadow:inset 0 2px 3px rgba(90,60,20,.25)}
+.brewPips i.hit{background:linear-gradient(180deg,#95ed7a,#49b53a)}
+.brewPips i.miss{background:linear-gradient(180deg,#ffb9a4,#d4643a)}
+
+/* Alien Market */
+.mktRow{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:6px 0}
+.mktCrate{background:linear-gradient(180deg,#fff,#f4e6c8);border:3px solid #e6d0a4;border-radius:16px;
+  padding:9px 4px;cursor:pointer;font-family:inherit;display:flex;flex-direction:column;align-items:center;gap:4px}
+.mktCrate.open{border-color:#8ce46a}
+.mktCrate.kept{border-color:#f0b429;box-shadow:0 0 0 3px rgba(240,180,41,.3)}
+.mktArt{width:52px;height:52px;font-size:30px;display:flex;align-items:center;justify-content:center}
+.mktArt svg{width:100%;height:100%}
+.mktLab{font-size:9.5px;font-weight:800;color:#7a6244;text-align:center;line-height:1.15}
+
+/* Constellations */
+.skyBox{background:radial-gradient(circle at 50% 40%,#2c2f5e,#141634);border-radius:18px;padding:6px}
+.sky{width:100%;display:block;aspect-ratio:1}
+.skyPt{cursor:pointer}
+.skyStar{fill:#6d75a8;transition:fill .15s}
+.skyStar.first{fill:#ffe9a8;animation:skyPulse 1.4s ease-in-out infinite}
+.skyStar.on{fill:#fff3c4;filter:drop-shadow(0 0 3px #ffd977)}
+@keyframes skyPulse{0%,100%{opacity:.75}50%{opacity:1}}
+.skyNum{font:700 4.6px sans-serif;fill:#8f97c8}
+.skyNum.on{fill:#ffe9a8}
+
+/* the world waking up: the backdrop gets its colour back, stage by stage */
+.app.bloom1 .hills{filter:saturate(1.15) brightness(1.04)}
+.app.bloom2 .hills{filter:saturate(1.35) brightness(1.08)}
+.app.bloom3 .hills{filter:saturate(1.6) brightness(1.12)}
+.app.bloom3 .sun{filter:brightness(1.15) drop-shadow(0 0 22px rgba(255,220,120,.55))}
+
 @media (max-height:720px){
   .guide{display:none}
   .order{width:126px}

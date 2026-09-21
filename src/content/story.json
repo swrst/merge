@@ -1,0 +1,81 @@
+[
+  {
+    "id": "s1",
+    "at": {
+      "world": "earth",
+      "lvl": 1
+    },
+    "who": "bloop",
+    "title": "The Last Vault",
+    "text": "Every growing thing that ever was is asleep inside this ship. I am its curator — the last one. You are its gardener, apparently. Congratulations. Start with a twig."
+  },
+  {
+    "id": "s2",
+    "at": {
+      "world": "earth",
+      "lvl": 3
+    },
+    "who": "bloop",
+    "title": "What the Bloom Was",
+    "text": "The Bloom was not a plant. It was every world holding hands. When it let go, the worlds forgot how to grow. Merging is remembering — two small things recalling what they add up to."
+  },
+  {
+    "id": "s3",
+    "at": {
+      "world": "earth",
+      "lvl": 5
+    },
+    "who": "bloop",
+    "title": "The Heart",
+    "text": "Under this meadow is a Heart — dormant, not dead. Feed it Bloom Essence and the world wakes around it. Every world has one. Every one of them is cold right now."
+  },
+  {
+    "id": "s4",
+    "at": {
+      "world": "luna",
+      "lvl": 1
+    },
+    "who": "luma",
+    "title": "Somebody Came Back",
+    "text": "Nobody has landed here since the quiet. We stopped watching the sky. Then a ship full of seeds falls out of it. Forgive me if I follow you around a bit."
+  },
+  {
+    "id": "s5",
+    "at": {
+      "world": "cindra",
+      "lvl": 1
+    },
+    "who": "vulk",
+    "title": "It Did Not Sleep",
+    "text": "Other worlds got cold. Cindra got ANGRY. Burned its own gardens to cinders rather than watch them wilt. If you can grow something here, gardener, you can grow anything."
+  },
+  {
+    "id": "s6",
+    "at": {
+      "world": "nerith",
+      "lvl": 1
+    },
+    "who": "marin",
+    "title": "Under the Shallows",
+    "text": "Our cities are down there, full of shells. We did not drown all at once — we drowned politely, over centuries. Bring the reef back and the rest of us remember how."
+  },
+  {
+    "id": "s7",
+    "at": {
+      "world": "vela",
+      "lvl": 1
+    },
+    "who": "halo",
+    "title": "Where It Was Last Seen",
+    "text": "The Bloom ended here, in the light. No ground, no soil, nothing to bury. Whatever you grow in Vela you grow out of thin air and stubbornness."
+  },
+  {
+    "id": "s8",
+    "at": {
+      "flag": "allHearts"
+    },
+    "who": "bloop",
+    "title": "The Bloom Returns",
+    "text": "Five hearts beating. Look at them from up here — lamps down a long hallway, all lit. The Vault is empty and the worlds are full. That was the whole idea."
+  }
+]

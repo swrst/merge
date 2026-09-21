@@ -10,12 +10,17 @@ import missionsJson from './missions.json';
 import configJson from './config.json';
 import researchJson from './research.json';
 import shopJson from './shop.json';
+import storyJson from './story.json';
 
+/** how an item is drawn: a primitive + a material, composed by src/artgen.ts */
+export interface ArtSpec { shape: string; mat: string; accent?: string; tier?: number; deco?: string[] }
 export interface ItemDef {
   name: string;
   chain: string;
   tier: number;
   sell: number;
+  /** generated art; items without one are hand-drawn in src/art.ts */
+  art?: ArtSpec;
   /** finishing this item installs a rocket part instead of leaving it on the board */
   part?: string;
   /** finishing this item tops up the fuel tank */
@@ -23,14 +28,18 @@ export interface ItemDef {
 }
 export interface ChainDef {
   name: string;
-  /** 'earth' | 'luna' for world chains, 'ship' for rocket parts, 'any' for meteor drops */
+  /** a world key for world chains, 'ship' for rocket parts, 'any' for everywhere */
   world: string;
+  /** the world-local level this chain appears at — nothing is on the board at once */
+  unlock: number;
   items: string[];
 }
 export interface ProducerDef {
   name: string;
   /** key into ART.producer() */
   art: string;
+  /** generated art, when `art` is not a hand-drawn key */
+  spec?: ArtSpec & { ground?: string };
   /** 'tap' spends energy on demand, 'timer' refills itself and banks charges */
   mode: 'tap' | 'timer';
   cost?: number;
@@ -56,14 +65,23 @@ export interface WorldDef {
   /** energy a tap producer costs in this world */
   tapCost?: number;
   /** the one thing that only happens here */
-  perk?: 'rain' | 'gravity' | 'eruption';
+  perk?: string;
+  /* ---- the Seed Vault story ---- */
+  /** what this world's dormant Heart is called */
+  heart: string;
+  /** terraforming stages: Bloom value needed, and what waking up looks like */
+  bloom: { need: number; title: string; text: string }[];
+  /** the line the world greets you with */
+  intro: string;
 }
 /** a permanent upgrade paid for with relics */
 export interface VaultDef { id: string; name: string; desc: string; icon: string; item: string; qty: number; max: number }
 /** an instant favour paid for with meteor stars */
 export interface ForgeDef { id: string; name: string; desc: string; icon: string; item: string; qty: number }
 export interface TaskDef { kind: string; label: string; min: number; max: number; coins: number }
-export interface CharacterDef { name: string; lines: string[] }
+export interface CharacterDef { name: string; lines: string[]; face?: { kind: string; mat: string; accent?: string } }
+/** a story beat: fires on reaching a world level, or on a one-off flag */
+export interface StoryDef { id: string; who: string; title: string; text: string; at?: { world?: string; lvl?: number; flag?: string } }
 export interface MissionDef { id: string; need: number; text: string; hint: string; coins: number }
 
 /** A lab recipe: two items + coins -> one rare item. Discovered by experimenting. */
@@ -131,6 +149,12 @@ export interface Config {
   lab: { failFee: number; clueEvery: number; build: { coins: number; item: string; qty: number } };
   /** how often a world's own event fires, and how strong it is */
   perk: { everyMs: number; spreadMs: number; gravityChance: number; eruptionItems: number };
+  /** the per-world level curve — the one that unlocks chains */
+  world: { base: number; perLevel: number; growth: number };
+  /** what waking a world's Heart pays out */
+  bloom: { reward: { coins: number; energy: number } };
+  /** the side games: entry cost and how often each can be played */
+  mini: Record<string, { cost: number; cooldownMs: number; grid?: number; digs?: number; rounds?: number }>;
   vault: VaultDef[];
   forge: ForgeDef[];
   tasks: { slots: number; refreshMs: number; pool: TaskDef[] };
@@ -145,6 +169,7 @@ export const MISSIONS = missionsJson as MissionDef[];
 export const CONFIG = configJson as Config;
 export const RECIPES = researchJson as RecipeDef[];
 export const SHOP = shopJson as ShopDef;
+export const STORY = storyJson as StoryDef[];
 
 /* ------------------------------------------------------------- lookups */
 
@@ -254,6 +279,28 @@ export function validateContent(): string[] {
     if (!has(PRODUCERS, g.producer)) errs.push(`world "${k}" grows unknown producer "${g.producer}"`);
     g.cells.forEach(c => { if (c < 0 || c >= cells) errs.push(`world "${k}" grows "${g.producer}" on cell ${c}, outside the board`); });
   }));
+  Object.entries(CHAINS).forEach(([k, c]) => {
+    if (!(c.unlock >= 1)) errs.push(`chain "${k}" needs an unlock level of 1 or more`);
+  });
+  Object.entries(WORLDS).forEach(([k, w]) => {
+    if (!w.heart) errs.push(`world "${k}" has no Heart`);
+    if (!w.bloom || !w.bloom.length) errs.push(`world "${k}" has no bloom stages`);
+    else w.bloom.forEach((b, i) => {
+      if (!(b.need > 0)) errs.push(`world "${k}" bloom stage ${i + 1} needs a positive target`);
+      if (i && b.need <= w.bloom[i - 1].need) errs.push(`world "${k}" bloom stage ${i + 1} is not harder than the one before`);
+    });
+    // a world you can never start playing is the one content bug that soft-locks
+    const first = w.chains.filter(c => CHAINS[c] && CHAINS[c].unlock <= 1);
+    if (first.length < 2) errs.push(`world "${k}" opens with ${first.length} chain(s) — it needs at least 2`);
+    if (!w.start.length) errs.push(`world "${k}" has no starting producer`);
+  });
+  const sids = new Set<string>();
+  STORY.forEach(s => {
+    if (sids.has(s.id)) errs.push(`duplicate story id "${s.id}"`);
+    sids.add(s.id);
+    if (!has(CHARACTERS, s.who)) errs.push(`story "${s.id}" uses unknown character "${s.who}"`);
+    if (s.at && s.at.world && !has(WORLDS, s.at.world)) errs.push(`story "${s.id}" points at unknown world "${s.at.world}"`);
+  });
   if (!(SHOP.supplyStock > 0)) errs.push('shop.supplyStock must be at least 1');
   if (!(SHOP.supplyPriceMultiplier >= 1)) errs.push('shop.supplyPriceMultiplier should be 1 or more');
   return errs;

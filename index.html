@@ -63,7 +63,7 @@
     <button class="tab" data-v="lab" id="tabLab"><span class="ti">🔬</span>Lab</button>
     <button class="tab" data-v="rocket" id="tabRocket"><span class="ti">🚀</span>Rocket<span class="dot" id="dotRocket" style="display:none"></span></button>
     <button class="tab" data-v="book"><span class="ti">📖</span>Guide</button>
-    <button class="tab" data-v="map" id="tabMap"><span class="ti">🗺️</span>Map</button>
+    <button class="tab" data-v="map" id="tabMap"><span class="ti">🌍</span>World<span class="dot" id="dotWorld" style="display:none"></span></button>
   </div>
 
   <div class="screen" id="sc-shop">
@@ -87,8 +87,19 @@
     <div class="scBody" id="bookBody"></div>
   </div>
   <div class="screen" id="sc-map">
-    <div class="scHead"><div class="scTitle">🗺️ Galaxy Map</div><button class="iconBtn scClose">✕</button></div>
+    <div class="scHead"><div class="scTitle">🌍 World &amp; Galaxy</div><button class="iconBtn scClose">✕</button></div>
     <div class="scBody" id="mapBody"></div>
+  </div>
+
+  <!-- the side games share one overlay; each one draws its own body -->
+  <div class="mini" id="mini">
+    <div class="miniBox">
+      <div class="miniHead"><div class="miniTitle" id="miniTitle"></div>
+        <button class="xBtn" id="miniClose">✕</button></div>
+      <div class="miniSub" id="miniSub"></div>
+      <div class="miniBody" id="miniBody"></div>
+      <div class="miniFoot" id="miniFoot"></div>
+    </div>
   </div>
 
   <div class="toast" id="toast"></div>

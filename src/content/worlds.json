@@ -1,14 +1,21 @@
 {
   "earth": {
     "name": "Sunny Meadow",
-    "subtitle": "Home planet",
+    "subtitle": "Home world",
     "planet": "earth",
     "chains": [
       "wood",
       "stone",
       "berry",
       "water",
-      "grass"
+      "grass",
+      "flower",
+      "honey",
+      "mush",
+      "cloth",
+      "feather",
+      "clay",
+      "garden"
     ],
     "start": [
       {
@@ -23,18 +30,27 @@
     "locks": {
       "0": 2,
       "1": 2,
-      "4": 2,
-      "5": 2,
       "2": 3,
       "3": 3,
-      "42": 4,
+      "4": 2,
+      "5": 2,
+      "6": 4,
+      "11": 4,
+      "12": 6,
+      "17": 6,
+      "30": 6,
+      "35": 6,
+      "36": 5,
+      "41": 5,
+      "42": 3,
       "43": 4,
-      "46": 4,
-      "47": 4,
       "44": 5,
-      "45": 5
+      "45": 5,
+      "46": 4,
+      "47": 3
     },
     "folks": [
+      "pip",
       "grandma",
       "timmy",
       "gigi",
@@ -43,38 +59,116 @@
     "grow": [
       {
         "producer": "bush",
-        "atLevel": 3,
+        "atLevel": 2,
         "cells": [
           32,
           31,
-          33,
-          26,
-          20
+          26
         ]
       },
       {
         "producer": "well",
-        "atLevel": 5,
+        "atLevel": 2,
         "cells": [
           27,
           21,
-          34,
           15
         ]
       },
       {
         "producer": "meadow",
-        "atLevel": 7,
+        "atLevel": 3,
         "cells": [
           16,
           10,
-          28,
+          28
+        ]
+      },
+      {
+        "producer": "flowerbed",
+        "atLevel": 3,
+        "cells": [
+          33,
+          39,
+          38
+        ]
+      },
+      {
+        "producer": "hive",
+        "atLevel": 4,
+        "cells": [
+          9,
+          14,
+          8
+        ]
+      },
+      {
+        "producer": "mosslog",
+        "atLevel": 4,
+        "cells": [
+          20,
+          25,
+          13
+        ]
+      },
+      {
+        "producer": "cottonpatch",
+        "atLevel": 5,
+        "cells": [
+          11,
+          17,
+          7
+        ]
+      },
+      {
+        "producer": "nestbox",
+        "atLevel": 5,
+        "cells": [
+          34,
+          40,
+          41
+        ]
+      },
+      {
+        "producer": "claypit",
+        "atLevel": 6,
+        "cells": [
+          35,
+          29,
           23
+        ]
+      },
+      {
+        "producer": "grubmound",
+        "atLevel": 7,
+        "cells": [
+          37,
+          36,
+          30
         ]
       }
     ],
     "tapCost": 1,
-    "perk": "rain"
+    "perk": "rain",
+    "heart": "Meadow Heart",
+    "bloom": [
+      {
+        "need": 3,
+        "title": "A Green Thread",
+        "text": "Colour creeps back into the grass. Bloop says the soil remembers you."
+      },
+      {
+        "need": 6,
+        "title": "The Meadow Stirs",
+        "text": "Seeds you never planted push up overnight. The Vault is answering."
+      },
+      {
+        "need": 10,
+        "title": "Full Bloom",
+        "text": "The meadow is awake. One world down — and the sky is full of dark ones."
+      }
+    ],
+    "intro": "Everything grew from here once. Then the Bloom went quiet and the world forgot how. You still remember. Start small: a twig, a pebble, a berry."
   },
   "luna": {
     "name": "Crater Camp",
@@ -82,7 +176,14 @@
     "planet": "luna",
     "chains": [
       "moon",
-      "glow"
+      "glow",
+      "dust",
+      "ice",
+      "crystal",
+      "lantern",
+      "silver",
+      "comet",
+      "lunamoth"
     ],
     "start": [
       {
@@ -96,27 +197,119 @@
     ],
     "locks": {
       "0": 2,
+      "1": 2,
+      "2": 3,
+      "3": 3,
+      "4": 2,
       "5": 2,
-      "42": 2,
-      "47": 2,
-      "1": 3,
-      "4": 3,
-      "43": 3,
-      "46": 3,
-      "2": 4,
-      "3": 4,
+      "6": 4,
+      "11": 4,
+      "12": 6,
+      "17": 6,
+      "30": 6,
+      "35": 6,
+      "36": 5,
+      "41": 5,
+      "42": 3,
+      "43": 4,
       "44": 5,
-      "45": 5
+      "45": 5,
+      "46": 4,
+      "47": 3
     },
     "folks": [
+      "bloop",
       "zib",
       "luma",
       "rokk",
       "nix"
     ],
-    "grow": [],
-    "tapCost": 2,
-    "perk": "gravity"
+    "grow": [
+      {
+        "producer": "dustflat",
+        "atLevel": 2,
+        "cells": [
+          32,
+          31,
+          26
+        ]
+      },
+      {
+        "producer": "icevein",
+        "atLevel": 2,
+        "cells": [
+          27,
+          21,
+          15
+        ]
+      },
+      {
+        "producer": "crystalspire",
+        "atLevel": 3,
+        "cells": [
+          16,
+          10,
+          28
+        ]
+      },
+      {
+        "producer": "wickpod",
+        "atLevel": 4,
+        "cells": [
+          33,
+          39,
+          38
+        ]
+      },
+      {
+        "producer": "silverseam",
+        "atLevel": 4,
+        "cells": [
+          9,
+          14,
+          8
+        ]
+      },
+      {
+        "producer": "comettrail",
+        "atLevel": 5,
+        "cells": [
+          20,
+          25,
+          13
+        ]
+      },
+      {
+        "producer": "mothpod",
+        "atLevel": 6,
+        "cells": [
+          11,
+          17,
+          7
+        ]
+      }
+    ],
+    "tapCost": 1,
+    "perk": "gravity",
+    "heart": "Crater Heart",
+    "bloom": [
+      {
+        "need": 3,
+        "title": "Dust Remembers",
+        "text": "Glow spores drift up out of the regolith. Nothing has grown here in an age."
+      },
+      {
+        "need": 6,
+        "title": "The Craters Sing",
+        "text": "Light pools in the low places. Luma says it sounds like a choir tuning up."
+      },
+      {
+        "need": 10,
+        "title": "Luna Awake",
+        "text": "The grey moon is silver now, and gardens ring every crater rim."
+      }
+    ],
+    "intro": "Luna went cold first — no air, no argument. But the Vault says a world only needs one living thing to start over. Find it."
   },
   "cindra": {
     "name": "Ember Hollow",
@@ -124,7 +317,14 @@
     "planet": "cinder",
     "chains": [
       "magma",
-      "shroom"
+      "shroom",
+      "iron",
+      "obsid",
+      "glassw",
+      "forge",
+      "spice",
+      "copper",
+      "phoenix"
     ],
     "start": [
       {
@@ -138,25 +338,397 @@
     ],
     "locks": {
       "0": 2,
+      "1": 2,
+      "2": 3,
+      "3": 3,
+      "4": 2,
       "5": 2,
-      "42": 2,
-      "47": 2,
-      "1": 3,
-      "4": 3,
-      "43": 3,
-      "46": 3,
-      "2": 4,
-      "3": 4,
+      "6": 4,
+      "11": 4,
+      "12": 6,
+      "17": 6,
+      "30": 6,
+      "35": 6,
+      "36": 5,
+      "41": 5,
+      "42": 3,
+      "43": 4,
       "44": 5,
-      "45": 5
+      "45": 5,
+      "46": 4,
+      "47": 3
     },
     "folks": [
       "vulk",
       "ember",
-      "nix"
+      "rokk",
+      "zib"
     ],
-    "grow": [],
-    "tapCost": 3,
-    "perk": "eruption"
+    "grow": [
+      {
+        "producer": "ironseam",
+        "atLevel": 2,
+        "cells": [
+          32,
+          31,
+          26
+        ]
+      },
+      {
+        "producer": "obsidslab",
+        "atLevel": 2,
+        "cells": [
+          27,
+          21,
+          15
+        ]
+      },
+      {
+        "producer": "sandpit",
+        "atLevel": 3,
+        "cells": [
+          16,
+          10,
+          28
+        ]
+      },
+      {
+        "producer": "coalpit",
+        "atLevel": 4,
+        "cells": [
+          33,
+          39,
+          38
+        ]
+      },
+      {
+        "producer": "spicevine",
+        "atLevel": 4,
+        "cells": [
+          9,
+          14,
+          8
+        ]
+      },
+      {
+        "producer": "copperseam",
+        "atLevel": 5,
+        "cells": [
+          20,
+          25,
+          13
+        ]
+      },
+      {
+        "producer": "ashnest",
+        "atLevel": 6,
+        "cells": [
+          11,
+          17,
+          7
+        ]
+      }
+    ],
+    "tapCost": 2,
+    "perk": "eruption",
+    "heart": "Hollow Heart",
+    "bloom": [
+      {
+        "need": 4,
+        "title": "Ash to Soil",
+        "text": "Where the ash cooled, something soft is growing through it."
+      },
+      {
+        "need": 8,
+        "title": "The Hollow Breathes",
+        "text": "The vents sigh instead of roaring. Vulk has not seen that in his lifetime."
+      },
+      {
+        "need": 12,
+        "title": "Cindra Reborn",
+        "text": "Fire and garden, at the same time, without either winning. That is the whole trick."
+      }
+    ],
+    "intro": "Cindra never went dormant — it went furious. The Bloom here did not die of cold. It burned. Ash is still soil, if you are patient."
+  },
+  "nerith": {
+    "name": "Tidal Shallows",
+    "subtitle": "Nerith",
+    "planet": "nerith",
+    "chains": [
+      "shellc",
+      "kelp",
+      "pearlc",
+      "coralc",
+      "fishc",
+      "tide",
+      "salt",
+      "sunkn",
+      "lumin"
+    ],
+    "start": [
+      {
+        "cell": 19,
+        "producer": "shellbed"
+      },
+      {
+        "cell": 22,
+        "producer": "kelpbed"
+      }
+    ],
+    "locks": {
+      "0": 2,
+      "1": 2,
+      "2": 3,
+      "3": 3,
+      "4": 2,
+      "5": 2,
+      "6": 4,
+      "11": 4,
+      "12": 6,
+      "17": 6,
+      "30": 6,
+      "35": 6,
+      "36": 5,
+      "41": 5,
+      "42": 3,
+      "43": 4,
+      "44": 5,
+      "45": 5,
+      "46": 4,
+      "47": 3
+    },
+    "folks": [
+      "marin",
+      "kelpa",
+      "sirra",
+      "bloop"
+    ],
+    "grow": [
+      {
+        "producer": "oysterbed",
+        "atLevel": 2,
+        "cells": [
+          32,
+          31,
+          26
+        ]
+      },
+      {
+        "producer": "coralhead",
+        "atLevel": 2,
+        "cells": [
+          27,
+          21,
+          15
+        ]
+      },
+      {
+        "producer": "fishtrap",
+        "atLevel": 3,
+        "cells": [
+          16,
+          10,
+          28
+        ]
+      },
+      {
+        "producer": "tidepool",
+        "atLevel": 3,
+        "cells": [
+          33,
+          39,
+          38
+        ]
+      },
+      {
+        "producer": "saltpan",
+        "atLevel": 4,
+        "cells": [
+          9,
+          14,
+          8
+        ]
+      },
+      {
+        "producer": "wrecksite",
+        "atLevel": 5,
+        "cells": [
+          20,
+          25,
+          13
+        ]
+      },
+      {
+        "producer": "lightvent",
+        "atLevel": 6,
+        "cells": [
+          11,
+          17,
+          7
+        ]
+      }
+    ],
+    "tapCost": 2,
+    "perk": "tide",
+    "heart": "Shallow Heart",
+    "bloom": [
+      {
+        "need": 4,
+        "title": "The Water Clears",
+        "text": "Silt settles. For the first time in centuries you can see the reef floor."
+      },
+      {
+        "need": 8,
+        "title": "Reefs Return",
+        "text": "Coral climbing the old ruins, fish following it up. Sirra will not stop humming."
+      },
+      {
+        "need": 12,
+        "title": "Nerith Alive",
+        "text": "A whole drowned world, breathing again through its gills."
+      }
+    ],
+    "intro": "Nerith drowned slowly and politely. The cities are still down there under the shallows, full of shells and nothing else. Wake the reef and the rest follows."
+  },
+  "vela": {
+    "name": "Aurora Reach",
+    "subtitle": "Vela",
+    "planet": "vela",
+    "chains": [
+      "cloudc",
+      "aurorac",
+      "starc",
+      "wind",
+      "skyfruit",
+      "chime",
+      "prismv",
+      "skynest",
+      "balloonc"
+    ],
+    "start": [
+      {
+        "cell": 19,
+        "producer": "cloudbank"
+      },
+      {
+        "cell": 22,
+        "producer": "auroraloom"
+      }
+    ],
+    "locks": {
+      "0": 2,
+      "1": 2,
+      "2": 3,
+      "3": 3,
+      "4": 2,
+      "5": 2,
+      "6": 4,
+      "11": 4,
+      "12": 6,
+      "17": 6,
+      "30": 6,
+      "35": 6,
+      "36": 5,
+      "41": 5,
+      "42": 3,
+      "43": 4,
+      "44": 5,
+      "45": 5,
+      "46": 4,
+      "47": 3
+    },
+    "folks": [
+      "zephyr",
+      "halo",
+      "wren",
+      "luma"
+    ],
+    "grow": [
+      {
+        "producer": "starcradle",
+        "atLevel": 2,
+        "cells": [
+          32,
+          31,
+          26
+        ]
+      },
+      {
+        "producer": "windvanep",
+        "atLevel": 2,
+        "cells": [
+          27,
+          21,
+          15
+        ]
+      },
+      {
+        "producer": "skytree",
+        "atLevel": 3,
+        "cells": [
+          16,
+          10,
+          28
+        ]
+      },
+      {
+        "producer": "chimepost",
+        "atLevel": 3,
+        "cells": [
+          33,
+          39,
+          38
+        ]
+      },
+      {
+        "producer": "prismstand",
+        "atLevel": 4,
+        "cells": [
+          9,
+          14,
+          8
+        ]
+      },
+      {
+        "producer": "skynestp",
+        "atLevel": 5,
+        "cells": [
+          20,
+          25,
+          13
+        ]
+      },
+      {
+        "producer": "silkloom",
+        "atLevel": 6,
+        "cells": [
+          11,
+          17,
+          7
+        ]
+      }
+    ],
+    "tapCost": 2,
+    "perk": "aurora",
+    "heart": "Reach Heart",
+    "bloom": [
+      {
+        "need": 5,
+        "title": "First Light",
+        "text": "A thread of aurora, thin as a hair, stitched across the dark."
+      },
+      {
+        "need": 10,
+        "title": "The Sky Weaves",
+        "text": "Whole curtains of it now. Halo says the Vault is singing back."
+      },
+      {
+        "need": 15,
+        "title": "The Bloom Returns",
+        "text": "Every world you woke is visible from here, lit up like lamps in a long hallway. You did that."
+      }
+    ],
+    "intro": "The last place the Bloom was seen alive. There is no ground here — only cloud, light and whatever you can grow on them. This is where it ends, or begins again."
   }
 }

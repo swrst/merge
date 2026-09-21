@@ -12,7 +12,10 @@ function paintHudIcons() {
   if (energy) energy.innerHTML = ART.icon('energy');
 }
 
-if (import.meta.env.DEV) (window as any).__art = ART;   // test hook, dev builds only
+if (import.meta.env.DEV) {
+  (window as any).__art = ART;                          // test hooks, dev builds only
+  import('./artgen').then(m => { (window as any).__artgen = m; });
+}
 
 async function main() {
   await hydrateSave();      // pull a native save back into localStorage before boot

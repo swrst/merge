@@ -1,94 +1,211 @@
 {
   "pip": {
     "name": "Pip",
-    "lines": []
+    "lines": [
+      "Ooh, is that for me?",
+      "You are quick at this!",
+      "Perfect. Just perfect."
+    ]
   },
   "grandma": {
-    "name": "Grandma Plum",
+    "name": "Granny Fern",
     "lines": [
-      "My pie senses are tingling!",
-      "Be a dear, fetch me this!",
-      "I am too old to climb trees."
+      "Bless you, dear.",
+      "My garden thanks you.",
+      "Just like the old days."
     ]
   },
   "timmy": {
-    "name": "Scout Timmy",
+    "name": "Timmy",
     "lines": [
-      "My fort needs supplies!",
-      "Badge time! Help me out?",
-      "I promise I will share. Maybe."
+      "Whoa, cool!",
+      "Can I keep it?",
+      "You are the best!"
     ]
   },
   "gigi": {
-    "name": "Chef Gigi",
+    "name": "Gigi",
     "lines": [
-      "Ze recipe demands it!",
-      "My kitchen is desperate!",
-      "Quickly, before ze soup cools!"
+      "Darling, exquisite.",
+      "Simply divine.",
+      "You have taste."
     ]
   },
   "biscuit": {
     "name": "Biscuit",
     "lines": [
-      "Woof! (He wants this.)",
-      "*tail wag intensifies*",
-      "Bork bork! (Please?)"
+      "Woof!",
+      "Wag wag wag.",
+      "Arf! Arf!"
     ]
   },
   "bloop": {
-    "name": "Prof. Bloop",
+    "name": "Bloop",
     "lines": [
-      "For SCIENCE! And snacks.",
-      "My scanner says: gimme.",
-      "Blorp! I need this thing."
-    ]
+      "The Vault remembers this one.",
+      "Good. Keep going.",
+      "One more thread, re-woven."
+    ],
+    "face": {
+      "kind": "blob",
+      "mat": "jade",
+      "accent": "cream"
+    }
   },
   "zib": {
     "name": "Zib",
     "lines": [
-      "Three eyes, one wish!",
-      "Zib want. Zib pay.",
-      "Trade you space money!"
-    ]
+      "Beep! Trade good!",
+      "Zib approve.",
+      "Shiny! Very shiny!"
+    ],
+    "face": {
+      "kind": "blob",
+      "mat": "mint",
+      "accent": "cream"
+    }
   },
   "luma": {
     "name": "Luma",
     "lines": [
-      "It would look lovely on my ship.",
-      "Pretty please, star friend?",
-      "I collect these!"
-    ]
+      "It glows just right.",
+      "The dark is smaller now.",
+      "Light travels. So do you."
+    ],
+    "face": {
+      "kind": "blob",
+      "mat": "rose",
+      "accent": "cream"
+    }
   },
   "rokk": {
     "name": "Rokk",
     "lines": [
-      "BEEP. RESOURCE REQUEST.",
-      "MY CIRCUITS DEMAND IT.",
-      "TRADE = GOOD. YES."
-    ]
+      "UNIT PLEASED.",
+      "CATALOGUED. THANK YOU.",
+      "STRUCTURAL INTEGRITY: LOVELY."
+    ],
+    "face": {
+      "kind": "robot",
+      "mat": "steel",
+      "accent": "sapphire"
+    }
   },
   "nix": {
     "name": "Nix",
     "lines": [
-      "I wandered far for this.",
-      "Shiny. I want it.",
-      "A gift for my home world?"
-    ]
+      "Mmm. Acceptable.",
+      "I collect these, you know.",
+      "Do not tell the others."
+    ],
+    "face": {
+      "kind": "crystal",
+      "mat": "amethyst",
+      "accent": "lilac"
+    }
   },
   "vulk": {
     "name": "Vulk",
     "lines": [
-      "Hot rock. Good rock.",
-      "I eat these. Do not judge.",
-      "Bring me the warm one!"
-    ]
+      "HOT WORK. GOOD WORK.",
+      "The forge approves.",
+      "Ash to soil. Ha!"
+    ],
+    "face": {
+      "kind": "flame",
+      "mat": "ember",
+      "accent": "gold"
+    }
   },
   "ember": {
     "name": "Ember",
     "lines": [
-      "Ooh, shiny and toasty!",
-      "My garden needs this.",
-      "Pretty please, with ash on top?"
-    ]
+      "Still warm. I like that.",
+      "Careful — it bites.",
+      "Sparks are just small stars."
+    ],
+    "face": {
+      "kind": "blob",
+      "mat": "flame",
+      "accent": "gold"
+    }
+  },
+  "marin": {
+    "name": "Marin",
+    "lines": [
+      "The current brought you.",
+      "Salt and patience, friend.",
+      "The reef noticed that."
+    ],
+    "face": {
+      "kind": "fish",
+      "mat": "sapphire",
+      "accent": "mint"
+    }
+  },
+  "kelpa": {
+    "name": "Kelpa",
+    "lines": [
+      "Grows back. Always grows back.",
+      "Green under the blue.",
+      "Tangle it up, I do not mind."
+    ],
+    "face": {
+      "kind": "blob",
+      "mat": "kelp",
+      "accent": "jade"
+    }
+  },
+  "sirra": {
+    "name": "Sirra",
+    "lines": [
+      "Listen — the water is humming.",
+      "Pearls for patience.",
+      "You hear it too, do you not?"
+    ],
+    "face": {
+      "kind": "fish",
+      "mat": "coral",
+      "accent": "pearl"
+    }
+  },
+  "zephyr": {
+    "name": "Zephyr",
+    "lines": [
+      "Caught on the updraft!",
+      "Lighter than that, even.",
+      "Whoosh. Straight up."
+    ],
+    "face": {
+      "kind": "cloud",
+      "mat": "cloud",
+      "accent": "mint"
+    }
+  },
+  "halo": {
+    "name": "Halo",
+    "lines": [
+      "The sky is stitching itself.",
+      "Colour, at last.",
+      "The Vault is singing back."
+    ],
+    "face": {
+      "kind": "crystal",
+      "mat": "aurora",
+      "accent": "star"
+    }
+  },
+  "wren": {
+    "name": "Wren",
+    "lines": [
+      "Chirrup! Lovely!",
+      "For the nest, for the nest.",
+      "Up we go!"
+    ],
+    "face": {
+      "kind": "bird",
+      "mat": "topaz",
+      "accent": "gold"
+    }
   }
 }

@@ -272,7 +272,61 @@
         "min": 2,
         "max": 5,
         "coins": 30
+      },
+      {
+        "kind": "bloom",
+        "label": "Feed {n} Bloom to the Heart",
+        "min": 2,
+        "max": 6,
+        "coins": 260
+      },
+      {
+        "kind": "chain",
+        "label": "Finish {n} merge chain",
+        "min": 1,
+        "max": 2,
+        "coins": 300
+      },
+      {
+        "kind": "mini",
+        "label": "Play {n} side games",
+        "min": 1,
+        "max": 3,
+        "coins": 180
       }
     ]
+  },
+  "world": {
+    "base": 22,
+    "perLevel": 26,
+    "growth": 6
+  },
+  "bloom": {
+    "reward": {
+      "coins": 400,
+      "energy": 40
+    },
+    "note": "Bloom value by tier: a Spark is 1, a Mote 2, a Core 4, a Heart 8."
+  },
+  "mini": {
+    "dig": {
+      "cost": 6,
+      "cooldownMs": 300000,
+      "grid": 20,
+      "digs": 6
+    },
+    "brew": {
+      "cost": 4,
+      "cooldownMs": 240000,
+      "rounds": 5
+    },
+    "market": {
+      "cost": 0,
+      "cooldownMs": 420000
+    },
+    "stars": {
+      "cost": 0,
+      "cooldownMs": 0
+    }
   }
 }

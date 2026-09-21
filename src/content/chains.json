@@ -2,47 +2,642 @@
   "wood": {
     "name": "Woodworks",
     "world": "earth",
+    "unlock": 1,
     "items": [
       "twig",
       "branch",
       "log",
       "lumber",
-      "cart"
+      "cart",
+      "workshop",
+      "treehouse"
     ]
   },
   "stone": {
     "name": "Rock Quarry",
     "world": "earth",
+    "unlock": 1,
     "items": [
       "pebble",
       "rock",
       "geode",
       "gem",
-      "statue"
+      "statue",
+      "obelisk",
+      "monument"
     ]
   },
   "berry": {
     "name": "Berry Kitchen",
     "world": "earth",
+    "unlock": 2,
     "items": [
       "berry",
       "berries",
       "jam",
       "pie",
-      "cake"
+      "cake",
+      "feast"
+    ]
+  },
+  "water": {
+    "name": "Waterworks",
+    "world": "earth",
+    "unlock": 2,
+    "items": [
+      "dew",
+      "puddle",
+      "jug",
+      "barrel",
+      "fountain",
+      "aqueduct"
+    ]
+  },
+  "grass": {
+    "name": "Hay Meadow",
+    "world": "earth",
+    "unlock": 3,
+    "items": [
+      "grass",
+      "hay",
+      "bale",
+      "hat",
+      "scarecrow",
+      "harvest"
+    ]
+  },
+  "flower": {
+    "name": "Flower Beds",
+    "world": "earth",
+    "unlock": 3,
+    "items": [
+      "bulbseed",
+      "sprig",
+      "bloombud",
+      "bouquet",
+      "garland",
+      "flowercrown"
+    ]
+  },
+  "honey": {
+    "name": "Honeyworks",
+    "world": "earth",
+    "unlock": 4,
+    "items": [
+      "nectar",
+      "honeydrop",
+      "honeycomb",
+      "honeypot",
+      "beehive",
+      "royaljelly"
+    ]
+  },
+  "mush": {
+    "name": "Forest Floor",
+    "world": "earth",
+    "unlock": 4,
+    "items": [
+      "caplet",
+      "toadstool",
+      "mushring",
+      "fairyring",
+      "mossheart"
+    ]
+  },
+  "cloth": {
+    "name": "The Weavery",
+    "world": "earth",
+    "unlock": 5,
+    "items": [
+      "fibre",
+      "thread",
+      "yarn",
+      "clothbolt",
+      "quilt",
+      "tapestry"
+    ]
+  },
+  "feather": {
+    "name": "The Nesting",
+    "world": "earth",
+    "unlock": 5,
+    "items": [
+      "down",
+      "plume",
+      "nest",
+      "speckegg",
+      "songbird",
+      "aviary"
+    ]
+  },
+  "clay": {
+    "name": "The Pottery",
+    "world": "earth",
+    "unlock": 6,
+    "items": [
+      "mud",
+      "claylump",
+      "claypot",
+      "urn",
+      "kiln",
+      "porcelain"
+    ]
+  },
+  "garden": {
+    "name": "Meadow Wilds",
+    "world": "earth",
+    "unlock": 7,
+    "items": [
+      "grub",
+      "chrysalis",
+      "flutter",
+      "swarm",
+      "meadowheart"
+    ]
+  },
+  "moon": {
+    "name": "Moon Rocks",
+    "world": "luna",
+    "unlock": 1,
+    "items": [
+      "mrock",
+      "mcrystal",
+      "mcore",
+      "mstar",
+      "moonorb",
+      "moonstatue"
+    ]
+  },
+  "glow": {
+    "name": "Glow Garden",
+    "world": "luna",
+    "unlock": 1,
+    "items": [
+      "spore",
+      "bulb",
+      "glowflower",
+      "starbloom",
+      "glowtree",
+      "glowgrove"
+    ]
+  },
+  "dust": {
+    "name": "Dust Flats",
+    "world": "luna",
+    "unlock": 2,
+    "items": [
+      "dustpinch",
+      "dustclump",
+      "regolith",
+      "moonbrick",
+      "moonwall"
+    ]
+  },
+  "ice": {
+    "name": "Ice Fields",
+    "world": "luna",
+    "unlock": 2,
+    "items": [
+      "frostchip",
+      "iceshard",
+      "icecore",
+      "snowstar",
+      "glacier",
+      "icecastle"
+    ]
+  },
+  "crystal": {
+    "name": "Crystal Vein",
+    "world": "luna",
+    "unlock": 3,
+    "items": [
+      "shardlet",
+      "prismlet",
+      "prismcore",
+      "prismheart",
+      "prismtower"
+    ]
+  },
+  "lantern": {
+    "name": "Lanternworks",
+    "world": "luna",
+    "unlock": 4,
+    "items": [
+      "wick",
+      "lampglass",
+      "moonlamp",
+      "beacon",
+      "lighthouse"
+    ]
+  },
+  "silver": {
+    "name": "Silver Lode",
+    "world": "luna",
+    "unlock": 4,
+    "items": [
+      "silverore",
+      "silvernug",
+      "silveringot",
+      "silvercup",
+      "silvercrown"
+    ]
+  },
+  "comet": {
+    "name": "Comet Trail",
+    "world": "luna",
+    "unlock": 5,
+    "items": [
+      "cometdust",
+      "cometice",
+      "cometcore",
+      "cometstone",
+      "cometheart"
+    ]
+  },
+  "lunamoth": {
+    "name": "Crater Wings",
+    "world": "luna",
+    "unlock": 6,
+    "items": [
+      "mothegg",
+      "mothcocoon",
+      "lunamothi",
+      "moonmoth",
+      "craterheart"
+    ]
+  },
+  "magma": {
+    "name": "Magma Works",
+    "world": "cindra",
+    "unlock": 1,
+    "items": [
+      "ember",
+      "cinder",
+      "lavablob",
+      "fireopal",
+      "suncore",
+      "sunforge"
+    ]
+  },
+  "shroom": {
+    "name": "Ash Garden",
+    "world": "cindra",
+    "unlock": 1,
+    "items": [
+      "sporecap",
+      "ashroom",
+      "bigshroom",
+      "glowcap",
+      "shroomtree",
+      "shroomcity"
+    ]
+  },
+  "iron": {
+    "name": "Iron Forge",
+    "world": "cindra",
+    "unlock": 2,
+    "items": [
+      "ironore",
+      "ironnug",
+      "ironingot",
+      "ironanvil",
+      "ironcrown"
+    ]
+  },
+  "obsid": {
+    "name": "Obsidian Cut",
+    "world": "cindra",
+    "unlock": 2,
+    "items": [
+      "obchip",
+      "obshard",
+      "obblade",
+      "obmirror",
+      "obthrone"
+    ]
+  },
+  "glassw": {
+    "name": "Glassworks",
+    "world": "cindra",
+    "unlock": 3,
+    "items": [
+      "sandpinch",
+      "moltenglass",
+      "glassbead",
+      "glassvase",
+      "glasslily"
+    ]
+  },
+  "forge": {
+    "name": "The Smithy",
+    "world": "cindra",
+    "unlock": 4,
+    "items": [
+      "coallump",
+      "coalbrick",
+      "forgefire",
+      "bellows",
+      "greatforge"
+    ]
+  },
+  "spice": {
+    "name": "Spice Kiln",
+    "world": "cindra",
+    "unlock": 4,
+    "items": [
+      "pepperpod",
+      "spicepouch",
+      "spicejar",
+      "spicecrate",
+      "spicefeast"
+    ]
+  },
+  "copper": {
+    "name": "Copper Seam",
+    "world": "cindra",
+    "unlock": 5,
+    "items": [
+      "copperore",
+      "coppernug",
+      "copperingot",
+      "copperbell",
+      "coppercog"
+    ]
+  },
+  "phoenix": {
+    "name": "Ashfall Wings",
+    "world": "cindra",
+    "unlock": 6,
+    "items": [
+      "ashfeather",
+      "emberegg",
+      "firebird",
+      "phoenix",
+      "hollowheart"
+    ]
+  },
+  "shellc": {
+    "name": "Shell Bed",
+    "world": "nerith",
+    "unlock": 1,
+    "items": [
+      "shellchip",
+      "seashell",
+      "bigshell",
+      "nautilus",
+      "shellhorn",
+      "shellthrone"
+    ]
+  },
+  "kelp": {
+    "name": "Kelp Forest",
+    "world": "nerith",
+    "unlock": 1,
+    "items": [
+      "kelpleaf",
+      "kelpfrond",
+      "kelpcoil",
+      "kelpbale",
+      "kelpgrove",
+      "kelpheart"
+    ]
+  },
+  "pearlc": {
+    "name": "Pearl Diving",
+    "world": "nerith",
+    "unlock": 2,
+    "items": [
+      "grit",
+      "seedpearl",
+      "pearl",
+      "pearlstrand",
+      "pearlcrown"
+    ]
+  },
+  "coralc": {
+    "name": "Coral Reef",
+    "world": "nerith",
+    "unlock": 2,
+    "items": [
+      "coralbud",
+      "coralsprig",
+      "coralfan",
+      "coralcrown",
+      "coralpalace"
+    ]
+  },
+  "fishc": {
+    "name": "Fish Market",
+    "world": "nerith",
+    "unlock": 3,
+    "items": [
+      "minnow",
+      "silverfish",
+      "bigfish",
+      "fishcatch",
+      "fishfeast"
+    ]
+  },
+  "tide": {
+    "name": "Tide Pools",
+    "world": "nerith",
+    "unlock": 3,
+    "items": [
+      "bubblet",
+      "seafoam",
+      "tidewave",
+      "tidalorb",
+      "tidalheart"
+    ]
+  },
+  "salt": {
+    "name": "Salt Pans",
+    "world": "nerith",
+    "unlock": 4,
+    "items": [
+      "saltgrain",
+      "saltcake",
+      "saltbrick",
+      "saltpillar",
+      "salttemple"
+    ]
+  },
+  "sunkn": {
+    "name": "Sunken Finds",
+    "world": "nerith",
+    "unlock": 5,
+    "items": [
+      "driftbit",
+      "driftwood",
+      "driftboat",
+      "sunkenchest",
+      "sunkenidol"
+    ]
+  },
+  "lumin": {
+    "name": "Deep Lights",
+    "world": "nerith",
+    "unlock": 6,
+    "items": [
+      "glowplankton",
+      "jellybell",
+      "deeplantern",
+      "abyssorb",
+      "shallowheart"
+    ]
+  },
+  "cloudc": {
+    "name": "Cloud Bank",
+    "world": "vela",
+    "unlock": 1,
+    "items": [
+      "wisp",
+      "cloudlet",
+      "cloudpuff",
+      "thundercloud",
+      "cloudcastle"
+    ]
+  },
+  "aurorac": {
+    "name": "Aurora Weave",
+    "world": "vela",
+    "unlock": 1,
+    "items": [
+      "aurorathread",
+      "aurorasilk",
+      "auroraveil",
+      "auroracloak",
+      "auroracrown"
+    ]
+  },
+  "starc": {
+    "name": "Star Nursery",
+    "world": "vela",
+    "unlock": 2,
+    "items": [
+      "stardust",
+      "starspark",
+      "starlet",
+      "starcluster",
+      "starforge"
+    ]
+  },
+  "wind": {
+    "name": "Wind Currents",
+    "world": "vela",
+    "unlock": 2,
+    "items": [
+      "breeze",
+      "gust",
+      "windcoil",
+      "windvane",
+      "stormeye"
+    ]
+  },
+  "skyfruit": {
+    "name": "Sky Orchard",
+    "world": "vela",
+    "unlock": 3,
+    "items": [
+      "skyseed",
+      "skybud",
+      "skyfruit",
+      "skybasket",
+      "skyfeast"
+    ]
+  },
+  "chime": {
+    "name": "Chime Tower",
+    "world": "vela",
+    "unlock": 3,
+    "items": [
+      "chimebit",
+      "chimebell",
+      "chimeset",
+      "chimetower",
+      "skybell"
+    ]
+  },
+  "prismv": {
+    "name": "Prism Array",
+    "world": "vela",
+    "unlock": 4,
+    "items": [
+      "lightmote",
+      "lightbeam",
+      "prismlens",
+      "prismarray",
+      "sunsprism"
+    ]
+  },
+  "skynest": {
+    "name": "Sky Nest",
+    "world": "vela",
+    "unlock": 5,
+    "items": [
+      "skydown",
+      "skyfeather",
+      "skyplume",
+      "skynestn",
+      "skyegg"
+    ]
+  },
+  "balloonc": {
+    "name": "Drift Yards",
+    "world": "vela",
+    "unlock": 6,
+    "items": [
+      "silkscrap",
+      "silkbag",
+      "driftballoon",
+      "skyship",
+      "reachheart"
     ]
   },
   "star": {
     "name": "Meteor Finds",
     "world": "any",
+    "unlock": 1,
     "items": [
       "scrap",
       "starcore"
     ]
   },
+  "relic": {
+    "name": "Relics",
+    "world": "any",
+    "unlock": 1,
+    "items": [
+      "relic1",
+      "relic2",
+      "relic3",
+      "relic4",
+      "relic5"
+    ]
+  },
+  "bloom": {
+    "name": "Bloom Essence",
+    "world": "any",
+    "unlock": 1,
+    "items": [
+      "bloomspark",
+      "bloommote",
+      "bloomcore",
+      "bloomheart"
+    ]
+  },
+  "wild": {
+    "name": "Wildcards",
+    "world": "any",
+    "unlock": 1,
+    "items": [
+      "rainbow"
+    ]
+  },
   "hull": {
     "name": "Rocket: Hull",
     "world": "ship",
+    "unlock": 1,
     "items": [
       "bolt",
       "boltpack",
@@ -52,6 +647,7 @@
   "engine": {
     "name": "Rocket: Engine",
     "world": "ship",
+    "unlock": 1,
     "items": [
       "spring",
       "coil",
@@ -61,6 +657,7 @@
   "nav": {
     "name": "Rocket: Nav Dish",
     "world": "ship",
+    "unlock": 1,
     "items": [
       "wire",
       "circuit",
@@ -70,6 +667,7 @@
   "tank": {
     "name": "Rocket: Fuel Tank",
     "world": "ship",
+    "unlock": 1,
     "items": [
       "glass",
       "tankglass",
@@ -79,92 +677,11 @@
   "fuel": {
     "name": "Rocket Fuel",
     "world": "ship",
+    "unlock": 1,
     "items": [
       "fuelore",
       "fuelcan",
       "rocketfuel"
-    ]
-  },
-  "moon": {
-    "name": "Moon Rocks",
-    "world": "luna",
-    "items": [
-      "mrock",
-      "mcrystal",
-      "mcore",
-      "mstar",
-      "moonorb"
-    ]
-  },
-  "glow": {
-    "name": "Glow Garden",
-    "world": "luna",
-    "items": [
-      "spore",
-      "bulb",
-      "glowflower",
-      "starbloom",
-      "glowtree"
-    ]
-  },
-  "relic": {
-    "name": "Relics",
-    "world": "any",
-    "items": [
-      "relic1",
-      "relic2",
-      "relic3"
-    ]
-  },
-  "magma": {
-    "name": "Magma Works",
-    "world": "cindra",
-    "items": [
-      "ember",
-      "cinder",
-      "lavablob",
-      "fireopal",
-      "suncore"
-    ]
-  },
-  "shroom": {
-    "name": "Ash Garden",
-    "world": "cindra",
-    "items": [
-      "sporecap",
-      "shroom",
-      "bigshroom",
-      "glowcap",
-      "shroomtree"
-    ]
-  },
-  "wild": {
-    "name": "Wildcards",
-    "world": "any",
-    "items": [
-      "rainbow"
-    ]
-  },
-  "water": {
-    "name": "Waterworks",
-    "world": "earth",
-    "items": [
-      "dew",
-      "puddle",
-      "jug",
-      "barrel",
-      "fountain"
-    ]
-  },
-  "grass": {
-    "name": "Hay Meadow",
-    "world": "earth",
-    "items": [
-      "grass",
-      "hay",
-      "bale",
-      "hat",
-      "scarecrow"
     ]
   }
 }

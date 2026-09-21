@@ -1,5 +1,23 @@
 /* ART - all game graphics as inline SVG. Soft-3D casual mobile style:
-   gradient volume + rim highlight + contact shadow, no flat web-ish icons. */
+   gradient volume + rim highlight + contact shadow, no flat web-ish icons.
+
+   Hand-drawn pieces (producers, characters, the rocket, the hero items) live in
+   this file. The hundreds of ordinary merge items are *composed* instead: an
+   item carries an `art` spec in items.json and artgen.ts draws it from a shared
+   library of primitives and materials. See `itemArt()` at the bottom. */
+import { renderItem, renderProducer, renderFace, faceColors } from './artgen';
+import itemsJson from './content/items.json';
+import producersJson from './content/producers.json';
+import charactersJson from './content/characters.json';
+
+const SPEC: Record<string, { shape: string; mat: string; accent?: string; tier?: number; deco?: string[] } | undefined> =
+  Object.fromEntries(Object.entries(itemsJson as Record<string, any>)
+    .map(([id, d]) => [id, d.art ? { ...d.art, tier: d.art.tier ?? d.tier } : undefined]));
+const PSPEC: Record<string, any> = Object.fromEntries(Object.values(producersJson as Record<string, any>)
+  .filter(p => p.spec).map(p => [p.art, p.spec]));
+const FSPEC: Record<string, any> = Object.fromEntries(Object.entries(charactersJson as Record<string, any>)
+  .filter(([, c]) => c.face).map(([k, c]) => [k, c.face]));
+
 export const ART = (function () {
   const cache: Record<string, string> = {};
 
@@ -876,6 +894,21 @@ export const ART = (function () {
         <circle cx="36" cy="40" r="9" fill="#a79fc4" opacity=".7"/><circle cx="62" cy="62" r="12" fill="#a79fc4" opacity=".6"/>
         <circle cx="66" cy="32" r="6" fill="#a79fc4" opacity=".5"/>
         ${glint(36, 30, 10, 0.35)}</svg>`;
+    if (kind === 'nerith')
+      return `<svg viewBox="0 0 100 100" class="planetArt"><defs>${rg('plN', '#7fe6f5', '#136a8f')}</defs>
+        <circle cx="50" cy="50" r="42" fill="url(#plN)"/>
+        <path d="M12 44 q12 -8 24 -1 q12 7 22 -1 q10 -7 18 2 q-2 6 -6 10 q-30 8 -58 0 Z" fill="#12a0b8" opacity=".85"/>
+        <path d="M20 66 q14 -7 28 1 q13 7 22 -3 q-8 18 -28 20 q-18 0 -22 -18Z" fill="#0e7f9c" opacity=".9"/>
+        <path d="M30 34 q10 -6 18 0 q-8 6 -18 0Z" fill="#c9fbff" opacity=".7"/>
+        <circle cx="66" cy="38" r="5" fill="#c9fbff" opacity=".65"/>
+        ${glint(34, 30, 11, 0.4)}</svg>`;
+    if (kind === 'vela')
+      return `<svg viewBox="0 0 100 100" class="planetArt"><defs>${rg('plV', '#f2d9ff', '#5a4bb5')}
+        ${lg('plVa', '#9ef5d8', '#c8a4ff', 0, 0, 1, 1)}</defs>
+        <circle cx="50" cy="50" r="42" fill="url(#plV)"/>
+        <path d="M10 52 q16 -18 38 -12 q22 6 42 -8 q-4 20 -22 28 q-24 10 -44 4 q-10 -4 -14 -12Z" fill="url(#plVa)" opacity=".85"/>
+        <path d="M18 70 q18 -8 34 0 q14 6 26 -4 q-8 18 -30 20 q-22 0 -30 -16Z" fill="#8f7fe0" opacity=".6"/>
+        ${spark(68, 30, 7)}${spark(32, 68, 5)}${glint(34, 30, 11, 0.4)}</svg>`;
     if (kind === 'mystery')
       return `<svg viewBox="0 0 100 100" class="planetArt"><defs>${rg('plX', '#6f7a99', '#3a4260')}</defs>
         <circle cx="50" cy="50" r="42" fill="url(#plX)"/>
@@ -904,11 +937,13 @@ export const ART = (function () {
   };
   /** drop a portrait into a figure as a nested svg at the given box */
   const head = (k: string, x: number, y: number, s: number) =>
-    get(CHAR, k).replace('<svg viewBox="0 0 100 100" class="face"',
+    charArt(k).replace('<svg viewBox="0 0 100 100" class="face"',
       `<svg x="${x}" y="${y}" width="${s}" height="${s}" viewBox="0 0 100 100"`);
 
   function figure(k: string) {
-    const f = FIG[k] || { body: '#9bd0ff', trim: '#4f8ad0' };
+    const f = FIG[k] || (FSPEC[k]
+      ? { ...faceColors(FSPEC[k]), kind: FSPEC[k].kind === 'robot' ? 'robot' : 'blob' }
+      : { body: '#9bd0ff', trim: '#4f8ad0' });
     const shadow = '<ellipse cx="50" cy="143" rx="27" ry="6" fill="#3a2a16" opacity=".16"/>';
     const arm = (x: number, rot: number) =>
       `<rect x="${x}" y="80" width="13" height="36" rx="6.5" fill="${f.body}" transform="rotate(${rot} ${x + 6.5} 86)"/>
@@ -980,13 +1015,40 @@ export const ART = (function () {
     return cache[key];
   }
 
+  /** hand-drawn art wins; otherwise compose the item from its spec */
+  function itemArt(k: string) {
+    if ((ITEM as Record<string, unknown>)[k]) return get(ITEM, k);
+    const sp = SPEC[k];
+    if (!sp) return get(ITEM, k);                       // the empty-svg fallback
+    const key = 'g' + k;
+    if (!cache[key]) cache[key] = renderItem(sp);
+    return cache[key];
+  }
+
+  function prodArt(k: string) {
+    if ((PROD as Record<string, unknown>)[k]) return get(PROD, k);
+    const sp = PSPEC[k];
+    if (!sp) return get(PROD, k);
+    const key = 'gp' + k;
+    if (!cache[key]) cache[key] = renderProducer(sp);
+    return cache[key];
+  }
+  function charArt(k: string) {
+    if ((CHAR as Record<string, unknown>)[k]) return get(CHAR, k);
+    const sp = FSPEC[k];
+    if (!sp) return get(CHAR, k);
+    const key = 'gc' + k;
+    if (!cache[key]) cache[key] = renderFace(sp);
+    return cache[key];
+  }
+
   return {
-    item: (k: string) => get(ITEM, k),
-    producer: (k: string) => get(PROD, k),
-    char: (k: string) => get(CHAR, k),
+    item: itemArt,
+    producer: prodArt,
+    char: charArt,
     figure: (k: string) => { const key = 'f' + k; if (!cache[key]) cache[key] = figure(k); return cache[key]; },
     icon: (k: string) => (ICON as Record<string, string>)[k] || '',
     weed, rocket, planet,
-    hasItem: (k: string) => !!ITEM[k],
+    hasItem: (k: string) => !!ITEM[k] || !!SPEC[k],
   };
 })();

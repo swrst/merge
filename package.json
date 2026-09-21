@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && vite build --config vite.standalone.config.ts && node scripts/standalone.mjs",
+    "build": "npm run content && vite build && vite build --config vite.standalone.config.ts && node scripts/standalone.mjs",
     "preview": "vite preview --port 4173",
     "check": "tsc --noEmit",
     "sync": "npm run build && cap sync",
@@ -13,7 +13,8 @@
     "icons": "capacitor-assets generate --android",
     "test": "node scripts/playtest.mjs",
     "apk": "npm run build && cap sync android && cd android && ./gradlew assembleDebug",
-    "ios": "npm run build && cap sync ios && cap open ios"
+    "ios": "npm run build && cap sync ios && cap open ios",
+    "content": "node scripts/gen-content.mjs"
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",

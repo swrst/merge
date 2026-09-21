@@ -1,8 +1,16 @@
 # Merge Rocket — handbook
 
-A kid-friendly merge game in the Travel Town mould. You start in a meadow on Earth,
-gather and merge, fill orders for goofy neighbours, survive a meteor crash, rebuild the
-alien's rocket piece by piece, brew fuel, and fly to new worlds.
+A kid-friendly merge game in the Travel Town mould, with a spine of its own.
+
+**The story.** The Bloom — the living network that linked every world — collapsed, and the
+worlds went dormant. Your rocket is the last **Seed Vault**: every growing thing that ever
+was is asleep inside it, and Bloop is its last curator. Merging is not tidying, it is
+*remembering*: two small things recalling what they add up to. Finish a chain and the Vault
+pays you Bloom Essence; feed that to a world's dormant **Heart** and the world wakes up
+around you, stage by visible stage. Five worlds, five Hearts, one job.
+
+You start in a meadow on Earth, gather and merge, fill orders for goofy neighbours, survive
+a meteor crash, rebuild the rocket piece by piece, brew fuel, and fly on.
 
 Built as a web app (TypeScript + PixiJS) and wrapped with Capacitor so the same code
 ships to Android and iOS.
@@ -109,14 +117,37 @@ unchanged. Apple Developer Program is $99/yr.
 - Locked weed/rock tiles show the level that clears them.
 
 ### Resources and chains
-- Five-tier chains per world (Woodworks, Rock Quarry, Berry Kitchen on Earth;
-  Moon Rocks and Glow Garden on Luna), plus rocket-part and fuel chains.
-- The fifth tier is a *masterpiece* — Wooden Cart, Crystal Statue, Berry Cake, Moon Orb,
-  Glow Tree. They sell for 80–104 and every one of them is an ingredient in the lab.
-- A three-tier **Relic** chain (Star Gem → Sun Amber → Prism Heart, 120 → 560 coins) sits on
-  top. No producer makes relics: they only come out of the Research Lab, and once you own
-  one, two of them still merge into the next like anything else.
-- Every item has a name, tier and sell price; top-tier items are the money makers.
+- **286 items across 57 chains**, five to seven tiers each: twelve chains on Earth, nine per
+  world after that, plus rocket parts, fuel, relics, Bloom Essence and the Wildcard.
+- The last tier of a chain is a *masterpiece* — Great Oak, Monument, Royal Jelly, Phoenix,
+  Coral Palace, Sky Bell. It sells for a fortune, it is a lab ingredient, and the first time
+  you make one the Vault pays you a **Bloom Spark**.
+- A five-tier **Relic** chain (Sun Amber → Prism Hearth → Tide Compass → Grove Sigil → Vault
+  Key) sits on top. No producer makes relics: they only come out of the Research Lab, and
+  once you own one, two of them still merge into the next like anything else.
+- Nothing is on the board at once. Each chain has an `unlock` — the **world level** it comes
+  back at — so a world opens with two chains and grows into nine or twelve.
+- Every item has a name, tier and sell price; sell prices follow one curve (2, 5, 13, 32, 78,
+  185, 430, 980), so a tier is worth about 2.4× the one below it.
+
+### Where the art comes from
+The hand-drawn pieces — producers, characters, the rocket, the planets, the hero items —
+live in `src/art.ts` as inline SVG. The hundreds of ordinary merge items are **composed**:
+`src/artgen.ts` holds ~90 primitives (seed, log, crystal, bell, bird, tower, butterfly…) and
+~65 materials (wood, honey, obsidian, aurora…), and an item is one line of data:
+
+```json
+"royaljelly": { "name": "Royal Jelly", "chain": "honey", "tier": 6, "sell": 185,
+                "art": { "shape": "orb", "mat": "honey", "accent": "gold",
+                         "deco": ["glow", "crest"] } }
+```
+
+A material yields a whole lighting ramp (highlight, base, shade, deep shade, rim, outline),
+and every primitive is drawn with the same stack — gradient body, ambient occlusion, rim
+light, specular, contact shadow — so 286 items look like one set rather than 286 doodles.
+Tier adds sparkle, a glow, a gold laurel on a chain's finale. Producers and alien faces use
+the same library (`renderProducer`, `renderFace`), which is why a new world costs data, not
+drawing time.
 
 ### Orders (contracts)
 - Three order cards at a time, each showing the **whole customer** — a full-body figure that
@@ -130,14 +161,51 @@ unchanged. Apple Developer Program is $99/yr.
   unfinished, most customers hand back a piece for the part you are furthest from finishing —
   orders are the steady drip that keeps the build moving.
 
-### Progression
-- Levels start at 1. XP mostly comes from orders (`3 + tier·2 + qty`), a trickle from merges.
-- The curve is **quadratic** — `8 + (l-1)·7 + 2.6·(l-1)²` — so 8, 18, 32, 52, 78, 108, 144,
-  184, 230, 282… Reaching level 11 takes over 1100 XP instead of a few easy minutes.
-- Each level needs more XP, refills energy completely and clears more board tiles.
+### Progression — two levels, on purpose
+**Account level** is the veteran's level. XP mostly comes from orders (`3 + tier·2 + qty`),
+a trickle from merges. The curve is quadratic — `8 + (l-1)·7 + 2.6·(l-1)²` — so 8, 18, 32,
+52, 78, 108, 144, 184, 230, 282… It sets energy, the tier of things people ask for, and when
+the Trading Post opens. It never resets.
+
+**World level** is the one that hands you new toys. Every world keeps its own level and its
+own XP pot (`22 + (l-1)·26 + 6·(l-1)²`, capped at 8), fed by whatever you earn while standing
+there. It clears the overgrown board cells, grows in new producers, and **unlocks chains** —
+which is why landing somewhere new is exciting even at account level 30: Vela starts with two
+chains, two producers and a cramped board, exactly like Earth did.
+
 - Energy: 50 + 5/level (+10 per Backpack upgrade), +1 every 40 s, plus a 🍪 Snack Break
   (+20, 3 minute cooldown). Slow on purpose: it is the pacing brake for the whole game.
-- Ten story missions track the whole arc, each paying coins on completion.
+- Twenty missions track the whole arc, each paying coins on completion.
+
+### 🌱 The Heart and the Bloom
+The long goal. Every world has a dormant Heart — the Meadow Heart, the Crater Heart, the
+Shallow Heart — shown in the 🌍 World tab with its own progress bar.
+
+- **Earning essence.** The first time you finish any chain in a world, the Vault pays a
+  **Bloom Spark**. Sparks merge: Spark → Mote → Core → Heart, worth 1, 2, 4 and 8 Bloom.
+  The Crater Dig also turns one up now and then.
+- **Feeding it.** One button hands every essence tile on the board to the Heart.
+- **Waking up.** Each world has three or four stages. Crossing one pays coins and energy,
+  fires a story beat, and *visibly* brightens the world — the hills and the sun get their
+  colour back, a stage at a time.
+- Wake all five and the last beat of the story plays.
+
+### 🎲 Side games
+Four small games in the 🌍 World tab, each a different verb, each on its own cooldown.
+
+- **⛏️ Crater Dig** (6 ⚡, 5 min) — press-your-luck. Twenty buried tiles, six digs, items and
+  coins under most of them and a cave-in under a few. Cash out whenever you like; one bad
+  dig buries the whole pile.
+- **⚗️ Fuel Brewing** (4 ⚡, 4 min) — timing. A needle sweeps a bar, you stop it in the green.
+  Five stirs, and the green shrinks every time. Each hit is Fuel Ore; a perfect five is a
+  Fuel Canister, which is the fastest honest route to a launch.
+- **🛸 Alien Market** (free, 7 min) — a gamble about information. Three crates, you may look
+  inside two, you keep exactly one — so the unopened one is always tempting. Zib will then
+  haggle your prize up a tier for coins.
+- **✨ Constellations** (free) — the permanent one, and what Star Cores are finally *for*.
+  Trace a shape by tapping its stars in order and it stays lit for the rest of the game: The
+  Plough (+10 % coins), The Lantern (taps cost 1 less energy), The Seed (timers 20 % faster),
+  The Vault (Bloom Essence counts double). They apply in every world.
 
 ### 🛒 Trading Post (level 4)
 The answer to "what are the coins even for".
@@ -232,29 +300,34 @@ the same three faces. Arrows appear at the edges when there are more than fit.
   countdown. Fill it before it sails for several times the usual payout plus a booster.
 
 ### Worlds
-Three playable worlds, each with its own sky, board palette, chains, producers, customers
-and music. They open in order and each trip costs fuel — and each one **plays** differently:
+Five playable worlds, each with its own sky, board palette, chains, producers, customers,
+music and Heart. They open in order and each trip costs fuel.
 
-| | Sunny Meadow (Earth) | Crater Camp (Luna) | Ember Hollow (Cindra) |
+| world | chains | opens with | its own event |
 | --- | --- | --- | --- |
-| chains | Woodworks, Rock Quarry, Berry Kitchen, Waterworks, Hay Meadow | Moon Rocks, Glow Garden | Magma Works, Ash Garden |
-| a tap costs | 1 ⚡ | 2 ⚡ | 3 ⚡ |
-| its own event | **rain** fills every timer producer at once | **low gravity** bounces an input back on roughly one merge in five | **eruptions** throw hot rocks onto free tiles |
+| **Sunny Meadow** (Earth) | 12 — wood, stone, berries, water, hay, flowers, honey, fungi, weaving, nesting, pottery, butterflies | Woodworks + Rock Quarry | **rain** fills every timer producer at once |
+| **Crater Camp** (Luna) | 9 — moon rock, glow garden, dust, ice, crystal, lanterns, silver, comets, moths | Moon Rocks + Glow Garden | **low gravity** bounces an input back on roughly one merge in five |
+| **Ember Hollow** (Cindra) | 9 — magma, ash garden, iron, obsidian, glass, the smithy, spice, copper, phoenix | Magma Works + Ash Garden | **eruptions** throw hot rocks onto free tiles |
+| **Tidal Shallows** (Nerith) | 9 — shells, kelp, pearls, coral, fish, tide pools, salt, sunken finds, deep lights | Shell Bed + Kelp Forest | tides |
+| **Aurora Reach** (Vela) | 9 — clouds, aurora weaving, stars, wind, sky orchard, chimes, prisms, sky nests, drift yards | Cloud Bank + Aurora Weave | aurora |
 
-A world keeps its own board, and travelling resets the shop shelf, the cargo ship and the
-contract board, so nothing from the last planet leaks into the next one. The Guide only
-lists what you can make where you are standing; the bag is what carries goods between
-worlds.
+A world keeps its own board **and its own level**, and travelling resets the shop shelf, the
+cargo ship and the contract board, so nothing from the last planet leaks into the next one.
+The Guide only lists what you can make where you are standing — and shows the chains still
+sleeping here as silhouettes with the level they come back at. The bag is what carries goods
+between worlds.
 
 ### Screens
 - **🧩 Board** — the game.
 - **🛒 Shop** — supplies, crates and upgrades (level 4).
 - **🔬 Lab** — the experiment bench, lab book and rumours (level 6).
 - **🚀 Rocket** — mission list with progress and the rocket assembling part by part.
-- **📖 Guide** — the **catalogue**: a collection bar (`11/45` found), every chain as picture
-  rows with sell price and how many you own right now, `???` for the undiscovered, plus what
-  each producer makes and costs.
-- **🗺️ Map** — the worlds, travel costs, and the launch button.
+- **📖 Guide** — the **catalogue**: a collection bar (`38/286` found), every awake chain as
+  picture rows with sell price and how many you own right now, `???` for the undiscovered,
+  a silhouette row for the chains still sleeping in this world, plus what each producer makes
+  and costs.
+- **🌍 World** — the hub for *where am I*: the Heart and its bloom progress, the four side
+  games, the constellations, and the galaxy map with travel costs and the launch button.
 
 ### Presentation and feel
 - All artwork is hand-written SVG (`src/art.ts`), rasterised into GPU textures at startup.
@@ -280,38 +353,68 @@ worlds.
 
 ## 4. Changing content
 
-**All content is JSON.** Adding items, chains, producers, characters, missions or whole
+**All content is data.** Adding items, chains, producers, characters, missions or whole
 worlds means editing data — no engine code.
 
+The game reads JSON at runtime. Four of those files are *generated* from compact tables,
+because 286 items written out as JSON is a few thousand lines of braces nobody can read:
+
 ```
-src/content/items.json        every item: name, chain, tier, sell price
-src/content/chains.json       merge chains: which items, in which order, which world
-src/content/producers.json    producers: tap or timer, cost, refill, `uses` if it runs out, drops
-src/content/worlds.json       worlds: chains, starting producers, locked tiles, characters
-src/content/characters.json   names and order lines
-src/content/missions.json     the story mission list
+scripts/content/chains.mjs      the catalogue: one line per item
+scripts/content/producers.mjs   the sources, and where they get planted
+scripts/content/worlds.mjs      worlds, the cast, the Seed Vault story
+scripts/gen-content.mjs         builds the JSON, then sanity-checks every shape and
+                                material against src/artgen.ts
+
+npm run content                 <- run this after editing any of the above
+```
+
+```
+src/content/items.json        GENERATED  every item: name, chain, tier, sell price, art spec
+src/content/chains.json       GENERATED  merge chains: items in order, world, unlock level
+src/content/producers.json    GENERATED  tap or timer, cost, refill, `uses`, drops, art spec
+src/content/worlds.json       GENERATED  chains, starting producers, locks, folks, Heart, bloom
+src/content/characters.json   GENERATED  names, order lines, generated-face specs
+src/content/story.json        GENERATED  the story beats and when they fire
+src/content/missions.json     the mission list
 src/content/research.json     lab recipes: two inputs -> one relic, price, riddle
-src/content/shop.json          shelf settings, upgrades and crates
-src/content/config.json       tuning: board size, energy, XP curve, meteors, unlocks,
-                              combo streaks, the daily calendar and the cargo ship
+src/content/shop.json         shelf settings, upgrades and crates
+src/content/config.json       tuning: board size, energy, both XP curves, meteors, unlocks,
+                              combo streaks, the daily calendar, the cargo ship, the side games
 src/content/index.ts          types + lookups + the validator
 ```
 
 ### Add an item to an existing chain
-1. `items.json` — add the entry, with `tier` equal to its position in the chain:
-   ```json
-   "plank": { "name": "Plank", "chain": "wood", "tier": 5, "sell": 70 }
-   ```
-2. `chains.json` — append the id to that chain's `items` array.
-3. `src/art.ts` — add a `plank: () => svg(...)` drawing under `ITEM`.
+One line in `scripts/content/chains.mjs`, in the chain's list, at the position you want:
+
+```js
+'plank|Plank|plank|wood/straw+crest',
+//  id  | name | shape | material / accent + decorations
+```
+
+Then `npm run content`. Tier, sell price and the drawing all follow. The shape comes from
+`SHAPE_NAMES` and the material from `MAT_NAMES` in `src/artgen.ts`; the generator refuses to
+build if you name one that does not exist. Decorations are `glow`, `ring`, `crest`, `motes`.
+
+### Add a whole chain
+```js
+['pottery', 'The Pottery', 'earth', 6,      // key, name, world, world level it wakes at
+  'mud|Clay Daub|pebble|clay',
+  'claypot|Clay Pot|pot|clay',
+  'kiln|Kiln|house|clay/flame'],
+```
 
 ### Add a producer
-```json
-"beehive": { "name": "Bee Hive", "art": "beehive", "mode": "timer",
-             "every": 20000, "cap": 3, "drops": ["honeydrop", "honeydrop", "honeycomb"] }
+One line in `scripts/content/producers.mjs`:
+
+```js
+['earth', 4, 'hive|Wild Hive|honey:honey/bark|timer:18/3|nectar nectar honeydrop'],
+// world, world level it appears at, id|name|art|mode|drops
 ```
-Then draw `beehive` under `PROD` in `src/art.ts`, and place it in a world's `start` array
-(or spawn it from code for a story beat).
+
+`art` is either a hand-drawn key from `src/art.ts` (`tree`, `rocks`, `well`…) or
+`shape:material/ground` to compose one. `mode` is `tap:<energy>` or
+`timer:<seconds>/<charges>`. Cells are assigned from the `CELLS` table in the same file.
 
 ### Add a lab recipe
 ```json
@@ -327,24 +430,29 @@ block, then apply it wherever it belongs in `game.ts` (the existing four are one
 `maxEnergy()`, `everyOf()`, `orderSlots()`, `snackAmt()`).
 
 ### Add a world
-```json
-"cinder": {
-  "name": "Ashen Wastes", "subtitle": "Cindra", "planet": "cinder",
-  "chains": ["magma", "relic"],
-  "start": [{ "cell": 19, "producer": "lavaVent" }, { "cell": 22, "producer": "ruins" }],
-  "locks": { "0": 2, "5": 2, "42": 2, "47": 2 },
-  "folks": ["zib", "nix"]
-}
-```
-Add its chains and producers, draw a `planet` variant in `art.ts`, and add a card in the
-Map screen's list. Cells are board indices: `row * cols + col`, so cell 19 is row 3, col 1.
+Add an entry to `WORLDS` in `scripts/content/worlds.mjs` — name, planet art key, tap cost,
+perk, the cast, its **Heart**, its bloom stages and its intro line. Then give it chains (at
+least two at `unlock: 1`) and producers (at least one at level 1), add it to `WORLD_ORDER` in
+`game.ts`, draw a `planet` variant in `art.ts`, and give it a sky and a board palette in
+`style.css` (`.app.<key>`) and a tile theme in `board.ts`'s `THEME`. Cells are board indices:
+`row * cols + col`, so cell 19 is row 3, col 1.
+
+New characters need no drawing — give them a `face` spec (`{ kind, mat, accent }`, kinds:
+blob, bug, fish, bird, crystal, flame, cloud, robot) and `renderFace` composes the portrait
+and the full-body order-card figure.
+
+### Add a story beat
+`STORY` in `scripts/content/worlds.mjs`. `at: { world, lvl }` fires it when that world reaches
+that world level; `at: { flag }` fires it when the game calls `checkStory('<flag>')`.
 
 ### The safety net
-`validateContent()` runs on every dev boot and prints problems to the console: items pointing
-at chains that don't exist, chains listing missing items, tiers that don't match their
-position, producers dropping unknown items, worlds referencing missing producers or
-characters, cells outside the board, duplicate mission ids. If the console is quiet, the
-content is consistent.
+Two nets. `npm run content` refuses to generate if a shape, material, character or dropped
+item does not exist. Then `validateContent()` runs on every dev boot and prints problems to
+the console: items pointing at chains that don't exist, chains listing missing items, tiers
+that don't match their position, producers dropping unknown items, worlds referencing missing
+producers or characters, cells outside the board, duplicate mission or story ids, bloom stages
+that do not get harder, and — the one that would soft-lock a player — **a world that opens
+with fewer than two chains or no producer**. If both are quiet, the content is consistent.
 
 ### Tuning knobs (`config.json`)
 | key | meaning |
@@ -380,8 +488,12 @@ index.html              app shell: HUD, order row, board host, tabs, modals
 src/main.ts             entry point: icons, native setup, ads init, starts the game
 src/game.ts             rules: merging, orders, levels, missions, story, worlds
 src/board.ts            the board: PixiJS rendering, drag input, GSAP animation
-src/art.ts              every drawing, as inline SVG
+src/art.ts              hand-drawn art: producers, characters, rocket, planets, hero items
+src/artgen.ts           the art engine: ~90 primitives x ~65 materials, plus producers
+                        and alien faces composed from the same library
 src/content/            all game data as JSON + types + validator
+scripts/content/        the compact source tables the JSON is generated from
+scripts/gen-content.mjs builds src/content/*.json (npm run content)
 src/native.ts           Capacitor: haptics, save mirroring, status bar
 src/ads.ts              ad seam — no-ops until a network is wired in
 src/style.css           everything outside the board
@@ -419,12 +531,19 @@ production strips them. That's enough to drive the whole game from Playwright: c
 cell centre from `__board.center(i)`, click or drag, then assert on `__game.state()`.
 
 `scripts/playtest.mjs` is that regression, wired to `npm test`. Start `npm run dev` in one
-shell, run `npm test` in another, and it drives the whole arc headlessly: the XP curve,
-producers and merging, buying supplies and upgrades (and checking max energy and the extra
-order card actually changed), the wreck spreading pieces across every unfinished part chain,
-60 rolled orders to confirm the part-gift rate, a dud experiment that costs the fee but keeps
-its samples, a real discovery that consumes both, the catalogue, and finally a launch to
-Luna — asserting no console errors throughout.
+shell, run `npm test` in another, and it drives the whole arc headlessly in **28 sections**:
+the XP curve, producers and merging, buying supplies and upgrades (and checking max energy
+and the extra order card actually changed), the wreck spreading pieces across every
+unfinished part chain, 60 rolled orders to confirm the part-gift rate, a dud experiment that
+costs the fee but keeps its samples, a real discovery that consumes both, the bag, the
+boosters, the cargo ship, the soft-lock rescue, launches to all four other worlds —
+
+and then the v6 systems: that a fresh world really does start with two chains and a cramped
+board, that **no contract ever asks for something that has not woken up yet**, that world
+levels unlock chains, that finishing a chain pays a Bloom Spark, that feeding the Heart wakes
+a stage and fires its story beat, all four side games end to end, tracing a constellation and
+paying its Star Cores, and that all 286 items can be drawn — asserting no console errors
+throughout.
 
 ---
 
@@ -453,10 +572,11 @@ an order payout, instant-finish a producer timer.
   a limit later.
 - Characters and celebrations could move to Spine (official Pixi v8 runtime) or Rive.
 - TypeScript is deliberately loose (`strict: false`) since this grew out of a JS prototype.
-- Three worlds are playable; the map already teases a fourth.
-- Minigames (a proper crater-digging or fuel-brewing interaction) are still an idea rather
-  than a feature.
+- Five worlds are playable. A sixth is data, not code — see *Add a world*.
 - Orders are all "fetch N of X" — timed and bundle orders would add variety.
-- Relics sell and fill orders, but a relic *sink* (a museum? decorating your camp?) would
-  give the lab a longer tail.
-- Sound is synthesised blips; real effects and music are still missing.
+- The world "wakes up" through palette and scenery; per-stage scenery props (flowers, reefs,
+  aurora curtains appearing on the backdrop) would sell it much harder.
+- The side games have no leaderboard or streak of their own; Crater Dig especially wants a
+  "deepest run" record.
+- Bloom Essence is earned from chain finales and the Dig. A third source — a weekly Vault
+  contract, say — would smooth the late curve.
