@@ -167,6 +167,16 @@ live in `src/art.ts` as inline SVG. The hundreds of ordinary merge items are **c
                          "deco": ["glow", "crest"] } }
 ```
 
+Every finished drawing — hand-drawn or composed — then goes through one more
+pass in `art.ts`: an SVG filter that thresholds the alpha (so the contact shadow
+is left alone), dilates the silhouette into a single thick warm-dark **contour**,
+and subtracts an offset copy of itself to lay a band of shade inside the bottom
+edge and a lip of light along the top. That is the Travel Town trick — a hundred
+unrelated objects wearing the same outline and the same light read as one box of
+toys — and it costs one filter per item at startup rather than a stroke on every
+path of every drawing. (No Gaussian in it: a blur there doubles the time to draw
+286 items and you cannot see it at tile size.)
+
 A material yields a whole lighting ramp (highlight, base, shade, deep shade, rim, outline)
 pushed to cartoon contrast — the highlight is 30 points lighter and warmer, the shade 20
 darker and *more* saturated, the outline a deep saturated version of the colour itself rather

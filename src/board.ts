@@ -19,11 +19,11 @@ export type Hooks = {
    this genre does it — it reads as a surface you put things on rather than a
    grid of separate buttons. */
 const THEME: Record<string, { tile: number; tileLo: number; lock: number; lockLo: number; txt: number }> = {
-  earth: { tile: 0xf6e3bd, tileLo: 0xefd7a9, lock: 0xdcc49a, lockLo: 0xd2b98d, txt: 0x8a6a3c },
-  luna: { tile: 0xe4dff5, tileLo: 0xd6cfec, lock: 0xc3bcdd, lockLo: 0xb8b0d4, txt: 0x5a4f86 },
-  cindra: { tile: 0xf2d9bd, tileLo: 0xe9caa8, lock: 0xd9ab88, lockLo: 0xcf9d78, txt: 0x8a4a2a },
-  nerith: { tile: 0xd6eef5, tileLo: 0xc7e5ee, lock: 0xa8d2de, lockLo: 0x9bc8d6, txt: 0x2f6e80 },
-  vela: { tile: 0xe7dcf7, tileLo: 0xdccff2, lock: 0xc2b2e2, lockLo: 0xb6a5da, txt: 0x5b4b95 },
+  earth: { tile: 0xf7e2b6, tileLo: 0xe9cd97, lock: 0xd8bc8b, lockLo: 0xccad7b, txt: 0x8a6a3c },
+  luna: { tile: 0xe6e0f7, tileLo: 0xd0c7e8, lock: 0xbfb6da, lockLo: 0xb0a6cf, txt: 0x5a4f86 },
+  cindra: { tile: 0xf5d8b2, tileLo: 0xe6c094, lock: 0xd5a178, lockLo: 0xc79167, txt: 0x8a4a2a },
+  nerith: { tile: 0xd8f0f7, tileLo: 0xbfe2ed, lock: 0xa3cedb, lockLo: 0x92c2d1, txt: 0x2f6e80 },
+  vela: { tile: 0xe9ddfa, tileLo: 0xd5c6f0, lock: 0xbdaade, lockLo: 0xae9bd4, txt: 0x5b4b95 },
 };
 /** an unknown world falls back to Earth rather than throwing mid-landing */
 const themeOf = (k: string) => THEME[k] || THEME.earth;
@@ -133,6 +133,21 @@ class PixiBoard {
   }
   private texture(key: string): Texture {
     return this.tex[key] || Texture.EMPTY;
+  }
+
+  /* A blank board is the worst bug this game can have, and there are two ways
+     to get one: a shake tween killed half-way through leaves the whole grid
+     parked off-screen, and a canvas that was measured while its panel had no
+     height stays that size until the next resize event that may never come.
+     The game ticks this twice a second; it costs nothing and it cannot get
+     stuck. */
+  heal() {
+    if (!this.ready) return;
+    const r = this.root as any;
+    if (!gsap.isTweening(r) && (r.x !== 0 || r.y !== 0)) { r.x = 0; r.y = 0; }
+    const w = this.host.clientWidth, h = this.host.clientHeight;
+    if (w > 60 && h > 60
+      && (Math.abs(this.app.screen.width - w) > 2 || Math.abs(this.app.screen.height - h) > 2)) this.layout();
   }
 
   /* -------------------------------------------------------------- layout */
@@ -345,7 +360,7 @@ class PixiBoard {
     if (s.art.parent !== this.lItem) this.lItem.addChild(s.art);
     gsap.killTweensOf(s.art);
     gsap.killTweensOf(s.art.scale);
-    const scale = s.key.startsWith('p') ? 0.96 : s.key.startsWith('b') ? 0.78 : 0.92;
+    const scale = s.key.startsWith('p') ? 1.02 : s.key.startsWith('b') ? 0.82 : 1.0;
     s.art.position.set(p.x, p.y);
     s.art.width = s.art.height = this.cell * scale;
     s.art.alpha = 1;
@@ -381,7 +396,7 @@ class PixiBoard {
   }
   private spriteScale(i: number) {
     const s = this.slots[i];
-    const scale = s.key.startsWith('p') ? 0.96 : s.key.startsWith('b') ? 0.78 : 0.92;
+    const scale = s.key.startsWith('p') ? 1.02 : s.key.startsWith('b') ? 0.82 : 1.0;
     return (this.cell * scale) / TEX;
   }
   /** producer squash when used */

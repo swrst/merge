@@ -3034,6 +3034,7 @@ export async function startGame() {
     while (S.energy < maxEnergy() && now - S.eAt >= per) { S.eAt += per; S.energy++; renderHUD(); }
     if (S.energy >= maxEnergy()) S.eAt = now;
     tickProducers();
+    board.heal();
     sweepSpecials();
     // snack cooldown
     const cd = Math.max(0, CONFIG.energy.snack.cooldownMs - (now - S.snackAt));

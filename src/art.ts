@@ -1009,6 +1009,44 @@ export const ART = (function () {
     flask: `<svg viewBox="0 0 100 100" class="ic"><defs>${lg('icFl', '#c8f6ff', '#4fb6e0')}${rg('icFl2', '#ffb3f0', '#a63fd0')}</defs><path d="M40 14 h20 v26 l18 32 a10 10 0 0 1 -9 15 h-38 a10 10 0 0 1 -9 -15 l18 -32Z" fill="url(#icFl)"/><path d="M33 60 h34 l10 18 a8 8 0 0 1 -7 9 h-40 a8 8 0 0 1 -7 -9Z" fill="url(#icFl2)"/><rect x="36" y="10" width="28" height="9" rx="4.5" fill="#fff"/><circle cx="44" cy="74" r="4" fill="#fff" opacity=".7"/><circle cx="58" cy="68" r="3" fill="#fff" opacity=".6"/></svg>`,
   };
 
+  /* ---------------------------------------------------------- the contour
+     Travel Town's whole set — a twig, a ring, a birthday cake — wears the same
+     thick warm-dark outline, and that one trick is most of why a hundred
+     unrelated objects read as one box of toys. Rather than hand-stroking every
+     path in every drawing, dilate the finished silhouette: feColorMatrix first
+     throws away everything under half alpha (so the contact shadow underneath
+     is *not* outlined), feMorphology grows what is left, and the original is
+     laid back on top. The body is pulled in a little so the contour has room
+     inside the viewBox. */
+  let inkN = 0;
+  function inked(svg: string, radius = 2.6, shrink = 0.92, col = '#41280f') {
+    const open = svg.indexOf('>');
+    if (open < 0 || svg.indexOf('</svg>') < 0) return svg;
+    const id = 'ink' + (inkN++).toString(36);
+    const head = svg.slice(0, open + 1);
+    const body = svg.slice(open + 1, svg.lastIndexOf('</svg>'));
+    const f = `<defs><filter id="${id}" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">`
+      // alpha, thresholded: the soft contact shadow under the item must not be
+      // outlined along with it
+      + `<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 14 -7" result="a"/>`
+      // the contour
+      + `<feMorphology in="a" operator="dilate" radius="${radius}" result="d"/>`
+      + `<feFlood flood-color="${col}"/><feComposite in2="d" operator="in" result="ring"/>`
+      // a band of shade inside the bottom edge and a lip of light along the top:
+      // two offsets and a subtract, which is what makes a flat cut-out look
+      // moulded. No blur — a Gaussian here doubles the cost of drawing 286
+      // items and you cannot see it at tile size.
+      + `<feOffset in="a" dy="-7" result="up"/><feComposite in="a" in2="up" operator="out" result="lip"/>`
+      + `<feFlood flood-color="#2e1c09" flood-opacity=".3"/><feComposite in2="lip" operator="in" result="shade"/>`
+      + `<feOffset in="a" dy="5" result="dn"/><feComposite in="a" in2="dn" operator="out" result="cap"/>`
+      + `<feFlood flood-color="#fffdf2" flood-opacity=".3"/><feComposite in2="cap" operator="in" result="lit"/>`
+      + `<feMerge><feMergeNode in="ring"/><feMergeNode in="SourceGraphic"/>`
+      + `<feMergeNode in="shade"/><feMergeNode in="lit"/></feMerge></filter></defs>`;
+    return head + f
+      + `<g filter="url(#${id})" transform="translate(50 50) scale(${shrink}) translate(-50 -50)">${body}</g>`
+      + '</svg>';
+  }
+
   function get(map: Record<string, () => string>, k: string) {
     const key = map === ITEM ? 'i' + k : map === PROD ? 'p' + k : 'c' + k;
     if (!cache[key]) cache[key] = (map[k] || (() => '<svg viewBox="0 0 100 100" class="art"></svg>'))();
@@ -1017,20 +1055,24 @@ export const ART = (function () {
 
   /** hand-drawn art wins; otherwise compose the item from its spec */
   function itemArt(k: string) {
-    if ((ITEM as Record<string, unknown>)[k]) return get(ITEM, k);
-    const sp = SPEC[k];
-    if (!sp) return get(ITEM, k);                       // the empty-svg fallback
-    const key = 'g' + k;
-    if (!cache[key]) cache[key] = renderItem(sp);
+    const key = 'ik' + k;
+    if (cache[key]) return cache[key];
+    let raw: string;
+    if ((ITEM as Record<string, unknown>)[k]) raw = get(ITEM, k);
+    else if (SPEC[k]) raw = renderItem(SPEC[k]);
+    else raw = get(ITEM, k);                            // the empty-svg fallback
+    cache[key] = inked(raw);
     return cache[key];
   }
 
   function prodArt(k: string) {
-    if ((PROD as Record<string, unknown>)[k]) return get(PROD, k);
-    const sp = PSPEC[k];
-    if (!sp) return get(PROD, k);
-    const key = 'gp' + k;
-    if (!cache[key]) cache[key] = renderProducer(sp);
+    const key = 'ikp' + k;
+    if (cache[key]) return cache[key];
+    let raw: string;
+    if ((PROD as Record<string, unknown>)[k]) raw = get(PROD, k);
+    else if (PSPEC[k]) raw = renderProducer(PSPEC[k]);
+    else raw = get(PROD, k);
+    cache[key] = inked(raw, 2.4, 0.94);
     return cache[key];
   }
   function charArt(k: string) {
