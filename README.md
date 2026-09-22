@@ -25,7 +25,10 @@ npm run android    # build, sync, open Android Studio
 npm run apk        # build a debug APK to sideload
 ```
 
-🎨 **[ART.md](ART.md)** — dropping painted sprites in over the generated art.
+🎨 **[ART-BRIEF.md](ART-BRIEF.md)** — the style bible and the full art order (367 assets,
+each with its prompt, in `art/manifest.csv`). **[ART.md](ART.md)** is the short version:
+where painted files go and how they override the generated art.
+📚 **[art/CATALOGUE.md](art/CATALOGUE.md)** — every merge chain, in order.
 
 📱 **[MOBILE.md](MOBILE.md)** — putting it on a phone, Android and iOS.
 
