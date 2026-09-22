@@ -161,7 +161,14 @@ For an agent that takes one system prompt and then a list of jobs:
 
 Then feed it rows from `art/manifest.csv`.
 
-## 6. Acceptance check
+## 6. Handing it to an art agent
+
+`art/AGENT-MESSAGE.md` is the whole brief as one message to paste into an agent
+that has access to this repo: what the game is, the style, the formats, the batch
+order, how to deliver (one branch and one PR per batch, image files only, never
+touch code or content) and what to check before each PR.
+
+## 7. Acceptance check
 
 Before a batch is accepted:
 
