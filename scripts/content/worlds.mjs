@@ -67,8 +67,7 @@ export const WORLDS = [
 /* Cells unlock as the world levels up. Same shape everywhere: the board opens
    outward from the middle, so early play is cosy and late play is roomy. */
 export const LOCKS = {
-  2: [0, 1, 4, 5], 3: [2, 3, 42, 47], 4: [43, 46, 6, 11],
-  5: [44, 45, 36, 41], 6: [12, 17, 30, 35],
+  2: [0, 5, 42, 47], 3: [1, 4, 43, 46], 4: [2, 3, 44, 45],
 };
 
 export const CHARACTERS = {

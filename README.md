@@ -5,8 +5,10 @@ the worlds went dormant, and your rocket is the last **Seed Vault**. Gather and 
 orders, survive a meteor crash, rebuild the rocket, and fly to five worlds — each one asleep
 until you finish its chains, feed its Heart, and watch it come back to life.
 
-**286 items across 57 chains**, four side games, constellations you light for permanent
-blessings, a Trading Post and a Research Lab. TypeScript + PixiJS, wrapped with Capacitor for
+**286 items across 57 chains**, earned two starters at a time — max out every producer you
+own before the next one takes root — four side games, constellations you light for permanent
+blessings, a Trading Post and a Research Lab, a painted camp and lab you tap your way around,
+and a side rail instead of a bottom dock. TypeScript + PixiJS, wrapped with Capacitor for
 Android and iOS.
 
 **Play it right now:** double-click `MergeRocket.html` — the whole game in one file, no install.

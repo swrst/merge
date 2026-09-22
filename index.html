@@ -58,13 +58,14 @@
     <button class="xBtn" id="infoClose">✕</button>
   </div>
 
-  <div class="dock six">
-    <button class="tab on" data-v="board"><span class="ti">🧩</span>Board</button>
-    <button class="tab" data-v="shop" id="tabShop"><span class="ti">🛒</span>Shop<span class="dot" id="dotShop" style="display:none"></span></button>
-    <button class="tab" data-v="lab" id="tabLab"><span class="ti">🔬</span>Lab</button>
-    <button class="tab" data-v="rocket" id="tabRocket"><span class="ti">🏛️</span>Vault<span class="dot" id="dotRocket" style="display:none"></span></button>
-    <button class="tab" data-v="book"><span class="ti">📖</span>Guide</button>
-    <button class="tab" data-v="map" id="tabMap"><span class="ti">🌍</span>World<span class="dot" id="dotWorld" style="display:none"></span></button>
+  <!-- Side rail instead of a bottom dock: round buttons down the right edge that
+       pop a panel open, the way this genre has always done it. -->
+  <div class="rail" id="rail">
+    <button class="tab railBtn" data-v="map" id="tabMap"><span class="ti">🌍</span><i>World</i><span class="dot" id="dotWorld" style="display:none"></span></button>
+    <button class="tab railBtn" data-v="shop" id="tabShop"><span class="ti">🛒</span><i>Shop</i><span class="dot" id="dotShop" style="display:none"></span></button>
+    <button class="tab railBtn" data-v="lab" id="tabLab"><span class="ti">🔬</span><i>Lab</i></button>
+    <button class="tab railBtn" data-v="rocket" id="tabRocket"><span class="ti">📋</span><i>Tasks</i><span class="dot" id="dotRocket" style="display:none"></span></button>
+    <button class="tab railBtn" data-v="book"><span class="ti">📖</span><i>Guide</i></button>
   </div>
 
   <div class="screen" id="sc-shop">
@@ -73,22 +74,22 @@
       <button class="iconBtn scClose">✕</button></div>
     <div class="scBody" id="shopBody"></div>
   </div>
-  <div class="screen" id="sc-lab">
+  <div class="screen scene lab" id="sc-lab">
     <div class="scHead"><div class="scTitle">🔬 Research Lab</div>
       <div class="scCoins"><span id="labCoinIc"></span><span id="labCoins">0</span></div>
       <button class="iconBtn scClose">✕</button></div>
     <div class="scBody" id="labBody"></div>
   </div>
   <div class="screen" id="sc-rocket">
-    <div class="scHead"><div class="scTitle">🏛️ Vault &amp; Tasks</div><button class="iconBtn scClose">✕</button></div>
+    <div class="scHead"><div class="scTitle">📋 Tasks &amp; Vault</div><button class="iconBtn scClose">✕</button></div>
     <div class="scBody" id="rocketBody"></div>
   </div>
   <div class="screen" id="sc-book">
     <div class="scHead"><div class="scTitle">📖 Merge Guide</div><button class="iconBtn scClose">✕</button></div>
     <div class="scBody" id="bookBody"></div>
   </div>
-  <div class="screen" id="sc-map">
-    <div class="scHead"><div class="scTitle">🌍 World &amp; Galaxy</div><button class="iconBtn scClose">✕</button></div>
+  <div class="screen scene" id="sc-map">
+    <div class="scHead"><div class="scTitle" id="mapTitle">🌍 World</div><button class="iconBtn scClose">✕</button></div>
     <div class="scBody" id="mapBody"></div>
   </div>
 

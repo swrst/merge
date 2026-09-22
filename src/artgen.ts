@@ -47,15 +47,20 @@ function hsl(h: number, s: number, l: number) {
   return '#' + f(r) + f(g) + f(b);
 }
 /** one hex in, a full lighting ramp out — warm on the lit side, cool in shadow */
+/* The ramp is what makes an item look moulded rather than drawn. Casual-merge
+   art (Travel Town and friends) is high-contrast and *saturated in the shadows*
+   — a dark tint of the colour, never grey and never black — with a near-white
+   key light on the top shoulder. Push both ends and the shape reads as a solid
+   object the moment you glance at it. */
 function ramp(hex: string): Ramp {
   const [h, s, l] = hex2hsl(hex);
   return {
-    hi: hsl(h + 8, Math.min(1, s * 0.82), Math.min(0.94, l + 0.26)),
-    base: hex,
-    lo: hsl(h - 6, Math.min(1, s * 1.05), Math.max(0.12, l - 0.16)),
-    deep: hsl(h - 12, Math.min(1, s * 1.1), Math.max(0.08, l - 0.3)),
-    rim: hsl(h + 24, Math.min(1, s * 0.6), Math.min(0.97, l + 0.38)),
-    line: hsl(h - 10, Math.min(1, s * 1.15), Math.max(0.1, l - 0.36)),
+    hi: hsl(h + 10, Math.min(1, s * 0.78), Math.min(0.96, l + 0.3)),
+    base: hsl(h, Math.min(1, s * 1.06), l),
+    lo: hsl(h - 8, Math.min(1, s * 1.14), Math.max(0.11, l - 0.2)),
+    deep: hsl(h - 14, Math.min(1, s * 1.2), Math.max(0.07, l - 0.34)),
+    rim: hsl(h + 26, Math.min(1, s * 0.45), Math.min(0.99, l + 0.44)),
+    line: hsl(h - 12, Math.min(1, s * 1.28), Math.max(0.09, l - 0.42)),
   };
 }
 
@@ -101,31 +106,45 @@ function occl(c: Ctx) {
   return rg(c, [[0.45, c.m.deep + '00'], [0.82, c.m.deep + '55'], [1, c.m.deep + '99']], 0.38, 0.3, 0.78);
 }
 
+/* A tight double shadow: a soft wide one for the ground, a darker tight one
+   right under the object, which is what actually sells the weight. */
 const SH = (y = 88, rx = 26, ry = 6, o = 0.18) =>
-  `<ellipse cx="50" cy="${y}" rx="${rx}" ry="${ry}" fill="#2e1f10" opacity="${o}"/>`;
+  `<ellipse cx="50" cy="${y + 1}" rx="${rx * 1.18}" ry="${ry * 1.25}" fill="#2a1b0c" opacity="${o * 0.55}"/>`
+  + `<ellipse cx="50" cy="${y}" rx="${rx * 0.78}" ry="${ry * 0.85}" fill="#241608" opacity="${o * 1.7}"/>`;
 
 /** specular highlight — a soft rotated blob on the lit shoulder */
 const spec = (x: number, y: number, r: number, o = 0.6, rot = -26) =>
-  `<ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r * 0.58}" fill="#fff" opacity="${o}" transform="rotate(${rot} ${x} ${y})"/>`;
+  `<ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r * 0.5}" fill="#fff" opacity="${o * 0.9}" transform="rotate(${rot} ${x} ${y})"/>`
+  + `<ellipse cx="${x + r * 0.9}" cy="${y + r * 0.5}" rx="${r * 0.3}" ry="${r * 0.18}" fill="#fff" opacity="${o * 0.6}" transform="rotate(${rot} ${x} ${y})"/>`;
 
 const twinkle = (x: number, y: number, s: number, col = '#fffbe0', o = 1) =>
   `<path d="M${x} ${y - s} Q${x + s * 0.2} ${y - s * 0.2} ${x + s} ${y} Q${x + s * 0.2} ${y + s * 0.2} ${x} ${y + s} `
   + `Q${x - s * 0.2} ${y + s * 0.2} ${x - s} ${y} Q${x - s * 0.2} ${y - s * 0.2} ${x} ${y - s}Z" fill="${col}" opacity="${o}"/>`;
 
-/** Draw a closed path with the full lighting stack. This is the workhorse. */
+/** Draw a closed path with the full lighting stack. This is the workhorse.
+ *  Five passes, in the order a painter would lay them down: body gradient,
+ *  occlusion at the bottom, a glossy sheet over the top half, a bounce light
+ *  coming back up off the ground, and a saturated contour to hold it together. */
 function solid(c: Ctx, d: string, o: { m?: Ramp; flat?: boolean; line?: number; shine?: boolean } = {}) {
   const m = o.m || c.m;
-  const g = lg(c, [[0, m.hi], [0.42, m.base], [1, m.lo]]);
-  const ao = rg(c, [[0.45, m.deep + '00'], [0.82, m.deep + '4d'], [1, m.deep + '99']], 0.38, 0.3, 0.78);
-  return `<path d="${d}" fill="${g}" stroke="${m.line}" stroke-width="${o.line ?? 3}" stroke-linejoin="round" stroke-linecap="round"/>`
-    + (o.flat ? '' : `<path d="${d}" fill="${ao}" stroke="none"/>`)
-    + `<path d="${d}" fill="none" stroke="${m.rim}" stroke-width="1.6" opacity=".5" stroke-linejoin="round"/>`;
+  const g = lg(c, [[0, m.hi], [0.38, m.base], [0.86, m.lo], [1, m.deep]]);
+  const ao = rg(c, [[0.42, m.deep + '00'], [0.78, m.deep + '59'], [1, m.deep + 'b3']], 0.36, 0.28, 0.8);
+  const gloss = lg(c, [[0, '#ffffff6b'], [0.3, '#ffffff1c'], [0.5, '#ffffff00']]);
+  const bounce = lg(c, [[0.74, m.rim + '00'], [1, m.rim + '59']]);
+  return `<path d="${d}" fill="${g}"/>`
+    + (o.flat ? '' : `<path d="${d}" fill="${ao}"/>`)
+    + `<path d="${d}" fill="${bounce}"/>`
+    + (o.shine === false ? '' : `<path d="${d}" fill="${gloss}"/>`)
+    + `<path d="${d}" fill="none" stroke="${m.line}" stroke-width="${o.line ?? 2.6}" stroke-linejoin="round" stroke-linecap="round" opacity=".92"/>`;
 }
 function circleSolid(c: Ctx, cx: number, cy: number, r: number, m?: Ramp) {
   const mm = m || c.m;
-  const g = rg(c, [[0, mm.hi], [0.5, mm.base], [1, mm.lo]], 0.34, 0.28, 0.9);
-  return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${g}" stroke="${mm.line}" stroke-width="3"/>`
-    + `<circle cx="${cx}" cy="${cy}" r="${r - 1}" fill="none" stroke="${mm.rim}" stroke-width="1.6" opacity=".45"/>`;
+  const g = rg(c, [[0, mm.hi], [0.46, mm.base], [0.88, mm.lo], [1, mm.deep]], 0.33, 0.26, 0.92);
+  const gloss = rg(c, [[0, '#ffffffa6'], [0.55, '#ffffff26'], [1, '#ffffff00']], 0.34, 0.2, 0.55);
+  return `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${g}"/>`
+    + `<circle cx="${cx}" cy="${cy}" r="${r}" fill="${rg(c, [[0.78, mm.rim + '00'], [1, mm.rim + '66']], 0.5, 0.86, 0.5)}"/>`
+    + `<ellipse cx="${cx}" cy="${cy - r * 0.34}" rx="${r * 0.82}" ry="${r * 0.6}" fill="${gloss}"/>`
+    + `<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${mm.line}" stroke-width="2.6" opacity=".92"/>`;
 }
 
 /* ---------------------------------------------------------------- shapes */
@@ -536,28 +555,29 @@ const SHAPES: Record<string, Draw> = {
 
 /** decoration that scales with how precious the item is */
 function deco(c: Ctx, extra: string[]) {
+  /* Restraint. The item itself is supposed to look better as it climbs, not wear
+     a hat: the old tier-6 gold laurel read as a shopping trolley under a loaf of
+     bread. All that is left is a warm halo behind the rare ones and a sparkle or
+     two, which is all this genre ever does. */
   let s = '';
   const t = c.tier;
-  if (t >= 4) s += twinkle(84, 22, 7, '#fffbe0', 0.9);
-  if (t >= 5) s += twinkle(18, 32, 5.5, '#fffbe0', 0.8) + twinkle(74, 78, 4.5, '#fffbe0', 0.7);
-  if (extra.indexOf('glow') >= 0 || t >= 5) {
-    s = `<circle cx="50" cy="50" r="44" fill="${c.m.hi}" opacity="${t >= 6 ? 0.22 : 0.13}"/>` + s;
+  const glow = extra.indexOf('glow') >= 0 || t >= 5;
+  if (glow) {
+    s += `<circle cx="50" cy="48" r="46" fill="${rg(c, [[0, c.m.hi + (t >= 6 ? '4d' : '33')], [1, c.m.hi + '00']], 0.5, 0.5, 0.5)}"/>`;
   }
-  // a ring is a *space* motif, so it is opt-in — it looked absurd round a loaf
-  if (extra.indexOf('ring') >= 0) {
-    s += `<ellipse cx="50" cy="52" rx="45" ry="14" fill="none" stroke="${R('gold').base}" stroke-width="3.4" opacity=".85" transform="rotate(-16 50 52)"/>`
-      + `<ellipse cx="50" cy="52" rx="45" ry="14" fill="none" stroke="${R('gold').rim}" stroke-width="1.4" opacity=".8" transform="rotate(-16 50 52)"/>`;
-  }
-  // chain finales get a little gold laurel instead: reads as "this is the best one"
-  if (extra.indexOf('crest') >= 0 || t >= 6) {
-    const g = R('gold');
-    s += `<path d="M26 84 q10 10 24 10 q14 0 24 -10" fill="none" stroke="${g.base}" stroke-width="4" stroke-linecap="round"/>`
-      + `<path d="M26 84 q10 10 24 10 q14 0 24 -10" fill="none" stroke="${g.rim}" stroke-width="1.6" stroke-linecap="round" opacity=".8"/>`
-      + [30, 50, 70].map(x => `<circle cx="${x}" cy="${x === 50 ? 93 : 89}" r="3.4" fill="${g.hi}" stroke="${g.line}" stroke-width="1.4"/>`).join('');
-  }
+  return s;
+}
+
+/** sparkles sit *over* the item, so they are added after the body */
+function deco2(c: Ctx, extra: string[]) {
+  let s = '';
+  const t = c.tier;
+  if (t >= 4) s += twinkle(83, 21, 7.5, '#fffdf0', 0.95);
+  if (t >= 5) s += twinkle(19, 31, 5.5, '#fffdf0', 0.8);
+  if (t >= 6) s += twinkle(75, 76, 5, '#fffdf0', 0.7) + twinkle(30, 72, 3.6, '#fffdf0', 0.6);
   if (extra.indexOf('motes') >= 0 || t >= 7) {
-    s += [20, 140, 260].map(a =>
-      `<circle cx="${(50 + Math.cos(a * Math.PI / 180) * 41).toFixed(1)}" cy="${(48 + Math.sin(a * Math.PI / 180) * 41).toFixed(1)}" r="4" fill="#fff6c8" opacity=".95"/>`).join('');
+    s += [24, 148, 272].map(a =>
+      `<circle cx="${(50 + Math.cos(a * Math.PI / 180) * 42).toFixed(1)}" cy="${(48 + Math.sin(a * Math.PI / 180) * 42).toFixed(1)}" r="3.6" fill="#fff6c8" opacity=".9"/>`).join('');
   }
   return s;
 }
@@ -580,11 +600,12 @@ export function renderItem(spec: ItemSpec): string {
     tier: spec.tier || 1,
   };
   const draw = SHAPES[spec.shape] || SHAPES.pebble;
-  const body = draw(c);
   const extras = spec.deco || [];
-  const top = deco(c, extras);
+  const halo = deco(c, extras);        // behind the item
+  const body = draw(c);
+  const sparks = deco2(c, extras);     // in front of it
   return `<svg viewBox="0 0 100 100" class="art"><defs>${c.defs.join('')}</defs>`
-    + SH() + body + top + '</svg>';
+    + halo + SH() + body + sparks + '</svg>';
 }
 
 /** A producer is the same primitive library, but staged as a *source*: it sits

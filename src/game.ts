@@ -1,5 +1,8 @@
 /* MERGE ROCKET - core game loop. Earth -> rebuild a rocket -> new worlds. */
 import { ART } from './art';
+// the painted backdrops the camp and the lab stand on
+import campEarthBg from './scenes/camp_earth.webp';
+import labRoomBg from './scenes/lab.webp';
 import { haptic } from './native';
 import { board } from './board';
 import { ads } from './ads';
@@ -31,15 +34,42 @@ export async function startGame() {
     + CONFIG.world.growth * (l - 1) * (l - 1));
   const wlv = (w?: string) => (S.wlv && S.wlv[w || S.world]) || 1;
   const wxp = (w?: string) => (S.wxp && S.wxp[w || S.world]) || 0;
-  /** the chains actually available in a world right now */
+  /* ------------------------------------------------- one thing at a time
+     A world does not hand you its whole catalogue. It gives you two producers,
+     and the next plot only fills once every producer you already have is fully
+     grown. Contracts pay for the growing, so the loop is: fill contracts, grow
+     what you have, and the world gives you something new to grow. */
+  /** the producers this world has revealed so far (they stay listed if one retires) */
+  const plots = (w?: string): string[] => {
+    const k = w || S.world;
+    if (!S.plots) S.plots = {};
+    if (!S.plots[k]) S.plots[k] = WORLDS[k].start.map(s2 => s2.producer);
+    return S.plots[k];
+  };
+  /** the chains those producers feed — this is what "unlocked" means now */
   const liveChains = (w?: string) => {
-    const k = w || S.world, lv = wlv(k);
-    return WORLDS[k].chains.filter(c => (CHAINS[c].unlock || 1) <= lv);
+    const k = w || S.world, set: Record<string, 1> = {};
+    plots(k).forEach(pk => {
+      const p = PRODS[pk]; if (!p) return;
+      p.drops.forEach(d => { if (ITEMS[d]) set[ITEMS[d].chain] = 1; });
+    });
+    return WORLDS[k].chains.filter(c => set[c]);
   };
   const lockedChains = (w?: string) => {
-    const k = w || S.world, lv = wlv(k);
-    return WORLDS[k].chains.filter(c => (CHAINS[c].unlock || 1) > lv);
+    const live = liveChains(w);
+    return WORLDS[w || S.world].chains.filter(c => live.indexOf(c) < 0);
   };
+  /** every producer standing in this world is at max level */
+  const allMaxed = () => {
+    const on = B().filter((c: any) => c && c.p && PRODS[c.p].mode === 'battery');
+    return on.length > 0 && on.every((c: any) => plv(c) >= PMAX);
+  };
+  /** the next producer this world is holding back, in its own order */
+  function nextProducer(): string | null {
+    const have = plots();
+    const g = (W().grow || []).find(x => have.indexOf(x.producer) < 0);
+    return g ? g.producer : null;
+  }
 
   /* ------------------------------------------------- shop upgrade effects */
   const upLv = (id: string) => (typeof S !== 'undefined' && S && S.up && S.up[id]) || 0;
@@ -113,6 +143,7 @@ export async function startGame() {
       fed: {}, stage: {},                     // Bloom value delivered / stages woken
       story: {},                              // story beats already played
       mini: {}, stars: {},                    // minigame cooldowns, lit constellations
+      plots: {},                              // producers each world has revealed
       firsts: {},                             // chains whose finale you have made
     };
   }
@@ -138,6 +169,7 @@ export async function startGame() {
     p.wlv = p.wlv || {}; p.wxp = p.wxp || {};
     p.fed = p.fed || {}; p.stage = p.stage || {};
     p.story = p.story || {}; p.mini = p.mini || {}; p.stars = p.stars || {};
+    p.plots = p.plots || {};
     p.firsts = p.firsts || {};
     // A pre-v6 save had one global level. Seed each visited world from it so
     // nobody who already flew to Cindra lands back on a beginner board — but cap
@@ -666,8 +698,7 @@ export async function startGame() {
   function onWorldLevel() {
     const lv = wlv(), b = B(), locks = W().locks;
     for (const k in locks) if (locks[k] <= lv && b[k] && b[k].b) b[k] = null;
-    const opened = W().chains.filter(c => (CHAINS[c].unlock || 1) === lv);
-    growProducers();
+    const opened: string[] = [];         // chains come from producers now, not levels
     paintBoard();
     if (opened.length) {
       const names = opened.map(c => CHAINS[c].name);
@@ -904,6 +935,9 @@ export async function startGame() {
     openBag(false);
     if (v !== 'board') sfx.whoosh();
     SCREENS.forEach(k => $('#sc-' + k).classList.toggle('open', v === k));
+    // over a painted scene the rail shrinks to little round pips, so it stops
+    // standing on the scenery it floats over
+    $('#app').classList.toggle('sceneOn', v === 'map' || v === 'lab');
     document.querySelectorAll<HTMLElement>('.tab').forEach(t => t.classList.toggle('on', t.dataset.v === v));
     if (v === 'rocket') renderRocket();
     if (v === 'book') renderBook();
@@ -1211,6 +1245,26 @@ export async function startGame() {
     toast('📘 Recipe bought: <b>' + ITEMS[r.result].name + '</b>');
     renderLab(); renderHUD(); save();
   }
+  /* ================================================================= THE LAB
+     A room, not a form. The bench slots sit on the painted counter, the book
+     lives on the shelf, and the rumours are a pop-up — the same way the camp
+     works, so the two painted screens feel like the same game. */
+  const LAB_PAD = {
+    a: [0.255, 0.545], b: [0.435, 0.552], out: [0.645, 0.545],
+    book: [0.275, 0.325], scope: [0.90, 0.50],
+  };
+  /* an empty bench socket, drawn rather than typed, so it reads on any backdrop */
+  const SOCKET = `<svg viewBox="0 0 100 100" class="art"><circle cx="50" cy="52" r="34" fill="#ffffff" opacity=".5"/>
+    <circle cx="50" cy="52" r="34" fill="none" stroke="#6b5236" stroke-width="4" stroke-dasharray="9 8" opacity=".55"/>
+    <path d="M50 38 v28 M36 52 h28" stroke="#6b5236" stroke-width="6" stroke-linecap="round" opacity=".6"/></svg>`;
+  const SOCKET_Q = `<svg viewBox="0 0 100 100" class="art"><circle cx="50" cy="52" r="34" fill="#c7a8ff" opacity=".35"/>
+    <circle cx="50" cy="52" r="34" fill="none" stroke="#7b4fd6" stroke-width="4" opacity=".6"/>
+    <text x="50" y="68" text-anchor="middle" font-size="42" font-weight="800" fill="#7b4fd6" opacity=".8">?</text></svg>`;
+  function labSpot(kind: string, pad: number[], art: string, label: string, sub: string, cls = '') {
+    return `<button class="spot ${cls}" data-lab="${kind}" data-fx="${pad[0]}" data-fy="${pad[1]}">
+      <span class="spotArt">${art}</span>
+      <span class="spotTag"><b>${label}</b>${sub ? `<i>${sub}</i>` : ''}</span></button>`;
+  }
   function renderLab() {
     const host = $('#labBody'); if (!host) return;
     $('#labCoins').textContent = S.coins;
@@ -1222,28 +1276,48 @@ export async function startGame() {
     const cost = knew ? r!.coins : CONFIG.lab.failFee;
     const known = RECIPES.filter(r2 => S.lab.disc[r2.id]);
     const blind = RECIPES.filter(r2 => !S.lab.disc[r2.id]);
-    const coin = ART.icon('coin');
-    const slotArt = (id: string | null, k: number) =>
-      `<button class="slot${id ? ' full' : ''}" data-slot="${k}">${id ? ART.item(id) : '+'}</button>`;
 
-    let html = `<div class="card"><div class="cardTitle">🧪 Experiment bench</div>
-      <div class="labSlots">
-        ${slotArt(a, 0)}<div class="labOp">+</div>${slotArt(b, 1)}<div class="labOp">➜</div>
-        <div class="slot out">${knew ? ART.item(r!.result) : '?'}</div>
-      </div>
-      <button class="big${knew ? '' : ' blue'}" id="btnResearch" ${ready ? '' : 'disabled'}>${ready
+    host.innerHTML = `<div class="sceneWrap lab">
+      <div class="sceneImg"></div><div class="sceneVig"></div>
+      <div class="sceneBtns"><button class="sceneBtn" data-labpop="book">📘</button>
+        ${blind.length ? `<button class="sceneBtn" data-labpop="rumours">❓</button>` : ''}</div>
+      ${labSpot('s0', LAB_PAD.a, a ? ART.item(a) : SOCKET,
+        a ? ITEMS[a].name : 'Sample A', a ? 'tap to swap' : 'tap to load', a ? 'filled' : 'empty')}
+      ${labSpot('s1', LAB_PAD.b, b ? ART.item(b) : SOCKET,
+        b ? ITEMS[b].name : 'Sample B', b ? 'tap to swap' : 'tap to load', b ? 'filled' : 'empty')}
+      ${labSpot('out', LAB_PAD.out, knew ? ART.item(r!.result) : SOCKET_Q,
+        knew ? ITEMS[r!.result].name : 'Result', knew ? 'known recipe' : 'unknown', knew ? 'ready' : 'empty')}
+      ${labSpot('book', LAB_PAD.book, ART.icon('blueprint'), 'Lab book', known.length + '/' + RECIPES.length)}
+      <div class="labBar">
+        ${a || b ? '<button class="labClear" id="btnClearSlots">Empty</button>' : ''}
+        <button class="big${knew ? '' : ' blue'}" id="btnResearch" ${ready ? '' : 'disabled'}>${ready
         ? (knew ? `BREW · ${cost} 🪙` : `EXPERIMENT · ${cost} 🪙`)
-        : 'Tap a slot to load a sample'}</button>
-      ${a || b ? '<button class="big gold" id="btnClearSlots">Empty the slots</button>' : ''}
-      <div class="noteLine">Any experiment costs ${CONFIG.lab.failFee} 🪙 — so <b>discovering</b> a recipe is cheap;
-        brewing a known one again costs its full price. Duds keep your samples, and every
-        ${CONFIG.lab.clueEvery} of them earns a clue.</div></div>`;
+        : 'Load two samples'}</button>
+      </div>
+    </div>`;
+    placeSpots('#labBody');
+    host.querySelectorAll('[data-lab]').forEach((e: any) => e.onclick = () => {
+      const k = e.dataset.lab;
+      if (k === 's0') pickForSlot(0);
+      else if (k === 's1') pickForSlot(1);
+      else if (k === 'book') labBook();
+      else if (!ready) { sfx.no(); toast('Load two samples first.'); }
+    });
+    host.querySelectorAll('[data-labpop]').forEach((e: any) => e.onclick = () =>
+      e.dataset.labpop === 'book' ? labBook() : labRumours());
+    const rb = $('#btnResearch'); if (rb) rb.onclick = doResearch;
+    const cb = $('#btnClearSlots');
+    if (cb) cb.onclick = () => { S.lab.slots = [null, null]; sfx.pop(); renderLab(); save(); };
+  }
 
-    html += `<div class="card"><div class="cardTitle">📘 Lab book <span style="font-size:10px;color:#9a7a4e;font-weight:600">${known.length}/${RECIPES.length}</span></div>
-      ${known.length ? known.map(r2 => {
-      const poor = S.coins < r2.coins;
-      return `<div class="rumour known">
-          <div class="rNote" style="font-style:normal;font-size:11.5px;color:#6b5236"><b>${ITEMS[r2.result].name}</b> — ${ITEMS[r2.inputs[0]].name} + ${ITEMS[r2.inputs[1]].name}</div>
+  function labBook() {
+    const known = RECIPES.filter(r2 => S.lab.disc[r2.id]);
+    const coin = ART.icon('coin');
+    modal('bloop', 'Lab book',
+      `<div class="noteLine" style="margin-top:0">${known.length}/${RECIPES.length} recipes written down.</div>
+       <div class="questList">${known.length ? known.map(r2 => {
+        const poor = S.coins < r2.coins;
+        return `<div class="rumour known">
           <div class="rLine">
             <div class="rMini">${ART.item(r2.inputs[0])}</div><div class="rArrow">+</div>
             <div class="rMini">${ART.item(r2.inputs[1])}</div><div class="rArrow">➜</div>
@@ -1251,42 +1325,43 @@ export async function startGame() {
             <div style="flex:1"></div>
             <button class="buyBtn" data-load="${r2.id}" ${poor ? 'disabled' : ''}>${coin}${r2.coins}</button>
           </div></div>`;
-    }).join('') : '<div class="noteLine">Nothing discovered yet. Try combining two odd things!</div>'}</div>`;
+      }).join('') : '<div class="noteLine">Nothing yet. Put two odd things on the bench and press EXPERIMENT.</div>'}</div>`,
+      'Close');
+    setTimeout(() => document.querySelectorAll('[data-load]').forEach((e: any) =>
+      e.onclick = () => { closeModal(); loadKnown(e.dataset.load); }), 30);
+  }
+  /** put a known recipe's two ingredients straight onto the bench */
+  function loadKnown(id: string) {
+    const r2 = RECIPES.find(x => x.id === id); if (!r2) return;
+    const missing = r2.inputs.filter(x => countItem(x) < 1);
+    if (missing.length) {
+      sfx.no();
+      toast('You need ' + missing.map(x => `<b>${ITEMS[x].name}</b>`).join(' and ') + ' on the board.');
+      return;
+    }
+    S.lab.slots = [r2.inputs[0], r2.inputs[1]];
+    sfx.pop(); renderLab(); save();
+  }
 
-    if (blind.length) {
-      html += `<div class="card"><div class="cardTitle">❓ Rumours (${blind.length})</div>
-        ${blind.map(r2 => {
+  function labRumours() {
+    const blind = RECIPES.filter(r2 => !S.lab.disc[r2.id]);
+    const coin = ART.icon('coin');
+    modal('nix', 'Rumours',
+      `<div class="questList">${blind.map(r2 => {
         const clue = S.lab.clue[r2.id];
         const price = Math.round(r2.coins * 1.5);
         return `<div class="rumour">
-            <div class="rNote">“${r2.note}”</div>
-            <div class="rLine">
-              <div class="rMini">${clue ? ART.item(r2.inputs[0]) : '?'}</div><div class="rArrow">+</div>
-              <div class="rMini">?</div><div class="rArrow">➜</div><div class="rMini">?</div>
-              <div style="flex:1"></div>
-              <button class="buyBtn" data-learn="${r2.id}" ${S.coins < price ? 'disabled' : ''}>${coin}${price}</button>
-            </div>${clue ? `<div class="rClue">Bloop worked out the first ingredient: <b>${ITEMS[r2.inputs[0]].name}</b></div>` : ''}</div>`;
-      }).join('')}
-        <div class="noteLine">Buy a rumour to have Bloop write the whole recipe down for you.</div></div>`;
-    }
-    if (known.length) {
-      html += `<div class="card"><div class="cardTitle">🏛️ What relics are for</div>
-        <div style="font-size:11.5px;font-weight:600;color:#7a6244">Relics buy <b>permanent perks</b> in the Relic Vault — open the 🚀 tab and scroll down. They also sell for a fortune and collectors pay double for them.</div></div>`;
-    }
-
-    host.innerHTML = html;
-    host.querySelectorAll('[data-slot]').forEach((s: any) => s.onclick = () => pickForSlot(+s.dataset.slot));
-    host.querySelectorAll('[data-learn]').forEach((s: any) => s.onclick = () => buyRecipe(s.dataset.learn));
-    host.querySelectorAll('[data-load]').forEach((s: any) => s.onclick = () => {
-      const r2 = RECIPES.filter(x => x.id === s.dataset.load)[0]; if (!r2) return;
-      const inv = inventory();
-      const short = r2.inputs.filter(id => (inv[id] || 0) < (r2.inputs[0] === r2.inputs[1] ? 2 : 1));
-      if (short.length) { sfx.no(); toast('You need a <b>' + ITEMS[short[0]].name + '</b> on the board.'); return; }
-      S.lab.slots = [r2.inputs[0], r2.inputs[1]];
-      renderLab(); doResearch();
-    });
-    const br = $('#btnResearch'); if (br) br.onclick = () => doResearch();
-    const bc = $('#btnClearSlots'); if (bc) bc.onclick = () => { S.lab.slots = [null, null]; sfx.tap(); renderLab(); save(); };
+          <div class="rNote">“${r2.note}”</div>
+          <div class="rLine">
+            <div class="rMini">${clue ? ART.item(r2.inputs[0]) : '?'}</div><div class="rArrow">+</div>
+            <div class="rMini">?</div><div class="rArrow">➜</div><div class="rMini">?</div>
+            <div style="flex:1"></div>
+            <button class="buyBtn" data-learn="${r2.id}" ${S.coins < price ? 'disabled' : ''}>${coin}${price}</button>
+          </div>${clue ? `<div class="rClue">First ingredient: <b>${ITEMS[r2.inputs[0]].name}</b></div>` : ''}</div>`;
+      }).join('')}</div>
+      <div class="noteLine">Buy a rumour and Bloop writes the whole recipe down for you.</div>`, 'Close');
+    setTimeout(() => document.querySelectorAll('[data-learn]').forEach((e: any) =>
+      e.onclick = () => { closeModal(); buyRecipe(e.dataset.learn); }), 30);
   }
   /* ============================================================ VAULT TAB
      What used to be the Rocket tab. The rocket itself now lives in your camp,
@@ -1794,6 +1869,7 @@ export async function startGame() {
       + (added.length ? ' — it can drop <b>' + [...new Set(added)].map(d => ITEMS[d].name).join('</b>, <b>') + '</b> now!' : ''));
     prog('grow', 1); tally('grow');
     paintBoard(); renderHUD(); renderWorldScreen(); save();
+    setTimeout(growProducers, 900);      // was that the last one? then the plot fills
   }
 
   /* A producer at max level does not last forever: it gives what it has and then
@@ -1825,14 +1901,21 @@ export async function startGame() {
 
   /** producers that appear as you level, listed per world in worlds.json */
   function growProducers() {
-    const b = B(), grown: string[] = [];
-    (W().grow || []).forEach(g => {
-      if (wlv() < g.atLevel) return;
-      if (b.some(c => c && c.p === g.producer)) return;
-      const i = firstFree(g.cells);
-      if (i >= 0) { b[i] = mkProd(g.producer); grown.push(PRODS[g.producer].name); }
-    });
-    if (grown.length) setTimeout(() => toast('🌱 <b>' + grown.join(' and ') + '</b> appeared on your board!'), 1400);
+    const b = B(), nxt = nextProducer();
+    if (!nxt || !allMaxed()) return;
+    if (b.some(c => c && c.p === nxt)) return;
+    const g = (W().grow || []).find(x => x.producer === nxt);
+    const i = firstFree(g ? g.cells : []);
+    if (i < 0) return;
+    b[i] = mkProd(nxt);
+    plots().push(nxt);
+    const p = PRODS[nxt];
+    const chains = [...new Set(p.drops.map(d => CHAINS[ITEMS[d].chain].name))];
+    sfx.discover(); confetti(); paintBoard(); renderHUD(); save();
+    setTimeout(() => modal(W().folks[0] || 'bloop', 'Something new took root',
+      `Everything you had is fully grown, so the meadow gave you a <b>${p.name}</b>.`
+      + `<div class="noteLine">It starts the <b>${chains.join('</b> and <b>')}</b> chain${chains.length > 1 ? 's' : ''}.</div>`,
+      'Show me'), 700);
   }
 
   function worldEvent(now: number) {
@@ -1998,6 +2081,8 @@ export async function startGame() {
     setTimeout(() => {
       if (!S.boards[w]) S.boards[w] = freshBoard(w);
       S.world = w; S.unlocked[w] = 1; sel = null;
+      // you arrive standing in the new camp, not looking at the star chart
+      worldTab = 'camp';
       if (!S.wlv[w]) { S.wlv[w] = 1; S.wxp[w] = 0; }
       applyBloomSkin();
       // the shelf, the ship and the contract board all belong to a world
@@ -2448,64 +2533,73 @@ export async function startGame() {
   }
 
   /* ============================================================ WORLD SCREEN
-     Two views behind one tab. The **camp** is the world you are standing in,
-     drawn as a little diorama: the rocket, the lab once it is built, the Heart,
-     and every producer you own, each one tappable. The **galaxy** is the map
-     between worlds. Everything that used to be a list of cards is now a place. */
+     Not a list of cards — a painted place you tap. The camp is the world you
+     are standing in, with your rocket on the big pad, the lab beside it, the
+     Heart on the far plinth and every producer on a stone of its own. The
+     galaxy is the map between worlds. Everything else pops up over the top. */
   let worldTab: 'camp' | 'galaxy' = 'camp';
 
-  /** where each thing stands in the diorama, so nothing ever jumps about */
-  const CAMP_SLOTS = [
-    [16, 10], [42, 8], [68, 12], [12, 34], [38, 32], [62, 34],
-    [24, 54], [50, 52], [76, 54], [88, 32], [36, 68], [64, 68],
+  /* Anchors measured off the painted background, as a fraction of the scene.
+     Each one is the *top of a plinth*, and a spot is drawn standing on it. */
+  const PAD = {
+    rocket: [0.355, 0.435], lab: [0.545, 0.545], heart: [0.788, 0.472],
+  };
+  const PROD_PADS = [
+    [0.265, 0.742], [0.512, 0.742], [0.788, 0.738],
+    [0.36, 0.90], [0.64, 0.90], [0.15, 0.605],
   ];
-  function campEnt(kind: string, x: number, y: number, art: string, label: string, sub: string, cls = '') {
-    // y is "how far back" — further back means smaller and higher up
-    const depth = 1 - y / 100;
-    const scale = (0.66 + depth * 0.5).toFixed(2);
-    return `<button class="campEnt ${cls}" data-ent="${kind}"
-      style="left:${x}%;bottom:${8 + y * 0.62}%;transform:translateX(-50%) scale(${scale});z-index:${Math.round(y)}">
-      <span class="entArt">${art}</span>
-      <span class="entTag"><b>${label}</b>${sub ? `<i>${sub}</i>` : ''}</span></button>`;
+
+  function spot(kind: string, pad: number[], art: string, label: string, sub: string, cls = '', badge = '') {
+    return `<button class="spot ${cls}" data-ent="${kind}" data-fx="${pad[0]}" data-fy="${pad[1]}">
+      ${badge ? `<span class="spotBadge">${badge}</span>` : ''}
+      <span class="spotArt">${art}</span>
+      <span class="spotTag"><b>${label}</b>${sub ? `<i>${sub}</i>` : ''}</span></button>`;
   }
 
   function campHTML() {
     const w = W(), b = B();
     const prods: { i: number; k: string }[] = [];
-    for (let i = 0; i < N; i++) if (b[i] && b[i].p) prods.push({ i, k: b[i].p });
+    for (let i = 0; i < N; i++) if (b[i] && b[i].p && PRODS[b[i].p].mode === 'battery') prods.push({ i, k: b[i].p });
 
-    let ents = '';
-    // the rocket always stands at the back right; before the crash it is a dream
     const built = Object.keys(S.parts).filter(k => S.parts[k]).length;
-    ents += campEnt('rocket', 85, 90, S.met
-      ? ART.rocket(S.parts)
-      : `<div class="entGhost">🚀</div>`,
+    let ents = spot('rocket', PAD.rocket,
+      S.met ? ART.rocket(S.parts) : '<div class="spotGhost">🚀</div>',
       S.met ? 'Rocket' : '???',
-      S.met ? (allParts() ? 'Ready · ⛽' + S.fuel + '/3' : built + '/4 parts') : 'not here yet', 'ship');
-    if (labOpen()) ents += campEnt('lab', 55, 90, ART.icon('flask'), 'Lab', 'Invent relics', 'lab');
-    ents += campEnt('heart', 15, 90, ART.item(worldAwake() ? 'bloomheart' : 'bloomcore'),
+      S.met ? (allParts() ? 'Ready · ⛽' + S.fuel + '/3' : built + '/4 parts') : 'nothing here yet',
+      'ship' + (S.met && allParts() && S.fuel >= CONFIG.rocket.fuelToLaunch ? ' ready' : ''));
+    if (labOpen()) ents += spot('lab', PAD.lab, ART.icon('flask'), 'Lab', 'Invent relics', 'lab');
+    ents += spot('heart', PAD.heart, ART.item(worldAwake() ? 'bloomheart' : 'bloomcore'),
       w.heart, worldAwake() ? 'Awake' : fed() + '/' + bloomGoal() + ' Bloom', 'heart');
 
-    prods.slice(0, CAMP_SLOTS.length).forEach((pr, n) => {
-      const p = PRODS[pr.k], c = b[pr.i], lv = plv(c);
-      const slot = CAMP_SLOTS[n];
-      const cap = capOf(p, lv);
+    prods.slice(0, PROD_PADS.length).forEach((pr, n) => {
+      const p = PRODS[pr.k], c = b[pr.i], lv = plv(c), cap = capOf(p, lv);
       const can = lv < PMAX && S.coins >= upCost(p, lv);
-      ents += campEnt('p' + pr.i, slot[0], slot[1], ART.producer(p.art), p.name,
-        `${c.ch ?? cap}/${cap}${lv > 1 ? ' · Lv' + lv : ''}`, can ? 'canUp' : '');
+      ents += spot('p' + pr.i, PROD_PADS[n], ART.producer(p.art), p.name,
+        can ? 'GROW · ' + upCost(p, lv) + ' 🪙' : (c.ch ?? cap) + '/' + cap,
+        can ? 'ready' : '', lv > 1 ? 'Lv' + lv : '');
     });
+    // the next plinth stands empty until you have grown everything on this one
+    const nxt = nextProducer();
+    if (nxt && prods.length < PROD_PADS.length) {
+      ents += spot('next', PROD_PADS[prods.length], '<div class="spotGhost">➕</div>',
+        'Empty plot', allMaxed() ? 'ready to plant' : 'grow them all first', 'empty');
+    }
 
-    return `<div class="camp">
-      <div class="campSky"></div><div class="campStars"></div><div class="campSun"></div>
-      <div class="campHills"></div><div class="campFloor"></div>
+    return `<div class="sceneWrap camp">
+      <div class="sceneImg"></div><div class="sceneVig"></div>
+      <div class="sceneName">${w.name}<i>lv ${wlv()}</i></div>
+      <div class="sceneBtns">
+        <button class="sceneBtn" data-pop="games">🎲</button>
+        <button class="sceneBtn" data-pop="stars">✨</button>
+        <button class="sceneBtn" data-pop="galaxy">🌌</button>
+      </div>
       ${ents}
-      <div class="campName">${w.name}<i>lv ${wlv()}</i></div>
     </div>`;
   }
 
   function galaxyHTML() {
     const fuelOk = S.fuel >= CONFIG.rocket.fuelToLaunch;
-    const spots = [[50, 78], [22, 58], [74, 52], [34, 28], [66, 14]];
+    const spots = [[50, 80], [22, 60], [74, 54], [34, 30], [66, 14]];
     const nodes = WORLD_ORDER.map((k, i) => {
       const ww = WORLDS[k], here = k === S.world;
       const reached = k === 'earth' || S.unlocked[k] || S.unlocked[WORLD_ORDER[i - 1]] || WORLD_ORDER[i - 1] === S.world;
@@ -2523,61 +2617,78 @@ export async function startGame() {
     const lines = WORLD_ORDER.slice(1).map((k, i) => {
       const a = spots[i], c = spots[i + 1];
       if (!a || !c) return '';
-      const dx = c[0] - a[0], dy = c[1] - a[1];
-      const len = Math.hypot(dx * 3.2, dy * 4.4);
+      const len = Math.hypot((c[0] - a[0]) * 3.2, (c[1] - a[1]) * 4.4);
       return `<i class="galLink${S.unlocked[k] ? ' on' : ''}" style="left:${a[0]}%;top:${a[1]}%;width:${len}%;
-        transform:rotate(${Math.atan2(dy * 4.4, dx * 3.2) * 180 / Math.PI}deg)"></i>`;
+        transform:rotate(${Math.atan2((c[1] - a[1]) * 4.4, (c[0] - a[0]) * 3.2) * 180 / Math.PI}deg)"></i>`;
     }).join('');
     return `<div class="galaxy">${lines}${nodes}
+      <button class="sceneBtn back" data-pop="camp">↩</button>
       <div class="galFoot">Each trip costs <b>${CONFIG.rocket.fuelToLaunch} ⛽</b> · you have <b>${S.fuel}</b></div></div>`;
   }
 
   function renderWorldScreen() {
     const host = $('#mapBody'); if (!host) return;
-    const w = W(), st = stage(), goal = bloomGoal(), have = fed();
-    const done = worldAwake();
-    const pct = done ? 100 : clamp(have / goal * 100, 0, 100);
-    const onBoard = B().reduce((a: number, c: any) => a + (c && c.id ? bloomValue(c.id) : 0), 0);
+    $('#mapTitle').textContent = worldTab === 'camp' ? '🌍 ' + W().name : '🌌 Galaxy';
+    host.innerHTML = worldTab === 'camp' ? campHTML() : galaxyHTML();
+    placeSpots();
+    host.querySelectorAll('[data-world]').forEach((b: any) => b.onclick = () => galaxyTap(b.dataset.world));
+    host.querySelectorAll('[data-ent]').forEach((b: any) => b.onclick = () => campTap(b.dataset.ent));
+    host.querySelectorAll('[data-pop]').forEach((b: any) => b.onclick = () => {
+      const k = b.dataset.pop;
+      sfx.tap();
+      if (k === 'games') gamesPanel();
+      else if (k === 'stars') starsPanel();
+      else { worldTab = k === 'camp' ? 'camp' : 'galaxy'; renderWorldScreen(); }
+    });
+  }
 
-    const heart = `<div class="card heartCard">
-      <div class="cardTitle">🌱 ${w.heart}<span class="stagePill">${done ? 'Awake' : 'Stage ' + (st + 1) + '/' + w.bloom.length}</span></div>
-      <div class="catBar"><i style="width:${pct}%"></i></div>
-      <div class="noteLine">${done ? 'This world is awake. Its Heart beats on its own now.'
-        : `<b>${w.bloom[st].title}</b> — ${have}/${goal} Bloom. Finish any merge chain here and the Vault pays you a Spark.`}</div>
-      <button class="big" id="btnFeed"${onBoard ? '' : ' disabled'}>${onBoard ? 'Feed the Heart (' + onBoard + ' Bloom)' : 'No essence on the board'}</button>
-    </div>`;
+  /* The picture is drawn `cover`, so it is cropped differently on every phone.
+     Work out that crop and put each spot where its plinth actually landed. */
+  function placeSpots(sel = '#mapBody') {
+    const host = $(sel); if (!host) return;
+    const wrap = host.querySelector('.sceneWrap') as HTMLElement;
+    if (!wrap) return;
+    const W2 = wrap.clientWidth, H = wrap.clientHeight;
+    if (!W2 || !H) return;
+    const iw = 1086, ih = 1448;
+    const sc = Math.max(W2 / iw, H / ih);
+    const dw = iw * sc, dh = ih * sc;
+    const ox = (W2 - dw) / 2, oy = (H - dh) / 2;
+    host.querySelectorAll('[data-fx]').forEach((e: any) => {
+      // a tall phone crops the painting hard at the sides, so keep the label
+      // chips on screen even when their plinth has been cropped half away
+      const x = ox + +e.dataset.fx * dw;
+      e.style.left = Math.max(48, Math.min(W2 - 48, x)) + 'px';
+      e.style.top = Math.max(70, Math.min(H - 42, oy + +e.dataset.fy * dh)) + 'px';
+    });
+  }
+  window.addEventListener('resize', () => {
+    if (view === 'map') placeSpots();
+    if (view === 'lab') placeSpots('#labBody');
+  });
 
-    const games = `<div class="card"><div class="cardTitle">🎲 Things to do</div>
-      <div class="gameGrid">
+  function gamesPanel() {
+    modal(W().folks[0] || 'bloop', 'Things to do',
+      `<div class="gameGrid">
         ${gameBtn('dig', '⛏️', 'Crater Dig', 'Six digs, one cave-in')}
         ${gameBtn('brew', '⚗️', 'Fuel Brewing', 'Stop the needle in the green')}
         ${gameBtn('market', '🛸', 'Alien Market', 'Peek in two, keep one')}
-      </div></div>`;
-
-    const sky = `<div class="card"><div class="cardTitle">✨ Constellations<span style="font-size:10px;color:#9a7a4e;font-weight:600;margin-left:auto">${CONSTS.filter(c => lit(c.id)).length}/${CONSTS.length} lit</span></div>
-      <div class="noteLine">This is what Star Cores are for. Trace one and its blessing is permanent, in every world.</div>
-      ${CONSTS.map(c => `<button class="constRow${lit(c.id) ? ' lit' : ''}" data-c="${c.id}">
+      </div>`, 'Close');
+    setTimeout(() => document.querySelectorAll('[data-game]').forEach((b: any) => b.onclick = () => {
+      const k = b.dataset.game; closeModal();
+      if (k === 'dig') playDig(); else if (k === 'brew') playBrew(); else playMarket();
+    }), 30);
+  }
+  function starsPanel() {
+    modal('nix', 'Constellations',
+      `<div class="noteLine" style="margin-top:0">This is what Star Cores are for. Trace one and its blessing is permanent, in every world.</div>
+       ${CONSTS.map(c => `<button class="constRow${lit(c.id) ? ' lit' : ''}" data-c="${c.id}">
         <span class="constIc">${lit(c.id) ? '✦' : '✧'}</span>
         <span class="constTxt"><b>${c.name}</b><i>${c.perk}</i></span>
-        <span class="constCost">${lit(c.id) ? 'Lit' : c.cost + ' ⭐'}</span></button>`).join('')}</div>`;
-
-    host.innerHTML = `<div class="wSwitch">
-        <button class="wsBtn${worldTab === 'camp' ? ' on' : ''}" data-wt="camp">🏕️ ${w.name}</button>
-        <button class="wsBtn${worldTab === 'galaxy' ? ' on' : ''}" data-wt="galaxy">🌌 Galaxy</button>
-      </div>`
-      + (worldTab === 'camp' ? campHTML() + heart + games + sky : galaxyHTML());
-
-    host.querySelectorAll('[data-wt]').forEach((b: any) => b.onclick = () => {
-      worldTab = b.dataset.wt; sfx.tap(); renderWorldScreen();
-    });
-    host.querySelectorAll('[data-world]').forEach((b: any) => b.onclick = () => galaxyTap(b.dataset.world));
-    host.querySelectorAll('[data-ent]').forEach((b: any) => b.onclick = () => campTap(b.dataset.ent));
-    host.querySelectorAll('[data-c]').forEach((b: any) => b.onclick = () => playStars(b.dataset.c));
-    host.querySelectorAll('[data-game]').forEach((b: any) => b.onclick = () => {
-      const k = b.dataset.game;
-      if (k === 'dig') playDig(); else if (k === 'brew') playBrew(); else playMarket();
-    });
-    const f = $('#btnFeed'); if (f) f.onclick = feedHeart;
+        <span class="constCost">${lit(c.id) ? 'Lit' : c.cost + ' ⭐'}</span></button>`).join('')}`, 'Close');
+    setTimeout(() => document.querySelectorAll('[data-c]').forEach((b: any) => b.onclick = () => {
+      closeModal(); playStars(b.dataset.c);
+    }), 30);
   }
 
   function galaxyTap(k: string) {
@@ -2600,7 +2711,20 @@ export async function startGame() {
     if (kind === 'rocket') { rocketPanel(); return; }
     if (kind === 'lab') { setView('lab'); return; }
     if (kind === 'heart') { heartPanel(); return; }
+    if (kind === 'next') { nextPlotPanel(); return; }
     if (kind[0] === 'p') producerPanel(+kind.slice(1));
+  }
+
+  function nextPlotPanel() {
+    const nxt = nextProducer();
+    const ok = allMaxed();
+    modal(W().folks[0] || 'bloop', ok ? 'Something wants to grow here' : 'An empty plot',
+      ok
+        ? `The soil is ready. <b>${nxt ? PRODS[nxt].name : 'Something new'}</b> will take root on its own the moment you look away.`
+        : `Nothing new takes root while the ones you have are still half-grown. Get <b>every producer to level ${PMAX}</b> and the plot fills itself.`
+        + `<div class="noteLine">${B().filter((c: any) => c && c.p && PRODS[c.p].mode === 'battery')
+          .map((c: any) => `${PRODS[c.p].name} — level ${plv(c)}/${PMAX}`).join('<br>')}</div>`,
+      'Right');
   }
 
   function rocketPanel() {
@@ -2610,7 +2734,7 @@ export async function startGame() {
       return;
     }
     const parts = [['hull', 'Hull', 'hullplate'], ['engine', 'Engine', 'enginecore'], ['nav', 'Nav Dish', 'navdish'], ['tank', 'Fuel Tank', 'fueltank']];
-    modal(S.met ? 'bloop' : 'pip', allParts() ? 'Your rocket' : 'Building the rocket',
+    modal('bloop', allParts() ? 'Your rocket' : 'Building the rocket',
       `<div class="rocketWrap">${ART.rocket(S.parts)}</div>
        <div class="partGrid">${parts.map(p => `<div class="part${S.parts[p[0]] ? ' on' : ''}">${ART.item(p[2])}<div class="pl">${p[1]}</div></div>`).join('')}</div>
        <div class="fuelRow"><div style="font-size:12px;font-weight:700">Fuel</div>
@@ -2640,6 +2764,7 @@ export async function startGame() {
       'Close');
     setTimeout(() => { const f = $('#feed2'); if (f) f.onclick = () => { closeModal(); feedHeart(); }; }, 30);
   }
+
 
   function producerPanel(cell: number) {
     tutFire('prodpanel');
@@ -2746,7 +2871,7 @@ export async function startGame() {
     },
     {
       id: 'grow', who: 'pip', say: "Tap anything in the camp to look after it. Coins make a producer <b>bigger and rarer</b> — that is what they are for.",
-      at: () => '.campEnt[data-ent^="p"]', on: 'prodpanel',
+      at: () => '.spot[data-ent^="p"]', on: 'prodpanel',
     },
     { id: 'done', who: 'pip', say: "That's everything. Merge, fill contracts, grow the meadow. And keep an eye on the sky — something is going to fall out of it, and it is going to change your week." },
   ];
@@ -3029,6 +3154,9 @@ export async function startGame() {
     $('#orders').addEventListener('scroll', orderArrows, { passive: true });
     renderTools();
     if (bagHas()) renderBag();
+    // the painted backdrops, handed to CSS as variables
+    $('#app').style.setProperty('--camp', `url(${campEarthBg})`);
+    $('#app').style.setProperty('--labbg', `url(${labRoomBg})`);
     $('#miniClose').onclick = closeMini;
     $('#btnQuests').onclick = questPanel;
     applyBloomSkin();
@@ -3037,7 +3165,7 @@ export async function startGame() {
       state: () => S, cells: () => B(),
       prods: PRODS, items: ITEMS, chains: CHAINS, config: CONFIG, recipes: RECIPES, shop: SHOP,
       hud: () => renderHUD(), world: () => renderWorldScreen(), wlv, bloomValue,
-      grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf,
+      grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
     };
     setInterval(tick, 500);

@@ -167,12 +167,16 @@ live in `src/art.ts` as inline SVG. The hundreds of ordinary merge items are **c
                          "deco": ["glow", "crest"] } }
 ```
 
-A material yields a whole lighting ramp (highlight, base, shade, deep shade, rim, outline),
-and every primitive is drawn with the same stack — gradient body, ambient occlusion, rim
-light, specular, contact shadow — so 286 items look like one set rather than 286 doodles.
-Tier adds sparkle, a glow, a gold laurel on a chain's finale. Producers and alien faces use
-the same library (`renderProducer`, `renderFace`), which is why a new world costs data, not
-drawing time.
+A material yields a whole lighting ramp (highlight, base, shade, deep shade, rim, outline)
+pushed to cartoon contrast — the highlight is 30 points lighter and warmer, the shade 20
+darker and *more* saturated, the outline a deep saturated version of the colour itself rather
+than grey. Every primitive is then drawn with the same five-pass stack: gradient body,
+ambient occlusion pooling at the bottom, a bounce light off the floor, a glossy white
+highlight across the top third, and a thick coloured contour around the whole silhouette.
+A double shadow (a wide soft one, a tight dark one) seats it on the tile. That is what makes
+286 items look like one toy set rather than 286 doodles. Tier adds a halo behind and
+sparkles in front. Producers and alien faces use the same library (`renderProducer`,
+`renderFace`), which is why a new world costs data, not drawing time.
 
 ### Orders (contracts)
 - Three order cards at a time, each showing the **whole customer** — a full-body figure that
@@ -194,9 +198,17 @@ the Trading Post opens. It never resets.
 
 **World level** is the one that hands you new toys. Every world keeps its own level and its
 own XP pot (`22 + (l-1)·26 + 6·(l-1)²`, capped at 8), fed by whatever you earn while standing
-there. It clears the overgrown board cells, grows in new producers, and **unlocks chains** —
-which is why landing somewhere new is exciting even at account level 30: Vela starts with two
-chains, two producers and a cramped board, exactly like Earth did.
+there. It clears the overgrown board cells and pays out, and landing somewhere new is
+exciting even at account level 30: Vela starts with two chains, two producers and a cramped
+board, exactly like Earth did.
+
+**New producers are earned, not timed.** A world hands you exactly **two** starters and
+nothing else. You fill contracts with what they drop, spend the coins growing both of them,
+and only when *every* producer you own is at **level 4** does the empty plot in your camp
+accept something new — which then wakes its whole chain. So the item list grows at the speed
+you actually play, a chain at a time, and the board is never a wall of things you have no use
+for. Until then the plot reads "grow them all first", and the shop, the catalogue and the
+contract board only ever mention chains you can actually reach.
 
 - Energy: 50 + 5/level (+10 per Backpack upgrade), +1 every 40 s, plus a 🍪 Snack Break
   (+20, 3 minute cooldown). Slow on purpose: it is the pacing brake for the whole game.
@@ -343,20 +355,30 @@ sleeping here as silhouettes with the level they come back at. The bag is what c
 between worlds.
 
 ### Screens
-- **🧩 Board** — the game.
+There is **no bottom dock**. Five round buttons run down a **side rail** on the right edge,
+the way this genre has always done it; each one pops a panel over the board and the rail
+stays on top of it, so you can go World → Shop → Lab without closing anything. The ✕ puts
+you back on the board.
+
+- **🧩 Board** — the game. Always there behind everything else.
 - **🛒 Shop** — supplies, crates and upgrades (level 4).
 - **🔬 Lab** — the experiment bench, lab book and rumours (level 6).
-- **🏛️ Vault** — the progression drawer: the rotating task board, the relic perks and
+- **📋 Tasks** — the progression drawer: the rotating task board, the relic perks and
   the star favours. The rocket moved to your camp, where you can watch it being built.
 - **📖 Guide** — the **catalogue**: a collection bar (`38/286` found), every awake chain as
   picture rows with sell price and how many you own right now, `???` for the undiscovered,
   a silhouette row for the chains still sleeping in this world, plus what each producer makes
   and costs.
-- **🌍 World** — two views behind one tab. The **camp** is the world you are standing
-  in, drawn as a little diorama: your rocket assembling itself at the back, the lab once
-  it is built, the Heart, and every producer you own — tap any of them to open its panel.
-  The **galaxy** is the map between worlds: planets on a starfield, locked ones dark, a
-  line lighting up behind you as you go.
+- **🌍 World** — two views behind one tab. The **camp** is a full-bleed painting of the
+  world you are standing in, with your rocket assembling itself on its pad, the lab once it
+  is built, the Heart, every producer you own and the empty plot waiting for the next one —
+  each standing on its own spot in the picture with a label chip under it, tappable for its
+  panel. The anchors are stored as fractions of the painting and placed in pixels at runtime,
+  so they stay glued to their plinths on any phone shape. Three buttons in the corner open
+  the side pop-ups — 🎲 games, ✨ constellations, 🌌 the galaxy — the Travel Town way, rather
+  than burying them in a drawer. The **galaxy** is the map between worlds: planets on a
+  starfield, locked ones dark, a line lighting up behind you as you go; tap your own world to
+  walk back into it.
 
 ### Sound
 Everything is synthesised by `scripts/make-audio.py` — no samples, nothing to license.
@@ -378,8 +400,12 @@ reverb tail is wrapped back onto the head so the loop has no seam.
   palette) that hops when the order is ready.
 - **Rarity reads at a glance**: tier-3 tiles get a blue frame, tier-4 a violet one, and
   tier-5 items and relics a gold frame, a breathing halo and three orbiting motes.
-- Tiles are drawn with a seated shadow, an inset floor and a top light, so the board reads
-  as physical rather than as flat rounded rectangles.
+- The board is a **checkerboard** of two warm tan tiles, so a 6×8 grid reads as a surface
+  instead of a spreadsheet; still-overgrown cells use the same two-tone trick in a lighter
+  sand. Tiles are drawn with a seated shadow, an inset floor and a top light, so the board
+  reads as physical rather than as flat rounded rectangles.
+- The camp and the lab are **painted scenes**, not forms: one illustration each, the
+  interactive things standing on it.
 - **Sound is a real audio pack**, not blips: 27 effects and three music beds, all synthesised
   by `scripts/make-audio.py` (no sampled material, nothing to license) and encoded to ~510 kB
   of Ogg Vorbis. Merges are pitched by tier, repeats get slight pitch drift, music crossfades
@@ -575,18 +601,22 @@ production strips them. That's enough to drive the whole game from Playwright: c
 cell centre from `__board.center(i)`, click or drag, then assert on `__game.state()`.
 
 `scripts/playtest.mjs` is that regression, wired to `npm test`. Start `npm run dev` in one
-shell, run `npm test` in another, and it drives the whole arc headlessly in **29 sections**:
+shell, run `npm test` in another, and it drives the whole arc headlessly in **34 sections**, 129 assertions:
 the XP curve, producers and merging, buying supplies and upgrades (and checking max energy
 and the extra order card actually changed), the wreck spreading pieces across every
 unfinished part chain, 60 rolled orders to confirm the part-gift rate, a dud experiment that
 costs the fee but keeps its samples, a real discovery that consumes both, the bag, the
 boosters, the cargo ship, the soft-lock rescue, launches to all four other worlds —
 
-and then the v6 systems: that a fresh world really does start with two chains and a cramped
-board, that **no contract ever asks for something that has not woken up yet**, that world
-levels unlock chains, that finishing a chain pays a Bloom Spark, that feeding the Heart wakes
+and then the v6/v7 systems: that a fresh world really does start with two chains and a
+cramped board, that **no contract ever asks for something that has not woken up yet**, that a
+half-grown world gets nothing new while **maxing every producer plants the next one** and
+wakes its chain, that finishing a chain pays a Bloom Spark, that feeding the Heart wakes
 a stage and fires its story beat, all four side games end to end, tracing a constellation and
-paying its Star Cores, that all 286 items can be drawn, and that a planted v5 save survives
+paying its Star Cores, that the camp's spots and the side rail are the topmost thing at
+their own centre (nothing tappable buried under the scenery), that a closed panel does not
+swallow board taps, the quest button and the chain pop-up, the guided intro,
+that all 286 items can be drawn, and that a planted v5 save survives
 the rewrite — keeping its level, coins and vault perks while the items that no longer exist
 are swept off the board, out of the bag and off the lab bench — asserting no console errors
 throughout.

@@ -15,12 +15,15 @@ export type Hooks = {
   canDrag: (i: number) => boolean;
 };
 
+/* Two tile colours per world, laid out as a checkerboard the way every game in
+   this genre does it — it reads as a surface you put things on rather than a
+   grid of separate buttons. */
 const THEME: Record<string, { tile: number; tileLo: number; lock: number; lockLo: number; txt: number }> = {
-  earth: { tile: 0xfff6e0, tileLo: 0xf3e1bd, lock: 0xd0a469, lockLo: 0xb98f52, txt: 0x9a7a4e },
-  luna: { tile: 0xf3f0ff, tileLo: 0xdcd5f2, lock: 0x9a92bd, lockLo: 0x827aa6, txt: 0x5a4f86 },
-  cindra: { tile: 0xfff0e2, tileLo: 0xf2d6bd, lock: 0xa8654a, lockLo: 0x8a4a33, txt: 0x8a4a2a },
-  nerith: { tile: 0xeafaff, tileLo: 0xc9ecf5, lock: 0x5f9fb0, lockLo: 0x437f90, txt: 0x2f6e80 },
-  vela: { tile: 0xf7f0ff, tileLo: 0xe2d6f7, lock: 0x8f7fc4, lockLo: 0x7264aa, txt: 0x5b4b95 },
+  earth: { tile: 0xf6e3bd, tileLo: 0xefd7a9, lock: 0xdcc49a, lockLo: 0xd2b98d, txt: 0x8a6a3c },
+  luna: { tile: 0xe4dff5, tileLo: 0xd6cfec, lock: 0xc3bcdd, lockLo: 0xb8b0d4, txt: 0x5a4f86 },
+  cindra: { tile: 0xf2d9bd, tileLo: 0xe9caa8, lock: 0xd9ab88, lockLo: 0xcf9d78, txt: 0x8a4a2a },
+  nerith: { tile: 0xd6eef5, tileLo: 0xc7e5ee, lock: 0xa8d2de, lockLo: 0x9bc8d6, txt: 0x2f6e80 },
+  vela: { tile: 0xe7dcf7, tileLo: 0xdccff2, lock: 0xc2b2e2, lockLo: 0xb6a5da, txt: 0x5b4b95 },
 };
 /** an unknown world falls back to Earth rather than throwing mid-landing */
 const themeOf = (k: string) => THEME[k] || THEME.earth;
@@ -201,18 +204,23 @@ class PixiBoard {
     const g = this.tiles[i], p = this.pos(i), c = this.cell, th = THEME[this.theme];
     const locked = this.slots[i] && this.slots[i].key.startsWith('b');
     const r = locked ? 0 : this.rarity(i);
-    const R = c * 0.24;
+    const R = c * 0.16;
+    // a checkerboard, not a grid of buttons: the two tones alternate and the
+    // tiles touch, so the board reads as one warm surface
+    const dark = ((i % this.cols) + ((i / this.cols) | 0)) % 2 === 1;
     g.clear();
-    // seated shadow, so tiles read as pressed into the board rather than painted on
-    g.roundRect(p.x + c * 0.03, p.y + c * 0.07, c * 0.94, c * 0.96, R)
-      .fill({ color: 0x000000, alpha: 0.12 });
-    g.roundRect(p.x, p.y, c, c, R).fill({ color: locked ? th.lock : th.tile });
-    // inset floor + a soft top light
-    g.roundRect(p.x + c * 0.07, p.y + c * 0.58, c * 0.86, c * 0.34, c * 0.18)
-      .fill({ color: locked ? th.lockLo : th.tileLo, alpha: 0.7 });
-    g.roundRect(p.x + c * 0.1, p.y + c * 0.07, c * 0.8, c * 0.26, c * 0.13)
-      .fill({ color: 0xffffff, alpha: locked ? 0.1 : 0.45 });
-    g.roundRect(p.x, p.y, c, c, R).stroke({ color: 0xffffff, alpha: locked ? 0.18 : 0.6, width: 2 });
+    g.roundRect(p.x, p.y, c, c, R)
+      .fill({ color: locked ? (dark ? th.lockLo : th.lock) : (dark ? th.tileLo : th.tile) });
+    if (!locked) {
+      // one soft light from the top, one soft shade at the foot
+      g.roundRect(p.x + c * 0.06, p.y + c * 0.05, c * 0.88, c * 0.2, c * 0.1)
+        .fill({ color: 0xffffff, alpha: 0.28 });
+      g.roundRect(p.x + c * 0.06, p.y + c * 0.76, c * 0.88, c * 0.18, c * 0.09)
+        .fill({ color: 0x000000, alpha: 0.05 });
+    } else {
+      g.roundRect(p.x + c * 0.06, p.y + c * 0.06, c * 0.88, c * 0.88, R * 0.8)
+        .fill({ color: 0x000000, alpha: 0.07 });
+    }
     if (r) {
       // rarity frame: quietly gold for good, hot for legendary
       const col = r === 3 ? 0xffb02e : r === 2 ? 0xc78cff : 0x8fd6ff;

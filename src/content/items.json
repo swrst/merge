@@ -71,10 +71,7 @@
     "art": {
       "shape": "tree",
       "mat": "bark",
-      "accent": "leaf",
-      "deco": [
-        "crest"
-      ]
+      "accent": "leaf"
     }
   },
   "pebble": {
@@ -148,10 +145,7 @@
     "art": {
       "shape": "arch",
       "mat": "stone",
-      "accent": "gold",
-      "deco": [
-        "crest"
-      ]
+      "accent": "gold"
     }
   },
   "berry": {
@@ -216,10 +210,7 @@
     "art": {
       "shape": "basket",
       "mat": "straw",
-      "accent": "cherry",
-      "deco": [
-        "crest"
-      ]
+      "accent": "cherry"
     }
   },
   "dew": {
@@ -283,10 +274,7 @@
     "art": {
       "shape": "arch",
       "mat": "stone",
-      "accent": "water",
-      "deco": [
-        "crest"
-      ]
+      "accent": "water"
     }
   },
   "grass": {
@@ -350,10 +338,7 @@
     "art": {
       "shape": "crate",
       "mat": "straw",
-      "accent": "gold",
-      "deco": [
-        "crest"
-      ]
+      "accent": "gold"
     }
   },
   "bulbseed": {
@@ -416,10 +401,7 @@
     "art": {
       "shape": "crown",
       "mat": "rose",
-      "accent": "gold",
-      "deco": [
-        "crest"
-      ]
+      "accent": "gold"
     }
   },
   "nectar": {
@@ -484,8 +466,7 @@
       "mat": "honey",
       "accent": "gold",
       "deco": [
-        "glow",
-        "crest"
+        "glow"
       ]
     }
   },
@@ -540,10 +521,7 @@
     "art": {
       "shape": "orb",
       "mat": "moss",
-      "accent": "glow",
-      "deco": [
-        "crest"
-      ]
+      "accent": "glow"
     }
   },
   "fibre": {
@@ -606,10 +584,7 @@
     "art": {
       "shape": "scroll",
       "mat": "rose",
-      "accent": "gold",
-      "deco": [
-        "crest"
-      ]
+      "accent": "gold"
     }
   },
   "down": {
@@ -674,10 +649,7 @@
     "art": {
       "shape": "house",
       "mat": "glass",
-      "accent": "leaf",
-      "deco": [
-        "crest"
-      ]
+      "accent": "leaf"
     }
   },
   "mud": {
@@ -740,10 +712,7 @@
     "art": {
       "shape": "pot",
       "mat": "cream",
-      "accent": "sapphire",
-      "deco": [
-        "crest"
-      ]
+      "accent": "sapphire"
     }
   },
   "grub": {
@@ -803,8 +772,7 @@
       "mat": "leaf",
       "accent": "glow",
       "deco": [
-        "glow",
-        "crest"
+        "glow"
       ]
     }
   },
@@ -873,10 +841,7 @@
     "art": {
       "shape": "mask",
       "mat": "moon",
-      "accent": "silver",
-      "deco": [
-        "crest"
-      ]
+      "accent": "silver"
     }
   },
   "spore": {
@@ -943,10 +908,7 @@
     "art": {
       "shape": "house",
       "mat": "spore",
-      "accent": "glow",
-      "deco": [
-        "crest"
-      ]
+      "accent": "glow"
     }
   },
   "dustpinch": {
@@ -1000,10 +962,7 @@
     "art": {
       "shape": "arch",
       "mat": "slate",
-      "accent": "moon",
-      "deco": [
-        "crest"
-      ]
+      "accent": "moon"
     }
   },
   "frostchip": {
@@ -1067,10 +1026,7 @@
     "art": {
       "shape": "tower",
       "mat": "ice",
-      "accent": "frost",
-      "deco": [
-        "crest"
-      ]
+      "accent": "frost"
     }
   },
   "shardlet": {
@@ -1126,10 +1082,7 @@
     "art": {
       "shape": "tower",
       "mat": "crystal",
-      "accent": "aurora",
-      "deco": [
-        "crest"
-      ]
+      "accent": "aurora"
     }
   },
   "wick": {
@@ -1185,10 +1138,7 @@
     "art": {
       "shape": "tower",
       "mat": "cream",
-      "accent": "flame",
-      "deco": [
-        "crest"
-      ]
+      "accent": "flame"
     }
   },
   "silverore": {
@@ -1240,10 +1190,7 @@
     "art": {
       "shape": "crown",
       "mat": "silver",
-      "accent": "moon",
-      "deco": [
-        "crest"
-      ]
+      "accent": "moon"
     }
   },
   "cometdust": {
@@ -1302,8 +1249,7 @@
       "mat": "star",
       "accent": "aurora",
       "deco": [
-        "glow",
-        "crest"
+        "glow"
       ]
     }
   },
@@ -1364,8 +1310,7 @@
       "mat": "moon",
       "accent": "glow",
       "deco": [
-        "glow",
-        "crest"
+        "glow"
       ]
     }
   },
@@ -1434,10 +1379,7 @@
     "art": {
       "shape": "anvil",
       "mat": "obsidian",
-      "accent": "flame",
-      "deco": [
-        "crest"
-      ]
+      "accent": "flame"
     }
   },
   "sporecap": {
@@ -1505,10 +1447,7 @@
     "art": {
       "shape": "house",
       "mat": "fungus",
-      "accent": "glow",
-      "deco": [
-        "crest"
-      ]
+      "accent": "glow"
     }
   },
   "ironore": {
@@ -1560,10 +1499,7 @@
     "art": {
       "shape": "crown",
       "mat": "steel",
-      "accent": "rust",
-      "deco": [
-        "crest"
-      ]
+      "accent": "rust"
     }
   },
   "obchip": {
@@ -1620,10 +1556,7 @@
     "art": {
       "shape": "arch",
       "mat": "obsidian",
-      "accent": "gold",
-      "deco": [
-        "crest"
-      ]
+      "accent": "gold"
     }
   },
   "sandpinch": {
@@ -1677,10 +1610,7 @@
     "art": {
       "shape": "flower",
       "mat": "glass",
-      "accent": "aurora",
-      "deco": [
-        "crest"
-      ]
+      "accent": "aurora"
     }
   },
   "coallump": {
@@ -1737,10 +1667,7 @@
     "art": {
       "shape": "house",
       "mat": "iron",
-      "accent": "flame",
-      "deco": [
-        "crest"
-      ]
+      "accent": "flame"
     }
   },
   "pepperpod": {
@@ -1794,10 +1721,7 @@
     "art": {
       "shape": "soup",
       "mat": "clay",
-      "accent": "flame",
-      "deco": [
-        "crest"
-      ]
+      "accent": "flame"
     }
   },
   "copperore": {
@@ -1849,10 +1773,7 @@
     "art": {
       "shape": "cog",
       "mat": "copper",
-      "accent": "gold",
-      "deco": [
-        "crest"
-      ]
+      "accent": "gold"
     }
   },
   "ashfeather": {
@@ -1901,8 +1822,7 @@
       "mat": "gold",
       "accent": "aurora",
       "deco": [
-        "glow",
-        "crest"
+        "glow"
       ]
     }
   },
@@ -1916,8 +1836,7 @@
       "mat": "flame",
       "accent": "glow",
       "deco": [
-        "glow",
-        "crest"
+        "glow"
       ]
     }
   },
@@ -1982,10 +1901,7 @@
     "art": {
       "shape": "arch",
       "mat": "pearl",
-      "accent": "coral",
-      "deco": [
-        "crest"
-      ]
+      "accent": "coral"
     }
   },
   "kelpleaf": {
@@ -2049,10 +1965,7 @@
     "art": {
       "shape": "house",
       "mat": "kelp",
-      "accent": "glow",
-      "deco": [
-        "crest"
-      ]
+      "accent": "glow"
     }
   },
   "grit": {
@@ -2107,10 +2020,7 @@
     "art": {
       "shape": "crown",
       "mat": "pearl",
-      "accent": "silver",
-      "deco": [
-        "crest"
-      ]
+      "accent": "silver"
     }
   },
   "coralbud": {
@@ -2163,10 +2073,7 @@
     "art": {
       "shape": "tower",
       "mat": "rose",
-      "accent": "pearl",
-      "deco": [
-        "crest"
-      ]
+      "accent": "pearl"
     }
   },
   "minnow": {
@@ -2220,10 +2127,7 @@
     "art": {
       "shape": "soup",
       "mat": "shell",
-      "accent": "mint",
-      "deco": [
-        "crest"
-      ]
+      "accent": "mint"
     }
   },
   "bubblet": {
@@ -2282,8 +2186,7 @@
       "mat": "sapphire",
       "accent": "glow",
       "deco": [
-        "glow",
-        "crest"
+        "glow"
       ]
     }
   },
@@ -2338,10 +2241,7 @@
     "art": {
       "shape": "tower",
       "mat": "cream",
-      "accent": "aurora",
-      "deco": [
-        "crest"
-      ]
+      "accent": "aurora"
     }
   },
   "driftbit": {
@@ -2399,10 +2299,7 @@
     "art": {
       "shape": "mask",
       "mat": "jade",
-      "accent": "gold",
-      "deco": [
-        "crest"
-      ]
+      "accent": "gold"
     }
   },
   "glowplankton": {
@@ -2470,8 +2367,7 @@
       "mat": "mint",
       "accent": "glow",
       "deco": [
-        "glow",
-        "crest"
+        "glow"
       ]
     }
   },
@@ -2527,10 +2423,7 @@
     "art": {
       "shape": "tower",
       "mat": "cloud",
-      "accent": "aurora",
-      "deco": [
-        "crest"
-      ]
+      "accent": "aurora"
     }
   },
   "aurorathread": {
@@ -2590,10 +2483,7 @@
     "art": {
       "shape": "crown",
       "mat": "aurora",
-      "accent": "star",
-      "deco": [
-        "crest"
-      ]
+      "accent": "star"
     }
   },
   "stardust": {
@@ -2649,10 +2539,7 @@
     "art": {
       "shape": "anvil",
       "mat": "dusk",
-      "accent": "star",
-      "deco": [
-        "crest"
-      ]
+      "accent": "star"
     }
   },
   "breeze": {
@@ -2708,8 +2595,7 @@
       "mat": "dusk",
       "accent": "aurora",
       "deco": [
-        "glow",
-        "crest"
+        "glow"
       ]
     }
   },
@@ -2764,10 +2650,7 @@
     "art": {
       "shape": "cake",
       "mat": "cloud",
-      "accent": "topaz",
-      "deco": [
-        "crest"
-      ]
+      "accent": "topaz"
     }
   },
   "chimebit": {
@@ -2823,8 +2706,7 @@
       "mat": "gold",
       "accent": "aurora",
       "deco": [
-        "glow",
-        "crest"
+        "glow"
       ]
     }
   },
@@ -2884,8 +2766,7 @@
       "mat": "gold",
       "accent": "aurora",
       "deco": [
-        "glow",
-        "crest"
+        "glow"
       ]
     }
   },
@@ -2943,8 +2824,7 @@
       "mat": "aurora",
       "accent": "gold",
       "deco": [
-        "glow",
-        "crest"
+        "glow"
       ]
     }
   },
@@ -3004,8 +2884,7 @@
       "mat": "aurora",
       "accent": "glow",
       "deco": [
-        "glow",
-        "crest"
+        "glow"
       ]
     }
   },
@@ -3086,8 +2965,7 @@
       "mat": "jade",
       "accent": "glow",
       "deco": [
-        "glow",
-        "crest"
+        "glow"
       ]
     }
   },
@@ -3101,8 +2979,7 @@
       "mat": "gold",
       "accent": "aurora",
       "deco": [
-        "glow",
-        "crest"
+        "glow"
       ]
     }
   },
@@ -3157,8 +3034,7 @@
       "mat": "aurora",
       "accent": "glow",
       "deco": [
-        "glow",
-        "crest"
+        "glow"
       ]
     }
   },
@@ -3206,10 +3082,7 @@
     "art": {
       "shape": "plank",
       "mat": "steel",
-      "accent": "silver",
-      "deco": [
-        "crest"
-      ]
+      "accent": "silver"
     },
     "part": "hull"
   },
@@ -3242,10 +3115,7 @@
     "art": {
       "shape": "cog",
       "mat": "iron",
-      "accent": "flame",
-      "deco": [
-        "crest"
-      ]
+      "accent": "flame"
     },
     "part": "engine"
   },
@@ -3278,10 +3148,7 @@
     "art": {
       "shape": "compass",
       "mat": "silver",
-      "accent": "sapphire",
-      "deco": [
-        "crest"
-      ]
+      "accent": "sapphire"
     },
     "part": "nav"
   },
@@ -3314,10 +3181,7 @@
     "art": {
       "shape": "barrel",
       "mat": "steel",
-      "accent": "glow",
-      "deco": [
-        "crest"
-      ]
+      "accent": "glow"
     },
     "part": "tank"
   },
@@ -3353,8 +3217,7 @@
       "mat": "glow",
       "accent": "aurora",
       "deco": [
-        "glow",
-        "crest"
+        "glow"
       ]
     },
     "fuel": true

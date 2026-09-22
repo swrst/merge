@@ -52,17 +52,61 @@ const drag = async (from, to) => {
 /** click something on the board screen, shooing away any modal that got in first */
 const tapUI = async (sel) => { await closeModal(); await page.locator(sel).first().click({ force: true }); };
 const shot = (n) => page.screenshot({ path: `/tmp/shot-${n}.png` });
+/** the shell must never be scrolled; if a click nudged it, put it back */
+const unscroll = () => page.evaluate(() => {
+  window.scrollTo(0, 0);
+  const a = document.querySelector('.app'); if (a) { a.scrollTop = 0; a.scrollLeft = 0; }
+});
 /** switch tabs; story beats and level-ups can pop a modal at any moment */
-const tab = async (v) => { await closeModal(); await page.click(`[data-v="${v}"]`); await page.waitForTimeout(500); };
+const tab = async (v) => {
+  await closeModal();
+  await unscroll();
+  // there is no "board" button any more — the rail opens panels, the ✕ closes them
+  if (v === 'board') {
+    const x = page.locator('.screen.open .scClose');
+    if (await x.count()) await x.first().click({ force: true });
+  } else {
+    await page.locator(`[data-v="${v}"]`).click({ force: true });
+  }
+  // the screen slides in; on a software renderer that can take a while to
+  // settle, and half-way through it everything is 200px lower than it looks
+  await page.waitForFunction(() => {
+    const sc = document.querySelector('.screen.open');
+    if (!sc) return true;
+    const m = new DOMMatrixReadOnly(getComputedStyle(sc).transform);
+    return Math.abs(m.m42) < 0.5;
+  }, null, { timeout: 8000 }).catch(() => {});
+  await page.waitForTimeout(400);
+};
+/** open the World tab standing in the camp, whichever view it was left on */
+const camp = async () => {
+  await tab('map');
+  const back = page.locator('[data-pop="camp"]');
+  if (await back.count()) { await back.first().click({ force: true }); await page.waitForTimeout(500); }
+};
+/** open one of the camp's side pop-ups; a queued story beat can steal the modal,
+    so check the title we landed on and try once more if something barged in */
+const pop = async (k, title) => {
+  for (let n = 0; n < 3; n++) {
+    await camp();
+    await page.locator(`[data-pop="${k}"]`).first().click({ force: true });
+    await page.waitForTimeout(700);
+    if (await page.locator('#modal.open').count()
+      && (await page.textContent('#mTitle').catch(() => '')) === title) return;
+    await closeModal();
+  }
+  throw new Error(`the ${k} pop-up never opened`);
+};
 /** fly somewhere and wait for the launch cutscene to finish clearing */
 const travel = async (world) => {
   await closeModal();
   await set(() => { window.__game.state().fuel = 3; });
   await closeModal();
   await tab('map');
-  // the galaxy is a sub-view of the World tab now
-  await page.locator('[data-wt="galaxy"]').click({ force: true });
-  await page.waitForTimeout(500);
+  // the galaxy is a sub-view of the World tab, and it remembers which view it
+  // was left on, so only switch when we are looking at the camp
+  const toGal = page.locator('[data-pop="galaxy"]');
+  if (await toGal.count()) { await toGal.click({ force: true }); await page.waitForTimeout(600); }
   await page.locator(`[data-world="${world}"]`).click({ force: true });
   await page.waitForFunction(w => window.__game.state().world === w, world, { timeout: 15000 });
   await page.waitForFunction(() => !document.querySelector('#cut').classList.contains('show'), null, { timeout: 15000 });
@@ -196,28 +240,32 @@ await tab('lab');
 must(await page.locator('#sc-lab.open').count() === 1, 'lab screen opens');
 await shot('lab-empty');
 const recipeCount = await page.evaluate(() => window.__game.recipes.length);
-must(await page.locator('#labBody [data-learn]').count() === recipeCount, `all ${recipeCount} rumours listed, none spoiled`);
+// the rumours are a pop-up off the bench now
+await page.evaluate(() => document.querySelector('[data-labpop="rumours"]').click());
+await page.waitForTimeout(1000);
+must(await page.locator('[data-learn]').count() === recipeCount, `all ${recipeCount} rumours listed, none spoiled`);
+await closeModal();
 
 // a dud pair costs the bench fee and consumes nothing
 await set(() => { const b = window.__game.state().boards.earth; b[14] = { id: 'twig' }; b[15] = { id: 'twig' }; });
-await page.click('[data-slot="0"]'); await page.waitForTimeout(300);
+await page.locator('[data-lab="s0"]').click({ force: true }); await page.waitForTimeout(300);
 await page.locator('[data-pick="twig"]').click(); await page.waitForTimeout(300);
-await page.click('[data-slot="1"]'); await page.waitForTimeout(300);
+await page.locator('[data-lab="s1"]').click({ force: true }); await page.waitForTimeout(300);
 await page.locator('[data-pick="twig"]').click(); await page.waitForTimeout(300);
 before = (await S()).coins;
-await page.click('#btnResearch'); await page.waitForTimeout(600);
+await page.locator('#btnResearch').click({ force: true }); await page.waitForTimeout(600);
 after = await S();
 must(after.coins === before - 40, `a dud costs the 40 coin bench fee (${before} -> ${after.coins})`);
 must(after.boards.earth.filter(c => c && c.id === 'twig').length === 2, 'a dud does not eat your samples');
 
 // the real recipe
-await page.click('[data-slot="0"]'); await page.waitForTimeout(300);
+await page.locator('[data-lab="s0"]').click({ force: true }); await page.waitForTimeout(300);
 await page.locator('[data-pick="gem"]').click(); await page.waitForTimeout(300);
-await page.click('[data-slot="1"]'); await page.waitForTimeout(300);
+await page.locator('[data-lab="s1"]').click({ force: true }); await page.waitForTimeout(300);
 await page.locator('[data-pick="scrap"]').click(); await page.waitForTimeout(300);
 await shot('lab-loaded');
 before = (await S()).coins;
-await page.click('#btnResearch'); await page.waitForTimeout(900);
+await page.locator('#btnResearch').click({ force: true }); await page.waitForTimeout(900);
 after = await S();
 must(after.lab.disc.r1 === 1, 'Star Gem recipe discovered');
 must(after.boards.earth.some(c => c && c.id === 'relic1'), 'a Star Gem is on the board');
@@ -225,10 +273,13 @@ must(!after.boards.earth.some(c => c && (c.id === 'gem' || c.id === 'scrap')), '
 must(after.coins === before - 40, `discovering only costs the bench fee (${before} -> ${after.coins})`);
 await closeModal(); await page.waitForTimeout(400);
 await shot('lab-known');
-must(await page.locator('#labBody [data-load="r1"]').count() === 1, 'the recipe is in the lab book, ready to brew again');
+await page.evaluate(() => document.querySelector('[data-labpop="book"]').click());
+await page.waitForTimeout(1000);
+must(await page.locator('[data-load="r1"]').count() === 1, 'the recipe is in the lab book, ready to brew again');
+await closeModal();
 
 head('Fuel does not leave a ghost tile (regression)');
-await page.click('#sc-lab .scClose'); await page.waitForTimeout(400);
+await tab('board');
 await set(() => {
   const s = window.__game.state(), b = s.boards.earth;
   for (let i = 0; i < b.length; i++) if (b[i]) b[i] = null;
@@ -302,7 +353,7 @@ if (!shopDiag.open || !shopDiag.bagBtn || shopDiag.disabled) console.log('   [sh
 console.log('   [shop]', JSON.stringify(shopDiag));
 await tapUI('[data-up="bag"]'); await page.waitForTimeout(450);
 must((await S()).up.bag === 1, 'Storage Bag bought');
-await page.click('#sc-shop .scClose'); await page.waitForTimeout(500);
+await tab('board');
 must(await page.locator('#tools .toolBtn').count() >= 1, 'the bag button appears above the board');
 must(await page.evaluate(() => {
   const r = document.querySelector('#board canvas').getBoundingClientRect();
@@ -486,22 +537,31 @@ const sleeping = await page.evaluate((cs) => {
 }, asked);
 must(sleeping.length === 0, 'and no contract asks for something that has not woken up yet');
 
-head('World levels unlock chains');
-await set(() => {
-  const g = window.__game, s = g.state();
-  s.wlv[s.world] = 3; s.wxp[s.world] = 0;
-});
-await page.evaluate(() => {
-  // nudge the world forward the way play would
-  const g = window.__game, s = g.state();
-  s.wxp[s.world] = 9999; g.hud();
-});
-await page.waitForTimeout(200);
-live = await page.evaluate(() => {
+head('Maxing what you have unlocks the next one');
+let before2 = await page.evaluate(() => {
   const g = window.__game, w = g.state().world;
-  return Object.values(g.chains).filter(c => c.world === w && c.unlock <= g.wlv(w)).length;
+  return { chains: Object.values(g.chains).filter(c => c.world === w && c.unlock <= 99).length,
+    live: g.liveChains().length, prods: g.cells().filter(c => c && c.p).length };
 });
-must(live > 2, `at world level 3 there are ${live} chains awake`);
+// not yet: they are still level 1
+await page.evaluate(() => window.__game.grow());
+await page.waitForTimeout(400);
+let mid = await page.evaluate(() => window.__game.cells().filter(c => c && c.p).length);
+must(mid === before2.prods, 'a half-grown world gets nothing new');
+// max every producer, and the next plot fills itself
+await set(() => {
+  const g = window.__game, b = g.cells();
+  b.forEach(c => { if (c && c.p && g.prods[c.p].mode === 'battery') c.lv = 4; });
+});
+await page.evaluate(() => window.__game.grow());
+await page.waitForTimeout(1200);
+const after4 = await page.evaluate(() => {
+  const g = window.__game;
+  return { live: g.liveChains().length, prods: g.cells().filter(c => c && c.p).length };
+});
+must(after4.prods > before2.prods, `growing them all planted a new producer (${before2.prods} -> ${after4.prods})`);
+must(after4.live > before2.live, `and woke its chain (${before2.live} -> ${after4.live} awake)`);
+await closeModal();
 
 head('Finishing a chain pays Bloom Essence');
 await closeModal();
@@ -522,18 +582,21 @@ must(spark, 'and a Bloom Spark landed on the board');
 
 head('Feeding the Heart wakes the world');
 await closeModal();
-await tab('map');
-await page.locator('[data-wt="camp"]').click({ force: true }); await page.waitForTimeout(400);
-let feedTxt = await page.textContent('#btnFeed');
-must(/Feed the Heart/.test(feedTxt), `the Heart offers to eat: "${feedTxt.trim()}"`);
+await camp();
+await page.waitForTimeout(400);
+await page.evaluate(() => document.querySelector('[data-ent="heart"]').click());
+await page.waitForTimeout(900);
+let feedTxt = await page.textContent('#feed2');
+must(/Feed it/.test(feedTxt), `the Heart offers to eat: "${feedTxt.trim()}"`);
 await set(() => {
   const g = window.__game, b = g.cells();
   let n = 0;
   for (let i = 0; i < b.length && n < 3; i++) if (!b[i]) { b[i] = { id: 'bloomcore' }; n++; }
   window.__board.sync(b);
 });
-await page.evaluate(() => window.__game.world());
-await page.locator('#btnFeed').click({ force: true }); await page.waitForTimeout(900);
+await page.evaluate(() => document.querySelector('[data-ent="heart"]').click());
+await page.waitForTimeout(900);
+await page.locator('#feed2').click({ force: true }); await page.waitForTimeout(1200);
 s = await S();
 must(s.fed.vela >= 12, `the Heart took ${s.fed.vela} Bloom`);
 must(s.stage.vela >= 1, 'and the world woke a stage');
@@ -542,8 +605,8 @@ await closeModal();
 
 head('Side games');
 await set(() => { const s = window.__game.state(); s.energy = 60; s.mini = {}; });
-await tab('map');
-await page.locator('[data-game="dig"]').click({ force: true }); await page.waitForTimeout(400);
+await pop('games', 'Things to do');
+await page.locator('[data-game="dig"]').click({ force: true }); await page.waitForTimeout(800);
 must(await page.locator('#mini.open').count() === 1, 'Crater Dig opens');
 const digCells = await page.locator('.digCell').count();
 must(digCells === 20, `with a ${digCells}-tile crater`);
@@ -557,16 +620,16 @@ must(opened >= 1, `digging revealed ${opened} tile(s)`);
 await page.locator('#miniClose').click({ force: true }); await page.waitForTimeout(300);
 
 await set(() => { const s = window.__game.state(); s.energy = 60; s.mini = {}; });
-await page.evaluate(() => window.__game.world());
-await page.locator('[data-game="brew"]').click({ force: true }); await page.waitForTimeout(400);
+await pop('games', 'Things to do');
+await page.locator('[data-game="brew"]').click({ force: true }); await page.waitForTimeout(800);
 must(await page.locator('.brewBar').count() === 1, 'Fuel Brewing opens with a needle');
 for (let i = 0; i < 5; i++) { await page.locator('#brewTap').click({ force: true }).catch(() => {}); await page.waitForTimeout(200); }
 must(await page.locator('#brewDone').count() === 1, 'and five stirs finish the brew');
 await page.locator('#brewDone').click({ force: true }); await page.waitForTimeout(300);
 
 await set(() => { const s = window.__game.state(); s.mini = {}; s.coins = 9000; });
-await page.evaluate(() => window.__game.world());
-await page.locator('[data-game="market"]').click({ force: true }); await page.waitForTimeout(400);
+await pop('games', 'Things to do');
+await page.locator('[data-game="market"]').click({ force: true }); await page.waitForTimeout(800);
 must(await page.locator('.mktCrate').count() === 3, 'the Alien Market lays out three crates');
 await page.locator('[data-m=\"0\"]').click({ force: true }); await page.waitForTimeout(200);
 await page.locator('[data-m=\"1\"]').click({ force: true }); await page.waitForTimeout(200);
@@ -584,8 +647,8 @@ await set(() => {
   for (let i = 0; i < b.length && n < 2; i++) if (!b[i]) { b[i] = { id: 'starcore' }; n++; }
   window.__board.sync(b);
 });
-await tab('map');
-await page.locator('[data-c="plough"]').click({ force: true }); await page.waitForTimeout(400);
+await pop('stars', 'Constellations');
+await page.locator('[data-c="plough"]').click({ force: true }); await page.waitForTimeout(800);
 must(await page.locator('.skyStar').count() === 7, 'the Plough has seven stars');
 for (let i = 0; i < 7; i++) { await page.locator(`[data-s="${i}"]`).click({ force: true }); await page.waitForTimeout(120); }
 s = await S();
@@ -690,11 +753,22 @@ const grew = await page.evaluate(p2 => {
   const g = window.__game, before = g.plv(g.cells()[p2.i]);
   return { before, dropsBefore: [...new Set(g.dropsOf(g.prods[p2.k], before))].length };
 }, prod);
-await tab('map');
-await page.locator('[data-wt="camp"]').click({ force: true }); await page.waitForTimeout(400);
-must(await page.locator('.campEnt[data-ent="rocket"]').count() === 1, 'the camp shows your rocket');
-must(await page.locator('.campEnt[data-ent="heart"]').count() === 1, 'and the world Heart');
-must(await page.locator('.campEnt[data-ent^="p"]').count() >= 2, 'and every producer you own');
+await camp();
+await page.waitForTimeout(400);
+must(await page.locator('.spot[data-ent="rocket"]').count() === 1, 'the camp shows your rocket');
+must(await page.locator('.spot[data-ent="heart"]').count() === 1, 'and the world Heart');
+must(await page.locator('.spot[data-ent^="p"]').count() >= 2, 'and every producer you own');
+// every button on a painted scene has to be the thing your thumb actually hits
+const buried = await page.evaluate(() => {
+  const bad = [];
+  document.querySelectorAll('#mapBody .sceneBtn, .rail .railBtn').forEach(b => {
+    const r = b.getBoundingClientRect();
+    const t = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+    if (!b.contains(t)) bad.push((b.dataset.pop || b.dataset.v) + ' under ' + (t ? t.className : 'nothing'));
+  });
+  return bad;
+});
+must(buried.length === 0, `nothing is buried under the scenery${buried.length ? ': ' + buried.join(', ') : ''}`);
 await page.evaluate(i => document.querySelector(`[data-ent="p${i}"]`).click(), prod.i);
 await page.waitForTimeout(900);
 must((await page.textContent('#mTitle')) === bat.name, 'tapping one opens its panel');
