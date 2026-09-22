@@ -41,6 +41,14 @@ button{font-family:inherit;cursor:pointer;border:none}
 .app.nerith{--sky1:#07405c;--sky2:#2e9fbe}
 .app.vela{--sky1:#1b1440;--sky2:#5c3f96}
 .scene{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+/* A painted backdrop, not a CSS sky: the world you are standing in, blurred
+   back and warmed over so a board of tiles still reads on top of it. */
+.sceneBack{position:absolute;inset:-14px;background-image:var(--camp);background-size:cover;background-position:center 18%;
+  filter:blur(2px) saturate(1.08) brightness(1.02);transform:scale(1.06)}
+.sceneWash{position:absolute;inset:0;background:
+  linear-gradient(180deg,rgba(255,244,214,.14) 0%,rgba(255,238,200,.2) 46%,rgba(255,226,175,.34) 100%)}
+/* with a painting behind it the cartoon sky furniture is just clutter */
+.app .sun,.app .hills,.app .cloud{display:none}
 .sun{position:absolute;top:26px;right:26px;width:74px;height:74px;border-radius:50%;
   background:radial-gradient(circle at 40% 36%,#fffbd0,#ffd450 58%,#ffb02e);box-shadow:0 0 44px rgba(255,203,61,.6)}
 .app.luna .sun{background:radial-gradient(circle at 38% 34%,#ffffff,#d9d3f2 60%,#a79fd0);box-shadow:0 0 40px rgba(220,215,255,.45)}

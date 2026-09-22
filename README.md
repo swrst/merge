@@ -19,10 +19,13 @@ npm install
 npm run dev        # http://localhost:5173, hot reload
 npm run content    # rebuild the catalogue from scripts/content/*.mjs
 npm test           # headless regression run (with dev running)
+npm run art        # what is painted and what is still generated
 npm run build      # dist/ + a fresh MergeRocket.html
 npm run android    # build, sync, open Android Studio
 npm run apk        # build a debug APK to sideload
 ```
+
+🎨 **[ART.md](ART.md)** — dropping painted sprites in over the generated art.
 
 📱 **[MOBILE.md](MOBILE.md)** — putting it on a phone, Android and iOS.
 

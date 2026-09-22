@@ -100,6 +100,16 @@ class PixiBoard {
   }
 
   /* ------------------------------------------------------------ textures */
+  /** a painted sprite: load the file itself, no rasterising involved */
+  private fromUrl(url: string): Promise<Texture> {
+    return new Promise(res => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => { try { res(Texture.from(img)); } catch { res(Texture.EMPTY); } };
+      img.onerror = () => res(Texture.EMPTY);
+      img.src = url;
+    });
+  }
   private rasterise(svg: string): Promise<Texture> {
     return new Promise(res => {
       // inline SVG in the DOM inherits its namespace; a data: URL does not, so add it
@@ -121,12 +131,13 @@ class PixiBoard {
   }
   async preload(itemIds: string[], producerArts: string[]) {
     const jobs: Promise<void>[] = [];
-    const add = (key: string, svg: string) => {
+    // a painted file loads as itself; everything else is drawn from its spec
+    const add = (key: string, svg: string, url?: string) => {
       if (this.tex[key]) return;
-      jobs.push(this.rasterise(svg).then(t => { this.tex[key] = t; }));
+      jobs.push((url ? this.fromUrl(url) : this.rasterise(svg)).then(t => { this.tex[key] = t; }));
     };
-    itemIds.forEach(id => add('i:' + id, ART.item(id)));
-    producerArts.forEach(a => add('p:' + a, ART.producer(a)));
+    itemIds.forEach(id => add('i:' + id, ART.item(id), ART.spriteItem(id)));
+    producerArts.forEach(a => add('p:' + a, ART.producer(a), ART.spriteProducer(a)));
     ['earth', 'luna', 'cindra'].forEach(w => add('w:' + w, ART.weed(w)));
     add('coin', ART.icon('coin'));
     await Promise.all(jobs);

@@ -2106,7 +2106,7 @@ export async function startGame() {
       // you arrive standing in the new camp, not looking at the star chart
       worldTab = 'camp';
       if (!S.wlv[w]) { S.wlv[w] = 1; S.wxp[w] = 0; }
-      applyBloomSkin();
+      applyBloomSkin(); applyScene();
       // the shelf, the ship and the contract board all belong to a world
       S.orders = []; S.orderCap = undefined; S.ordersAt = 0; fillOrders(true);
       S.shop.stock = null; S.shop.at = 0;
@@ -2225,6 +2225,13 @@ export async function startGame() {
     if (WORLD_ORDER.every(w => worldAwake(w))) checkStory('allHearts');
     renderHUD(); renderWorldScreen();
   }
+  /** the world you are standing in, painted: its own picture if one was dropped
+   *  into public/sprites/scenes, otherwise the meadow */
+  function applyScene() {
+    const url = ART.spriteScene(S.world) || campEarthBg;
+    $('#app').style.setProperty('--camp', `url(${url})`);
+  }
+
   /** the board and the backdrop visibly come back to life, stage by stage */
   function applyBloomSkin() {
     const app = $('#app'); if (!app) return;
@@ -3189,8 +3196,8 @@ export async function startGame() {
     renderTools();
     if (bagHas()) renderBag();
     // the painted backdrops, handed to CSS as variables
-    $('#app').style.setProperty('--camp', `url(${campEarthBg})`);
-    $('#app').style.setProperty('--labbg', `url(${labRoomBg})`);
+    applyScene();
+    $('#app').style.setProperty('--labbg', `url(${ART.spriteScene('lab') || labRoomBg})`);
     $('#miniClose').onclick = closeMini;
     $('#btnQuests').onclick = questPanel;
     applyBloomSkin();

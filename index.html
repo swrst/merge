@@ -11,7 +11,10 @@
 </head>
 <body>
 <div class="app" id="app">
-  <div class="scene" id="scene"><div class="stars"></div><div class="sun"></div><div class="hills"></div></div>
+  <!-- the board sits on the same painted world the camp is drawn in, pushed
+       back with a blur and a warm wash so the tiles stay readable -->
+  <div class="scene" id="scene"><div class="sceneBack"></div><div class="sceneWash"></div>
+    <div class="stars"></div><div class="sun"></div><div class="hills"></div></div>
 
   <div class="hud">
     <div class="lvlBox"><div class="orb" id="lvl">1</div>

@@ -6,6 +6,7 @@
    item carries an `art` spec in items.json and artgen.ts draws it from a shared
    library of primitives and materials. See `itemArt()` at the bottom. */
 import { renderItem, renderProducer, renderFace, faceColors } from './artgen';
+import { SPRITE } from './sprites';
 import itemsJson from './content/items.json';
 import producersJson from './content/producers.json';
 import charactersJson from './content/characters.json';
@@ -1057,6 +1058,11 @@ export const ART = (function () {
   function itemArt(k: string) {
     const key = 'ik' + k;
     if (cache[key]) return cache[key];
+    // a painted file for this item beats anything the generator can do
+    if (SPRITE.item[k]) {
+      cache[key] = `<svg viewBox="0 0 100 100" class="art"><image href="${SPRITE.item[k]}" x="0" y="0" width="100" height="100"/></svg>`;
+      return cache[key];
+    }
     let raw: string;
     if ((ITEM as Record<string, unknown>)[k]) raw = get(ITEM, k);
     else if (SPEC[k]) raw = renderItem(SPEC[k]);
@@ -1068,6 +1074,10 @@ export const ART = (function () {
   function prodArt(k: string) {
     const key = 'ikp' + k;
     if (cache[key]) return cache[key];
+    if (SPRITE.producer[k]) {
+      cache[key] = `<svg viewBox="0 0 100 100" class="art"><image href="${SPRITE.producer[k]}" x="0" y="0" width="100" height="100"/></svg>`;
+      return cache[key];
+    }
     let raw: string;
     if ((PROD as Record<string, unknown>)[k]) raw = get(PROD, k);
     else if (PSPEC[k]) raw = renderProducer(PSPEC[k]);
@@ -1092,5 +1102,9 @@ export const ART = (function () {
     icon: (k: string) => (ICON as Record<string, string>)[k] || '',
     weed, rocket, planet,
     hasItem: (k: string) => !!ITEM[k] || !!SPEC[k],
+    /** a painted file for this item/producer, if one was dropped in */
+    spriteItem: (k: string) => SPRITE.item[k] || '',
+    spriteProducer: (k: string) => SPRITE.producer[k] || '',
+    spriteScene: (k: string) => SPRITE.scene[k] || '',
   };
 })();
