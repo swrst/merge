@@ -63,11 +63,17 @@ for (const [world, at, line] of PRODUCERS) {
   }
   if (modePart.startsWith('once')) {
     p.mode = 'once'; p.uses = +modePart.split(':')[1];
-  } else {
-    // bat:<charges>/<minutes to refill from empty>
+  } else if (modePart.startsWith('nrg')) {
+    // nrg:<energy per tap at level 1> — taps for ever, energy is the brake
+    p.mode = 'energy'; p.cost = +modePart.split(':')[1];
+    if (!(p.cost > 0)) throw new Error(`producer "${id}" needs an energy cost`);
+  } else if (modePart.startsWith('bat')) {
+    // bat:<charges>/<minutes to refill from empty> — free taps, then a wait
     const [cap, mins] = modePart.split(':')[1].split('/');
     p.mode = 'battery'; p.cap = +cap;
     p.every = Math.round(+mins * 60000 / +cap);
+  } else {
+    throw new Error(`producer "${id}" has an unknown mode "${modePart}"`);
   }
   producers[id] = p;
 

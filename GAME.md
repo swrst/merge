@@ -118,19 +118,30 @@ story beats queue up behind it instead of popping over it, and it runs once.
 After that the **📜 quest button** under the contracts always says the single next
 thing to do, and opens the full list when you tap it.
 
-### Producers are batteries
-No drip feed. Every producer holds **20–25 taps** that you can spend as fast as you
-can tap, and then refills itself over about half an hour — while you merge, and while
-the game is shut. Tapping costs no energy at all; the bar under each producer is the
-whole story, and when it runs dry you can wait, or spend 12 ⚡ for a quarter tank.
+### Two kinds of producer
+Most of them — the tree, the rock pile, the well, the seams and the vents — tap
+**for ever**, and each tap spends **energy**. That is the brake on a session, the
+same as the genre has always done it: energy comes back on its own (+1 every 40 s,
+plus a 🍪 Snack Break), so the question is never "is the tree ready yet", it is
+"what do I want to spend the next twenty taps on". The price is written on the
+producer: a little **⚡1** pill under it, greyed out when you cannot afford it.
 
-**They grow.** Coins buy a producer four levels, and each one adds five charges *and
-the next tier up its chain*: a level-4 Big Tree hands out Timber Crates as well as
-twigs. You buy the upgrade by tapping the thing itself in your camp.
+A minority — the Berry Bush, the Wild Hive, the Glow Pod, the Kelp Bed, the
+Aurora Loom, one or two per world — are **patches**: 20–25 **free** taps you can
+spend as fast as you can tap, no energy at all, and then half an hour to refill
+itself (it refills while you merge, and while the game is shut). Those are the
+ones with a battery bar and a count. Run one dry and you can wait, or spend 12 ⚡
+for a quarter tank.
 
-**And they end.** A producer at max level keeps going for another 45 taps, then goes
-to seed: it pays out a last harvest and something else takes root in its place, so a
-late board never settles into the same four taps forever.
+**They grow.** Coins buy any producer four levels, and each level adds *the next
+tier up its chain*: a level-4 Big Tree hands out Timber Crates as well as twigs.
+An energy producer also costs **one more ⚡ every two levels** — 1, 1, 2, 2 — so a
+maxed one is twice the price a tap and several tiers better. A patch gets five
+more charges instead. You buy the upgrade by tapping the thing itself in your camp.
+
+**And they end.** A producer at max level keeps going for another 45 taps, then
+goes to seed: it pays out a last harvest and something else takes root in its
+place, so a late board never settles into the same four taps forever.
 
 ### Board and merging
 - 6 × 8 board, rendered on a **WebGL canvas** (PixiJS) with **GSAP** motion.
@@ -208,7 +219,9 @@ the Trading Post opens. It never resets.
 
 **World level** is the one that hands you new toys. Every world keeps its own level and its
 own XP pot (`22 + (l-1)·26 + 6·(l-1)²`, capped at 8), fed by whatever you earn while standing
-there. It clears the overgrown board cells and pays out, and landing somewhere new is
+there. It clears the overgrown board cells — those are labelled **lv2/lv3/lv4** and it
+is the *world's* level they mean, not yours; every world starts again at 1 — and
+it pays out, and landing somewhere new is
 exciting even at account level 30: Vela starts with two chains, two producers and a cramped
 board, exactly like Earth did.
 

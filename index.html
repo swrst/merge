@@ -22,16 +22,15 @@
     <button class="iconBtn" id="btnGear">⚙️</button>
   </div>
 
-  <div class="guide">
-    <div class="face" id="guideFace"></div>
-    <div class="bubble" id="guideTxt">Welcome!</div>
-  </div>
-
   <div class="orderWrap">
     <button class="oArrow l" id="oLeft">‹</button>
     <div class="orders" id="orders"></div>
     <button class="oArrow r" id="oRight">›</button>
-    <button class="questBtn" id="btnQuests"><span class="qIc">📜</span><span class="qTxt" id="questTxt">Quests</span><span class="dot" id="dotQuest" style="display:none"></span></button>
+    <!-- one "what now?" line instead of two: Pip says it and it opens the list -->
+    <button class="questBtn" id="btnQuests">
+      <span class="qFace" id="guideFace"></span>
+      <span class="qCol"><b class="qTxt" id="questTxt">Quests</b><i id="guideTxt">Welcome!</i></span>
+      <span class="dot" id="dotQuest" style="display:none"></span></button>
   </div>
 
   <div class="stage" id="stage">

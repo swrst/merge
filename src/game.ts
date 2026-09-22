@@ -61,7 +61,7 @@ export async function startGame() {
   };
   /** every producer standing in this world is at max level */
   const allMaxed = () => {
-    const on = B().filter((c: any) => c && c.p && PRODS[c.p].mode === 'battery');
+    const on = B().filter((c: any) => c && c.p && PRODS[c.p].mode !== 'once');
     return on.length > 0 && on.every((c: any) => plv(c) >= PMAX);
   };
   /** the next producer this world is holding back, in its own order */
@@ -317,6 +317,12 @@ export async function startGame() {
     for (let i = 0; i < N; i++) {
       const c = B()[i]; if (!c || !c.p) continue;
       const p = PRODS[c.p];
+      if (p.mode === 'energy') {
+        const cost = ecost(p, plv(c));
+        board.setCost(i, cost, S.energy >= cost);
+        board.setReady(i, S.energy >= cost);
+        continue;
+      }
       if (p.mode !== 'battery') { board.setReady(i, true); continue; }
       const cap = capOf(p, plv(c)), ev = everyOf(p);
       if (c.ch === undefined) { c.ch = cap; c.at = now; }
@@ -753,6 +759,15 @@ export async function startGame() {
       const cap = capOf(p, plv(c));
       if (c.ch >= cap) c.at = Date.now();          // start the clock on the first tap
       c.ch--;
+    } else if (p.mode === 'energy') {
+      const cost = ecost(p, plv(c));
+      if (S.energy < cost) {
+        sfx.no(); bumpChip('#chipEnergy');
+        toast(`Out of energy — ${p.name} costs <b>${cost} ⚡</b> a tap. It comes back on its own, or take a 🍪 Snack Break.`);
+        return;
+      }
+      S.energy -= cost; S.eAt = S.eAt || Date.now();
+      bumpChip('#chipEnergy'); floatText(i, '-' + cost + ' ⚡', '#9be8ff');
     }
     // The wreck is not a slot machine: it hands out pieces for the part you are
     // furthest from finishing, so the rocket always creeps forward.
@@ -1480,7 +1495,9 @@ export async function startGame() {
       `<div class="card"><div class="cardTitle">🏭 Producers</div>${Object.keys(PRODS).filter(k => B().some(c => c && c.p === k) || (k === 'wreck' && S.met)).map(k => {
         const p = PRODS[k];
         return `<div class="mission"><div class="mBox" style="background:#fff;box-shadow:none">${ART.producer(p.art)}</div>
-        <div class="mTxt">${p.name}<div style="font-size:10px;color:#9a7a4e;font-weight:600">${p.mode === 'battery' ? `Holds ${capOf(p, 1)} taps · a full battery takes ${mmss(everyOf(p) * capOf(p, 1))}` : `${p.uses} digs, then it collapses`} · makes ${[...new Set(p.drops as string[])].map(d => ITEMS[d].name).join(', ')}</div></div></div>`;
+        <div class="mTxt">${p.name}<div style="font-size:10px;color:#9a7a4e;font-weight:600">${p.mode === 'battery' ? `Free taps: holds ${capOf(p, 1)}, a full battery takes ${mmss(everyOf(p) * capOf(p, 1))}`
+          : p.mode === 'energy' ? `${ecost(p, 1)} ⚡ a tap, as often as you like`
+            : `${p.uses} digs, then it collapses`} · makes ${[...new Set(p.drops as string[])].map(d => ITEMS[d].name).join(', ')}</div></div></div>`;
       }).join('')}</div>` +
       (elsewhere.length ? `<div class="card"><div class="cardTitle">🌍 Other worlds</div>
         <div style="font-size:11.5px;font-weight:600;color:#7a6244">${elsewhere.map(k => `<b>${CHAINS[k].name}</b> (${WORLDS[CHAINS[k].world].name})`).join(', ')} — only on their own planet. Your bag carries things between worlds.</div></div>` : '') +
@@ -1797,6 +1814,11 @@ export async function startGame() {
      two berries was the single worst thing about playing this. */
   const PMAX = 4;                                   // upgrade levels per producer
   const plv = (c: any) => (c && c.lv) || 1;
+  /** what one tap on an energy producer costs. It climbs, but gently: one more
+   *  every two levels, so a maxed producer is twice the price and several tiers
+   *  better. Anything steeper and upgrading feels like a punishment. */
+  const ecost = (p: any, lv: number) =>
+    Math.max(1, (p.cost || 1) + Math.floor((lv - 1) / 2) - (starPerk('lantern') ? 0 : 0));
   /** charges at this level; the Lantern constellation makes every battery bigger */
   const capOf = (p: any, lv: number) =>
     Math.round(((p.cap || 12) + (lv - 1) * 5) * (starPerk('lantern') ? 1.2 : 1));
@@ -2559,7 +2581,7 @@ export async function startGame() {
   function campHTML() {
     const w = W(), b = B();
     const prods: { i: number; k: string }[] = [];
-    for (let i = 0; i < N; i++) if (b[i] && b[i].p && PRODS[b[i].p].mode === 'battery') prods.push({ i, k: b[i].p });
+    for (let i = 0; i < N; i++) if (b[i] && b[i].p && PRODS[b[i].p].mode !== 'once') prods.push({ i, k: b[i].p });
 
     const built = Object.keys(S.parts).filter(k => S.parts[k]).length;
     let ents = spot('rocket', PAD.rocket,
@@ -2575,7 +2597,8 @@ export async function startGame() {
       const p = PRODS[pr.k], c = b[pr.i], lv = plv(c), cap = capOf(p, lv);
       const can = lv < PMAX && S.coins >= upCost(p, lv);
       ents += spot('p' + pr.i, PROD_PADS[n], ART.producer(p.art), p.name,
-        can ? 'GROW · ' + upCost(p, lv) + ' 🪙' : (c.ch ?? cap) + '/' + cap,
+        can ? 'GROW · ' + upCost(p, lv) + ' 🪙'
+          : p.mode === 'energy' ? ecost(p, lv) + ' ⚡ a tap' : (c.ch ?? cap) + '/' + cap,
         can ? 'ready' : '', lv > 1 ? 'Lv' + lv : '');
     });
     // the next plinth stands empty until you have grown everything on this one
@@ -2722,7 +2745,7 @@ export async function startGame() {
       ok
         ? `The soil is ready. <b>${nxt ? PRODS[nxt].name : 'Something new'}</b> will take root on its own the moment you look away.`
         : `Nothing new takes root while the ones you have are still half-grown. Get <b>every producer to level ${PMAX}</b> and the plot fills itself.`
-        + `<div class="noteLine">${B().filter((c: any) => c && c.p && PRODS[c.p].mode === 'battery')
+        + `<div class="noteLine">${B().filter((c: any) => c && c.p && PRODS[c.p].mode !== 'once')
           .map((c: any) => `${PRODS[c.p].name} — level ${plv(c)}/${PMAX}`).join('<br>')}</div>`,
       'Right');
   }
@@ -2779,11 +2802,15 @@ export async function startGame() {
       `<div class="prodHead">${ART.producer(p.art)}</div>
        <div class="pipsRow">${Array.from({ length: PMAX }, (_, i) => `<i class="pip${i < lv ? ' on' : ''}"></i>`).join('')}
          <span>Level ${lv}${lv >= PMAX ? ' · max' : ''}</span></div>
-       <div class="chargeLine"><b>${c.ch ?? cap}/${cap}</b> charges<i>${c.ch >= cap ? 'full' : 'a full battery takes ' + mmss(everyOf(p) * cap)}</i></div>
+       ${p.mode === 'energy'
+        ? `<div class="chargeLine"><b>${ecost(p, lv)} ⚡</b> a tap<i>taps for ever — energy is the only brake</i></div>`
+        : `<div class="chargeLine"><b>${c.ch ?? cap}/${cap}</b> charges<i>${c.ch >= cap ? 'full · free taps' : 'free taps · a full battery takes ' + mmss(everyOf(p) * cap)}</i></div>`}
        <div class="dropRow">${uniq.map(d => `<span class="dropChip">${ART.item(d)}<b>${ITEMS[d].name}</b></span>`).join('')}</div>
        ${lv >= PMAX
         ? `<div class="noteLine">Fully grown. It will keep going for a while yet, then go to seed and let something else take root.</div>`
-        : `<div class="noteLine">Level ${lv + 1}: <b>+5</b> charges${added.length
+        : `<div class="noteLine">Level ${lv + 1}: ${p.mode === 'energy'
+          ? (ecost(p, lv + 1) > ecost(p, lv) ? `<b>${ecost(p, lv + 1)} ⚡</b> a tap` : `still <b>${ecost(p, lv)} ⚡</b> a tap`)
+          : '<b>+5</b> charges'}${added.length
           ? ` and it starts dropping <b>${added.map(d => ITEMS[d].name).join('</b>, <b>')}</b>`
           : ' and better odds on the rarer drops'}.</div>
            <button class="big gold" id="upProd"${S.coins >= price ? '' : ' disabled'}>Grow it — ${price} 🪙</button>`}`,
@@ -2858,7 +2885,7 @@ export async function startGame() {
       when: () => S.orders.some((o: any) => o.needs.every((nd: any) => countItem(nd.id) >= nd.qty)),
     },
     {
-      id: 'battery', who: 'pip', say: "Every producer has a <b>battery</b> — the little bar under it. Empty it as fast as you like; it fills itself back up over about half an hour, even while the game is shut.",
+      id: 'battery', who: 'pip', say: "Most things here run on <b>energy</b> — the little ⚡ price under them. Energy comes back on its own, so tap away. A few patches, like the berry bush, hand out <b>free</b> taps instead and then need a rest.",
       at: () => cellWith(c => c.p === 'tree'),
     },
     {
@@ -3006,7 +3033,13 @@ export async function startGame() {
     audio.unlock();                                   // the first gesture starts the mixer
     const pick = (k: number | null) => { sel = k; board.setSelected(k); };
     if (!c) { pick(null); hideInfo(); return; }
-    if (c.b) { sfx.no(); pick(null); hideInfo(); toast('Clears at Level ' + c.b + ' — keep leveling up!'); return; }
+    if (c.b) {
+      sfx.no(); pick(null); hideInfo();
+      // this is the *world* level, not your own — every world starts at 1, and
+      // saying "Level 3" to someone who is account level 7 reads like a bug
+      toast(`Overgrown — it clears at <b>${W().name} level ${c.b}</b> (you are on ${wlv()}). Fill contracts here to raise it.`);
+      return;
+    }
     if (c.p) { pick(null); hideInfo(); useProducer(i); return; }
     if (sel === null) { pick(i); showInfo(i); return; }
     if (sel === i) { pick(null); hideInfo(); return; }
@@ -3166,7 +3199,7 @@ export async function startGame() {
       state: () => S, cells: () => B(),
       prods: PRODS, items: ITEMS, chains: CHAINS, config: CONFIG, recipes: RECIPES, shop: SHOP,
       hud: () => renderHUD(), world: () => renderWorldScreen(), wlv, bloomValue,
-      grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed,
+      grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed, ecost,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
     };
     setInterval(tick, 500);

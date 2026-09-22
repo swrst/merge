@@ -263,7 +263,7 @@ class PixiBoard {
     if (!c) return;
     if (c.b) {
       s.art = this.sprite('w:' + this.theme, i, 0.78);
-      const t = new Text({ text: String(c.b), style: { fontFamily: 'Fredoka, sans-serif', fontSize: this.cell * 0.26, fontWeight: '700', fill: 0xffffff } });
+      const t = new Text({ text: 'lv' + c.b, style: { fontFamily: 'Fredoka, sans-serif', fontSize: this.cell * 0.22, fontWeight: '700', fill: 0xffffff } });
       t.anchor.set(0.5);
       const p = this.center(i);
       t.position.set(p.x + this.cell * 0.28, p.y + this.cell * 0.3);
@@ -321,7 +321,7 @@ class PixiBoard {
     const s = this.slots[i] as any;
     if (s.pending) { s.pending.kill(); s.pending = undefined; }
     if (s.idle) { s.idle.kill(); s.idle = undefined; }
-    [s.art, s.timer, s.badge, s.bar, s.ring, s.readyRing, s.aura, s.spin].forEach((o: any) => {
+    [s.art, s.timer, s.badge, s.bar, s.cost, s.ring, s.readyRing, s.aura, s.spin].forEach((o: any) => {
       if (o) { gsap.killTweensOf(o); gsap.killTweensOf(o.scale); o.destroy({ children: true }); }
     });
     s.art = s.timer = undefined; s.badge = undefined; s.ring = undefined;
@@ -346,9 +346,10 @@ class PixiBoard {
     // the battery bar is drawn against the old cell size — throw it away and let
     // the next tick redraw it, the same as the rings above
     if (s.bar) { s.bar.destroy({ children: true }); s.bar = undefined; s.barW = undefined; s.barFrac = undefined; }
+    if (s.cost) { gsap.killTweensOf(s.cost); s.cost.destroy({ children: true }); s.cost = undefined; s.costW = undefined; }
     if (!s.art) return;
     if (s.timer && s.key.startsWith('b')) {
-      s.timer.style.fontSize = this.cell * 0.26;
+      s.timer.style.fontSize = this.cell * 0.22;
       s.timer.position.set(p.x + this.cell * 0.28, p.y + this.cell * 0.3);
     } else if (s.timer) {
       s.timer.destroy(); s.timer = undefined;
@@ -634,6 +635,37 @@ class PixiBoard {
     s.timer.position.set(p.x, p.y + this.cell * 0.47);
     s.timer.visible = !!label;
     s.timer.text = label;
+  }
+
+  /** an energy producer taps for ever; what it shows is the price of a tap */
+  setCost(i: number, cost: number, enough: boolean) {
+    const s = this.slots[i] as any; if (!s.art) return;
+    const p = this.center(i);
+    if (!s.cost) {
+      const c = new Container();
+      const g = new Graphics(); g.label = 'pill';
+      const t = new Text({ text: '', style: { fontFamily: 'Fredoka, sans-serif', fontWeight: '700', fill: 0xffffff } });
+      t.anchor.set(0.5); t.label = 'n';
+      c.addChild(g, t);
+      this.lItem.addChild(c);
+      s.cost = c;
+    }
+    const w = this.cell * 0.42, h = this.cell * 0.25;
+    const g = s.cost.children[0] as Graphics, t = s.cost.children[1] as Text;
+    if (s.costW !== w) {
+      g.clear().roundRect(-w / 2, -h / 2, w, h, h / 2)
+        .fill({ color: 0x2f9ed6 }).stroke({ color: 0xffffff, width: 2 });
+      t.style.fontSize = this.cell * 0.18;
+      s.costW = w;
+    }
+    const txt = '⚡' + cost;
+    if (t.text !== txt) {
+      t.text = txt;
+      gsap.fromTo(s.cost.scale, { x: 1.3, y: 1.3 }, { x: 1, y: 1, duration: 0.28, ease: 'back.out(3)' });
+    }
+    g.tint = enough ? 0xffffff : 0x8d8d8d;
+    s.cost.alpha = enough ? 1 : 0.75;
+    s.cost.position.set(p.x, p.y + this.cell * 0.38);
   }
 
   /* --------------------------------------------------------------- input */

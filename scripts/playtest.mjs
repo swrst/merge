@@ -551,7 +551,7 @@ must(mid === before2.prods, 'a half-grown world gets nothing new');
 // max every producer, and the next plot fills itself
 await set(() => {
   const g = window.__game, b = g.cells();
-  b.forEach(c => { if (c && c.p && g.prods[c.p].mode === 'battery') c.lv = 4; });
+  b.forEach(c => { if (c && c.p && g.prods[c.p].mode !== 'once') c.lv = 4; });
 });
 await page.evaluate(() => window.__game.grow());
 await page.waitForTimeout(1200);
@@ -712,7 +712,41 @@ head('An old save survives the rewrite');
   await ctx.close();
 }
 
-head('Producers are batteries, not drip feeds');
+head('Most producers run on energy, a few on free charges');
+await closeModal();
+await tab('board');
+const nrg = await page.evaluate(() => {
+  const g = window.__game, b = g.cells();
+  const i = b.findIndex(c => c && c.p && g.prods[c.p].mode === 'energy');
+  return i < 0 ? null : { i, k: b[i].p, name: g.prods[b[i].p].name, cost: g.ecost(g.prods[b[i].p], 1) };
+});
+must(!!nrg, `this world has an energy producer (${nrg && nrg.name})`);
+await set(() => {
+  const g = window.__game, st = g.state(), b = g.cells();
+  for (let k = 0; k < b.length; k++) if (b[k] && b[k].id) b[k] = null;
+  st.energy = 6;
+  const c = b.find(x => x && x.p && g.prods[x.p].mode === 'energy');
+  c.lv = 1;
+  window.__board.sync(b);
+});
+await tapCell(nrg.i); await page.waitForTimeout(300);
+let e1 = (await S()).energy;
+must(e1 === 6 - nrg.cost, `a tap costs ${nrg.cost} energy (6 -> ${e1})`);
+must(await page.evaluate(() => window.__game.cells().filter(c => c && c.id).length) === 1, 'and it dropped something');
+// unlimited taps: only energy stops you
+await set(() => { window.__game.state().energy = 0; });
+await tapCell(nrg.i); await page.waitForTimeout(300);
+must((await S()).energy === 0, 'with no energy the tap is refused');
+must(await page.evaluate(() => window.__game.cells().filter(c => c && c.id).length) === 1, 'and nothing was dropped');
+await set(() => { window.__game.state().energy = 60; });
+for (let i = 0; i < 12; i++) await tapCell(nrg.i);
+await page.waitForTimeout(400);
+must(await page.evaluate(() => window.__game.cells().filter(c => c && c.id).length) >= 8,
+  'with energy in the tank it taps as often as you like');
+must(await page.evaluate(p2 => window.__game.ecost(window.__game.prods[p2.k], 4)
+  > window.__game.ecost(window.__game.prods[p2.k], 1), nrg), 'a maxed one costs more per tap');
+
+head('A few patches hand out free charges instead');
 await closeModal();
 await tab('board');
 // by now we are standing on Vela, so use whatever producer this world has

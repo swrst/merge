@@ -654,13 +654,20 @@ button{font-family:inherit;cursor:pointer;border:none}
 .rechargeBox{margin-top:8px;background:#fff6e4;border-radius:12px;padding:7px 9px;font-size:11.5px;font-weight:600;color:#7a6244}
 
 /* --------------------------------------------------------------- quests */
-.questBtn{display:flex;align-items:center;gap:6px;margin:0 10px 6px;width:calc(100% - 20px);
-  background:linear-gradient(180deg,#fffdf7,#ffeecb);border:2.5px solid #fff;border-radius:14px;
-  padding:5px 10px;font-family:inherit;box-shadow:0 3px 0 rgba(150,105,50,.3);position:relative}
+.questBtn{display:flex;align-items:center;gap:8px;margin:0 10px 6px;width:calc(100% - 20px);
+  background:linear-gradient(180deg,#fffdf7,#ffeecb);border:3px solid #fff;border-radius:18px;
+  padding:5px 10px 5px 6px;font-family:inherit;box-shadow:0 4px 0 rgba(150,105,50,.3);position:relative}
+.qFace{width:34px;height:34px;flex:none;border-radius:50%;background:#fff;border:2.5px solid #fff;overflow:hidden;
+  box-shadow:0 2px 0 rgba(150,105,50,.26);animation:bob 2.4s ease-in-out infinite}
+.qFace svg{width:100%;height:100%;display:block}
+.qCol{flex:1;min-width:0;display:flex;flex-direction:column;align-items:flex-start;line-height:1.2}
+.qCol i{font-style:normal;font-size:10px;font-weight:600;color:#9a7a4e;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.qCol i b{color:#e07a1c}
 .questBtn:active{transform:translateY(2px);box-shadow:0 1px 0 rgba(150,105,50,.3)}
 .qIc{font-size:15px;flex:none}
-.qTxt{flex:1;text-align:left;font-size:11px;font-weight:700;color:#7a6244;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.qTxt{text-align:left;font-size:11.5px;font-weight:800;color:#6b5236;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .questBtn:after{content:"›";font-size:16px;font-weight:800;color:#c2a274}
 .qHead{font-size:12px;font-weight:700;color:#9a7a4e}
 .questList{max-height:46vh;overflow-y:auto;margin-top:8px;text-align:left}
