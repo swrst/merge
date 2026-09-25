@@ -6,7 +6,7 @@ orders, survive a meteor crash, rebuild the rocket, and fly to five worlds — e
 until you finish its chains, feed its Heart, and watch it come back to life.
 
 Producers tap for ever and spend **energy**; a few patches hand out free charges
-instead and then rest. **286 items across 57 chains**, earned two starters at a time — max out every producer you
+instead and then rest. **504 items across 84 chains**, earned two starters at a time — max out every producer you
 own before the next one takes root — four side games, constellations you light for permanent
 blessings, a Trading Post and a Research Lab, a painted camp and lab you tap your way around,
 and a side rail instead of a bottom dock. TypeScript + PixiJS, wrapped with Capacitor for
@@ -25,7 +25,7 @@ npm run android    # build, sync, open Android Studio
 npm run apk        # build a debug APK to sideload
 ```
 
-🎨 **[ART-BRIEF.md](ART-BRIEF.md)** — the style bible and the full art order (367 assets,
+🎨 **[ART-BRIEF.md](ART-BRIEF.md)** — the style bible and the full art order (612 assets,
 each with its prompt, in `art/manifest.csv`). **[ART.md](ART.md)** is the short version:
 where painted files go and how they override the generated art.
 📚 **[art/CATALOGUE.md](art/CATALOGUE.md)** — every merge chain, in order.

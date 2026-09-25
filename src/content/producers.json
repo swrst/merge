@@ -174,6 +174,57 @@
     "mode": "energy",
     "cost": 1
   },
+  "vegpatch": {
+    "name": "Veggie Patch",
+    "art": "vegpatch",
+    "drops": [
+      "vegseed",
+      "vegseed",
+      "vegseed",
+      "seedling"
+    ],
+    "spec": {
+      "shape": "sprout",
+      "mat": "leaf",
+      "ground": "clay"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "tinkerbench": {
+    "name": "Tinker Bench",
+    "art": "tinkerbench",
+    "drops": [
+      "lenschip",
+      "lenschip",
+      "lenschip",
+      "lens"
+    ],
+    "spec": {
+      "shape": "anvil",
+      "mat": "copper",
+      "ground": "wood"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "crashsite": {
+    "name": "Crash Site",
+    "art": "crashsite",
+    "drops": [
+      "oddegg",
+      "oddegg",
+      "blinky"
+    ],
+    "spec": {
+      "shape": "planet",
+      "mat": "steel",
+      "ground": "clay"
+    },
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
+  },
   "geyser": {
     "name": "Moon Geyser",
     "art": "geyser",
@@ -314,6 +365,108 @@
     "mode": "energy",
     "cost": 1
   },
+  "pupnest": {
+    "name": "Critter Burrow",
+    "art": "pupnest",
+    "drops": [
+      "wobbleegg",
+      "wobbleegg",
+      "blip"
+    ],
+    "spec": {
+      "shape": "egg",
+      "mat": "lilac",
+      "ground": "slate"
+    },
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
+  },
+  "scrapyard": {
+    "name": "Rover Scrapyard",
+    "art": "scrapyard",
+    "drops": [
+      "screw",
+      "screw",
+      "screw",
+      "wheel"
+    ],
+    "spec": {
+      "shape": "crate",
+      "mat": "steel",
+      "ground": "slate"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "gasvent": {
+    "name": "Helium Vent",
+    "art": "gasvent",
+    "drops": [
+      "gaswisp",
+      "gaswisp",
+      "gaswisp",
+      "gasbubble"
+    ],
+    "spec": {
+      "shape": "bubble",
+      "mat": "glow",
+      "ground": "slate"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "impact": {
+    "name": "Impact Crater",
+    "art": "impact",
+    "drops": [
+      "spacegrit",
+      "spacegrit",
+      "spacegrit",
+      "meteorite"
+    ],
+    "spec": {
+      "shape": "rock",
+      "mat": "iron",
+      "ground": "slate"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "relaymast": {
+    "name": "Relay Mast",
+    "art": "relaymast",
+    "drops": [
+      "antwire",
+      "antwire",
+      "antwire",
+      "antenna"
+    ],
+    "spec": {
+      "shape": "compass",
+      "mat": "silver",
+      "ground": "slate"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "melonvine": {
+    "name": "Melon Vine",
+    "art": "melonvine",
+    "drops": [
+      "moonseed",
+      "moonseed",
+      "moonsprout"
+    ],
+    "spec": {
+      "shape": "fruit",
+      "mat": "mint",
+      "ground": "slate"
+    },
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
+  },
   "lavavent": {
     "name": "Lava Vent",
     "art": "lavavent",
@@ -450,6 +603,108 @@
     "spec": {
       "shape": "feather",
       "mat": "smoke",
+      "ground": "obsidian"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "warmnest": {
+    "name": "Warm Nest",
+    "art": "warmnest",
+    "drops": [
+      "warmegg",
+      "warmegg",
+      "newt"
+    ],
+    "spec": {
+      "shape": "egg",
+      "mat": "ember",
+      "ground": "obsidian"
+    },
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
+  },
+  "basaltcliff": {
+    "name": "Basalt Cliff",
+    "art": "basaltcliff",
+    "drops": [
+      "basaltchip",
+      "basaltchip",
+      "basaltchip",
+      "basaltblock"
+    ],
+    "spec": {
+      "shape": "prism",
+      "mat": "slate",
+      "ground": "obsidian"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "sulfurspring": {
+    "name": "Sulfur Spring",
+    "art": "sulfurspring",
+    "drops": [
+      "sulfurdust",
+      "sulfurdust",
+      "sulfurdust",
+      "sulfurcrystal"
+    ],
+    "spec": {
+      "shape": "bubble",
+      "mat": "topaz",
+      "ground": "obsidian"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "steamvent": {
+    "name": "Steam Vent",
+    "art": "steamvent",
+    "drops": [
+      "steampuff",
+      "steampuff",
+      "steampuff",
+      "steampipe"
+    ],
+    "spec": {
+      "shape": "cloud",
+      "mat": "smoke",
+      "ground": "obsidian"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "charstump": {
+    "name": "Charred Stump",
+    "art": "charstump",
+    "drops": [
+      "charseed",
+      "charseed",
+      "embersprout"
+    ],
+    "spec": {
+      "shape": "stump",
+      "mat": "coal",
+      "ground": "obsidian"
+    },
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
+  },
+  "rubyvein": {
+    "name": "Ruby Vein",
+    "art": "rubyvein",
+    "drops": [
+      "redchip",
+      "redchip",
+      "redchip",
+      "rubyshard"
+    ],
+    "spec": {
+      "shape": "ore",
+      "mat": "ruby",
       "ground": "obsidian"
     },
     "mode": "energy",
@@ -605,6 +860,108 @@
     "mode": "energy",
     "cost": 1
   },
+  "squidreef": {
+    "name": "Squid Reef",
+    "art": "squidreef",
+    "drops": [
+      "bubbleegg",
+      "bubbleegg",
+      "squidlet"
+    ],
+    "spec": {
+      "shape": "coral",
+      "mat": "rose",
+      "ground": "sand"
+    },
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
+  },
+  "nestbeach": {
+    "name": "Nesting Beach",
+    "art": "nestbeach",
+    "drops": [
+      "turtleegg",
+      "turtleegg",
+      "turtleegg",
+      "hatchling"
+    ],
+    "spec": {
+      "shape": "egg",
+      "mat": "cream",
+      "ground": "sand"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "dock": {
+    "name": "Old Dock",
+    "art": "dock",
+    "drops": [
+      "knot",
+      "knot",
+      "knot",
+      "float"
+    ],
+    "spec": {
+      "shape": "plank",
+      "mat": "wood",
+      "ground": "sand"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "glassbeach": {
+    "name": "Glass Beach",
+    "art": "glassbeach",
+    "drops": [
+      "glasspebble",
+      "glasspebble",
+      "glasspebble",
+      "seaglassbit"
+    ],
+    "spec": {
+      "shape": "pebble",
+      "mat": "glass",
+      "ground": "sand"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "urchinrock": {
+    "name": "Urchin Rock",
+    "art": "urchinrock",
+    "drops": [
+      "urchinspine",
+      "urchinspine",
+      "urchinspine",
+      "urchin"
+    ],
+    "spec": {
+      "shape": "rock",
+      "mat": "plum",
+      "ground": "sand"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "mantadeep": {
+    "name": "Manta Deep",
+    "art": "mantadeep",
+    "drops": [
+      "mantaegg",
+      "mantaegg",
+      "babymanta"
+    ],
+    "spec": {
+      "shape": "wave",
+      "mat": "deepsea",
+      "ground": "sand"
+    },
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
+  },
   "cloudbank": {
     "name": "Cloud Bank",
     "art": "cloudbank",
@@ -748,6 +1105,108 @@
     ],
     "spec": {
       "shape": "cloth",
+      "mat": "rose",
+      "ground": "cloud"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "starden": {
+    "name": "Star Den",
+    "art": "starden",
+    "drops": [
+      "stardustegg",
+      "stardustegg",
+      "glimmer"
+    ],
+    "spec": {
+      "shape": "star",
+      "mat": "dusk",
+      "ground": "cloud"
+    },
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
+  },
+  "solarfarm": {
+    "name": "Solar Array",
+    "art": "solarfarm",
+    "drops": [
+      "solarcell",
+      "solarcell",
+      "solarcell",
+      "solarpanel"
+    ],
+    "spec": {
+      "shape": "plank",
+      "mat": "sapphire",
+      "ground": "cloud"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "nebulapool": {
+    "name": "Nebula Pool",
+    "art": "nebulapool",
+    "drops": [
+      "nebwisp",
+      "nebwisp",
+      "nebwisp",
+      "nebpuff"
+    ],
+    "spec": {
+      "shape": "cloud",
+      "mat": "lilac",
+      "ground": "cloud"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "starbed": {
+    "name": "Star Bed",
+    "art": "starbed",
+    "drops": [
+      "starseed",
+      "starseed",
+      "starsprout"
+    ],
+    "spec": {
+      "shape": "flower",
+      "mat": "star",
+      "ground": "cloud"
+    },
+    "mode": "battery",
+    "cap": 20,
+    "every": 90000
+  },
+  "gravwell": {
+    "name": "Gravity Well",
+    "art": "gravwell",
+    "drops": [
+      "planetdust",
+      "planetdust",
+      "planetdust",
+      "planetoid"
+    ],
+    "spec": {
+      "shape": "planet",
+      "mat": "dusk",
+      "ground": "cloud"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "kitepost": {
+    "name": "Kite Post",
+    "art": "kitepost",
+    "drops": [
+      "kitetail",
+      "kitetail",
+      "kitetail",
+      "kitediamond"
+    ],
+    "spec": {
+      "shape": "leaf",
       "mat": "rose",
       "ground": "cloud"
     },

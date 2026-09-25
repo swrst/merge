@@ -2,7 +2,13 @@
    each with a ready-to-paste prompt, plus the merge catalogue as a document.
 
    Usage:  npm run art:manifest      ->  art/manifest.csv, art/manifest.json,
-                                         art/CATALOGUE.md                     */
+                                         art/CATALOGUE.md
+
+   Every row carries the batch it belongs to (scenes, ui, starters, producers,
+   chain-<key>, fx) so a whole batch can be pulled out with
+   `npm run art -- --batch chain-wood`. The prompts are written to be pasted
+   into an image model (Midjourney, Stable Diffusion, GPT-image, ...) as they
+   are; `negative` is there for the models that take one.                     */
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -13,14 +19,33 @@ const items = read('src/content/items.json');
 const chains = read('src/content/chains.json');
 const prods = read('src/content/producers.json');
 const worlds = read('src/content/worlds.json');
+let notes = { items: {}, producers: {} };
+try { notes = read('art/notes.json'); } catch { /* run `npm run content` first for the descriptions */ }
 
-/* --- the house style, repeated on every single prompt ------------------- */
-const STYLE = 'cartoon mobile merge-game asset, Travel Town / Merge Mansion style, '
-  + '3/4 view from slightly above as if sitting on a table, thick dark warm-brown outline, '
-  + 'soft baked lighting from the upper left, glossy highlight on the top surface, '
-  + 'saturated friendly palette, subtle contact shadow under the object, '
-  + 'centred, filling about 80% of the frame, transparent background, no text, no border, '
-  + 'clean vector-painted finish, 512x512';
+/* --- the house style, repeated on every single prompt -------------------
+   Travel Town's look, moved into space: chunky rounded toy objects, glossy
+   semi-3D paint, bright friendly colour, soft light from the upper left. */
+const STYLE = 'Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, '
+  + 'soft glossy semi-3D painted rendering, bright saturated friendly colours, '
+  + 'gentle warm key light from the upper left with one soft white highlight on the top surface, '
+  + 'shaded side a deeper richer version of the base colour (never grey or black), '
+  + 'a thin darker warm-brown edge line, a small soft contact shadow directly beneath. '
+  + 'Three-quarter view from about 30 degrees above, as if sitting on a table. '
+  + 'Isolated on a plain transparent background, centred, filling about 80% of the frame, '
+  + 'simple bold silhouette that still reads as a 60-pixel icon. '
+  + 'No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512';
+const NEGATIVE = 'text, letters, numbers, watermark, signature, logo, background scenery, ground plane, '
+  + 'frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, '
+  + 'grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline';
+
+/* the key colours of each world, so a chain stays inside its family */
+const PALETTE = {
+  earth: 'Sunny Meadow palette — grass green, honey amber, warm tan, sky blue',
+  luna: 'Crater Camp palette — lilac, pale silver, slate blue, glowing cyan',
+  cindra: 'Ember Hollow palette — ember orange, magma red, obsidian purple-black, ash grey',
+  nerith: 'Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand',
+  vela: 'Aurora Reach palette — violet, aurora teal, starlight gold, cloud white',
+};
 
 /* shape key -> what it actually is, so the painter is not guessing */
 const SHAPE = {
@@ -70,61 +95,124 @@ const MAT = {
 };
 const TIER = {
   1: 'the smallest, plainest thing in its chain — tiny, humble, no decoration',
-  2: 'a step up: a little bigger, a little tidier',
+  2: 'a step up: a little bigger, a little tidier, still found rather than made',
   3: 'clearly made, not found: neat shape, one small metal or painted detail',
   4: 'handsome: richer colour, a trim or a band, a faint sheen',
   5: 'precious: fine detailing, gold or gem accents, a soft glow around it',
-  6: 'a showpiece: ornate, glowing, floating motes of light',
-  7: 'the crown of the chain: a small monument of a thing, radiant, unmistakably the best',
+  6: 'a showpiece: ornate, glowing, a few floating motes of light',
+  7: 'the crown of the chain: a small monument, radiant, unmistakably the best',
 };
+/* Chains run 4 to 8 steps. The look climbs over the whole chain whatever its
+   length: step one is always plainest, the last is always the crown. */
+const readOf = (n, len) => len <= 1 ? 7 : Math.min(7, 1 + Math.round(n * 6 / (len - 1)));
 
 const rows = [];
-const add = (path, kind, name, group, prompt) => rows.push({ path, kind, name, group, prompt });
+const add = (path, kind, name, group, prompt, batch, negative = NEGATIVE) =>
+  rows.push({ path, kind, name, group, batch, prompt, negative });
 
-/* ---------------------------------------------------------------- items */
-for (const [ck, ch] of Object.entries(chains)) {
-  const world = worlds[ch.world] ? worlds[ch.world].name : ch.world;
-  ch.items.forEach((id, n) => {
-    const it = items[id]; if (!it) return;
-    const a = it.art || {};
-    const shape = SHAPE[a.shape] || 'object';
-    const mat = MAT[a.mat] || 'painted';
-    const acc = a.accent && MAT[a.accent] ? `, with ${MAT[a.accent]} accents` : '';
-    const tier = TIER[it.tier] || TIER[4];
-    add(`src/sprites/items/${id}.png`, 'item', it.name, `${ch.name} (${world})`,
-      `${it.name} — a ${mat} ${shape}${acc}. Step ${n + 1} of ${ch.items.length} in the `
-      + `"${ch.name}" merge chain, so it must read as ${tier}. It has to be recognisable at 60px `
-      + `on a tile next to ${ch.items.length - 1} relatives, so keep the silhouette simple and distinct. ${STYLE}`);
-  });
+/* -------------------------------------------------------------- scenes */
+/* Where the camp screen stands things, as fractions of the 1086x1448 picture
+   (x across, y down). These are the anchors in src/game.ts (PAD, PROD_PADS,
+   LAB_PAD) — a painting that puts its plinths elsewhere has spots floating
+   over nothing. art/guides/*.png draws the same layout for img2img/ControlNet. */
+const pct = ([x, y]) => `${Math.round(x * 100)}% across, ${Math.round(y * 100)}% down`;
+const CAMP = {
+  rocket: [0.355, 0.435], lab: [0.545, 0.545], heart: [0.788, 0.472],
+  prods: [[0.265, 0.742], [0.512, 0.742], [0.788, 0.738], [0.36, 0.90], [0.64, 0.90], [0.15, 0.605]],
+};
+const LAB = { a: [0.255, 0.545], b: [0.435, 0.552], out: [0.645, 0.545], book: [0.275, 0.325], scope: [0.90, 0.50] };
+const SCENE_STYLE = 'Painted mobile-game background in the style of Travel Town: soft glossy semi-3D cartoon painting, '
+  + 'bright saturated friendly colour, warm light from the upper left, clean shapes, no photorealism. '
+  + 'Portrait 1086x1448 (3:4), opaque, seen from slightly above like a game map. '
+  + 'Keep everything important inside the middle 70% of the width — tall phones crop the sides. '
+  + 'No characters, no text, no letters, no UI, no watermark.';
+const CAMP_LAYOUT = 'Layout, which must be followed because the game stands objects on these exact spots: '
+  + `a large raised round launch pad with a few steps, its top centred at ${pct(CAMP.rocket)}; `
+  + `a small flat clearing at ${pct(CAMP.lab)} for the lab; `
+  + `one raised round plinth at ${pct(CAMP.heart)} for the world's Heart; `
+  + `and six flat round stone plinths for producers, their tops at ${CAMP.prods.map(pct).join('; ')}. `
+  + 'Every plinth and pad is empty. Paths of open ground link them. '
+  + 'The area between them stays calm and simple — the merge board is also drawn over this picture, blurred. '
+  + 'Composition reference: art/guides/camp_layout.png. Style and layout reference: src/scenes/camp_earth.webp.';
+const SCENES = {
+  earth: 'Sunny Meadow, the Earth-like home world at midday: rolling green hills and a sandy clearing, '
+    + 'honey-gold sunlight, a clean sky-blue sky with a pale moon and a small ringed planet low on the horizon, '
+    + 'wildflowers, ferns and a few small cyan crystals in the grass, a stream on one side.',
+  luna: 'Crater Camp on Luna, a small lilac moon under a starry sky: pale silver-lilac crater ground with soft round craters, '
+    + 'slate-blue shadows, cyan glowing crystals and glow-plants around the edges, a big blue ringed planet hanging on the horizon, '
+    + 'two little dome habitats and an antenna far in the distance.',
+  cindra: 'Ember Hollow on Cindra, a volcanic world at dusk: dark purple-black obsidian ground, rivers of glowing orange lava at the edges, '
+    + 'a smoking volcano in the distance under a magenta-to-orange sky, ash-grey haze, mushroom trees glowing warm orange, '
+    + 'the lava glow lighting everything warmly.',
+  nerith: 'Tidal Shallows on Nerith, an ocean world: bright turquoise shallow water, wet-sand islands and sandbars as the ground, '
+    + 'coral-pink reefs visible under the clear water, pearl-white foam at the edges, drowned domed ruins poking out of the sea '
+    + 'in the distance, two small suns low in a pale sky.',
+  vela: 'Aurora Reach on Vela, cloudtops at night: a deep violet starry sky with sweeping teal aurora ribbons, soft white cloud islands '
+    + 'as the ground, starlight-gold lanterns on posts, floating rocks and a distant cloud castle.',
+};
+for (const [k, w] of Object.entries(worlds)) {
+  add(`src/sprites/scenes/${k}.webp`, 'scene', w.name, 'world backdrop',
+    `${SCENES[k] || w.name + ' — ' + (w.subtitle || '')} The camp you stand in on this world. ${CAMP_LAYOUT} ${SCENE_STYLE}`,
+    'scenes', 'characters, people, animals, text, letters, UI, buttons, watermark, photo, photorealistic, dark, muddy colours, objects on the plinths');
 }
-/* ------------------------------------------------------------ producers */
-for (const [, p] of Object.entries(prods)) {
+add('src/sprites/scenes/lab.webp', 'scene', 'Research Lab', 'world backdrop',
+  'The inside of a small cosy research lab built into a rocket: white panels with brass trim, warm lamps, pipes and dials. '
+  + `A curved white-and-brass workbench runs across the middle with two round empty sockets side by side, at ${pct(LAB.a)} and ${pct(LAB.b)}, `
+  + `and a third, larger glowing socket at ${pct(LAB.out)}. A glass cabinet of shelves on the left with an open recipe book at ${pct(LAB.book)}. `
+  + `A big round porthole on the right, around ${pct(LAB.scope)}, looking out at floating islands and stars. `
+  + 'All sockets empty. Composition reference: art/guides/lab_layout.png; style reference: src/scenes/lab.webp. '
+  + SCENE_STYLE,
+  'scenes', 'characters, people, text, letters, UI, buttons, watermark, photo, photorealistic, dark, muddy colours, objects in the sockets');
+
+/* ---------------------------------------------------------- starters */
+/* the two producers every world opens with, plus the rocket wreck */
+const STARTERS = new Set(['wreck']);
+Object.values(worlds).forEach(w => (w.start || []).forEach(x => STARTERS.add(x.producer)));
+const byWorld = {};
+Object.entries(worlds).forEach(([k, w]) => {
+  (w.start || []).forEach(x => { byWorld[x.producer] = k; });
+  (w.grow || []).forEach(x => { byWorld[x.producer] = k; });
+});
+const prodRow = (id, p) => {
   const a = p.spec || {};
   const shape = SHAPE[a.shape] || p.name.toLowerCase();
   const mat = MAT[a.mat] || 'painted';
   const ground = MAT[a.ground] || 'earth';
+  const what = notes.producers[id] || `a ${mat} ${shape}`;
+  const wk = byWorld[id];
   const drops = [...new Set(p.drops)].map(d => items[d] && items[d].name).filter(Boolean).slice(0, 3).join(', ');
-  add(`src/sprites/producers/${p.art}.png`, 'producer', p.name, 'producer',
-    `${p.name} — a ${mat} ${shape} rooted on a small mound of ${ground}, a source the player taps `
-    + `for ${drops}. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; `
-    + `the mound is part of the sprite. ${STYLE}`);
-}
-/* --------------------------------------------------------------- scenes */
-const SCENE_EXTRA = 'Painted background art, 1086x1448 portrait, no transparency, no text, no UI. '
-  + 'Leave the middle of the frame calm and uncluttered — a board of tiles is drawn over it. '
-  + 'Across the lower third put 5 clearly separated flat round plinths or clearings for objects to stand on, '
-  + 'and one larger raised launch pad on the left. Same cartoon style as the items: '
-  + 'saturated, soft baked light, painterly but clean.';
-for (const [k, w] of Object.entries(worlds)) {
-  add(`src/sprites/scenes/${k}.webp`, 'scene', w.name, 'world backdrop',
-    `${w.name} — ${w.subtitle || ''}. The camp you stand in on this world. ${SCENE_EXTRA}`);
-}
-add('src/sprites/scenes/lab.webp', 'scene', 'Research Lab', 'world backdrop',
-  'The inside of a small research lab built onto a rocket: a curved white-and-brass workbench across the '
-  + 'lower half with two round empty sockets side by side and a third larger one to the right, a glass '
-  + 'cabinet of shelves on the left, a big round porthole on the right looking out at floating islands. '
-  + SCENE_EXTRA.replace('Across the lower third put 5 clearly separated flat round plinths or clearings for objects to stand on, and one larger raised launch pad on the left. ', ''));
+  add(`src/sprites/producers/${p.art}.png`, 'producer', p.name, wk ? `producer (${worlds[wk].name})` : 'producer',
+    `${p.name} — ${what}, standing on its own small round mound of ${ground}. A source the player taps for ${drops}. `
+    + 'Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. '
+    + `${wk ? PALETTE[wk] + '. ' : ''}${STYLE}`,
+    STARTERS.has(id) ? 'starters' : 'producers');
+};
+Object.entries(prods).filter(([id]) => STARTERS.has(id)).forEach(([id, p]) => prodRow(id, p));
+Object.entries(prods).filter(([id]) => !STARTERS.has(id)).forEach(([id, p]) => prodRow(id, p));
 
+/* -------------------------------------------------------------- items */
+const ORDER = [...Object.keys(worlds), 'ship', 'any'];
+const chainList = Object.entries(chains).sort((a, b) => {
+  const wa = ORDER.indexOf(a[1].world), wb = ORDER.indexOf(b[1].world);
+  return wa !== wb ? wa - wb : (a[1].unlock - b[1].unlock);
+});
+for (const [ck, ch] of chainList) {
+  const world = worlds[ch.world] ? worlds[ch.world].name : ch.world === 'ship' ? 'Rocket parts' : 'every world';
+  const pal = PALETTE[ch.world] ? PALETTE[ch.world] + '. ' : '';
+  const len = ch.items.length;
+  ch.items.forEach((id, n) => {
+    const it = items[id]; if (!it) return;
+    const a = it.art || {};
+    const fallback = `a ${MAT[a.mat] || 'painted'} ${SHAPE[a.shape] || 'object'}`
+      + (a.accent && MAT[a.accent] ? `, with ${MAT[a.accent]} accents` : '');
+    const what = notes.items[id] || fallback;
+    const up = n ? ` One step up from the ${items[ch.items[n - 1]].name}, and its outline must be clearly different from it.` : '';
+    add(`src/sprites/items/${id}.png`, 'item', it.name, `${ch.name} (${world})`,
+      `${it.name} — ${what}. Step ${n + 1} of ${len} in the "${ch.name}" merge chain, so it must read as `
+      + `${TIER[readOf(n, len)]}.${up} ${pal}${STYLE}`,
+      `chain-${ck}`);
+  });
+}
 /* ------------------------------------------------------------------- UI */
 const UI = [
   ['ui/panel_wood.png', 'Panel frame', '9-slice panel frame: a rounded warm-cream card with a thick white rim and a soft brown drop edge, empty middle, 256x256 with 48px corners'],
@@ -148,7 +236,9 @@ const UI = [
   ['ui/plinth.png', 'Camp plinth', 'flat round stone plinth seen 3/4 from above, cracked pale stone with grass at the edges, for a producer to stand on, 512x256, transparent background'],
 ];
 UI.forEach(([p, name, desc]) => add(`src/sprites/${p}`, 'ui', name, 'interface',
-  `${name} — ${desc}. Same house style as the items: thick dark warm-brown outline, soft baked light from the upper left, glossy top highlight, saturated friendly palette, transparent background, no text.`));
+  `${name} — ${desc}. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, `
+  + 'rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, '
+  + 'transparent background, no text, no letters, no icons unless described.', 'ui'));
 
 /* ------------------------------------------------------- animation sheets */
 const FX = [
@@ -160,31 +250,39 @@ const FX = [
   ['fx/bloom_wake.png', 'Bloom wake', '8 frames in a 4x2 grid, 256px per frame: green-gold light unfurling like a flower opening'],
 ];
 FX.forEach(([p, name, desc]) => add(`src/sprites/${p}`, 'fx', name, 'animation',
-  `${name} — sprite sheet, ${desc}. Read left to right, top to bottom, evenly spaced, each frame the same size, transparent background, no text. Cartoon mobile game VFX, saturated, soft glow, matching a warm Travel Town style.`));
+  `${name} — sprite sheet, ${desc}. Read left to right, top to bottom, evenly spaced, each frame the same size, transparent background, no text. Cartoon mobile game VFX, saturated, soft glow, matching a warm Travel Town style.`, 'fx'));
 
 /* ------------------------------------------------------------- write out */
 mkdirSync(join(root, 'art'), { recursive: true });
 const esc = v => `"${String(v).replace(/"/g, '""')}"`;
 writeFileSync(join(root, 'art/manifest.csv'),
-  'path,kind,name,group,prompt\n' + rows.map(r => [r.path, r.kind, r.name, r.group, r.prompt].map(esc).join(',')).join('\n') + '\n');
+  'path,kind,name,group,batch,prompt,negative\n'
+  + rows.map(r => [r.path, r.kind, r.name, r.group, r.batch, r.prompt, r.negative].map(esc).join(',')).join('\n') + '\n');
 writeFileSync(join(root, 'art/manifest.json'), JSON.stringify(rows, null, 2) + '\n');
 
 /* the merge catalogue, as a document a person can read */
+const worldItems = Object.values(chains).filter(c => worlds[c.world]).reduce((a, c) => a + c.items.length, 0);
 let md = '# The merge catalogue\n\n'
-  + `${Object.keys(items).length} items across ${Object.keys(chains).length} chains, `
+  + `${Object.keys(items).length} items across ${Object.keys(chains).length} chains `
+  + `(${worldItems} of them in the five worlds, the rest shared and rocket parts), `
   + `${Object.keys(prods).length} producers, ${Object.keys(worlds).length} worlds.\n\n`
-  + 'Each chain is a ladder: two of a thing make the next thing up. The last item in a\n'
-  + 'chain is its finale — finishing one for the first time pays Bloom essence.\n';
+  + 'Each chain is a ladder: two of a thing make the next thing up. Chains run from 4 to 8\n'
+  + 'steps. The last item in a chain is its finale — finishing one for the first time pays\n'
+  + 'Bloom essence. *Lv* is the world level the chain wakes at.\n\n'
+  + 'Generated by `npm run art:manifest` from `scripts/content/` — edit those, not this.\n';
 for (const [wk, w] of Object.entries(worlds)) {
-  md += `\n## ${w.name}${w.subtitle ? ` — *${w.subtitle}*` : ''}\n`;
   const mine = Object.entries(chains).filter(([, c]) => c.world === wk);
-  for (const [, c] of mine) {
-    md += `\n**${c.name}**  \n`;
-    md += c.items.map(id => `${items[id].name} *(t${items[id].tier})*`).join(' → ') + '\n';
+  md += `\n## ${w.name}${w.subtitle ? ` — *${w.subtitle}*` : ''}\n\n`
+    + `${mine.length} chains, ${mine.reduce((a, [, c]) => a + c.items.length, 0)} items.\n`;
+  for (const [ck, c] of mine) {
+    const src = Object.values(prods).find(p => p.drops.some(d => items[d] && items[d].chain === ck));
+    md += `\n**${c.name}** · ${c.items.length} steps · Lv ${c.unlock}${src ? ` · from the ${src.name}` : ''}  \n`;
+    md += c.items.map(id => items[id].name).join(' → ') + '\n';
   }
-  const ps = Object.values(prods).filter(p => (w.start || []).some(s => s.producer === p.art)
-    || (w.grow || []).some(g => g.producer === p.art));
-  if (ps.length) md += `\n*Producers:* ${ps.map(p => p.name).join(', ')}\n`;
+}
+md += '\n## Shared and rocket\n';
+for (const [, c] of Object.entries(chains).filter(([, c]) => !worlds[c.world])) {
+  md += `\n**${c.name}** · ${c.items.length} steps  \n` + c.items.map(id => items[id].name).join(' → ') + '\n';
 }
 writeFileSync(join(root, 'art/CATALOGUE.md'), md);
 

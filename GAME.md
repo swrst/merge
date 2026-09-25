@@ -153,8 +153,8 @@ place, so a late board never settles into the same four taps forever.
 - Locked weed/rock tiles show the level that clears them.
 
 ### Resources and chains
-- **286 items across 57 chains**, five to seven tiers each: twelve chains on Earth, nine per
-  world after that, plus rocket parts, fuel, relics, Bloom Essence and the Wildcard.
+- **504 items across 84 chains**, four to eight tiers each: fifteen chains in every world
+  (minerals, gardens, machines and friendly alien critters), plus rocket parts, fuel, relics, Bloom Essence and the Wildcard.
 - The last tier of a chain is a *masterpiece* — Great Oak, Monument, Royal Jelly, Phoenix,
   Coral Palace, Sky Bell. It sells for a fortune, it is a lab ingredient, and the first time
   you make one the Vault pays you a **Bloom Spark**.
@@ -186,7 +186,7 @@ edge and a lip of light along the top. That is the Travel Town trick — a hundr
 unrelated objects wearing the same outline and the same light read as one box of
 toys — and it costs one filter per item at startup rather than a stroke on every
 path of every drawing. (No Gaussian in it: a blur there doubles the time to draw
-286 items and you cannot see it at tile size.)
+504 items and you cannot see it at tile size.)
 
 A material yields a whole lighting ramp (highlight, base, shade, deep shade, rim, outline)
 pushed to cartoon contrast — the highlight is 30 points lighter and warmer, the shade 20
@@ -195,7 +195,7 @@ than grey. Every primitive is then drawn with the same five-pass stack: gradient
 ambient occlusion pooling at the bottom, a bounce light off the floor, a glossy white
 highlight across the top third, and a thick coloured contour around the whole silhouette.
 A double shadow (a wide soft one, a tight dark one) seats it on the tile. That is what makes
-286 items look like one toy set rather than 286 doodles. Tier adds a halo behind and
+504 items look like one toy set rather than 504 doodles. Tier adds a halo behind and
 sparkles in front. Producers and alien faces use the same library (`renderProducer`,
 `renderFace`), which is why a new world costs data, not drawing time.
 
@@ -388,7 +388,7 @@ you back on the board.
 - **🔬 Lab** — the experiment bench, lab book and rumours (level 6).
 - **📋 Tasks** — the progression drawer: the rotating task board, the relic perks and
   the star favours. The rocket moved to your camp, where you can watch it being built.
-- **📖 Guide** — the **catalogue**: a collection bar (`38/286` found), every awake chain as
+- **📖 Guide** — the **catalogue**: a collection bar (`38/504` found), every awake chain as
   picture rows with sell price and how many you own right now, `???` for the undiscovered,
   a silhouette row for the chains still sleeping in this world, plus what each producer makes
   and costs.
@@ -448,7 +448,7 @@ reverb tail is wrapped back onto the head so the loop has no seam.
 worlds means editing data — no engine code.
 
 The game reads JSON at runtime. Four of those files are *generated* from compact tables,
-because 286 items written out as JSON is a few thousand lines of braces nobody can read:
+because 504 items written out as JSON is a few thousand lines of braces nobody can read:
 
 ```
 scripts/content/chains.mjs      the catalogue: one line per item
@@ -639,7 +639,7 @@ a stage and fires its story beat, all four side games end to end, tracing a cons
 paying its Star Cores, that the camp's spots and the side rail are the topmost thing at
 their own centre (nothing tappable buried under the scenery), that a closed panel does not
 swallow board taps, the quest button and the chain pop-up, the guided intro,
-that all 286 items can be drawn, and that a planted v5 save survives
+that all 504 items can be drawn, and that a planted v5 save survives
 the rewrite — keeping its level, coins and vault perks while the items that no longer exist
 are swept off the board, out of the bag and off the lab bench — asserting no console errors
 throughout.

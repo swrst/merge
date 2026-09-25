@@ -1,44 +1,54 @@
-/* Which painted sprites exist, and which are still generated.
-   Usage:  npm run art            (summary)
-           npm run art -- --todo  (just the missing filenames, one per line) */
-import { readFileSync, readdirSync, existsSync } from 'node:fs';
+/* Which painted sprites exist, which are still generated, and the prompts for
+   the next batch.
+
+   Usage:  npm run art                         summary, batch by batch
+           npm run art -- --todo               just the missing paths, one per line
+           npm run art -- --batch chain-wood   the prompts for one batch, ready to paste
+           npm run art -- --batch scenes --missing   ...only the ones not painted yet
+
+   Reads art/manifest.json (npm run art:manifest). Batches, in the order to paint
+   them: scenes, ui, starters, then chains world by world, producers, fx. */
+import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
-const read = p => JSON.parse(readFileSync(join(root, p), 'utf8'));
-const items = read('src/content/items.json');
-const chains = read('src/content/chains.json');
-const prods = read('src/content/producers.json');
-const worlds = read('src/content/worlds.json');
+const rows = JSON.parse(readFileSync(join(root, 'art/manifest.json'), 'utf8'));
+const args = process.argv.slice(2);
+const has = r => existsSync(join(root, r.path))
+  || existsSync(join(root, r.path.replace(/\.(png|webp)$/, r.path.endsWith('.png') ? '.webp' : '.png')));
 
-const have = d => existsSync(join(root, d))
-  ? new Set(readdirSync(join(root, d)).map(f => f.replace(/\.(png|webp|jpg|jpeg)$/i, '')))
-  : new Set();
-const hi = have('src/sprites/items'), hp = have('src/sprites/producers'), hs = have('src/sprites/scenes');
+const ORDER = ['scenes', 'ui', 'starters'];
+const batches = [...new Set(rows.map(r => r.batch))].sort((a, b) => {
+  const rank = x => ORDER.includes(x) ? ORDER.indexOf(x) : x === 'producers' ? 90 : x === 'fx' ? 99 : 10;
+  return rank(a) - rank(b);                         // Array.sort is stable: chains keep catalogue order
+});
 
-const todo = process.argv.includes('--todo');
-const missing = [];
-for (const [k, c] of Object.entries(chains))
-  for (const id of c.items) if (!hi.has(id)) missing.push(['items', id, items[id].name, c.name]);
-for (const [k, p] of Object.entries(prods)) if (!hp.has(p.art)) missing.push(['producers', p.art, p.name, 'producer']);
-for (const k of Object.keys(worlds)) if (!hs.has(k)) missing.push(['scenes', k, worlds[k].name, 'backdrop']);
-if (!hs.has('lab')) missing.push(['scenes', 'lab', 'Research Lab', 'backdrop']);
-
-if (todo) {
-  missing.forEach(([dir, id]) => console.log(`src/sprites/${dir}/${id}.png`));
-} else {
-  console.log(`painted: ${hi.size} items, ${hp.size} producers, ${hs.size} scenes`);
-  console.log(`still generated: ${missing.filter(m => m[0] === 'items').length} items, `
-    + `${missing.filter(m => m[0] === 'producers').length} producers, `
-    + `${missing.filter(m => m[0] === 'scenes').length} scenes`);
-  let chain = '';
-  missing.filter(m => m[0] === 'items').forEach(([, id, name, ch]) => {
-    if (ch !== chain) { chain = ch; console.log(`\n  ${chain}`); }
-    console.log(`    ${id}.png`.padEnd(28) + name);
+const bi = args.indexOf('--batch');
+if (bi >= 0) {
+  const name = args[bi + 1];
+  const mine = rows.filter(r => r.batch === name && (!args.includes('--missing') || !has(r)));
+  if (!mine.length) {
+    console.error(`no batch "${name}". Batches: ${batches.join(', ')}`);
+    process.exit(1);
+  }
+  console.log(`# Batch ${name} — ${mine.length} image(s)\n`);
+  mine.forEach((r, i) => {
+    console.log(`## ${i + 1}. ${r.name}${has(r) ? '  (already painted)' : ''}`);
+    console.log(`Save as: ${r.path}\n`);
+    console.log(r.prompt + '\n');
+    console.log(`Negative: ${r.negative}\n`);
   });
-  console.log('\n  producers');
-  missing.filter(m => m[0] === 'producers').forEach(([, id, name]) => console.log(`    ${id}.png`.padEnd(28) + name));
-  console.log('\n  scenes');
-  missing.filter(m => m[0] === 'scenes').forEach(([, id, name]) => console.log(`    ${id}.webp`.padEnd(28) + name));
+} else if (args.includes('--todo')) {
+  rows.filter(r => !has(r)).forEach(r => console.log(r.path));
+} else {
+  const done = rows.filter(has).length;
+  console.log(`painted ${done} of ${rows.length} assets\n`);
+  for (const b of batches) {
+    const mine = rows.filter(r => r.batch === b), n = mine.filter(has).length;
+    const mark = n === mine.length ? '✓' : n ? '…' : ' ';
+    console.log(`  ${mark} ${b.padEnd(22)} ${String(n).padStart(3)}/${mine.length}   ${mine[0].group}`);
+  }
+  console.log('\nnpm run art -- --batch <name>   prints that batch\'s prompts');
+  console.log('npm run dev, then /art/sheet.html?batch=<name>   checks the files you dropped in');
 }

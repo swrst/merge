@@ -23,11 +23,12 @@ const sell = t => SELL[Math.min(t, SELL.length) - 1];
 /* ---------------------------------------------------------------- items */
 const items = {};
 const chains = {};
+const notes = { items: {}, producers: {} };        // painter's descriptions -> art/notes.json
 
 for (const [key, name, world, unlock, ...lines] of CHAINS) {
   const ids = [];
   lines.forEach((line, i) => {
-    const [id, label, shape, matPart] = line.split('|');
+    const [id, label, shape, matPart, desc] = line.split('|');
     if (!id || !label || !shape || !matPart) throw new Error(`bad item line: ${line}`);
     const [matAcc, decoPart] = matPart.split('+');
     const [mat, accent] = matAcc.split('/');
@@ -37,6 +38,7 @@ for (const [key, name, world, unlock, ...lines] of CHAINS) {
     if (decoPart) art.deco = decoPart.split(',').filter(Boolean);
     if (items[id]) throw new Error(`duplicate item id "${id}"`);
     items[id] = { name: label, chain: key, tier, sell: sell(tier), art, ...(SPECIAL[id] || {}) };
+    if (desc) notes.items[id] = desc;
     ids.push(id);
   });
   if (chains[key]) throw new Error(`duplicate chain key "${key}"`);
@@ -50,7 +52,8 @@ const starts = {};                                 // world -> [{cell, producer}
 const seen = {};                                   // world -> how many producers placed
 
 for (const [world, at, line] of PRODUCERS) {
-  const [id, name, artPart, modePart, dropPart] = line.split('|');
+  const [id, name, artPart, modePart, dropPart, desc] = line.split('|');
+  if (desc) notes.producers[id] = desc;
   const drops = dropPart.split(/\s+/).filter(Boolean);
   drops.forEach(d => { if (!items[d]) throw new Error(`producer "${id}" drops unknown item "${d}"`); });
   const p = { name, art: id, drops };
@@ -115,6 +118,8 @@ write('producers.json', producers);
 write('worlds.json', worlds);
 write('characters.json', CHARACTERS);
 write('story.json', STORY);
+writeFileSync(join(OUT, '..', '..', 'art', 'notes.json'), JSON.stringify(notes, null, 2) + '\n');
+console.log(`  ../art/notes.json  ${Object.keys(notes.items).length} item and ${Object.keys(notes.producers).length} producer descriptions`);
 
 /* ------------------------------------------------------------ sanity pass */
 const errs = [];

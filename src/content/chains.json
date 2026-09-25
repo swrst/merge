@@ -10,7 +10,8 @@
       "lumber",
       "cart",
       "workshop",
-      "treehouse"
+      "treehouse",
+      "woodrocket"
     ]
   },
   "stone": {
@@ -37,7 +38,8 @@
       "jam",
       "pie",
       "cake",
-      "feast"
+      "feast",
+      "jamfactory"
     ]
   },
   "water": {
@@ -50,7 +52,8 @@
       "jug",
       "barrel",
       "fountain",
-      "aqueduct"
+      "aqueduct",
+      "watertower"
     ]
   },
   "grass": {
@@ -76,7 +79,8 @@
       "bloombud",
       "bouquet",
       "garland",
-      "flowercrown"
+      "flowercrown",
+      "flowerarch"
     ]
   },
   "honey": {
@@ -89,7 +93,8 @@
       "honeycomb",
       "honeypot",
       "beehive",
-      "royaljelly"
+      "royaljelly",
+      "honeypalace"
     ]
   },
   "mush": {
@@ -114,7 +119,8 @@
       "yarn",
       "clothbolt",
       "quilt",
-      "tapestry"
+      "tapestry",
+      "spacesuit"
     ]
   },
   "feather": {
@@ -155,6 +161,47 @@
       "meadowheart"
     ]
   },
+  "veggie": {
+    "name": "Veggie Patch",
+    "world": "earth",
+    "unlock": 8,
+    "items": [
+      "vegseed",
+      "seedling",
+      "carrot",
+      "vegbundle",
+      "vegcrate",
+      "vegstall",
+      "giantpumpkin"
+    ]
+  },
+  "stargaze": {
+    "name": "Stargazing",
+    "world": "earth",
+    "unlock": 9,
+    "items": [
+      "lenschip",
+      "lens",
+      "spyglass",
+      "telescope",
+      "observatory",
+      "planetarium"
+    ]
+  },
+  "visitor": {
+    "name": "Little Visitors",
+    "world": "earth",
+    "unlock": 10,
+    "items": [
+      "oddegg",
+      "blinky",
+      "alienkid",
+      "alienexplorer",
+      "saucer",
+      "alienfamily",
+      "mothership"
+    ]
+  },
   "moon": {
     "name": "Moon Rocks",
     "world": "luna",
@@ -165,7 +212,9 @@
       "mcore",
       "mstar",
       "moonorb",
-      "moonstatue"
+      "moonstatue",
+      "moonbase",
+      "moonpalace"
     ]
   },
   "glow": {
@@ -190,7 +239,8 @@
       "dustclump",
       "regolith",
       "moonbrick",
-      "moonwall"
+      "moonwall",
+      "moontown"
     ]
   },
   "ice": {
@@ -203,7 +253,8 @@
       "icecore",
       "snowstar",
       "glacier",
-      "icecastle"
+      "icecastle",
+      "icepalace"
     ]
   },
   "crystal": {
@@ -215,7 +266,9 @@
       "prismlet",
       "prismcore",
       "prismheart",
-      "prismtower"
+      "prismtower",
+      "prismgarden",
+      "prismthrone"
     ]
   },
   "lantern": {
@@ -227,7 +280,8 @@
       "lampglass",
       "moonlamp",
       "beacon",
-      "lighthouse"
+      "lighthouse",
+      "starbeacon"
     ]
   },
   "silver": {
@@ -239,7 +293,8 @@
       "silvernug",
       "silveringot",
       "silvercup",
-      "silvercrown"
+      "silvercrown",
+      "silverthrone"
     ]
   },
   "comet": {
@@ -266,6 +321,90 @@
       "craterheart"
     ]
   },
+  "moonpup": {
+    "name": "Moon Critters",
+    "world": "luna",
+    "unlock": 7,
+    "items": [
+      "wobbleegg",
+      "blip",
+      "moonpup",
+      "hoppup",
+      "craterhound",
+      "starhound",
+      "moonguardian"
+    ]
+  },
+  "rover": {
+    "name": "Rover Yard",
+    "world": "luna",
+    "unlock": 8,
+    "items": [
+      "screw",
+      "wheel",
+      "axle",
+      "toyrover",
+      "moonbuggy",
+      "bigrover",
+      "roverbase",
+      "launchpad"
+    ]
+  },
+  "helium": {
+    "name": "Helium Wells",
+    "world": "luna",
+    "unlock": 9,
+    "items": [
+      "gaswisp",
+      "gasbubble",
+      "gasflask",
+      "gascan",
+      "gastank",
+      "fusioncell",
+      "fusionreactor"
+    ]
+  },
+  "meteorite": {
+    "name": "Meteorite Field",
+    "world": "luna",
+    "unlock": 10,
+    "items": [
+      "spacegrit",
+      "meteorite",
+      "ironmeteor",
+      "pallasite",
+      "meteorgeode",
+      "starmetal",
+      "meteormonument"
+    ]
+  },
+  "dish": {
+    "name": "Signal Dishes",
+    "world": "luna",
+    "unlock": 11,
+    "items": [
+      "antwire",
+      "antenna",
+      "minidish",
+      "radar",
+      "signaltower",
+      "deeparray",
+      "starhorn"
+    ]
+  },
+  "moonmelon": {
+    "name": "Crater Farm",
+    "world": "luna",
+    "unlock": 12,
+    "items": [
+      "moonseed",
+      "moonsprout",
+      "moonmelon",
+      "meloncrate",
+      "moondome",
+      "moonfarm"
+    ]
+  },
   "magma": {
     "name": "Magma Works",
     "world": "cindra",
@@ -276,7 +415,9 @@
       "lavablob",
       "fireopal",
       "suncore",
-      "sunforge"
+      "sunforge",
+      "toyvolcano",
+      "sunengine"
     ]
   },
   "shroom": {
@@ -289,7 +430,8 @@
       "bigshroom",
       "glowcap",
       "shroomtree",
-      "shroomcity"
+      "shroomcity",
+      "shroomcastle"
     ]
   },
   "iron": {
@@ -301,7 +443,9 @@
       "ironnug",
       "ironingot",
       "ironanvil",
-      "ironcrown"
+      "ironcrown",
+      "ironbot",
+      "ironmech"
     ]
   },
   "obsid": {
@@ -313,7 +457,8 @@
       "obshard",
       "obblade",
       "obmirror",
-      "obthrone"
+      "obthrone",
+      "obcitadel"
     ]
   },
   "glassw": {
@@ -325,7 +470,9 @@
       "moltenglass",
       "glassbead",
       "glassvase",
-      "glasslily"
+      "glasslily",
+      "glassdome",
+      "glasspalace"
     ]
   },
   "forge": {
@@ -337,7 +484,8 @@
       "coalbrick",
       "forgefire",
       "bellows",
-      "greatforge"
+      "greatforge",
+      "foundry"
     ]
   },
   "spice": {
@@ -349,7 +497,8 @@
       "spicepouch",
       "spicejar",
       "spicecrate",
-      "spicefeast"
+      "spicefeast",
+      "spicebazaar"
     ]
   },
   "copper": {
@@ -361,7 +510,10 @@
       "coppernug",
       "copperingot",
       "copperbell",
-      "coppercog"
+      "coppercog",
+      "copperclock",
+      "automaton",
+      "clocktower"
     ]
   },
   "phoenix": {
@@ -376,6 +528,85 @@
       "hollowheart"
     ]
   },
+  "salamander": {
+    "name": "Fire Critters",
+    "world": "cindra",
+    "unlock": 7,
+    "items": [
+      "warmegg",
+      "newt",
+      "salamander",
+      "lavalizard",
+      "magmadrake",
+      "emberwyrm"
+    ]
+  },
+  "basalt": {
+    "name": "Basalt Columns",
+    "world": "cindra",
+    "unlock": 8,
+    "items": [
+      "basaltchip",
+      "basaltblock",
+      "hexcolumn",
+      "columnstack",
+      "basaltarch",
+      "causeway",
+      "basaltcrown"
+    ]
+  },
+  "sulfur": {
+    "name": "Sulfur Springs",
+    "world": "cindra",
+    "unlock": 9,
+    "items": [
+      "sulfurdust",
+      "sulfurcrystal",
+      "sulfurcluster",
+      "brimstone"
+    ]
+  },
+  "steam": {
+    "name": "Steamworks",
+    "world": "cindra",
+    "unlock": 10,
+    "items": [
+      "steampuff",
+      "steampipe",
+      "valve",
+      "boiler",
+      "steamengine",
+      "geoplant",
+      "steamtitan"
+    ]
+  },
+  "emberfruit": {
+    "name": "Ember Orchard",
+    "world": "cindra",
+    "unlock": 11,
+    "items": [
+      "charseed",
+      "embersprout",
+      "firefruit",
+      "fruitbasket",
+      "embertree",
+      "embergrove"
+    ]
+  },
+  "rubyc": {
+    "name": "Ruby Caves",
+    "world": "cindra",
+    "unlock": 12,
+    "items": [
+      "redchip",
+      "rubyshard",
+      "cutruby",
+      "rubyring",
+      "rubyscepter",
+      "rubycrown",
+      "rubyidol"
+    ]
+  },
   "shellc": {
     "name": "Shell Bed",
     "world": "nerith",
@@ -386,7 +617,8 @@
       "bigshell",
       "nautilus",
       "shellhorn",
-      "shellthrone"
+      "shellthrone",
+      "shellpalace"
     ]
   },
   "kelp": {
@@ -399,7 +631,8 @@
       "kelpcoil",
       "kelpbale",
       "kelpgrove",
-      "kelpheart"
+      "kelpheart",
+      "kelpcathedral"
     ]
   },
   "pearlc": {
@@ -411,7 +644,9 @@
       "seedpearl",
       "pearl",
       "pearlstrand",
-      "pearlcrown"
+      "pearlcrown",
+      "pearlorb",
+      "pearlpalace"
     ]
   },
   "coralc": {
@@ -423,7 +658,9 @@
       "coralsprig",
       "coralfan",
       "coralcrown",
-      "coralpalace"
+      "coralpalace",
+      "coralcity",
+      "reefcrown"
     ]
   },
   "fishc": {
@@ -435,7 +672,8 @@
       "silverfish",
       "bigfish",
       "fishcatch",
-      "fishfeast"
+      "fishfeast",
+      "fishhall"
     ]
   },
   "tide": {
@@ -459,7 +697,8 @@
       "saltcake",
       "saltbrick",
       "saltpillar",
-      "salttemple"
+      "salttemple",
+      "saltlight"
     ]
   },
   "sunkn": {
@@ -471,7 +710,9 @@
       "driftwood",
       "driftboat",
       "sunkenchest",
-      "sunkenidol"
+      "sunkenidol",
+      "galleon",
+      "sunkencity"
     ]
   },
   "lumin": {
@@ -486,6 +727,81 @@
       "shallowheart"
     ]
   },
+  "squid": {
+    "name": "Reef Critters",
+    "world": "nerith",
+    "unlock": 7,
+    "items": [
+      "bubbleegg",
+      "squidlet",
+      "tentapal",
+      "reefsquid",
+      "glowocto",
+      "krakenpal",
+      "tidekraken"
+    ]
+  },
+  "turtle": {
+    "name": "Turtle Cove",
+    "world": "nerith",
+    "unlock": 8,
+    "items": [
+      "turtleegg",
+      "hatchling",
+      "seaturtle",
+      "islandturtle"
+    ]
+  },
+  "harbour": {
+    "name": "Harbour",
+    "world": "nerith",
+    "unlock": 9,
+    "items": [
+      "knot",
+      "float",
+      "buoy",
+      "anchor",
+      "shipwheel",
+      "divebell",
+      "submarine"
+    ]
+  },
+  "seaglass": {
+    "name": "Sea Glass",
+    "world": "nerith",
+    "unlock": 10,
+    "items": [
+      "glasspebble",
+      "seaglassbit",
+      "glassfloat",
+      "glasslamp",
+      "glasschime",
+      "glasscity"
+    ]
+  },
+  "urchin": {
+    "name": "Urchin Garden",
+    "world": "nerith",
+    "unlock": 11,
+    "items": [
+      "urchinspine",
+      "urchin",
+      "starurchin",
+      "starfishcrown"
+    ]
+  },
+  "manta": {
+    "name": "Manta Glide",
+    "world": "nerith",
+    "unlock": 12,
+    "items": [
+      "mantaegg",
+      "babymanta",
+      "manta",
+      "starmanta",
+      "skymanta"
+    ]
+  },
   "cloudc": {
     "name": "Cloud Bank",
     "world": "vela",
@@ -495,7 +811,9 @@
       "cloudlet",
       "cloudpuff",
       "thundercloud",
-      "cloudcastle"
+      "cloudcastle",
+      "cloudcity",
+      "skykingdom"
     ]
   },
   "aurorac": {
@@ -507,7 +825,8 @@
       "aurorasilk",
       "auroraveil",
       "auroracloak",
-      "auroracrown"
+      "auroracrown",
+      "auroraharp"
     ]
   },
   "starc": {
@@ -519,7 +838,9 @@
       "starspark",
       "starlet",
       "starcluster",
-      "starforge"
+      "starforge",
+      "constellation",
+      "supernova"
     ]
   },
   "wind": {
@@ -531,6 +852,7 @@
       "gust",
       "windcoil",
       "windvane",
+      "windmill",
       "stormeye"
     ]
   },
@@ -543,7 +865,8 @@
       "skybud",
       "skyfruit",
       "skybasket",
-      "skyfeast"
+      "skyfeast",
+      "skytreehouse"
     ]
   },
   "chime": {
@@ -555,7 +878,8 @@
       "chimebell",
       "chimeset",
       "chimetower",
-      "skybell"
+      "skybell",
+      "chimecathedral"
     ]
   },
   "prismv": {
@@ -567,7 +891,8 @@
       "lightbeam",
       "prismlens",
       "prismarray",
-      "sunsprism"
+      "sunsprism",
+      "rainbowbridge"
     ]
   },
   "skynest": {
@@ -579,7 +904,8 @@
       "skyfeather",
       "skyplume",
       "skynestn",
-      "skyegg"
+      "skyegg",
+      "skyroc"
     ]
   },
   "balloonc": {
@@ -592,6 +918,87 @@
       "driftballoon",
       "skyship",
       "reachheart"
+    ]
+  },
+  "starling": {
+    "name": "Star Critters",
+    "world": "vela",
+    "unlock": 7,
+    "items": [
+      "stardustegg",
+      "glimmer",
+      "starsprite",
+      "nebkitten",
+      "cometfox",
+      "aurorafox",
+      "celestfox",
+      "starbeast"
+    ]
+  },
+  "satellite": {
+    "name": "Satellite Works",
+    "world": "vela",
+    "unlock": 8,
+    "items": [
+      "solarcell",
+      "solarpanel",
+      "minisat",
+      "commsat",
+      "stationmod",
+      "orbstation",
+      "stargate"
+    ]
+  },
+  "nebula": {
+    "name": "Nebula Jars",
+    "world": "vela",
+    "unlock": 9,
+    "items": [
+      "nebwisp",
+      "nebpuff",
+      "nebjar",
+      "nebglobe",
+      "neblamp",
+      "bottledgalaxy"
+    ]
+  },
+  "starflower": {
+    "name": "Starflower Beds",
+    "world": "vela",
+    "unlock": 10,
+    "items": [
+      "starseed",
+      "starsprout",
+      "starflower",
+      "starpot",
+      "stargarden",
+      "starmeadow"
+    ]
+  },
+  "planets": {
+    "name": "Tiny Planets",
+    "world": "vela",
+    "unlock": 11,
+    "items": [
+      "planetdust",
+      "planetoid",
+      "miniplanet",
+      "ringplanet",
+      "twinplanets",
+      "orrery",
+      "galaxyswirl",
+      "universe"
+    ]
+  },
+  "kite": {
+    "name": "Sky Kites",
+    "world": "vela",
+    "unlock": 12,
+    "items": [
+      "kitetail",
+      "kitediamond",
+      "boxkite",
+      "dragonkite"
     ]
   },
   "star": {

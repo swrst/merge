@@ -15,7 +15,10 @@
       "cloth",
       "feather",
       "clay",
-      "garden"
+      "garden",
+      "veggie",
+      "stargaze",
+      "visitor"
     ],
     "start": [
       {
@@ -138,6 +141,33 @@
           36,
           30
         ]
+      },
+      {
+        "producer": "vegpatch",
+        "atLevel": 8,
+        "cells": [
+          12,
+          18,
+          24
+        ]
+      },
+      {
+        "producer": "tinkerbench",
+        "atLevel": 9,
+        "cells": [
+          6,
+          7,
+          13
+        ]
+      },
+      {
+        "producer": "crashsite",
+        "atLevel": 10,
+        "cells": [
+          8,
+          14,
+          15
+        ]
       }
     ],
     "tapCost": 1,
@@ -175,7 +205,13 @@
       "lantern",
       "silver",
       "comet",
-      "lunamoth"
+      "lunamoth",
+      "moonpup",
+      "rover",
+      "helium",
+      "meteorite",
+      "dish",
+      "moonmelon"
     ],
     "start": [
       {
@@ -271,6 +307,60 @@
           17,
           7
         ]
+      },
+      {
+        "producer": "pupnest",
+        "atLevel": 7,
+        "cells": [
+          34,
+          40,
+          41
+        ]
+      },
+      {
+        "producer": "scrapyard",
+        "atLevel": 8,
+        "cells": [
+          35,
+          29,
+          23
+        ]
+      },
+      {
+        "producer": "gasvent",
+        "atLevel": 9,
+        "cells": [
+          37,
+          36,
+          30
+        ]
+      },
+      {
+        "producer": "impact",
+        "atLevel": 10,
+        "cells": [
+          12,
+          18,
+          24
+        ]
+      },
+      {
+        "producer": "relaymast",
+        "atLevel": 11,
+        "cells": [
+          6,
+          7,
+          13
+        ]
+      },
+      {
+        "producer": "melonvine",
+        "atLevel": 12,
+        "cells": [
+          8,
+          14,
+          15
+        ]
       }
     ],
     "tapCost": 1,
@@ -308,7 +398,13 @@
       "forge",
       "spice",
       "copper",
-      "phoenix"
+      "phoenix",
+      "salamander",
+      "basalt",
+      "sulfur",
+      "steam",
+      "emberfruit",
+      "rubyc"
     ],
     "start": [
       {
@@ -403,6 +499,60 @@
           17,
           7
         ]
+      },
+      {
+        "producer": "warmnest",
+        "atLevel": 7,
+        "cells": [
+          34,
+          40,
+          41
+        ]
+      },
+      {
+        "producer": "basaltcliff",
+        "atLevel": 8,
+        "cells": [
+          35,
+          29,
+          23
+        ]
+      },
+      {
+        "producer": "sulfurspring",
+        "atLevel": 9,
+        "cells": [
+          37,
+          36,
+          30
+        ]
+      },
+      {
+        "producer": "steamvent",
+        "atLevel": 10,
+        "cells": [
+          12,
+          18,
+          24
+        ]
+      },
+      {
+        "producer": "charstump",
+        "atLevel": 11,
+        "cells": [
+          6,
+          7,
+          13
+        ]
+      },
+      {
+        "producer": "rubyvein",
+        "atLevel": 12,
+        "cells": [
+          8,
+          14,
+          15
+        ]
       }
     ],
     "tapCost": 2,
@@ -440,7 +590,13 @@
       "tide",
       "salt",
       "sunkn",
-      "lumin"
+      "lumin",
+      "squid",
+      "turtle",
+      "harbour",
+      "seaglass",
+      "urchin",
+      "manta"
     ],
     "start": [
       {
@@ -535,6 +691,60 @@
           17,
           7
         ]
+      },
+      {
+        "producer": "squidreef",
+        "atLevel": 7,
+        "cells": [
+          34,
+          40,
+          41
+        ]
+      },
+      {
+        "producer": "nestbeach",
+        "atLevel": 8,
+        "cells": [
+          35,
+          29,
+          23
+        ]
+      },
+      {
+        "producer": "dock",
+        "atLevel": 9,
+        "cells": [
+          37,
+          36,
+          30
+        ]
+      },
+      {
+        "producer": "glassbeach",
+        "atLevel": 10,
+        "cells": [
+          12,
+          18,
+          24
+        ]
+      },
+      {
+        "producer": "urchinrock",
+        "atLevel": 11,
+        "cells": [
+          6,
+          7,
+          13
+        ]
+      },
+      {
+        "producer": "mantadeep",
+        "atLevel": 12,
+        "cells": [
+          8,
+          14,
+          15
+        ]
       }
     ],
     "tapCost": 2,
@@ -572,7 +782,13 @@
       "chime",
       "prismv",
       "skynest",
-      "balloonc"
+      "balloonc",
+      "starling",
+      "satellite",
+      "nebula",
+      "starflower",
+      "planets",
+      "kite"
     ],
     "start": [
       {
@@ -666,6 +882,60 @@
           11,
           17,
           7
+        ]
+      },
+      {
+        "producer": "starden",
+        "atLevel": 7,
+        "cells": [
+          34,
+          40,
+          41
+        ]
+      },
+      {
+        "producer": "solarfarm",
+        "atLevel": 8,
+        "cells": [
+          35,
+          29,
+          23
+        ]
+      },
+      {
+        "producer": "nebulapool",
+        "atLevel": 9,
+        "cells": [
+          37,
+          36,
+          30
+        ]
+      },
+      {
+        "producer": "starbed",
+        "atLevel": 10,
+        "cells": [
+          12,
+          18,
+          24
+        ]
+      },
+      {
+        "producer": "gravwell",
+        "atLevel": 11,
+        "cells": [
+          6,
+          7,
+          13
+        ]
+      },
+      {
+        "producer": "kitepost",
+        "atLevel": 12,
+        "cells": [
+          8,
+          14,
+          15
         ]
       }
     ],

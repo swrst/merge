@@ -1,181 +1,158 @@
 # Merge Rocket — art brief
 
-Everything an art agent needs to produce the game's visuals, and everything the
-game will accept. There are **367 assets** listed in `art/manifest.csv`, each with
-its own finished prompt. This file is the style bible around them.
+Everything needed to produce the game's visuals, and everything the game will
+accept. There are **612 assets** listed in `art/manifest.csv`, each with its own
+finished prompt. This file is the style bible around them.
 
-Read `art/CATALOGUE.md` for the full merge catalogue — every chain, in order, with
-the name and tier of each item.
+`art/CATALOGUE.md` is the full merge catalogue: 504 items in 84 chains, every
+chain in order, by world.
 
 ---
 
 ## 1. The one-paragraph brief
 
-> A warm, sunny, hand-painted cartoon world seen from a slight top-down three-quarter
-> angle, in the manner of **Travel Town** and **Merge Mansion**. Objects are toys:
-> chunky, rounded, simplified, with no small fiddly detail. Every object wears the
-> same thick dark warm-brown contour and is lit by the same soft light from the
-> upper left, with a glossy highlight on its top surface and a soft shadow pooling
-> under it. Colours are saturated and friendly — sunlit greens, honey ambers, warm
-> tans, clean sky blues — never muddy, never neon. Nothing is photoreal, nothing is
-> flat vector clip art: the finish is painted, but clean.
+> **Travel Town, in space.** A bright, friendly mobile merge world of planets,
+> friendly aliens, minerals, crystals, rocket parts and space gardens. Objects
+> are chunky rounded toys with a soft, glossy, semi-3D painted finish. They are
+> seen from a slight top-down three-quarter angle and all lit by the same soft
+> warm light from the upper left, with a glossy highlight on top and a small soft
+> shadow underneath. Colours are saturated and cheerful, never muddy, never neon,
+> never gritty sci-fi. Nothing is photoreal, and nothing is flat vector clip art.
 
-That paragraph is the test. If a new asset can sit on a board beside the others and
-you cannot tell it was made separately, it passed.
+That paragraph is the test. If a new asset can sit on a board beside the others
+and you cannot tell it was made separately, it passes.
 
-## 2. The rules, in detail
+## 2. The rules
 
-**Angle.** Three-quarter from about 30° above, as if the object were sitting on a
-table in front of you. Not flat-on, not top-down. The same angle for everything, so
-a board of forty objects looks like one table.
+**Angle.** Three-quarter view from about 30° above, as if the object were sitting
+on a table. Use the same angle for everything.
 
-**Light.** One key light from the upper left, warm. The top and upper-left faces are
-brightest; the lower right falls into a deeper, *more saturated* version of the base
-colour — never grey, never black. A narrow bounce of light along the bottom edge
-keeps the object from looking stuck on. One soft white glossy highlight on the
-top-most curved surface.
+**Light.** One warm key light from the upper left. The shaded side is a deeper,
+richer version of the base colour, never grey or black. One soft white highlight
+goes on the top surface.
 
-**Contour.** A single thick dark warm-brown outline (≈ #41280f) around the whole
-silhouette, roughly 6px at 512×512, even weight all the way round. Interior lines,
-if any, are thinner and the same family of colour. No black.
+**Edge.** A thin, darker warm-brown edge line, as in Travel Town. Never a heavy
+black outline.
 
-**Shadow.** A soft elliptical contact shadow directly under the object, part of the
-sprite, about 60% of the object's width, low opacity. It sits on a tan tile, so
-tint it warm.
+**Shadow.** A small soft contact shadow directly under the object, as part of the
+sprite.
 
-**Silhouette.** This is the part that matters most. An item is seen at 60px on a
-tile next to six relatives from the same chain. A player must tell them apart by
-shape alone, at a glance, while scrolling. Within one chain each step should change
-the outline, not just add a detail: twig → branch → log → stack of planks, not four
-increasingly detailed sticks.
+**Silhouette.** This matters most. An item is seen at 60px next to its relatives.
+Each step of a chain must change the *outline*, not just add detail: twig →
+branch → log → stack of planks, not four increasingly detailed sticks.
 
-**Tier reads.** Chains climb, and the climb has to be visible:
+**Tier reads.** Chains run **4 to 8 steps**. However long the chain is, its
+first step is the plainest and its last is the crown. The prompt for each item
+already says which read it gets.
 
-| Tier | What it should look like |
+| Read | What it should look like |
 |---|---|
 | 1 | The smallest, plainest version. Tiny, humble, no decoration. |
 | 2 | A little bigger, a little tidier. Still found, not made. |
-| 3 | Clearly made rather than found: neat shape, one painted or metal detail. |
+| 3 | Clearly made rather than found: a neat shape and one painted or metal detail. |
 | 4 | Handsome: richer colour, a trim or a band, a faint sheen. |
 | 5 | Precious: fine detail, gold or gem accents, a soft glow around it. |
 | 6 | A showpiece: ornate, glowing, motes of light floating near it. |
 | 7 | The crown of the chain. A small monument. Radiant and unmistakable. |
 
-**Palette per world.** Each world has a key. Keep items inside their world's family.
+**World palettes.** Keep each item inside its world's colour family.
 
 | World | Mood | Key colours |
 |---|---|---|
-| Sunny Meadow | warm midday countryside | grass green, honey amber, warm tan, sky blue |
+| Sunny Meadow | warm midday, an Earth lookalike | grass green, honey amber, warm tan, sky blue |
 | Crater Camp | cold lilac moonlight | lilac, pale silver, slate blue, glowing cyan |
 | Ember Hollow | volcanic dusk | ember orange, magma red, obsidian purple-black, ash grey |
 | Tidal Shallows | bright shallow sea | turquoise, coral pink, pearl white, wet sand |
 | Aurora Reach | night sky and cloudtops | violet, aurora teal, starlight gold, cloud white |
 
-**Formats.** Items, producers, UI: **PNG, transparent, square, 512×512** (256 is
-acceptable, 512 gives headroom). Scenes: **WebP or PNG, 1086×1448 portrait, opaque**.
-Sprite sheets: PNG, transparent, frames in an even grid, read left-to-right then
-top-to-bottom.
-
-**Never.** No text or numbers baked into a sprite. No background, no card, no frame,
-no ground plane (except producers, which stand on their own mound). No drop shadow
-onto a backdrop. No watermark. No photoreal texture. No heavy noise or grain.
+**Never.** No text or numbers baked into a sprite. No background, card, frame
+or ground plane (producers are the exception: they stand on their own mound).
+No watermark. No photoreal texture. No heavy noise or grain.
 
 ## 3. What to produce
 
-`art/manifest.csv` has one row per asset: `path, kind, name, group, prompt`. The
-`path` is exactly where the file goes in the repo, and the filename **is** the id
-the game looks up — rename nothing.
+`art/manifest.csv` (and `art/manifest.json`) has one row per asset:
+`path, kind, name, group, batch, prompt, negative`. The `path` is exactly where
+the file goes, and the filename **is** the id the game looks up. Rename nothing.
 
 | Kind | Count | Goes in | Size |
 |---|---|---|---|
-| item | 286 | `src/sprites/items/<id>.png` | 512² transparent |
-| producer | 50 | `src/sprites/producers/<art>.png` | 512² transparent |
+| item | 504 | `src/sprites/items/<id>.png` | 512² transparent (256² accepted) |
+| producer | 77 | `src/sprites/producers/<art>.png` | 512² transparent |
 | scene | 6 | `src/sprites/scenes/<world>.webp` | 1086×1448 opaque |
-| ui | 19 | `src/sprites/ui/<name>.png` | as noted per row |
-| fx | 6 | `src/sprites/fx/<name>.png` | sprite sheets |
+| ui | 19 | `src/sprites/ui/<name>.png` | as the row says |
+| fx | 6 | `src/sprites/fx/<name>.png` | sprite sheets, transparent |
 
-### Order of work
+### Order of work — one batch at a time
 
-1. **Six scenes.** They set the light and the palette for everything else, and they
-   change the look of the game more than anything else on this list.
-2. **The nineteen UI pieces.** Panel, buttons, tiles, icons, order card, plinth.
-   These are what the player's eye sits on all the time.
-3. **The ten starter producers** (`tree`, `rocks`, `bush`, `well`, `geyser`,
-   `glowpod`, `lavavent`, `shroomlog`, `shellbed`, `kelpbed`, `cloudbank`,
-   `auroraloom`), then the rest.
-4. **Items, chain by chain, in tier order** — a whole chain at a time, never
-   scattered, because the climb only works if the seven were drawn together.
-   Start with Sunny Meadow's seven chains; that is the first hour of the game.
-5. **The six sprite sheets** last.
+1. **`scenes`** — the five camps and the lab. They set the light and palette for
+   everything else.
+2. **`ui`** — panel, buttons, tiles, icons, order card, plinth.
+3. **`starters`** — the two producers each world opens with, plus the Rocket
+   Wreck.
+4. **`chain-<key>`** — items, one whole chain per batch, world by world, starting
+   with Sunny Meadow (`chain-wood`, `chain-stone`, …). Paint a whole chain in one
+   sitting with one style reference, because the climb only works if its steps
+   were made together.
+5. **`producers`** — the rest of the producers.
+6. **`fx`** — the six sprite sheets.
 
-Partial delivery is fine and expected. Anything not painted keeps its generated
-drawing, and the two sit together without looking broken because the generated art
-already wears the same contour and the same light.
+Partial delivery is fine. Anything not painted keeps its generated drawing.
 
-### Consistency across a batch
+## 4. Making the images
 
-Paint a chain in one pass with the same seed/style reference, and put the whole
-chain on one sheet to check the climb before exporting the pieces. The single most
-common failure is tier 4 looking better than tier 6.
-
-## 4. Feeding it back in
-
-Drop the files into the paths in the manifest and reload. That is the whole
-integration — no code change, no manifest to update, no content rebuild. The build
-inlines them into the single-file `MergeRocket.html`, which is why they live under
-`src/` and not `public/`.
+The prompts are written to be pasted into an image model as they are: Midjourney,
+Stable Diffusion/Flux, GPT-image, or similar.
 
 ```bash
-npm run art             # what is painted, what is still generated
-npm run art -- --todo   # just the missing paths, one per line
-npm run art:manifest    # rebuild manifest.csv / manifest.json / CATALOGUE.md
-npm run dev             # look at it
-npm test                # 136 checks, including that every item can still be drawn
+npm run art                               # progress, batch by batch
+npm run art -- --batch chain-wood         # that batch's prompts and file names
+npm run art -- --batch scenes --missing   # only what is still to do
+```
+
+- **One chain, one reference.** Make the first image of a chain, then use it as
+  the style/image reference for the rest (`--sref` in Midjourney, IP-Adapter in
+  SD, the reference image in GPT-image). Once the first batches look right, use
+  one approved item as a house reference for everything.
+- **Transparency.** GPT-image can output a transparent background directly.
+  With other models, generate on a plain flat light background and cut it out
+  (rembg, remove.bg, Photoshop). Keep the soft contact shadow when you cut.
+- **Scenes must follow the layout.** The game stands the rocket, the lab, the
+  Heart and six producers on fixed spots in the picture (listed in each scene
+  prompt). Use `art/guides/camp_layout.png` (or `lab_layout.png`) as the
+  img2img / ControlNet composition input, and `src/scenes/camp_earth.webp` as
+  the style reference. Export as WebP, 1086×1448.
+- **Size.** Export items and producers at exactly 512×512, object centred and
+  filling about 80% of the frame.
+
+## 5. Feeding it back in
+
+Drop the files onto their paths and reload. That is the whole integration: no
+code change, no manifest update, no content rebuild. The build inlines the files
+into the single-file `MergeRocket.html`, which is why they live under `src/`.
+
+```bash
+npm run dev             # the game, and the check sheet at /art/sheet.html
+npm test                # the full playtest
 npm run build           # dist/ + a fresh single-file MergeRocket.html
 ```
 
-## 5. The master prompt
+The catalogue itself is authored in `scripts/content/` (chains, producers,
+worlds). After editing it, run `npm run content && npm run art:manifest`.
 
-For an agent that takes one system prompt and then a list of jobs:
+## 6. Acceptance check
 
-> You are producing 2D art for a mobile merge game called Merge Rocket. The house
-> style is warm hand-painted cartoon in the manner of Travel Town and Merge
-> Mansion: objects are chunky simplified toys seen three-quarter from about 30°
-> above, each with a single thick dark warm-brown contour (#41280f) of even weight,
-> lit by one soft warm key light from the upper left, a glossy white highlight on
-> the top surface, the shaded side a deeper *more saturated* version of the base
-> colour rather than grey, a narrow bounce of light along the bottom edge, and a
-> soft warm elliptical contact shadow beneath. Saturated friendly colours, clean
-> painted finish, no photorealism, no flat vector clip art, no small fiddly detail,
-> no text, no background, no frame, no watermark.
->
-> Every asset is delivered as a PNG with a transparent background, square, 512×512,
-> the object centred and filling about 80% of the frame, unless the job says
-> otherwise. The object must be readable as a 60-pixel silhouette.
->
-> I will give you jobs one per line as `path | name | prompt`. Produce exactly one
-> image per job and name the file after the final path segment, unchanged. If a job
-> belongs to a merge chain it will say which step it is; the chain must climb
-> visibly from plain and small to ornate and radiant, and each step must change the
-> silhouette, not just add detail.
+Open `/art/sheet.html?batch=<name>` with `npm run dev` running. It lays the
+batch on the board-tile colour at full size and at 60px, lays each chain out in
+order, marks where the game stands things on each scene, and flags files that
+are missing, the wrong size, or not transparent at the corners. A batch passes
+when:
 
-Then feed it rows from `art/manifest.csv`.
-
-## 6. Handing it to an art agent
-
-`art/AGENT-MESSAGE.md` is the whole brief as one message to paste into an agent
-that has access to this repo: what the game is, the style, the formats, the batch
-order, how to deliver (one branch and one PR per batch, image files only, never
-touch code or content) and what to check before each PR.
-
-## 7. Acceptance check
-
-Before a batch is accepted:
-
-1. Put all of it on one sheet against `#e9cd97` (the board tile colour). Anything
-   that disappears into the background, or screams out of it, fails.
-2. Scale the sheet to 60px per item. Anything you cannot name at that size fails.
-3. Lay each chain out in order. If the climb is not obvious without the names, the
-   chain fails as a chain even if every item is good on its own.
-4. Check the contour weight and the light direction across the batch. One asset lit
+1. Nothing disappears into the `#e9cd97` tile colour or screams out of it.
+2. Every item can be named at 60px.
+3. Each chain's climb is obvious without the names, and the last step is clearly
+   the best. The most common failure is a middle step looking better than the
+   crown.
+4. Angle, light direction and edge weight match across the batch. One asset lit
    from the right is worse than ten mediocre assets lit the same way.
+5. On scenes, every red anchor dot lands on a plinth or pad.
