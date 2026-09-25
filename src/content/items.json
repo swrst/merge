@@ -74,6 +74,20 @@
       "accent": "leaf"
     }
   },
+  "woodrocket": {
+    "name": "Timber Rocket",
+    "chain": "wood",
+    "tier": 8,
+    "sell": 980,
+    "art": {
+      "shape": "tower",
+      "mat": "wood",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
   "pebble": {
     "name": "Pebble",
     "chain": "stone",
@@ -213,6 +227,20 @@
       "accent": "cherry"
     }
   },
+  "jamfactory": {
+    "name": "Jam Kitchen",
+    "chain": "berry",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "house",
+      "mat": "cream",
+      "accent": "berry",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
   "dew": {
     "name": "Dewdrop",
     "chain": "water",
@@ -275,6 +303,20 @@
       "shape": "arch",
       "mat": "stone",
       "accent": "water"
+    }
+  },
+  "watertower": {
+    "name": "Water Tower",
+    "chain": "water",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "tower",
+      "mat": "wood",
+      "accent": "water",
+      "deco": [
+        "glow"
+      ]
     }
   },
   "grass": {
@@ -404,6 +446,20 @@
       "accent": "gold"
     }
   },
+  "flowerarch": {
+    "name": "Blossom Arch",
+    "chain": "flower",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "arch",
+      "mat": "rose",
+      "accent": "leaf",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
   "nectar": {
     "name": "Nectar Drop",
     "chain": "honey",
@@ -463,6 +519,20 @@
     "sell": 185,
     "art": {
       "shape": "orb",
+      "mat": "honey",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "honeypalace": {
+    "name": "Honey Palace",
+    "chain": "honey",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "tower",
       "mat": "honey",
       "accent": "gold",
       "deco": [
@@ -585,6 +655,20 @@
       "shape": "scroll",
       "mat": "rose",
       "accent": "gold"
+    }
+  },
+  "spacesuit": {
+    "name": "Patchwork Spacesuit",
+    "chain": "cloth",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "cloth",
+      "mat": "cream",
+      "accent": "sapphire",
+      "deco": [
+        "glow"
+      ]
     }
   },
   "down": {
@@ -776,6 +860,242 @@
       ]
     }
   },
+  "vegseed": {
+    "name": "Veggie Seed",
+    "chain": "veggie",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "seed",
+      "mat": "clay"
+    }
+  },
+  "seedling": {
+    "name": "Seedling",
+    "chain": "veggie",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "sprout",
+      "mat": "leaf"
+    }
+  },
+  "carrot": {
+    "name": "Carrot",
+    "chain": "veggie",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "fruit",
+      "mat": "peach",
+      "accent": "leaf"
+    }
+  },
+  "vegbundle": {
+    "name": "Veggie Bundle",
+    "chain": "veggie",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "grain",
+      "mat": "peach",
+      "accent": "leaf"
+    }
+  },
+  "vegcrate": {
+    "name": "Veggie Crate",
+    "chain": "veggie",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "crate",
+      "mat": "wood",
+      "accent": "peach"
+    }
+  },
+  "vegstall": {
+    "name": "Market Stall",
+    "chain": "veggie",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "cloth",
+      "accent": "peach"
+    }
+  },
+  "giantpumpkin": {
+    "name": "Prize Pumpkin",
+    "chain": "veggie",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "fruit",
+      "mat": "peach",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "lenschip": {
+    "name": "Lens Chip",
+    "chain": "stargaze",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "ice",
+      "mat": "glass"
+    }
+  },
+  "lens": {
+    "name": "Lens",
+    "chain": "stargaze",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "gem",
+      "mat": "glass",
+      "accent": "copper"
+    }
+  },
+  "spyglass": {
+    "name": "Spyglass",
+    "chain": "stargaze",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "bottle",
+      "mat": "copper",
+      "accent": "glass"
+    }
+  },
+  "telescope": {
+    "name": "Telescope",
+    "chain": "stargaze",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "lantern",
+      "mat": "copper",
+      "accent": "sapphire"
+    }
+  },
+  "observatory": {
+    "name": "Observatory",
+    "chain": "stargaze",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "house",
+      "mat": "cream",
+      "accent": "sapphire",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "planetarium": {
+    "name": "Planetarium",
+    "chain": "stargaze",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "sapphire",
+      "accent": "star",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "oddegg": {
+    "name": "Odd Egg",
+    "chain": "visitor",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "egg",
+      "mat": "mint",
+      "accent": "star"
+    }
+  },
+  "blinky": {
+    "name": "Blinky",
+    "chain": "visitor",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "slime",
+      "mat": "mint"
+    }
+  },
+  "alienkid": {
+    "name": "Little Alien",
+    "chain": "visitor",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "slime",
+      "mat": "mint",
+      "accent": "lilac"
+    }
+  },
+  "alienexplorer": {
+    "name": "Alien Explorer",
+    "chain": "visitor",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "slime",
+      "mat": "mint",
+      "accent": "steel"
+    }
+  },
+  "saucer": {
+    "name": "Flying Saucer",
+    "chain": "visitor",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "planet",
+      "mat": "steel",
+      "accent": "glow",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "alienfamily": {
+    "name": "Saucer Family",
+    "chain": "visitor",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "planet",
+      "mat": "silver",
+      "accent": "mint",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "mothership": {
+    "name": "Mothership",
+    "chain": "visitor",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "planet",
+      "mat": "silver",
+      "accent": "aurora",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
   "mrock": {
     "name": "Moon Rock",
     "chain": "moon",
@@ -842,6 +1162,35 @@
       "shape": "mask",
       "mat": "moon",
       "accent": "silver"
+    }
+  },
+  "moonbase": {
+    "name": "Moon Outpost",
+    "chain": "moon",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "house",
+      "mat": "silver",
+      "accent": "moon",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "moonpalace": {
+    "name": "Lunar Palace",
+    "chain": "moon",
+    "tier": 8,
+    "sell": 980,
+    "art": {
+      "shape": "tower",
+      "mat": "moon",
+      "accent": "star",
+      "deco": [
+        "glow",
+        "motes"
+      ]
     }
   },
   "spore": {
@@ -965,6 +1314,20 @@
       "accent": "moon"
     }
   },
+  "moontown": {
+    "name": "Dome Town",
+    "chain": "dust",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "slate",
+      "accent": "glow",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
   "frostchip": {
     "name": "Frost Chip",
     "chain": "ice",
@@ -1029,6 +1392,20 @@
       "accent": "frost"
     }
   },
+  "icepalace": {
+    "name": "Frost Citadel",
+    "chain": "ice",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "tower",
+      "mat": "ice",
+      "accent": "aurora",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
   "shardlet": {
     "name": "Crystal Chip",
     "chain": "crystal",
@@ -1083,6 +1460,35 @@
       "shape": "tower",
       "mat": "crystal",
       "accent": "aurora"
+    }
+  },
+  "prismgarden": {
+    "name": "Crystal Garden",
+    "chain": "crystal",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "crystal",
+      "accent": "aurora",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "prismthrone": {
+    "name": "Crystal Throne",
+    "chain": "crystal",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "arch",
+      "mat": "crystal",
+      "accent": "gold",
+      "deco": [
+        "glow",
+        "motes"
+      ]
     }
   },
   "wick": {
@@ -1141,6 +1547,21 @@
       "accent": "flame"
     }
   },
+  "starbeacon": {
+    "name": "Star Beacon",
+    "chain": "lantern",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "tower",
+      "mat": "gold",
+      "accent": "star",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
   "silverore": {
     "name": "Silver Ore",
     "chain": "silver",
@@ -1191,6 +1612,20 @@
       "shape": "crown",
       "mat": "silver",
       "accent": "moon"
+    }
+  },
+  "silverthrone": {
+    "name": "Silver Throne",
+    "chain": "silver",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "arch",
+      "mat": "silver",
+      "accent": "amethyst",
+      "deco": [
+        "glow"
+      ]
     }
   },
   "cometdust": {
@@ -1314,6 +1749,511 @@
       ]
     }
   },
+  "wobbleegg": {
+    "name": "Wobble Egg",
+    "chain": "moonpup",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "egg",
+      "mat": "lilac",
+      "accent": "moon"
+    }
+  },
+  "blip": {
+    "name": "Blip",
+    "chain": "moonpup",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "slime",
+      "mat": "lilac"
+    }
+  },
+  "moonpup": {
+    "name": "Moon Pup",
+    "chain": "moonpup",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "slime",
+      "mat": "lilac",
+      "accent": "silver"
+    }
+  },
+  "hoppup": {
+    "name": "Hop Pup",
+    "chain": "moonpup",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "slime",
+      "mat": "lilac",
+      "accent": "sapphire"
+    }
+  },
+  "craterhound": {
+    "name": "Crater Hound",
+    "chain": "moonpup",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "slime",
+      "mat": "moon",
+      "accent": "sapphire"
+    }
+  },
+  "starhound": {
+    "name": "Star Hound",
+    "chain": "moonpup",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "slime",
+      "mat": "dusk",
+      "accent": "star",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "moonguardian": {
+    "name": "Moon Guardian",
+    "chain": "moonpup",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "slime",
+      "mat": "moon",
+      "accent": "gold",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "screw": {
+    "name": "Screw",
+    "chain": "rover",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "cog",
+      "mat": "steel"
+    }
+  },
+  "wheel": {
+    "name": "Rover Wheel",
+    "chain": "rover",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "cog",
+      "mat": "steel",
+      "accent": "slate"
+    }
+  },
+  "axle": {
+    "name": "Wheel Axle",
+    "chain": "rover",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "plank",
+      "mat": "steel",
+      "accent": "slate"
+    }
+  },
+  "toyrover": {
+    "name": "Little Rover",
+    "chain": "rover",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "crate",
+      "mat": "steel",
+      "accent": "sapphire"
+    }
+  },
+  "moonbuggy": {
+    "name": "Moon Buggy",
+    "chain": "rover",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "boat",
+      "mat": "silver",
+      "accent": "sapphire"
+    }
+  },
+  "bigrover": {
+    "name": "Six-Wheel Rover",
+    "chain": "rover",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "crate",
+      "mat": "silver",
+      "accent": "topaz"
+    }
+  },
+  "roverbase": {
+    "name": "Rover Garage",
+    "chain": "rover",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "house",
+      "mat": "silver",
+      "accent": "sapphire",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "launchpad": {
+    "name": "Launch Pad",
+    "chain": "rover",
+    "tier": 8,
+    "sell": 980,
+    "art": {
+      "shape": "tower",
+      "mat": "silver",
+      "accent": "flame",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "gaswisp": {
+    "name": "Gas Wisp",
+    "chain": "helium",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "cloud",
+      "mat": "glow"
+    }
+  },
+  "gasbubble": {
+    "name": "Gas Bubble",
+    "chain": "helium",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "bubble",
+      "mat": "glow",
+      "accent": "lilac"
+    }
+  },
+  "gasflask": {
+    "name": "Gas Flask",
+    "chain": "helium",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "flask",
+      "mat": "glass",
+      "accent": "glow"
+    }
+  },
+  "gascan": {
+    "name": "Gas Canister",
+    "chain": "helium",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "bottle",
+      "mat": "steel",
+      "accent": "glow"
+    }
+  },
+  "gastank": {
+    "name": "Helium Tank",
+    "chain": "helium",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "barrel",
+      "mat": "silver",
+      "accent": "glow"
+    }
+  },
+  "fusioncell": {
+    "name": "Fusion Cell",
+    "chain": "helium",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "orb",
+      "mat": "glow",
+      "accent": "aurora",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "fusionreactor": {
+    "name": "Fusion Reactor",
+    "chain": "helium",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "tower",
+      "mat": "silver",
+      "accent": "aurora",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "spacegrit": {
+    "name": "Space Grit",
+    "chain": "meteorite",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "pebble",
+      "mat": "iron"
+    }
+  },
+  "meteorite": {
+    "name": "Meteorite",
+    "chain": "meteorite",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "rock",
+      "mat": "iron",
+      "accent": "slate"
+    }
+  },
+  "ironmeteor": {
+    "name": "Iron Meteorite",
+    "chain": "meteorite",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "ore",
+      "mat": "iron",
+      "accent": "silver"
+    }
+  },
+  "pallasite": {
+    "name": "Pallasite",
+    "chain": "meteorite",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "geode",
+      "mat": "iron",
+      "accent": "jade"
+    }
+  },
+  "meteorgeode": {
+    "name": "Star Geode",
+    "chain": "meteorite",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "geode",
+      "mat": "dusk",
+      "accent": "star",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "starmetal": {
+    "name": "Star Metal",
+    "chain": "meteorite",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "ingot",
+      "mat": "silver",
+      "accent": "star",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "meteormonument": {
+    "name": "Skyfall Stone",
+    "chain": "meteorite",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "boulder",
+      "mat": "iron",
+      "accent": "star",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "antwire": {
+    "name": "Antenna Wire",
+    "chain": "dish",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "rope",
+      "mat": "copper"
+    }
+  },
+  "antenna": {
+    "name": "Antenna",
+    "chain": "dish",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "key",
+      "mat": "silver",
+      "accent": "copper"
+    }
+  },
+  "minidish": {
+    "name": "Mini Dish",
+    "chain": "dish",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "compass",
+      "mat": "silver"
+    }
+  },
+  "radar": {
+    "name": "Radar Dish",
+    "chain": "dish",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "compass",
+      "mat": "silver",
+      "accent": "sapphire"
+    }
+  },
+  "signaltower": {
+    "name": "Signal Tower",
+    "chain": "dish",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "tower",
+      "mat": "silver",
+      "accent": "sapphire",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "deeparray": {
+    "name": "Deep Space Array",
+    "chain": "dish",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "tower",
+      "mat": "silver",
+      "accent": "aurora",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "starhorn": {
+    "name": "Listening Spire",
+    "chain": "dish",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "tower",
+      "mat": "gold",
+      "accent": "aurora",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "moonseed": {
+    "name": "Moon Seed",
+    "chain": "moonmelon",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "seed",
+      "mat": "lilac"
+    }
+  },
+  "moonsprout": {
+    "name": "Moon Sprout",
+    "chain": "moonmelon",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "sprout",
+      "mat": "mint",
+      "accent": "lilac"
+    }
+  },
+  "moonmelon": {
+    "name": "Moon Melon",
+    "chain": "moonmelon",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "fruit",
+      "mat": "mint",
+      "accent": "lilac"
+    }
+  },
+  "meloncrate": {
+    "name": "Melon Crate",
+    "chain": "moonmelon",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "crate",
+      "mat": "steel",
+      "accent": "mint"
+    }
+  },
+  "moondome": {
+    "name": "Farm Dome",
+    "chain": "moonmelon",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "house",
+      "mat": "glass",
+      "accent": "mint",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "moonfarm": {
+    "name": "Crater Farmstead",
+    "chain": "moonmelon",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "mint",
+      "accent": "lilac",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
   "ember": {
     "name": "Ember",
     "chain": "magma",
@@ -1380,6 +2320,35 @@
       "shape": "anvil",
       "mat": "obsidian",
       "accent": "flame"
+    }
+  },
+  "toyvolcano": {
+    "name": "Little Volcano",
+    "chain": "magma",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "boulder",
+      "mat": "obsidian",
+      "accent": "magma",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "sunengine": {
+    "name": "Sun Engine",
+    "chain": "magma",
+    "tier": 8,
+    "sell": 980,
+    "art": {
+      "shape": "cog",
+      "mat": "gold",
+      "accent": "flame",
+      "deco": [
+        "glow",
+        "motes"
+      ]
     }
   },
   "sporecap": {
@@ -1450,6 +2419,20 @@
       "accent": "glow"
     }
   },
+  "shroomcastle": {
+    "name": "Shroom Castle",
+    "chain": "shroom",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "tower",
+      "mat": "fungus",
+      "accent": "ember",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
   "ironore": {
     "name": "Iron Ore",
     "chain": "iron",
@@ -1500,6 +2483,31 @@
       "shape": "crown",
       "mat": "steel",
       "accent": "rust"
+    }
+  },
+  "ironbot": {
+    "name": "Iron Bot",
+    "chain": "iron",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "totem",
+      "mat": "iron",
+      "accent": "flame"
+    }
+  },
+  "ironmech": {
+    "name": "Great Mech",
+    "chain": "iron",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "totem",
+      "mat": "steel",
+      "accent": "flame",
+      "deco": [
+        "glow"
+      ]
     }
   },
   "obchip": {
@@ -1559,6 +2567,21 @@
       "accent": "gold"
     }
   },
+  "obcitadel": {
+    "name": "Obsidian Citadel",
+    "chain": "obsid",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "tower",
+      "mat": "obsidian",
+      "accent": "ember",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
   "sandpinch": {
     "name": "Hot Sand",
     "chain": "glassw",
@@ -1611,6 +2634,35 @@
       "shape": "flower",
       "mat": "glass",
       "accent": "aurora"
+    }
+  },
+  "glassdome": {
+    "name": "Glass Dome",
+    "chain": "glassw",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "glass",
+      "accent": "aurora",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "glasspalace": {
+    "name": "Glass Palace",
+    "chain": "glassw",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "tower",
+      "mat": "glass",
+      "accent": "aurora",
+      "deco": [
+        "glow",
+        "motes"
+      ]
     }
   },
   "coallump": {
@@ -1670,6 +2722,21 @@
       "accent": "flame"
     }
   },
+  "foundry": {
+    "name": "Star Foundry",
+    "chain": "forge",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "iron",
+      "accent": "star",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
   "pepperpod": {
     "name": "Pepper Pod",
     "chain": "spice",
@@ -1724,6 +2791,20 @@
       "accent": "flame"
     }
   },
+  "spicebazaar": {
+    "name": "Spice Bazaar",
+    "chain": "spice",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "cloth",
+      "accent": "flame",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
   "copperore": {
     "name": "Copper Ore",
     "chain": "copper",
@@ -1774,6 +2855,50 @@
       "shape": "cog",
       "mat": "copper",
       "accent": "gold"
+    }
+  },
+  "copperclock": {
+    "name": "Copper Clock",
+    "chain": "copper",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "compass",
+      "mat": "copper",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "automaton": {
+    "name": "Copper Automaton",
+    "chain": "copper",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "totem",
+      "mat": "copper",
+      "accent": "gold",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "clocktower": {
+    "name": "Clockwork Tower",
+    "chain": "copper",
+    "tier": 8,
+    "sell": 980,
+    "art": {
+      "shape": "tower",
+      "mat": "copper",
+      "accent": "gold",
+      "deco": [
+        "glow",
+        "motes"
+      ]
     }
   },
   "ashfeather": {
@@ -1837,6 +2962,448 @@
       "accent": "glow",
       "deco": [
         "glow"
+      ]
+    }
+  },
+  "warmegg": {
+    "name": "Warm Egg",
+    "chain": "salamander",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "egg",
+      "mat": "ember"
+    }
+  },
+  "newt": {
+    "name": "Flicker Newt",
+    "chain": "salamander",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "fish",
+      "mat": "ember",
+      "accent": "flame"
+    }
+  },
+  "salamander": {
+    "name": "Salamander",
+    "chain": "salamander",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "fish",
+      "mat": "flame",
+      "accent": "magma"
+    }
+  },
+  "lavalizard": {
+    "name": "Lava Lizard",
+    "chain": "salamander",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "fish",
+      "mat": "magma",
+      "accent": "obsidian"
+    }
+  },
+  "magmadrake": {
+    "name": "Magma Drake",
+    "chain": "salamander",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "bird",
+      "mat": "magma",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "emberwyrm": {
+    "name": "Ember Wyrm",
+    "chain": "salamander",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "bird",
+      "mat": "flame",
+      "accent": "gold",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "basaltchip": {
+    "name": "Basalt Chip",
+    "chain": "basalt",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "pebble",
+      "mat": "slate"
+    }
+  },
+  "basaltblock": {
+    "name": "Basalt Block",
+    "chain": "basalt",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "rock",
+      "mat": "slate",
+      "accent": "obsidian"
+    }
+  },
+  "hexcolumn": {
+    "name": "Hex Column",
+    "chain": "basalt",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "prism",
+      "mat": "slate",
+      "accent": "obsidian"
+    }
+  },
+  "columnstack": {
+    "name": "Column Stack",
+    "chain": "basalt",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "prism",
+      "mat": "slate",
+      "accent": "ember"
+    }
+  },
+  "basaltarch": {
+    "name": "Basalt Gate",
+    "chain": "basalt",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "arch",
+      "mat": "slate",
+      "accent": "ember",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "causeway": {
+    "name": "Giant's Steps",
+    "chain": "basalt",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "tower",
+      "mat": "slate",
+      "accent": "flame",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "basaltcrown": {
+    "name": "Basalt Crown",
+    "chain": "basalt",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "crown",
+      "mat": "obsidian",
+      "accent": "gold",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "sulfurdust": {
+    "name": "Sulfur Dust",
+    "chain": "sulfur",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "pebble",
+      "mat": "topaz"
+    }
+  },
+  "sulfurcrystal": {
+    "name": "Sulfur Crystal",
+    "chain": "sulfur",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "crystal",
+      "mat": "topaz"
+    }
+  },
+  "sulfurcluster": {
+    "name": "Sulfur Cluster",
+    "chain": "sulfur",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "geode",
+      "mat": "topaz",
+      "accent": "obsidian"
+    }
+  },
+  "brimstone": {
+    "name": "Brimstone Heart",
+    "chain": "sulfur",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "gem",
+      "mat": "topaz",
+      "accent": "flame",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "steampuff": {
+    "name": "Steam Puff",
+    "chain": "steam",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "cloud",
+      "mat": "smoke"
+    }
+  },
+  "steampipe": {
+    "name": "Steam Pipe",
+    "chain": "steam",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "plank",
+      "mat": "copper",
+      "accent": "smoke"
+    }
+  },
+  "valve": {
+    "name": "Pressure Valve",
+    "chain": "steam",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "cog",
+      "mat": "copper",
+      "accent": "ruby"
+    }
+  },
+  "boiler": {
+    "name": "Boiler",
+    "chain": "steam",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "barrel",
+      "mat": "copper",
+      "accent": "flame"
+    }
+  },
+  "steamengine": {
+    "name": "Steam Engine",
+    "chain": "steam",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "cog",
+      "mat": "iron",
+      "accent": "copper"
+    }
+  },
+  "geoplant": {
+    "name": "Geothermal Plant",
+    "chain": "steam",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "iron",
+      "accent": "flame",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "steamtitan": {
+    "name": "Steam Titan",
+    "chain": "steam",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "totem",
+      "mat": "copper",
+      "accent": "flame",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "charseed": {
+    "name": "Char Seed",
+    "chain": "emberfruit",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "seed",
+      "mat": "coal",
+      "accent": "ember"
+    }
+  },
+  "embersprout": {
+    "name": "Ember Sprout",
+    "chain": "emberfruit",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "sprout",
+      "mat": "ember"
+    }
+  },
+  "firefruit": {
+    "name": "Fire Fruit",
+    "chain": "emberfruit",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "fruit",
+      "mat": "flame",
+      "accent": "magma"
+    }
+  },
+  "fruitbasket": {
+    "name": "Fire Fruit Basket",
+    "chain": "emberfruit",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "basket",
+      "mat": "straw",
+      "accent": "flame"
+    }
+  },
+  "embertree": {
+    "name": "Ember Tree",
+    "chain": "emberfruit",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "tree",
+      "mat": "obsidian",
+      "accent": "flame",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "embergrove": {
+    "name": "Ember Grove",
+    "chain": "emberfruit",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "tree",
+      "mat": "flame",
+      "accent": "gold",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "redchip": {
+    "name": "Red Chip",
+    "chain": "rubyc",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "pebble",
+      "mat": "ruby"
+    }
+  },
+  "rubyshard": {
+    "name": "Ruby Shard",
+    "chain": "rubyc",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "crystal",
+      "mat": "ruby"
+    }
+  },
+  "cutruby": {
+    "name": "Cut Ruby",
+    "chain": "rubyc",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "gem",
+      "mat": "ruby"
+    }
+  },
+  "rubyring": {
+    "name": "Ruby Ring",
+    "chain": "rubyc",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "ring",
+      "mat": "gold",
+      "accent": "ruby"
+    }
+  },
+  "rubyscepter": {
+    "name": "Ruby Sceptre",
+    "chain": "rubyc",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "key",
+      "mat": "gold",
+      "accent": "ruby",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "rubycrown": {
+    "name": "Ruby Crown",
+    "chain": "rubyc",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "crown",
+      "mat": "gold",
+      "accent": "ruby",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "rubyidol": {
+    "name": "Ruby Idol",
+    "chain": "rubyc",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "mask",
+      "mat": "ruby",
+      "accent": "gold",
+      "deco": [
+        "glow",
+        "motes"
       ]
     }
   },
@@ -1904,6 +3471,21 @@
       "accent": "coral"
     }
   },
+  "shellpalace": {
+    "name": "Shell Palace",
+    "chain": "shellc",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "tower",
+      "mat": "pearl",
+      "accent": "coral",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
   "kelpleaf": {
     "name": "Kelp Leaf",
     "chain": "kelp",
@@ -1968,6 +3550,20 @@
       "accent": "glow"
     }
   },
+  "kelpcathedral": {
+    "name": "Kelp Cathedral",
+    "chain": "kelp",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "tower",
+      "mat": "kelp",
+      "accent": "glow",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
   "grit": {
     "name": "Grain of Grit",
     "chain": "pearlc",
@@ -2023,6 +3619,35 @@
       "accent": "silver"
     }
   },
+  "pearlorb": {
+    "name": "Pearl Orb",
+    "chain": "pearlc",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "orb",
+      "mat": "pearl",
+      "accent": "aurora",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "pearlpalace": {
+    "name": "Pearl Palace",
+    "chain": "pearlc",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "tower",
+      "mat": "pearl",
+      "accent": "coral",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
   "coralbud": {
     "name": "Coral Bud",
     "chain": "coralc",
@@ -2074,6 +3699,35 @@
       "shape": "tower",
       "mat": "rose",
       "accent": "pearl"
+    }
+  },
+  "coralcity": {
+    "name": "Coral City",
+    "chain": "coralc",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "coral",
+      "accent": "pearl",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "reefcrown": {
+    "name": "Reef Crown",
+    "chain": "coralc",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "crown",
+      "mat": "coral",
+      "accent": "pearl",
+      "deco": [
+        "glow",
+        "motes"
+      ]
     }
   },
   "minnow": {
@@ -2128,6 +3782,20 @@
       "shape": "soup",
       "mat": "shell",
       "accent": "mint"
+    }
+  },
+  "fishhall": {
+    "name": "Harbour Market",
+    "chain": "fishc",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "shell",
+      "accent": "sapphire",
+      "deco": [
+        "glow"
+      ]
     }
   },
   "bubblet": {
@@ -2244,6 +3912,21 @@
       "accent": "aurora"
     }
   },
+  "saltlight": {
+    "name": "Salt Lighthouse",
+    "chain": "salt",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "tower",
+      "mat": "cream",
+      "accent": "aurora",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
   "driftbit": {
     "name": "Driftwood Bit",
     "chain": "sunkn",
@@ -2300,6 +3983,35 @@
       "shape": "mask",
       "mat": "jade",
       "accent": "gold"
+    }
+  },
+  "galleon": {
+    "name": "Sunken Galleon",
+    "chain": "sunkn",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "boat",
+      "mat": "bark",
+      "accent": "kelp",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "sunkencity": {
+    "name": "Drowned City",
+    "chain": "sunkn",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "tower",
+      "mat": "jade",
+      "accent": "pearl",
+      "deco": [
+        "glow",
+        "motes"
+      ]
     }
   },
   "glowplankton": {
@@ -2371,6 +4083,396 @@
       ]
     }
   },
+  "bubbleegg": {
+    "name": "Bubble Egg",
+    "chain": "squid",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "egg",
+      "mat": "water",
+      "accent": "coral"
+    }
+  },
+  "squidlet": {
+    "name": "Squidlet",
+    "chain": "squid",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "slime",
+      "mat": "coral"
+    }
+  },
+  "tentapal": {
+    "name": "Tentacle Pal",
+    "chain": "squid",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "slime",
+      "mat": "coral",
+      "accent": "mint"
+    }
+  },
+  "reefsquid": {
+    "name": "Reef Squid",
+    "chain": "squid",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "slime",
+      "mat": "rose",
+      "accent": "coral"
+    }
+  },
+  "glowocto": {
+    "name": "Glow Octo",
+    "chain": "squid",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "slime",
+      "mat": "lilac",
+      "accent": "glow",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "krakenpal": {
+    "name": "Kraken Pal",
+    "chain": "squid",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "slime",
+      "mat": "deepsea",
+      "accent": "coral",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "tidekraken": {
+    "name": "Tide Kraken",
+    "chain": "squid",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "slime",
+      "mat": "deepsea",
+      "accent": "pearl",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "turtleegg": {
+    "name": "Turtle Egg",
+    "chain": "turtle",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "egg",
+      "mat": "cream"
+    }
+  },
+  "hatchling": {
+    "name": "Hatchling",
+    "chain": "turtle",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "fish",
+      "mat": "jade"
+    }
+  },
+  "seaturtle": {
+    "name": "Sea Turtle",
+    "chain": "turtle",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "fish",
+      "mat": "jade",
+      "accent": "sand"
+    }
+  },
+  "islandturtle": {
+    "name": "Island Turtle",
+    "chain": "turtle",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "house",
+      "mat": "jade",
+      "accent": "leaf",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "knot": {
+    "name": "Rope Knot",
+    "chain": "harbour",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "rope",
+      "mat": "rope"
+    }
+  },
+  "float": {
+    "name": "Net Float",
+    "chain": "harbour",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "bubble",
+      "mat": "glass",
+      "accent": "rope"
+    }
+  },
+  "buoy": {
+    "name": "Buoy",
+    "chain": "harbour",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "bell",
+      "mat": "coral",
+      "accent": "cream"
+    }
+  },
+  "anchor": {
+    "name": "Anchor",
+    "chain": "harbour",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "key",
+      "mat": "iron",
+      "accent": "rope"
+    }
+  },
+  "shipwheel": {
+    "name": "Ship's Wheel",
+    "chain": "harbour",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "cog",
+      "mat": "wood",
+      "accent": "gold"
+    }
+  },
+  "divebell": {
+    "name": "Diving Bell",
+    "chain": "harbour",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "bell",
+      "mat": "copper",
+      "accent": "glass",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "submarine": {
+    "name": "Submarine",
+    "chain": "harbour",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "boat",
+      "mat": "topaz",
+      "accent": "copper",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "glasspebble": {
+    "name": "Glass Pebble",
+    "chain": "seaglass",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "pebble",
+      "mat": "glass"
+    }
+  },
+  "seaglassbit": {
+    "name": "Sea Glass",
+    "chain": "seaglass",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "ice",
+      "mat": "mint"
+    }
+  },
+  "glassfloat": {
+    "name": "Glass Float",
+    "chain": "seaglass",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "orb",
+      "mat": "glass",
+      "accent": "mint"
+    }
+  },
+  "glasslamp": {
+    "name": "Sea Glass Lamp",
+    "chain": "seaglass",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "lantern",
+      "mat": "mint",
+      "accent": "glow"
+    }
+  },
+  "glasschime": {
+    "name": "Sea Glass Chimes",
+    "chain": "seaglass",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "bell",
+      "mat": "glass",
+      "accent": "mint",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "glasscity": {
+    "name": "Glass Reef Dome",
+    "chain": "seaglass",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "glass",
+      "accent": "aurora",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "urchinspine": {
+    "name": "Urchin Spine",
+    "chain": "urchin",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "twig",
+      "mat": "plum"
+    }
+  },
+  "urchin": {
+    "name": "Urchin",
+    "chain": "urchin",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "berry",
+      "mat": "plum"
+    }
+  },
+  "starurchin": {
+    "name": "Star Urchin",
+    "chain": "urchin",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "star",
+      "mat": "coral",
+      "accent": "plum"
+    }
+  },
+  "starfishcrown": {
+    "name": "Starfish Crown",
+    "chain": "urchin",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "crown",
+      "mat": "coral",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "mantaegg": {
+    "name": "Manta Egg",
+    "chain": "manta",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "egg",
+      "mat": "deepsea"
+    }
+  },
+  "babymanta": {
+    "name": "Baby Manta",
+    "chain": "manta",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "fish",
+      "mat": "deepsea",
+      "accent": "mint"
+    }
+  },
+  "manta": {
+    "name": "Manta Ray",
+    "chain": "manta",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "fish",
+      "mat": "deepsea",
+      "accent": "cream"
+    }
+  },
+  "starmanta": {
+    "name": "Star Manta",
+    "chain": "manta",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "fish",
+      "mat": "dusk",
+      "accent": "star",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "skymanta": {
+    "name": "Sky Manta",
+    "chain": "manta",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "bird",
+      "mat": "aurora",
+      "accent": "star",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
   "wisp": {
     "name": "Wisp",
     "chain": "cloudc",
@@ -2424,6 +4526,35 @@
       "shape": "tower",
       "mat": "cloud",
       "accent": "aurora"
+    }
+  },
+  "cloudcity": {
+    "name": "Cloud City",
+    "chain": "cloudc",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "tower",
+      "mat": "cloud",
+      "accent": "aurora",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "skykingdom": {
+    "name": "Sky Kingdom",
+    "chain": "cloudc",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "tower",
+      "mat": "cloud",
+      "accent": "gold",
+      "deco": [
+        "glow",
+        "motes"
+      ]
     }
   },
   "aurorathread": {
@@ -2486,6 +4617,21 @@
       "accent": "star"
     }
   },
+  "auroraharp": {
+    "name": "Aurora Harp",
+    "chain": "aurorac",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "bell",
+      "mat": "gold",
+      "accent": "aurora",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
   "stardust": {
     "name": "Stardust",
     "chain": "starc",
@@ -2542,6 +4688,35 @@
       "accent": "star"
     }
   },
+  "constellation": {
+    "name": "Constellation",
+    "chain": "starc",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "star",
+      "mat": "star",
+      "accent": "aurora",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "supernova": {
+    "name": "Supernova",
+    "chain": "starc",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "orb",
+      "mat": "star",
+      "accent": "flame",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
   "breeze": {
     "name": "Breeze",
     "chain": "wind",
@@ -2585,11 +4760,25 @@
       "accent": "mint"
     }
   },
-  "stormeye": {
-    "name": "Storm Eye",
+  "windmill": {
+    "name": "Sky Windmill",
     "chain": "wind",
     "tier": 5,
     "sell": 78,
+    "art": {
+      "shape": "tower",
+      "mat": "silver",
+      "accent": "mint",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "stormeye": {
+    "name": "Storm Eye",
+    "chain": "wind",
+    "tier": 6,
+    "sell": 185,
     "art": {
       "shape": "planet",
       "mat": "dusk",
@@ -2653,6 +4842,20 @@
       "accent": "topaz"
     }
   },
+  "skytreehouse": {
+    "name": "Orchard Isle",
+    "chain": "skyfruit",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "tree",
+      "mat": "mint",
+      "accent": "topaz",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
   "chimebit": {
     "name": "Chime Shard",
     "chain": "chime",
@@ -2707,6 +4910,21 @@
       "accent": "aurora",
       "deco": [
         "glow"
+      ]
+    }
+  },
+  "chimecathedral": {
+    "name": "Chime Cathedral",
+    "chain": "chime",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "tower",
+      "mat": "gold",
+      "accent": "aurora",
+      "deco": [
+        "glow",
+        "motes"
       ]
     }
   },
@@ -2770,6 +4988,21 @@
       ]
     }
   },
+  "rainbowbridge": {
+    "name": "Rainbow Bridge",
+    "chain": "prismv",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "arch",
+      "mat": "aurora",
+      "accent": "gold",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
   "skydown": {
     "name": "Sky Down",
     "chain": "skynest",
@@ -2825,6 +5058,21 @@
       "accent": "gold",
       "deco": [
         "glow"
+      ]
+    }
+  },
+  "skyroc": {
+    "name": "Sky Roc",
+    "chain": "skynest",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "bird",
+      "mat": "aurora",
+      "accent": "gold",
+      "deco": [
+        "glow",
+        "motes"
       ]
     }
   },
@@ -2885,6 +5133,480 @@
       "accent": "glow",
       "deco": [
         "glow"
+      ]
+    }
+  },
+  "stardustegg": {
+    "name": "Starlit Egg",
+    "chain": "starling",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "egg",
+      "mat": "dusk",
+      "accent": "star"
+    }
+  },
+  "glimmer": {
+    "name": "Glimmer",
+    "chain": "starling",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "slime",
+      "mat": "star"
+    }
+  },
+  "starsprite": {
+    "name": "Star Sprite",
+    "chain": "starling",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "star",
+      "mat": "star",
+      "accent": "aurora"
+    }
+  },
+  "nebkitten": {
+    "name": "Nebula Kitten",
+    "chain": "starling",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "slime",
+      "mat": "lilac",
+      "accent": "star"
+    }
+  },
+  "cometfox": {
+    "name": "Comet Fox",
+    "chain": "starling",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "slime",
+      "mat": "dusk",
+      "accent": "star",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "aurorafox": {
+    "name": "Aurora Fox",
+    "chain": "starling",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "slime",
+      "mat": "aurora",
+      "accent": "star",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "celestfox": {
+    "name": "Celestial Fox",
+    "chain": "starling",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "slime",
+      "mat": "dusk",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "starbeast": {
+    "name": "Constellation Beast",
+    "chain": "starling",
+    "tier": 8,
+    "sell": 980,
+    "art": {
+      "shape": "slime",
+      "mat": "star",
+      "accent": "aurora",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "solarcell": {
+    "name": "Solar Cell",
+    "chain": "satellite",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "plank",
+      "mat": "sapphire"
+    }
+  },
+  "solarpanel": {
+    "name": "Solar Panel",
+    "chain": "satellite",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "plank",
+      "mat": "sapphire",
+      "accent": "silver"
+    }
+  },
+  "minisat": {
+    "name": "Mini Satellite",
+    "chain": "satellite",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "cog",
+      "mat": "silver",
+      "accent": "sapphire"
+    }
+  },
+  "commsat": {
+    "name": "Comm Satellite",
+    "chain": "satellite",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "compass",
+      "mat": "silver",
+      "accent": "gold"
+    }
+  },
+  "stationmod": {
+    "name": "Station Module",
+    "chain": "satellite",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "barrel",
+      "mat": "silver",
+      "accent": "sapphire"
+    }
+  },
+  "orbstation": {
+    "name": "Orbital Station",
+    "chain": "satellite",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "planet",
+      "mat": "silver",
+      "accent": "aurora",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "stargate": {
+    "name": "Star Gate",
+    "chain": "satellite",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "ring",
+      "mat": "silver",
+      "accent": "aurora",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "nebwisp": {
+    "name": "Nebula Wisp",
+    "chain": "nebula",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "cloud",
+      "mat": "lilac"
+    }
+  },
+  "nebpuff": {
+    "name": "Nebula Puff",
+    "chain": "nebula",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "cloud",
+      "mat": "lilac",
+      "accent": "aurora"
+    }
+  },
+  "nebjar": {
+    "name": "Nebula Jar",
+    "chain": "nebula",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "jar",
+      "mat": "glass",
+      "accent": "lilac"
+    }
+  },
+  "nebglobe": {
+    "name": "Nebula Globe",
+    "chain": "nebula",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "orb",
+      "mat": "glass",
+      "accent": "lilac",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "neblamp": {
+    "name": "Nebula Lamp",
+    "chain": "nebula",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "lantern",
+      "mat": "gold",
+      "accent": "lilac",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "bottledgalaxy": {
+    "name": "Bottled Galaxy",
+    "chain": "nebula",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "bottle",
+      "mat": "glass",
+      "accent": "aurora",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "starseed": {
+    "name": "Starseed",
+    "chain": "starflower",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "seed",
+      "mat": "star"
+    }
+  },
+  "starsprout": {
+    "name": "Star Sprout",
+    "chain": "starflower",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "sprout",
+      "mat": "mint",
+      "accent": "star"
+    }
+  },
+  "starflower": {
+    "name": "Starflower",
+    "chain": "starflower",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "flower",
+      "mat": "star",
+      "accent": "lilac"
+    }
+  },
+  "starpot": {
+    "name": "Starflower Pot",
+    "chain": "starflower",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "pot",
+      "mat": "lilac",
+      "accent": "star"
+    }
+  },
+  "stargarden": {
+    "name": "Celestial Garden",
+    "chain": "starflower",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "blossom",
+      "mat": "star",
+      "accent": "aurora",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "starmeadow": {
+    "name": "Starflower Meadow",
+    "chain": "starflower",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "blossom",
+      "mat": "star",
+      "accent": "lilac",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "planetdust": {
+    "name": "Planet Dust",
+    "chain": "planets",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "pebble",
+      "mat": "dusk"
+    }
+  },
+  "planetoid": {
+    "name": "Planetoid",
+    "chain": "planets",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "rock",
+      "mat": "slate",
+      "accent": "dusk"
+    }
+  },
+  "miniplanet": {
+    "name": "Mini Planet",
+    "chain": "planets",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "planet",
+      "mat": "sapphire",
+      "accent": "leaf"
+    }
+  },
+  "ringplanet": {
+    "name": "Ringed Planet",
+    "chain": "planets",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "planet",
+      "mat": "topaz",
+      "accent": "cream"
+    }
+  },
+  "twinplanets": {
+    "name": "Twin Planets",
+    "chain": "planets",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "planet",
+      "mat": "rose",
+      "accent": "sapphire"
+    }
+  },
+  "orrery": {
+    "name": "Orrery",
+    "chain": "planets",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "compass",
+      "mat": "gold",
+      "accent": "sapphire",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "galaxyswirl": {
+    "name": "Galaxy Swirl",
+    "chain": "planets",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "spiral",
+      "mat": "aurora",
+      "accent": "star",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "universe": {
+    "name": "Pocket Universe",
+    "chain": "planets",
+    "tier": 8,
+    "sell": 980,
+    "art": {
+      "shape": "orb",
+      "mat": "dusk",
+      "accent": "star",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "kitetail": {
+    "name": "Kite Tail",
+    "chain": "kite",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "rope",
+      "mat": "rose"
+    }
+  },
+  "kitediamond": {
+    "name": "Kite",
+    "chain": "kite",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "leaf",
+      "mat": "rose",
+      "accent": "aurora"
+    }
+  },
+  "boxkite": {
+    "name": "Box Kite",
+    "chain": "kite",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "crate",
+      "mat": "topaz",
+      "accent": "rose"
+    }
+  },
+  "dragonkite": {
+    "name": "Dragon Kite",
+    "chain": "kite",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "bird",
+      "mat": "aurora",
+      "accent": "gold",
+      "deco": [
+        "glow",
+        "motes"
       ]
     }
   },

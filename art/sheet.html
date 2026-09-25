@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Art batch check</title>
+<!--
+  The acceptance sheet from ART-BRIEF.md §7, done by the browser.
+
+    npm run dev            then open  http://localhost:5173/art/sheet.html
+    ...sheet.html?batch=chain-wood      one batch
+    ...sheet.html?batch=chain-*         every chain, in catalogue order
+
+  It lays the batch on the board-tile colour at full size and at 60px, lays each
+  chain out in order, and checks every file it can: that it exists, its size,
+  and that an item's corners are transparent. It only reads; nothing is written.
+-->
+<style>
+  :root { --tile: #e9cd97; --tile2: #dfbf85; --ink: #41280f; --bad: #c0392b; --ok: #2e7d32; --bg: #fbf5ea; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 14px/1.4 system-ui, sans-serif; color: var(--ink); background: var(--bg); }
+  header { position: sticky; top: 0; z-index: 2; background: #fff8ec; border-bottom: 2px solid var(--tile2);
+    padding: 10px 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+  header select, header label { font: inherit; }
+  main { padding: 16px; }
+  h2 { margin: 28px 0 8px; font-size: 16px; }
+  .sum { font-weight: 600; }
+  .sum .bad { color: var(--bad); } .sum .ok { color: var(--ok); }
+  .row { display: flex; flex-wrap: wrap; gap: 6px; background: var(--tile); padding: 8px; border-radius: 10px; }
+  .cell { position: relative; background: var(--tile); border-radius: 8px; }
+  .cell:nth-child(even) { background: var(--tile2); }
+  .big .cell { width: 196px; }
+  .big img, .big .miss { width: 196px; height: 196px; }
+  .small .cell { width: 60px; height: 60px; }
+  .small img, .small .miss { width: 60px; height: 60px; }
+  img { display: block; object-fit: contain; }
+  .miss { display: grid; place-items: center; font-size: 11px; color: #9b7a4c; text-align: center; padding: 4px; }
+  .cap { font-size: 11px; padding: 2px 4px 4px; }
+  .cap b { display: block; }
+  .flag { color: var(--bad); font-weight: 600; }
+  .gen { padding: 0; opacity: .55; } .gen svg { width: 100%; height: 100%; }
+  .gentag { display: block; font-size: 10px; color: #9b7a4c; }
+  .scene img, .scene .miss { width: 270px; height: 360px; object-fit: cover; }
+  .scene .cell { width: 270px; }
+  .scene .anchor { position: absolute; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%;
+    border: 2px solid #fff; background: rgba(192, 57, 43, .8); pointer-events: none; }
+  .arrow { align-self: center; opacity: .5; }
+</style>
+</head>
+<body>
+<header>
+  <strong>Art batch check</strong>
+  <select id="pick"></select>
+  <label><input type="checkbox" id="onlyMissing"> hide what is not painted yet</label>
+  <span class="sum" id="sum"></span>
+</header>
+<main id="out">Loading art/manifest.json…</main>
+<script type="module">
+import { ART } from '/src/art.ts';                 // the generated drawing, shown where nothing is painted yet
+const stand = r => {
+  const id = r.path.split('/').pop().replace(/\.(png|webp)$/, '');
+  try { return r.kind === 'item' ? ART.item(id) : r.kind === 'producer' ? ART.producer(id) : ''; } catch { return ''; }
+};
+const CAMP = [[0.355, 0.435], [0.545, 0.545], [0.788, 0.472], [0.265, 0.742], [0.512, 0.742], [0.788, 0.738],
+  [0.36, 0.90], [0.64, 0.90], [0.15, 0.605]];
+const LAB = [[0.255, 0.545], [0.435, 0.552], [0.645, 0.545], [0.275, 0.325], [0.90, 0.50]];
+const rows = await (await fetch('/art/manifest.json')).json();
+const batches = [...new Set(rows.map(r => r.batch))];
+const pick = document.getElementById('pick'), out = document.getElementById('out');
+const want = new URLSearchParams(location.search).get('batch') || batches[0];
+pick.innerHTML = ['chain-*', ...batches].map(b => `<option${b === want ? ' selected' : ''}>${b}</option>`).join('');
+pick.onchange = () => { location.search = '?batch=' + pick.value; };
+document.getElementById('onlyMissing').onchange = () => render();
+
+const load = src => new Promise(res => {
+  const im = new Image();
+  im.onload = () => res(im); im.onerror = () => res(null);
+  im.src = src + '?t=' + Date.now();
+});
+function corners(im) {
+  const c = document.createElement('canvas'); c.width = im.naturalWidth; c.height = im.naturalHeight;
+  const g = c.getContext('2d'); g.drawImage(im, 0, 0);
+  const pts = [[2, 2], [c.width - 3, 2], [2, c.height - 3], [c.width - 3, c.height - 3]];
+  return pts.every(([x, y]) => g.getImageData(x, y, 1, 1).data[3] < 16);
+}
+function expect(r) {
+  if (r.kind === 'scene') return [1086, 1448];
+  if (r.kind === 'item' || r.kind === 'producer') return [512, 512];
+  const m = r.prompt.match(/(\d+)x(\d+)/); return m ? [+m[1], +m[2]] : null;
+}
+async function check(r) {
+  const im = await load('/' + r.path);
+  const flags = [];
+  if (!im) return { im, flags: ['missing'] };
+  const e = expect(r);
+  if (e && (im.naturalWidth !== e[0] || im.naturalHeight !== e[1])) {
+    const sq = r.kind === 'item' || r.kind === 'producer';
+    // 256 is allowed for items and producers; any other size is not
+    if (!(sq && im.naturalWidth === 256 && im.naturalHeight === 256))
+      flags.push(`${im.naturalWidth}×${im.naturalHeight}, want ${e[0]}×${e[1]}`);
+  }
+  if (r.kind !== 'scene' && !corners(im)) flags.push('corners not transparent');
+  if (r.kind === 'scene' && corners(im)) flags.push('scene has transparent corners');
+  return { im, flags };
+}
+const cell = (r, res, over = '') => '<div class="cell"><div class="pic" style="position:relative">'
+  + (res.im ? `<img src="${res.im.src}" alt="${r.name}" title="${r.name}">${over}`
+    : stand(r) ? `<div class="miss gen">${stand(r)}</div>` : `<div class="miss">${r.name}<br>not painted</div>`)
+  + `</div><div class="cap"><b>${r.name}</b>${r.path.split('/').pop()}`
+  + (res.im ? '' : '<i class="gentag">generated</i>')
+  + (res.flags.length && res.im ? `<div class="flag">${res.flags.join('<br>')}</div>` : '') + '</div></div>';
+const tiny = (r, res) => `<div class="cell" title="${r.name}">`
+  + (res.im ? `<img src="${res.im.src}" alt="">` : `<div class="miss gen">${stand(r) || '·'}</div>`) + '</div>';
+
+let cache = null;
+async function render() {
+  const b = pick.value;
+  const mine = rows.filter(r => b === 'chain-*' ? r.batch.startsWith('chain-') : r.batch === b);
+  if (!cache || cache.b !== b) cache = { b, res: await Promise.all(mine.map(check)) };
+  const only = document.getElementById('onlyMissing').checked;
+  const list = mine.map((r, i) => [r, cache.res[i]]).filter(([, x]) => !only || x.im);
+  const have = cache.res.filter(x => x.im).length, bad = cache.res.filter(x => x.im && x.flags.length).length;
+  document.getElementById('sum').innerHTML = `${have}/${mine.length} painted · `
+    + (bad ? `<span class="bad">${bad} with problems</span>` : '<span class="ok">no problems found</span>');
+  let h = '';
+  if (list.some(([r]) => r.kind === 'scene')) {
+    h += '<h2>Scenes — red dots are where the game stands things</h2><div class="row scene">';
+    list.forEach(([r, x]) => {
+      const pts = r.path.endsWith('lab.webp') ? LAB : CAMP;
+      h += cell(r, x, pts.map(([px, py]) => `<i class="anchor" style="left:${px * 100}%;top:${py * 100}%"></i>`).join(''));
+    });
+    h += '</div>';
+  }
+  const groups = {};
+  list.filter(([r]) => r.kind !== 'scene').forEach(([r, x]) => { (groups[r.group] ||= []).push([r, x]); });
+  for (const [g, xs] of Object.entries(groups)) {
+    h += `<h2>${g}</h2><div class="row big">`
+      + xs.map(([r, x], n) => (n && r.kind === 'item' ? '<span class="arrow">→</span>' : '') + cell(r, x)).join('') + '</div>';
+    h += '<div class="row small" style="margin-top:6px">' + xs.map(([r, x]) => tiny(r, x)).join('') + '</div>';
+  }
+  out.innerHTML = h || 'Nothing in this batch.';
+}
+render();
+</script>
+</body>
+</html>

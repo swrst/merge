@@ -22,7 +22,8 @@ const IGNORE = /ERR_TUNNEL_CONNECTION_FAILED|fonts\.googleapis|ERR_NAME_NOT_RESO
 page.on('console', m => { if (m.type() === 'error' && !IGNORE.test(m.text())) errors.push(m.text()); });
 page.on('pageerror', e => errors.push('pageerror: ' + e.message));
 await page.goto(URL);
-await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 20000 });
+// boot rasterises every item (500+) before the first frame; software GL needs the headroom
+await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 45000 });
 
 const S = () => page.evaluate(() => JSON.parse(JSON.stringify(window.__game.state())));
 // A test that pokes state directly has to ask for a repaint; the game itself
@@ -385,7 +386,10 @@ await tapUI('#btnStash'); await page.waitForTimeout(500);
 after = await S();
 must(after.bag.length === 1 && after.bag[0] === 'gem', 'the item moved into the bag');
 must(!after.boards.earth[12], 'and left the board');
-await tapUI('#tools .toolBtn'); await page.waitForTimeout(450);
+await tapUI('#tools .toolBtn');
+// the tray slides up; on software GL that can take well over its 0.3s, and a
+// click mid-slide lands outside the viewport
+await page.waitForFunction(() => /^(none|matrix\(1, 0, 0, 1, 0, 0\))$/.test(getComputedStyle(document.querySelector('#bagTray')).transform));
 await tapUI('.bagSlot.full'); await page.waitForTimeout(500);
 after = await S();
 must(after.bag.length === 0 && after.boards.earth.some(c => c && c.id === 'gem'), 'and comes back out again');
@@ -460,7 +464,8 @@ head('Daily rewards');
 // otherwise write the live state straight back over a localStorage edit
 await set(() => { const s = window.__game.state(); s.daily = { key: 0, day: 0 }; });
 await page.reload();
-await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 20000 });
+// boot rasterises every item (500+) before the first frame; software GL needs the headroom
+await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 45000 });
 await page.waitForTimeout(2600);
 const dayCells = await page.locator('#modal.open .dayCell').count();
 if (dayCells !== 7) console.log('   [daily] modal title is now: ' + (await page.textContent('#mTitle')) + ' | cells ' + dayCells);
@@ -694,7 +699,7 @@ head('An old save survives the rewrite');
   const oldErrs = [];
   old.on('pageerror', e => oldErrs.push(e.message));
   await old.goto(URL);
-  await old.waitForFunction(() => window.__game, null, { timeout: 20000 });
+  await old.waitForFunction(() => window.__game, null, { timeout: 45000 });
   await old.waitForTimeout(2000);
   const m = await old.evaluate(() => {
     const g = window.__game, st = g.state(), b = g.cells();
@@ -848,8 +853,11 @@ await page.locator('#btnQuests').click({ force: true }); await page.waitForTimeo
 must(await page.locator('.questRow').count() >= 15, `the quest list shows all ${await page.locator('.questRow').count()} of them`);
 must(await page.locator('.questRow.now').count() === 1, 'with the current one called out');
 await closeModal();
+const askedFor = await page.locator('#orders [data-need]').first().getAttribute('data-need');
+const askedLen = await page.evaluate(id => window.__game.chains[window.__game.items[id].chain].items.length, askedFor);
 await page.locator('#orders [data-need]').first().click({ force: true }); await page.waitForTimeout(900);
-must(await page.locator('.chainWrap .chStep').count() >= 4, 'tapping a contract item draws its whole chain');
+// chains run 2 to 8 steps (rocket parts are 3), so count against the one asked for
+must(await page.locator('.chainWrap .chStep').count() === askedLen, `tapping a contract item draws its whole chain (${askedLen} steps)`);
 must(await page.locator('.chStep.want').count() === 1, 'with the one they asked for highlighted');
 must(await page.locator('.srcBox').count() === 1, 'and points at the producer that starts it');
 await closeModal();
@@ -862,7 +870,7 @@ head('The guided intro');
   const tErrs = [];
   t2.on('pageerror', e => tErrs.push(e.message));
   await t2.goto(URL);
-  await t2.waitForFunction(() => window.__game, null, { timeout: 20000 });
+  await t2.waitForFunction(() => window.__game, null, { timeout: 45000 });
   await t2.waitForTimeout(2600);
   must(await t2.locator('#tut.on').count() === 1, 'a fresh save opens straight into the intro');
   must(await t2.locator('#modal.open').count() === 0, 'and nothing else pops over it');
