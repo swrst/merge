@@ -869,7 +869,7 @@ html.ui-btn_green .big:not(.blue):not(.gold):not(:disabled),
 html.ui-btn_gold .big.gold:not(:disabled),
 html.ui-btn_blue .big.blue:not(:disabled){
   background:none;border-style:solid;border-color:transparent;box-shadow:none;border-radius:0;
-  border-image-slice:44 70 fill;border-image-width:18px 26px;border-image-repeat:stretch}
+  border-image-slice:40 48 fill;border-image-width:18px 22px;border-image-repeat:stretch}
 html.ui-btn_green .big:not(.blue):not(.gold):not(:disabled){border-image-source:var(--ui-btn_green)}
 html.ui-btn_gold .big.gold:not(:disabled){border-image-source:var(--ui-btn_gold)}
 html.ui-btn_blue .big.blue:not(:disabled){border-image-source:var(--ui-btn_blue)}
@@ -878,3 +878,7 @@ html.ui-panel_wood .mBoxW{background:none;box-shadow:none;border-radius:0;border
   border-image:var(--ui-panel_wood) 64 fill / 22px stretch}
 html.ui-btn_round .railBtn:not(.on),
 html.ui-btn_round .sceneBtn{background:var(--ui-btn_round) center/100% 100% no-repeat;border-color:transparent;box-shadow:none}
+html.ui-bar_track .xpbar{background:var(--ui-bar_track) center/100% 100% no-repeat;box-shadow:none;height:11px}
+html.ui-bar_fill .xpbar i{background:var(--ui-bar_fill) left center/100% 100% no-repeat}
+html.ui-badge_ready .oNeed.done:after{content:"";background:var(--ui-badge_ready) center/100% 100% no-repeat;border:0;box-shadow:none;width:20px;height:20px}
+

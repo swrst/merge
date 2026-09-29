@@ -93,7 +93,9 @@ Files in `src/sprites/ui/` skin the interface the same way, with no code change:
 | `tile_light.png`, `tile_dark.png`, `tile_locked.png` | the board checkerboard and overgrown tiles |
 | `icon_<name>.png` (`icon_coin`, `icon_energy`, `icon_star`, …) | that icon everywhere it is shown |
 
-Not hooked up yet: `icon_gem`, `icon_bloom`, `frame_rare`, `badge_ready`, `ribbon`,
-`bar_track`, `order_card`, `plinth`, and the `fx/` sprite sheets. Painting them is
-fine; they will show once the game uses them.
+Also hooked up: `bar_track.png` + `bar_fill.png` (the XP bar) and `badge_ready.png`
+(the tick on a filled contract slot).
 
+Not hooked up yet: `icon_gem`, `icon_bloom`, `frame_rare`, `ribbon`, `order_card`,
+`plinth`, and the `fx/` sprite sheets. Painting them is fine; they will show once
+the game uses them.

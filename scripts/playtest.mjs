@@ -433,6 +433,7 @@ await set(() => {
 });
 await page.waitForTimeout(400);
 await drag(20, 21);
+await page.waitForFunction(() => window.__game.cells()[21]?.id === 'gem', null, { timeout: 4000 }).catch(() => {});
 must(await page.evaluate(() => window.__game.cells()[21]?.id) === 'gem', 'rainbow + geode makes a Gemstone');
 
 head('Cargo ship');
@@ -729,7 +730,7 @@ must(!!nrg, `this world has an energy producer (${nrg && nrg.name})`);
 await set(() => {
   const g = window.__game, st = g.state(), b = g.cells();
   for (let k = 0; k < b.length; k++) if (b[k] && b[k].id) b[k] = null;
-  st.energy = 6;
+  st.energy = 6; st.eAt = Date.now();          // no regen tick sneaking in mid-check
   const c = b.find(x => x && x.p && g.prods[x.p].mode === 'energy');
   c.lv = 1;
   window.__board.sync(b);
@@ -739,7 +740,7 @@ let e1 = (await S()).energy;
 must(e1 === 6 - nrg.cost, `a tap costs ${nrg.cost} energy (6 -> ${e1})`);
 must(await page.evaluate(() => window.__game.cells().filter(c => c && c.id).length) === 1, 'and it dropped something');
 // unlimited taps: only energy stops you
-await set(() => { window.__game.state().energy = 0; });
+await set(() => { const st = window.__game.state(); st.energy = 0; st.eAt = Date.now(); });
 await tapCell(nrg.i); await page.waitForTimeout(300);
 must((await S()).energy === 0, 'with no energy the tap is refused');
 must(await page.evaluate(() => window.__game.cells().filter(c => c && c.id).length) === 1, 'and nothing was dropped');
