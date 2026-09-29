@@ -63,7 +63,15 @@ const stand = r => {
 };
 const CAMP = [[0.355, 0.435], [0.545, 0.545], [0.788, 0.472], [0.265, 0.742], [0.512, 0.742], [0.788, 0.738],
   [0.36, 0.90], [0.64, 0.90], [0.15, 0.605]];
-const LAB = [[0.255, 0.545], [0.435, 0.552], [0.645, 0.545], [0.275, 0.325], [0.90, 0.50]];
+const LAB = [[0.255, 0.545], [0.435, 0.552], [0.645, 0.545], [0.275, 0.325]];
+// each painted scene's own plinth positions, the ones the game uses
+let ANCH = {};
+try { ANCH = await (await fetch('/src/sprites/scenes/anchors.json')).json(); } catch { /* defaults */ }
+const anchorsFor = r => {
+  const k = r.path.split('/').pop().replace(/\.\w+$/, ''), a = ANCH[k];
+  if (k === 'lab') return a ? [a.a, a.b, a.out, a.book].filter(Boolean) : LAB;
+  return a ? [a.rocket, a.lab, a.heart, ...(a.prods || [])].filter(Boolean) : CAMP;
+};
 const rows = await (await fetch('/art/manifest.json')).json();
 const batches = [...new Set(rows.map(r => r.batch))];
 const pick = document.getElementById('pick'), out = document.getElementById('out');
@@ -124,9 +132,9 @@ async function render() {
     + (bad ? `<span class="bad">${bad} with problems</span>` : '<span class="ok">no problems found</span>');
   let h = '';
   if (list.some(([r]) => r.kind === 'scene')) {
-    h += '<h2>Scenes — red dots are where the game stands things</h2><div class="row scene">';
+    h += '<h2>Scenes — red dots are where the game stands things (src/sprites/scenes/anchors.json)</h2><div class="row scene">';
     list.forEach(([r, x]) => {
-      const pts = r.path.endsWith('lab.webp') ? LAB : CAMP;
+      const pts = anchorsFor(r);
       h += cell(r, x, pts.map(([px, py]) => `<i class="anchor" style="left:${px * 100}%;top:${py * 100}%"></i>`).join(''));
     });
     h += '</div>';

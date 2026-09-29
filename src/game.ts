@@ -3,6 +3,7 @@ import { ART } from './art';
 // the painted backdrops the camp and the lab stand on
 import campEarthBg from './scenes/camp_earth.webp';
 import labRoomBg from './scenes/lab.webp';
+import SCENE_ANCHORS from './sprites/scenes/anchors.json';
 import { haptic } from './native';
 import { board } from './board';
 import { ads } from './ads';
@@ -1264,10 +1265,14 @@ export async function startGame() {
      A room, not a form. The bench slots sit on the painted counter, the book
      lives on the shelf, and the rumours are a pop-up — the same way the camp
      works, so the two painted screens feel like the same game. */
-  const LAB_PAD = {
+  const LAB_PAD_DEFAULT = {
     a: [0.255, 0.545], b: [0.435, 0.552], out: [0.645, 0.545],
     book: [0.275, 0.325], scope: [0.90, 0.50],
   };
+  /** a painted scene carries its own plinth positions (sprites/scenes/anchors.json);
+   *  the built-in backdrop keeps the defaults it was measured for */
+  const sceneAnchors = (k: string): any => (ART.spriteScene(k) && (SCENE_ANCHORS as any)[k]) || {};
+  const labPad = () => ({ ...LAB_PAD_DEFAULT, ...sceneAnchors('lab') });
   /* an empty bench socket, drawn rather than typed, so it reads on any backdrop */
   const SOCKET = `<svg viewBox="0 0 100 100" class="art"><circle cx="50" cy="52" r="34" fill="#ffffff" opacity=".5"/>
     <circle cx="50" cy="52" r="34" fill="none" stroke="#6b5236" stroke-width="4" stroke-dasharray="9 8" opacity=".55"/>
@@ -1296,13 +1301,13 @@ export async function startGame() {
       <div class="sceneImg"></div><div class="sceneVig"></div>
       <div class="sceneBtns"><button class="sceneBtn" data-labpop="book">📘</button>
         ${blind.length ? `<button class="sceneBtn" data-labpop="rumours">❓</button>` : ''}</div>
-      ${labSpot('s0', LAB_PAD.a, a ? ART.item(a) : SOCKET,
+      ${labSpot('s0', labPad().a, a ? ART.item(a) : SOCKET,
         a ? ITEMS[a].name : 'Sample A', a ? 'tap to swap' : 'tap to load', a ? 'filled' : 'empty')}
-      ${labSpot('s1', LAB_PAD.b, b ? ART.item(b) : SOCKET,
+      ${labSpot('s1', labPad().b, b ? ART.item(b) : SOCKET,
         b ? ITEMS[b].name : 'Sample B', b ? 'tap to swap' : 'tap to load', b ? 'filled' : 'empty')}
-      ${labSpot('out', LAB_PAD.out, knew ? ART.item(r!.result) : SOCKET_Q,
+      ${labSpot('out', labPad().out, knew ? ART.item(r!.result) : SOCKET_Q,
         knew ? ITEMS[r!.result].name : 'Result', knew ? 'known recipe' : 'unknown', knew ? 'ready' : 'empty')}
-      ${labSpot('book', LAB_PAD.book, ART.icon('blueprint'), 'Lab book', known.length + '/' + RECIPES.length)}
+      ${labSpot('book', labPad().book, ART.icon('blueprint'), 'Lab book', known.length + '/' + RECIPES.length)}
       <div class="labBar">
         ${a || b ? '<button class="labClear" id="btnClearSlots">Empty</button>' : ''}
         <button class="big${knew ? '' : ' blue'}" id="btnResearch" ${ready ? '' : 'disabled'}>${ready
@@ -2570,10 +2575,10 @@ export async function startGame() {
 
   /* Anchors measured off the painted background, as a fraction of the scene.
      Each one is the *top of a plinth*, and a spot is drawn standing on it. */
-  const PAD = {
+  const PAD_DEFAULT = {
     rocket: [0.355, 0.435], lab: [0.545, 0.545], heart: [0.788, 0.472],
   };
-  const PROD_PADS = [
+  const PROD_PADS_DEFAULT = [
     [0.265, 0.742], [0.512, 0.742], [0.788, 0.738],
     [0.36, 0.90], [0.64, 0.90], [0.15, 0.605],
   ];
@@ -2586,6 +2591,9 @@ export async function startGame() {
   }
 
   function campHTML() {
+    const A = sceneAnchors(S.world);
+    const PAD = { ...PAD_DEFAULT, ...A };
+    const PROD_PADS: number[][] = A.prods || PROD_PADS_DEFAULT;
     const w = W(), b = B();
     const prods: { i: number; k: string }[] = [];
     for (let i = 0; i < N; i++) if (b[i] && b[i].p && PRODS[b[i].p].mode !== 'once') prods.push({ i, k: b[i].p });
