@@ -24,6 +24,7 @@
 const ITEMS_G = import.meta.glob('./sprites/items/*.{png,webp,jpg,jpeg}', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
 const PRODS_G = import.meta.glob('./sprites/producers/*.{png,webp,jpg,jpeg}', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
 const SCENES_G = import.meta.glob('./sprites/scenes/*.{png,webp,jpg,jpeg}', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
+const UI_G = import.meta.glob('./sprites/ui/*.{png,webp}', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
 
 function byName(files: Record<string, string>): Record<string, string> {
   const out: Record<string, string> = {};
@@ -38,7 +39,20 @@ export const SPRITE = {
   item: byName(ITEMS_G),
   producer: byName(PRODS_G),
   scene: byName(SCENES_G),
+  ui: byName(UI_G),
 };
 
+/* Painted UI pieces are skinned in through CSS: each file becomes a custom
+   property (--ui-btn_green) and a class on <html> (ui-btn_green), and
+   style.css only swaps the look when that class is there. No file, no change. */
+if (typeof document !== 'undefined') {
+  const root = document.documentElement;
+  Object.entries(SPRITE.ui).forEach(([k, url]) => {
+    root.style.setProperty('--ui-' + k, `url("${url}")`);
+    root.classList.add('ui-' + k);
+  });
+}
+
 export const spriteCount = () =>
-  Object.keys(SPRITE.item).length + Object.keys(SPRITE.producer).length + Object.keys(SPRITE.scene).length;
+  Object.keys(SPRITE.item).length + Object.keys(SPRITE.producer).length + Object.keys(SPRITE.scene).length
+  + Object.keys(SPRITE.ui).length;

@@ -112,9 +112,10 @@ const add = (path, kind, name, group, prompt, batch, negative = NEGATIVE) =>
 
 /* -------------------------------------------------------------- scenes */
 /* Where the camp screen stands things, as fractions of the 1086x1448 picture
-   (x across, y down). These are the anchors in src/game.ts (PAD, PROD_PADS,
-   LAB_PAD) — a painting that puts its plinths elsewhere has spots floating
-   over nothing. art/guides/*.png draws the same layout for img2img/ControlNet. */
+   (x across, y down). These are the defaults in src/game.ts. An image model
+   will not hit them exactly, and does not have to: after a scene is painted,
+   its real plinth positions go into src/sprites/scenes/anchors.json and the
+   game uses those. art/guides/*.png draws the same layout for img2img. */
 const pct = ([x, y]) => `${Math.round(x * 100)}% across, ${Math.round(y * 100)}% down`;
 const CAMP = {
   rocket: [0.355, 0.435], lab: [0.545, 0.545], heart: [0.788, 0.472],
@@ -126,7 +127,7 @@ const SCENE_STYLE = 'Painted mobile-game background in the style of Travel Town:
   + 'Portrait 1086x1448 (3:4), opaque, seen from slightly above like a game map. '
   + 'Keep everything important inside the middle 70% of the width — tall phones crop the sides. '
   + 'No characters, no text, no letters, no UI, no watermark.';
-const CAMP_LAYOUT = 'Layout, which must be followed because the game stands objects on these exact spots: '
+const CAMP_LAYOUT = 'Layout (roughly — the game is told afterwards where each plinth landed): '
   + `a large raised round launch pad with a few steps, its top centred at ${pct(CAMP.rocket)}; `
   + `a small flat clearing at ${pct(CAMP.lab)} for the lab; `
   + `one raised round plinth at ${pct(CAMP.heart)} for the world's Heart; `

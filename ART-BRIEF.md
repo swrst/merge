@@ -117,11 +117,14 @@ npm run art -- --batch scenes --missing   # only what is still to do
 - **Transparency.** GPT-image can output a transparent background directly.
   With other models, generate on a plain flat light background and cut it out
   (rembg, remove.bg, Photoshop). Keep the soft contact shadow when you cut.
-- **Scenes must follow the layout.** The game stands the rocket, the lab, the
-  Heart and six producers on fixed spots in the picture (listed in each scene
-  prompt). Use `art/guides/camp_layout.png` (or `lab_layout.png`) as the
-  img2img / ControlNet composition input, and `src/scenes/camp_earth.webp` as
-  the style reference. Export as WebP, 1086×1448.
+- **Scenes need the right plinths, not exact positions.** A camp needs one
+  big launch pad, one raised plinth for the Heart, one small clearing for the
+  lab and six producer plinths, roughly where `art/guides/camp_layout.png`
+  puts them (the lab needs three bench sockets and a book shelf). Image models
+  will not hit exact spots, so after painting, record where each plinth
+  actually landed in `src/sprites/scenes/anchors.json` (fractions of the
+  picture, centre of the plinth top) and check the red dots on the sheet.
+  Export as WebP, 1086×1448.
 - **Size.** Export items and producers at exactly 512×512, object centred and
   filling about 80% of the frame.
 
@@ -155,4 +158,5 @@ when:
    crown.
 4. Angle, light direction and edge weight match across the batch. One asset lit
    from the right is worse than ten mediocre assets lit the same way.
-5. On scenes, every red anchor dot lands on a plinth or pad.
+5. On scenes, every red anchor dot lands on a plinth or pad. If one misses,
+   fix its numbers in `src/sprites/scenes/anchors.json`, not the painting.

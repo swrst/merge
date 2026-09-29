@@ -860,3 +860,21 @@ button{font-family:inherit;cursor:pointer;border:none}
   .dock.six .tab{font-size:0;padding:3px 1px}
   .dock.six .tab .ti{font-size:18px}
 }
+
+/* ---------------------------------------------------------------- painted UI
+   Each rule only applies once the matching file is in src/sprites/ui/ (the
+   <html> gets a ui-<name> class; see sprites.ts). The painted pieces are
+   9-sliced, so they stretch to any width without squashing their corners. */
+html.ui-btn_green .big:not(.blue):not(.gold):not(:disabled),
+html.ui-btn_gold .big.gold:not(:disabled),
+html.ui-btn_blue .big.blue:not(:disabled){
+  background:none;border-style:solid;border-color:transparent;box-shadow:none;border-radius:0;
+  border-image-slice:44 70 fill;border-image-width:18px 26px;border-image-repeat:stretch}
+html.ui-btn_green .big:not(.blue):not(.gold):not(:disabled){border-image-source:var(--ui-btn_green)}
+html.ui-btn_gold .big.gold:not(:disabled){border-image-source:var(--ui-btn_gold)}
+html.ui-btn_blue .big.blue:not(:disabled){border-image-source:var(--ui-btn_blue)}
+html.ui-btn_green .big:active:not(:disabled){box-shadow:none}
+html.ui-panel_wood .mBoxW{background:none;box-shadow:none;border-radius:0;border-style:solid;border-color:transparent;
+  border-image:var(--ui-panel_wood) 64 fill / 22px stretch}
+html.ui-btn_round .railBtn:not(.on),
+html.ui-btn_round .sceneBtn{background:var(--ui-btn_round) center/100% 100% no-repeat;border-color:transparent;box-shadow:none}
