@@ -1099,12 +1099,17 @@ export const ART = (function () {
     producer: prodArt,
     char: charArt,
     figure: (k: string) => { const key = 'f' + k; if (!cache[key]) cache[key] = figure(k); return cache[key]; },
-    icon: (k: string) => (ICON as Record<string, string>)[k] || '',
+    /** a painted ui/icon_<k>.png wins over the drawn icon */
+    icon: (k: string) => SPRITE.ui['icon_' + k]
+      ? `<img class="ic" src="${SPRITE.ui['icon_' + k]}" alt="" draggable="false">`
+      : (ICON as Record<string, string>)[k] || '',
+    iconSvg: (k: string) => (ICON as Record<string, string>)[k] || '',
     weed, rocket, planet,
     hasItem: (k: string) => !!ITEM[k] || !!SPEC[k],
     /** a painted file for this item/producer, if one was dropped in */
     spriteItem: (k: string) => SPRITE.item[k] || '',
     spriteProducer: (k: string) => SPRITE.producer[k] || '',
     spriteScene: (k: string) => SPRITE.scene[k] || '',
+    spriteUi: (k: string) => SPRITE.ui[k] || '',
   };
 })();

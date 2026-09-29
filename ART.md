@@ -80,3 +80,20 @@ shade inside the bottom edge and a lip of light along the top. That is what make
 a hundred unrelated objects read as one box of toys. A painted sprite gets it too,
 which is why painted and generated art can share a board without clashing — if a
 sprite already has its own heavy outline the extra one just reads as a rim.
+
+## Painted UI
+
+Files in `src/sprites/ui/` skin the interface the same way, with no code change:
+
+| File | Replaces |
+|---|---|
+| `btn_green.png`, `btn_gold.png`, `btn_blue.png` | the big action buttons (9-sliced, so any width works) |
+| `btn_round.png` | the side-rail and scene buttons |
+| `panel_wood.png` | every pop-up panel (9-sliced) |
+| `tile_light.png`, `tile_dark.png`, `tile_locked.png` | the board checkerboard and overgrown tiles |
+| `icon_<name>.png` (`icon_coin`, `icon_energy`, `icon_star`, …) | that icon everywhere it is shown |
+
+Not hooked up yet: `icon_gem`, `icon_bloom`, `frame_rare`, `badge_ready`, `ribbon`,
+`bar_track`, `order_card`, `plinth`, and the `fx/` sprite sheets. Painting them is
+fine; they will show once the game uses them.
+

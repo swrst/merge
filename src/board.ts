@@ -61,6 +61,7 @@ class PixiBoard {
   lFx = new Container();
   lDrag = new Container();
   tiles: Graphics[] = [];
+  tileArt: Sprite[] = [];                      // painted tiles (ui/tile_*.png), when there are any
   slots: Slot[] = [];
   theme: string = 'earth';
   private tex: Record<string, Texture> = {};
@@ -81,8 +82,11 @@ class PixiBoard {
     this.app.stage.addChild(this.root);
 
     for (let i = 0; i < cols * rows; i++) {
+      const art = new Sprite(Texture.EMPTY);
+      art.visible = false;
       const g = new Graphics();
-      this.lTile.addChild(g);
+      this.lTile.addChild(art, g);
+      this.tileArt.push(art);
       this.tiles.push(g);
       this.slots.push({ key: '' });
     }
@@ -139,7 +143,10 @@ class PixiBoard {
     itemIds.forEach(id => add('i:' + id, ART.item(id), ART.spriteItem(id)));
     producerArts.forEach(a => add('p:' + a, ART.producer(a), ART.spriteProducer(a)));
     ['earth', 'luna', 'cindra'].forEach(w => add('w:' + w, ART.weed(w)));
-    add('coin', ART.icon('coin'));
+    add('coin', ART.iconSvg('coin'), ART.spriteUi('icon_coin') || undefined);
+    ['tile_light', 'tile_dark', 'tile_locked'].forEach(k => {
+      const url = ART.spriteUi(k); if (url) add('ui:' + k, '', url);
+    });
     await Promise.all(jobs);
   }
   private texture(key: string): Texture {
@@ -235,6 +242,20 @@ class PixiBoard {
     // tiles touch, so the board reads as one warm surface
     const dark = ((i % this.cols) + ((i / this.cols) | 0)) % 2 === 1;
     g.clear();
+    const art = this.tileArt[i];
+    const paint = this.tex[locked ? 'ui:tile_locked' : dark ? 'ui:tile_dark' : 'ui:tile_light']
+      || (locked ? undefined : this.tex['ui:tile_light']);
+    if (art) art.visible = !!paint;
+    if (paint && art) {
+      // a painted tile carries its own light and shade; only the rarity frame is drawn over it
+      art.texture = paint; art.position.set(p.x, p.y); art.width = c; art.height = c;
+      if (r) {
+        const col = r === 3 ? 0xffb02e : r === 2 ? 0xc78cff : 0x8fd6ff;
+        g.roundRect(p.x + 1, p.y + 1, c - 2, c - 2, R - 1)
+          .stroke({ color: col, alpha: r === 3 ? 0.95 : 0.65, width: r === 3 ? 3 : 2.2 });
+      }
+      return;
+    }
     g.roundRect(p.x, p.y, c, c, R)
       .fill({ color: locked ? (dark ? th.lockLo : th.lock) : (dark ? th.tileLo : th.tile) });
     if (!locked) {
