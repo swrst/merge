@@ -109,7 +109,21 @@ class PixiBoard {
     return new Promise(res => {
       const img = new Image();
       img.crossOrigin = 'anonymous';
-      img.onload = () => { try { res(Texture.from(img)); } catch { res(Texture.EMPTY); } };
+      // Redraw at the same size as the generated art. The pop and bob tweens
+      // animate scale towards 1, which assumes every texture is TEX wide; a
+      // 512px painted file left as-is would balloon to 512px on the board.
+      img.onload = () => {
+        try {
+          const n = TEX;
+          const cv = document.createElement('canvas');
+          cv.width = cv.height = n;
+          const ctx = cv.getContext('2d');
+          if (!ctx) return res(Texture.EMPTY);
+          ctx.imageSmoothingQuality = 'high';
+          ctx.drawImage(img, 0, 0, n, n);
+          res(Texture.from(cv));
+        } catch { res(Texture.EMPTY); }
+      };
       img.onerror = () => res(Texture.EMPTY);
       img.src = url;
     });

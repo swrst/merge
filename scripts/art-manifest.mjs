@@ -223,7 +223,7 @@ const UI = [
   ['ui/btn_round.png', 'Round icon button', 'round cream button with a thick white rim and a brown drop edge, empty middle, 128x128'],
   ['ui/tile_light.png', 'Board tile, light', 'single flat board tile, warm light tan, very slightly rounded corners, a faint lighter sheen along the top edge, 128x128, no outline'],
   ['ui/tile_dark.png', 'Board tile, dark', 'as tile_light but one shade deeper, for the checkerboard'],
-  ['ui/tile_locked.png', 'Board tile, overgrown', 'a board tile covered in short grass and weeds, dustier tan underneath, 128x128'],
+  ['ui/tile_locked.png', 'Board tile, overgrown', 'a flat square board tile seen straight from above (NOT isometric, NOT a diamond), same shape and rounded corners as tile_light, covered in short grass and weeds, dustier tan underneath, 128x128'],
   ['ui/icon_coin.png', 'Coin', 'stack-of-one gold coin seen 3/4, thick outline, bright rim light, 128x128'],
   ['ui/icon_energy.png', 'Energy', 'rounded lightning bolt, electric blue with a white core, 128x128'],
   ['ui/icon_gem.png', 'Premium gem', 'violet cut gem with a white sparkle, 128x128'],
@@ -232,7 +232,8 @@ const UI = [
   ['ui/frame_rare.png', 'Rarity frame', 'thin glowing rounded-square frame, violet, for marking a rare item on its tile, 128x128, transparent middle'],
   ['ui/badge_ready.png', 'Ready badge', 'small round green badge with a white tick, thick white rim, 96x96'],
   ['ui/ribbon.png', 'Panel ribbon', 'a gold banner ribbon that sits across the top of a panel, empty middle for a title, 512x128'],
-  ['ui/bar_track.png', 'Progress bar', 'empty rounded progress-bar track, dark warm brown, 256x48, plus a separate bright green fill of the same shape'],
+  ['ui/bar_track.png', 'Progress bar track', 'empty rounded progress-bar track, dark warm brown, 256x48'],
+  ['ui/bar_fill.png', 'Progress bar fill', 'the bright green fill for the progress-bar track, same rounded shape, 256x48'],
   ['ui/order_card.png', 'Contract card', 'blank order card: rounded cream card, thick white rim, a slot circle at the top for a character portrait and three empty square slots in a row below, 512x640'],
   ['ui/plinth.png', 'Camp plinth', 'flat round stone plinth seen 3/4 from above, cracked pale stone with grass at the edges, for a producer to stand on, 512x256, transparent background'],
 ];

@@ -5351,7 +5351,7 @@
     "name": "Board tile, overgrown",
     "group": "interface",
     "batch": "ui",
-    "prompt": "Board tile, overgrown — a board tile covered in short grass and weeds, dustier tan underneath, 128x128. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
+    "prompt": "Board tile, overgrown — a flat square board tile seen straight from above (NOT isometric, NOT a diamond), same shape and rounded corners as tile_light, covered in short grass and weeds, dustier tan underneath, 128x128. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
@@ -5429,10 +5429,19 @@
   {
     "path": "src/sprites/ui/bar_track.png",
     "kind": "ui",
-    "name": "Progress bar",
+    "name": "Progress bar track",
     "group": "interface",
     "batch": "ui",
-    "prompt": "Progress bar — empty rounded progress-bar track, dark warm brown, 256x48, plus a separate bright green fill of the same shape. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
+    "prompt": "Progress bar track — empty rounded progress-bar track, dark warm brown, 256x48. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/ui/bar_fill.png",
+    "kind": "ui",
+    "name": "Progress bar fill",
+    "group": "interface",
+    "batch": "ui",
+    "prompt": "Progress bar fill — the bright green fill for the progress-bar track, same rounded shape, 256x48. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {

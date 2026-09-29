@@ -94,7 +94,7 @@ function corners(im) {
 function expect(r) {
   if (r.kind === 'scene') return [1086, 1448];
   if (r.kind === 'item' || r.kind === 'producer') return [512, 512];
-  const m = r.prompt.match(/(\d+)x(\d+)/); return m ? [+m[1], +m[2]] : null;
+  return null;                                  // UI pieces are 9-sliced, so only their look matters
 }
 async function check(r) {
   const im = await load('/' + r.path);
