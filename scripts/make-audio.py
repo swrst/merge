@@ -270,33 +270,82 @@ def s_tap():
     return master(marimba(note(-12), 0.14, soft=0.8) * 0.9, 0.34)
 
 
+def bloop(f0, f1, dur=0.11):
+    """A round water-drop 'bloop': a sine that bends up. The body of a merge."""
+    n = int(SR * dur)
+    f = np.linspace(f0, f1, n) ** 1.0
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    return np.sin(ph) * env(n, 0.003, dur * 0.35, 0.35, dur * 0.5, 0.0)
+
+
+def glass(f, dur):
+    """A soft glassy chime: FM bell with the metal filed off."""
+    return lowpass_fast(fm_bell(f, dur, ratio=3.01, index=1.6, tau=dur * 0.38), 7000, 1)
+
+
+def sparkle(dur, amount, seed=0):
+    """A scatter of tiny high chimes, like dust catching the light."""
+    r = np.random.default_rng(100 + seed)
+    out = np.zeros(int(SR * dur))
+    for _ in range(amount):
+        at = r.uniform(0.02, dur * 0.55)
+        f = note(24 + r.choice([0, 2, 4, 7, 9, 12, 14, 16]))
+        g = r.uniform(0.25, 0.6)
+        tone = glass(f, 0.35) * g
+        k = int(at * SR)
+        m = min(len(out) - k, len(tone))
+        out[k:k + m] += tone[:m]
+    return out
+
+
 def s_pop(pitch=1.0):
-    """An item landing: one round kalimba note, no fizz."""
-    body = kalimba(note(4) * pitch, 0.3)
-    air = lowpass_fast(noise(0.04), 2200) * expdecay(int(SR * 0.04), 0.012)
-    return master(mixdown([(0, body, 0.8), (0, air, 0.1)], 0.34), 0.6)
+    """An item landing on the board: a soft bubbly bloop and a tiny tick."""
+    b = bloop(320 * pitch, 620 * pitch, 0.09)
+    tick = kalimba(note(16) * pitch, 0.18)
+    return master(mixdown([(0, b, 0.7), (0.012, tick, 0.28)], 0.26), 0.55)
 
 
 def s_merge(tier):
-    """Two marimba notes a fourth apart, climbing a pentatonic step per tier,
-       with a soft bell an octave up. Warm, short, never shrill."""
-    PENT = [0, 2, 4, 7, 9]
-    root = PENT[(tier - 1) % 5] + 12 * ((tier - 1) // 5)
-    dur = 0.7
-    parts = []
-    for k, (off, at) in enumerate([(0, 0.0), (7, 0.07)]):
-        f = note(root + off)
-        parts.append((at, marimba(f, 0.55, soft=0.35), 0.62))
-        parts.append((at, kalimba(f * 2, 0.4) * 0.5, 0.2))
-    parts.append((0.03, marimba(note(root - 12), 0.4, soft=0.9), 0.2))
-    return master(reverb(mixdown(parts, dur), 0.28, 0.2), 0.72)
+    """The sound you hear most, so it has to feel good every time.
+       A bubbly 'bloop' as the two squash together, then a bright little chime
+       chord that climbs a major-pentatonic step with every tier, and more
+       sparkle the higher it goes. Short, round, never harsh."""
+    PENT = [0, 2, 4, 7, 9, 12, 14, 16]
+    root = PENT[min(tier, 8) - 1]
+    dur = 0.55 + 0.08 * tier
+    parts = [(0, bloop(260 + 25 * tier, 700 + 40 * tier, 0.1), 0.55)]
+    chord = [0, 4, 7] if tier < 4 else [0, 4, 7, 12]
+    for k, off in enumerate(chord):
+        f = note(root + off + 12)
+        parts.append((0.035 + k * 0.035, glass(f, 0.5 + 0.05 * tier), 0.34))
+        parts.append((0.035 + k * 0.035, marimba(f / 2, 0.35, soft=0.5), 0.22))
+    if tier >= 3:
+        parts.append((0.06, sparkle(dur, 2 + tier, tier), 0.16 + 0.02 * tier))
+    return master(reverb(mixdown(parts, dur), 0.3, 0.2 + 0.015 * tier), 0.7 + 0.02 * min(tier, 6))
+
+
+def s_crown():
+    """Finishing a chain: the merge, then a short rising fanfare in glass and
+       marimba, with a warm pad blooming underneath."""
+    parts = [(0, bloop(300, 900, 0.12), 0.55)]
+    run = [0, 4, 7, 12, 16, 19, 24]
+    for i, off in enumerate(run):
+        f = note(off + 7)
+        parts.append((0.05 + i * 0.06, glass(f, 0.9), 0.32))
+        parts.append((0.05 + i * 0.06, marimba(f / 2, 0.5, soft=0.4), 0.2))
+    parts.append((0.1, sparkle(1.4, 14, 99), 0.22))
+    pad = warmpad(note(7), 1.6, 1600) * env(int(SR * 1.6), .15, .3, .6, .8, .2)
+    parts.append((0.08, pad, 0.34))
+    return master(reverb(mixdown(parts, 1.9), 0.55, 0.32), 0.88)
 
 
 def s_coin():
-    """Two kalimba notes up a fifth — coins without the cash-register clang."""
-    parts = [(0, kalimba(note(12), 0.4), 0.75),
-             (0.055, kalimba(note(19), 0.45), 0.6)]
-    return master(reverb(mixdown(parts, 0.5), 0.22, 0.2), 0.6)
+    """Coins: two bright glass notes up a fifth with a pinch of sparkle."""
+    parts = [(0, glass(note(19), 0.45), 0.5),
+             (0.06, glass(note(26), 0.5), 0.45),
+             (0.0, kalimba(note(7), 0.3), 0.3),
+             (0.04, sparkle(0.5, 4, 3), 0.12)]
+    return master(reverb(mixdown(parts, 0.6), 0.25, 0.2), 0.6)
 
 
 def s_sell():
@@ -588,7 +637,8 @@ def main():
         'pop': s_pop(1.0),
         'pop_hi': s_pop(1.25),
         'merge1': s_merge(1), 'merge2': s_merge(2), 'merge3': s_merge(3),
-        'merge4': s_merge(4), 'merge5': s_merge(5),
+        'merge4': s_merge(4), 'merge5': s_merge(5), 'merge6': s_merge(6),
+        'merge7': s_merge(7), 'merge8': s_merge(8), 'merge_crown': s_crown(),
         'coin': s_coin(),
         'sell': s_sell(),
         'levelup': s_levelup(),

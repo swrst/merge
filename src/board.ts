@@ -163,6 +163,29 @@ class PixiBoard {
     });
     await Promise.all(jobs);
   }
+  /** Load the rest a few at a time, only when the browser is idle, so the
+   *  first minutes of play (and the intro's animations) never stutter. */
+  async preloadIdle(itemIds: string[], producerArts: string[]) {
+    const jobs: [string, string, string?][] = [];
+    itemIds.forEach(id => { if (!this.tex['i:' + id]) jobs.push(['i:' + id, ART.item(id), ART.spriteItem(id) || undefined]); });
+    producerArts.forEach(a => { if (!this.tex['p:' + a]) jobs.push(['p:' + a, ART.producer(a), ART.spriteProducer(a) || undefined]); });
+    const idle = () => new Promise<void>(res => {
+      const w = window as any;
+      if (w.requestIdleCallback) w.requestIdleCallback(() => res(), { timeout: 400 }); else setTimeout(res, 40);
+    });
+    for (let k = 0; k < jobs.length; k += 4) {
+      await idle();
+      await Promise.all(jobs.slice(k, k + 4).map(([key, svg, url]) => {
+        if (this.tex[key]) return null;
+        return (url ? this.fromUrl(url) : this.rasterise(svg)).then(t => { this.tex[key] = t; });
+      }));
+    }
+  }
+  /** forget any slot drawn before its texture had loaded, so the next sync()
+   *  draws it again with the real one */
+  unstale() {
+    this.slots.forEach(s => { if (s.art && (s.art as any).texture === Texture.EMPTY) s.key = ''; });
+  }
   private texture(key: string): Texture {
     return this.tex[key] || Texture.EMPTY;
   }

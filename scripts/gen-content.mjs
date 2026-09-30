@@ -11,6 +11,7 @@ import { dirname, join } from 'node:path';
 import { CHAINS, SPECIAL } from './content/chains.mjs';
 import { PRODUCERS, CELLS } from './content/producers.mjs';
 import { WORLDS, LOCKS, CHARACTERS, STORY } from './content/worlds.mjs';
+import { ASKS, LIKES } from './content/contracts.mjs';
 
 const OUT = join(dirname(fileURLToPath(import.meta.url)), '..', 'src', 'content');
 
@@ -42,7 +43,7 @@ for (const [key, name, world, unlock, ...lines] of CHAINS) {
     ids.push(id);
   });
   if (chains[key]) throw new Error(`duplicate chain key "${key}"`);
-  chains[key] = { name, world, unlock, items: ids };
+  chains[key] = { name, world, unlock, items: ids, ...(ASKS[key] ? { asks: ASKS[key] } : {}) };
 }
 
 /* ------------------------------------------------------------ producers */
@@ -116,7 +117,8 @@ write('items.json', items);
 write('chains.json', chains);
 write('producers.json', producers);
 write('worlds.json', worlds);
-write('characters.json', CHARACTERS);
+const chars = Object.fromEntries(Object.entries(CHARACTERS).map(([k, c]) => [k, { ...c, ...(LIKES[k] ? { likes: LIKES[k] } : {}) }]));
+write('characters.json', chars);
 write('story.json', STORY);
 writeFileSync(join(OUT, '..', '..', 'art', 'notes.json'), JSON.stringify(notes, null, 2) + '\n');
 console.log(`  ../art/notes.json  ${Object.keys(notes.items).length} item and ${Object.keys(notes.producers).length} producer descriptions`);
@@ -135,6 +137,14 @@ Object.entries(producers).forEach(([id, p]) => p.spec && check(p.spec, `producer
 Object.values(worlds).forEach(w => w.folks.forEach(f => {
   if (!CHARACTERS[f]) errs.push(`world ${w.name} lists unknown character "${f}"`);
 }));
+Object.entries(chains).forEach(([k, c]) => {
+  if (c.world !== 'ship' && c.world !== 'any' && !ASKS[k]) errs.push(`chain "${k}" has no contract lines in contracts.mjs`);
+});
+Object.keys(ASKS).forEach(k => { if (!chains[k]) errs.push(`contracts.mjs ASKS names unknown chain "${k}"`); });
+Object.entries(LIKES).forEach(([ch, ls]) => {
+  if (!CHARACTERS[ch]) errs.push(`contracts.mjs LIKES names unknown character "${ch}"`);
+  ls.forEach(k => { if (!chains[k]) errs.push(`${ch} likes unknown chain "${k}"`); });
+});
 STORY.forEach(s => { if (!CHARACTERS[s.who]) errs.push(`story "${s.id}" uses unknown character "${s.who}"`); });
 
 console.log(`\n  ${Object.keys(items).length} items · ${Object.keys(chains).length} chains · `

@@ -219,7 +219,9 @@ export async function startGame() {
     pop: () => audio.playVary('pop', 0.08),
     popHi: () => audio.playVary('pop_hi', 0.08),
     /** merge sounds climb with the tier you just made */
-    merge: (tier = 1) => audio.playVary('merge' + clamp(tier, 1, 5), 0.04),
+    // a chord, so keep the pitch drift tiny or it goes out of tune with itself
+    merge: (tier = 1) => audio.playVary('merge' + clamp(tier, 1, 8), 0.012),
+    crown: () => { audio.play('merge_crown'); audio.duck(1.6, 0.35); },
     big: () => audio.play('levelup'),
     coin: () => audio.playVary('coin', 0.05),
     sell: () => audio.playVary('sell', 0.05),
@@ -297,7 +299,14 @@ export async function startGame() {
       },
       canDrag: (i: number) => { const c = B()[i]; return !!c && !c.b; },
     });
-    await board.preload(ITEM_IDS, PRODUCER_ARTS);
+    // Rasterising every item before the first frame grows with the catalogue
+    // (500+ now). Wait only for the world you are standing in, plus the shared
+    // and rocket chains that can land anywhere; the rest loads behind it.
+    const here = (id: string) => [S.world, 'any', 'ship'].indexOf(CHAINS[ITEMS[id].chain].world) >= 0;
+    const prodHere = new Set([...WORLDS[S.world].start, ...(WORLDS[S.world].grow || [])]
+      .map(x => PRODS[x.producer].art).concat(['scrapwreck', 'crater']));
+    await board.preload(ITEM_IDS.filter(here), PRODUCER_ARTS.filter(a => prodHere.has(a)));
+    board.preloadIdle(ITEM_IDS, PRODUCER_ARTS).then(() => { board.unstale(); paintBoard(); });
     board.setTheme(S.world);
   }
 
@@ -574,7 +583,6 @@ export async function startGame() {
   /* ================================================================ ORDERS */
   let oid = 1;
   function rollOrder() {
-    const w = W(), maxT = clamp(1 + Math.floor(S.lvl / CONFIG.orders.maxTierAtLevel), 1, 5);
     // only ask for things the player can actually make right now: a chain counts
     // if one of its producers is sitting on the board
     const live: Record<string, boolean> = {};
@@ -582,33 +590,58 @@ export async function startGame() {
       if (!c || !c.p) return;
       PRODS[c.p].drops.forEach((d: string) => { live[ITEMS[d].chain] = true; });
     });
-    let pool: string[] = [];
-    const open = liveChains();
-    open.forEach(c => { if (live[c]) CHAINS[c].items.forEach(id => { if (ITEMS[id].tier <= maxT) pool.push(id); }); });
-    if (!pool.length) open.forEach(c => CHAINS[c].items.forEach(id => { if (ITEMS[id].tier <= maxT) pool.push(id); }));
-    if (S.seen.scrap && Math.random() < 0.15) pool.push('scrap');
-    if (S.met && !allParts() && Math.random() < 0.12) pool.push(rnd(['bolt', 'spring', 'wire', 'glass']));
-    // collectors start asking for relics once you have made one
-    if (S.seen.relic1 && Math.random() < 0.14) pool.push('relic1');
-    const pick = rnd(pool), d = ITEMS[pick];
-    const needs = [{ id: pick, qty: d.tier >= 3 ? 1 : 1 + Math.floor(Math.random() * 2) }];
-    if (S.lvl >= 4 && Math.random() < 0.3) {
-      const p2 = rnd(pool.filter(x => x !== pick));
-      if (p2) needs.push({ id: p2, qty: 1 });
-    }
-    const worth = needs.reduce((a, nd) => a + ITEMS[nd.id].sell * nd.qty, 0);
+    const awake = liveChains();
+    const open = awake.filter(c => live[c]).length ? awake.filter(c => live[c]) : awake;
+    /* How far up a chain a contract reaches: it grows with this world's level
+       and a little with the player's, and it never asks for the crown — that
+       one is yours to show off (and sells for a fortune). */
+    const wl = wlv();
+    const reach = (ck: string) => clamp(2 + Math.floor((wl - 1) / 2) + Math.floor(S.lvl / 8), 2,
+      Math.max(2, CHAINS[ck].items.length - 1));
+    const itemFrom = (ck: string, cap?: number) => {
+      const top = Math.min(reach(ck), cap ?? 99), lo = Math.max(1, top - 2);
+      const ids = CHAINS[ck].items.filter(id => ITEMS[id].tier >= lo && ITEMS[id].tier <= top);
+      return ids.length ? rnd(ids) : CHAINS[ck].items[0];
+    };
+    // Who is asking, first — then what they would plausibly want.
     const folks = W().folks.concat(S.met ? ['bloop'] : []);
-    const char = rnd(folks);
+    const fans = folks.filter(f => (CHARS[f].likes || []).some(c => open.indexOf(c) >= 0));
+    const busy = S.orders.map(o => o.char);
+    const pickFrom = (fans.length ? fans : folks).filter(f => busy.indexOf(f) < 0);
+    const char = rnd(pickFrom.length ? pickFrom : (fans.length ? fans : folks));
+    const theirs = open.filter(c => (CHARS[char].likes || []).indexOf(c) >= 0);
+    const chains = theirs.length ? theirs : open;
+    let chain = rnd(chains);
+    let pick = itemFrom(chain);
+    // the odd special request: star scrap, a rocket piece, a relic
+    const r = Math.random();
+    if (S.seen.scrap && r < 0.1) { pick = 'scrap'; chain = 'star'; }
+    else if (S.met && !allParts() && r < 0.2) { pick = rnd(['bolt', 'spring', 'wire', 'glass']); chain = ITEMS[pick].chain; }
+    else if (S.seen.relic1 && r < 0.28) { pick = 'relic1'; chain = 'relic'; }
+    const d = ITEMS[pick];
+    const needs = [{ id: pick, qty: d.tier >= 3 ? 1 : 1 + Math.floor(Math.random() * 2) }];
+    // a second thing from another chain the same person cares about, a step lower
+    if (S.lvl >= 4 && Math.random() < 0.3 && chains.length > 1) {
+      const other = rnd(chains.filter(c => c !== chain));
+      const p2 = other ? itemFrom(other, Math.max(1, reach(other) - 1)) : null;
+      if (p2 && p2 !== pick) needs.push({ id: p2, qty: 1 });
+    }
+    const asks = CHAINS[chain].asks;
+    const said = S.orders.map(o => o.say);
+    const fresh = (asks || []).filter(x => said.indexOf(x) < 0);
+    const say = fresh.length ? rnd(fresh) : asks && asks.length ? rnd(asks) : rnd(CHARS[char].lines);
+    const worth = needs.reduce((a, nd) => a + ITEMS[nd.id].sell * nd.qty, 0);
     // Orders are the steady drip that keeps the rocket build moving: while parts
     // are missing, most customers pay you back with a piece you still need.
     let give: string | null = null;
     if (S.met && !allParts() && Math.random() < CONFIG.orders.partRewardChance) give = partPiece(true);
     else if (Math.random() < CONFIG.orders.itemRewardChance) {
-      const bonus = pool.filter(x => ITEMS[x].tier >= 2 && ITEMS[x].tier <= Math.max(2, maxT));
+      const c2 = rnd(chains);
+      const bonus = CHAINS[c2].items.filter(x => ITEMS[x].tier >= 2 && ITEMS[x].tier <= reach(c2));
       if (bonus.length) give = rnd(bonus);
     }
     return {
-      id: 'o' + (oid++), char, say: rnd(CHARS[char].lines), give,
+      id: 'o' + (oid++), char, say, give,
       needs,
       coins: Math.round((Math.round(worth * (2 + Math.random())) + 8) * coinMult()),
       xp: Math.round((CONFIG.xp.orderBase + needs.reduce((a, nd) => a + ITEMS[nd.id].tier * 2 + nd.qty, 0)) * xpMult()),
@@ -803,7 +836,8 @@ export async function startGame() {
     }
     b[from] = null; b[to] = { id: nx }; gotItem(nx);
     board.animMerge(from, to, nx);
-    sfx.merge(ITEMS[nx].tier); haptic('light'); floatText(to, ITEMS[nx].name, '#fff');
+    const crown = CHAINS[ITEMS[nx].chain].items.slice(-1)[0] === nx && CHAINS[ITEMS[nx].chain].items.length > 2;
+    if (crown) { sfx.crown(); haptic('medium'); } else { sfx.merge(ITEMS[nx].tier); haptic('light'); } floatText(to, ITEMS[nx].name, '#fff');
     addXp(CONFIG.xp.perMerge); prog('merge', 1); tally('merge'); tutFire('merge');
     if (ITEMS[nx].tier >= 4) tally('tier4');
     lunaBounce(a.id, to);
@@ -2112,6 +2146,10 @@ export async function startGame() {
       worldTab = 'camp';
       if (!S.wlv[w]) { S.wlv[w] = 1; S.wxp[w] = 0; }
       applyBloomSkin(); applyScene();
+      // this world's art jumps the queue; anything drawn before it lands is redrawn
+      board.preload(ITEM_IDS.filter(id => CHAINS[ITEMS[id].chain].world === w),
+        [...WORLDS[w].start, ...(WORLDS[w].grow || [])].map(x => PRODS[x.producer].art))
+        .then(() => { board.unstale(); paintBoard(); });
       // the shelf, the ship and the contract board all belong to a world
       S.orders = []; S.orderCap = undefined; S.ordersAt = 0; fillOrders(true);
       S.shop.stock = null; S.shop.at = 0;

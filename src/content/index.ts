@@ -28,6 +28,8 @@ export interface ItemDef {
 }
 export interface ChainDef {
   name: string;
+  /** what people want things from this chain for, one line per contract */
+  asks?: string[];
   /** a world key for world chains, 'ship' for rocket parts, 'any' for everywhere */
   world: string;
   /** the world-local level this chain appears at — nothing is on the board at once */
@@ -79,7 +81,7 @@ export interface VaultDef { id: string; name: string; desc: string; icon: string
 /** an instant favour paid for with meteor stars */
 export interface ForgeDef { id: string; name: string; desc: string; icon: string; item: string; qty: number }
 export interface TaskDef { kind: string; label: string; min: number; max: number; coins: number }
-export interface CharacterDef { name: string; lines: string[]; face?: { kind: string; mat: string; accent?: string } }
+export interface CharacterDef { name: string; lines: string[]; likes?: string[]; face?: { kind: string; mat: string; accent?: string } }
 /** a story beat: fires on reaching a world level, or on a one-off flag */
 export interface StoryDef { id: string; who: string; title: string; text: string; at?: { world?: string; lvl?: number; flag?: string } }
 export interface MissionDef { id: string; need: number; text: string; hint: string; coins: number }
