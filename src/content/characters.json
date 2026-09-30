@@ -5,6 +5,13 @@
       "Ooh, is that for me?",
       "You are quick at this!",
       "Perfect. Just perfect."
+    ],
+    "likes": [
+      "wood",
+      "stone",
+      "veggie",
+      "visitor",
+      "water"
     ]
   },
   "grandma": {
@@ -13,6 +20,14 @@
       "Bless you, dear.",
       "My garden thanks you.",
       "Just like the old days."
+    ],
+    "likes": [
+      "berry",
+      "honey",
+      "flower",
+      "cloth",
+      "mush",
+      "clay"
     ]
   },
   "timmy": {
@@ -21,6 +36,14 @@
       "Whoa, cool!",
       "Can I keep it?",
       "You are the best!"
+    ],
+    "likes": [
+      "stone",
+      "stargaze",
+      "visitor",
+      "feather",
+      "garden",
+      "wood"
     ]
   },
   "gigi": {
@@ -29,6 +52,14 @@
       "Darling, exquisite.",
       "Simply divine.",
       "You have taste."
+    ],
+    "likes": [
+      "flower",
+      "cloth",
+      "clay",
+      "feather",
+      "honey",
+      "berry"
     ]
   },
   "biscuit": {
@@ -37,6 +68,13 @@
       "Woof!",
       "Wag wag wag.",
       "Arf! Arf!"
+    ],
+    "likes": [
+      "wood",
+      "berry",
+      "water",
+      "grass",
+      "veggie"
     ]
   },
   "bloop": {
@@ -50,7 +88,16 @@
       "kind": "blob",
       "mat": "jade",
       "accent": "cream"
-    }
+    },
+    "likes": [
+      "star",
+      "relic",
+      "glow",
+      "crystal",
+      "garden",
+      "aurorac",
+      "starc"
+    ]
   },
   "zib": {
     "name": "Zib",
@@ -63,7 +110,16 @@
       "kind": "blob",
       "mat": "mint",
       "accent": "cream"
-    }
+    },
+    "likes": [
+      "silver",
+      "dust",
+      "rover",
+      "dish",
+      "meteorite",
+      "iron",
+      "copper"
+    ]
   },
   "luma": {
     "name": "Luma",
@@ -76,7 +132,17 @@
       "kind": "blob",
       "mat": "rose",
       "accent": "cream"
-    }
+    },
+    "likes": [
+      "glow",
+      "lantern",
+      "comet",
+      "lunamoth",
+      "crystal",
+      "starc",
+      "planets",
+      "nebula"
+    ]
   },
   "rokk": {
     "name": "Rokk",
@@ -89,7 +155,17 @@
       "kind": "robot",
       "mat": "steel",
       "accent": "sapphire"
-    }
+    },
+    "likes": [
+      "dust",
+      "ice",
+      "rover",
+      "meteorite",
+      "helium",
+      "iron",
+      "steam",
+      "basalt"
+    ]
   },
   "nix": {
     "name": "Nix",
@@ -102,7 +178,15 @@
       "kind": "crystal",
       "mat": "amethyst",
       "accent": "lilac"
-    }
+    },
+    "likes": [
+      "crystal",
+      "moon",
+      "silver",
+      "meteorite",
+      "moonpup",
+      "moonmelon"
+    ]
   },
   "vulk": {
     "name": "Vulk",
@@ -115,7 +199,16 @@
       "kind": "flame",
       "mat": "ember",
       "accent": "gold"
-    }
+    },
+    "likes": [
+      "magma",
+      "iron",
+      "forge",
+      "steam",
+      "basalt",
+      "copper",
+      "obsid"
+    ]
   },
   "ember": {
     "name": "Ember",
@@ -128,7 +221,17 @@
       "kind": "blob",
       "mat": "flame",
       "accent": "gold"
-    }
+    },
+    "likes": [
+      "shroom",
+      "spice",
+      "phoenix",
+      "emberfruit",
+      "salamander",
+      "glassw",
+      "rubyc",
+      "sulfur"
+    ]
   },
   "marin": {
     "name": "Marin",
@@ -141,7 +244,15 @@
       "kind": "fish",
       "mat": "sapphire",
       "accent": "mint"
-    }
+    },
+    "likes": [
+      "fishc",
+      "harbour",
+      "salt",
+      "sunkn",
+      "turtle",
+      "kelp"
+    ]
   },
   "kelpa": {
     "name": "Kelpa",
@@ -154,7 +265,15 @@
       "kind": "blob",
       "mat": "kelp",
       "accent": "jade"
-    }
+    },
+    "likes": [
+      "kelp",
+      "coralc",
+      "urchin",
+      "squid",
+      "tide",
+      "seaglass"
+    ]
   },
   "sirra": {
     "name": "Sirra",
@@ -167,7 +286,15 @@
       "kind": "fish",
       "mat": "coral",
       "accent": "pearl"
-    }
+    },
+    "likes": [
+      "pearlc",
+      "shellc",
+      "tide",
+      "lumin",
+      "seaglass",
+      "manta"
+    ]
   },
   "zephyr": {
     "name": "Zephyr",
@@ -180,7 +307,14 @@
       "kind": "cloud",
       "mat": "cloud",
       "accent": "mint"
-    }
+    },
+    "likes": [
+      "cloudc",
+      "wind",
+      "kite",
+      "balloonc",
+      "skyfruit"
+    ]
   },
   "halo": {
     "name": "Halo",
@@ -193,7 +327,15 @@
       "kind": "crystal",
       "mat": "aurora",
       "accent": "star"
-    }
+    },
+    "likes": [
+      "aurorac",
+      "prismv",
+      "starc",
+      "nebula",
+      "starflower",
+      "planets"
+    ]
   },
   "wren": {
     "name": "Wren",
@@ -206,6 +348,13 @@
       "kind": "bird",
       "mat": "topaz",
       "accent": "gold"
-    }
+    },
+    "likes": [
+      "skynest",
+      "skyfruit",
+      "chime",
+      "starling",
+      "cloudc"
+    ]
   }
 }
