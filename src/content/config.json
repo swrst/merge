@@ -335,5 +335,62 @@
       "cost": 0,
       "cooldownMs": 0
     }
+  },
+  "visitor": {
+    "firstAtWorldLevel": 3,
+    "everyMs": 1500000,
+    "firstMs": 420000,
+    "lastsMs": 1200000,
+    "taps": 14,
+    "refillMin": 8
+  },
+  "bubble": {
+    "chance": 0.07,
+    "minTier": 2,
+    "lastsMs": 60000,
+    "priceMult": 6,
+    "minPrice": 25
+  },
+  "milestone": {
+    "steps": [
+      4,
+      6,
+      8,
+      10,
+      12
+    ],
+    "energy": 15
+  },
+  "chest": {
+    "chest": {
+      "items": 3,
+      "maxTier": 2,
+      "coins": 0
+    },
+    "bigchest": {
+      "items": 5,
+      "maxTier": 3,
+      "coins": 120
+    }
+  },
+  "daily2": {
+    "count": 5,
+    "marks": [
+      40,
+      80,
+      120
+    ]
+  },
+  "shop2": {
+    "freeGiftEnergy": 20,
+    "energyRefill": {
+      "amount": 40,
+      "base": 60,
+      "step": 40
+    },
+    "chestPrice": {
+      "chest": 140,
+      "bigchest": 520
+    }
   }
 }

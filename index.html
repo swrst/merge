@@ -28,6 +28,7 @@
   <div class="orderWrap">
     <button class="oArrow l" id="oLeft">‹</button>
     <div class="orders" id="orders"></div>
+    <div class="oMile" id="oMile" title="Contracts until the next chest"></div>
     <button class="oArrow r" id="oRight">›</button>
     <!-- one "what now?" line instead of two: Pip says it and it opens the list -->
     <button class="questBtn" id="btnQuests">
@@ -66,8 +67,8 @@
     <button class="tab railBtn" data-v="map" id="tabMap"><span class="ti">🌍</span><i>World</i><span class="dot" id="dotWorld" style="display:none"></span></button>
     <button class="tab railBtn" data-v="shop" id="tabShop"><span class="ti">🛒</span><i>Shop</i><span class="dot" id="dotShop" style="display:none"></span></button>
     <button class="tab railBtn" data-v="lab" id="tabLab"><span class="ti">🔬</span><i>Lab</i></button>
-    <button class="tab railBtn" data-v="rocket" id="tabRocket"><span class="ti">📋</span><i>Tasks</i><span class="dot" id="dotRocket" style="display:none"></span></button>
-    <button class="tab railBtn" data-v="book"><span class="ti">📖</span><i>Guide</i></button>
+    <button class="tab railBtn" data-v="rocket" id="tabRocket"><span class="ti">📜</span><i>Goals</i><span class="dot" id="dotRocket" style="display:none"></span></button>
+    <button class="tab railBtn" data-v="book"><span class="ti">📖</span><i>Album</i></button>
   </div>
 
   <div class="screen" id="sc-shop">
@@ -83,11 +84,11 @@
     <div class="scBody" id="labBody"></div>
   </div>
   <div class="screen" id="sc-rocket">
-    <div class="scHead"><div class="scTitle">📋 Tasks &amp; Vault</div><button class="iconBtn scClose">✕</button></div>
+    <div class="scHead"><div class="scTitle">📜 Goals</div><button class="iconBtn scClose">✕</button></div>
     <div class="scBody" id="rocketBody"></div>
   </div>
   <div class="screen" id="sc-book">
-    <div class="scHead"><div class="scTitle">📖 Merge Guide</div><button class="iconBtn scClose">✕</button></div>
+    <div class="scHead"><div class="scTitle">📖 Collection</div><button class="iconBtn scClose">✕</button></div>
     <div class="scBody" id="bookBody"></div>
   </div>
   <div class="screen scene" id="sc-map">

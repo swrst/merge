@@ -5760,6 +5760,31 @@
       ]
     }
   },
+  "chest": {
+    "name": "Supply Chest",
+    "chain": "chest",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "chest",
+      "mat": "wood",
+      "accent": "gold"
+    }
+  },
+  "bigchest": {
+    "name": "Treasure Chest",
+    "chain": "chest",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "chest",
+      "mat": "gold",
+      "accent": "ruby",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
   "rainbow": {
     "name": "Wildcard",
     "chain": "wild",

@@ -101,7 +101,8 @@ const pop = async (k, title) => {
 /** fly somewhere and wait for the launch cutscene to finish clearing */
 const travel = async (world) => {
   await closeModal();
-  await set(() => { window.__game.state().fuel = 3; });
+  // new worlds open once the one before has its launch pad restored
+  await set(() => { const st = window.__game.state(); st.fuel = 3; st.proj = { earth: 99, luna: 99, cindra: 99, nerith: 99, vela: 99 }; });
   await closeModal();
   await tab('map');
   // the galaxy is a sub-view of the World tab, and it remembers which view it
@@ -543,30 +544,91 @@ const sleeping = await page.evaluate((cs) => {
 }, asked);
 must(sleeping.length === 0, 'and no contract asks for something that has not woken up yet');
 
-head('Maxing what you have unlocks the next one');
+head('A world level brings the next producer');
 let before2 = await page.evaluate(() => {
-  const g = window.__game, w = g.state().world;
-  return { chains: Object.values(g.chains).filter(c => c.world === w && c.unlock <= 99).length,
-    live: g.liveChains().length, prods: g.cells().filter(c => c && c.p).length };
+  const g = window.__game;
+  return { live: g.liveChains().length, prods: g.cells().filter(c => c && c.p).length };
 });
-// not yet: they are still level 1
+// not yet: a fresh world is level 1 and the next plot waits for level 2
 await page.evaluate(() => window.__game.grow());
 await page.waitForTimeout(400);
 let mid = await page.evaluate(() => window.__game.cells().filter(c => c && c.p).length);
-must(mid === before2.prods, 'a half-grown world gets nothing new');
-// max every producer, and the next plot fills itself
-await set(() => {
-  const g = window.__game, b = g.cells();
-  b.forEach(c => { if (c && c.p && g.prods[c.p].mode !== 'once') c.lv = 4; });
-});
+must(mid === before2.prods, 'nothing new takes root before its world level');
+await set(() => { const g = window.__game, st = g.state(); st.wlv[st.world] = 2; });
 await page.evaluate(() => window.__game.grow());
 await page.waitForTimeout(1200);
 const after4 = await page.evaluate(() => {
   const g = window.__game;
   return { live: g.liveChains().length, prods: g.cells().filter(c => c && c.p).length };
 });
-must(after4.prods > before2.prods, `growing them all planted a new producer (${before2.prods} -> ${after4.prods})`);
+must(after4.prods > before2.prods, `reaching the level planted a new producer (${before2.prods} -> ${after4.prods})`);
 must(after4.live > before2.live, `and woke its chain (${before2.live} -> ${after4.live} awake)`);
+await closeModal();
+
+head('Restoration projects');
+await set(() => {
+  const g = window.__game, s = g.state(), b = g.cells();
+  for (let i = 0; i < b.length; i++) if (b[i] && b[i].id) b[i] = null;
+  s.proj.vela = 0; s.coins = 5000;
+  const fr = []; for (let i = 0; i < b.length; i++) if (!b[i]) fr.push(i);
+  b[fr[0]] = { id: 'cloudpuff' }; b[fr[1]] = { id: 'aurorasilk' };
+  window.__board.sync(b);
+});
+await tab('rocket');
+must(await page.locator('#rocketBody .pRow.cur').count() === 1, 'the Goals screen shows the current project');
+await page.locator('#btnProject').click({ force: true }); await page.waitForTimeout(900);
+s = await S();
+must(s.proj.vela === 1, 'building it moves the world on to the next project');
+must(!s.boards.vela.some(c => c && (c.id === 'cloudpuff' || c.id === 'aurorasilk')), 'and used up the items it asked for');
+await closeModal();
+await tab('board');
+
+head('Chests and bubbles');
+await set(() => {
+  const g = window.__game, b = g.cells();
+  for (let i = 0; i < b.length; i++) if (b[i] && b[i].id) b[i] = null;
+  const fr = []; for (let i = 0; i < b.length; i++) if (!b[i]) fr.push(i);
+  b[fr[0]] = { id: 'chest' };
+  b[fr[fr.length - 1]] = { bub: 'cloudpuff', until: Date.now() + 60000 };
+  window.__t = { chest: fr[0], bub: fr[fr.length - 1] };
+  window.__board.sync(b);
+});
+const tcells = await page.evaluate(() => window.__t);
+await closeModal();
+await tapCell(tcells.chest); await page.waitForTimeout(900);
+let items = await page.evaluate(() => window.__game.cells().filter(c => c && c.id).length);
+must(items >= 3 && !(await S()).boards.vela.some(c => c && c.id === 'chest'), `tapping a chest spills ${items} things onto the board`);
+await tapCell(tcells.bub); await page.waitForTimeout(600);
+await page.locator('#btnBubble').click({ force: true }); await page.waitForTimeout(600);
+s = await S();
+must(s.boards.vela[tcells.bub] && s.boards.vela[tcells.bub].id === 'cloudpuff', 'buying a bubble turns it into the real thing');
+await closeModal();
+
+head('Visitors bring a temporary producer');
+await set(() => { const st = window.__game.state(); st.wlv[st.world] = 5; st.vis = null; st.visAt = 1; });
+await closeModal(); await tab('board');
+await page.waitForFunction(() => window.__game.cells().some(c => c && c.tmp), null, { timeout: 8000 }).catch(() => {});
+s = await S();
+must(s.boards.vela.some(c => c && c.tmp), 'a visitor landed with a producer of their own');
+must(s.orders.some(o => o.vis && o.give === 'chest'), 'and put up a contract that pays a chest');
+await closeModal();
+// and leaves when the time is up, taking its producer and its contract with it
+await set(() => { window.__game.state().vis.until = 1; });
+await page.waitForTimeout(1500);
+s = await S();
+must(!s.boards.vela.some(c => c && c.tmp) && !s.orders.some(o => o.vis), 'and flew home when the time was up, producer and contract with it');
+await set(() => { window.__game.state().visAt = Date.now() + 9e8; });
+await closeModal();
+
+head('Flying back is free');
+await set(() => { window.__game.state().fuel = 0; });
+await closeModal();
+await page.evaluate(() => window.__game.fly('earth'));
+await page.waitForFunction(() => window.__game.state().world === 'earth', null, { timeout: 15000 }).catch(() => {});
+s = await S();
+must(s.world === 'earth' && s.fuel === 0, 'back in Sunny Meadow without spending fuel');
+await page.waitForTimeout(3200); await closeModal();
+await travel('vela');
 await closeModal();
 
 head('Finishing a chain pays Bloom Essence');
@@ -730,7 +792,7 @@ must(!!nrg, `this world has an energy producer (${nrg && nrg.name})`);
 await set(() => {
   const g = window.__game, st = g.state(), b = g.cells();
   for (let k = 0; k < b.length; k++) if (b[k] && b[k].id) b[k] = null;
-  st.energy = 6; st.eAt = Date.now();          // no regen tick sneaking in mid-check
+  st.energy = 6; st.eAt = Date.now(); st.visAt = Date.now() + 9e8; st.vis = null;          // no regen tick sneaking in mid-check
   const c = b.find(x => x && x.p && g.prods[x.p].mode === 'energy');
   c.lv = 1;
   window.__board.sync(b);
@@ -758,14 +820,14 @@ await tab('board');
 // by now we are standing on Vela, so use whatever producer this world has
 const prod = await page.evaluate(() => {
   const g = window.__game, b = g.cells();
-  const i = b.findIndex(c => c && c.p && g.prods[c.p].mode === 'battery');
+  const i = b.findIndex(c => c && c.p && !c.tmp && g.prods[c.p].mode === 'battery');
   return { i, k: b[i].p };
 });
 await set(() => {
   const g = window.__game, st = g.state(), b = g.cells();
   for (let k = 0; k < b.length; k++) if (b[k] && b[k].id) b[k] = null;
   st.energy = 8;                         // deliberately low: taps must not need it
-  const c = b.find(x => x && x.p && g.prods[x.p].mode === 'battery');
+  const c = b.find(x => x && x.p && !x.tmp && g.prods[x.p].mode === 'battery');
   c.lv = 1; c.spent = 0; c.ch = g.capOf(g.prods[c.p], 1);
   window.__board.sync(b);
 });
@@ -827,14 +889,16 @@ await closeModal();
 
 head('A maxed producer eventually goes to seed');
 await tab('board');
-await set(() => {
+// the producer tested above, by its cell: later levels plant more batteries
+await page.evaluate(i => {
   const g = window.__game, b = g.cells(), st = g.state();
-  const c = b.find(x => x && x.p && g.prods[x.p].mode === 'battery');
+  const c = b[i];
   c.lv = 4; c.spent = 43; c.ch = 99;
   for (let k = 0; k < b.length; k++) if (b[k] && b[k].id) b[k] = null;
   st.coins = 0;
   window.__board.sync(b);
-});
+}, prod.i);
+await page.evaluate(() => window.__game.hud());
 for (let i = 0; i < 3; i++) await tapCell(prod.i);
 await page.waitForTimeout(1400);
 const seeded = await page.evaluate(i => {
@@ -851,16 +915,22 @@ await set(() => { const st = window.__game.state(); st.mp = {}; });
 const qTxt = await page.textContent('#questTxt');
 must(qTxt.length > 4, `the quest button says what to do next: "${qTxt}"`);
 await page.locator('#btnQuests').click({ force: true }); await page.waitForTimeout(900);
+// once the rocket stands, the strip points at the restoration project and the
+// starter quests live one tap further, on the Goals screen
+if (await page.locator('#openQuests').count()) { await page.evaluate(() => document.querySelector('#openQuests').click()); await page.waitForTimeout(700); }
 must(await page.locator('.questRow').count() >= 15, `the quest list shows all ${await page.locator('.questRow').count()} of them`);
 must(await page.locator('.questRow.now').count() === 1, 'with the current one called out');
 await closeModal();
+await tab('board');
 const askedFor = await page.locator('#orders [data-need]').first().getAttribute('data-need');
 const askedLen = await page.evaluate(id => window.__game.chains[window.__game.items[id].chain].items.length, askedFor);
 await page.locator('#orders [data-need]').first().click({ force: true }); await page.waitForTimeout(900);
 // chains run 2 to 8 steps (rocket parts are 3), so count against the one asked for
 must(await page.locator('.chainWrap .chStep').count() === askedLen, `tapping a contract item draws its whole chain (${askedLen} steps)`);
 must(await page.locator('.chStep.want').count() === 1, 'with the one they asked for highlighted');
-must(await page.locator('.srcBox').count() === 1, 'and points at the producer that starts it');
+const srcOn = await page.evaluate(id => { const g = window.__game, ch = g.items[id].chain;
+  return g.cells().some(c => c && c.p && g.prods[c.p].drops.some(d => g.items[d].chain === ch)); }, askedFor);
+must(await page.locator('.srcBox').count() === (srcOn ? 1 : 0), srcOn ? 'and points at the producer that starts it' : 'and says where it comes from (its producer is not on this board)');
 await closeModal();
 
 head('The guided intro');

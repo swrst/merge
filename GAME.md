@@ -679,3 +679,30 @@ an order payout, top a producer's battery back up.
   "deepest run" record.
 - Bloom Essence is earned from chain finales and the Dig. A third source — a weekly Vault
   contract, say — would smooth the late curve.
+
+## v7 — the main loop
+
+**Restore the world, then leave it.** Every world has 10–11 restoration projects
+(`scripts/content/projects.mjs`). Each asks for a few specific items plus coins
+and pays world XP, often a chest, and a story line. They open one at a time.
+One project per world is the launch pad: until it is built, the next planet
+stays locked on the star map. Flying back to a world you have visited is free.
+
+**Producers unlock by world level** (the `at` in `producers.mjs`, now up to 12).
+The empty plot in the camp says which level opens it.
+
+**Around the loop:**
+- *Contracts* pay coins, and some pay energy. Every few deliveries a milestone
+  chest drops (the 📦 badge under the order row).
+- *Visitors*: from world level 3, now and then someone from another planet lands
+  with a producer of their own. It gives 14 free taps and leaves after about 20
+  minutes. Their contract always pays a Supply Chest.
+- *Bubbles*: a merge sometimes leaves a floating copy of the result. Buy it for
+  coins within 60 s or it pops.
+- *Chests*: tap one to spill items from this world's awake chains. Two Supply
+  Chests merge into a Treasure Chest.
+- *Daily tasks*: 5 a day (one is "make this specific thing"). Points fill three
+  reward chests.
+- *Shop*: a free daily gift, an energy refill, the rotating shelf, chests,
+  boosters and upgrades, in tabs.
+- *Album*: one tile per chain, per world; tap a tile for the chain and its source.
