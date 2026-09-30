@@ -99,3 +99,15 @@ Also hooked up: `bar_track.png` + `bar_fill.png` (the XP bar) and `badge_ready.p
 Not hooked up yet: `icon_gem`, `icon_bloom`, `frame_rare`, `ribbon`, `order_card`,
 `plinth`, and the `fx/` sprite sheets. Painting them is fine; they will show once
 the game uses them.
+
+## Keep the files small
+
+Every sprite is inlined into the single-file `MergeRocket.html`, so size adds up
+fast (500 items at 250 kB each would be a 125 MB page). After adding a batch, run:
+
+```bash
+npm run art:optimize    # items/producers -> 256 px palette PNG, scenes -> WebP q80
+```
+
+It is safe to run repeatedly and leaves files that are already small alone.
+

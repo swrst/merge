@@ -804,7 +804,7 @@ button{font-family:inherit;cursor:pointer;border:none}
   box-shadow:none!important;display:flex;flex-direction:column;align-items:center;gap:2px;
   font-family:inherit;cursor:pointer;width:104px}
 .spot:active{filter:brightness(1.12)}
-.spotArt{width:70px;height:70px;filter:drop-shadow(0 6px 7px rgba(20,30,15,.45))}
+.spotArt{width:84px;height:84px;filter:drop-shadow(0 6px 7px rgba(20,30,15,.45))}
 .spotArt svg{width:100%;height:100%}
 .spot.ship .spotArt{width:76px;height:98px}
 .spot.heart .spotArt{width:56px;height:56px;animation:heartBeat 2.6s ease-in-out infinite}

@@ -8,6 +8,9 @@
    policy, decode failure, a browser without WebAudio) every method is a no-op
    and the game plays on in silence. */
 
+/** music sits well under the effects: it is a bed, not a soundtrack */
+const MUSIC_VOL = 0.35;
+
 const urls = import.meta.glob('./audio/*.ogg', {
   eager: true, query: '?url', import: 'default',
 }) as Record<string, string>;
@@ -43,7 +46,7 @@ class Audio {
         this.ctx = new AC();
         this.master = this.ctx!.createGain(); this.master.gain.value = 0.9;
         this.sfxBus = this.ctx!.createGain(); this.sfxBus.gain.value = this.sfxOn ? 1 : 0;
-        this.musicBus = this.ctx!.createGain(); this.musicBus.gain.value = this.musicOn ? 0.5 : 0;
+        this.musicBus = this.ctx!.createGain(); this.musicBus.gain.value = this.musicOn ? MUSIC_VOL : 0;
         this.sfxBus.connect(this.master); this.musicBus.connect(this.master);
         this.master.connect(this.ctx!.destination);
       } catch { this.broken = true; return; }
@@ -147,8 +150,8 @@ class Audio {
     const now = this.ctx.currentTime, g = this.musicBus.gain;
     g.cancelScheduledValues(now);
     g.setValueAtTime(g.value, now);
-    g.linearRampToValueAtTime(0.5 * to, now + 0.12);
-    g.linearRampToValueAtTime(0.5, now + seconds);
+    g.linearRampToValueAtTime(MUSIC_VOL * to, now + 0.12);
+    g.linearRampToValueAtTime(MUSIC_VOL, now + seconds);
   }
 
   setSfx(on: boolean) {
@@ -158,7 +161,7 @@ class Audio {
   setMusic(on: boolean) {
     this.musicOn = on;
     if (!this.ctx) return;
-    this.musicBus.gain.value = on ? 0.5 : 0;
+    this.musicBus.gain.value = on ? MUSIC_VOL : 0;
     if (on && this.wanted && !this.current) this.playMusic(this.wanted);
   }
 }

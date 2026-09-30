@@ -431,7 +431,7 @@ def s_boost():
 # -------------------------------------------------------------------- music
 def music(name, bpm, bars, chords, mel, *, pad_gain=0.2, bass_oct=-24,
           lead='marimba', arp=(0, 2, 1, 2), arp_gain=0.16, arp_oct=12,
-          shake=None, reverb_mix=0.34, cut=1600, mel_oct=12):
+          shake=None, reverb_mix=0.34, cut=1600, mel_oct=12, mel_gain=0.3, air=0.0):
     """A loopable stereo bed, built the way a cosy game actually scores itself:
        a pad holding the chord, a soft bass on the down beat, a gentle arpeggio
        keeping time, and a melody with *rests* in it. Eight bars, so the loop
@@ -476,7 +476,14 @@ def music(name, bpm, bars, chords, mel, *, pad_gain=0.2, bass_oct=-24,
             continue
         f = note(off + mel_oct)
         sig = marimba(f, ln * beat, soft=0.45) if lead == 'marimba' else kalimba(f, ln * beat)
-        add(at * beat, sig, 0.3, 0.5 + 0.1 * math.sin(at * 1.7))
+        add(at * beat, sig, mel_gain, 0.5 + 0.1 * math.sin(at * 1.7))
+
+    if air:
+        # a slow breath of filtered noise under everything: room tone, not a sound
+        n = int(SR * dur)
+        swell = 0.55 + 0.45 * np.sin(2 * np.pi * np.arange(n) / n * 2 - math.pi / 2)
+        for pan in (0.2, 0.8):
+            add(0, lowpass_fast(noise(dur), 700) * swell, air, pan)
 
     left = reverb(mixdown(L, dur), 0.62, reverb_mix)
     right = reverb(mixdown(R, dur), 0.68, reverb_mix)
@@ -509,8 +516,9 @@ def earth_theme():
         (7, 2), (9, 1), (11, 1), (12, 3), (None, 1),
         (9, 1), (7, 1), (4, 2), (None, 12),
     ])
-    return music('music_earth', 82, 8, chords, mel, pad_gain=0.2,
-                 arp=(0, 2, 1, 2), arp_gain=0.15, shake=[1, 3], reverb_mix=0.3)
+    return music('music_earth', 66, 8, chords, mel, pad_gain=0.24,
+                 arp=(0, None, 2, None), arp_gain=0.1, shake=None, reverb_mix=0.42,
+                 cut=1250, mel_gain=0.22, air=0.05)
 
 
 def luna_theme():
@@ -523,9 +531,9 @@ def luna_theme():
         (11, 4), (None, 4),
         (9, 2), (7, 1), (4, 1), (2, 4), (None, 8),
     ])
-    return music('music_luna', 64, 8, chords, mel, pad_gain=0.26, lead='kalimba',
-                 arp=(0, None, 2, None), arp_gain=0.12, arp_oct=24,
-                 shake=None, reverb_mix=0.46, cut=1300)
+    return music('music_luna', 56, 8, chords, mel, pad_gain=0.28, lead='kalimba',
+                 arp=(0, None, None, None), arp_gain=0.09, arp_oct=24,
+                 shake=None, reverb_mix=0.52, cut=1100, mel_gain=0.2, air=0.06)
 
 
 def cindra_theme():
@@ -538,8 +546,9 @@ def cindra_theme():
         (7, 2), (10, 2), (7, 2), (5, 1), (3, 1),
         (2, 3), (None, 5),
     ])
-    return music('music_cindra', 76, 8, chords, mel, pad_gain=0.22,
-                 arp=(0, 1, 2, 1), arp_gain=0.15, shake=[2], reverb_mix=0.34, cut=1450)
+    return music('music_cindra', 62, 8, chords, mel, pad_gain=0.25,
+                 arp=(0, None, 2, None), arp_gain=0.1, shake=None, reverb_mix=0.44,
+                 cut=1150, mel_gain=0.2, air=0.05)
 
 
 def nerith_theme():
@@ -552,9 +561,9 @@ def nerith_theme():
         (3, 2), (2, 1), (0, 1), (-2, 4),
         (None, 4), (0, 2), (3, 2),
     ])
-    return music('music_nerith', 62, 8, chords, mel, pad_gain=0.27, lead='kalimba',
-                 arp=(0, None, 2, 1), arp_gain=0.13, arp_oct=12,
-                 shake=None, reverb_mix=0.48, cut=1250)
+    return music('music_nerith', 54, 8, chords, mel, pad_gain=0.28, lead='kalimba',
+                 arp=(0, None, 2, None), arp_gain=0.09, arp_oct=12,
+                 shake=None, reverb_mix=0.54, cut=1050, mel_gain=0.2, air=0.08)
 
 
 def vela_theme():
@@ -567,9 +576,9 @@ def vela_theme():
         (16, 2), (14, 1), (12, 1), (11, 4),
         (None, 2), (7, 2), (9, 4),
     ])
-    return music('music_vela', 70, 8, chords, mel, pad_gain=0.25, lead='kalimba',
-                 arp=(0, 2, 3, 2), arp_gain=0.14, arp_oct=24,
-                 shake=[1.5, 3.5], reverb_mix=0.44, cut=1700)
+    return music('music_vela', 58, 8, chords, mel, pad_gain=0.27, lead='kalimba',
+                 arp=(0, None, 3, None), arp_gain=0.09, arp_oct=24,
+                 shake=None, reverb_mix=0.52, cut=1300, mel_gain=0.2, air=0.06)
 
 
 # --------------------------------------------------------------------- main

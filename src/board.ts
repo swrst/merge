@@ -4,7 +4,7 @@
 import { Application, Container, Graphics, Sprite, Text, Texture } from 'pixi.js';
 import gsap from 'gsap';
 import { ART } from './art';
-import { ITEMS } from './content';
+import { ITEMS, CHAINS } from './content';
 
 export type Cell = { b?: number; p?: string; id?: string; ch?: number; at?: number } | null;
 
@@ -242,9 +242,12 @@ class PixiBoard {
     const d = ITEMS[k.slice(1)];
     if (!d) return 0;
     if (d.chain === 'relic' || d.chain === 'wild') return 3;
-    if (d.tier >= 5) return 3;
-    if (d.tier === 4) return 2;
-    if (d.tier === 3) return 1;
+    // Relative to the chain, not an absolute tier: chains run 4 to 8 steps, and
+    // the painted art already shows its own climb. Only the crown and the step
+    // below it get a frame, so a busy board still reads calm.
+    const len = (CHAINS[d.chain]?.items.length) || 7;
+    if (d.tier >= len) return 3;
+    if (d.tier === len - 1 && len >= 5) return 2;
     return 0;
   }
   private drawTile(i: number) {
