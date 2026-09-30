@@ -372,7 +372,7 @@ export async function startGame() {
     $('#tabLab').classList.toggle('hide', !labOpen());
     $('#dotRocket').style.display = tasksDone() > 0 ? '' : 'none';
     const cur = curMission(), pj = curProject();
-    const showProj = !cur || (S.met && allParts());
+    const showProj = !cur || MISSIONS.indexOf(cur) >= 3;
     $('#questTxt').textContent = showProj ? (pj ? '🏗️ ' + pj.name : '🌟 ' + W().name + ' is restored!') : cur.text;
     if (showProj && pj) {
       const got = pj.needs.filter(([id, q]: [string, number]) => countItem(id) >= q).length;
@@ -776,7 +776,8 @@ export async function startGame() {
     $('#luSub').textContent = 'Energy refilled • weeds cleared';
     lu.classList.remove('show'); void lu.offsetWidth; lu.classList.add('show');
     setTimeout(() => lu.classList.remove('show'), 2100);
-    if (S.lvl >= CONFIG.meteor.firstAtLevel && !S.met) setTimeout(meteorStory, 1800);
+    // on a story world Bloop arrives with a chapter (Mend the Old Well), not a level
+    if (S.lvl >= CONFIG.meteor.firstAtLevel && !S.met && !scripted('earth')) setTimeout(meteorStory, 1800);
   }
   function prog(id: string, add?: number, setTo?: number) {
     const m = MISSIONS.find(x => x.id === id); if (!m) return;
@@ -1786,7 +1787,7 @@ export async function startGame() {
     renderOrders();
   }
   function shipTick(now: number) {
-    if (S.lvl < CONFIG.ship.firstAtLevel) return;
+    if (S.lvl < CONFIG.ship.firstAtLevel || (scripted() && projDone() < 6)) return;
     if (S.ship) {
       if (now > S.ship.endsAt) {
         S.ship = null; S.shipAt = now + CONFIG.ship.everyMs;
@@ -1998,7 +1999,7 @@ export async function startGame() {
      empty plot, so there is always a visible next thing to work towards. */
   function growProducers() {
     const b = B(), nxt = nextProducer();
-    if (!nxt || wlv() < nextAt()) return;
+    if (!nxt || wlv() < nextAt() || scripted()) return;
     if (b.some(c => c && c.p === nxt)) return;
     const g = (W().grow || []).find(x => x.producer === nxt);
     const i = firstFree(g ? g.cells : []);
@@ -2130,12 +2131,40 @@ export async function startGame() {
   const launchIdx = (w: string) => projList(w).findIndex((p: any) => p.launch);
   /** has this world's way off been repaired? (the last world has none) */
   const launchDone = (w: string) => { const i = launchIdx(w); return i < 0 || projDone(w) > i; };
-  const projReady = (p: any) => !!p && p.needs.every(([id, q]: [string, number]) => countItem(id) >= q) && S.coins >= p.coins;
+  const projReady = (p: any) => !!p && p.needs.every(([id, q]: [string, number]) => countItem(id) >= q) && S.coins >= p.coins
+    && (!p.rocket || !!allParts());
+  const worldDone = (w?: string) => projList(w).length > 0 && projDone(w) >= projList(w).length;
+  /** a world told as a story: its chapters hand out the producers, not its level */
+  const scripted = (w?: string) => projList(w).some((p: any) => p.unlock || p.temp) && !worldDone(w);
+  /** plant a producer the story has just given you, and say so */
+  function plantProducer(k: string) {
+    const b = B(); if (b.some(c => c && c.p === k)) return;
+    const g = (W().grow || []).find(x => x.producer === k);
+    let i = firstFree(g ? g.cells : []);
+    if (i < 0) i = freeCells()[Math.floor(freeCells().length / 2)] ?? -1;
+    if (i < 0) { toast('Make some room — the ' + PRODS[k].name + ' is waiting to be planted!'); S.pendingPlant = k; return; }
+    b[i] = mkProd(k);
+    if (plots().indexOf(k) < 0) plots().push(k);
+    S.pendingPlant = null;
+    sparkle(i, 22, '#b7f59a'); sfx.discover();
+    paintBoard();
+  }
+  /** a guest producer from the story: free taps for a while, then it moves on */
+  function spawnGuest(t: any, who: string) {
+    const spot = freeCells()[Math.floor(freeCells().length / 2)];
+    if (spot === undefined) { S.guestBack = { ...t, who, at: Date.now() + 30000 }; toast('Make some room — a guest is on the way!'); return; }
+    const until = Date.now() + t.mins * 60000;
+    B()[spot] = { p: t.p, tmp: until, ch: t.taps, lv: 1 };
+    S.vis = { w: S.world, p: t.p, char: who, until, from: S.world, story: 1, taps: t.taps, mins: t.mins };
+    S.guestBack = null;
+    sparkle(spot, 22, '#ffe9a8'); sfx.discover(); paintBoard();
+  }
   function buildProject() {
     const p = curProject(); if (!p) return;
     const short = p.needs.filter(([id, q]: [string, number]) => countItem(id) < q)
       .map(([id, q]: [string, number]) => `${q - countItem(id)}× <b>${ITEMS[id].name}</b>`);
     if (S.coins < p.coins) short.push(`<b>${p.coins - S.coins}</b> more coins`);
+    if (p.rocket && !allParts()) short.push('the <b>finished rocket</b>');
     if (short.length) { sfx.no(); toast('Still need ' + short.join(', ') + '.'); return; }
     p.needs.forEach(([id, q]: [string, number]) => { for (let k = 0; k < q; k++) consumeOne(id); });
     spend(p.coins);
@@ -2146,9 +2175,16 @@ export async function startGame() {
     sfx.build(); haptic('heavy'); confetti();
     tally('project');
     const nextW = WORLD_ORDER[WORLD_ORDER.indexOf(S.world) + 1];
+    if (p.unlock) setTimeout(() => plantProducer(p.unlock), 900);
+    if (p.temp) setTimeout(() => spawnGuest(p.temp, p.who), 900);
+    if (p.event === 'meteor' && !S.met) setTimeout(meteorStory, 3200);
+    const next = curProject();
+    const what = p.unlock ? `<div class="noteLine">🌱 New: <b>${PRODS[p.unlock].name}</b> — it stays on your board.</div>`
+      : p.temp ? `<div class="noteLine">⏳ A <b>${PRODS[p.temp.p].name}</b> is visiting: ${p.temp.taps} free taps for ${p.temp.mins} minutes.</div>` : '';
     modal(p.who, '✅ ' + p.name, p.text
-      + `<div class="rewardLine">+${p.xp} XP${gift ? ' · 🎁 ' + gift : ''}</div>`
-      + (p.launch && nextW ? `<div class="noteLine">🚀 <b>${WORLDS[nextW].name}</b> is now on the star map.</div>` : ''), 'Wonderful');
+      + `<div class="rewardLine">+${p.xp} XP${gift ? ' · 🎁 ' + gift : ''}</div>` + what
+      + (worldDone() && nextW ? `<div class="noteLine">🚀 ${W().name} is restored! <b>${WORLDS[nextW].name}</b> is now on the star map.</div>`
+        : next ? `<div class="noteLine">Next chapter: <b>${next.name}</b></div>` : ''), 'Wonderful');
     paintBoard(); renderRocket(); renderHUD(); renderOrders(); save();
   }
   function projectCard() {
@@ -2165,7 +2201,8 @@ export async function startGame() {
       const ok = projReady(p);
       return `<div class="pRow cur"><div class="pHead"><span class="pFace">${ART.char(p.who)}</span>
           <div><b>${p.name}</b>${p.launch ? '<i>🚀 opens the next world</i>' : ''}</div></div>
-          <div class="pNeeds">${need(p)}<span class="pNeed${S.coins >= p.coins ? ' ok' : ''}">${coin}<b>${p.coins}</b></span></div>
+          <div class="pNeeds">${need(p)}<span class="pNeed${S.coins >= p.coins ? ' ok' : ''}">${coin}<b>${p.coins}</b></span>
+            ${p.rocket ? `<span class="pNeed${allParts() ? ' ok' : ''}">🚀<b>${PART_KEYS.filter(k => S.parts[k]).length}/4</b></span>` : ''}</div>
           <button class="big${ok ? '' : ' off'}" id="btnProject">${ok ? 'BUILD IT!' : 'Collect the items'}</button></div>`;
     }).join('');
     return `<div class="card proj"><div class="cardTitle">🏗️ Restore ${W().name}<span class="pCount">${done}/${list.length}</span></div>
@@ -2325,16 +2362,29 @@ export async function startGame() {
   const visiting = () => !!(S.vis && S.vis.w === S.world && Date.now() < S.vis.until);
   function visitorTick(now: number) {
     const v = S.vis;
-    if (v && v.w === S.world && now >= v.until) {
+    // a producer the story promised, waiting for a free tile
+    if (S.pendingPlant && freeCells().length) plantProducer(S.pendingPlant);
+    const gone = v && v.w === S.world && (now >= v.until || !B().some((c: any) => c && c.tmp));
+    if (gone && (now >= v.until || v.story)) {
       const b = B();
       for (let i = 0; i < N; i++) if (b[i] && b[i].tmp) { b[i] = null; sparkle(i, 16, '#ffe9a8'); }
       S.orders = S.orders.filter((o: any) => !o.vis);
-      toast(`👋 ${CHARS[v.char].name} packed up and flew home.`);
+      toast(v.story ? `👋 The ${PRODS[v.p].name} moved on.` : `👋 ${CHARS[v.char].name} packed up and flew home.`);
+      // if the chapter you are on still needs what it made, it comes back soon
+      const cp = curProject(), chain = ITEMS[PRODS[v.p].drops[0]].chain;
+      if (v.story && cp && cp.needs.some(([id]: [string, number]) => ITEMS[id].chain === chain))
+        S.guestBack = { p: v.p, taps: v.taps, mins: v.mins, who: v.char, at: now + 90000 };
       S.vis = null; S.visAt = now + CFG.visitor.everyMs;
       paintBoard(); renderOrders(); save();
       return;
     }
     if (v && v.w === S.world) return;
+    if (S.guestBack && now >= S.guestBack.at && view === 'board') {
+      const g = S.guestBack; spawnGuest(g, g.who);
+      if (!S.guestBack) toast(`⏳ The <b>${PRODS[g.p].name}</b> is back for a little while!`);
+      return;
+    }
+    if (scripted()) return;                          // the story brings its own guests
     if (!S.visAt) { S.visAt = now + CFG.visitor.firstMs; return; }
     if (now < S.visAt || view !== 'board' || wlv() < CFG.visitor.firstAtWorldLevel || tutOn()) return;
     const opts = VISITORS.filter(x => x.from !== S.world);
@@ -2362,7 +2412,11 @@ export async function startGame() {
   /** a new world opens on the map once the previous one's launch project is built */
   const reachable = (w: string) => {
     const i = WORLD_ORDER.indexOf(w);
-    return visited(w) || (i > 0 && visited(WORLD_ORDER[i - 1]) && launchDone(WORLD_ORDER[i - 1]));
+    if (visited(w)) return true;
+    const prev = WORLD_ORDER[i - 1];
+    if (i <= 0 || !visited(prev)) return false;
+    // a story world opens the next only when it is fully restored
+    return projList(prev).some((p: any) => p.unlock) ? worldDone(prev) : launchDone(prev);
   };
   function travelTo(w: string) {
     const free = visited(w);
@@ -3009,7 +3063,7 @@ export async function startGame() {
     if (!reachable(k)) {
       sfx.no();
       if (!visited(prev)) toast('🔒 Fly to ' + WORLDS[prev].name + ' first.');
-      else { const lp = projList(prev)[launchIdx(prev)]; toast(`🔒 Build <b>${lp ? lp.name : 'the launch pad'}</b> in ${WORLDS[prev].name} first — see 📜 Goals.`); }
+      else toast(`🔒 Restore <b>${WORLDS[prev].name}</b> first — ${projDone(prev)}/${projList(prev).length} chapters done. See 📜 Goals.`);
       return;
     }
     if (visited(k)) { travelTo(k); return; }

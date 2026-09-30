@@ -22,7 +22,7 @@
 export const PRODUCERS = [
   /* ---------------------------------------------------------- Sunny Meadow */
   ['earth', 1, 'tree|Big Tree|tree|nrg:1|twig twig twig branch|a big friendly round-crowned tree with a thick trunk, a few twigs at its roots'],
-  ['earth', 1, 'rocks|Rock Pile|rocks|nrg:1|pebble pebble pebble rock|a heap of rounded grey boulders with a pickaxe leaning on it'],
+  ['earth', 2, 'rocks|Rock Pile|rocks|nrg:1|pebble pebble pebble rock|a heap of rounded grey boulders with a pickaxe leaning on it'],
   ['earth', 2, 'bush|Berry Bush|bush|bat:20/30|berry berry berries|a round leafy bush dotted with red berries'],
   ['earth', 2, 'well|Old Well|well|nrg:1|dew dew dew puddle|a round stone well with a little wooden roof and a bucket'],
   ['earth', 3, 'meadow|Hay Meadow|meadow|nrg:1|grass grass grass hay|a small patch of tall golden meadow grass with a hay fork stuck in it'],
@@ -36,6 +36,9 @@ export const PRODUCERS = [
   ['earth', 8, 'vegpatch|Veggie Patch|sprout:leaf/clay|nrg:1|vegseed vegseed vegseed seedling|a small tilled veggie patch with carrot tops and a watering can'],
   ['earth', 9, 'tinkerbench|Tinker Bench|anvil:copper/wood|nrg:1|lenschip lenschip lenschip lens|a wooden workbench with a vice, lens grinder and a brass lamp'],
   ['earth', 10, 'crashsite|Crash Site|planet:steel/clay|bat:20/30|oddegg oddegg blinky|a small silver saucer nose-down in the dirt, dome cracked, little lights still blinking'],
+
+  /* story guests: never planted by level, only by a chapter of the story */
+  ['earth', 99, 'raincloud|Rain Cloud|cloud:water/cloud|bat:16/30|dew dew dew puddle|a fat grey-blue rain cloud drizzling onto a little puddle'],
 
   /* ----------------------------------------------------------- Crater Camp */
   ['luna', 1, 'geyser|Moon Geyser|geyser|nrg:1|mrock mrock mrock mcrystal|a crater vent puffing lilac moon dust with crystals around its rim'],
