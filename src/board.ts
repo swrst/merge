@@ -6,7 +6,7 @@ import gsap from 'gsap';
 import { ART } from './art';
 import { ITEMS, CHAINS } from './content';
 
-export type Cell = { b?: number; p?: string; id?: string; ch?: number; at?: number } | null;
+export type Cell = { b?: number; p?: string; id?: string; ch?: number; at?: number; bub?: string; until?: number; tmp?: number } | null;
 
 export type Hooks = {
   onTap: (i: number) => void;
@@ -317,9 +317,10 @@ class PixiBoard {
   }
 
   /* ---------------------------------------------------------------- sync */
-  private keyOf(c: Cell) { return !c ? 'e' : c.b ? 'b' + c.b : c.p ? 'p' + c.p : 'i' + c.id; }
+  private keyOf(c: Cell) { return !c ? 'e' : c.b ? 'b' + c.b : c.bub ? 'u' + c.bub : c.p ? 'p' + c.p + (c.tmp ? '*' : '') : 'i' + c.id; }
 
   sync(cells: Cell[]) {
+    if (this.slots.length < cells.length) return;       // not built yet: the first sync after init draws it
     for (let i = 0; i < cells.length; i++) {
       const key = this.keyOf(cells[i]);
       if (this.slots[i].key === key) continue;
@@ -341,9 +342,28 @@ class PixiBoard {
       t.position.set(p.x + this.cell * 0.28, p.y + this.cell * 0.3);
       this.lItem.addChild(t);
       s.timer = t;
+    } else if (c.bub) {
+      // a bubble: a ghost of the item inside a soap film — buy it before it pops
+      const p = this.center(i);
+      const ring = new Graphics();
+      ring.circle(0, 0, this.cell * 0.44).fill({ color: 0xbfe8ff, alpha: 0.22 })
+        .stroke({ color: 0xffffff, alpha: 0.85, width: 2.5 });
+      ring.circle(-this.cell * 0.16, -this.cell * 0.18, this.cell * 0.07).fill({ color: 0xffffff, alpha: 0.8 });
+      ring.position.set(p.x, p.y);
+      this.lItem.addChild(ring);
+      (s as any).ring = ring;
+      s.art = this.sprite('i:' + c.bub, i, 0.7);
+      s.art.alpha = 0.72;
+      gsap.to(ring.scale, { x: 1.06, y: 1.06, duration: 0.9, yoyo: true, repeat: -1, ease: 'sine.inOut' });
     } else if (c.p) {
       s.art = this.sprite('p:' + c.p, i, 0.96);
       this.idleBob(i);
+      if (c.tmp) {
+        // a visitor's producer: a little clock badge says it will not stay
+        const p = this.center(i), t = new Text({ text: '⏳', style: { fontSize: this.cell * 0.26 } });
+        t.anchor.set(0.5); t.position.set(p.x - this.cell * 0.3, p.y - this.cell * 0.3);
+        this.lItem.addChild(t); (s as any).clock = t;
+      }
     } else if (c.id) {
       s.art = this.sprite('i:' + c.id, i, 0.92);
       this.addAura(i);
@@ -393,12 +413,12 @@ class PixiBoard {
     const s = this.slots[i] as any;
     if (s.pending) { s.pending.kill(); s.pending = undefined; }
     if (s.idle) { s.idle.kill(); s.idle = undefined; }
-    [s.art, s.timer, s.badge, s.bar, s.cost, s.ring, s.readyRing, s.aura, s.spin].forEach((o: any) => {
+    [s.art, s.timer, s.badge, s.bar, s.cost, s.ring, s.readyRing, s.aura, s.spin, s.clock].forEach((o: any) => {
       if (o) { gsap.killTweensOf(o); gsap.killTweensOf(o.scale); o.destroy({ children: true }); }
     });
     s.art = s.timer = undefined; s.badge = undefined; s.ring = undefined;
     s.bar = undefined; s.barW = undefined; s.barFrac = undefined;
-    s.aura = undefined; s.spin = undefined;
+    s.aura = undefined; s.spin = undefined; s.cost = undefined; s.clock = undefined;
     s.readyRing = null; s.hinting = false;
   }
   /** Re-seat everything on tile `i` after the grid has moved or resized.

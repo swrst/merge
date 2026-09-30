@@ -674,6 +674,10 @@ export const CHAINS = [
     'bloomcore|Bloom Core|orb|jade/glow+glow|a glowing jade orb with a flower inside',
     'bloomheart|Bloom Heart|orb|aurora/glow+glow|a radiant heart-shaped bloom of light'],
 
+  ['chest', 'Chests', 'any', 1,
+    'chest|Supply Chest|chest|wood/gold|a small wooden chest with gold corners and a round lock, lid slightly bulging',
+    'bigchest|Treasure Chest|chest|gold/ruby+glow|a big gold-banded treasure chest glowing at the seams, gems on the lid'],
+
   ['wild', 'Wildcards', 'any', 1,
     'rainbow|Wildcard|orb|aurora/glow+glow,motes|a rainbow-swirled orb that could become anything'],
 

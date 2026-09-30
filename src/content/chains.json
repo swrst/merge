@@ -1405,6 +1405,15 @@
       "bloomheart"
     ]
   },
+  "chest": {
+    "name": "Chests",
+    "world": "any",
+    "unlock": 1,
+    "items": [
+      "chest",
+      "bigchest"
+    ]
+  },
   "wild": {
     "name": "Wildcards",
     "world": "any",

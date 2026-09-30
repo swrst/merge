@@ -12,6 +12,7 @@ import { CHAINS, SPECIAL } from './content/chains.mjs';
 import { PRODUCERS, CELLS } from './content/producers.mjs';
 import { WORLDS, LOCKS, CHARACTERS, STORY } from './content/worlds.mjs';
 import { ASKS, LIKES } from './content/contracts.mjs';
+import { PROJECTS } from './content/projects.mjs';
 
 const OUT = join(dirname(fileURLToPath(import.meta.url)), '..', 'src', 'content');
 
@@ -104,6 +105,7 @@ for (const w of WORLDS) {
     grow: grow[w.key] || [],
     tapCost: w.tapCost, perk: w.perk,
     heart: w.heart, bloom: w.bloom, intro: w.intro,
+    projects: PROJECTS[w.key] || [],
   };
 }
 
@@ -140,6 +142,12 @@ Object.values(worlds).forEach(w => w.folks.forEach(f => {
 Object.entries(chains).forEach(([k, c]) => {
   if (c.world !== 'ship' && c.world !== 'any' && !ASKS[k]) errs.push(`chain "${k}" has no contract lines in contracts.mjs`);
 });
+Object.entries(PROJECTS).forEach(([w, list]) => list.forEach(pr => pr.needs.forEach(([id]) => {
+  if (!items[id]) errs.push(`project "${pr.id}" in ${w} needs unknown item "${id}"`);
+  else if (chains[items[id].chain].world !== w) errs.push(`project "${pr.id}" needs "${id}" from another world`);
+  if (pr.gift && pr.gift !== 'chest' && !items[pr.gift]) errs.push(`project "${pr.id}" gives unknown "${pr.gift}"`);
+})));
+Object.values(PROJECTS).forEach(list => { if (list.length && !list.some(p => p.launch) && list !== PROJECTS.vela) errs.push('a world has no launch project'); });
 Object.keys(ASKS).forEach(k => { if (!chains[k]) errs.push(`contracts.mjs ASKS names unknown chain "${k}"`); });
 Object.entries(LIKES).forEach(([ch, ls]) => {
   if (!CHARACTERS[ch]) errs.push(`contracts.mjs LIKES names unknown character "${ch}"`);
