@@ -139,7 +139,7 @@ must(cfg.meteor.everyMinMs >= 180000, `meteors are at least ${cfg.meteor.everyMi
 /* ------------------------------------------------------- merging still works */
 head('Producers and merging');
 const prodCells = await page.evaluate(() => window.__game.cells().map((c, i) => c && c.p ? i : -1).filter(i => i >= 0));
-must(prodCells.length >= 2, `${prodCells.length} producers on the board`);
+must(prodCells.length === 1, `the meadow starts calm: ${prodCells.length} producer on the board`);
 for (let n = 0; n < 6; n++) await tapCell(prodCells[0]);
 let s = await S();
 must(Object.keys(s.made).length > 0, 'the catalogue records what you make');
@@ -414,7 +414,7 @@ must(after.boost.wand === 0, 'and used itself up');
 await set(() => {
   const s = window.__game.state(), b = s.boards.earth;
   for (let i = 0; i < b.length; i++) if (b[i] && b[i].id) b[i] = null;
-  for (let i = 0; i < 6; i++) b[i] = { id: 'twig' };
+  for (let i = 0; i < 6; i++) b[i] = { id: 'pebble' };   // nobody is asking for stone yet
   s.orders = []; s.ship = null;
   window.__board.sync(b);
 });
@@ -423,7 +423,7 @@ before = (await S()).coins;
 await tapUI('#tools .toolBtn[title="Tidy Bomb"]'); await page.waitForTimeout(800);
 after = await S();
 must(after.coins > before, `the bomb sold the clutter for coins (${before} -> ${after.coins})`);
-must(after.boards.earth.filter(c => c && c.id === 'twig').length === 0, 'and cleared the board');
+must(after.boards.earth.filter(c => c && c.id === 'pebble').length === 0, 'and cleared the board');
 
 head('Rainbow Gem is a wildcard');
 await set(() => {
@@ -442,7 +442,7 @@ await set(() => {
   const s = window.__game.state(), b = s.boards.earth;
   for (let i = 0; i < b.length; i++) if (b[i]) b[i] = null;
   b[19] = { p: 'tree' }; b[22] = { p: 'rocks' };
-  s.lvl = 9; s.ship = null; s.shipAt = Date.now() - 1;
+  s.lvl = 9; s.ship = null; s.shipAt = Date.now() - 1; s.proj.earth = 6;   // ships come after chapter 6
   window.__board.sync(b);
 });
 await page.waitForTimeout(1500);
@@ -974,6 +974,48 @@ head('The guided intro');
   must(tErrs.length === 0, tErrs.length ? 'intro threw: ' + tErrs[0] : 'with nothing thrown');
   await ctx2.close();
 }
+
+head('Sunny Meadow is a story');
+await closeModal(); await tab('board');
+await page.evaluate(() => window.__game.fly('earth'));
+await page.waitForFunction(() => window.__game.state().world === 'earth', null, { timeout: 8000 }).catch(() => {});
+await page.waitForTimeout(800); await closeModal();
+must((await S()).world === 'earth', 'back home in the meadow');
+await set(() => {
+  const g = window.__game, s = g.state(), b = g.cells();
+  for (let i = 0; i < b.length; i++) if (b[i] && (b[i].id || (b[i].p && b[i].p !== 'tree'))) b[i] = null;
+  s.proj.earth = 0; s.coins = 5000; s.vis = null; s.guestBack = null; s.pendingPlant = null;
+  const fr = []; for (let i = 0; i < b.length; i++) if (!b[i]) fr.push(i);
+  b[fr[0]] = { id: 'branch' }; b[fr[1]] = { id: 'branch' };
+  window.__board.sync(b);
+});
+await tab('rocket');
+await page.evaluate(() => document.querySelector('#btnProject').click()); await page.waitForTimeout(1600);
+await closeModal(); await tab('board');
+s = await S();
+must(s.proj.earth === 1, 'chapter 1 is done');
+must(s.boards.earth.some(c => c && c.p === 'rocks'), 'and it planted the Rock Pile');
+must(!s.boards.earth.some(c => c && c.p && c.p !== 'tree' && c.p !== 'rocks'), 'and nothing else');
+await set(() => {
+  const g = window.__game, s = g.state(), b = g.cells();
+  for (let i = 0; i < b.length; i++) if (b[i] && b[i].id) b[i] = null;
+  s.proj.earth = 2;
+  const fr = []; for (let i = 0; i < b.length; i++) if (!b[i]) fr.push(i);
+  const pj = window.__game.state().proj; void pj;
+  ['jam', 'berries'].forEach((id, k) => { b[fr[k]] = { id }; });
+  window.__board.sync(b);
+});
+await tab('rocket');
+await page.evaluate(() => document.querySelector('#btnProject').click()); await page.waitForTimeout(1800);
+await closeModal(); await tab('board');
+s = await S();
+must(s.boards.earth.some(c => c && c.p === 'raincloud' && c.tmp), 'chapter 3 brings a temporary Rain Cloud');
+must(s.vis && s.vis.story, 'as a story guest');
+await set(() => { window.__game.state().vis.until = Date.now() - 1; });
+await page.waitForTimeout(2500);
+s = await S();
+must(!s.boards.earth.some(c => c && c.tmp), 'which moves on when its time is up');
+must(s.guestBack && s.guestBack.p === 'raincloud', 'and comes back while the chapter still needs water');
 
 head('Console');
 must(errors.length === 0, errors.length ? `console errors:\n${errors.join('\n')}` : 'no console errors');

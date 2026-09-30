@@ -706,3 +706,13 @@ The empty plot in the camp says which level opens it.
 - *Shop*: a free daily gift, an energy refill, the rotating shelf, chests,
   boosters and upgrades, in tabs.
 - *Album*: one tile per chain, per world; tap a tile for the chain and its source.
+
+## v8 — Sunny Meadow is a story
+
+- You start with **one** producer (the Big Tree). Every other Meadow producer is handed out by a chapter
+  (`unlock` in scripts/content/projects.mjs): Rock Pile → Berry Bush → Old Well → Meadow Patch → Flowerbed.
+- Some chapters bring a **temporary guest** (`temp`): Rain Cloud, Beehive, Crash Site. It stays for a
+  set number of taps / minutes; if it leaves while the current chapter still needs its chain, it comes back ~90 s later.
+- The meteor, cargo ships (from chapter 6) and random visitors are held back while the world is being told as a story.
+- Chapter 10 needs the finished rocket. Crater Camp stays locked until all 10 Meadow chapters are done.
+- Other worlds keep the level-based producer growth.

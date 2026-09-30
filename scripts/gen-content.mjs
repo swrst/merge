@@ -146,6 +146,8 @@ Object.entries(PROJECTS).forEach(([w, list]) => list.forEach(pr => pr.needs.forE
   if (!items[id]) errs.push(`project "${pr.id}" in ${w} needs unknown item "${id}"`);
   else if (chains[items[id].chain].world !== w) errs.push(`project "${pr.id}" needs "${id}" from another world`);
   if (pr.gift && pr.gift !== 'chest' && !items[pr.gift]) errs.push(`project "${pr.id}" gives unknown "${pr.gift}"`);
+  if (pr.unlock && !producers[pr.unlock]) errs.push(`project "${pr.id}" unlocks unknown producer "${pr.unlock}"`);
+  if (pr.temp && !producers[pr.temp.p]) errs.push(`project "${pr.id}" brings unknown producer "${pr.temp.p}"`);
 })));
 Object.values(PROJECTS).forEach(list => { if (list.length && !list.some(p => p.launch) && list !== PROJECTS.vela) errs.push('a world has no launch project'); });
 Object.keys(ASKS).forEach(k => { if (!chains[k]) errs.push(`contracts.mjs ASKS names unknown chain "${k}"`); });

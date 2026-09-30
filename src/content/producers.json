@@ -225,6 +225,24 @@
     "cap": 20,
     "every": 90000
   },
+  "raincloud": {
+    "name": "Rain Cloud",
+    "art": "raincloud",
+    "drops": [
+      "dew",
+      "dew",
+      "dew",
+      "puddle"
+    ],
+    "spec": {
+      "shape": "cloud",
+      "mat": "water",
+      "ground": "cloud"
+    },
+    "mode": "battery",
+    "cap": 16,
+    "every": 112500
+  },
   "geyser": {
     "name": "Moon Geyser",
     "art": "geyser",

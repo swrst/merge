@@ -24,10 +24,6 @@
       {
         "cell": 19,
         "producer": "tree"
-      },
-      {
-        "cell": 22,
-        "producer": "rocks"
       }
     ],
     "locks": {
@@ -52,6 +48,13 @@
       "biscuit"
     ],
     "grow": [
+      {
+        "producer": "rocks",
+        "atLevel": 2,
+        "cells": [
+          22
+        ]
+      },
       {
         "producer": "bush",
         "atLevel": 2,
@@ -168,6 +171,13 @@
           14,
           15
         ]
+      },
+      {
+        "producer": "raincloud",
+        "atLevel": 99,
+        "cells": [
+          19
+        ]
       }
     ],
     "tapCost": 1,
@@ -200,41 +210,35 @@
           [
             "branch",
             2
-          ],
-          [
-            "rock",
-            1
           ]
         ],
-        "coins": 20,
-        "xp": 20,
-        "text": "You can see the road to the village again! Pip is already running down it."
+        "coins": 0,
+        "xp": 15,
+        "unlock": "rocks",
+        "text": "You can see the road to the village again! Pip found an old rock pile behind the brambles — it is yours now."
       },
       {
         "id": "e2",
-        "name": "Mend the Old Well",
-        "who": "grandma",
+        "name": "A Stone Border",
+        "who": "pip",
         "needs": [
-          [
-            "log",
-            1
-          ],
           [
             "rock",
             2
           ],
           [
-            "puddle",
+            "log",
             1
           ]
         ],
-        "coins": 40,
-        "xp": 30,
-        "text": "Fresh water, first time in years. Granny Fern cried a little. Happy tears, she says."
+        "coins": 20,
+        "xp": 25,
+        "unlock": "bush",
+        "text": "A tidy border round the garden. Granny Fern peeked over it and spotted a berry bush that is ready to fruit again."
       },
       {
         "id": "e3",
-        "name": "Granny's Kitchen",
+        "name": "Granny's Jam",
         "who": "grandma",
         "needs": [
           [
@@ -242,18 +246,42 @@
             1
           ],
           [
+            "berries",
+            1
+          ]
+        ],
+        "coins": 40,
+        "xp": 40,
+        "temp": {
+          "p": "raincloud",
+          "taps": 16,
+          "mins": 20
+        },
+        "text": "The first jar of jam in years! And look — a rain cloud is drifting over the meadow. Catch what you can before it moves on."
+      },
+      {
+        "id": "e4",
+        "name": "Mend the Old Well",
+        "who": "grandma",
+        "needs": [
+          [
+            "puddle",
+            2
+          ],
+          [
             "jug",
             1
           ]
         ],
         "coins": 60,
-        "xp": 45,
-        "gift": "chest",
-        "text": "The kitchen smells of jam again. The whole village has found a reason to walk past."
+        "xp": 60,
+        "unlock": "well",
+        "event": "meteor",
+        "text": "The well works again, so water is here to stay. ...Wait. What is that in the sky?"
       },
       {
-        "id": "e4",
-        "name": "Fix the Fences",
+        "id": "e5",
+        "name": "Mend the Fences",
         "who": "biscuit",
         "needs": [
           [
@@ -261,16 +289,41 @@
             2
           ],
           [
-            "bale",
+            "pie",
             1
           ]
         ],
         "coins": 90,
-        "xp": 60,
-        "text": "Biscuit has a yard to guard now, and he takes the job VERY seriously."
+        "xp": 80,
+        "unlock": "meadow",
+        "gift": "chest",
+        "text": "Biscuit has a yard to guard, and the hay meadow behind it is growing tall again."
       },
       {
-        "id": "e5",
+        "id": "e6",
+        "name": "Harvest Supper",
+        "who": "grandma",
+        "needs": [
+          [
+            "bale",
+            1
+          ],
+          [
+            "cake",
+            1
+          ],
+          [
+            "barrel",
+            1
+          ]
+        ],
+        "coins": 130,
+        "xp": 110,
+        "unlock": "flowerbed",
+        "text": "The whole village ate together. Gigi brought seeds for a flower bed, \"for a little colour, darling\"."
+      },
+      {
+        "id": "e7",
         "name": "The Flower Market",
         "who": "gigi",
         "needs": [
@@ -279,95 +332,75 @@
             1
           ],
           [
-            "honeycomb",
-            1
-          ],
-          [
             "geode",
             1
           ]
         ],
-        "coins": 130,
-        "xp": 80,
+        "coins": 170,
+        "xp": 140,
         "gift": "chest",
-        "text": "Colour on every stall. Gigi says it is almost, almost fashionable."
+        "temp": {
+          "p": "hive",
+          "taps": 18,
+          "mins": 20
+        },
+        "text": "Colour on every stall — and the flowers brought the bees back. A wild hive has settled for a while."
       },
       {
-        "id": "e6",
-        "name": "Repair the Launch Pad",
+        "id": "e8",
+        "name": "Honey Cakes",
+        "who": "gigi",
+        "needs": [
+          [
+            "honeycomb",
+            1
+          ],
+          [
+            "statue",
+            1
+          ]
+        ],
+        "coins": 220,
+        "xp": 170,
+        "temp": {
+          "p": "crashsite",
+          "taps": 16,
+          "mins": 25
+        },
+        "text": "Honey cakes for everyone. Then Timmy came running: something small crashed behind the hill, and it is blinking."
+      },
+      {
+        "id": "e9",
+        "name": "The Little Visitors",
+        "who": "timmy",
+        "needs": [
+          [
+            "alienkid",
+            1
+          ],
+          [
+            "fountain",
+            1
+          ]
+        ],
+        "coins": 280,
+        "xp": 210,
+        "gift": "chest",
+        "text": "The little visitors are safe, and they want to go home too. Bloop says the rocket could take everyone."
+      },
+      {
+        "id": "e10",
+        "name": "The Launch Pad",
         "who": "bloop",
         "launch": true,
+        "rocket": true,
         "needs": [
           [
             "cart",
             1
           ],
           [
-            "statue",
-            1
-          ],
-          [
-            "barrel",
-            1
-          ]
-        ],
-        "coins": 200,
-        "xp": 110,
-        "gift": "chest",
-        "text": "Blorp! The pad holds! With fuel in the tank, the rocket can reach Luna now. The meadow will be here when you come back."
-      },
-      {
-        "id": "e7",
-        "name": "The Weaving Circle",
-        "who": "gigi",
-        "needs": [
-          [
-            "clothbolt",
-            1
-          ],
-          [
-            "nest",
-            1
-          ],
-          [
-            "honeypot",
-            1
-          ]
-        ],
-        "coins": 240,
-        "xp": 130,
-        "text": "Quilts for every bed in the village, and one very small one for Biscuit."
-      },
-      {
-        "id": "e8",
-        "name": "The Potter's Shed",
-        "who": "grandma",
-        "needs": [
-          [
-            "claypot",
-            2
-          ],
-          [
-            "fairyring",
-            1
-          ]
-        ],
-        "coins": 300,
-        "xp": 160,
-        "gift": "chest",
-        "text": "Pots for seedlings, cups for tea. The shed hums with the kiln."
-      },
-      {
-        "id": "e9",
-        "name": "Market Day",
-        "who": "pip",
-        "needs": [
-          [
-            "vegcrate",
-            1
-          ],
-          [
-            "pie",
+            "garland",
             1
           ],
           [
@@ -375,47 +408,10 @@
             1
           ]
         ],
-        "coins": 380,
-        "xp": 200,
-        "text": "Stalls from here to the river. The first market day since the Bloom went quiet."
-      },
-      {
-        "id": "e10",
-        "name": "The Observatory",
-        "who": "timmy",
-        "needs": [
-          [
-            "telescope",
-            1
-          ],
-          [
-            "obelisk",
-            1
-          ]
-        ],
-        "coins": 460,
-        "xp": 240,
-        "gift": "chest",
-        "text": "Timmy has not slept. He has found three new stars and named them all after Biscuit."
-      },
-      {
-        "id": "e11",
-        "name": "Send the Visitors Home",
-        "who": "timmy",
-        "needs": [
-          [
-            "saucer",
-            1
-          ],
-          [
-            "treehouse",
-            1
-          ]
-        ],
-        "coins": 600,
-        "xp": 320,
-        "gift": "chest",
-        "text": "The little saucer lifts off, blinking thank-you in every colour it has. Sunny Meadow is fully awake."
+        "coins": 360,
+        "xp": 300,
+        "gift": "bigchest",
+        "text": "The pad holds, the rocket stands, the meadow is awake. Sunny Meadow is restored — and Luna is waiting."
       }
     ]
   },
