@@ -4,7 +4,7 @@ Paste everything below the line into the ChatGPT art agent.
 
 ---
 
-You are continuing as art director and illustrator for **Merge Rocket** (repo `swrst/merge`, branch `main`). It's a Travel Town–style merge game set in space. The game's UI has just been redesigned to work like Travel Town. Your job now is to paint the **new UI pieces** and the **story portraits**, and then go back to the Meadow chains.
+You are continuing as art director and illustrator for **Merge Rocket** (repo `swrst/merge`, branch `main`). It's a Travel Town–style merge game set in space. The game's UI has just been redesigned to work like Travel Town. Your job now is to paint the **character portraits** and the **new UI pieces**, and then go back to the Meadow chains.
 
 ## What changed in the game (look at it first: `npm ci && npm run dev`)
 - A **bottom dock** of six big buttons: Map · Goals · Fun · Lab · Album · Shop.
@@ -20,18 +20,20 @@ You are continuing as art director and illustrator for **Merge Rocket** (repo `s
 - Style references: `src/sprites/ui/btn_green.png`, `ribbon.png`, `panel_wood.png`, `icon_coin.png` and `src/sprites/producers/well.png`. Match their gloss, outline weight and warm light exactly.
 
 ## Order (one PR per step)
-1. **`art/ui2`**, batch `ui2` (16 files):
+1. **`art/portraits`**, batch `portraits` (**18 files**, the top priority). Every character gets a painted face: Pip, Granny Fern, Timmy, Gigi, Biscuit, Bloop, Zib, Luma, Rokk, Nix, Vulk, Ember, Marin, Kelpa, Sirra, Zephyr, Halo and Wren.
+   - **Where they show:** big (150px) in story scenes, and small (36px, in a circle) on every contract card. Both sizes have to work, so give each one a clear silhouette and a face that fills the upper middle of the square.
+   - **Style:** head and shoulders, a friendly expression, the same warm light from the upper left, and the same painterly semi-3D finish as the producers. Paint them as one set.
+   - **Order:** do the six Sunny Meadow characters first (pip, grandma, timmy, gigi, biscuit, bloop) and **push them**, then the other twelve.
+2. **`art/ui2`**, batch `ui2` (16 files):
    - `dock_bar`, `dock_btn`, `popup_frame`, `btn_close`, `talk_box`, `card_back`, `wheel`
    - icons `ic_map`, `ic_goals`, `ic_fun`, `ic_lab`, `ic_album`, `ic_shop`, `ic_spin`, `ic_event`, `ic_science`
    - **9-slice pieces** (`popup_frame`, `talk_box`, `dock_bar`): keep the corners inside the stated corner size, and keep the middle plain so it can stretch without smearing.
    - **The wheel** must have exactly 8 equal wedges. Wedge 1 starts at 12 o'clock and the rest go clockwise in the colours listed in its prompt. Leave every wedge empty: the game draws the prizes on top.
    - **The dock icons** must read at 34px. Use a bold, simple silhouette; no fine detail.
-2. **`art/portraits`**, batch `portraits` (6 files): Pip, Granny Fern, Timmy, Gigi, Biscuit and Bloop.
-   - These are the faces of the whole story, shown at 150px in the story scenes. Keep the same painterly semi-3D style as the producers.
-   - Head and shoulders, a friendly expression, and the same light direction for all six. Paint them as one set so they look like the same family of characters.
-3. **Meadow chains**, one PR each, continuing where you stopped: `chain-grass`, `chain-flower`, `chain-honey`, `chain-mush`, `chain-cloth`, `chain-feather`, `chain-visitor`, `chain-veggie`, `chain-stargaze`, `chain-clay`, `chain-garden`.
-   - The story now uses all of these chains, in this order.
+3. **Meadow chains**, one PR each: `chain-grass`, `chain-flower`, `chain-honey`, `chain-mush`, `chain-cloth`, `chain-feather`, `chain-visitor`, `chain-veggie`, `chain-stargaze`, `chain-clay`, `chain-garden`.
 4. **The rest of the Meadow producers**: `flowerbed`, `hive`, `raincloud`, `crashsite`, `mosslog`, `cottonpatch`, `nestbox`, `vegpatch`, `tinkerbench`, then `chain-chest` (`chest`, `bigchest`).
+
+**Item framing:** the game now re-centres every item automatically and scales it so the painted part fills about 86% of the square. You don't need to pad or centre by hand, but keep a single subject per file with a clean transparent edge.
 
 ## Rules
 - PNG with a transparent background, at the size in each prompt (or 2× that).

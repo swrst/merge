@@ -1086,7 +1086,7 @@ export const ART = (function () {
     return cache[key];
   }
   function charArt(k: string) {
-    if (SPRITE.char[k]) return `<svg viewBox="0 0 100 100" class="art"><image href="${SPRITE.char[k]}" x="0" y="0" width="100" height="100"/></svg>`;
+    if (SPRITE.char[k]) return `<svg viewBox="0 0 100 100" class="face"><image href="${SPRITE.char[k]}" x="0" y="0" width="100" height="100"/></svg>`;
     if ((CHAR as Record<string, unknown>)[k]) return get(CHAR, k);
     const sp = FSPEC[k];
     if (!sp) return get(CHAR, k);
@@ -1099,7 +1099,11 @@ export const ART = (function () {
     item: itemArt,
     producer: prodArt,
     char: charArt,
-    figure: (k: string) => { const key = 'f' + k; if (!cache[key]) cache[key] = figure(k); return cache[key]; },
+    figure: (k: string) => {
+      // a painted portrait beats the assembled figure everywhere it is shown
+      if (SPRITE.char[k]) return `<svg viewBox="0 0 100 100" class="fig portrait"><image href="${SPRITE.char[k]}" x="0" y="0" width="100" height="100"/></svg>`;
+      const key = 'f' + k; if (!cache[key]) cache[key] = figure(k); return cache[key];
+    },
     /** a painted ui/icon_<k>.png wins over the drawn icon */
     icon: (k: string) => SPRITE.ui['icon_' + k]
       ? `<img class="ic" src="${SPRITE.ui['icon_' + k]}" alt="" draggable="false">`

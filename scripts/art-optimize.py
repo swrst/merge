@@ -30,9 +30,37 @@ def palette_png(im):
     return b.getvalue()
 
 
+FILL = {'items': 0.86, 'producers': 0.92, 'chars': 0.94}
+
+
+def recentre(im, sub):
+    """Items are drawn on a tile, so a sprite whose subject sits off to one side
+    or fills half the frame looks wrong next to its neighbours. Crop to what is
+    painted and put it back centred at a consistent size. Returns None when the
+    sprite is already fine, so a clean file is never re-encoded."""
+    a = im.split()[3].point(lambda v: 255 if v > 40 else 0)
+    bb = a.getbbox()
+    if not bb:
+        return None
+    w, h = im.size
+    cx = (bb[0] + bb[2]) / 2 / w - .5
+    cy = (bb[1] + bb[3]) / 2 / h - .5
+    fill = max(bb[2] - bb[0], bb[3] - bb[1]) / w
+    want = FILL[sub]
+    if abs(cx) <= .025 and abs(cy) <= .03 and abs(fill - want) <= .07:
+        return None
+    crop = im.crop(bb)
+    side = round(SQUARE * want)
+    k = side / max(crop.width, crop.height)
+    crop = crop.resize((max(1, round(crop.width * k)), max(1, round(crop.height * k))), Image.LANCZOS)
+    out = Image.new('RGBA', (SQUARE, SQUARE), (0, 0, 0, 0))
+    out.paste(crop, ((SQUARE - crop.width) // 2, (SQUARE - crop.height) // 2), crop)
+    return out
+
+
 def main():
     before = after = 0
-    for sub in ('items', 'producers', 'ui', 'scenes'):
+    for sub in ('items', 'producers', 'chars', 'ui', 'scenes'):
         d = os.path.join(ROOT, sub)
         if not os.path.isdir(d):
             continue
@@ -53,12 +81,21 @@ def main():
                 data = b.getvalue()
             else:
                 im = im.convert('RGBA')
-                if sub in ('items', 'producers') and im.width > SQUARE:
+                if sub in ('items', 'producers', 'chars') and im.width > SQUARE:
                     im = im.resize((SQUARE, SQUARE), Image.LANCZOS)
-                if im.mode == 'RGBA' and size <= 40_000 and im.width <= SQUARE:
+                fixed = recentre(im, sub) if sub in FILL else None
+                if fixed is not None:
+                    im = fixed
+                    print(f'  {sub}/{f:28s} re-centred')
+                elif size <= 40_000 and im.width <= SQUARE:
                     after += size
                     continue
                 data = palette_png(im)
+                if fixed is not None:
+                    with open(p, 'wb') as fh:
+                        fh.write(data)
+                    after += len(data)
+                    continue
             if len(data) < size:
                 with open(p, 'wb') as fh:
                     fh.write(data)

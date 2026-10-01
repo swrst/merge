@@ -6,7 +6,7 @@ import gsap from 'gsap';
 import { ART } from './art';
 import { ITEMS, CHAINS } from './content';
 
-export type Cell = { b?: number; p?: string; id?: string; ch?: number; at?: number; bub?: string; until?: number; tmp?: number } | null;
+export type Cell = { b?: number; p?: string; id?: string; ch?: number; at?: number; bub?: string; until?: number; tmp?: number; pr?: number } | null;
 
 export type Hooks = {
   onTap: (i: number) => void;
@@ -289,6 +289,7 @@ class PixiBoard {
     if (paint && art) {
       // a painted tile carries its own light and shade; only the rarity frame is drawn over it
       art.texture = paint; art.position.set(p.x, p.y); art.width = c; art.height = c;
+      if (this.slots[i] && this.slots[i].key.startsWith('u')) g.roundRect(p.x + 2, p.y + 2, c - 4, c - 4, R).fill({ color: 0x7cc8ff, alpha: 0.35 });
       if (r) {
         const col = r === 3 ? 0xffb02e : r === 2 ? 0xc78cff : 0x8fd6ff;
         g.roundRect(p.x + 1, p.y + 1, c - 2, c - 2, R - 1)
@@ -298,6 +299,7 @@ class PixiBoard {
     }
     g.roundRect(p.x, p.y, c, c, R)
       .fill({ color: locked ? (dark ? th.lockLo : th.lock) : (dark ? th.tileLo : th.tile) });
+    if (this.slots[i] && this.slots[i].key.startsWith('u')) g.roundRect(p.x + 2, p.y + 2, c - 4, c - 4, R).fill({ color: 0x7cc8ff, alpha: 0.35 });
     if (!locked) {
       // one soft light from the top, one soft shade at the foot
       g.roundRect(p.x + c * 0.06, p.y + c * 0.05, c * 0.88, c * 0.2, c * 0.1)
@@ -343,18 +345,36 @@ class PixiBoard {
       this.lItem.addChild(t);
       s.timer = t;
     } else if (c.bub) {
-      // a bubble: a ghost of the item inside a soap film — buy it before it pops
-      const p = this.center(i);
-      const ring = new Graphics();
-      ring.circle(0, 0, this.cell * 0.44).fill({ color: 0xbfe8ff, alpha: 0.22 })
-        .stroke({ color: 0xffffff, alpha: 0.85, width: 2.5 });
-      ring.circle(-this.cell * 0.16, -this.cell * 0.18, this.cell * 0.07).fill({ color: 0xffffff, alpha: 0.8 });
-      ring.position.set(p.x, p.y);
-      this.lItem.addChild(ring);
-      (s as any).ring = ring;
-      s.art = this.sprite('i:' + c.bub, i, 0.7);
-      s.art.alpha = 0.72;
-      gsap.to(ring.scale, { x: 1.06, y: 1.06, duration: 0.9, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+      /* A bubble has to read as "not yours yet" from across the board: the
+         item sits small and pale inside a bright soap film drawn ON TOP of it,
+         the tile goes blue, and a gold price tag hangs off the bottom. */
+      const p = this.center(i), R = this.cell * 0.46;
+      s.art = this.sprite('i:' + c.bub, i, 0.6);
+      s.art.alpha = 0.8;
+      const film = new Container();
+      const g = new Graphics();
+      g.circle(0, 0, R).fill({ color: 0x9fdcff, alpha: 0.3 });
+      g.circle(0, 0, R).stroke({ color: 0x58b8f0, alpha: 1, width: 3.5 });
+      g.circle(0, 0, R - 3.5).stroke({ color: 0xffffff, alpha: 0.75, width: 1.6 });
+      g.arc(0, 0, R * 0.78, Math.PI * 1.05, Math.PI * 1.45).stroke({ color: 0xffffff, alpha: 0.9, width: R * 0.12, cap: 'round' });
+      g.circle(R * 0.42, R * 0.45, R * 0.08).fill({ color: 0xffffff, alpha: 0.7 });
+      g.arc(0, 0, R * 0.9, Math.PI * 0.1, Math.PI * 0.45).stroke({ color: 0xff9fe0, alpha: 0.45, width: 2 });
+      film.addChild(g);
+      if (c.pr) {
+        const tag = new Container();
+        const t = new Text({ text: '🪙' + c.pr, style: { fontFamily: 'Fredoka, sans-serif', fontSize: this.cell * 0.19, fontWeight: '700', fill: 0x6b4206 } });
+        t.anchor.set(0.5);
+        const w = t.width + this.cell * 0.14, h = this.cell * 0.26;
+        const bg = new Graphics().roundRect(-w / 2, -h / 2, w, h, h / 2).fill({ color: 0xffd34d }).stroke({ color: 0xffffff, width: 2 });
+        tag.addChild(bg, t);
+        tag.position.set(0, R * 0.92);
+        film.addChild(tag);
+      }
+      film.position.set(p.x, p.y);
+      this.lFx.addChild(film);
+      (s as any).ring = film;
+      gsap.to(film.scale, { x: 1.05, y: 0.96, duration: 0.8, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+      gsap.to(s.art, { y: p.y - this.cell * 0.04, duration: 1.1, yoyo: true, repeat: -1, ease: 'sine.inOut' });
     } else if (c.p) {
       s.art = this.sprite('p:' + c.p, i, 0.96);
       this.idleBob(i);
