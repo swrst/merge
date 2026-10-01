@@ -5688,6 +5688,114 @@
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
+    "path": "src/sprites/chars/zib.png",
+    "kind": "char",
+    "name": "Zib",
+    "group": "character portrait",
+    "batch": "portraits",
+    "prompt": "Zib, a character portrait for a cosy mobile merge game in the style of Travel Town: a small mint-green blob alien trader with brass goggles pushed up and a satchel bursting with shiny bits. Head and shoulders, facing the viewer slightly turned, big friendly eyes, warm expressive smile, soft painterly semi-3D rendering, warm light from the upper left, thin warm-brown outline, centred, filling most of a 512x512 square, transparent background.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/chars/luma.png",
+    "kind": "char",
+    "name": "Luma",
+    "group": "character portrait",
+    "batch": "portraits",
+    "prompt": "Luma, a character portrait for a cosy mobile merge game in the style of Travel Town: a soft rose-pink glowing jelly alien holding a little lantern, dreamy half-closed eyes. Head and shoulders, facing the viewer slightly turned, big friendly eyes, warm expressive smile, soft painterly semi-3D rendering, warm light from the upper left, thin warm-brown outline, centred, filling most of a 512x512 square, transparent background.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/chars/rokk.png",
+    "kind": "char",
+    "name": "Rokk",
+    "group": "character portrait",
+    "batch": "portraits",
+    "prompt": "Rokk, a character portrait for a cosy mobile merge game in the style of Travel Town: a sturdy square steel-grey robot with a glowing sapphire visor for eyes, rivets, a tiny antenna, very polite. Head and shoulders, facing the viewer slightly turned, big friendly eyes, warm expressive smile, soft painterly semi-3D rendering, warm light from the upper left, thin warm-brown outline, centred, filling most of a 512x512 square, transparent background.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/chars/nix.png",
+    "kind": "char",
+    "name": "Nix",
+    "group": "character portrait",
+    "batch": "portraits",
+    "prompt": "Nix, a character portrait for a cosy mobile merge game in the style of Travel Town: a lilac amethyst crystal creature with faceted cheeks and a collector's monocle, slightly smug smile. Head and shoulders, facing the viewer slightly turned, big friendly eyes, warm expressive smile, soft painterly semi-3D rendering, warm light from the upper left, thin warm-brown outline, centred, filling most of a 512x512 square, transparent background.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/chars/vulk.png",
+    "kind": "char",
+    "name": "Vulk",
+    "group": "character portrait",
+    "batch": "portraits",
+    "prompt": "Vulk, a character portrait for a cosy mobile merge game in the style of Travel Town: a stocky living-flame blacksmith spirit, ember-orange with a soot-streaked leather apron and a hammer on the shoulder. Head and shoulders, facing the viewer slightly turned, big friendly eyes, warm expressive smile, soft painterly semi-3D rendering, warm light from the upper left, thin warm-brown outline, centred, filling most of a 512x512 square, transparent background.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/chars/ember.png",
+    "kind": "char",
+    "name": "Ember",
+    "group": "character portrait",
+    "batch": "portraits",
+    "prompt": "Ember, a character portrait for a cosy mobile merge game in the style of Travel Town: a small cheerful flame sprite, gold and orange, sparks for freckles. Head and shoulders, facing the viewer slightly turned, big friendly eyes, warm expressive smile, soft painterly semi-3D rendering, warm light from the upper left, thin warm-brown outline, centred, filling most of a 512x512 square, transparent background.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/chars/marin.png",
+    "kind": "char",
+    "name": "Marin",
+    "group": "character portrait",
+    "batch": "portraits",
+    "prompt": "Marin, a character portrait for a cosy mobile merge game in the style of Travel Town: a sapphire-blue fish-folk harbourmaster with a little captain's hat and a calm smile. Head and shoulders, facing the viewer slightly turned, big friendly eyes, warm expressive smile, soft painterly semi-3D rendering, warm light from the upper left, thin warm-brown outline, centred, filling most of a 512x512 square, transparent background.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/chars/kelpa.png",
+    "kind": "char",
+    "name": "Kelpa",
+    "group": "character portrait",
+    "batch": "portraits",
+    "prompt": "Kelpa, a character portrait for a cosy mobile merge game in the style of Travel Town: a kelp-green blob gardener with seaweed hair and a tiny trowel. Head and shoulders, facing the viewer slightly turned, big friendly eyes, warm expressive smile, soft painterly semi-3D rendering, warm light from the upper left, thin warm-brown outline, centred, filling most of a 512x512 square, transparent background.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/chars/sirra.png",
+    "kind": "char",
+    "name": "Sirra",
+    "group": "character portrait",
+    "batch": "portraits",
+    "prompt": "Sirra, a character portrait for a cosy mobile merge game in the style of Travel Town: a coral-pink fish-folk singer with pearl earrings and a shell hair clip. Head and shoulders, facing the viewer slightly turned, big friendly eyes, warm expressive smile, soft painterly semi-3D rendering, warm light from the upper left, thin warm-brown outline, centred, filling most of a 512x512 square, transparent background.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/chars/zephyr.png",
+    "kind": "char",
+    "name": "Zephyr",
+    "group": "character portrait",
+    "batch": "portraits",
+    "prompt": "Zephyr, a character portrait for a cosy mobile merge game in the style of Travel Town: a fluffy white cloud creature with mint cheeks, a little aviator scarf blowing in the wind. Head and shoulders, facing the viewer slightly turned, big friendly eyes, warm expressive smile, soft painterly semi-3D rendering, warm light from the upper left, thin warm-brown outline, centred, filling most of a 512x512 square, transparent background.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/chars/halo.png",
+    "kind": "char",
+    "name": "Halo",
+    "group": "character portrait",
+    "batch": "portraits",
+    "prompt": "Halo, a character portrait for a cosy mobile merge game in the style of Travel Town: a shimmering aurora crystal being, teal-to-violet, with tiny stars floating around its head. Head and shoulders, facing the viewer slightly turned, big friendly eyes, warm expressive smile, soft painterly semi-3D rendering, warm light from the upper left, thin warm-brown outline, centred, filling most of a 512x512 square, transparent background.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/chars/wren.png",
+    "kind": "char",
+    "name": "Wren",
+    "group": "character portrait",
+    "batch": "portraits",
+    "prompt": "Wren, a character portrait for a cosy mobile merge game in the style of Travel Town: a topaz-gold songbird person with a twig-nest hat and bright round eyes. Head and shoulders, facing the viewer slightly turned, big friendly eyes, warm expressive smile, soft painterly semi-3D rendering, warm light from the upper left, thin warm-brown outline, centred, filling most of a 512x512 square, transparent background.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
     "path": "src/sprites/fx/merge_burst.png",
     "kind": "fx",
     "name": "Merge burst",

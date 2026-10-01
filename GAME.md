@@ -750,3 +750,17 @@ The empty plot in the camp says which level opens it.
 - Quick chips above the board show the event, free spins and the accelerator.
 - The ⚡ and 🪙 chips open the energy popup and the shop.
 - Painted pieces from batch `ui2` and `portraits` (`src/sprites/chars/`) drop in automatically.
+
+## v10 — polish pass
+
+- **Bubbles** are unmistakable now. The tile turns blue, a bright soap film with highlights sits over a smaller, paler copy of the item, and a gold price tag hangs underneath. The first one you ever see explains itself.
+- **Contracts are smaller:** 120px cards, a round portrait, and the speech line hidden, so the board gets more room.
+- **Friendship.** Every contract you fill for someone counts. At 3, 10, 25, 50 and 100 they come over in a story scene with a gift. Their ❤️ level shows on their card.
+- **Portraits.** `src/sprites/chars/<id>.png` replaces a character everywhere (story scenes, contract cards, Goals). There are manifest rows for all 18.
+- **Camp map.** The old 🎲 and ✨ buttons are gone: side games and Constellations live in 🎪 Fun. A clear 🌌 Star Map button replaces them. The Lab plinth shows your Science, and the rocket plinth stays empty until its first part.
+- **Star map** redesigned:
+  - A winding, scrollable route up through a nebula, home at the bottom.
+  - Big glowing planets; your rocket orbits the one you're on.
+  - Beside each planet, a card with its name, theme, chapter progress and one clear action (fly back, launch, or what still needs restoring).
+- **Sprites.** `npm run art:optimize` now re-centres every item, producer and portrait and scales it to a consistent fill (86% / 92% / 94%).
+- **Ribbon titles** sit inside the painted band.

@@ -151,7 +151,7 @@ export async function startGame() {
       /* v7: restoration projects, daily tasks, contract milestones, visitors */
       proj: {}, dt: null, om: { n: 0, step: 0 }, vis: null, visAt: 0,
       /* v9: Science and research, the accelerator, story talk, live events, the wheel */
-      sci: 0, res: {}, acc: null, talked: {}, ev: { key: '', pts: 0, got: 0 }, spin: { day: 0, tok: 0 },
+      sci: 0, res: {}, acc: null, talked: {}, ev: { key: '', pts: 0, got: 0 }, spin: { day: 0, tok: 0 }, fr: {},
     };
   }
   /** Old saves keep their progress — missing fields are simply filled in. */
@@ -180,7 +180,7 @@ export async function startGame() {
     p.firsts = p.firsts || {};
     p.proj = p.proj || {}; p.om = p.om || { n: 0, step: 0 }; if (p.vis === undefined) p.vis = null; p.visAt = p.visAt || 0;
     p.sci = p.sci || 0; p.res = p.res || {}; if (p.acc === undefined) p.acc = null; p.talked = p.talked || {};
-    p.ev = p.ev || { key: '', pts: 0, got: 0 }; p.spin = p.spin || { day: 0, tok: 0 };
+    p.ev = p.ev || { key: '', pts: 0, got: 0 }; p.spin = p.spin || { day: 0, tok: 0 }; p.fr = p.fr || {};
     if (!p.lab.built && (p.proj.earth || 0) >= 5) p.lab.built = 1;
     // A pre-v6 save had one global level. Seed each visited world from it so
     // nobody who already flew to Cindra lands back on a beginner board — but cap
@@ -474,7 +474,7 @@ export async function startGame() {
       card.innerHTML =
         `<div class="oTop">
            <div class="oFig">${ART.figure(o.char)}</div>
-           <div class="oWho"><div class="oName">${ch.name}</div><div class="oSay">${o.say}</div>
+           <div class="oWho"><div class="oName">${ch.name}${frLv(o.char) ? `<span class="oFr" title="Friendship">❤️${frLv(o.char)}</span>` : ''}</div><div class="oSay">${o.say}</div>
              <div class="oRews"><span class="oRew">${ART.icon('coin')}${o.coins}</span><span class="oRew">${ART.icon('star')}${o.xp}</span>
              ${o.give ? `<span class="oRew gift" title="Gift: ${ITEMS[o.give].name}">${ART.item(o.give)}</span>` : ''}
              ${o.nrg ? `<span class="oRew">${ART.icon('energy')}${o.nrg}</span>` : ''}</div>
@@ -734,6 +734,7 @@ export async function startGame() {
     }
     if (o.nrg) { S.energy += o.nrg; bumpChip('#chipEnergy'); setTimeout(() => toast(`⚡ +${o.nrg} energy from ${CHARS[o.char].name}`), 700); }
     prog('deliver', 1); tally('deliver'); mileTick();
+    befriend(o.char);
     evPts(CFG.event.points.contract + CFG.event.points.perNeed * o.needs.length);
     addXp(o.xp);
     paintBoard(); tutFire('deliver');
@@ -2347,8 +2348,11 @@ export async function startGame() {
     if (d.tier < CFG.bubble.minTier || ch.world === 'any' || ch.world === 'ship' || d.part || d.fuel) return;
     if (ch.items[ch.items.length - 1] === id || Math.random() > CFG.bubble.chance) return;
     const spot = nearFree(at); if (spot < 0) return;
-    B()[spot] = { bub: id, until: Date.now() + CFG.bubble.lastsMs };
-    setTimeout(() => { paintBoard(); floatText(spot, '🫧 Bubble!', '#bff0ff'); }, 450);
+    B()[spot] = { bub: id, until: Date.now() + CFG.bubble.lastsMs, pr: bubblePrice(id) };
+    setTimeout(() => {
+      paintBoard(); floatText(spot, '🫧 Bubble!', '#bff0ff');
+      if (!S.story.bubble) { S.story.bubble = 1; toast('🫧 A <b>bubble</b>: a bonus copy you can <b>buy</b> before it pops. Tap it!'); }
+    }, 450);
   }
   function tapBubble(i: number) {
     const c = B()[i]; if (!c || !c.bub) return;
@@ -2616,6 +2620,29 @@ export async function startGame() {
      Everything here pays out through grant(), so a reward reads the same
      wherever it comes from. */
 
+  /* ---------------------------------------------------------- friendship
+     Every contract you fill for someone makes you better friends. At each new
+     level they come over to say so — in a story scene — with a present. */
+  const FR_AT = [3, 10, 25, 50, 100];
+  const FR_GIFT: Reward[] = [{ energy: 10 }, { item: 'chest' }, { coins: 200, spin: 1 }, { item: 'bigchest' }, { coins: 600, spin: 2 }];
+  const FR_SAY = [
+    'You keep turning up when I need you. That means a lot round here.',
+    'I told everyone about you. Well — everyone who would listen.',
+    'Honestly? This place feels like home again, and that is your doing.',
+    'Best friends. No arguments. I have decided.',
+    'Whatever you need, whenever you need it. Just ask.'];
+  const frLv = (c: string) => { const n = (S.fr && S.fr[c]) || 0; let l = 0; while (l < FR_AT.length && n >= FR_AT[l]) l++; return l; };
+  function befriend(c: string) {
+    S.fr = S.fr || {};
+    const before = frLv(c);
+    S.fr[c] = (S.fr[c] || 0) + 1;
+    const now = frLv(c);
+    if (now <= before) return;
+    const gift = FR_GIFT[now - 1];
+    setTimeout(() => talkScene([[c, `❤️ <b>Friendship level ${now}!</b> ${FR_SAY[now - 1]}`], [c, `Here — a little thank-you: <b>${rewardText(gift)}</b>.`]],
+      () => { grant(gift); confetti(); renderOrders(); }), 900);
+  }
+
   /* ------------------------------------------------------------- rewards */
   type Reward = { energy?: number; coins?: number; item?: string; boost?: string; spin?: number; sci?: number };
   function rewardText(r: Reward) {
@@ -2667,6 +2694,12 @@ export async function startGame() {
   let talkQ: [string, string][] = [], talkDone: (() => void) | null = null, talkFirst = '';
   function talkScene(lines: [string, string][], done?: () => void) {
     if (!lines || !lines.length) { if (done) done(); return; }
+    if ($('#talk').classList.contains('open')) {
+      // already talking: this conversation waits its turn
+      talkQ = talkQ.concat(lines);
+      const prev = talkDone; talkDone = () => { if (prev) prev(); if (done) done(); };
+      return;
+    }
     talkQ = lines.slice(); talkDone = done || null; talkFirst = lines[0][0];
     $('#talk').classList.add('open');
     talkStep();
@@ -2949,6 +2982,7 @@ export async function startGame() {
       ${card('dig', '⛏️', 'Crater Dig', cd('dig'), S.met ? '' : '🔒 After the meteor')}
       ${card('brew', '⚗️', 'Fuel Brewing', cd('brew'), S.met ? '' : '🔒 After the meteor')}
       ${card('market', '🛍️', 'Alien Market', cd('market'), S.met ? '' : '🔒 After the meteor')}
+      ${card('stars', '✨', 'Constellations', Object.keys(S.stars || {}).length + ' traced · Star Cores', S.seen.starcore ? '' : '🔒 Find a Star Core')}
     </div>`, 'fun');
     document.querySelectorAll<HTMLElement>('[data-fun]').forEach(b => b.onclick = () => {
       if (b.classList.contains('locked')) { sfx.no(); toast('Not yet — ' + b.querySelector('i')!.textContent); return; }
@@ -2956,6 +2990,7 @@ export async function startGame() {
       if (k === 'event') { eventPop(); return; }
       if (k === 'spin') { spinPop(); return; }
       closePop();
+      if (k === 'stars') { closePop(); starsPanel(); return; }
       if (k === 'pairs') playPairs(); else if (k === 'dig') playDig(); else if (k === 'brew') playBrew(); else playMarket();
     });
   }
@@ -3347,11 +3382,11 @@ export async function startGame() {
 
     const built = Object.keys(S.parts).filter(k => S.parts[k]).length;
     let ents = spot('rocket', PAD.rocket,
-      S.met ? ART.rocket(S.parts) : '<div class="spotGhost">🚀</div>',
+      S.met && built ? ART.rocket(S.parts) : '<div class="spotGhost">🚀</div>',
       S.met ? 'Rocket' : '???',
       S.met ? (allParts() ? 'Ready · ⛽' + S.fuel + '/3' : built + '/4 parts') : 'nothing here yet',
       'ship' + (S.met && allParts() && S.fuel >= CONFIG.rocket.fuelToLaunch ? ' ready' : ''));
-    if (labOpen()) ents += spot('lab', PAD.lab, ART.icon('flask'), 'Lab', 'Invent relics', 'lab');
+    if (labOpen()) ents += spot('lab', PAD.lab, ART.icon('flask'), "Bloop's Lab", S.acc && !accLeft() ? '⚗️ ready!' : '🧪 ' + S.sci, 'lab' + (S.acc && !accLeft() ? ' ready' : ''));
     ents += spot('heart', PAD.heart, ART.item(worldAwake() ? 'bloomheart' : 'bloomcore'),
       w.heart, worldAwake() ? 'Awake' : fed() + '/' + bloomGoal() + ' Bloom', 'heart');
 
@@ -3373,43 +3408,61 @@ export async function startGame() {
     return `<div class="sceneWrap camp">
       <div class="sceneImg"></div><div class="sceneVig"></div>
       <div class="sceneName">${w.name}<i>lv ${wlv()}</i></div>
-      <div class="sceneBtns">
-        <button class="sceneBtn" data-pop="games">🎲</button>
-        <button class="sceneBtn" data-pop="stars">✨</button>
-        <button class="sceneBtn" data-pop="galaxy">🌌</button>
-      </div>
+      <button class="starMapBtn" data-pop="galaxy"><span>🌌</span><b>Star Map</b></button>
       ${ents}
     </div>`;
   }
 
+  /* The star map: a winding path up through space, home at the bottom. Each
+     planet is big, glows in its own colour, and says plainly what it needs. */
+  const GAL = {
+    earth: { tag: 'Home world · meadows & orchards', glow: '#7be06a' },
+    luna: { tag: 'The Moon · craters & crystals', glow: '#c9b8ff' },
+    cindra: { tag: 'Fire planet · forges & lava', glow: '#ff8a3d' },
+    nerith: { tag: 'Ocean planet · reefs & pearls', glow: '#45c7e8' },
+    vela: { tag: 'Sky planet · clouds & auroras', glow: '#d08bff' },
+  } as Record<string, { tag: string; glow: string }>;
+  const GAL_STEP = 210, GAL_TOP = 90;
   function galaxyHTML() {
     const fuelOk = S.fuel >= CONFIG.rocket.fuelToLaunch;
-    const spots = [[50, 80], [22, 60], [74, 54], [34, 30], [66, 14]];
+    const n = WORLD_ORDER.length, H = GAL_TOP + (n - 1) * GAL_STEP + 150;
+    const pt = (i: number) => ({ x: i % 2 ? 70 : 30, y: GAL_TOP + (n - 1 - i) * GAL_STEP + 55 });
+    let path = '', lit = '';
+    for (let i = 1; i < n; i++) {
+      const a = pt(i - 1), c = pt(i), my = (a.y + c.y) / 2;
+      const seg = `M${a.x} ${a.y} C${a.x} ${my} ${c.x} ${my} ${c.x} ${c.y}`;
+      path += seg + ' ';
+      if (visited(WORLD_ORDER[i])) lit += seg + ' ';
+    }
     const nodes = WORLD_ORDER.map((k, i) => {
-      const ww = WORLDS[k], here = k === S.world;
-      const reached = reachable(k);
-      const can = !here && reached && (visited(k) || (allParts() && fuelOk));
+      const ww = WORLDS[k], here = k === S.world, reached = reachable(k), seen = visited(k);
+      const can = !here && reached && (seen || (allParts() && fuelOk));
       const prev = WORLD_ORDER[i - 1];
-      const sp = spots[i] || [50, 50];
       const state = here ? 'here' : reached ? (can ? 'go' : 'wait') : 'locked';
-      return `<button class="galNode ${state}" data-world="${k}" style="left:${sp[0]}%;top:${sp[1]}%">
-        <span class="galArt">${reached ? ART.planet(ww.planet) : ART.planet('mystery')}</span>
-        <span class="galName">${reached ? ww.name : '???'}</span>
-        <span class="galSub">${here ? 'You are here'
-          : !reached ? (prev && visited(prev) ? '🔒 Restore ' + WORLDS[prev].name : '🔒 Locked')
-            : visited(k) ? 'Fly back ✈️' : can ? 'LAUNCH 🚀' : 'Need ⛽' + CONFIG.rocket.fuelToLaunch}</span>
-        ${reached && worldAwake(k) ? '<span class="galBloom">🌱</span>' : ''}</button>`;
+      const p = pt(i), side = p.x < 50 ? 'r' : 'l';
+      const list = projList(k), done = projDone(k);
+      const prog = seen && list.length ? `<div class="gpBar"><i style="width:${Math.round(done / list.length * 100)}%"></i></div>
+        <em>📜 ${done}/${list.length} chapters${worldDone(k) ? ' · restored ✨' : ''}</em>` : '';
+      const btn = here ? '<span class="gpHere">📍 You are here</span>'
+        : !reached ? `<span class="gpNeed">🔒 ${prev && visited(prev) ? `Restore ${WORLDS[prev].name} · ${projDone(prev)}/${projList(prev).length}` : 'Far away'}</span>`
+          : seen ? `<button class="gpGo" data-world="${k}">Fly back ✈️</button>`
+            : can ? `<button class="gpGo launch" data-world="${k}">LAUNCH 🚀</button>`
+              : `<span class="gpNeed">${allParts() ? `Needs ⛽ ${S.fuel}/${CONFIG.rocket.fuelToLaunch} fuel` : 'Finish the rocket first'}</span>`;
+      return `<div class="gp gp-${k} ${state} side-${side}" style="left:${p.x}%;top:${p.y}px;--glow:${GAL[k] ? GAL[k].glow : '#fff'}">
+        <button class="gpPlanet" data-world="${k}"><span class="gpRing"></span>
+          <span class="galArt">${ART.planet(ww.planet)}</span>
+          ${here ? '<span class="gpRocket">🚀</span>' : ''}${state === 'locked' ? '<span class="gpLock">🔒</span>' : ''}
+          ${reached && worldAwake(k) ? '<span class="galBloom">🌱</span>' : ''}</button>
+        <div class="gpCard"><b>${ww.name}</b><i>${GAL[k] ? GAL[k].tag : ''}</i>${prog}${btn}</div>
+      </div>`;
     }).join('');
-    const lines = WORLD_ORDER.slice(1).map((k, i) => {
-      const a = spots[i], c = spots[i + 1];
-      if (!a || !c) return '';
-      const len = Math.hypot((c[0] - a[0]) * 3.2, (c[1] - a[1]) * 4.4);
-      return `<i class="galLink${S.unlocked[k] ? ' on' : ''}" style="left:${a[0]}%;top:${a[1]}%;width:${len}%;
-        transform:rotate(${Math.atan2((c[1] - a[1]) * 4.4, (c[0] - a[0]) * 3.2) * 180 / Math.PI}deg)"></i>`;
-    }).join('');
-    return `<div class="galaxy">${lines}${nodes}
-      <button class="sceneBtn back" data-pop="camp">↩</button>
-      <div class="galFoot">A new world costs <b>${CONFIG.rocket.fuelToLaunch} ⛽</b> (you have <b>${S.fuel}</b>) · flying back is free</div></div>`;
+    return `<div class="gal2"><div class="galSky"></div>
+      <div class="galTop"><button class="galBack" data-pop="camp">↩ Camp</button><b>🌌 Star Map</b><span class="galFuel">⛽ ${S.fuel}/${CONFIG.rocket.fuelToLaunch}</span></div>
+      <div class="galScroll" id="galScroll"><div class="galPath" style="height:${H}px">
+        <svg class="galSvg" viewBox="0 0 100 ${H}" preserveAspectRatio="none" style="height:${H}px">
+          <path d="${path}" class="galRoute"/><path d="${lit}" class="galRoute lit"/></svg>
+        ${nodes}</div></div>
+      <div class="galFoot">A new world costs <b>${CONFIG.rocket.fuelToLaunch} ⛽</b> · flying back is always free</div></div>`;
   }
 
   function renderWorldScreen() {
@@ -3417,6 +3470,10 @@ export async function startGame() {
     $('#mapTitle').textContent = worldTab === 'camp' ? '🌍 ' + W().name : '🌌 Galaxy';
     host.innerHTML = worldTab === 'camp' ? campHTML() : galaxyHTML();
     placeSpots();
+    if (worldTab !== 'camp') {
+      const sc = $('#galScroll'), me = host.querySelector('.gp.here') as HTMLElement;
+      if (sc && me) sc.scrollTop = Math.max(0, me.offsetTop - sc.clientHeight / 2);
+    }
     host.querySelectorAll('[data-world]').forEach((b: any) => b.onclick = () => galaxyTap(b.dataset.world));
     host.querySelectorAll('[data-ent]').forEach((b: any) => b.onclick = () => campTap(b.dataset.ent));
     host.querySelectorAll('[data-pop]').forEach((b: any) => b.onclick = () => {

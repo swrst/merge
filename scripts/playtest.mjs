@@ -112,7 +112,7 @@ const travel = async (world) => {
   // was left on, so only switch when we are looking at the camp
   const toGal = page.locator('[data-pop="galaxy"]');
   if (await toGal.count()) { await toGal.click({ force: true }); await page.waitForTimeout(600); }
-  await page.locator(`[data-world="${world}"]`).click({ force: true });
+  await page.locator(`.gpPlanet[data-world="${world}"]`).click({ force: true });
   await page.waitForFunction(w => window.__game.state().world === w, world, { timeout: 15000 });
   await page.waitForFunction(() => !document.querySelector('#cut').classList.contains('show'), null, { timeout: 15000 });
   await page.waitForTimeout(900); await closeModal(); await page.waitForTimeout(300);
@@ -664,8 +664,9 @@ await closeModal();
 
 head('Side games');
 await set(() => { const s = window.__game.state(); s.energy = 60; s.mini = {}; });
-await pop('games', 'Things to do');
-await page.locator('[data-game="dig"]').click({ force: true }); await page.waitForTimeout(800);
+await closeModal(); await tab('board');
+await page.evaluate(() => window.__game.v9.funPop()); await page.waitForTimeout(500);
+await page.evaluate(() => document.querySelector('[data-fun="dig"]').click()); await page.waitForTimeout(800);
 must(await page.locator('#mini.open').count() === 1, 'Crater Dig opens');
 const digCells = await page.locator('.digCell').count();
 must(digCells === 20, `with a ${digCells}-tile crater`);
@@ -679,16 +680,18 @@ must(opened >= 1, `digging revealed ${opened} tile(s)`);
 await page.locator('#miniClose').click({ force: true }); await page.waitForTimeout(300);
 
 await set(() => { const s = window.__game.state(); s.energy = 60; s.mini = {}; });
-await pop('games', 'Things to do');
-await page.locator('[data-game="brew"]').click({ force: true }); await page.waitForTimeout(800);
+await closeModal(); await tab('board');
+await page.evaluate(() => window.__game.v9.funPop()); await page.waitForTimeout(500);
+await page.evaluate(() => document.querySelector('[data-fun="brew"]').click()); await page.waitForTimeout(800);
 must(await page.locator('.brewBar').count() === 1, 'Fuel Brewing opens with a needle');
 for (let i = 0; i < 5; i++) { await page.locator('#brewTap').click({ force: true }).catch(() => {}); await page.waitForTimeout(200); }
 must(await page.locator('#brewDone').count() === 1, 'and five stirs finish the brew');
 await page.locator('#brewDone').click({ force: true }); await page.waitForTimeout(300);
 
 await set(() => { const s = window.__game.state(); s.mini = {}; s.coins = 9000; });
-await pop('games', 'Things to do');
-await page.locator('[data-game="market"]').click({ force: true }); await page.waitForTimeout(800);
+await closeModal(); await tab('board');
+await page.evaluate(() => window.__game.v9.funPop()); await page.waitForTimeout(500);
+await page.evaluate(() => document.querySelector('[data-fun="market"]').click()); await page.waitForTimeout(800);
 must(await page.locator('.mktCrate').count() === 3, 'the Alien Market lays out three crates');
 await page.locator('[data-m=\"0\"]').click({ force: true }); await page.waitForTimeout(200);
 await page.locator('[data-m=\"1\"]').click({ force: true }); await page.waitForTimeout(200);
@@ -706,7 +709,10 @@ await set(() => {
   for (let i = 0; i < b.length && n < 2; i++) if (!b[i]) { b[i] = { id: 'starcore' }; n++; }
   window.__board.sync(b);
 });
-await pop('stars', 'Constellations');
+await closeModal(); await tab('board');
+await set(() => { window.__game.state().seen.starcore = 1; });
+await page.evaluate(() => window.__game.v9.funPop()); await page.waitForTimeout(500);
+await page.evaluate(() => document.querySelector('[data-fun="stars"]').click()); await page.waitForTimeout(800);
 await page.locator('[data-c="plough"]').click({ force: true }); await page.waitForTimeout(800);
 must(await page.locator('.skyStar').count() === 7, 'the Plough has seven stars');
 for (let i = 0; i < 7; i++) { await page.locator(`[data-s="${i}"]`).click({ force: true }); await page.waitForTimeout(120); }

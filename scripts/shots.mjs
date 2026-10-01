@@ -12,7 +12,7 @@ await page.locator('#tSkip').click({ force: true }).catch(() => {});
 await page.waitForTimeout(800);
 const setup = process.env.SETUP;
 if (setup) { await page.evaluate(setup); await page.evaluate(() => window.__game.hud()); await page.waitForTimeout(800); }
-const shot = async (n) => { await page.waitForTimeout(700); await page.screenshot({ path: `${OUT}/${n}.png` }); };
+const shot = async (n) => { await page.waitForTimeout(1600); await page.screenshot({ path: `${OUT}/${n}.png` }); };
 const close = async () => { await page.evaluate(() => { document.querySelectorAll('.modal.open,#modal.open').forEach(m => m.classList.remove('open')); }); };
 await close(); await shot('board');
 for (const v of (process.env.VIEWS || 'rocket,shop,lab,book,map').split(',')) {

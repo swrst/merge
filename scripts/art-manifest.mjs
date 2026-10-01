@@ -115,6 +115,19 @@ const CHAR_ROWS = [
   ['gigi', 'Gigi', 'a glamorous village florist and tailor in her forties, a big sun hat with flowers, cat-eye sunglasses pushed up, a measuring tape round her neck'],
   ['biscuit', 'Biscuit', 'a fluffy golden corgi-like village dog with a red bandana, tongue out, ears up, very happy'],
   ['bloop', 'Bloop', 'a small round jade-green jelly alien with one big shiny eye, two tiny antennae with glowing tips, a cream belly, slightly wobbly, very sweet'],
+  /* the other worlds' folk, so every contract card has a painted face */
+  ['zib', 'Zib', 'a small mint-green blob alien trader with brass goggles pushed up and a satchel bursting with shiny bits'],
+  ['luma', 'Luma', 'a soft rose-pink glowing jelly alien holding a little lantern, dreamy half-closed eyes'],
+  ['rokk', 'Rokk', 'a sturdy square steel-grey robot with a glowing sapphire visor for eyes, rivets, a tiny antenna, very polite'],
+  ['nix', 'Nix', 'a lilac amethyst crystal creature with faceted cheeks and a collector\'s monocle, slightly smug smile'],
+  ['vulk', 'Vulk', 'a stocky living-flame blacksmith spirit, ember-orange with a soot-streaked leather apron and a hammer on the shoulder'],
+  ['ember', 'Ember', 'a small cheerful flame sprite, gold and orange, sparks for freckles'],
+  ['marin', 'Marin', 'a sapphire-blue fish-folk harbourmaster with a little captain\'s hat and a calm smile'],
+  ['kelpa', 'Kelpa', 'a kelp-green blob gardener with seaweed hair and a tiny trowel'],
+  ['sirra', 'Sirra', 'a coral-pink fish-folk singer with pearl earrings and a shell hair clip'],
+  ['zephyr', 'Zephyr', 'a fluffy white cloud creature with mint cheeks, a little aviator scarf blowing in the wind'],
+  ['halo', 'Halo', 'a shimmering aurora crystal being, teal-to-violet, with tiny stars floating around its head'],
+  ['wren', 'Wren', 'a topaz-gold songbird person with a twig-nest hat and bright round eyes'],
 ];
 const add = (path, kind, name, group, prompt, batch, negative = NEGATIVE) =>
   rows.push({ path, kind, name, group, batch, prompt, negative });
