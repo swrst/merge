@@ -362,6 +362,8 @@ export async function startGame() {
     $('#coins').textContent = S.coins;
     $('#energy').textContent = S.energy + '/' + maxEnergy();
     $('#lvl').textContent = S.lvl;
+    const av = $('#avatar');
+    if (av && !av.dataset.on && document.documentElement.classList.contains('has-player')) { av.innerHTML = ART.char('player'); av.dataset.on = '1'; }
     $('#xpTxt').textContent = S.xp + '/' + xpNeed(S.lvl);
     $('#xpFill').style.width = clamp(S.xp / xpNeed(S.lvl) * 100, 0, 100) + '%';
     const app = $('#app');
@@ -2714,7 +2716,7 @@ export async function startGame() {
     const [who, text] = l;
     const t = $('#talk');
     t.classList.toggle('right', who !== talkFirst);
-    $('#tkFace').innerHTML = ART.char(who);
+    $('#tkFace').innerHTML = ART.charFull(who);
     $('#tkName').textContent = (CHARS[who] && CHARS[who].name) || who;
     $('#tkText').innerHTML = text;
     t.classList.remove('beat'); void t.offsetWidth; t.classList.add('beat');
@@ -2976,8 +2978,8 @@ export async function startGame() {
     const cd = (k: string) => miniLeft(k) ? '⏳ ' + mmss(miniLeft(k)) : 'Ready!';
     const lockLv = (n: number) => S.lvl < n ? `🔒 Level ${n}` : '';
     pop('🎪 Fun & Games', `<div class="funGrid">
-      ${card('event', e ? e.theme.icon : '🎉', e ? e.theme.name : 'Events', e ? `${S.ev.key === e.key ? S.ev.pts : 0} ${e.theme.token} · ${dhm(e.ends - Date.now())}` : 'next in ' + dhm(evNext() - Date.now()), lockLv(EV().unlockLevel), !!e)}
-      ${card('spin', '🎡', 'Lucky Wheel', spinsLeft() ? spinsLeft() + ' spin' + (spinsLeft() > 1 ? 's' : '') + ' ready!' : 'Free spin tomorrow', lockLv(SP().unlockLevel), spinsLeft() > 0 && S.lvl >= SP().unlockLevel)}
+      ${card('event', ART.uiIcon('ic_event', e ? e.theme.icon : '🎉'), e ? e.theme.name : 'Events', e ? `${S.ev.key === e.key ? S.ev.pts : 0} ${e.theme.token} · ${dhm(e.ends - Date.now())}` : 'next in ' + dhm(evNext() - Date.now()), lockLv(EV().unlockLevel), !!e)}
+      ${card('spin', ART.uiIcon('ic_spin', '🎡'), 'Lucky Wheel', spinsLeft() ? spinsLeft() + ' spin' + (spinsLeft() > 1 ? 's' : '') + ' ready!' : 'Free spin tomorrow', lockLv(SP().unlockLevel), spinsLeft() > 0 && S.lvl >= SP().unlockLevel)}
       ${card('pairs', '🛸', 'Alien Pairs', cd('pairs'), lockLv((miniCfg('pairs').unlockLevel || 0)), !miniLeft('pairs') && S.lvl >= (miniCfg('pairs').unlockLevel || 0))}
       ${card('dig', '⛏️', 'Crater Dig', cd('dig'), S.met ? '' : '🔒 After the meteor')}
       ${card('brew', '⚗️', 'Fuel Brewing', cd('brew'), S.met ? '' : '🔒 After the meteor')}
@@ -3015,9 +3017,9 @@ export async function startGame() {
   function renderQuick() {
     const host = $('#quick'); if (!host) return;
     const e = evNow(), bits: string[] = [];
-    if (e) bits.push(`<button class="qChip ev" data-q="event">${e.theme.icon}<b>${S.ev.key === e.key ? S.ev.pts : 0}</b><i>${dhm(e.ends - Date.now())}</i></button>`);
-    if (S.lvl >= SP().unlockLevel && spinsLeft()) bits.push(`<button class="qChip spin" data-q="spin">🎡<b>${spinsLeft()}</b></button>`);
-    if (S.acc) bits.push(`<button class="qChip acc" data-q="acc">⚗️<i>${accLeft() ? mmss(accLeft()) : 'done!'}</i></button>`);
+    if (e) bits.push(`<button class="qChip ev" data-q="event">${ART.uiIcon('ic_event', e.theme.icon)}<b>${S.ev.key === e.key ? S.ev.pts : 0}</b><i>${dhm(e.ends - Date.now())}</i></button>`);
+    if (S.lvl >= SP().unlockLevel && spinsLeft()) bits.push(`<button class="qChip spin" data-q="spin">${ART.uiIcon('ic_spin', '🎡')}<b>${spinsLeft()}</b></button>`);
+    if (S.acc) bits.push(`<button class="qChip acc" data-q="acc">${ART.uiIcon('ic_lab', '⚗️')}<i>${accLeft() ? mmss(accLeft()) : 'done!'}</i></button>`);
     const html = bits.join('');
     if (host.dataset.h === html) return;
     host.dataset.h = html; host.innerHTML = html;
@@ -3450,7 +3452,7 @@ export async function startGame() {
               : `<span class="gpNeed">${allParts() ? `Needs ⛽ ${S.fuel}/${CONFIG.rocket.fuelToLaunch} fuel` : 'Finish the rocket first'}</span>`;
       return `<div class="gp gp-${k} ${state} side-${side}" style="left:${p.x}%;top:${p.y}px;--glow:${GAL[k] ? GAL[k].glow : '#fff'}">
         <button class="gpPlanet" data-world="${k}"><span class="gpRing"></span>
-          <span class="galArt">${ART.planet(ww.planet)}</span>
+          <span class="galArt">${ART.uiIcon('planet_' + k, ART.planet(ww.planet))}</span>
           ${here ? '<span class="gpRocket">🚀</span>' : ''}${state === 'locked' ? '<span class="gpLock">🔒</span>' : ''}
           ${reached && worldAwake(k) ? '<span class="galBloom">🌱</span>' : ''}</button>
         <div class="gpCard"><b>${ww.name}</b><i>${GAL[k] ? GAL[k].tag : ''}</i>${prog}${btn}</div>
