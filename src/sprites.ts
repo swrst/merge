@@ -53,6 +53,7 @@ if (typeof document !== 'undefined') {
     root.style.setProperty('--ui-' + k, `url("${url}")`);
     root.classList.add('ui-' + k);
   });
+  if (SPRITE.char.player) root.classList.add('has-player');
 }
 
 export const spriteCount = () =>

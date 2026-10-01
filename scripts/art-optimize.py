@@ -33,7 +33,7 @@ def palette_png(im):
 FILL = {'items': 0.86, 'producers': 0.92, 'chars': 0.94}
 
 
-def recentre(im, sub):
+def recentre(im, sub, force=False):
     """Items are drawn on a tile, so a sprite whose subject sits off to one side
     or fills half the frame looks wrong next to its neighbours. Crop to what is
     painted and put it back centred at a consistent size. Returns None when the
@@ -45,9 +45,9 @@ def recentre(im, sub):
     w, h = im.size
     cx = (bb[0] + bb[2]) / 2 / w - .5
     cy = (bb[1] + bb[3]) / 2 / h - .5
-    fill = max(bb[2] - bb[0], bb[3] - bb[1]) / w
+    fill = max(bb[2] - bb[0], bb[3] - bb[1]) / max(w, h)
     want = FILL[sub]
-    if abs(cx) <= .025 and abs(cy) <= .03 and abs(fill - want) <= .07:
+    if not force and abs(cx) <= .025 and abs(cy) <= .03 and abs(fill - want) <= .07:
         return None
     crop = im.crop(bb)
     side = round(SQUARE * want)
@@ -73,7 +73,7 @@ def main():
             before += size
             im = Image.open(p)
             if sub == 'scenes':
-                if size <= 260_000:
+                if size <= 300_000:
                     after += size
                     continue
                 b = io.BytesIO()
@@ -81,9 +81,12 @@ def main():
                 data = b.getvalue()
             else:
                 im = im.convert('RGBA')
-                if sub in ('items', 'producers', 'chars') and im.width > SQUARE:
-                    im = im.resize((SQUARE, SQUARE), Image.LANCZOS)
-                fixed = recentre(im, sub) if sub in FILL else None
+                fixed = None
+                if sub in FILL:
+                    # a non-square file (a slice off a strip) is always re-framed
+                    fixed = recentre(im, sub, force=im.width != im.height)
+                    if fixed is None and im.width > SQUARE:
+                        im = im.resize((SQUARE, SQUARE), Image.LANCZOS)
                 if fixed is not None:
                     im = fixed
                     print(f'  {sub}/{f:28s} re-centred')
