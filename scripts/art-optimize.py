@@ -72,6 +72,9 @@ def main():
             size = os.path.getsize(p)
             before += size
             im = Image.open(p)
+            if sub == 'ui' and ext == '.webp':
+                after += size                      # photographic backdrops stay WebP
+                continue
             if sub == 'scenes':
                 if size <= 300_000:
                     after += size
