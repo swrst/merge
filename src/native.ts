@@ -50,8 +50,13 @@ export async function setupChrome() {
     // Android's back button should step out of a screen, not kill the app
     const { App } = await import('@capacitor/app');
     App.addListener('backButton', () => {
+      // a story scene steps on, a small popup or side game closes, before anything else
+      const talk = document.querySelector('#talk.open') as HTMLElement | null;
+      if (talk) { talk.click(); return; }
       const modal = document.querySelector('#modal.open') as HTMLElement | null;
       if (modal) { (document.querySelector('#mBtn') as HTMLElement)?.click(); return; }
+      if (document.querySelector('#pop.open')) { (document.querySelector('#popX') as HTMLElement)?.click(); return; }
+      if (document.querySelector('#mini.open')) { (document.querySelector('#miniClose') as HTMLElement)?.click(); return; }
       const tray = document.querySelector('.tray.open') as HTMLElement | null;
       if (tray) { (document.querySelector('#bagClose') as HTMLElement)?.click(); return; }
       const open = document.querySelector('.screen.open') as HTMLElement | null;

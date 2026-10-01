@@ -476,7 +476,7 @@ export async function startGame() {
       card.innerHTML =
         `<div class="oTop">
            <div class="oFig">${ART.figure(o.char)}</div>
-           <div class="oWho"><div class="oName">${ch.name}${frLv(o.char) ? `<span class="oFr" title="Friendship">❤️${frLv(o.char)}</span>` : ''}</div><div class="oSay">${o.say}</div>
+           <div class="oWho"><div class="oName">${ch.name}${frLv(o.char) ? `<span class="oFr" title="Friendship">${ART.uiIcon('ic_heart', '❤️')}${frLv(o.char)}</span>` : ''}</div><div class="oSay">${o.say}</div>
              <div class="oRews"><span class="oRew">${ART.icon('coin')}${o.coins}</span><span class="oRew">${ART.icon('star')}${o.xp}</span>
              ${o.give ? `<span class="oRew gift" title="Gift: ${ITEMS[o.give].name}">${ART.item(o.give)}</span>` : ''}
              ${o.nrg ? `<span class="oRew">${ART.icon('energy')}${o.nrg}</span>` : ''}</div>
@@ -3004,9 +3004,9 @@ export async function startGame() {
     const snackLeft = Math.max(0, (S.snackAt || 0) + CONFIG.energy.snack.cooldownMs - Date.now());
     pop('⚡ Energy', `<div class="enBig">${ART.icon('energy')}<b>${S.energy}</b><i>/ ${maxEnergy()}</i></div>
       <div class="noteLine" style="margin-top:2px">${full ? 'Full! Go merge something.' : `+1 every ${Math.round(per / 60000 * 10) / 10} min · next in <b>${mmss(next)}</b>`}</div>
-      <div class="enRow"><span class="enIc">🍪</span><div><b>Snack break</b><i>+${snackAmt()} energy, every 4 hours</i></div>
+      <div class="enRow"><span class="enIc">${ART.uiIcon('ic_cookie', '🍪')}</span><div><b>Snack break</b><i>+${snackAmt()} energy, every 4 hours</i></div>
         <button class="buyBtn" id="enSnack"${snackLeft || full ? ' disabled' : ''}>${snackLeft ? mmss(snackLeft) : 'Free'}</button></div>
-      <div class="enRow"><span class="enIc">🔋</span><div><b>Refill pack</b><i>+${CFG.shop2.energyRefill.amount} energy right now</i></div>
+      <div class="enRow"><span class="enIc">${ART.icon('energy')}</span><div><b>Refill pack</b><i>+${CFG.shop2.energyRefill.amount} energy right now</i></div>
         <button class="buyBtn" id="enBuy"${S.coins < refillPrice() ? ' disabled' : ''}>${refillPrice()} 🪙</button></div>
       <div class="noteLine">More energy: daily tasks, the 🎡 wheel, events, and 🔬 Lab research.</div>`, 'energy');
     const sn = $('#enSnack'); if (sn) sn.onclick = () => { ($('#btnSnack') as HTMLButtonElement).click(); setTimeout(energyPop, 100); };
@@ -3384,12 +3384,13 @@ export async function startGame() {
 
     const built = Object.keys(S.parts).filter(k => S.parts[k]).length;
     let ents = spot('rocket', PAD.rocket,
-      S.met && built ? ART.rocket(S.parts) : '<div class="spotGhost">🚀</div>',
+      S.met ? (ART.spriteUi('rocket_0') ? `<img class="campImg" src="${ART.spriteUi('rocket_' + (built >= 4 ? 3 : built >= 3 ? 2 : built >= 1 ? 1 : 0))}">`
+        : built ? ART.rocket(S.parts) : '<div class="spotGhost">🚀</div>') : '<div class="spotGhost">🚀</div>',
       S.met ? 'Rocket' : '???',
       S.met ? (allParts() ? 'Ready · ⛽' + S.fuel + '/3' : built + '/4 parts') : 'nothing here yet',
       'ship' + (S.met && allParts() && S.fuel >= CONFIG.rocket.fuelToLaunch ? ' ready' : ''));
-    if (labOpen()) ents += spot('lab', PAD.lab, ART.icon('flask'), "Bloop's Lab", S.acc && !accLeft() ? '⚗️ ready!' : '🧪 ' + S.sci, 'lab' + (S.acc && !accLeft() ? ' ready' : ''));
-    ents += spot('heart', PAD.heart, ART.item(worldAwake() ? 'bloomheart' : 'bloomcore'),
+    if (labOpen()) ents += spot('lab', PAD.lab, ART.spriteUi('camp_lab') ? `<img class="campImg" src="${ART.spriteUi('camp_lab')}">` : ART.icon('flask'), "Bloop's Lab", S.acc && !accLeft() ? '⚗️ ready!' : '🧪 ' + S.sci, 'lab' + (S.acc && !accLeft() ? ' ready' : ''));
+    ents += spot('heart', PAD.heart, ART.spriteUi('camp_heart_on') ? `<img class="campImg" src="${ART.spriteUi(worldAwake() ? 'camp_heart_on' : 'camp_heart_off')}">` : ART.item(worldAwake() ? 'bloomheart' : 'bloomcore'),
       w.heart, worldAwake() ? 'Awake' : fed() + '/' + bloomGoal() + ' Bloom', 'heart');
 
     prods.slice(0, PROD_PADS.length).forEach((pr, n) => {
@@ -3997,6 +3998,7 @@ export async function startGame() {
     document.querySelectorAll<HTMLElement>('.tab').forEach(t => t.onclick = () => setView(t.dataset.v as string));
     document.querySelectorAll<HTMLElement>('.scClose').forEach(b => b.onclick = () => setView('board'));
     $('#btnHint').onclick = () => { showHint(true); lastAct = Date.now(); };
+    { const hi = document.querySelector('#btnHint .hintIc'); if (hi) hi.innerHTML = ART.uiIcon('ic_hint', '💡'); }
     $('#btnSnack').onclick = async () => {
       if (S.energy >= maxEnergy()) { toast('Energy is already full!'); return; }
       // once an ad network is wired up this becomes "watch to refill"; until then
