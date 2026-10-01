@@ -1,6 +1,6 @@
 # The merge catalogue
 
-504 items across 84 chains (477 of them in the five worlds, the rest shared and rocket parts), 77 producers, 5 worlds.
+506 items across 85 chains (477 of them in the five worlds, the rest shared and rocket parts), 78 producers, 5 worlds.
 
 Each chain is a ladder: two of a thing make the next thing up. Chains run from 4 to 8
 steps. The last item in a chain is its finale — finishing one for the first time pays
@@ -263,6 +263,9 @@ Sun Amber → Prism Hearth → Tide Compass → Grove Sigil → Vault Key
 
 **Bloom Essence** · 4 steps  
 Bloom Spark → Bloom Mote → Bloom Core → Bloom Heart
+
+**Chests** · 2 steps  
+Supply Chest → Treasure Chest
 
 **Wildcards** · 1 steps  
 Wildcard
