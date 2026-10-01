@@ -40,6 +40,7 @@
   <div class="stage" id="stage">
     <div class="stageTop">
       <div class="worldTag"><span id="worldIcon"></span><span id="worldName">Sunny Meadow</span></div>
+      <div class="quick" id="quick"></div>
       <div class="tools" id="tools">
         <button class="hintTag" id="btnSnack">🍪 +20</button>
         <button class="hintTag" id="btnHint">💡 Hint</button>
@@ -57,29 +58,32 @@
   <div class="infoBar" id="infoBar">
     <div id="infoTxt"></div>
     <button class="sellBtn alt" id="btnStash">Stash</button>
+    <button class="sellBtn sci" id="btnRecycle">🧪</button>
     <button class="sellBtn" id="btnSell">Sell</button>
     <button class="xBtn" id="infoClose">✕</button>
   </div>
 
-  <!-- Side rail instead of a bottom dock: round buttons down the right edge that
-       pop a panel open, the way this genre has always done it. -->
-  <div class="rail" id="rail">
-    <button class="tab railBtn" data-v="map" id="tabMap"><span class="ti">🌍</span><i>World</i><span class="dot" id="dotWorld" style="display:none"></span></button>
-    <button class="tab railBtn" data-v="shop" id="tabShop"><span class="ti">🛒</span><i>Shop</i><span class="dot" id="dotShop" style="display:none"></span></button>
-    <button class="tab railBtn" data-v="lab" id="tabLab"><span class="ti">🔬</span><i>Lab</i></button>
+  <!-- Bottom dock, Travel Town style: big round buttons, each opens a popup
+       over the board instead of a screen that replaces it. -->
+  <div class="rail dock" id="rail">
+    <button class="tab railBtn" data-v="map" id="tabMap"><span class="ti">🌍</span><i>Map</i><span class="dot" id="dotWorld" style="display:none"></span></button>
     <button class="tab railBtn" data-v="rocket" id="tabRocket"><span class="ti">📜</span><i>Goals</i><span class="dot" id="dotRocket" style="display:none"></span></button>
-    <button class="tab railBtn" data-v="book"><span class="ti">📖</span><i>Album</i></button>
+    <button class="tab railBtn" data-v="fun" id="tabFun"><span class="ti">🎪</span><i>Fun</i><span class="dot" id="dotFun" style="display:none"></span></button>
+    <button class="tab railBtn" data-v="lab" id="tabLab"><span class="ti">🔬</span><i>Lab</i><span class="dot" id="dotLab" style="display:none"></span></button>
+    <button class="tab railBtn" data-v="book" id="tabBook"><span class="ti">📖</span><i>Album</i></button>
+    <button class="tab railBtn" data-v="shop" id="tabShop"><span class="ti">🛒</span><i>Shop</i><span class="dot" id="dotShop" style="display:none"></span></button>
   </div>
 
+  <div class="scrim" id="scrim"></div>
   <div class="screen" id="sc-shop">
     <div class="scHead"><div class="scTitle">🛒 Trading Post</div>
       <div class="scCoins"><span id="shopCoinIc"></span><span id="shopCoins">0</span></div>
       <button class="iconBtn scClose">✕</button></div>
     <div class="scBody" id="shopBody"></div>
   </div>
-  <div class="screen scene lab" id="sc-lab">
-    <div class="scHead"><div class="scTitle">🔬 Research Lab</div>
-      <div class="scCoins"><span id="labCoinIc"></span><span id="labCoins">0</span></div>
+  <div class="screen lab" id="sc-lab">
+    <div class="scHead"><div class="scTitle">🔬 Bloop's Lab</div>
+      <div class="scCoins sciChip"><span>🧪</span><span id="labCoins">0</span></div>
       <button class="iconBtn scClose">✕</button></div>
     <div class="scBody" id="labBody"></div>
   </div>
@@ -119,6 +123,19 @@
       <div class="tSay" id="tSay"></div>
       <div class="tRow"><button class="tSkip" id="tSkip">Skip intro</button><button class="tNext" id="tNext">Got it</button></div>
     </div>
+  </div>
+
+  <!-- a generic popup for the small things: energy, the wheel, events, fun -->
+  <div class="pop" id="pop"><div class="popBox">
+    <div class="popRibbon" id="popTitle"></div>
+    <button class="popX" id="popX">✕</button>
+    <div class="popBody" id="popBody"></div>
+  </div></div>
+
+  <!-- story scenes: a big portrait and a speech box, tap to go on -->
+  <div class="talk" id="talk">
+    <div class="tkFace" id="tkFace"></div>
+    <div class="tkBox"><div class="tkName" id="tkName"></div><div class="tkText" id="tkText"></div><div class="tkMore">tap ▸</div></div>
   </div>
 
   <div class="toast" id="toast"></div>

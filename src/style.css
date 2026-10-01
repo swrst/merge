@@ -944,4 +944,204 @@ html.ui-badge_ready .oNeed.done:after{content:"";background:var(--ui-badge_ready
 .bubArt{width:90px;height:90px;margin:8px auto;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#d8f1ff 60%,#a9dcff);padding:10px;opacity:.9}
 .bubArt svg,.bubArt img{width:100%;height:100%}
 .sCArt .stock{position:absolute;right:-8px;top:-4px;left:auto;bottom:auto}
-.screen:not(.scene) .scBody{padding-right:58px}   /* the side rail sits over the right edge */
+
+
+/* ============================================================== v9 layout
+   Travel Town shape: HUD, contracts, the board, and a bottom dock of big round
+   buttons. Everything else is a popup over the board — never a second screen
+   you get lost in. */
+:root{--dockH:76px}
+.app .stage{margin:0 8px 6px}
+/* the dock */
+.rail.dock{position:relative;right:auto;bottom:auto;z-index:40;flex:none;display:flex;flex-direction:row;justify-content:space-around;
+  align-items:flex-end;gap:2px;height:calc(var(--dockH) + env(safe-area-inset-bottom,0px));padding:6px 6px calc(8px + env(safe-area-inset-bottom,0px));
+  background:linear-gradient(180deg,#f7d9a3,#e2b26c);border-top:4px solid #fff3d6;border-radius:26px 26px 0 0;
+  box-shadow:0 -4px 0 rgba(150,105,50,.18),0 -8px 18px rgba(0,0,0,.18)}
+html.ui-dock_bar .rail.dock{background:var(--ui-dock_bar) center/100% 100% no-repeat;border-top-color:transparent;box-shadow:none}
+.rail.dock .railBtn{width:54px;height:58px;border-radius:20px;flex:none;border-width:3px;padding-top:2px}
+.rail.dock .railBtn .ti{font-size:24px;filter:drop-shadow(0 2px 1px rgba(0,0,0,.18))}
+.rail.dock .railBtn i{font-size:9.5px;margin-top:2px;color:#7a5326}
+.rail.dock .railBtn.on{transform:translateY(-6px)}
+.app.sceneOn .rail.dock{gap:2px}
+.app.sceneOn .rail.dock .railBtn{width:54px;height:58px;border-radius:20px;border-width:3px}
+.app.sceneOn .rail.dock .railBtn i{display:block}
+.app.sceneOn .rail.dock .railBtn .ti{font-size:24px}
+html.ui-dock_btn .rail.dock .railBtn:not(.on){background:var(--ui-dock_btn) center/100% 100% no-repeat;border-color:transparent;box-shadow:none}
+.rail.dock .dot{top:-5px;right:-5px}
+/* the info bar now sits on top of the dock */
+.infoBar{bottom:calc(var(--dockH) + 8px + env(safe-area-inset-bottom,0px))}
+.sellBtn.sci{background:linear-gradient(180deg,#e3d4ff,#b998ff);color:#4b2b8f;box-shadow:0 3px 0 #8a63d9}
+.sellBtn.alt{background:linear-gradient(180deg,#d9f2ff,#9fd8ff);color:#1f5f8a;box-shadow:0 3px 0 #5aa6d8}
+/* quieter quest strip: one line */
+.questBtn{padding:3px 10px 3px 4px;border-radius:16px;margin-bottom:5px}
+.qFace{width:28px;height:28px}
+/* the snack moved into the energy popup */
+#btnSnack{display:none}
+.chip{cursor:pointer}
+.chip:after{content:"+";margin-left:3px;width:16px;height:16px;border-radius:50%;background:linear-gradient(180deg,#8fe86d,#4fb63a);
+  color:#fff;font-size:13px;line-height:16px;text-align:center;box-shadow:0 1.5px 0 #3c8f2c}
+
+/* screens become popups that float between the HUD and the dock */
+.scrim{position:absolute;inset:0;z-index:29;background:rgba(40,25,10,.5);opacity:0;pointer-events:none;transition:opacity .2s}
+.app.popOn .scrim{opacity:1;pointer-events:auto}
+.screen:not(.scene){left:10px;right:10px;top:calc(54px + env(safe-area-inset-top,0px));bottom:calc(var(--dockH) + 10px + env(safe-area-inset-bottom,0px));
+  border-radius:26px;border:4px solid #fff;background:linear-gradient(180deg,#fffaf0,#fde9c6);
+  box-shadow:0 8px 0 rgba(150,105,50,.3),0 18px 40px rgba(0,0,0,.35);
+  transform:scale(.88) translateY(20px);opacity:0;transition:transform .26s cubic-bezier(.3,1.4,.5,1),opacity .18s,visibility 0s .26s}
+.screen:not(.scene).open{transform:none;opacity:1;transition:transform .26s cubic-bezier(.3,1.4,.5,1),opacity .18s,visibility 0s}
+.screen:not(.scene) .scHead{justify-content:center;padding:0;margin:-20px 40px 6px;position:relative;z-index:2}
+.screen:not(.scene) .scTitle{flex:none;padding:7px 26px 9px;border-radius:14px;font-size:17px;color:#fff;text-align:center;
+  background:linear-gradient(180deg,#ff9a6b,#e8643c);box-shadow:0 4px 0 #b84a26,0 6px 12px rgba(0,0,0,.2);text-shadow:0 2px 0 rgba(120,40,10,.45)}
+html.ui-ribbon .screen:not(.scene) .scTitle,html.ui-ribbon .popRibbon{background:var(--ui-ribbon) center/100% 100% no-repeat;box-shadow:none;padding-left:40px;padding-right:40px}
+.screen:not(.scene) .scHead .iconBtn{position:absolute;right:-38px;top:12px;margin:0}
+.screen:not(.scene) .scCoins{position:absolute;left:-36px;top:14px}
+.screen:not(.scene) .scBody{padding:6px 12px 14px}
+.scClose,.popX{width:36px;height:36px;border-radius:50%;background:linear-gradient(180deg,#ff8a78,#e8483a);color:#fff;font-weight:800;font-size:15px;
+  border:3px solid #fff;box-shadow:0 3px 0 #b3301f,0 4px 10px rgba(0,0,0,.25)}
+html.ui-btn_close .scClose,html.ui-btn_close .popX{background:var(--ui-btn_close) center/100% 100% no-repeat;border-color:transparent;box-shadow:none;color:transparent}
+.screen.scene{bottom:calc(var(--dockH) + env(safe-area-inset-bottom,0px))}
+html.ui-popup_frame .screen:not(.scene),html.ui-popup_frame .popBox{background:none;border-style:solid;border-color:transparent;box-shadow:0 18px 40px rgba(0,0,0,.35);border-radius:0;
+  border-image:var(--ui-popup_frame) 70 fill / 26px stretch}
+.sciChip{background:linear-gradient(180deg,#f4eeff,#e3d4ff)!important;color:#4b2b8f}
+
+/* the generic small popup */
+.pop{position:absolute;inset:0;z-index:150;background:rgba(40,25,10,.55);display:flex;align-items:center;justify-content:center;padding:16px;
+  opacity:0;pointer-events:none;transition:opacity .2s}
+.pop.open{opacity:1;pointer-events:auto}
+.popBox{position:relative;width:100%;max-width:360px;max-height:84%;display:flex;flex-direction:column;background:linear-gradient(180deg,#fffaf0,#fde9c6);
+  border:4px solid #fff;border-radius:26px;padding:24px 12px 14px;box-shadow:0 8px 0 rgba(150,105,50,.3),0 18px 40px rgba(0,0,0,.35);
+  transform:scale(.85);transition:transform .26s cubic-bezier(.3,1.5,.5,1)}
+.pop.open .popBox{transform:scale(1)}
+.popRibbon{position:absolute;top:-20px;left:50%;transform:translateX(-50%);white-space:nowrap;padding:7px 26px 9px;border-radius:14px;font-size:17px;font-weight:700;color:#fff;
+  background:linear-gradient(180deg,#ff9a6b,#e8643c);box-shadow:0 4px 0 #b84a26,0 6px 12px rgba(0,0,0,.2);text-shadow:0 2px 0 rgba(120,40,10,.45)}
+.pop.ev .popRibbon{background:linear-gradient(180deg,#ff9fd0,#e0559c);box-shadow:0 4px 0 #a8326e}
+.pop.spin .popRibbon{background:linear-gradient(180deg,#ffd76b,#f0a20d);box-shadow:0 4px 0 #b97700}
+.pop.fun .popRibbon{background:linear-gradient(180deg,#9fd8ff,#3f9de6);box-shadow:0 4px 0 #2b74b0}
+.pop.energy .popRibbon{background:linear-gradient(180deg,#8fe0ff,#2fb2e6);box-shadow:0 4px 0 #1d84ad}
+.popX{position:absolute;top:-14px;right:-10px;z-index:2}
+.popBody{overflow-y:auto;min-height:0}
+
+/* story scenes */
+.talk{position:absolute;inset:0;z-index:170;display:flex;flex-direction:column;justify-content:flex-end;padding:0 12px calc(22px + env(safe-area-inset-bottom,0px));
+  background:linear-gradient(180deg,rgba(30,20,10,0) 25%,rgba(30,20,10,.65));opacity:0;pointer-events:none;transition:opacity .25s}
+.talk.open{opacity:1;pointer-events:auto}
+.tkFace{width:150px;height:150px;margin:0 0 -26px 6px;position:relative;z-index:2;filter:drop-shadow(0 8px 10px rgba(0,0,0,.35))}
+.tkFace svg,.tkFace img{width:100%;height:100%}
+.talk.right .tkFace{margin-left:auto;margin-right:6px}
+.talk.beat .tkFace{animation:tkIn .35s cubic-bezier(.3,1.5,.5,1)}
+@keyframes tkIn{from{transform:translateY(24px) scale(.9);opacity:.2}to{transform:none;opacity:1}}
+.tkBox{position:relative;background:linear-gradient(180deg,#fffdf6,#fff0d4);border:4px solid #fff;border-radius:22px;padding:22px 16px 14px;
+  box-shadow:0 6px 0 rgba(150,105,50,.3),0 14px 30px rgba(0,0,0,.3);min-height:110px}
+html.ui-talk_box .tkBox{background:none;border-style:solid;border-color:transparent;box-shadow:none;border-radius:0;border-image:var(--ui-talk_box) 60 fill / 22px stretch}
+.tkName{position:absolute;top:-16px;left:18px;padding:4px 16px;border-radius:12px;font-size:14px;font-weight:800;color:#fff;
+  background:linear-gradient(180deg,#8fd85f,#4fb63a);box-shadow:0 3px 0 #3c8f2c;text-shadow:0 1px 0 rgba(0,60,0,.4)}
+.talk.right .tkName{left:auto;right:18px;background:linear-gradient(180deg,#9fd8ff,#3f9de6);box-shadow:0 3px 0 #2b74b0}
+.tkText{font-size:15px;font-weight:600;line-height:1.35;color:#5b452a}
+.tkText b{color:#e07a1c}
+.tkMore{position:absolute;right:14px;bottom:6px;font-size:11px;font-weight:800;color:#c9a678;animation:bob 1.2s ease-in-out infinite}
+.talkBtn{flex:none;width:34px;height:34px;border-radius:50%;background:#fff;border:2px solid #f0dcb4;font-size:16px}
+
+/* quick chips above the board */
+.quick{display:flex;gap:5px;margin-right:auto;margin-left:6px}
+.qChip{display:flex;align-items:center;gap:3px;border-radius:99px;padding:2px 8px 2px 5px;font-size:13px;background:#fff;border:2px solid #fff;
+  box-shadow:0 2px 0 rgba(150,105,50,.25);font-family:inherit;animation:readyBob 1.6s ease-in-out infinite}
+.qChip b{font-size:11px;color:#6b5236}.qChip i{font-style:normal;font-size:9.5px;font-weight:700;color:#9a7a4e}
+.qChip.ev{background:linear-gradient(180deg,#fff0f8,#ffd5ea)}
+.qChip.spin{background:linear-gradient(180deg,#fff8dc,#ffe28a)}
+.qChip.acc{background:linear-gradient(180deg,#f6f0ff,#e3d4ff)}
+
+/* fun corner */
+.funGrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.funCard{position:relative;display:flex;flex-direction:column;align-items:center;gap:1px;padding:10px 6px;border-radius:18px;background:#fffaf0;border:3px solid #fff;
+  box-shadow:0 4px 0 rgba(150,105,50,.22);font-family:inherit;color:#5c4327}
+.funCard .fIc{font-size:34px;line-height:1.1}
+.funCard b{font-size:13px}.funCard i{font-style:normal;font-size:10px;font-weight:700;color:#9a7a4e}
+.funCard.hot{background:linear-gradient(180deg,#fff6d8,#ffe7a8);box-shadow:0 4px 0 rgba(200,140,30,.4),0 0 0 2px #ffd46a}
+.funCard.hot:after{content:"!";position:absolute;top:-6px;right:-4px;width:20px;height:20px;border-radius:50%;background:#ff5e57;color:#fff;font-weight:800;font-size:12px;
+  line-height:20px;border:2px solid #fff}
+.funCard.locked{opacity:.55;filter:grayscale(.6)}
+
+/* wheel */
+.wheelWrap{position:relative;width:250px;height:250px;margin:6px auto 8px}
+.wheel{position:absolute;inset:0;border-radius:50%;border:7px solid #ffcb3d;box-shadow:0 0 0 4px #fff,0 8px 18px rgba(0,0,0,.25),inset 0 0 12px rgba(0,0,0,.12)}
+.wSeg{position:absolute;left:50%;top:0;width:0;height:50%;transform-origin:0 100%}
+.wSeg span{position:absolute;left:-30px;top:12px;width:60px;display:flex;flex-direction:column;align-items:center;font-size:9px;font-weight:800;color:#6b4a20;text-align:center;line-height:1.05}
+.wSeg span svg,.wSeg span img{width:30px;height:30px}
+.wSeg .rwEmoji{font-size:22px}
+.wHub{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff6c8,#ffcb3d 60%,#e09a0c);
+  display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 3px 0 #b97700,0 0 0 3px #fff}
+.wheelPin{position:absolute;left:50%;top:-14px;transform:translateX(-50%);z-index:3;font-size:26px;color:#e8483a;text-shadow:0 2px 0 #fff,0 3px 4px rgba(0,0,0,.3)}
+html.ui-wheel .wheel{background:var(--ui-wheel) center/100% 100% no-repeat!important;border:none;box-shadow:none}
+
+/* alien pairs */
+.pairGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:4px 0}
+.pCard{position:relative;aspect-ratio:1/1;border-radius:14px;padding:0;background:linear-gradient(180deg,#8fd0ff,#4a9be6);border:3px solid #fff;
+  box-shadow:0 3px 0 #2b74b0;transition:transform .25s}
+.pCard .pBack{font-size:26px;font-weight:800;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.2)}
+.pCard .pFace{display:none;position:absolute;inset:4px}
+.pCard .pFace svg,.pCard .pFace img{width:100%;height:100%}
+.pCard.up,.pCard.got{background:#fffaf0;box-shadow:0 3px 0 rgba(150,105,50,.25);transform:rotateY(0)}
+.pCard.up .pBack,.pCard.got .pBack{display:none}.pCard.up .pFace,.pCard.got .pFace{display:block}
+.pCard.got{opacity:.55;background:#e6ffdc}
+html.ui-card_back .pCard:not(.up):not(.got){background:var(--ui-card_back) center/100% 100% no-repeat;border-color:transparent;box-shadow:none}
+html.ui-card_back .pCard:not(.up):not(.got) .pBack{visibility:hidden}
+.pairInfo{text-align:center;font-size:12px;font-weight:700;color:#7a6244;margin:4px 0}
+
+/* lab */
+.screen.lab .scBody{position:relative}
+.labTabs{margin-bottom:4px}
+.labPanel{display:flex;flex-direction:column;gap:8px}
+.labIntro{font-size:11.5px;font-weight:600;color:#7a6244;background:#f4eeff;border-radius:12px;padding:8px 10px;border:2px solid #e3d4ff}
+.resList{display:flex;flex-direction:column;gap:7px}
+.resRow{display:flex;align-items:center;gap:8px;background:#fffaf0;border:3px solid #fff;border-radius:16px;padding:7px 8px;box-shadow:0 3px 0 rgba(150,105,50,.18)}
+.resRow.max{background:linear-gradient(180deg,#f1ffe9,#dff7d3)}
+.resIc{font-size:26px;width:36px;text-align:center}
+.resTxt{flex:1;min-width:0;display:flex;flex-direction:column}
+.resTxt b{font-size:12.5px;color:#5c4327}.resTxt i{font-style:normal;font-size:10.5px;font-weight:600;color:#9a7a4e}
+.resPips{display:flex;gap:3px;margin-top:3px}.resPips em{width:14px;height:6px;border-radius:3px;background:#eddfc2}.resPips em.on{background:linear-gradient(90deg,#b998ff,#8a63d9)}
+.buyBtn.sci{background:linear-gradient(180deg,#e3d4ff,#b998ff);color:#4b2b8f;box-shadow:0 3px 0 #8a63d9}
+.accBox{background:#fffaf0;border:3px solid #fff;border-radius:18px;padding:12px;text-align:center;box-shadow:0 3px 0 rgba(150,105,50,.18)}
+.accArt{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px}
+.accArt svg,.accArt img{width:64px;height:64px}
+.accArrow{font-size:22px;color:#8a63d9;font-weight:800}
+.accTime{font-size:20px;font-weight:800;color:#4b2b8f;margin-top:6px}
+.accEmpty{font-size:64px;opacity:.5}
+.screen.lab .sceneWrap{position:relative;height:430px;border-radius:16px}
+.screen.lab .labBar{right:14px}
+
+/* event */
+.evHead{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.evFace{width:64px;height:64px;flex:none}.evFace svg,.evFace img{width:100%;height:100%}
+.evHead b{font-size:22px;color:#c23f86}.evHead i{display:block;font-style:normal;font-size:11px;font-weight:600;color:#7a6244;margin-top:2px}
+.evHead em{display:block;font-style:normal;font-size:11px;font-weight:800;color:#c23f86;margin-top:3px}
+.evTrack{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
+.evNode{position:relative;display:flex;flex-direction:column;align-items:center;background:#fffaf0;border:3px solid #fff;border-radius:14px;padding:5px 3px;box-shadow:0 2px 0 rgba(150,105,50,.18)}
+.evNode.got{background:#e6ffdc;opacity:.75}
+.evNode.ready{background:#fff0f8;box-shadow:0 0 0 2px #ff9fd0}
+.evNeed{font-size:10px;font-weight:800;color:#c23f86}
+.evArt{width:34px;height:34px;display:flex;align-items:center;justify-content:center}.evArt svg,.evArt img{width:100%;height:100%}
+.rwEmoji{font-size:24px}
+.evRw{font-size:9px;font-weight:700;color:#7a6244;text-align:center;line-height:1.1}
+.evTick{position:absolute;top:-6px;right:-4px;width:18px;height:18px;border-radius:50%;background:#5ec93f;color:#fff;font-size:11px;font-weight:800;
+  display:flex;align-items:center;justify-content:center}
+.evOff{text-align:center;font-size:14px;font-weight:600;color:#7a6244;padding:20px 6px}
+
+/* energy */
+.enBig{display:flex;align-items:center;justify-content:center;gap:6px;font-size:36px;font-weight:800;color:#2b8ed6}
+.enBig svg,.enBig img{width:48px;height:48px}.enBig i{font-style:normal;font-size:16px;color:#7a9bb5}
+.enRow{display:flex;align-items:center;gap:8px;background:#fffaf0;border:3px solid #fff;border-radius:16px;padding:8px;margin-top:8px;box-shadow:0 3px 0 rgba(150,105,50,.18)}
+.enRow>div{flex:1}.enRow b{display:block;font-size:13px;color:#5c4327}.enRow i{font-style:normal;font-size:10.5px;font-weight:600;color:#9a7a4e}
+.enIc{font-size:28px}
+.tkName{left:150px}
+.talk.right .tkName{right:150px}
+.wSeg span{top:16px}.wSeg span b{font-size:13px;color:#5b3d12;text-shadow:0 1px 0 #fff}
+
+/* painted dock icons replace the emoji as soon as they exist */
+html.ui-ic_map #tabMap .ti,html.ui-ic_goals #tabRocket .ti,html.ui-ic_fun #tabFun .ti,html.ui-ic_lab #tabLab .ti,
+html.ui-ic_album #tabBook .ti,html.ui-ic_shop #tabShop .ti{font-size:0;width:34px;height:34px;background:center/contain no-repeat}
+html.ui-ic_map #tabMap .ti{background-image:var(--ui-ic_map)}
+html.ui-ic_goals #tabRocket .ti{background-image:var(--ui-ic_goals)}
+html.ui-ic_fun #tabFun .ti{background-image:var(--ui-ic_fun)}
+html.ui-ic_lab #tabLab .ti{background-image:var(--ui-ic_lab)}
+html.ui-ic_album #tabBook .ti{background-image:var(--ui-ic_album)}
+html.ui-ic_shop #tabShop .ti{background-image:var(--ui-ic_shop)}

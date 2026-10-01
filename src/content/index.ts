@@ -116,7 +116,7 @@ export interface ShopDef {
 export interface Config {
   board: { cols: number; rows: number; starterItems: number };
   start: { coins: number; energy: number; world: string };
-  energy: { base: number; perLevel: number; regenMs: number; snack: { amount: number; cooldownMs: number } };
+  energy: { base: number; perLevel: number; regenMs: number; snack: { amount: number; cooldownMs: number }; levelUp?: number };
   /** level curve: base + (l-1)·perLevel + growth·(l-1)² */
   xp: { base: number; perLevel: number; growth: number; perMerge: number; orderBase: number };
   orders: {
@@ -156,7 +156,7 @@ export interface Config {
   /** what waking a world's Heart pays out */
   bloom: { reward: { coins: number; energy: number } };
   /** the side games: entry cost and how often each can be played */
-  mini: Record<string, { cost: number; cooldownMs: number; grid?: number; digs?: number; rounds?: number }>;
+  mini: Record<string, { cost: number; cooldownMs: number; grid?: number; digs?: number; rounds?: number; flips?: number; unlockLevel?: number }>;
   vault: VaultDef[];
   forge: ForgeDef[];
   tasks: { slots: number; refreshMs: number; pool: TaskDef[] };

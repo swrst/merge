@@ -32,8 +32,8 @@
       "berries"
     ],
     "mode": "battery",
-    "cap": 20,
-    "every": 90000
+    "cap": 10,
+    "every": 360000
   },
   "well": {
     "name": "Old Well",
@@ -89,8 +89,8 @@
       "ground": "bark"
     },
     "mode": "battery",
-    "cap": 20,
-    "every": 90000
+    "cap": 10,
+    "every": 360000
   },
   "mosslog": {
     "name": "Mossy Log",
@@ -222,8 +222,8 @@
       "ground": "clay"
     },
     "mode": "battery",
-    "cap": 20,
-    "every": 90000
+    "cap": 10,
+    "every": 360000
   },
   "raincloud": {
     "name": "Rain Cloud",
@@ -264,8 +264,8 @@
       "bulb"
     ],
     "mode": "battery",
-    "cap": 20,
-    "every": 90000
+    "cap": 10,
+    "every": 360000
   },
   "dustflat": {
     "name": "Dust Flat",
@@ -298,8 +298,8 @@
       "ground": "slate"
     },
     "mode": "battery",
-    "cap": 20,
-    "every": 90000
+    "cap": 10,
+    "every": 360000
   },
   "crystalspire": {
     "name": "Crystal Spire",
@@ -397,8 +397,8 @@
       "ground": "slate"
     },
     "mode": "battery",
-    "cap": 20,
-    "every": 90000
+    "cap": 10,
+    "every": 360000
   },
   "scrapyard": {
     "name": "Rover Scrapyard",
@@ -482,8 +482,8 @@
       "ground": "slate"
     },
     "mode": "battery",
-    "cap": 20,
-    "every": 90000
+    "cap": 10,
+    "every": 360000
   },
   "lavavent": {
     "name": "Lava Vent",
@@ -506,8 +506,8 @@
       "ashroom"
     ],
     "mode": "battery",
-    "cap": 20,
-    "every": 90000
+    "cap": 10,
+    "every": 360000
   },
   "ironseam": {
     "name": "Iron Seam",
@@ -590,8 +590,8 @@
       "ground": "obsidian"
     },
     "mode": "battery",
-    "cap": 20,
-    "every": 90000
+    "cap": 10,
+    "every": 360000
   },
   "copperseam": {
     "name": "Copper Seam",
@@ -640,8 +640,8 @@
       "ground": "obsidian"
     },
     "mode": "battery",
-    "cap": 20,
-    "every": 90000
+    "cap": 10,
+    "every": 360000
   },
   "basaltcliff": {
     "name": "Basalt Cliff",
@@ -708,8 +708,8 @@
       "ground": "obsidian"
     },
     "mode": "battery",
-    "cap": 20,
-    "every": 90000
+    "cap": 10,
+    "every": 360000
   },
   "rubyvein": {
     "name": "Ruby Vein",
@@ -759,8 +759,8 @@
       "ground": "sand"
     },
     "mode": "battery",
-    "cap": 20,
-    "every": 90000
+    "cap": 10,
+    "every": 360000
   },
   "oysterbed": {
     "name": "Oyster Bed",
@@ -776,8 +776,8 @@
       "ground": "sand"
     },
     "mode": "battery",
-    "cap": 20,
-    "every": 90000
+    "cap": 10,
+    "every": 360000
   },
   "coralhead": {
     "name": "Coral Head",
@@ -892,8 +892,8 @@
       "ground": "sand"
     },
     "mode": "battery",
-    "cap": 20,
-    "every": 90000
+    "cap": 10,
+    "every": 360000
   },
   "nestbeach": {
     "name": "Nesting Beach",
@@ -977,8 +977,8 @@
       "ground": "sand"
     },
     "mode": "battery",
-    "cap": 20,
-    "every": 90000
+    "cap": 10,
+    "every": 360000
   },
   "cloudbank": {
     "name": "Cloud Bank",
@@ -1011,8 +1011,8 @@
       "ground": "dusk"
     },
     "mode": "battery",
-    "cap": 20,
-    "every": 90000
+    "cap": 10,
+    "every": 360000
   },
   "starcradle": {
     "name": "Star Cradle",
@@ -1061,8 +1061,8 @@
       "ground": "cloud"
     },
     "mode": "battery",
-    "cap": 20,
-    "every": 90000
+    "cap": 10,
+    "every": 360000
   },
   "chimepost": {
     "name": "Chime Post",
@@ -1143,8 +1143,8 @@
       "ground": "cloud"
     },
     "mode": "battery",
-    "cap": 20,
-    "every": 90000
+    "cap": 10,
+    "every": 360000
   },
   "solarfarm": {
     "name": "Solar Array",
@@ -1194,8 +1194,8 @@
       "ground": "cloud"
     },
     "mode": "battery",
-    "cap": 20,
-    "every": 90000
+    "cap": 10,
+    "every": 360000
   },
   "gravwell": {
     "name": "Gravity Well",

@@ -107,6 +107,15 @@ const TIER = {
 const readOf = (n, len) => len <= 1 ? 7 : Math.min(7, 1 + Math.round(n * 6 / (len - 1)));
 
 const rows = [];
+/* the Sunny Meadow cast and Bloop — the faces of the story scenes */
+const CHAR_ROWS = [
+  ['pip', 'Pip', 'a cheerful village kid of about ten with messy chestnut hair, freckles, an orange t-shirt and blue dungarees, a leaf stuck in the hair'],
+  ['grandma', 'Granny Fern', 'a kind round-faced grandmother with a silver bun, round glasses, rosy cheeks, a lilac cardigan and a little flower pinned on it'],
+  ['timmy', 'Timmy', 'an excitable small boy with a blue cap on backwards, big curious eyes, a gap-toothed grin and a toy spyglass on a string'],
+  ['gigi', 'Gigi', 'a glamorous village florist and tailor in her forties, a big sun hat with flowers, cat-eye sunglasses pushed up, a measuring tape round her neck'],
+  ['biscuit', 'Biscuit', 'a fluffy golden corgi-like village dog with a red bandana, tongue out, ears up, very happy'],
+  ['bloop', 'Bloop', 'a small round jade-green jelly alien with one big shiny eye, two tiny antennae with glowing tips, a cream belly, slightly wobbly, very sweet'],
+];
 const add = (path, kind, name, group, prompt, batch, negative = NEGATIVE) =>
   rows.push({ path, kind, name, group, batch, prompt, negative });
 
@@ -241,6 +250,41 @@ UI.forEach(([p, name, desc]) => add(`src/sprites/${p}`, 'ui', name, 'interface',
   `${name} — ${desc}. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, `
   + 'rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, '
   + 'transparent background, no text, no letters, no icons unless described.', 'ui'));
+
+/* ------------------------------------------------------- v9: the new UI
+   The Travel Town layout: a bottom dock, popups over the board, story scenes,
+   the Lucky Wheel and Alien Pairs. Each file only takes effect once it exists
+   (style.css checks for html.ui-<name>), so they can land one at a time. */
+const UI2 = [
+  ['ui/dock_bar.png', 'Bottom dock bar', 'a wide bar that sits along the bottom of the phone screen: warm honey-wood with a cream top lip and big rounded TOP corners only, flat bottom edge, soft inner shading, empty, 1024x200'],
+  ['ui/dock_btn.png', 'Dock button', 'a rounded-square button base for the bottom dock: cream with a thick white rim and a warm brown drop edge, empty middle for an icon, 160x170'],
+  ['ui/popup_frame.png', 'Popup frame', '9-slice popup window: rounded cream-paper card, thick white rim, soft warm-brown outer edge and a gentle drop shadow, empty middle, 512x512 with 70px corners'],
+  ['ui/btn_close.png', 'Close button', 'round tomato-red button with a thick white rim and a bold white X in the middle (the X is the one allowed symbol), glossy top highlight, 128x128'],
+  ['ui/talk_box.png', 'Story speech box', '9-slice speech box for story dialogue: rounded cream card with a thick white rim, a soft honey-coloured inner border, empty middle, 512x256 with 60px corners'],
+  ['ui/card_back.png', 'Alien Pairs card back', 'the back of a memory card: rounded square, sky-blue with a cream rim, a small cute flying saucer emblem in the middle, 192x192'],
+  ['ui/wheel.png', 'Lucky wheel', 'a flat lucky prize wheel seen straight on, 8 equal wedges, wedge 1 starts at 12 o\'clock and they go clockwise: butter yellow, white, sky blue, white, pink, white, mint green, white; a chunky gold rim with little round light bulbs, empty wedges (no prizes, no text), centre left empty, 768x768'],
+  ['ui/ic_map.png', 'Dock icon: Map', 'a little folded treasure map with a red dotted path, 128x128'],
+  ['ui/ic_goals.png', 'Dock icon: Goals', 'a rolled parchment scroll with a red wax seal, 128x128'],
+  ['ui/ic_fun.png', 'Dock icon: Fun', 'a small striped circus tent, red and cream, with a flag on top, 128x128'],
+  ['ui/ic_lab.png', 'Dock icon: Lab', 'a round glass flask bubbling with violet liquid, 128x128'],
+  ['ui/ic_album.png', 'Dock icon: Album', 'a chunky closed photo album with a gold star on the cover, 128x128'],
+  ['ui/ic_shop.png', 'Dock icon: Shop', 'a little market stall with a striped awning, 128x128'],
+  ['ui/ic_spin.png', 'Icon: Lucky Wheel', 'a tiny colourful prize wheel on a stand, 128x128'],
+  ['ui/ic_event.png', 'Icon: Event', 'a shooting star with a pink-gold sparkly tail, 128x128'],
+  ['ui/ic_science.png', 'Icon: Science', 'a small test tube with glowing violet liquid and a bubble, 128x128'],
+];
+UI2.forEach(([p, name, desc]) => add(`src/sprites/${p}`, 'ui', name, 'interface v2',
+  `${name} — ${desc}. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, `
+  + 'rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, '
+  + 'transparent background, no text, no letters, no icons unless described.', 'ui2'));
+
+/* story portraits: head-and-shoulders, used big in the story scenes and small
+   on the contract cards */
+CHAR_ROWS.forEach(([k, name, look]) => add(`src/sprites/chars/${k}.png`, 'char', name, 'character portrait',
+  `${name}, a character portrait for a cosy mobile merge game in the style of Travel Town: ${look}. Head and shoulders, `
+  + 'facing the viewer slightly turned, big friendly eyes, warm expressive smile, soft painterly semi-3D rendering, '
+  + 'warm light from the upper left, thin warm-brown outline, centred, filling most of a 512x512 square, transparent background.',
+  'portraits'));
 
 /* ------------------------------------------------------- animation sheets */
 const FX = [

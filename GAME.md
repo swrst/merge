@@ -716,3 +716,37 @@ The empty plot in the camp says which level opens it.
 - The meteor, cargo ships (from chapter 6) and random visitors are held back while the world is being told as a story.
 - Chapter 10 needs the finished rocket. Crater Camp stays locked until all 10 Meadow chapters are done.
 - Other worlds keep the level-based producer growth.
+
+## v9 — Lab, side games, events, story scenes, Travel Town UI
+
+**Economy.** Energy is scarce again:
+- Cap is 40 + 2 per level; it comes back 1 every 2 min.
+- A level-up gives +20 instead of a full refill.
+- The snack is +15 every 4 h, and lives in the ⚡ popup (tap the energy chip).
+- Free patches hold 10 taps and refill over an hour.
+- Fewer contracts pay in energy, and milestones give less.
+
+**Contracts.** After level 3 a contract asks for tier 3+ items, often two or three different ones; from level 8 a third is common. Rewards scale with what they ask for.
+
+**Story.** Sunny Meadow has 16 chapters and uses every Meadow chain.
+- Each chapter opens with a short conversation (`talk` in `projects.mjs`), shown as a portrait scene. Finishing a chapter plays its closing line, then the reward, then the next chapter's opening.
+- 💬 on the Goals card replays the current chapter.
+- Chapter 5 (Bloop's Workshop) builds the Lab.
+- `gen-content` checks that every chapter only asks for chains you can already make.
+
+**Lab.**
+- **Recycle:** selected item → 🧪 Science, worth tier² per item.
+- **Research:** permanent perks bought with Science (battery, solar, lucky taps, golden touch, quick patches, haggling, pockets).
+- **Accelerator:** one item goes in and comes out one step higher after tier × 4 min; you can rush it with coins.
+- **Fusion:** the old recipe bench.
+
+**Fun** (🎪 in the dock):
+- **Live event**, rotating Meteor Shower / Bloom Festival / Comet Carnival: 3 days on, 1 off, on a fixed calendar. Points come from tier-3+ merges, contracts and chapters, and fill a 12-step reward track.
+- **Lucky Wheel:** one free spin a day, plus spin tokens.
+- **Alien Pairs** memory game, plus Dig, Brew and Market.
+
+**UI.**
+- A bottom dock; all panels are popups over the board.
+- Quick chips above the board show the event, free spins and the accelerator.
+- The ⚡ and 🪙 chips open the energy popup and the shop.
+- Painted pieces from batch `ui2` and `portraits` (`src/sprites/chars/`) drop in automatically.
