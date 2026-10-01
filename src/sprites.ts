@@ -25,6 +25,7 @@ const ITEMS_G = import.meta.glob('./sprites/items/*.{png,webp,jpg,jpeg}', { eage
 const PRODS_G = import.meta.glob('./sprites/producers/*.{png,webp,jpg,jpeg}', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
 const SCENES_G = import.meta.glob('./sprites/scenes/*.{png,webp,jpg,jpeg}', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
 const UI_G = import.meta.glob('./sprites/ui/*.{png,webp}', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
+const CHARS_G = import.meta.glob('./sprites/chars/*.{png,webp}', { eager: true, query: '?url', import: 'default' }) as Record<string, string>;
 
 function byName(files: Record<string, string>): Record<string, string> {
   const out: Record<string, string> = {};
@@ -40,6 +41,7 @@ export const SPRITE = {
   producer: byName(PRODS_G),
   scene: byName(SCENES_G),
   ui: byName(UI_G),
+  char: byName(CHARS_G),
 };
 
 /* Painted UI pieces are skinned in through CSS: each file becomes a custom
@@ -55,4 +57,4 @@ if (typeof document !== 'undefined') {
 
 export const spriteCount = () =>
   Object.keys(SPRITE.item).length + Object.keys(SPRITE.producer).length + Object.keys(SPRITE.scene).length
-  + Object.keys(SPRITE.ui).length;
+  + Object.keys(SPRITE.ui).length + Object.keys(SPRITE.char).length;

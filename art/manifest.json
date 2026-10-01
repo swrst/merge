@@ -5490,6 +5490,204 @@
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
+    "path": "src/sprites/ui/dock_bar.png",
+    "kind": "ui",
+    "name": "Bottom dock bar",
+    "group": "interface v2",
+    "batch": "ui2",
+    "prompt": "Bottom dock bar — a wide bar that sits along the bottom of the phone screen: warm honey-wood with a cream top lip and big rounded TOP corners only, flat bottom edge, soft inner shading, empty, 1024x200. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/ui/dock_btn.png",
+    "kind": "ui",
+    "name": "Dock button",
+    "group": "interface v2",
+    "batch": "ui2",
+    "prompt": "Dock button — a rounded-square button base for the bottom dock: cream with a thick white rim and a warm brown drop edge, empty middle for an icon, 160x170. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/ui/popup_frame.png",
+    "kind": "ui",
+    "name": "Popup frame",
+    "group": "interface v2",
+    "batch": "ui2",
+    "prompt": "Popup frame — 9-slice popup window: rounded cream-paper card, thick white rim, soft warm-brown outer edge and a gentle drop shadow, empty middle, 512x512 with 70px corners. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/ui/btn_close.png",
+    "kind": "ui",
+    "name": "Close button",
+    "group": "interface v2",
+    "batch": "ui2",
+    "prompt": "Close button — round tomato-red button with a thick white rim and a bold white X in the middle (the X is the one allowed symbol), glossy top highlight, 128x128. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/ui/talk_box.png",
+    "kind": "ui",
+    "name": "Story speech box",
+    "group": "interface v2",
+    "batch": "ui2",
+    "prompt": "Story speech box — 9-slice speech box for story dialogue: rounded cream card with a thick white rim, a soft honey-coloured inner border, empty middle, 512x256 with 60px corners. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/ui/card_back.png",
+    "kind": "ui",
+    "name": "Alien Pairs card back",
+    "group": "interface v2",
+    "batch": "ui2",
+    "prompt": "Alien Pairs card back — the back of a memory card: rounded square, sky-blue with a cream rim, a small cute flying saucer emblem in the middle, 192x192. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/ui/wheel.png",
+    "kind": "ui",
+    "name": "Lucky wheel",
+    "group": "interface v2",
+    "batch": "ui2",
+    "prompt": "Lucky wheel — a flat lucky prize wheel seen straight on, 8 equal wedges, wedge 1 starts at 12 o'clock and they go clockwise: butter yellow, white, sky blue, white, pink, white, mint green, white; a chunky gold rim with little round light bulbs, empty wedges (no prizes, no text), centre left empty, 768x768. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/ui/ic_map.png",
+    "kind": "ui",
+    "name": "Dock icon: Map",
+    "group": "interface v2",
+    "batch": "ui2",
+    "prompt": "Dock icon: Map — a little folded treasure map with a red dotted path, 128x128. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/ui/ic_goals.png",
+    "kind": "ui",
+    "name": "Dock icon: Goals",
+    "group": "interface v2",
+    "batch": "ui2",
+    "prompt": "Dock icon: Goals — a rolled parchment scroll with a red wax seal, 128x128. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/ui/ic_fun.png",
+    "kind": "ui",
+    "name": "Dock icon: Fun",
+    "group": "interface v2",
+    "batch": "ui2",
+    "prompt": "Dock icon: Fun — a small striped circus tent, red and cream, with a flag on top, 128x128. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/ui/ic_lab.png",
+    "kind": "ui",
+    "name": "Dock icon: Lab",
+    "group": "interface v2",
+    "batch": "ui2",
+    "prompt": "Dock icon: Lab — a round glass flask bubbling with violet liquid, 128x128. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/ui/ic_album.png",
+    "kind": "ui",
+    "name": "Dock icon: Album",
+    "group": "interface v2",
+    "batch": "ui2",
+    "prompt": "Dock icon: Album — a chunky closed photo album with a gold star on the cover, 128x128. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/ui/ic_shop.png",
+    "kind": "ui",
+    "name": "Dock icon: Shop",
+    "group": "interface v2",
+    "batch": "ui2",
+    "prompt": "Dock icon: Shop — a little market stall with a striped awning, 128x128. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/ui/ic_spin.png",
+    "kind": "ui",
+    "name": "Icon: Lucky Wheel",
+    "group": "interface v2",
+    "batch": "ui2",
+    "prompt": "Icon: Lucky Wheel — a tiny colourful prize wheel on a stand, 128x128. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/ui/ic_event.png",
+    "kind": "ui",
+    "name": "Icon: Event",
+    "group": "interface v2",
+    "batch": "ui2",
+    "prompt": "Icon: Event — a shooting star with a pink-gold sparkly tail, 128x128. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/ui/ic_science.png",
+    "kind": "ui",
+    "name": "Icon: Science",
+    "group": "interface v2",
+    "batch": "ui2",
+    "prompt": "Icon: Science — a small test tube with glowing violet liquid and a bubble, 128x128. Mobile game UI in the style of Travel Town: soft glossy semi-3D, bright friendly colours, rounded chunky shapes, soft light from the upper left with a glossy top highlight, a thin warm-brown edge line, transparent background, no text, no letters, no icons unless described.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/chars/pip.png",
+    "kind": "char",
+    "name": "Pip",
+    "group": "character portrait",
+    "batch": "portraits",
+    "prompt": "Pip, a character portrait for a cosy mobile merge game in the style of Travel Town: a cheerful village kid of about ten with messy chestnut hair, freckles, an orange t-shirt and blue dungarees, a leaf stuck in the hair. Head and shoulders, facing the viewer slightly turned, big friendly eyes, warm expressive smile, soft painterly semi-3D rendering, warm light from the upper left, thin warm-brown outline, centred, filling most of a 512x512 square, transparent background.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/chars/grandma.png",
+    "kind": "char",
+    "name": "Granny Fern",
+    "group": "character portrait",
+    "batch": "portraits",
+    "prompt": "Granny Fern, a character portrait for a cosy mobile merge game in the style of Travel Town: a kind round-faced grandmother with a silver bun, round glasses, rosy cheeks, a lilac cardigan and a little flower pinned on it. Head and shoulders, facing the viewer slightly turned, big friendly eyes, warm expressive smile, soft painterly semi-3D rendering, warm light from the upper left, thin warm-brown outline, centred, filling most of a 512x512 square, transparent background.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/chars/timmy.png",
+    "kind": "char",
+    "name": "Timmy",
+    "group": "character portrait",
+    "batch": "portraits",
+    "prompt": "Timmy, a character portrait for a cosy mobile merge game in the style of Travel Town: an excitable small boy with a blue cap on backwards, big curious eyes, a gap-toothed grin and a toy spyglass on a string. Head and shoulders, facing the viewer slightly turned, big friendly eyes, warm expressive smile, soft painterly semi-3D rendering, warm light from the upper left, thin warm-brown outline, centred, filling most of a 512x512 square, transparent background.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/chars/gigi.png",
+    "kind": "char",
+    "name": "Gigi",
+    "group": "character portrait",
+    "batch": "portraits",
+    "prompt": "Gigi, a character portrait for a cosy mobile merge game in the style of Travel Town: a glamorous village florist and tailor in her forties, a big sun hat with flowers, cat-eye sunglasses pushed up, a measuring tape round her neck. Head and shoulders, facing the viewer slightly turned, big friendly eyes, warm expressive smile, soft painterly semi-3D rendering, warm light from the upper left, thin warm-brown outline, centred, filling most of a 512x512 square, transparent background.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/chars/biscuit.png",
+    "kind": "char",
+    "name": "Biscuit",
+    "group": "character portrait",
+    "batch": "portraits",
+    "prompt": "Biscuit, a character portrait for a cosy mobile merge game in the style of Travel Town: a fluffy golden corgi-like village dog with a red bandana, tongue out, ears up, very happy. Head and shoulders, facing the viewer slightly turned, big friendly eyes, warm expressive smile, soft painterly semi-3D rendering, warm light from the upper left, thin warm-brown outline, centred, filling most of a 512x512 square, transparent background.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/chars/bloop.png",
+    "kind": "char",
+    "name": "Bloop",
+    "group": "character portrait",
+    "batch": "portraits",
+    "prompt": "Bloop, a character portrait for a cosy mobile merge game in the style of Travel Town: a small round jade-green jelly alien with one big shiny eye, two tiny antennae with glowing tips, a cream belly, slightly wobbly, very sweet. Head and shoulders, facing the viewer slightly turned, big friendly eyes, warm expressive smile, soft painterly semi-3D rendering, warm light from the upper left, thin warm-brown outline, centred, filling most of a 512x512 square, transparent background.",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
     "path": "src/sprites/fx/merge_burst.png",
     "kind": "fx",
     "name": "Merge burst",

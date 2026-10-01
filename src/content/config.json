@@ -10,13 +10,14 @@
     "world": "earth"
   },
   "energy": {
-    "base": 50,
-    "perLevel": 5,
-    "regenMs": 40000,
+    "base": 40,
+    "perLevel": 2,
+    "regenMs": 120000,
     "snack": {
-      "amount": 20,
-      "cooldownMs": 180000
-    }
+      "amount": 15,
+      "cooldownMs": 14400000
+    },
+    "levelUp": 20
   },
   "xp": {
     "base": 8,
@@ -32,7 +33,7 @@
     "partRewardChance": 0.6,
     "itemRewardChance": 0.25,
     "minSlots": 2,
-    "refillMs": 45000
+    "refillMs": 90000
   },
   "meteor": {
     "firstAtLevel": 3,
@@ -334,6 +335,12 @@
     "stars": {
       "cost": 0,
       "cooldownMs": 0
+    },
+    "pairs": {
+      "cost": 0,
+      "cooldownMs": 2400000,
+      "flips": 24,
+      "unlockLevel": 4
     }
   },
   "visitor": {
@@ -359,7 +366,7 @@
       10,
       12
     ],
-    "energy": 15
+    "energy": 5
   },
   "chest": {
     "chest": {
@@ -382,15 +389,293 @@
     ]
   },
   "shop2": {
-    "freeGiftEnergy": 20,
+    "freeGiftEnergy": 15,
     "energyRefill": {
       "amount": 40,
-      "base": 60,
-      "step": 40
+      "base": 80,
+      "step": 60
     },
     "chestPrice": {
       "chest": 140,
       "bigchest": 520
     }
+  },
+  "event": {
+    "unlockLevel": 4,
+    "cycleH": 96,
+    "activeH": 72,
+    "epoch": 1767571200000,
+    "themes": [
+      {
+        "id": "meteor",
+        "name": "Meteor Shower",
+        "icon": "\u2604\ufe0f",
+        "token": "Star Shards",
+        "who": "bloop",
+        "blurb": "Shards fall whenever you merge big things and fill contracts."
+      },
+      {
+        "id": "bloom",
+        "name": "Bloom Festival",
+        "icon": "\ud83c\udf38",
+        "token": "Petals",
+        "who": "gigi",
+        "blurb": "Every big merge and every contract scatters petals."
+      },
+      {
+        "id": "carnival",
+        "name": "Comet Carnival",
+        "icon": "\ud83c\udfaa",
+        "token": "Tickets",
+        "who": "timmy",
+        "blurb": "Win tickets by merging high and filling contracts."
+      }
+    ],
+    "points": {
+      "mergeFromTier": 3,
+      "contract": 3,
+      "perNeed": 2,
+      "chapter": 15
+    },
+    "track": [
+      [
+        10,
+        {
+          "energy": 10
+        }
+      ],
+      [
+        25,
+        {
+          "coins": 80
+        }
+      ],
+      [
+        45,
+        {
+          "item": "chest"
+        }
+      ],
+      [
+        70,
+        {
+          "boost": "wand"
+        }
+      ],
+      [
+        100,
+        {
+          "energy": 20
+        }
+      ],
+      [
+        140,
+        {
+          "spin": 1
+        }
+      ],
+      [
+        190,
+        {
+          "coins": 250
+        }
+      ],
+      [
+        250,
+        {
+          "item": "chest"
+        }
+      ],
+      [
+        320,
+        {
+          "boost": "bomb"
+        }
+      ],
+      [
+        400,
+        {
+          "energy": 30,
+          "sci": 20
+        }
+      ],
+      [
+        500,
+        {
+          "item": "bigchest"
+        }
+      ],
+      [
+        620,
+        {
+          "coins": 600,
+          "spin": 2
+        }
+      ]
+    ]
+  },
+  "spin": {
+    "unlockLevel": 3,
+    "segments": [
+      {
+        "r": {
+          "energy": 5
+        },
+        "w": 24,
+        "c": "#ffe08a"
+      },
+      {
+        "r": {
+          "coins": 40
+        },
+        "w": 22,
+        "c": "#ffffff"
+      },
+      {
+        "r": {
+          "energy": 10
+        },
+        "w": 16,
+        "c": "#9fe0ff"
+      },
+      {
+        "r": {
+          "item": "chest"
+        },
+        "w": 10,
+        "c": "#ffffff"
+      },
+      {
+        "r": {
+          "coins": 120
+        },
+        "w": 12,
+        "c": "#ffd0e4"
+      },
+      {
+        "r": {
+          "boost": "wand"
+        },
+        "w": 7,
+        "c": "#ffffff"
+      },
+      {
+        "r": {
+          "energy": 25
+        },
+        "w": 6,
+        "c": "#b9f59b"
+      },
+      {
+        "r": {
+          "item": "bigchest"
+        },
+        "w": 3,
+        "c": "#ffffff"
+      }
+    ]
+  },
+  "lab2": {
+    "accMinPerTier": 4,
+    "accMaxMin": 40,
+    "accSciPerTier": 3,
+    "rushCoinsPerMin": 4,
+    "research": [
+      {
+        "id": "battery",
+        "icon": "\ud83d\udd0b",
+        "name": "Bigger Battery",
+        "d": "+8 max energy",
+        "max": 5,
+        "cost": [
+          15,
+          35,
+          70,
+          120,
+          200
+        ]
+      },
+      {
+        "id": "solar",
+        "icon": "\u2600\ufe0f",
+        "name": "Solar Charger",
+        "d": "Energy comes back 12% faster",
+        "max": 5,
+        "cost": [
+          20,
+          45,
+          90,
+          150,
+          240
+        ]
+      },
+      {
+        "id": "lucky",
+        "icon": "\ud83c\udf40",
+        "name": "Lucky Taps",
+        "d": "4% chance a tap drops two things",
+        "max": 5,
+        "cost": [
+          25,
+          55,
+          100,
+          170,
+          260
+        ]
+      },
+      {
+        "id": "golden",
+        "icon": "\u2728",
+        "name": "Golden Touch",
+        "d": "3% chance a drop is one step higher",
+        "max": 5,
+        "cost": [
+          30,
+          65,
+          120,
+          200,
+          300
+        ]
+      },
+      {
+        "id": "patch",
+        "icon": "\ud83c\udf31",
+        "name": "Quick Patches",
+        "d": "Free patches refill 15% faster",
+        "max": 4,
+        "cost": [
+          20,
+          50,
+          100,
+          170
+        ]
+      },
+      {
+        "id": "trader",
+        "icon": "\ud83e\udd1d",
+        "name": "Haggling",
+        "d": "+8% coins from contracts",
+        "max": 5,
+        "cost": [
+          20,
+          45,
+          90,
+          150,
+          240
+        ]
+      },
+      {
+        "id": "pocket",
+        "icon": "\ud83c\udf92",
+        "name": "Deep Pockets",
+        "d": "+2 storage bag slots",
+        "max": 3,
+        "cost": [
+          30,
+          80,
+          160
+        ]
+      }
+    ]
   }
 }

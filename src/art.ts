@@ -1086,6 +1086,7 @@ export const ART = (function () {
     return cache[key];
   }
   function charArt(k: string) {
+    if (SPRITE.char[k]) return `<svg viewBox="0 0 100 100" class="art"><image href="${SPRITE.char[k]}" x="0" y="0" width="100" height="100"/></svg>`;
     if ((CHAR as Record<string, unknown>)[k]) return get(CHAR, k);
     const sp = FSPEC[k];
     if (!sp) return get(CHAR, k);

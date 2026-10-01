@@ -30,6 +30,9 @@ const S = () => page.evaluate(() => JSON.parse(JSON.stringify(window.__game.stat
 // repaints off its own events.
 const set = async (fn) => { await page.evaluate(fn); await page.evaluate(() => window.__game.hud()); };
 const closeModal = async () => {
+  // story scenes and small popups sit over everything: tap through / close them
+  for (let k = 0; k < 12 && await page.locator('#talk.open').count(); k++) { await page.click('#talk'); await page.waitForTimeout(260); }
+  if (await page.locator('#pop.open').count()) { await page.click('#popX', { force: true }); await page.waitForTimeout(250); }
   let n = 0;
   while (await page.locator('#modal.open').count() && n++ < 4) {
     if (process.env.MODALS) console.log('   [modal] ' + await page.textContent('#mTitle'));
@@ -75,7 +78,7 @@ const tab = async (v) => {
     const sc = document.querySelector('.screen.open');
     if (!sc) return true;
     const m = new DOMMatrixReadOnly(getComputedStyle(sc).transform);
-    return Math.abs(m.m42) < 0.5;
+    return Math.abs(m.m42) < 0.5 && Math.abs(m.a - 1) < 0.01 && +getComputedStyle(sc).opacity > 0.98;
   }, null, { timeout: 8000 }).catch(() => {});
   await page.waitForTimeout(400);
 };
@@ -166,7 +169,7 @@ after = await S();
 must(after.up.energy === 1, 'Bigger Backpack bought');
 must(after.coins < before, 'upgrade cost coins');
 const maxTxt = await page.locator('#energy').textContent();
-must(maxTxt.endsWith('/85'), `max energy grew to ${maxTxt.split('/')[1]} (50 + 5x5 + 10)`);
+must(maxTxt.endsWith('/60'), `max energy grew to ${maxTxt.split('/')[1]} (40 + 2x5 + 10)`);
 before = await page.evaluate(() => window.__game.orderSlots());
 await page.locator('#shopBody [data-up="orders"]').click(); await page.waitForTimeout(500);
 must(await page.evaluate(() => window.__game.orderSlots()) === before + 1,
@@ -213,25 +216,12 @@ await set(() => {
 });
 await page.waitForTimeout(300);
 must(await page.locator('#tabLab.hide').count() === 1, 'the Lab tab is hidden before it exists');
-await tab('shop');
-must(await page.locator('#btnBuildLab').count() === 1, 'a build card appears once the rocket is whole');
-await page.locator('#btnBuildLab').click(); await page.waitForTimeout(400);
-must((await S()).lab.built !== 1, 'BUILD refuses without the materials');
-must((await page.textContent('#toast')).toLowerCase().includes('star scrap'),
-  'and says exactly what is missing instead of doing nothing');
-await set(() => { const b = window.__game.state().boards.earth; b[14] = { id: 'scrap' }; b[15] = { id: 'scrap' }; });
-await tab('board');
-await tab('shop');
-before = (await S()).coins;
-await page.click('#btnBuildLab'); await page.waitForTimeout(700); await closeModal(); await page.waitForTimeout(300);
-after = await S();
-must(after.lab.built === 1, 'lab built');
-must(after.coins < before, `the build spent coins (${before} -> ${after.coins}, minus the mission payout)`);
-must(after.boards.earth.filter(c => c && c.id === 'scrap').length === 0, 'the build ate 3 Star Scrap');
+// the story builds the lab (Meadow chapter 5) — here we just switch it on
+await set(() => { window.__game.state().lab.built = 1; });
+await page.waitForTimeout(300);
 must(await page.locator('#tabLab.hide').count() === 0, 'the Lab tab appears once built');
 
 head('Research Lab');
-await page.click('#sc-shop .scClose'); await page.waitForTimeout(300);
 await set(() => {
   const s = window.__game.state(), b = s.boards.earth;
   for (let i = 0; i < b.length; i++) if (b[i] && b[i].id) b[i] = null;
@@ -240,6 +230,7 @@ await set(() => {
 });
 await tab('lab');
 must(await page.locator('#sc-lab.open').count() === 1, 'lab screen opens');
+await page.evaluate(() => document.querySelector('[data-ltab="fusion"]').click()); await page.waitForTimeout(400);
 await shot('lab-empty');
 const recipeCount = await page.evaluate(() => window.__game.recipes.length);
 // the rumours are a pop-up off the bench now
@@ -835,7 +826,7 @@ let bat = await page.evaluate(k => {
   const g = window.__game, c = g.cells().find(x => x && x.p === k);
   return { ch: c.ch, cap: g.capOf(g.prods[k], 1), mode: g.prods[k].mode, name: g.prods[k].name };
 }, prod.k);
-must(bat.mode === 'battery' && bat.cap >= 20, `the ${bat.name} holds ${bat.cap} taps`);
+must(bat.mode === "battery" && bat.cap >= 10, `the ${bat.name} holds ${bat.cap} taps`);
 const energyBefore = (await S()).energy;
 for (let i = 0; i < 10; i++) await tapCell(prod.i);
 await page.waitForTimeout(400);
@@ -946,7 +937,7 @@ head('The guided intro');
   must(await t2.locator('#tut.on').count() === 1, 'a fresh save opens straight into the intro');
   must(await t2.locator('#modal.open').count() === 0, 'and nothing else pops over it');
   const say1 = await t2.textContent('#tSay');
-  await t2.locator('#tNext').click({ force: true }); await t2.waitForTimeout(1200);
+  await t2.locator('#tNext').click({ force: true }); await t2.waitForTimeout(3000);   // let the dimmers settle on a software renderer
   const say2 = await t2.textContent('#tSay');
   must(say2 !== say1, 'it moves on when you press the button');
   // the hole has to be over the Big Tree, and everything else has to be dimmed
@@ -1002,7 +993,7 @@ await set(() => {
   s.proj.earth = 2;
   const fr = []; for (let i = 0; i < b.length; i++) if (!b[i]) fr.push(i);
   const pj = window.__game.state().proj; void pj;
-  ['jam', 'berries'].forEach((id, k) => { b[fr[k]] = { id }; });
+  ['jam', 'berries', 'berries'].forEach((id, k) => { b[fr[k]] = { id }; });
   window.__board.sync(b);
 });
 await tab('rocket');
@@ -1016,6 +1007,96 @@ await page.waitForTimeout(2500);
 s = await S();
 must(!s.boards.earth.some(c => c && c.tmp), 'which moves on when its time is up');
 must(s.guestBack && s.guestBack.p === 'raincloud', 'and comes back while the chapter still needs water');
+
+head('Chapter 5 builds the Lab');
+await set(() => {
+  const g = window.__game, s = g.state(), b = g.cells();
+  for (let i = 0; i < b.length; i++) if (b[i] && b[i].id) b[i] = null;
+  s.proj.earth = 4; s.lab.built = 0; s.coins = 5000; s.vis = null; s.guestBack = null;
+  const fr = []; for (let i = 0; i < b.length; i++) if (!b[i]) fr.push(i);
+  ['scrap', 'lumber', 'geode'].forEach((id, k) => { b[fr[k]] = { id }; });
+  window.__board.sync(b);
+});
+await tab('rocket');
+await page.evaluate(() => document.querySelector('#btnProject').click()); await page.waitForTimeout(1200);
+must(await page.locator('#talk.open').count() === 1, 'finishing a chapter plays its story scene');
+await closeModal(); await page.waitForTimeout(400); await closeModal(); await page.waitForTimeout(700);
+s = await S();
+await closeModal();
+must(s.lab.built === 1 && s.proj.earth === 5, 'Bloop\'s Workshop opens the Lab');
+must(s.talked.e6 === 1, 'and the next chapter introduces itself');
+
+head('Science and research');
+await tab('board');
+await set(() => {
+  const g = window.__game, s = g.state(), b = g.cells();
+  for (let i = 0; i < b.length; i++) if (b[i] && b[i].id) b[i] = null;
+  s.orders = []; s.sci = 0;
+  const fr = []; for (let i = 0; i < b.length; i++) if (!b[i]) fr.push(i);
+  b[fr[0]] = { id: 'geode' }; window.__t = fr[0];
+  window.__board.sync(b);
+});
+const rcell = await page.evaluate(() => window.__t);
+await tapCell(rcell); await page.waitForTimeout(300);
+must(await page.locator('#btnRecycle').isVisible(), 'a selected item can be recycled once the Lab exists');
+await page.locator('#btnRecycle').click({ force: true }); await page.waitForTimeout(400);
+s = await S();
+must(s.sci === 9 && !s.boards.earth.some(c => c && c.id === 'geode'), `recycling a tier-3 Geode gives 9 Science (${s.sci})`);
+await set(() => { window.__game.state().sci = 100; });
+const e0 = await page.evaluate(() => window.__game.maxEnergy());
+await tab('lab');
+await page.evaluate(() => document.querySelector('[data-res="battery"]').click()); await page.waitForTimeout(300);
+s = await S();
+must(s.res.battery === 1 && s.sci === 85, 'Bigger Battery research costs 15 Science');
+must(await page.evaluate(() => window.__game.maxEnergy()) === e0 + 8, 'and adds 8 max energy');
+await set(() => {
+  const g = window.__game, b = g.cells();
+  const fr = []; for (let i = 0; i < b.length; i++) if (!b[i]) fr.push(i);
+  b[fr[0]] = { id: 'log' }; window.__board.sync(b);
+});
+await page.evaluate(() => document.querySelector('[data-ltab="acc"]').click()); await page.waitForTimeout(300);
+await page.evaluate(() => document.querySelector('#accLoad').click()); await page.waitForTimeout(400);
+await page.evaluate(() => document.querySelector('[data-acc="log"]').click()); await page.waitForTimeout(400);
+s = await S();
+must(s.acc && s.acc.id === 'log' && !s.boards.earth.some(c => c && c.id === 'log'), 'the accelerator takes a Log in');
+await set(() => { window.__game.state().acc.at = Date.now() - 3600000; window.__game.v9.labTab('acc'); });
+await page.evaluate(() => document.querySelector('#accGet').click()); await page.waitForTimeout(500);
+s = await S();
+must(!s.acc && s.boards.earth.some(c => c && c.id === 'lumber'), 'and hands back a Lumber Pile');
+await tab('board');
+
+head('Lucky Wheel, events and Alien Pairs');
+await set(() => { const s = window.__game.state(); s.lvl = 6; s.spin = { day: 0, tok: 0 }; s.coins = 1000; s.energy = 0; });
+await page.evaluate(() => window.__game.v9.spinPop()); await page.waitForTimeout(400);
+before = await S();
+await page.evaluate(() => document.querySelector('#spinGo').click()); await page.waitForTimeout(4600);
+after = await S();
+must(after.spin.day !== 0, 'the daily free spin is used');
+must(after.energy > before.energy || after.coins > before.coins || Object.values(after.boost).some(n => n > 0) || after.boards.earth.some(c => c && (c.id === 'chest' || c.id === 'bigchest')), 'and pays something out');
+await closeModal();
+const evOn = await page.evaluate(() => !!window.__game.v9.evNow());
+if (evOn) {
+  await set(() => { window.__game.state().ev = { key: '', pts: 0, got: 0 }; });
+  await set(() => {
+    const g = window.__game, b = g.cells();
+    for (let i = 0; i < b.length; i++) if (b[i] && b[i].id) b[i] = null;
+    const fr = []; for (let i = 0; i < b.length; i++) if (!b[i]) fr.push(i);
+    b[fr[0]] = { id: 'log' }; b[fr[1]] = { id: 'log' }; window.__t = [fr[0], fr[1]];
+    window.__board.sync(b);
+  });
+  const lc = await page.evaluate(() => window.__t);
+  await drag(lc[0], lc[1]);
+  s = await S();
+  must(s.ev.pts >= 2, `a tier-4 merge earns event points (${s.ev.pts})`);
+} else ok('(no event running right now — skipped the points check)');
+await set(() => { const s = window.__game.state(); s.mini.pairs = 0; });
+await page.evaluate(() => window.__game.v9.playPairs()); await page.waitForTimeout(400);
+must(await page.locator('#mini.open .pCard').count() === 16, 'Alien Pairs deals 16 cards');
+const cards = await page.evaluate(() => [...document.querySelectorAll('.pCard')].map(c => c.querySelector('.pFace').innerHTML));
+const pairOf = cards.findIndex((h, k) => k > 0 && h === cards[0]);
+await page.locator('.pCard').nth(0).click(); await page.locator('.pCard').nth(pairOf).click(); await page.waitForTimeout(900);
+must(await page.locator('.pCard.got').count() === 2, 'a matching pair stays face up');
+await page.evaluate(() => document.querySelector('#miniClose').click()); await page.waitForTimeout(300);
 
 head('Console');
 must(errors.length === 0, errors.length ? `console errors:\n${errors.join('\n')}` : 'no console errors');

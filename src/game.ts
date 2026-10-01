@@ -75,26 +75,28 @@ export async function startGame() {
   /* ------------------------------------------------- shop upgrade effects */
   const upLv = (id: string) => (typeof S !== 'undefined' && S && S.up && S.up[id]) || 0;
   const upPrice = (u: any) => u.basePrice + u.step * upLv(u.id);
+  /** a Lab research level (bought with Science) */
+  const res = (id: string) => (typeof S !== 'undefined' && S && S.res && S.res[id]) || 0;
   const maxEnergy = () =>
-    CONFIG.energy.base + (S.lvl - 1) * CONFIG.energy.perLevel + upLv('energy') * CONFIG.upgrades.energyPerStep;
+    CONFIG.energy.base + (S.lvl - 1) * CONFIG.energy.perLevel + upLv('energy') * CONFIG.upgrades.energyPerStep + res('battery') * 8;
   const orderSlots = () => CONFIG.orders.slots + upLv('orders') * CONFIG.upgrades.ordersPerStep + vaultLv('crowd');
   const snackAmt = () => CONFIG.energy.snack.amount + upLv('snack') * CONFIG.upgrades.snackPerStep;
   /** a timer producer's refill time, sped up by the Fertiliser upgrade */
   const everyOf = (p: any) =>
     Math.max(3000, Math.round(p.every * Math.max(0.25, 1 - upLv('speed') * CONFIG.upgrades.speedPerStep)
-      * (starPerk('seed') ? 0.8 : 1)));
+      * (starPerk('seed') ? 0.8 : 1) * (1 - res('patch') * 0.15)));
   /* Relic Vault perks feed straight into the numbers the rest of the game reads,
      so a perk is bought once and then never has to be remembered again. */
   const vaultLv = (id: string) => (typeof S !== 'undefined' && S && S.vault && S.vault[id]) || 0;
   const coinMult = () => 1 + vaultLv('rich') * 0.15 + (starPerk('plough') ? 0.1 : 0);
   const xpMult = () => 1 + vaultLv('wise') * 0.25;
-  const regenMs = () => Math.round(CONFIG.energy.regenMs / (1 + vaultLv('brisk') * 0.2));
+  const regenMs = () => Math.round(CONFIG.energy.regenMs / (1 + vaultLv('brisk') * 0.2 + res('solar') * 0.12));
   const meteorScale = () => 1 - vaultLv('comet') * 0.3;
   const shopOpen = () => S.lvl >= CONFIG.unlocks.shopAtLevel;
   /* The lab is a building, not a level reward: it stays invisible until Bloop
      has a rocket to cannibalise and the player pays for the build. */
   const labOpen = () => !!(S.lab && S.lab.built);
-  const labOffered = () => !!(S.met && allParts());
+  const labOffered = () => false;                  // the story builds the lab now (Meadow chapter 5)
 
   /* =============================================================== STATE */
   const SAVE = 'mergeRocket_v2';   // key kept; the shape is versioned inside (S.v)
@@ -148,6 +150,8 @@ export async function startGame() {
       firsts: {},                             // chains whose finale you have made
       /* v7: restoration projects, daily tasks, contract milestones, visitors */
       proj: {}, dt: null, om: { n: 0, step: 0 }, vis: null, visAt: 0,
+      /* v9: Science and research, the accelerator, story talk, live events, the wheel */
+      sci: 0, res: {}, acc: null, talked: {}, ev: { key: '', pts: 0, got: 0 }, spin: { day: 0, tok: 0 },
     };
   }
   /** Old saves keep their progress — missing fields are simply filled in. */
@@ -175,6 +179,9 @@ export async function startGame() {
     p.plots = p.plots || {};
     p.firsts = p.firsts || {};
     p.proj = p.proj || {}; p.om = p.om || { n: 0, step: 0 }; if (p.vis === undefined) p.vis = null; p.visAt = p.visAt || 0;
+    p.sci = p.sci || 0; p.res = p.res || {}; if (p.acc === undefined) p.acc = null; p.talked = p.talked || {};
+    p.ev = p.ev || { key: '', pts: 0, got: 0 }; p.spin = p.spin || { day: 0, tok: 0 };
+    if (!p.lab.built && (p.proj.earth || 0) >= 5) p.lab.built = 1;
     // A pre-v6 save had one global level. Seed each visited world from it so
     // nobody who already flew to Cindra lands back on a beginner board — but cap
     // it low enough that there is still something left to unlock. Dropping a
@@ -381,6 +388,8 @@ export async function startGame() {
     $('#dotQuest').style.display = showProj ? (projReady(pj) ? '' : 'none') : (cur && (S.mp[cur.id] || 0) >= cur.need ? '' : 'none');
     $('#btnQuests').dataset.proj = showProj ? '1' : '';
     $('#dotShop').style.display = (shopNews() || (labOffered() && !S.lab.built)) ? '' : 'none';
+    $('#dotFun').style.display = (evNow() || (S.lvl >= SP().unlockLevel && spinsLeft() > 0)) ? '' : 'none';
+    $('#dotLab').style.display = (S.acc && !accLeft()) || L2().research.some((r: any) => res(r.id) < r.max && S.sci >= researchCost(r)) ? '' : 'none';
     renderTools();
     if (view === 'shop') $('#shopCoins').textContent = S.coins;
     if (view === 'lab') $('#labCoins').textContent = S.coins;
@@ -608,10 +617,13 @@ export async function startGame() {
        and a little with the player's, and it never asks for the crown — that
        one is yours to show off (and sells for a fortune). */
     const wl = wlv();
-    const reach = (ck: string) => clamp(2 + Math.floor((wl - 1) / 2) + Math.floor(S.lvl / 8), 2,
+    // the first few levels stay gentle so the intro reads; after that a contract
+    // asks for real work: tier 3+ and often two or three different things
+    const early = S.lvl < 3;
+    const reach = (ck: string) => clamp((early ? 2 : 3) + Math.floor((wl - 1) / 2) + Math.floor(S.lvl / 6), 2,
       Math.max(2, CHAINS[ck].items.length - 1));
     const itemFrom = (ck: string, cap?: number) => {
-      const top = Math.min(reach(ck), cap ?? 99), lo = Math.max(1, top - 2);
+      const top = Math.min(reach(ck), cap ?? 99), lo = early ? 1 : Math.max(2, top - 1);
       const ids = CHAINS[ck].items.filter(id => ITEMS[id].tier >= lo && ITEMS[id].tier <= top);
       return ids.length ? rnd(ids) : CHAINS[ck].items[0];
     };
@@ -631,12 +643,17 @@ export async function startGame() {
     else if (S.met && !allParts() && r < 0.2) { pick = rnd(['bolt', 'spring', 'wire', 'glass']); chain = ITEMS[pick].chain; }
     else if (S.seen.relic1 && r < 0.28) { pick = 'relic1'; chain = 'relic'; }
     const d = ITEMS[pick];
-    const needs = [{ id: pick, qty: d.tier >= 3 ? 1 : 1 + Math.floor(Math.random() * 2) }];
-    // a second thing from another chain the same person cares about, a step lower
-    if (S.lvl >= 4 && Math.random() < 0.3 && chains.length > 1) {
-      const other = rnd(chains.filter(c => c !== chain));
-      const p2 = other ? itemFrom(other, Math.max(1, reach(other) - 1)) : null;
-      if (p2 && p2 !== pick) needs.push({ id: p2, qty: 1 });
+    const needs = [{ id: pick, qty: d.tier >= 4 ? 1 : d.tier === 3 ? (Math.random() < 0.35 ? 2 : 1) : 2 }];
+    // more things from other chains the same person cares about (or any awake one)
+    const pool = chains.length > 1 ? chains : open;
+    const extra = early ? 0 : (Math.random() < Math.min(0.75, 0.35 + S.lvl * 0.03) ? 1 : 0)
+      + (S.lvl >= 8 && Math.random() < 0.3 ? 1 : 0);
+    for (let k = 0; k < extra; k++) {
+      const left = pool.filter(c => c !== chain && !needs.some(nd => ITEMS[nd.id].chain === c));
+      if (!left.length) break;
+      const other = rnd(left);
+      const p2 = itemFrom(other, Math.max(2, reach(other) - 1));
+      if (p2 && !needs.some(nd => nd.id === p2)) needs.push({ id: p2, qty: 1 });
     }
     const asks = CHAINS[chain].asks;
     const said = S.orders.map(o => o.say);
@@ -653,11 +670,11 @@ export async function startGame() {
       if (bonus.length) give = rnd(bonus);
     }
     // now and then someone pays in energy instead of a gift — Travel Town does this
-    const nrg = !give && Math.random() < 0.18 ? 5 + 5 * Math.floor(Math.random() * 3) : 0;
+    const nrg = !give && Math.random() < 0.08 ? 3 + 3 * Math.floor(Math.random() * 3) : 0;
     return {
       id: 'o' + (oid++), char, say, give, nrg,
       needs,
-      coins: Math.round((Math.round(worth * (2 + Math.random())) + 8) * coinMult()),
+      coins: Math.round((Math.round(worth * (2 + Math.random())) + 8) * coinMult() * (1 + res('trader') * 0.08)),
       xp: Math.round((CONFIG.xp.orderBase + needs.reduce((a, nd) => a + ITEMS[nd.id].tier * 2 + nd.qty, 0)) * xpMult()),
     };
   }
@@ -717,6 +734,7 @@ export async function startGame() {
     }
     if (o.nrg) { S.energy += o.nrg; bumpChip('#chipEnergy'); setTimeout(() => toast(`⚡ +${o.nrg} energy from ${CHARS[o.char].name}`), 700); }
     prog('deliver', 1); tally('deliver'); mileTick();
+    evPts(CFG.event.points.contract + CFG.event.points.perNeed * o.needs.length);
     addXp(o.xp);
     paintBoard(); tutFire('deliver');
     renderOrders(); renderHUD(); save();
@@ -743,7 +761,8 @@ export async function startGame() {
     }
   }
   function onLevel() {
-    S.energy = maxEnergy();
+    // a level is a treat, not a free refill: a top-up that never overfills
+    S.energy = Math.max(S.energy, Math.min(maxEnergy(), S.energy + (CONFIG.energy.levelUp || 20)));
     if (S.lvl === CONFIG.unlocks.shopAtLevel) setTimeout(() => modal('pip', 'The Trading Post!',
       'A trader rolled into the meadow! Tap 🛒 to spend your coins on materials, salvage crates, and <b>permanent upgrades</b> — a bigger energy backpack, faster plants, an extra order slot. Coins are for spending!',
       'Take my coins!'), 2300);
@@ -825,8 +844,15 @@ export async function startGame() {
     }
     // The wreck is not a slot machine: it hands out pieces for the part you are
     // furthest from finishing, so the rocket always creeps forward.
-    const id = (c.p === 'wreck' && !allParts() ? partPiece() : null) || rnd(dropsOf(p, plv(c)));
+    let id = (c.p === 'wreck' && !allParts() ? partPiece() : null) || rnd(dropsOf(p, plv(c)));
+    // Golden Touch: now and then the drop arrives one step up
+    if (res('golden') && Math.random() < res('golden') * 0.03 && nextOf(id) && !ITEMS[id].part) { id = nextOf(id) as string; setTimeout(() => floatText(spot, '✨ Golden!', '#ffe07a'), 300); }
     b[spot] = { id }; gotItem(id);
+    // Lucky Taps: a second one for free
+    if (res('lucky') && Math.random() < res('lucky') * 0.04) {
+      const s2 = nearFree(i);
+      if (s2 >= 0) { b[s2] = { id }; gotItem(id); setTimeout(() => { board.animSpawn(s2, id, i); floatText(s2, '🍀 Lucky!', '#b9f59b'); }, 160); }
+    }
     (c.p === 'crater' || c.p === 'wreck' ? sfx.dig : sfx.pop)();
     haptic('light'); board.animSpawn(spot, id, i);
     if (c.p === 'tree') prog('spawn', 1);
@@ -861,6 +887,7 @@ export async function startGame() {
     if (crown) { sfx.crown(); haptic('medium'); } else { sfx.merge(ITEMS[nx].tier); haptic('light'); } floatText(to, ITEMS[nx].name, '#fff');
     addXp(CONFIG.xp.perMerge); prog('merge', 1); tally('merge'); tally('make:' + nx); tutFire('merge');
     if (ITEMS[nx].tier >= 4) tally('tier4');
+    if (ITEMS[nx].tier >= CFG.event.points.mergeFromTier) evPts(ITEMS[nx].tier - CFG.event.points.mergeFromTier + 1, to);
     if (!crown) maybeBubble(nx, to);
     lunaBounce(a.id, to);
     bumpStreak(Date.now(), to);
@@ -1000,8 +1027,10 @@ export async function startGame() {
   /* ============================================================== SCREENS */
   const SCREENS = ['shop', 'lab', 'rocket', 'book', 'map'];
   function setView(v: string) {
+    if (v === 'fun') { if (view !== 'board') setView('board'); funPop(); return; }
+    if (popOpen()) closePop();
     if (v === 'shop' && !shopOpen()) { sfx.no(); toast('The Trading Post opens at Level ' + CONFIG.unlocks.shopAtLevel + '!'); return; }
-    if (v === 'lab' && !labOpen()) { sfx.no(); toast('No lab yet — build one in the 🛒 Shop first.'); return; }
+    if (v === 'lab' && !labOpen()) { sfx.no(); toast('The Lab opens in Meadow chapter 5 — keep restoring!'); return; }
     view = v;
     if (v === 'map') tutFire('world');
     openBag(false);
@@ -1009,7 +1038,8 @@ export async function startGame() {
     SCREENS.forEach(k => $('#sc-' + k).classList.toggle('open', v === k));
     // over a painted scene the rail shrinks to little round pips, so it stops
     // standing on the scenery it floats over
-    $('#app').classList.toggle('sceneOn', v === 'map' || v === 'lab');
+    $('#app').classList.toggle('sceneOn', v === 'map');
+    $('#app').classList.toggle('popOn', v !== 'board' && v !== 'map');
     document.querySelectorAll<HTMLElement>('.tab').forEach(t => t.classList.toggle('on', t.dataset.v === v));
     if (v === 'rocket') renderRocket();
     if (v === 'book') renderBook();
@@ -1374,9 +1404,8 @@ export async function startGame() {
       <span class="spotArt">${art}</span>
       <span class="spotTag"><b>${label}</b>${sub ? `<i>${sub}</i>` : ''}</span></button>`;
   }
-  function renderLab() {
+  function renderFusion() {
     const host = $('#labBody'); if (!host) return;
-    $('#labCoins').textContent = S.coins;
     pruneSlots();
     const a = S.lab.slots[0], b = S.lab.slots[1];
     const r = a && b ? recipeFor(a, b) : null;
@@ -1487,6 +1516,7 @@ export async function startGame() {
     host.querySelectorAll('[data-vault]').forEach((b: any) => b.onclick = () => vaultBuy(b.dataset.vault));
     host.querySelectorAll('.pNeed[data-need]').forEach((n: any) => n.onclick = () => chainPanel(n.dataset.need));
     const bp = $('#btnProject'); if (bp) bp.onclick = buildProject;
+    const bt = $('#btnTalk'); if (bt) bt.onclick = () => chapterIntro(true);
     const q = $('#openQuests'); if (q) q.onclick = questPanel;
   }
 
@@ -1589,7 +1619,7 @@ export async function startGame() {
      The board is the scarce resource in a merge game, so the bag is the release
      valve: items parked here are out of the way but never lost. Capacity is a
      shop upgrade, and with no upgrade the whole feature stays hidden. */
-  const bagCap = () => (upLv('bag') + vaultLv('deep')) * CONFIG.upgrades.bagPerStep;
+  const bagCap = () => (upLv('bag') + vaultLv('deep')) * CONFIG.upgrades.bagPerStep + res('pocket') * 2;
   const bagHas = () => bagCap() > 0;
   function openBag(on?: boolean) {
     const tray = $('#bagTray');
@@ -1860,8 +1890,7 @@ export async function startGame() {
     modal('bloop', 'Blorp — no room!',
       'Your board is full and nothing matches. Sit tight, I will sweep the small stuff into my pockets and pay you for it.',
       'Please do!');
-    const btn = $('#mBtn');
-    if (btn) btn.onclick = () => { $('#modal').classList.remove('open'); btn.onclick = closeModal; rescue(); };
+    afterModal = rescue;
   }
 
 
@@ -2178,13 +2207,21 @@ export async function startGame() {
     if (p.unlock) setTimeout(() => plantProducer(p.unlock), 900);
     if (p.temp) setTimeout(() => spawnGuest(p.temp, p.who), 900);
     if (p.event === 'meteor' && !S.met) setTimeout(meteorStory, 3200);
+    if (p.lab && !S.lab.built) { S.lab.built = 1; S.sci += 10; prog('lab', 1); }
+    evPts(CFG.event.points.chapter);
     const next = curProject();
     const what = p.unlock ? `<div class="noteLine">🌱 New: <b>${PRODS[p.unlock].name}</b> — it stays on your board.</div>`
       : p.temp ? `<div class="noteLine">⏳ A <b>${PRODS[p.temp.p].name}</b> is visiting: ${p.temp.taps} free taps for ${p.temp.mins} minutes.</div>` : '';
-    modal(p.who, '✅ ' + p.name, p.text
-      + `<div class="rewardLine">+${p.xp} XP${gift ? ' · 🎁 ' + gift : ''}</div>` + what
-      + (worldDone() && nextW ? `<div class="noteLine">🚀 ${W().name} is restored! <b>${WORLDS[nextW].name}</b> is now on the star map.</div>`
-        : next ? `<div class="noteLine">Next chapter: <b>${next.name}</b></div>` : ''), 'Wonderful');
+    const labLine = p.lab ? `<div class="noteLine">🔬 <b>The Lab is open!</b> Find it in the bottom bar. +10 🧪 to start you off.</div>` : '';
+    setView('board');
+    const reward = () => {
+      modal(p.who, '✅ ' + p.name,
+        `<div class="rewardLine">+${p.xp} XP${gift ? ' · 🎁 ' + gift : ''}</div>` + what + labLine
+        + (worldDone() && nextW ? `<div class="noteLine">🚀 ${W().name} is restored! <b>${WORLDS[nextW].name}</b> is now on the star map.</div>`
+          : next ? `<div class="noteLine">Next chapter: <b>${next.name}</b></div>` : ''), 'Wonderful');
+      afterModal = () => chapterIntro();
+    };
+    talkScene([[p.who, p.text]], reward);
     paintBoard(); renderRocket(); renderHUD(); renderOrders(); save();
   }
   function projectCard() {
@@ -2200,7 +2237,8 @@ export async function startGame() {
       if (k > done) return k === done + 1 ? `<div class="pRow next"><span class="pTick">🔒</span><b>${p.name}</b>${p.launch ? '<i>🚀 opens the next world</i>' : ''}</div>` : '';
       const ok = projReady(p);
       return `<div class="pRow cur"><div class="pHead"><span class="pFace">${ART.char(p.who)}</span>
-          <div><b>${p.name}</b>${p.launch ? '<i>🚀 opens the next world</i>' : ''}</div></div>
+          <div style="flex:1"><b>Chapter ${k + 1}: ${p.name}</b>${p.launch ? '<i>🚀 opens the next world</i>' : ''}</div>
+          ${p.talk ? '<button class="talkBtn" id="btnTalk" title="Replay the story">💬</button>' : ''}</div>
           <div class="pNeeds">${need(p)}<span class="pNeed${S.coins >= p.coins ? ' ok' : ''}">${coin}<b>${p.coins}</b></span>
             ${p.rocket ? `<span class="pNeed${allParts() ? ' ok' : ''}">🚀<b>${PART_KEYS.filter(k => S.parts[k]).length}/4</b></span>` : ''}</div>
           <button class="big${ok ? '' : ' off'}" id="btnProject">${ok ? 'BUILD IT!' : 'Collect the items'}</button></div>`;
@@ -2259,7 +2297,7 @@ export async function startGame() {
     if (dt.got[k] || dt.pts < mark) { sfx.no(); toast(`Reach ${mark} points first — you have ${dt.pts}.`); return; }
     dt.got[k] = 1;
     const at = giveItem(k === 0 ? 'chest' : 'bigchest');
-    S.energy = Math.min(maxEnergy() + 40, S.energy + 15 + k * 10);
+    S.energy = Math.min(maxEnergy(), S.energy + 5 + k * 5);
     if (k === 2) { giveBoost('rainbow'); S.coins += 200; }
     sfx.big(); haptic('medium'); confetti();
     if (at >= 0) sparkle(at, 16, '#ffe9a8');
@@ -2475,6 +2513,7 @@ export async function startGame() {
       const at = b.at || {};
       if (at.flag) return at.flag === flag;
       if (at.world && at.world !== S.world) return false;
+      if (at.world && projList(at.world).some((p: any) => p.talk)) return false;   // its chapters tell it
       return !at.lvl || wlv() >= at.lvl;
     });
     if (!beat) return false;
@@ -2570,6 +2609,387 @@ export async function startGame() {
     app.classList.remove('bloom1', 'bloom2', 'bloom3');
     const st = stage();
     if (st) app.classList.add('bloom' + Math.min(st, 3));
+  }
+
+  /* ================================================================== v9
+     Science, the new Lab, story scenes, live events, the wheel and Alien Pairs.
+     Everything here pays out through grant(), so a reward reads the same
+     wherever it comes from. */
+
+  /* ------------------------------------------------------------- rewards */
+  type Reward = { energy?: number; coins?: number; item?: string; boost?: string; spin?: number; sci?: number };
+  function rewardText(r: Reward) {
+    const b: string[] = [];
+    if (r.energy) b.push(`+${r.energy} ⚡`);
+    if (r.coins) b.push(`+${r.coins} 🪙`);
+    if (r.sci) b.push(`+${r.sci} 🧪`);
+    if (r.spin) b.push(`+${r.spin} 🎡`);
+    if (r.boost) b.push((SHOP.boosters.find((x: any) => x.id === r.boost) || { name: r.boost }).name);
+    if (r.item) b.push(ITEMS[r.item].name);
+    return b.join(' · ');
+  }
+  function rewardIcon(r: Reward) {
+    if (r.item) return ART.item(r.item);
+    if (r.coins) return ART.icon('coin');
+    if (r.energy) return ART.icon('energy');
+    if (r.boost) return `<span class="rwEmoji">${r.boost === 'wand' ? '🪄' : r.boost === 'bomb' ? '💣' : '🌈'}</span>`;
+    if (r.spin) return '<span class="rwEmoji">🎡</span>';
+    if (r.sci) return '<span class="rwEmoji">🧪</span>';
+    return '';
+  }
+  function grant(r: Reward) {
+    if (r.energy) { S.energy += r.energy; bumpChip('#chipEnergy'); }
+    if (r.coins) { S.coins += r.coins; bumpChip('#chipCoins'); }
+    if (r.sci) S.sci += r.sci;
+    if (r.spin) S.spin.tok += r.spin;
+    if (r.boost) giveBoost(r.boost);
+    if (r.item && giveItem(r.item) < 0) { S.bag.push(r.item); toast('Board full — the ' + ITEMS[r.item].name + ' went into your bag.'); }
+    sfx.coin(); paintBoard(); renderHUD(); save();
+  }
+
+  /* ------------------------------------------------------- generic popup */
+  let popClose: (() => void) | null = null;
+  function pop(title: string, html: string, cls = '', onClose?: () => void) {
+    $('#popTitle').innerHTML = title;
+    $('#popBody').innerHTML = html;
+    $('#pop').className = 'pop open ' + cls;
+    popClose = onClose || null;
+    sfx.whoosh();
+  }
+  function closePop() {
+    $('#pop').classList.remove('open');
+    const f = popClose; popClose = null; if (f) f();
+    renderHUD(); save();
+  }
+  const popOpen = () => $('#pop').classList.contains('open');
+
+  /* --------------------------------------------------------- story scenes */
+  let talkQ: [string, string][] = [], talkDone: (() => void) | null = null, talkFirst = '';
+  function talkScene(lines: [string, string][], done?: () => void) {
+    if (!lines || !lines.length) { if (done) done(); return; }
+    talkQ = lines.slice(); talkDone = done || null; talkFirst = lines[0][0];
+    $('#talk').classList.add('open');
+    talkStep();
+  }
+  function talkStep() {
+    const l = talkQ.shift();
+    if (!l) {
+      $('#talk').classList.remove('open');
+      const d = talkDone; talkDone = null; if (d) setTimeout(d, 200);
+      return;
+    }
+    const [who, text] = l;
+    const t = $('#talk');
+    t.classList.toggle('right', who !== talkFirst);
+    $('#tkFace').innerHTML = ART.char(who);
+    $('#tkName').textContent = (CHARS[who] && CHARS[who].name) || who;
+    $('#tkText').innerHTML = text;
+    t.classList.remove('beat'); void t.offsetWidth; t.classList.add('beat');
+    sfx.tap();
+  }
+  /** play the current chapter's opening conversation (once, unless asked) */
+  function chapterIntro(force = false) {
+    const cp = curProject();
+    if (!cp || !cp.talk) return false;
+    if (S.talked[cp.id] && !force) return false;
+    S.talked[cp.id] = 1; save();
+    talkScene(cp.talk.concat([[cp.who, `📜 <b>${cp.name}</b> — I need ${cp.needs.map(([id, q]: [string, number]) => `${q}× ${ITEMS[id].name}`).join(', ')}${cp.coins ? ` and ${cp.coins} coins` : ''}. Check 📜 Goals any time.`]]));
+    return true;
+  }
+
+  /* --------------------------------------------------------------- the Lab */
+  const L2 = () => CFG.lab2;
+  const sciOf = (id: string) => ITEMS[id].tier * ITEMS[id].tier;
+  function recycleItem(i: number) {
+    const b = B(), c = b[i]; if (!c || !c.id) return;
+    const wanted = S.orders.some(o => o.needs.some(nd => nd.id === c.id))
+      || (curProject() && curProject().needs.some(([id]: [string, number]) => id === c.id));
+    if (wanted) { sfx.no(); toast('Someone needs that! Keep it.'); return; }
+    const v = sciOf(c.id);
+    S.sci += v; sfx.discover(); haptic('light');
+    floatText(i, '+' + v + ' 🧪', '#c9b3ff'); sparkle(i, 10, '#c9b3ff');
+    b[i] = null; sel = null; tally('sell');
+    paintCell(i); renderHUD(); renderOrders(); save();
+  }
+  let labTab = 'research';
+  function researchCost(r: any) { return r.cost[Math.min(res(r.id), r.cost.length - 1)]; }
+  function buyResearch(id: string) {
+    const r = L2().research.find((x: any) => x.id === id); if (!r) return;
+    if (res(id) >= r.max) { toast(r.name + ' is maxed out!'); return; }
+    const c = researchCost(r);
+    if (S.sci < c) { sfx.no(); toast(`Needs <b>${c} 🧪</b> — recycle spare items to make Science.`); return; }
+    S.sci -= c; S.res[id] = res(id) + 1;
+    sfx.discover(); haptic('medium'); confetti();
+    toast(`🔬 <b>${r.name}</b> is now level ${res(id)}!`);
+    renderLab(); renderHUD(); save();
+  }
+  const accLeft = () => S.acc ? Math.max(0, S.acc.at + S.acc.dur - Date.now()) : 0;
+  function accDur(id: string) { return Math.min(L2().accMaxMin, ITEMS[id].tier * L2().accMinPerTier) * 60000; }
+  function accCost(id: string) { return ITEMS[id].tier * L2().accSciPerTier; }
+  function accPick() {
+    const inv = inventory();
+    const ids = Object.keys(inv).filter(id => nextOf(id) && !ITEMS[id].part && !isChest(id) && id !== 'rainbow');
+    if (!ids.length) { sfx.no(); toast('Nothing on your board can be grown right now.'); return; }
+    ids.sort((a, b) => ITEMS[a].tier - ITEMS[b].tier);
+    modal('bloop', 'Grow one step',
+      `Pick something. The accelerator turns it into the <b>next step up</b> while you play.
+       <div class="pickGrid">${ids.map(id => `<button class="pickCell" data-acc="${id}">${ART.item(id)}<b>🧪${accCost(id)}</b></button>`).join('')}</div>`, 'Cancel');
+    setTimeout(() => document.querySelectorAll<HTMLElement>('[data-acc]').forEach(btn => btn.onclick = () => {
+      const id = btn.dataset.acc as string, c = accCost(id);
+      if (S.sci < c) { sfx.no(); toast(`Needs <b>${c} 🧪</b>.`); return; }
+      S.sci -= c; consumeOne(id);
+      S.acc = { id, at: Date.now(), dur: accDur(id) };
+      closeModal(); sfx.build(); paintBoard(); renderLab(); renderHUD(); save();
+    }), 30);
+  }
+  function accCollect(rush = false) {
+    if (!S.acc) return;
+    const left = accLeft();
+    if (left > 0 && !rush) return;
+    if (left > 0) {
+      const price = Math.ceil(left / 60000) * L2().rushCoinsPerMin;
+      if (S.coins < price) { sfx.no(); toast('That costs ' + price + ' coins.'); return; }
+      spend(price);
+    }
+    const out = nextOf(S.acc.id) as string;
+    if (!freeCells().length) { sfx.no(); toast('Make some room on the board first!'); return; }
+    const at = giveItem(out); S.acc = null;
+    sfx.discover(); confetti();
+    if (at >= 0) sparkle(at, 20, '#c9b3ff');
+    toast(`⚗️ Out comes a <b>${ITEMS[out].name}</b>!`);
+    renderLab(); renderHUD(); renderOrders(); save();
+  }
+  function renderLab() {
+    const host = $('#labBody'); if (!host) return;
+    $('#labCoins').textContent = S.sci;
+    const tabs = `<div class="shopTabs labTabs">${[['research', '🔬 Research'], ['acc', '⚗️ Accelerator'], ['fusion', '🧫 Fusion']]
+      .map(([k, n]) => `<button class="sTab${labTab === k ? ' on' : ''}" data-ltab="${k}">${n}</button>`).join('')}</div>`;
+    if (labTab === 'fusion') { renderFusion(); host.insertAdjacentHTML('afterbegin', tabs); }
+    else if (labTab === 'research') {
+      host.innerHTML = tabs + `<div class="labPanel">
+        <div class="labIntro">Tap a spare item on the board and press <b>🧪 Recycle</b> to turn it into Science. Bigger things give much more.</div>
+        <div class="resList">${L2().research.map((r: any) => {
+          const lv = res(r.id), max = lv >= r.max, c = researchCost(r);
+          return `<div class="resRow${max ? ' max' : ''}"><span class="resIc">${r.icon}</span>
+            <div class="resTxt"><b>${r.name}</b><i>${r.d}</i>
+              <span class="resPips">${Array.from({ length: r.max }, (_, k) => `<em class="${k < lv ? 'on' : ''}"></em>`).join('')}</span></div>
+            <button class="buyBtn sci" data-res="${r.id}"${max || S.sci < c ? ' disabled' : ''}>${max ? 'MAX' : '🧪 ' + c}</button></div>`;
+        }).join('')}</div></div>`;
+    } else {
+      const a = S.acc, left = accLeft();
+      host.innerHTML = tabs + `<div class="labPanel">
+        <div class="labIntro">Put one item in the accelerator. When the timer ends it comes out <b>one step higher</b>. Costs Science; takes longer for bigger things.</div>
+        <div class="accBox">${a ? `<div class="accArt">${ART.item(a.id)}<span class="accArrow">➜</span>${ART.item(nextOf(a.id) as string)}</div>
+            <div class="catBar"><i style="width:${Math.round((1 - left / a.dur) * 100)}%"></i></div>
+            ${left > 0 ? `<div class="accTime" id="accTime">${mmss(left)}</div>
+              <button class="big gold" id="accRush">Finish now · ${Math.ceil(left / 60000) * L2().rushCoinsPerMin} 🪙</button>`
+              : `<button class="big" id="accGet">Collect ${ITEMS[nextOf(a.id) as string].name}!</button>`}`
+          : `<div class="accEmpty">⚗️</div><button class="big blue" id="accLoad">Load an item</button>`}</div></div>`;
+    }
+    host.querySelectorAll('[data-ltab]').forEach((b: any) => b.onclick = () => { labTab = b.dataset.ltab as string; sfx.tap(); renderLab(); });
+    host.querySelectorAll('[data-res]').forEach((b: any) => b.onclick = () => buyResearch(b.dataset.res as string));
+    const al = $('#accLoad'); if (al) al.onclick = accPick;
+    const ag = $('#accGet'); if (ag) ag.onclick = () => accCollect();
+    const ar = $('#accRush'); if (ar) ar.onclick = () => accCollect(true);
+  }
+
+  /* ----------------------------------------------------------- live event */
+  const EV = () => CFG.event;
+  /** which event is on right now (they rotate on a fixed calendar so every
+   *  player sees the same one, offline or not) */
+  function evNow(): { theme: any; key: string; ends: number } | null {
+    if (S.lvl < EV().unlockLevel) return null;
+    const cyc = EV().cycleH * 3600000, act = EV().activeH * 3600000;
+    const t = Date.now() - EV().epoch, n = Math.floor(t / cyc), into = t - n * cyc;
+    if (into >= act) return null;
+    const theme = EV().themes[((n % EV().themes.length) + EV().themes.length) % EV().themes.length];
+    return { theme, key: theme.id + n, ends: EV().epoch + n * cyc + act };
+  }
+  function evNext() {
+    const cyc = EV().cycleH * 3600000, t = Date.now() - EV().epoch;
+    return EV().epoch + (Math.floor(t / cyc) + 1) * cyc;
+  }
+  const dhm = (ms: number) => {
+    const m = Math.max(0, Math.floor(ms / 60000)), d = Math.floor(m / 1440), h = Math.floor((m % 1440) / 60);
+    return d ? `${d}d ${h}h` : h ? `${h}h ${m % 60}m` : `${m % 60}m`;
+  };
+  function evPts(n: number, at?: number) {
+    const e = evNow(); if (!e || n <= 0) return;
+    if (S.ev.key !== e.key) S.ev = { key: e.key, pts: 0, got: 0 };
+    S.ev.pts += n;
+    if (at !== undefined) setTimeout(() => floatText(at, `+${n} ${e.theme.icon}`, '#ffd0e4'), 380);
+    const tr = EV().track;
+    while (S.ev.got < tr.length && S.ev.pts >= tr[S.ev.got][0]) {
+      const r = tr[S.ev.got][1]; S.ev.got++;
+      grant(r);
+      toast(`${e.theme.icon} Event reward: <b>${rewardText(r)}</b>`);
+    }
+    renderQuick();
+  }
+  function eventPop() {
+    const e = evNow();
+    if (!e) {
+      pop('🎉 Events', `<div class="evOff">The next event starts in <b>${dhm(evNext() - Date.now())}</b>.
+        ${S.lvl < EV().unlockLevel ? `<br>Events open at level ${EV().unlockLevel}.` : ''}</div>`, 'ev');
+      return;
+    }
+    if (S.ev.key !== e.key) S.ev = { key: e.key, pts: 0, got: 0 };
+    const tr = EV().track, top = tr[tr.length - 1][0];
+    pop(`${e.theme.icon} ${e.theme.name}`, `<div class="evHead"><span class="evFace">${ART.char(e.theme.who)}</span>
+        <div><b>${S.ev.pts}</b> ${e.theme.token}<i>${e.theme.blurb}</i><em>⏳ ends in ${dhm(e.ends - Date.now())}</em></div></div>
+      <div class="evTrack">${tr.map(([need, r]: [number, Reward], k: number) => `<div class="evNode${k < S.ev.got ? ' got' : S.ev.pts >= need ? ' ready' : ''}">
+          <span class="evNeed">${need}</span><span class="evArt">${rewardIcon(r)}</span><span class="evRw">${rewardText(r)}</span>
+          ${k < S.ev.got ? '<span class="evTick">✓</span>' : ''}</div>`).join('')}</div>
+      <div class="catBar"><i style="width:${Math.min(100, Math.round(S.ev.pts / top * 100))}%"></i></div>
+      <div class="noteLine">Merge to tier ${EV().points.mergeFromTier}+ (+1 and up), fill contracts (+${EV().points.contract}+), finish story chapters (+${EV().points.chapter}).</div>`, 'ev');
+  }
+
+  /* ------------------------------------------------------------ the wheel */
+  const SP = () => CFG.spin;
+  const freeSpin = () => S.spin.day !== today();
+  const spinsLeft = () => (freeSpin() ? 1 : 0) + (S.spin.tok || 0);
+  let spinning = false;
+  function wheelHTML() {
+    const seg = SP().segments, n = seg.length, a = 360 / n;
+    const grad = seg.map((s: any, k: number) => `${s.c} ${k * a}deg ${(k + 1) * a}deg`).join(',');
+    return `<div class="wheelWrap"><div class="wheelPin">▼</div>
+      <div class="wheel" id="wheel" style="background:conic-gradient(${grad})">
+        ${seg.map((s: any, k: number) => `<div class="wSeg" style="transform:rotate(${k * a + a / 2}deg)"><span>${rewardIcon(s.r)}<b>${s.r.energy || s.r.coins || ''}</b></span></div>`).join('')}
+      </div><div class="wHub">🎡</div></div>`;
+  }
+  function spinPop() {
+    if (S.lvl < SP().unlockLevel) { sfx.no(); toast(`The Lucky Wheel opens at level ${SP().unlockLevel}.`); return; }
+    pop('🎡 Lucky Wheel', `${wheelHTML()}
+      <div class="noteLine" id="spinNote">${freeSpin() ? 'One <b>free spin</b> every day.' : 'Free spin used today.'} You have <b>${spinsLeft()}</b> spin${spinsLeft() === 1 ? '' : 's'}.</div>
+      <button class="big gold" id="spinGo"${spinsLeft() ? '' : ' disabled'}>${spinsLeft() ? 'SPIN!' : 'Come back tomorrow'}</button>
+      <div class="noteLine">Extra spins come from events and the daily chest.</div>`, 'spin');
+    const go = $('#spinGo'); if (go) go.onclick = doSpin;
+  }
+  function doSpin() {
+    if (spinning || !spinsLeft()) return;
+    spinning = true;
+    if (freeSpin()) S.spin.day = today(); else S.spin.tok--;
+    const seg = SP().segments, tot = seg.reduce((a: number, s: any) => a + s.w, 0);
+    let r = Math.random() * tot, k = 0;
+    while (r >= seg[k].w) { r -= seg[k].w; k++; }
+    const a = 360 / seg.length, target = 360 * 6 + (360 - (k * a + a / 2));
+    const w = $('#wheel'); w.style.transition = 'transform 3.6s cubic-bezier(.15,.85,.2,1)'; w.style.transform = `rotate(${target}deg)`;
+    ($('#spinGo') as HTMLButtonElement).disabled = true;
+    sfx.whoosh();
+    const ticks = setInterval(() => sfx.tap(), 180);
+    setTimeout(() => clearInterval(ticks), 2600);
+    setTimeout(() => {
+      spinning = false; grant(seg[k].r); confetti();
+      toast(`🎡 You won <b>${rewardText(seg[k].r)}</b>!`);
+      spinPop(); setTimeout(() => { const w2 = $('#wheel'); if (w2) w2.style.transform = `rotate(${target % 360}deg)`; }, 0);
+    }, 3800);
+    save();
+  }
+
+  /* ---------------------------------------------------------- Alien Pairs */
+  function playPairs() {
+    const c = miniCfg('pairs');
+    if (S.lvl < (c.unlockLevel || 0)) { sfx.no(); toast(`Alien Pairs opens at level ${c.unlockLevel}.`); return; }
+    if (!canPlay('pairs')) return;
+    setCooldown('pairs');
+    const pool: string[] = [];
+    liveChains().forEach(ch => CHAINS[ch].items.forEach(id => { if (ITEMS[id].tier <= 4) pool.push(id); }));
+    const picks: string[] = [];
+    while (picks.length < 8 && pool.length) { const id = pool.splice(Math.floor(Math.random() * pool.length), 1)[0]; if (picks.indexOf(id) < 0) picks.push(id); }
+    while (picks.length < 8) picks.push(rnd(['pebble', 'twig', 'berry', 'dew', 'grass', 'bulbseed', 'nectar', 'caplet']));
+    const cards = picks.concat(picks).sort(() => Math.random() - 0.5);
+    miniState = { k: 'pairs', cards, open: [] as number[], got: new Set<number>(), flips: c.flips || 24, won: [] as string[], busy: false };
+    openMini('🛸 Alien Pairs', 'Bloop shuffled some things under the cups. Find the pairs!');
+    drawPairs();
+  }
+  function drawPairs() {
+    const m = miniState; if (!m || m.k !== 'pairs') return;
+    $('#miniBody').innerHTML = `<div class="pairGrid">${m.cards.map((id: string, i: number) =>
+      `<button class="pCard${m.got.has(i) ? ' got' : m.open.indexOf(i) >= 0 ? ' up' : ''}" data-pc="${i}">
+        <span class="pBack">?</span><span class="pFace">${ART.item(id)}</span></button>`).join('')}</div>`;
+    $('#miniFoot').innerHTML = `<div class="pairInfo">Flips left: <b>${m.flips}</b> · Pairs: <b>${m.got.size / 2}/8</b></div>`;
+    document.querySelectorAll<HTMLElement>('[data-pc]').forEach(b => b.onclick = () => pairTap(+b.dataset.pc!));
+  }
+  function pairTap(i: number) {
+    const m = miniState; if (!m || m.busy || m.got.has(i) || m.open.indexOf(i) >= 0 || m.flips <= 0) return;
+    m.open.push(i); sfx.pop(); drawPairs();
+    if (m.open.length < 2) return;
+    m.flips--; m.busy = true;
+    const [a, b] = m.open;
+    setTimeout(() => {
+      if (m.cards[a] === m.cards[b]) { m.got.add(a); m.got.add(b); m.won.push(m.cards[a]); sfx.merge(3); }
+      else sfx.no();
+      m.open = []; m.busy = false; drawPairs();
+      if (m.got.size === 16 || m.flips <= 0) endPairs();
+    }, 650);
+  }
+  function endPairs() {
+    const m = miniState; if (!m) return;
+    const all = m.got.size === 16;
+    const list: { id?: string; coins?: number }[] = m.won.slice(0, 4).map((id: string) => ({ id }));
+    list.push({ coins: m.won.length * 12 });
+    if (all) list.push({ id: 'chest' });
+    const p = payout(list);
+    $('#miniFoot').innerHTML = `<div class="pairInfo">${all ? '🎉 <b>All pairs!</b> A Supply Chest is yours.' : `${m.won.length} pairs found.`}<br>${payoutLine(p)}</div>
+      <button class="big" id="pairDone">Nice!</button>`;
+    $('#pairDone').onclick = closeMini;
+  }
+
+  /* ------------------------------------------------------- the fun corner */
+  function funPop() {
+    const e = evNow();
+    const card = (k: string, ic: string, name: string, sub: string, lock = '', hot = false) =>
+      `<button class="funCard${lock ? ' locked' : ''}${hot ? ' hot' : ''}" data-fun="${k}"><span class="fIc">${ic}</span><b>${name}</b><i>${lock || sub}</i></button>`;
+    const cd = (k: string) => miniLeft(k) ? '⏳ ' + mmss(miniLeft(k)) : 'Ready!';
+    const lockLv = (n: number) => S.lvl < n ? `🔒 Level ${n}` : '';
+    pop('🎪 Fun & Games', `<div class="funGrid">
+      ${card('event', e ? e.theme.icon : '🎉', e ? e.theme.name : 'Events', e ? `${S.ev.key === e.key ? S.ev.pts : 0} ${e.theme.token} · ${dhm(e.ends - Date.now())}` : 'next in ' + dhm(evNext() - Date.now()), lockLv(EV().unlockLevel), !!e)}
+      ${card('spin', '🎡', 'Lucky Wheel', spinsLeft() ? spinsLeft() + ' spin' + (spinsLeft() > 1 ? 's' : '') + ' ready!' : 'Free spin tomorrow', lockLv(SP().unlockLevel), spinsLeft() > 0 && S.lvl >= SP().unlockLevel)}
+      ${card('pairs', '🛸', 'Alien Pairs', cd('pairs'), lockLv((miniCfg('pairs').unlockLevel || 0)), !miniLeft('pairs') && S.lvl >= (miniCfg('pairs').unlockLevel || 0))}
+      ${card('dig', '⛏️', 'Crater Dig', cd('dig'), S.met ? '' : '🔒 After the meteor')}
+      ${card('brew', '⚗️', 'Fuel Brewing', cd('brew'), S.met ? '' : '🔒 After the meteor')}
+      ${card('market', '🛍️', 'Alien Market', cd('market'), S.met ? '' : '🔒 After the meteor')}
+    </div>`, 'fun');
+    document.querySelectorAll<HTMLElement>('[data-fun]').forEach(b => b.onclick = () => {
+      if (b.classList.contains('locked')) { sfx.no(); toast('Not yet — ' + b.querySelector('i')!.textContent); return; }
+      const k = b.dataset.fun;
+      if (k === 'event') { eventPop(); return; }
+      if (k === 'spin') { spinPop(); return; }
+      closePop();
+      if (k === 'pairs') playPairs(); else if (k === 'dig') playDig(); else if (k === 'brew') playBrew(); else playMarket();
+    });
+  }
+
+  /* ------------------------------------------------------------- energy */
+  function energyPop() {
+    const per = regenMs(), full = S.energy >= maxEnergy();
+    const next = full ? 0 : Math.max(0, per - (Date.now() - (S.eAt || Date.now())));
+    const snackLeft = Math.max(0, (S.snackAt || 0) + CONFIG.energy.snack.cooldownMs - Date.now());
+    pop('⚡ Energy', `<div class="enBig">${ART.icon('energy')}<b>${S.energy}</b><i>/ ${maxEnergy()}</i></div>
+      <div class="noteLine" style="margin-top:2px">${full ? 'Full! Go merge something.' : `+1 every ${Math.round(per / 60000 * 10) / 10} min · next in <b>${mmss(next)}</b>`}</div>
+      <div class="enRow"><span class="enIc">🍪</span><div><b>Snack break</b><i>+${snackAmt()} energy, every 4 hours</i></div>
+        <button class="buyBtn" id="enSnack"${snackLeft || full ? ' disabled' : ''}>${snackLeft ? mmss(snackLeft) : 'Free'}</button></div>
+      <div class="enRow"><span class="enIc">🔋</span><div><b>Refill pack</b><i>+${CFG.shop2.energyRefill.amount} energy right now</i></div>
+        <button class="buyBtn" id="enBuy"${S.coins < refillPrice() ? ' disabled' : ''}>${refillPrice()} 🪙</button></div>
+      <div class="noteLine">More energy: daily tasks, the 🎡 wheel, events, and 🔬 Lab research.</div>`, 'energy');
+    const sn = $('#enSnack'); if (sn) sn.onclick = () => { ($('#btnSnack') as HTMLButtonElement).click(); setTimeout(energyPop, 100); };
+    const by = $('#enBuy'); if (by) by.onclick = () => { buyRefill(); energyPop(); };
+  }
+
+  /* -------------------------------------------- quick chips over the board */
+  function renderQuick() {
+    const host = $('#quick'); if (!host) return;
+    const e = evNow(), bits: string[] = [];
+    if (e) bits.push(`<button class="qChip ev" data-q="event">${e.theme.icon}<b>${S.ev.key === e.key ? S.ev.pts : 0}</b><i>${dhm(e.ends - Date.now())}</i></button>`);
+    if (S.lvl >= SP().unlockLevel && spinsLeft()) bits.push(`<button class="qChip spin" data-q="spin">🎡<b>${spinsLeft()}</b></button>`);
+    if (S.acc) bits.push(`<button class="qChip acc" data-q="acc">⚗️<i>${accLeft() ? mmss(accLeft()) : 'done!'}</i></button>`);
+    const html = bits.join('');
+    if (host.dataset.h === html) return;
+    host.dataset.h = html; host.innerHTML = html;
+    host.querySelectorAll('[data-q]').forEach((b: any) => b.onclick = () => {
+      const k = b.dataset.q;
+      if (k === 'event') eventPop(); else if (k === 'spin') spinPop(); else { labTab = 'acc'; setView('lab'); }
+    });
   }
 
   /* ============================================================= SIDE GAMES
@@ -3267,7 +3687,7 @@ export async function startGame() {
     S.tut = 1; save();
     // the daily calendar and the story beats queue up behind the intro rather
     // than popping a modal over the one button you were told to press
-    if (wasOn) setTimeout(() => { checkDaily(); setTimeout(() => checkStory(), 900); }, 700);
+    if (wasOn) setTimeout(() => { checkDaily(); setTimeout(() => { if (!checkStory()) chapterIntro(); }, 900); }, 700);
     $('#tut').classList.remove('on');
     setTimeout(() => { if (!tutOn()) $('#tut').style.display = 'none'; }, 300);
     clearInterval(tutTimer); tutTimer = 0;
@@ -3366,7 +3786,9 @@ export async function startGame() {
     $('#modal').classList.add('open');
   }
   const closeModal = () => $('#modal').classList.remove('open');
-  $('#mBtn') && ($('#mBtn').onclick = closeModal);
+  /** something to do once the player has read the modal (a story beat chains on) */
+  let afterModal: (() => void) | null = null;
+  $('#mBtn') && ($('#mBtn').onclick = () => { closeModal(); const f = afterModal; afterModal = null; if (f) setTimeout(f, 250); });
 
   /* ================================================================ INPUT */
   /* Pointer handling lives in board.ts (Pixi hit-testing): it calls back into
@@ -3404,6 +3826,10 @@ export async function startGame() {
     const st = $('#btnStash');
     st.style.display = bagHas() ? '' : 'none';
     st.onclick = () => stashItem(i);
+    const rc = $('#btnRecycle');
+    rc.style.display = labOpen() ? '' : 'none';
+    rc.innerHTML = '🧪 +' + sciOf(c.id);
+    rc.onclick = () => { recycleItem(i); $('#infoBar').classList.remove('on'); };
   }
 
   /* ================================================================== LOOP */
@@ -3431,6 +3857,11 @@ export async function startGame() {
       if (popped) { sfx.pop(); paintBoard(); } }
     worldEvent(now);
     checkStuck(now);
+    renderQuick();
+    if (view === 'lab' && labTab === 'acc' && S.acc) {
+      const t = $('#accTime');
+      if (t) { if (accLeft() > 0) t.textContent = mmss(accLeft()); else renderLab(); }
+    }
     // the shelf restocks on its own so the 🛒 badge can nag you
     if (shopOpen()) {
       const before = S.shop.at;
@@ -3502,6 +3933,7 @@ export async function startGame() {
     await buildBoard();
     paintBoard(); renderHUD(); renderOrders(); renderRocket();
     meteorTimer = Date.now() + 40000;
+    if (S.tut) setTimeout(() => { if (!$('#modal').classList.contains('open') && !tutOn()) chapterIntro(); }, 2200);
 
     document.querySelectorAll<HTMLElement>('.tab').forEach(t => t.onclick = () => setView(t.dataset.v as string));
     document.querySelectorAll<HTMLElement>('.scClose').forEach(b => b.onclick = () => setView('board'));
@@ -3533,6 +3965,12 @@ export async function startGame() {
         if (rb) rb.onclick = () => { localStorage.removeItem(SAVE); location.reload(); };
       }, 30);
     };
+    $('#chipEnergy').onclick = () => energyPop();
+    $('#chipCoins').onclick = () => setView('shop');
+    $('#popX').onclick = () => closePop();
+    $('#scrim').onclick = () => setView('board');
+    $('#pop').onclick = (ev: any) => { if (ev.target && ev.target.id === 'pop') closePop(); };
+    $('#talk').onclick = () => talkStep();
     $('#infoClose').onclick = () => { $('#infoBar').classList.remove('on'); sel = null; paintBoard(); };
     $('#bagClose').onclick = () => openBag(false);
     $('#oLeft').onclick = () => scrollOrders(-1);
@@ -3553,7 +3991,8 @@ export async function startGame() {
       hud: () => renderHUD(), world: () => renderWorldScreen(), wlv, bloomValue,
       grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed, ecost,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
-      fly: (w: string) => galaxyTap(w),
+      fly: (w: string) => galaxyTap(w), view: (v: string) => setView(v),
+      v9: { funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, labTab: (t: string) => { labTab = t; renderLab(); } },
     };
     setInterval(tick, 500);
     setInterval(save, 8000);

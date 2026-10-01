@@ -144,11 +144,30 @@ Object.entries(chains).forEach(([k, c]) => {
 });
 Object.entries(PROJECTS).forEach(([w, list]) => list.forEach(pr => pr.needs.forEach(([id]) => {
   if (!items[id]) errs.push(`project "${pr.id}" in ${w} needs unknown item "${id}"`);
-  else if (chains[items[id].chain].world !== w) errs.push(`project "${pr.id}" needs "${id}" from another world`);
+  else if (!['any', 'ship', w].includes(chains[items[id].chain].world)) errs.push(`project "${pr.id}" needs "${id}" from another world`);
   if (pr.gift && pr.gift !== 'chest' && !items[pr.gift]) errs.push(`project "${pr.id}" gives unknown "${pr.gift}"`);
   if (pr.unlock && !producers[pr.unlock]) errs.push(`project "${pr.id}" unlocks unknown producer "${pr.unlock}"`);
   if (pr.temp && !producers[pr.temp.p]) errs.push(`project "${pr.id}" brings unknown producer "${pr.temp.p}"`);
 })));
+/* A story world hands out its producers chapter by chapter, so every chapter
+   must only ask for chains you can already make by then: the starters, what
+   earlier chapters planted, the guest the previous chapter brought, and the
+   meteor wreck/craters once the meteor has fallen. */
+Object.entries(PROJECTS).forEach(([w, list]) => {
+  if (!list.some(p => p.unlock || p.temp)) return;
+  const have = new Set((worlds[w].start || []).map(x => x.producer));
+  let guest = null, meteor = false;
+  const chainsOf = (pk) => new Set(producers[pk].drops.map(d => items[d].chain));
+  list.forEach(pr => {
+    const can = new Set();
+    [...have, ...(guest ? [guest] : []), ...(meteor ? ['wreck', 'crater'] : [])].forEach(pk => chainsOf(pk).forEach(c => can.add(c)));
+    pr.needs.forEach(([id]) => { const c = items[id] && items[id].chain; if (c && !can.has(c) && chains[c].world !== 'ship') errs.push(`story ${w}/${pr.id} needs "${id}" but nothing makes ${c} yet`); });
+    (pr.talk || []).forEach(([who]) => { if (!CHARACTERS[who]) errs.push(`story ${pr.id} talk uses unknown "${who}"`); });
+    if (pr.unlock) have.add(pr.unlock);
+    guest = pr.temp ? pr.temp.p : null;
+    if (pr.event === 'meteor') meteor = true;
+  });
+});
 Object.values(PROJECTS).forEach(list => { if (list.length && !list.some(p => p.launch) && list !== PROJECTS.vela) errs.push('a world has no launch project'); });
 Object.keys(ASKS).forEach(k => { if (!chains[k]) errs.push(`contracts.mjs ASKS names unknown chain "${k}"`); });
 Object.entries(LIKES).forEach(([ch, ls]) => {
