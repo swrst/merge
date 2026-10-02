@@ -43,7 +43,9 @@
       "visitor",
       "feather",
       "garden",
-      "wood"
+      "wood",
+      "toys",
+      "pond"
     ]
   },
   "gigi": {
@@ -74,7 +76,50 @@
       "berry",
       "water",
       "grass",
-      "veggie"
+      "veggie",
+      "toys"
+    ]
+  },
+  "mumbo": {
+    "name": "Mumbo",
+    "lines": [
+      "Fresh from the oven!",
+      "Smells like home.",
+      "One more batch!"
+    ],
+    "face": {
+      "kind": "blob",
+      "mat": "peach",
+      "accent": "cream"
+    },
+    "likes": [
+      "bakery",
+      "berry",
+      "honey",
+      "veggie",
+      "grass",
+      "water"
+    ]
+  },
+  "pim": {
+    "name": "Lady Pim",
+    "lines": [
+      "How delightful.",
+      "Tea solves most things.",
+      "Pinkies up, dear."
+    ],
+    "face": {
+      "kind": "crystal",
+      "mat": "rose",
+      "accent": "gold"
+    },
+    "likes": [
+      "tea",
+      "flower",
+      "clay",
+      "pond",
+      "honey",
+      "cloth"
     ]
   },
   "bloop": {

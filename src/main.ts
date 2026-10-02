@@ -10,6 +10,8 @@ function paintHudIcons() {
   });
   const energy = document.getElementById('icEnergy');
   if (energy) energy.innerHTML = ART.icon('energy');
+  const gem = document.getElementById('icGem');
+  if (gem) gem.innerHTML = ART.icon('gem');
 }
 
 if (import.meta.env.DEV) {

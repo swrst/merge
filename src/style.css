@@ -1389,3 +1389,35 @@ html.ui-levelup_banner .luCard{background:var(--ui-levelup_banner) center/contai
 .przRow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0 2px;padding:6px 8px;border-radius:12px;background:#fff8e6;border:2px dashed #f0cf8a}
 .przRow i{font-style:normal;font-size:11px;font-weight:800;color:#b07c1e}
 .prz{display:flex;align-items:center;gap:4px;font-size:11px}.prz svg,.prz img{width:30px;height:30px}.prz b{color:#5c4327}
+
+/* ============================================================== v16 */
+/* four counters across the top: tighter chips */
+.hud{gap:4px;padding-left:6px;padding-right:6px}
+.chip{min-width:0;padding:3px 7px 3px 3px;font-size:12px}
+.chip .ic{width:22px;height:22px}
+.xpwrap{width:46px}
+#chipGems{color:#6b3fb5}
+/* ads */
+.big.adBtn{background:linear-gradient(180deg,#b9a0ff,#7b4fd6)!important;box-shadow:0 4px 0 #5a35a8!important;border-image:none!important;border-radius:18px!important;font-size:14px;padding:10px}
+.big.adBtn i{display:block;font-style:normal;font-size:10px;opacity:.85}
+.big.adBtn:disabled{opacity:.5}
+.fakeAd{position:absolute;inset:0;z-index:600;background:rgba(10,8,30,.92);display:flex;align-items:center;justify-content:center;color:#fff;text-align:center}
+.fakeAd b{display:block;font-size:26px}.fakeAd i{display:block;font-style:normal;font-size:12px;opacity:.7;margin:6px 0 14px}
+.fakeBar{display:block;width:200px;height:8px;border-radius:99px;background:rgba(255,255,255,.2);overflow:hidden;margin:0 auto}
+.fakeBar em{display:block;height:100%;background:#ffd45e;animation:fakeAd 2.6s linear forwards}
+@keyframes fakeAd{from{width:0}to{width:100%}}
+/* gems in the shop */
+.buyBtn.gem{background:linear-gradient(180deg,#e3d4ff,#b998ff);color:#4b2b8f;box-shadow:0 3px 0 #8a63d9}
+.buyBtn.cash{background:linear-gradient(180deg,#8fe86d,#4fb63a);color:#fff;box-shadow:0 3px 0 #3c8f2c;text-shadow:0 1px 0 rgba(0,60,0,.4);font-size:13px}
+.gemCard{position:relative}.gemCard.owned{opacity:.6}
+.gTag{position:absolute;top:-8px;left:50%;transform:translateX(-50%);white-space:nowrap;background:#ff5e7a;color:#fff;font-size:9.5px;font-weight:800;border-radius:99px;padding:2px 8px;border:2px solid #fff}
+.testTag{font-style:normal;font-size:9px;background:#ffe08a;color:#7a4f06;border-radius:99px;padding:1px 6px;margin-left:4px}
+/* leaderboard */
+.lbBox{background:#fffaf0;border:3px solid #fff;border-radius:16px;padding:6px 8px;margin-bottom:8px;box-shadow:0 2px 0 rgba(150,105,50,.18)}
+.lbHead{font-size:11.5px;font-weight:700;color:#7a6244;margin-bottom:4px}.lbHead b{color:#c23f86}
+.lbRow{display:flex;gap:8px;font-size:12px;padding:3px 4px;border-radius:8px}.lbRow b{width:28px;color:#b07c1e}.lbRow span{flex:1;font-weight:700;color:#5c4327}.lbRow em{font-style:normal;font-weight:800;color:#c23f86}
+.lbRow.me{background:#fff0f8;box-shadow:inset 0 0 0 2px #ff9fd0}
+/* camp storage button */
+.starMapBtn.store{top:106px;background:linear-gradient(180deg,#d59a57,#a9702f)}
+.xplabel{white-space:nowrap;font-size:8.5px}
+.evHead{align-items:flex-start}

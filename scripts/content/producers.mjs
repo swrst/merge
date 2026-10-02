@@ -40,6 +40,17 @@ export const PRODUCERS = [
   /* story guests: never planted by level, only by a chapter of the story */
   ['earth', 99, 'raincloud|Rain Cloud|cloud:water/cloud|bat:16/30|dew dew dew puddle|a fat grey-blue rain cloud drizzling onto a little puddle'],
 
+  /* v16: story unlocks for the later Meadow chapters */
+  ['earth', 99, 'windmill|Windmill|tower:wood/grass|nrg:1|flour flour flour dough|a small stone windmill with turning cloth sails'],
+  ['earth', 99, 'teabush|Tea Bush|bush:leaf/moss|bat:10/60|tealeaf tealeaf teabundle|a neat round tea bush with fresh green tips'],
+  ['earth', 99, 'lilypond|Lily Pond|wave:water/moss|nrg:1|ponddrop ponddrop ponddrop lilypad|a small round pond with lily pads and a reed'],
+  ['earth', 99, 'toychest|Toy Chest|chest:cherry/moss|bat:10/60|block block spintop|a painted toy chest, lid open, toys peeking out'],
+
+  /* event guests: planted while an event runs, gone when it ends */
+  ['*', 0, 'fallingstar|Falling Star|star:star/slate|bat:12/45|starbit starbit starbunch|a fallen glowing star sitting in a little crater'],
+  ['*', 0, 'lanternstall|Lantern Stall|house:rose/moss|bat:12/45|paperlantern paperlantern lanternstring|a festival stall hung with paper lanterns'],
+  ['*', 0, 'candycart|Candy Cart|crate:cherry/moss|bat:12/45|candydrop candydrop lollipop|a striped candy cart with a little awning'],
+
   /* ----------------------------------------------------------- Crater Camp */
   ['luna', 1, 'geyser|Moon Geyser|geyser|nrg:1|mrock mrock mrock mcrystal|a crater vent puffing lilac moon dust with crystals around its rim'],
   ['luna', 1, 'glowpod|Glow Pod|glowpod|bat:10/60|spore spore bulb|a big glowing seed pod on a stalk, softly pulsing cyan'],
