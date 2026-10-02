@@ -803,3 +803,14 @@ Running out of energy opens the energy popup.
 **Events:**
 - Each theme brings a temporary guest producer: Falling Star, Lantern Stall or Candy Cart. Its chains (Falling Stars, Festival Lanterns, Candy Carnival) give big event points.
 - A 20-player leaderboard (simulated on the device until there is a server) pays gems by final rank.
+
+## v18 — merge feel pass
+- **Magnet drop**: let go beside a twin (over a tile it can't use, or right on the border of an empty one) and it still merges. Gutters between tiles no longer swallow drops.
+- **Match glow**: while you drag, every tile it can merge with glows gold and breathes; the twin under your finger leans in.
+- **Swap**: dropping on a different item or producer trades places (Travel Town rule). Two finished-chain items still bounce back.
+- **Double-tap**: an item flies to its nearest twin and merges. One-time tip after the intro; the hint toast mentions it.
+- **Animations**: the dragged item rides above the finger and leans with movement. Moves glide and land with a squash; swaps hop across. Merges squash the partner, flash white, throw stars, and from tier 4 add light rays (tier 6+ gives a small board bump). A refused drop does a head-shake.
+- **Rewards travel**: sold coins, combo coins and contract coins fly into the coin counter; delivered items fly into the card; XP stars fly to the level orb.
+- **Sounds** (scripts/make-audio.py, `python3 scripts/make-audio.py lift land swap hover click nope` rebuilds only these): lift, land, swap, hover tick, a soft "uh-uh" instead of the buzzer, and a quiet tok on every button.
+- **Fixes**: art that wasn't preloaded yet (event visitors, fresh chains) is now loaded on demand; before, the Lantern Stall sat invisible. `#fff` float text was rendering dark blue. Contract glow now follows items you move. The contract row no longer collapses, so the board can't jump under your finger. A full board now points you at a mergeable pair.
+- `scripts/ux-check.mjs`: a 1-minute regression for all of the above.
