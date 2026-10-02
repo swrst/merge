@@ -290,6 +290,7 @@ class PixiBoard {
       // a painted tile carries its own light and shade; only the rarity frame is drawn over it
       art.texture = paint; art.position.set(p.x, p.y); art.width = c; art.height = c;
       if (this.slots[i] && this.slots[i].key.startsWith('u')) g.roundRect(p.x + 2, p.y + 2, c - 4, c - 4, R).fill({ color: 0x7cc8ff, alpha: 0.35 });
+      if (this.wanted.has(i)) g.roundRect(p.x + 2, p.y + 2, c - 4, c - 4, R).fill({ color: 0x8ce46a, alpha: 0.38 }).stroke({ color: 0x4fb63a, width: 2.5, alpha: 0.95 });
       if (r) {
         const col = r === 3 ? 0xffb02e : r === 2 ? 0xc78cff : 0x8fd6ff;
         g.roundRect(p.x + 1, p.y + 1, c - 2, c - 2, R - 1)
@@ -300,6 +301,7 @@ class PixiBoard {
     g.roundRect(p.x, p.y, c, c, R)
       .fill({ color: locked ? (dark ? th.lockLo : th.lock) : (dark ? th.tileLo : th.tile) });
     if (this.slots[i] && this.slots[i].key.startsWith('u')) g.roundRect(p.x + 2, p.y + 2, c - 4, c - 4, R).fill({ color: 0x7cc8ff, alpha: 0.35 });
+    if (this.wanted.has(i)) g.roundRect(p.x + 2, p.y + 2, c - 4, c - 4, R).fill({ color: 0x8ce46a, alpha: 0.38 }).stroke({ color: 0x4fb63a, width: 2.5, alpha: 0.95 });
     if (!locked) {
       // one soft light from the top, one soft shade at the foot
       g.roundRect(p.x + c * 0.06, p.y + c * 0.05, c * 0.88, c * 0.2, c * 0.1)
@@ -658,6 +660,15 @@ class PixiBoard {
         this.lFx.addChild(g); s.ring = g;
       } else if (!on && s.ring) { s.ring.destroy(); s.ring = undefined; }
     });
+  }
+  /** items a ready contract or chapter is about to take: their tiles glow green */
+  private wanted = new Set<number>();
+  setWanted(list: number[]) {
+    const nw = new Set(list);
+    if (nw.size === this.wanted.size && list.every(k => this.wanted.has(k))) return;
+    const old = this.wanted; this.wanted = nw;
+    old.forEach(k => { if (!nw.has(k)) this.drawTile(k); });
+    nw.forEach(k => { if (!old.has(k)) this.drawTile(k); });
   }
   setHint(list: number[] | null) {
     this.slots.forEach((s, k) => {

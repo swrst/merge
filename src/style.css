@@ -94,7 +94,7 @@ button{font-family:inherit;cursor:pointer;border:none}
   border:2.5px solid #fff;border-radius:999px;padding:3px 11px 3px 4px;box-shadow:0 3px 0 rgba(150,105,50,.28),0 5px 10px rgba(0,0,0,.14);
   font-weight:700;font-size:13px;color:#6b4a20;min-width:64px;justify-content:center}
 .chip .ic{width:24px;height:24px;flex:none;filter:drop-shadow(0 1px 1px rgba(0,0,0,.2))}
-.chip.pop{animation:chipPop .38s ease}
+.chip.bump{animation:chipPop .38s ease}
 @keyframes chipPop{0%{transform:scale(1)}40%{transform:scale(1.22)}100%{transform:scale(1)}}
 .lvlBox{display:flex;align-items:center;gap:6px;background:linear-gradient(180deg,#fffdf7,#ffeecb);
   border:2.5px solid #fff;border-radius:999px;padding:3px 12px 3px 3px;box-shadow:0 3px 0 rgba(150,105,50,.28),0 5px 10px rgba(0,0,0,.14)}
@@ -1280,3 +1280,64 @@ html.ui-toast_bg .toast{background:var(--ui-toast_bg) center/100% 100% no-repeat
 .spot.ship .spotArt{width:110px;height:118px}
 .spot.lab .spotArt{width:104px;height:96px}
 .spot.heart .spotArt{width:84px;height:92px}
+
+/* ============================================================ v14 UX pass */
+/* no world-name pill on the board: the camp and Galaxy already say where you are */
+.stageTop .worldTag{display:none}
+/* chapter strip: always visible, shows what it needs, glows when ready */
+.questBtn{padding:4px 8px 4px 4px;min-height:52px}
+.questBtn:after{display:none}
+.qFace{width:40px;height:40px}
+.qTxt{font-size:12px}
+.qNeeds{display:flex;gap:4px;margin-top:2px;flex-wrap:nowrap;overflow:hidden}
+.qNeed{display:flex;align-items:center;gap:1px;background:#fff6e2;border:2px solid #f0dcb4;border-radius:10px;padding:0 5px 0 1px;height:24px}
+.qNeed svg,.qNeed img,.qNeed .ic{width:20px;height:20px}
+.qNeed em{font-style:normal;font-size:10px;font-weight:800;color:#8a6a3c}
+.qNeed.ok{background:#e9ffdf;border-color:#8ce46a}.qNeed.ok em{color:#3f9a28}
+.qGo{font-size:22px;font-weight:800;color:#c2a274;margin-left:auto;padding:0 4px}
+.qBuild{margin-left:auto;flex:none;padding:8px 12px;border-radius:14px;font-size:13px;font-weight:800;color:#fff;
+  background:linear-gradient(180deg,#8fe86d,#4fb63a);box-shadow:0 3px 0 #3c8f2c;text-shadow:0 1px 0 rgba(0,60,0,.4);animation:readyBob 1s ease-in-out infinite}
+.questBtn.ready{background:linear-gradient(180deg,#f3ffe9,#d9f7c9)!important;box-shadow:0 0 0 3px #8ce46a,0 0 18px rgba(110,220,80,.7)!important;animation:readyBob 1.6s ease-in-out infinite}
+/* contracts: ready cards glow, a round tick gives */
+.order{cursor:pointer}
+.order:not(.ready) .oNeeds{margin-bottom:2px}
+.order.ready{box-shadow:0 0 0 3px #8ce46a,0 0 18px rgba(110,220,80,.75)!important}
+.order .oTick{position:absolute;right:-6px;bottom:-6px;width:38px;height:38px;padding:0;border-radius:50%;z-index:3;
+  background:linear-gradient(180deg,#8fe86d,#4fb63a);border:3px solid #fff;box-shadow:0 3px 0 #3c8f2c,0 4px 10px rgba(0,0,0,.25);
+  color:#fff;font-size:18px;font-weight:900;animation:readyBob .9s ease-in-out infinite;display:flex;align-items:center;justify-content:center}
+html.ui-ic_tick .order .oTick{background:none;border:0;box-shadow:none}
+.order .oTick .uiIc{width:38px;height:38px}
+html.ui-btn_give .btnDeliver.on.oTick{background:none}
+.orders{padding-bottom:10px}
+/* the item-info modal: one clear button, a quiet close */
+.modal.lite #mBtn{background:none!important;border-image:none!important;box-shadow:none!important;color:#9a7a4e;font-size:13px;padding:6px;margin-top:4px;text-decoration:underline}
+.mSay{font-size:13px;font-weight:600;color:#6b5236;line-height:1.35;margin-bottom:6px}
+/* toolbox */
+.toolbox .ic{width:22px;height:22px}
+/* coach marks */
+.coach{position:absolute;inset:0;z-index:160;pointer-events:none;opacity:0;transition:opacity .2s}
+.coach.on{opacity:1}
+.coachRing{position:absolute;border-radius:18px;box-shadow:0 0 0 4px #ffd45e,0 0 0 9999px rgba(20,12,4,.35),0 0 22px rgba(255,203,61,.9);animation:hintPulse 1s ease-in-out infinite}
+.coachBub{position:absolute;left:14px;right:14px;display:flex;align-items:center;gap:8px;padding:8px 12px 8px 6px;border-radius:18px;
+  background:#fffaf0;border:3px solid #fff;box-shadow:0 6px 16px rgba(0,0,0,.3);font-size:13.5px;font-weight:600;color:#5b452a}
+.coachBub b{color:#e07a1c}
+.coachFace{width:40px;height:40px;flex:none}.coachFace svg{width:100%;height:100%}
+/* dock: painted button on top, label underneath it on the bar */
+.rail.dock{align-items:flex-start;padding-top:6px}
+.rail.dock .railBtn{height:64px;width:56px;justify-content:flex-start;padding-top:5px;border-radius:18px}
+html.ui-dock_btn .rail.dock .railBtn,html.ui-dock_btn .rail.dock .railBtn:not(.on){background:var(--ui-dock_btn) center top/52px 48px no-repeat;border:0;box-shadow:none}
+html.ui-dock_btn .rail.dock .railBtn.on{background:var(--ui-dock_btn) center top/52px 48px no-repeat;box-shadow:none;transform:translateY(-4px)}
+html.ui-dock_btn .rail.dock .railBtn.on:before{content:"";position:absolute;left:2px;right:2px;top:0;height:48px;border-radius:14px;box-shadow:0 0 0 3px #ffd34d,0 0 12px rgba(255,200,60,.8)}
+.rail.dock .railBtn i{position:absolute;left:-6px;right:-6px;bottom:0;text-align:center;font-size:10.5px;font-weight:800;color:#fff;
+  text-shadow:0 1px 0 #7a4a18,1px 0 0 #7a4a18,-1px 0 0 #7a4a18,0 -1px 0 #7a4a18,0 2px 2px rgba(0,0,0,.3)}
+.rail.dock .railBtn .ti{margin-top:2px}
+/* camp: smaller pieces, one-line name tags, so neighbours never overlap */
+.spot .spotArt{width:72px;height:72px}
+.spotTag{padding:2px 8px;margin-top:-6px}
+.spotTag b{font-size:10px;max-width:84px}
+.spotTag i{font-size:9px}
+.spot.ship .spotArt{width:100px;height:108px}
+.spot.lab .spotArt{width:92px;height:86px}
+.spot.heart .spotArt{width:74px;height:82px}
+.sceneName{top:12px;left:12px}
+.starMapBtn{top:56px}

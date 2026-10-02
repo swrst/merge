@@ -396,7 +396,9 @@ await set(() => {
 });
 await page.waitForTimeout(400);
 before = await page.evaluate(() => window.__game.cells().filter(c => c && c.id).length);
-await tapUI('#tools .toolBtn[title="Merge Wand"]'); await page.waitForTimeout(900);
+await tapUI('#tools .toolbox'); await page.waitForTimeout(400);
+must(await page.locator('#pop.open [data-boost-use]').count() === 3, 'boosters open in a toolbox that says what each does');
+await page.evaluate(() => document.querySelector('[data-boost-use="wand"]').click()); await page.waitForTimeout(900);
 after = await S();
 const nowItems = await page.evaluate(() => window.__game.cells().filter(c => c && c.id).length);
 must(nowItems < before, `the wand merged the board down (${before} -> ${nowItems} items)`);
@@ -411,7 +413,8 @@ await set(() => {
 });
 await page.waitForTimeout(400);
 before = (await S()).coins;
-await tapUI('#tools .toolBtn[title="Tidy Bomb"]'); await page.waitForTimeout(800);
+await tapUI('#tools .toolbox'); await page.waitForTimeout(400);
+await page.evaluate(() => document.querySelector('[data-boost-use="bomb"]').click()); await page.waitForTimeout(800);
 after = await S();
 must(after.coins > before, `the bomb sold the clutter for coins (${before} -> ${after.coins})`);
 must(after.boards.earth.filter(c => c && c.id === 'pebble').length === 0, 'and cleared the board');
@@ -908,9 +911,11 @@ await closeModal();
 
 head('The quest button and the "where do I get one?" panel');
 await tab('board');
-await set(() => { const st = window.__game.state(); st.mp = {}; });
-const qTxt = await page.textContent('#questTxt');
-must(qTxt.length > 4, `the quest button says what to do next: "${qTxt}"`);
+await set(() => { const st = window.__game.state(); st.mp = {}; st.proj[st.world] = 0; });
+await page.waitForTimeout(300);
+const qTxt = await page.textContent('#btnQuests .qTxt');
+must(/Ch\. \d+/.test(qTxt), `the chapter strip is always on screen: "${qTxt}"`);
+must(await page.locator('#btnQuests .qNeed').count() >= 1, 'and shows what the chapter needs');
 await page.locator('#btnQuests').click({ force: true }); await page.waitForTimeout(900);
 // once the rocket stands, the strip points at the restoration project and the
 // starter quests live one tap further, on the Goals screen
@@ -942,10 +947,9 @@ head('The guided intro');
   await t2.waitForTimeout(2600);
   must(await t2.locator('#tut.on').count() === 1, 'a fresh save opens straight into the intro');
   must(await t2.locator('#modal.open').count() === 0, 'and nothing else pops over it');
-  const say1 = await t2.textContent('#tSay');
-  await t2.locator('#tNext').click({ force: true }); await t2.waitForTimeout(3000);   // let the dimmers settle on a software renderer
   const say2 = await t2.textContent('#tSay');
-  must(say2 !== say1, 'it moves on when you press the button');
+  await t2.waitForTimeout(1500);   // let the dimmers settle on a software renderer
+  must(/Big Tree/.test(say2), 'the first step is something to do: tap the tree');
   // the hole has to be over the Big Tree, and everything else has to be dimmed
   const spot = await t2.evaluate(() => {
     const g = window.__game, i = g.cells().findIndex(c => c && c.p === 'tree');
@@ -1025,7 +1029,7 @@ await set(() => {
 });
 await tab('rocket');
 await page.evaluate(() => document.querySelector('#btnProject').click()); await page.waitForTimeout(1200);
-must(await page.locator('#talk.open').count() === 1, 'finishing a chapter plays its story scene');
+must(await page.locator('#modal.open .mSay').count() === 1, 'finishing a chapter shows its closing line with the reward');
 await closeModal(); await page.waitForTimeout(400); await closeModal(); await page.waitForTimeout(700);
 s = await S();
 await closeModal();

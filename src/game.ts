@@ -151,7 +151,7 @@ export async function startGame() {
       /* v7: restoration projects, daily tasks, contract milestones, visitors */
       proj: {}, dt: null, om: { n: 0, step: 0 }, vis: null, visAt: 0,
       /* v9: Science and research, the accelerator, story talk, live events, the wheel */
-      sci: 0, res: {}, acc: null, talked: {}, ev: { key: '', pts: 0, got: 0 }, spin: { day: 0, tok: 0 }, fr: {},
+      sci: 0, res: {}, acc: null, talked: {}, coach: {}, ev: { key: '', pts: 0, got: 0 }, spin: { day: 0, tok: 0 }, fr: {},
     };
   }
   /** Old saves keep their progress — missing fields are simply filled in. */
@@ -179,7 +179,7 @@ export async function startGame() {
     p.plots = p.plots || {};
     p.firsts = p.firsts || {};
     p.proj = p.proj || {}; p.om = p.om || { n: 0, step: 0 }; if (p.vis === undefined) p.vis = null; p.visAt = p.visAt || 0;
-    p.sci = p.sci || 0; p.res = p.res || {}; if (p.acc === undefined) p.acc = null; p.talked = p.talked || {};
+    p.coach = p.coach || {}; p.sci = p.sci || 0; p.res = p.res || {}; if (p.acc === undefined) p.acc = null; p.talked = p.talked || {};
     p.ev = p.ev || { key: '', pts: 0, got: 0 }; p.spin = p.spin || { day: 0, tok: 0 }; p.fr = p.fr || {};
     if (!p.lab.built && (p.proj.earth || 0) >= 5) p.lab.built = 1;
     // A pre-v6 save had one global level. Seed each visited world from it so
@@ -371,8 +371,6 @@ export async function startGame() {
     $('#worldName').textContent = W().name;
     $('#worldIcon').innerHTML = ART.planet(W().planet);
     const m = curMission();
-    $('#guideFace').innerHTML = ART.char(S.met ? 'bloop' : 'pip');
-    $('#guideTxt').innerHTML = m ? m.hint : '<b>Nice!</b> Keep merging, trading and exploring — more worlds are waiting.';
     $('#tabRocket').classList.toggle('locked', false);
     $('#tabMap').classList.toggle('locked', false);
     const essence = B().some((c: any) => c && c.id && bloomValue(c.id) > 0);
@@ -380,21 +378,50 @@ export async function startGame() {
     $('#tabShop').classList.toggle('locked', !shopOpen());
     $('#tabLab').classList.toggle('hide', !labOpen());
     $('#dotRocket').style.display = tasksDone() > 0 ? '' : 'none';
-    const cur = curMission(), pj = curProject();
-    const showProj = !cur || MISSIONS.indexOf(cur) >= 3;
-    $('#questTxt').textContent = showProj ? (pj ? '🏗️ ' + pj.name : '🌟 ' + W().name + ' is restored!') : cur.text;
-    if (showProj && pj) {
-      const got = pj.needs.filter(([id, q]: [string, number]) => countItem(id) >= q).length;
-      $('#guideTxt').innerHTML = projReady(pj) ? '<b>Ready to build!</b> Tap here.' : `${got}/${pj.needs.length} items ready · ${pj.coins} coins`;
-    }
-    $('#dotQuest').style.display = showProj ? (projReady(pj) ? '' : 'none') : (cur && (S.mp[cur.id] || 0) >= cur.need ? '' : 'none');
-    $('#btnQuests').dataset.proj = showProj ? '1' : '';
+    renderStrip();
     $('#dotShop').style.display = (shopNews() || (labOffered() && !S.lab.built)) ? '' : 'none';
     $('#dotFun').style.display = (evNow() || (S.lvl >= SP().unlockLevel && spinsLeft() > 0)) ? '' : 'none';
     $('#dotLab').style.display = (S.acc && !accLeft()) || L2().research.some((r: any) => res(r.id) < r.max && S.sci >= researchCost(r)) ? '' : 'none';
-    renderTools();
+    renderTools(); updateWanted();
     if (view === 'shop') $('#shopCoins').textContent = S.coins;
     if (view === 'lab') $('#labCoins').textContent = S.coins;
+  }
+  /* The chapter strip: the main quest is always on screen, with the things it
+     needs, and it lights up the moment you can build it. */
+  let stripKey = '';
+  function renderStrip() {
+    const btn = $('#btnQuests'); if (!btn) return;
+    const pj = curProject(), ready = projReady(pj);
+    const key = pj ? pj.id + '|' + ready + '|' + S.coins + '|' + pj.needs.map(([id]: [string, number]) => countItem(id)).join(',') : 'done' + S.world;
+    if (key === stripKey) return; stripKey = key;
+    btn.classList.toggle('ready', !!ready);
+    if (!pj) {
+      btn.innerHTML = `<span class="qFace">${ART.char('pip')}</span><span class="qCol"><b class="qTxt">🌟 ${W().name} is restored!</b><i>Open the Galaxy to fly on.</i></span>`;
+      return;
+    }
+    const n = projDone() + 1;
+    btn.innerHTML = `<span class="qFace">${ART.char(pj.who)}</span>
+      <span class="qCol"><b class="qTxt">Ch. ${n}: ${pj.name}</b>
+        <span class="qNeeds">${pj.needs.map(([id, q]: [string, number]) => {
+          const have = Math.min(q, countItem(id));
+          return `<span class="qNeed${have >= q ? ' ok' : ''}">${ART.item(id)}<em>${have}/${q}</em></span>`;
+        }).join('')}${pj.coins ? `<span class="qNeed${S.coins >= pj.coins ? ' ok' : ''}">${ART.icon('coin')}<em>${pj.coins}</em></span>` : ''}
+        ${pj.rocket ? `<span class="qNeed${allParts() ? ' ok' : ''}">🚀<em>${PART_KEYS.filter(k => S.parts[k]).length}/4</em></span>` : ''}</span></span>
+      ${ready ? '<span class="qBuild">BUILD!</span>' : '<span class="qGo">›</span>'}`;
+  }
+  /** which board cells a ready contract or a ready chapter is about to take */
+  function updateWanted() {
+    const b = B(), used = new Set<number>(), take = (id: string, q: number) => {
+      for (let i = 0; i < N && q; i++) if (!used.has(i) && b[i] && b[i].id === id) { used.add(i); q--; }
+    };
+    const stock = inventory(), claim: Record<string, number> = {};
+    S.orders.forEach(o => {
+      const ok = o.needs.every(nd => (stock[nd.id] || 0) - (claim[nd.id] || 0) >= nd.qty);
+      if (ok) o.needs.forEach(nd => { claim[nd.id] = (claim[nd.id] || 0) + nd.qty; take(nd.id, nd.qty); });
+    });
+    const pj = curProject();
+    if (pj && projReady(pj)) pj.needs.forEach(([id, q]: [string, number]) => take(id, q));
+    board.setWanted([...used]);
   }
   function curMission() { return MISSIONS.find(m => (S.mp[m.id] || 0) < m.need); }
   function readyParts() { return !allParts() && Object.keys(S.parts).some(k => !S.parts[k]); }
@@ -486,17 +513,19 @@ export async function startGame() {
           const have = Math.min(ready ? nd.qty : held(nd.id), nd.qty);
           return `<div class="oNeed${have >= nd.qty ? ' done' : ''}" data-need="${nd.id}">${ART.item(nd.id)}<b>${have}/${nd.qty}</b></div>`;
         }).join('')}</div>
-         <button class="btnDeliver${ready ? ' on' : ''}">${ready ? 'GIVE IT!' : 'FIND IT'}</button>`;
-      (card.querySelector('.btnDeliver') as HTMLElement).onclick = (ev: Event) => { ev.stopPropagation(); ready ? deliver(o.id) : findFor(o); };
+         ${ready ? `<button class="btnDeliver on oTick" title="Give">${ART.uiIcon('ic_tick', '✔')}</button>` : ''}`;
+      const tick = card.querySelector('.btnDeliver') as HTMLElement | null;
+      if (tick) tick.onclick = (ev: Event) => { ev.stopPropagation(); deliver(o.id); };
       // tapping the thing they want explains where it comes from, which is the
       // question a new player actually has
       card.querySelectorAll('[data-need]').forEach((n: any) => n.onclick = (ev: Event) => {
         ev.stopPropagation(); chainPanel(n.dataset.need);
       });
-      card.onclick = () => findFor(o);
+      // a ready card gives on any tap; otherwise it points at where to get things
+      card.onclick = () => ready ? deliver(o.id) : findFor(o);
       host.appendChild(card);
     });
-    orderArrows();
+    orderArrows(); updateWanted(); renderStrip();
     // the order row is the tallest variable block above the board; once it has
     // settled the board re-measures so its last row never hides under the dock
     board.layout();
@@ -560,8 +589,9 @@ export async function startGame() {
        <div class="noteLine" style="text-align:left">${where}</div>
        ${src && src.on ? `<div class="srcBox">${ART.producer(PRODS[src.k].art)}
           <div><b>${PRODS[src.k].name}</b><i>${(B()[src.i].ch ?? 0)}/${capOf(PRODS[src.k], plv(B()[src.i]))} charges</i></div></div>
-         <button class="big" id="showSrc">Show me on the board</button>` : ''}`,
-      'Got it');
+         <button class="big blue" id="showSrc">📍 Show me on the board</button>` : ''}`,
+      'Close');
+    $('#modal').classList.add('lite');
     setTimeout(() => {
       const b2 = $('#showSrc');
       if (b2 && src && src.on) b2.onclick = () => {
@@ -742,7 +772,7 @@ export async function startGame() {
     paintBoard(); tutFire('deliver');
     renderOrders(); renderHUD(); save();
   }
-  function bumpChip(sel2: string) { const c = $(sel2); c.classList.remove('pop'); void c.offsetWidth; c.classList.add('pop'); }
+  function bumpChip(sel2: string) { const c = $(sel2); c.classList.remove('bump'); void c.offsetWidth; c.classList.add('bump'); }
 
   /* ============================================================ PROGRESSION */
   function addXp(n: number) {
@@ -963,7 +993,7 @@ export async function startGame() {
       B()[spot] = mkProd('wreck');
       const s2 = nearFree(spot); if (s2 >= 0) { B()[s2] = { id: 'scrap' }; gotItem('scrap'); }
       paintBoard(); prog('meteor', 1);
-      modal('bloop', 'Blorp! Hello!', 'My ship hit your meadow — oopsie. I am <b>Bloop</b>. Tap the wreck to dig out broken bits, then merge each pile up into the four rocket parts: <b>Hull, Engine, Nav Dish, Fuel Tank</b>.', 'Deal!');
+      modal('bloop', 'Blorp! Hello!', 'I crashed. Oops. <b>Tap my wreck</b> for parts and merge them into a rocket.', 'Deal!');
       checkStory('met');
       renderHUD(); renderRocket(); save();
     }), 700);
@@ -1729,15 +1759,24 @@ export async function startGame() {
       bg.onclick = () => openBag();
       host.appendChild(bg);
     }
-    SHOP.boosters.forEach(bo => {
-      if (boostN(bo.id) <= 0) return;
-      const btn = el('button', 'toolBtn');
-      btn.innerHTML = ART.icon(bo.icon) + `<span class="n">${boostN(bo.id)}</span>`;
-      btn.title = bo.name;
-      btn.onclick = () => useBoost(bo.id);
+    // boosters live in one toolbox: each opens with what it does before you use it
+    const owned = SHOP.boosters.reduce((a, bo) => a + boostN(bo.id), 0);
+    if (owned > 0) {
+      const btn = el('button', 'toolBtn toolbox');
+      btn.innerHTML = ART.icon('wand') + `<span class="n">${owned}</span>`;
+      btn.title = 'Boosters';
+      btn.onclick = () => toolsPop();
       host.appendChild(btn);
-    });
+    }
     keep.forEach(k => k && host.appendChild(k));
+  }
+
+  function toolsPop() {
+    pop('🧰 Boosters', `<div class="toolList">${SHOP.boosters.map(bo => `<div class="enRow">
+        <span class="enIc">${ART.icon(bo.icon)}</span><div><b>${bo.name} ×${boostN(bo.id)}</b><i>${bo.desc}</i></div>
+        <button class="buyBtn" data-boost-use="${bo.id}"${boostN(bo.id) ? '' : ' disabled'}>Use</button></div>`).join('')}</div>
+      <div class="noteLine">Get more in the 🛒 Shop, the 🎡 wheel and events.</div>`, 'energy');
+    document.querySelectorAll<HTMLElement>('[data-boost-use]').forEach(b => b.onclick = () => { closePop(); useBoost(b.dataset.boostUse as string); });
   }
 
   /* =============================================================== STREAKS
@@ -2219,12 +2258,12 @@ export async function startGame() {
     setView('board');
     const reward = () => {
       modal(p.who, '✅ ' + p.name,
-        `<div class="rewardLine">+${p.xp} XP${gift ? ' · 🎁 ' + gift : ''}</div>` + what + labLine
-        + (worldDone() && nextW ? `<div class="noteLine">🚀 ${W().name} is restored! <b>${WORLDS[nextW].name}</b> is now on the star map.</div>`
+        `<div class="mSay">${p.text}</div><div class="rewardLine">+${p.xp} XP${gift ? ' · 🎁 ' + gift : ''}</div>` + what + labLine
+        + (worldDone() && nextW ? `<div class="noteLine">🚀 ${W().name} is restored! <b>${WORLDS[nextW].name}</b> is now open in the Galaxy.</div>`
           : next ? `<div class="noteLine">Next chapter: <b>${next.name}</b></div>` : ''), 'Wonderful');
       afterModal = () => chapterIntro();
     };
-    talkScene([[p.who, p.text]], reward);
+    reward();
     paintBoard(); renderRocket(); renderHUD(); renderOrders(); save();
   }
   function projectCard() {
@@ -2728,7 +2767,7 @@ export async function startGame() {
     if (!cp || !cp.talk) return false;
     if (S.talked[cp.id] && !force) return false;
     S.talked[cp.id] = 1; save();
-    talkScene(cp.talk.concat([[cp.who, `📜 <b>${cp.name}</b> — I need ${cp.needs.map(([id, q]: [string, number]) => `${q}× ${ITEMS[id].name}`).join(', ')}${cp.coins ? ` and ${cp.coins} coins` : ''}. Check 📜 Goals any time.`]]));
+    talkScene(cp.talk);
     return true;
   }
 
@@ -2969,6 +3008,41 @@ export async function startGame() {
       <button class="big" id="pairDone">Nice!</button>`;
     $('#pairDone').onclick = closeMini;
   }
+
+  /* ----------------------------------------------------------- coach marks
+     One line, pointing at the thing, the first time it matters. Never blocks:
+     any tap anywhere dismisses it. */
+  const COACH: { k: string; at: string; say: string; when: () => boolean }[] = [
+    { k: 'contract', at: '#orders .order.ready', say: 'Ready! <b>Tap the card</b> to give the glowing items.', when: () => !!document.querySelector('#orders .order.ready') },
+    { k: 'chapter', at: '#btnQuests', say: 'Chapter ready! <b>Tap to build</b> and unlock something new.', when: () => projReady(curProject()) },
+    { k: 'map', at: '#tabMap', say: 'Your <b>camp</b>: see and upgrade your producers.', when: () => projDone('earth') >= 1 },
+    { k: 'goals', at: '#tabRocket', say: '<b>Goals</b>: story chapters and daily tasks with chests.', when: () => projDone('earth') >= 2 },
+    { k: 'fun', at: '#tabFun', say: '<b>Fun</b>: a free daily spin, events and mini-games.', when: () => S.lvl >= SP().unlockLevel },
+    { k: 'shop', at: '#tabShop', say: 'The <b>Shop</b> opened: a free gift every day.', when: () => shopOpen() },
+    { k: 'lab', at: '#tabLab', say: "<b>Bloop's Lab</b>: recycle spare items into 🧪 and research upgrades.", when: () => labOpen() },
+    { k: 'recycle', at: '#tabLab', say: 'Tip: tap any spare item, then <b>🧪</b> to recycle it into Science.', when: () => labOpen() && !!S.coach.lab },
+    { k: 'tools', at: '#tools .toolbox', say: 'Your <b>boosters</b>. Tap to see what each one does.', when: () => !!document.querySelector('#tools .toolbox') },
+    { k: 'energy', at: '#chipEnergy', say: 'Low on energy? <b>Tap here</b> for a free snack.', when: () => S.energy < 8 },
+  ];
+  let coachOn: string | null = null, coachT = 0;
+  function coachTick() {
+    if (coachOn || !S.tut || tutOn() || view !== 'board') return;
+    if (popOpen() || $('#modal').classList.contains('open') || $('#talk').classList.contains('open') || $('#mini').classList.contains('open')) return;
+    if (Date.now() < coachT) return;
+    const c = COACH.find(x => !S.coach[x.k] && x.when() && document.querySelector(x.at));
+    if (!c) return;
+    const t = document.querySelector(c.at) as HTMLElement, app = $('#app').getBoundingClientRect(), r = t.getBoundingClientRect();
+    coachOn = c.k; S.coach[c.k] = 1; save();
+    const ring = $('#coachRing'), bub = $('#coachBub');
+    ring.style.cssText = `left:${r.left - app.left - 6}px;top:${r.top - app.top - 6}px;width:${r.width + 12}px;height:${r.height + 12}px`;
+    $('#coachTxt').innerHTML = c.say; $('#coachFace').innerHTML = ART.char(S.met ? 'bloop' : 'pip');
+    const below = r.top - app.top < app.height / 2;
+    bub.style.top = below ? (r.bottom - app.top + 14) + 'px' : '';
+    bub.style.bottom = below ? '' : (app.bottom - r.top + 14) + 'px';
+    $('#coach').classList.add('on'); sfx.tap();
+    setTimeout(() => window.addEventListener('pointerdown', coachOff, { once: true, capture: true }), 300);
+  }
+  function coachOff() { $('#coach').classList.remove('on'); coachOn = null; coachT = Date.now() + 2500; }
 
   /* ------------------------------------------------------- the fun corner */
   function funPop() {
@@ -3397,13 +3471,12 @@ export async function startGame() {
       const p = PRODS[pr.k], c = b[pr.i], lv = plv(c), cap = capOf(p, lv);
       const can = lv < PMAX && S.coins >= upCost(p, lv);
       ents += spot('p' + pr.i, PROD_PADS[n], ART.producer(p.art), p.name,
-        can ? 'GROW · ' + upCost(p, lv) + ' 🪙'
-          : p.mode === 'energy' ? ecost(p, lv) + ' ⚡ a tap' : (c.ch ?? cap) + '/' + cap,
+        can ? '⬆ ' + upCost(p, lv) + ' 🪙' : '',
         can ? 'ready' : '', lv > 1 ? 'Lv' + lv : '');
     });
     // the next plinth stands empty until you have grown everything on this one
     const nxt = nextProducer();
-    if (nxt && prods.length < PROD_PADS.length) {
+    if (nxt && prods.length < PROD_PADS.length && !scripted()) {
       ents += spot('next', PROD_PADS[prods.length], '<div class="spotGhost">➕</div>',
         'Empty plot', 'opens at lv ' + nextAt(), 'empty');
     }
@@ -3411,7 +3484,7 @@ export async function startGame() {
     return `<div class="sceneWrap camp">
       <div class="sceneImg"></div><div class="sceneVig"></div>
       <div class="sceneName">${w.name}<i>lv ${wlv()}</i></div>
-      <button class="starMapBtn" data-pop="galaxy"><span>🌌</span><b>Star Map</b></button>
+      <button class="starMapBtn" data-pop="galaxy"><span>🌌</span><b>Galaxy</b></button>
       ${ents}
     </div>`;
   }
@@ -3460,7 +3533,7 @@ export async function startGame() {
       </div>`;
     }).join('');
     return `<div class="gal2"><div class="galSky"></div>
-      <div class="galTop"><button class="galBack" data-pop="camp">↩ Camp</button><b>🌌 Star Map</b><span class="galFuel">⛽ ${S.fuel}/${CONFIG.rocket.fuelToLaunch}</span></div>
+      <div class="galTop"><button class="galBack" data-pop="camp">↩ Camp</button><b>🌌 Galaxy</b><span class="galFuel">⛽ ${S.fuel}/${CONFIG.rocket.fuelToLaunch}</span></div>
       <div class="galScroll" id="galScroll"><div class="galPath" style="height:${H}px">
         <svg class="galSvg" viewBox="0 0 100 ${H}" preserveAspectRatio="none" style="height:${H}px">
           <path d="${path}" class="galRoute"/><path d="${lit}" class="galRoute lit"/></svg>
@@ -3685,47 +3758,18 @@ export async function startGame() {
     for (let i = 0; i < N && out.length < max; i++) if (b[i] && fn(b[i])) out.push(i);
     return out.length ? out : null;
   };
+  /* Short and hands-on: every step but the last is something you DO. The
+     rest of the game is introduced by coach() hints as each part opens. */
   const TUT: TutStep[] = [
-    { id: 'hello', who: 'pip', say: "Oh — hello! I'm <b>Pip</b>. You picked a quiet morning to arrive. Nothing much grows here any more, but the old meadow still remembers how. Let me show you." },
+    { id: 'tap', who: 'pip', say: "Hi! Tap the <b>Big Tree</b>.", at: () => cellWith(c => c.p === 'tree'), on: 'spawn' },
+    { id: 'tap2', who: 'pip', say: "Once more!", at: () => cellWith(c => c.p === 'tree'), on: 'spawn' },
+    { id: 'merge', who: 'pip', say: "<b>Drag</b> one twig onto the other.", at: () => cellsWith(c => c.id === 'twig'), on: 'merge' },
     {
-      id: 'tap', who: 'pip', say: "That's the <b>Big Tree</b>. Give it a tap and it drops a twig.",
-      at: () => cellWith(c => c.p === 'tree'), on: 'spawn',
-    },
-    {
-      id: 'tap2', who: 'pip', say: "Again! You want <b>two</b> of a thing before anything interesting happens.",
-      at: () => cellWith(c => c.p === 'tree'), on: 'spawn',
-    },
-    {
-      id: 'merge', who: 'pip', say: "Now <b>drag one twig onto the other</b>. Two of the same thing always make the next thing up.",
-      at: () => cellsWith(c => c.id === 'twig'), on: 'merge',
-    },
-    { id: 'merged', who: 'pip', say: "A <b>Branch</b>! That is the whole game, really. Two twigs make a branch, two branches make a log, and it keeps going — seven steps in this chain alone." },
-    {
-      id: 'order', who: 'pip', say: "See the cards up top? Those are your neighbours asking for things. Tap the <b>picture</b> on one to find out where it comes from.",
-      at: () => '#orders [data-need]', on: 'chain',
-    },
-    {
-      id: 'deliver', who: 'pip', say: "When a card turns green you have what they want. <b>Give it</b> — contracts are where the coins and the XP come from.",
-      at: () => '#orders .order.ready .btnDeliver', on: 'deliver',
+      id: 'deliver', who: 'pip', say: "This card is ready. <b>Tap it</b> to give.",
+      at: () => '#orders .order.ready', on: 'deliver',
       when: () => S.orders.some((o: any) => o.needs.every((nd: any) => countItem(nd.id) >= nd.qty)),
     },
-    {
-      id: 'battery', who: 'pip', say: "Most things here run on <b>energy</b> — the little ⚡ price under them. Energy comes back on its own, so tap away. A few patches, like the berry bush, hand out <b>free</b> taps instead and then need a rest.",
-      at: () => cellWith(c => c.p === 'tree'),
-    },
-    {
-      id: 'quests', who: 'pip', say: "Lost? This button always says the one thing to do next. Give it a tap.",
-      at: () => '#btnQuests', on: 'quests',
-    },
-    {
-      id: 'world', who: 'pip', say: "And this is your <b>camp</b> — the meadow itself. Your tree, your rocks, and a few things that are not here yet.",
-      at: () => '[data-v="map"]', on: 'world',
-    },
-    {
-      id: 'grow', who: 'pip', say: "Tap anything in the camp to look after it. Coins make a producer <b>bigger and rarer</b> — that is what they are for.",
-      at: () => '.spot[data-ent^="p"]', on: 'prodpanel',
-    },
-    { id: 'done', who: 'pip', say: "That's everything. Merge, fill contracts, grow the meadow. And keep an eye on the sky — something is going to fall out of it, and it is going to change your week." },
+    { id: 'story', who: 'pip', say: "This is your <b>story</b>. Collect what it shows to unlock new things.", at: () => '#btnQuests' },
   ];
 
   let tutAt = -1, tutHave = 0, tutTimer: any = 0;
@@ -3747,7 +3791,7 @@ export async function startGame() {
     S.tut = 1; save();
     // the daily calendar and the story beats queue up behind the intro rather
     // than popping a modal over the one button you were told to press
-    if (wasOn) setTimeout(() => { checkDaily(); setTimeout(() => { if (!checkStory()) chapterIntro(); }, 900); }, 700);
+    if (wasOn) setTimeout(() => chapterIntro(), 600);
     $('#tut').classList.remove('on');
     setTimeout(() => { if (!tutOn()) $('#tut').style.display = 'none'; }, 300);
     clearInterval(tutTimer); tutTimer = 0;
@@ -3843,6 +3887,7 @@ export async function startGame() {
     $('#mTitle').textContent = title;
     $('#mBody').innerHTML = body;
     $('#mBtn').textContent = btn || 'OK';
+    $('#modal').classList.remove('lite');
     $('#modal').classList.add('open');
   }
   const closeModal = () => $('#modal').classList.remove('open');
@@ -3917,7 +3962,7 @@ export async function startGame() {
       if (popped) { sfx.pop(); paintBoard(); } }
     worldEvent(now);
     checkStuck(now);
-    renderQuick();
+    renderQuick(); coachTick();
     if (view === 'lab' && labTab === 'acc' && S.acc) {
       const t = $('#accTime');
       if (t) { if (accLeft() > 0) t.textContent = mmss(accLeft()); else renderLab(); }
@@ -4043,7 +4088,7 @@ export async function startGame() {
     applyScene();
     $('#app').style.setProperty('--labbg', `url(${ART.spriteScene('lab') || labRoomBg})`);
     $('#miniClose').onclick = closeMini;
-    $('#btnQuests').onclick = () => { if ($('#btnQuests').dataset.proj) { sfx.tap(); setView('rocket'); } else questPanel(); };
+    $('#btnQuests').onclick = () => { tutFire('quests'); const pj = curProject(); if (pj && projReady(pj)) buildProject(); else { sfx.tap(); setView('rocket'); } };
     applyBloomSkin();
 
     if (import.meta.env.DEV) (window as any).__game = {
@@ -4062,7 +4107,7 @@ export async function startGame() {
     document.addEventListener('visibilitychange', () => { if (document.hidden) save(); });
 
     $('#tNext').onclick = () => { sfx.tap(); tutNext(); };
-    $('#tSkip').onclick = () => { sfx.tap(); tutEnd(); toast('Intro skipped — the 📜 button always says what to do next.'); };
+    $('#tSkip').onclick = () => { sfx.tap(); tutEnd(); toast('Intro skipped. The chapter bar above the board shows what to do next.'); };
     if (!S.tut) {
       setTimeout(tutStart, 700);
     } else {
