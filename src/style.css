@@ -1426,3 +1426,22 @@ html.ui-levelup_banner .luCard{background:var(--ui-levelup_banner) center/contai
 .flyIc{position:absolute;left:0;top:0;z-index:240;pointer-events:none;will-change:transform;filter:drop-shadow(0 3px 4px rgba(60,30,0,.35))}
 .flyIc svg,.flyIc img{width:100%;height:100%;display:block}
 .orb.bump,.order.bump{animation:chipPop .38s ease}
+
+/* v19 painted bits */
+.evBanner{display:block;width:100%;height:auto;margin:-6px 0 6px;border-radius:12px}
+.lbRow b .uiIc{width:22px;height:22px;vertical-align:middle}
+.starMapBtn span .uiIc{width:26px;height:26px;display:block}
+.galTop b .uiIc,.popRibbon .uiIc{width:22px;height:22px;vertical-align:-4px}
+.sCArt .uiIc{width:100%;height:100%;object-fit:contain}
+.big.adBtn .uiIc{width:22px;height:22px;vertical-align:-5px;margin-right:2px}
+.digCell{position:relative;overflow:hidden}
+.digCell>.uiIc{position:absolute;inset:4%;width:92%;height:92%;object-fit:contain}
+
+.mktArt .uiIc{width:56px;height:56px}
+.accArt{float:right;width:84px;height:auto;margin:0 0 4px 8px}
+.toolBtn.toolbox .uiIc{width:80%;height:80%}
+html.ui-dig_hole .digCell.open:not(.bad){background:var(--ui-dig_hole) center/96% no-repeat,linear-gradient(180deg,#d9b98a,#b98d55)}
+html.ui-dig_grass .digCell:not(.open){background:linear-gradient(180deg,#8ccf5a,#5fa83a)}
+html.ui-btn_ad .big.adBtn{background:var(--ui-btn_ad) center/100% 100% no-repeat!important;box-shadow:none!important;color:#fff;text-shadow:0 2px 0 rgba(60,20,120,.5)}
+html.ui-btn_ad .big.adBtn{padding-left:16%!important}
+html.ui-btn_ad .big.adBtn .uiIc{display:none}

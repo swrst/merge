@@ -2,6 +2,8 @@
 
 Paste the **setup message** first, then one sheet prompt at a time. Save each result into `Desktop\chatgpt art` with the file name given (e.g. `luna_sheet1.png`). I cut the sheets and wire everything in.
 
+**Status:** Sheet 2 (Dust Flats + Ice Fields) is in the game. The rest still to do. Generate each sheet as its own full-size image; a collage of all sheets in one picture is too small to cut.
+
 Totals: 98 items in 15 chains (8 sheets), 13 producers (2 sheets), 1 board-tile sheet. 11 images.
 
 ---

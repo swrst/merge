@@ -1877,7 +1877,7 @@ export async function startGame() {
     const owned = SHOP.boosters.reduce((a, bo) => a + boostN(bo.id), 0);
     if (owned > 0) {
       const btn = el('button', 'toolBtn toolbox');
-      btn.innerHTML = ART.icon('wand') + `<span class="n">${owned}</span>`;
+      btn.innerHTML = ART.uiIcon('ic_toolbox', ART.icon('wand')) + `<span class="n">${owned}</span>`;
       btn.title = 'Boosters';
       btn.onclick = () => toolsPop();
       host.appendChild(btn);
@@ -1886,7 +1886,7 @@ export async function startGame() {
   }
 
   function toolsPop() {
-    pop('🧰 Boosters', `<div class="toolList">${SHOP.boosters.map(bo => `<div class="enRow">
+    pop(ART.uiIcon('ic_toolbox', '🧰') + ' Boosters', `<div class="toolList">${SHOP.boosters.map(bo => `<div class="enRow">
         <span class="enIc">${ART.icon(bo.icon)}</span><div><b>${bo.name} ×${boostN(bo.id)}</b><i>${bo.desc}</i></div>
         <button class="buyBtn" data-boost-use="${bo.id}"${boostN(bo.id) ? '' : ' disabled'}>Use</button></div>`).join('')}</div>
       <div class="noteLine">Get more in the 🛒 Shop, the 🎡 wheel and events.</div>`, 'energy');
@@ -2993,7 +2993,7 @@ export async function startGame() {
     } else {
       const a = S.acc, left = accLeft();
       host.innerHTML = tabs + `<div class="labPanel">
-        <div class="labIntro">Put one item in the accelerator. When the timer ends it comes out <b>one step higher</b>. Costs Science; takes longer for bigger things.</div>
+        <div class="labIntro">${ART.uiIcon('accelerator', '').replace('class="uiIc"', 'class="uiIc accArt"')}Put one item in the accelerator. When the timer ends it comes out <b>one step higher</b>. Costs Science; takes longer for bigger things.</div>
         <div class="accBox">${a ? `<div class="accArt">${ART.item(a.id)}<span class="accArrow">➜</span>${ART.item(nextOf(a.id) as string)}</div>
             <div class="catBar"><i style="width:${Math.round((1 - left / a.dur) * 100)}%"></i></div>
             ${left > 0 ? `<div class="accTime" id="accTime">${mmss(left)}</div>
@@ -3051,7 +3051,7 @@ export async function startGame() {
     }
     if (S.ev.key !== e.key) S.ev = { key: e.key, pts: 0, got: 0 };
     const tr = EV().track, top = tr[tr.length - 1][0];
-    pop(`${e.theme.icon} ${e.theme.name}`, `<div class="evHead"><span class="evFace">${ART.char(e.theme.who)}</span>
+    pop(`${e.theme.icon} ${e.theme.name}`, `${ART.uiIcon('banner_' + e.theme.id, '').replace('class="uiIc"', 'class="uiIc evBanner"')}<div class="evHead"><span class="evFace">${ART.char(e.theme.who)}</span>
         <div><b>${S.ev.pts}</b> ${e.theme.token}<i>${e.theme.blurb}</i><em>⏳ ends in ${dhm(e.ends - Date.now())}</em></div></div>
       <div class="evTrack">${tr.map(([need, r]: [number, Reward], k: number) => `<div class="evNode${k < S.ev.got ? ' got' : S.ev.pts >= need ? ' ready' : ''}">
           <span class="evNeed">${need}</span><span class="evArt">${rewardIcon(r)}</span><span class="evRw">${rewardText(r)}</span>
@@ -3062,9 +3062,16 @@ export async function startGame() {
         const me = list.findIndex(x => x.n === 'You');
         const show = list.slice(0, 3).concat(me > 3 ? [list[me]] : list.slice(3, 4));
         return `<div class="lbBox"><div class="lbHead">🏆 Leaderboard · you are <b>#${me + 1}</b> · prize ${RANK_GEMS(me + 1)} 💎</div>
-          ${show.map(x => `<div class="lbRow${x.n === 'You' ? ' me' : ''}"><b>#${list.indexOf(x) + 1}</b><span>${x.n}</span><em>${x.pts}</em></div>`).join('')}</div>`;
+          ${show.map(x => `<div class="lbRow${x.n === 'You' ? ' me' : ''}"><b>${list.indexOf(x) < 3 ? ART.uiIcon('medal_' + (list.indexOf(x) + 1), '#' + (list.indexOf(x) + 1)) : '#' + (list.indexOf(x) + 1)}</b><span>${x.n}</span><em>${x.pts}</em></div>`).join('')}</div>`;
       })()}
+      ${S.ev.join !== e.key ? `<button class="big" id="evJoin">${e.theme.icon} Invite the ${PRODS[EV_PROD[e.theme.id]].name}</button>
+        <div class="noteLine">It sets up on your board for the event: free taps, and its items are worth big ${e.theme.token}.</div>` : ''}
       <div class="noteLine">Merge the event guest's items (big points!), merge to tier ${EV().points.mergeFromTier}+ (+1 and up), fill contracts (+${EV().points.contract}+), finish story chapters (+${EV().points.chapter}).</div>`, 'ev');
+    const jb = document.getElementById('evJoin');
+    if (jb) jb.onclick = () => {
+      if (!freeCells().length) { toast('Make a free tile first — the stall needs room.'); return; }
+      S.ev.join = e.key; closePop(); setView('board'); eventTick();
+    };
   }
 
   /* ------------------------------------------------------------ the wheel */
@@ -3188,7 +3195,7 @@ export async function startGame() {
     $('#app').appendChild(o); sfx.whoosh();
     setTimeout(() => { o.remove(); reward(); }, 2600);
   }
-  const adBtn = (k: string, label: string, id: string) => `<button class="big adBtn" id="${id}"${adLeft(k) ? '' : ' disabled'}>📺 ${label}${S.adfree ? '' : ` <i>${adLeft(k)} left today</i>`}</button>`;
+  const adBtn = (k: string, label: string, id: string) => `<button class="big adBtn" id="${id}"${adLeft(k) ? '' : ' disabled'}>${ART.uiIcon('ic_ad', '📺')} ${label}${S.adfree ? '' : ` <i>${adLeft(k)} left today</i>`}</button>`;
 
   /* ------------------------------------------------------------- purchases */
   function gemsShop() {
@@ -3198,7 +3205,9 @@ export async function startGame() {
         p.boosts ? Object.entries(p.boosts).map(([k, n]) => n + '× ' + k).join(', ') : '', p.item ? ITEMS[p.item].name : '', p.adfree ? 'No ad videos — rewards are instant' : '']
         .filter(Boolean).join(' · ');
       return `<div class="sCard gemCard${p.tag ? ' hot' : ''}${owned ? ' owned' : ''}">${p.tag ? `<span class="gTag">${p.tag}</span>` : ''}
-        <div class="sCArt">${p.gems && !p.energy && !p.item ? ART.icon('gem') : p.adfree ? '📺' : p.id === 'energy_pack' ? ART.icon('energy') : ART.item('bigchest')}</div>
+        <div class="sCArt">${({ gems_s: 'gem_s', gems_m: 'gem_m', gems_l: 'gem_l', gems_xl: 'gem_xl', adfree: 'ic_ad', energy_pack: 'crate_store' } as Record<string, string>)[p.id]
+          ? ART.uiIcon(({ gems_s: 'gem_s', gems_m: 'gem_m', gems_l: 'gem_l', gems_xl: 'gem_xl', adfree: 'ic_ad', energy_pack: 'crate_store' } as Record<string, string>)[p.id], p.adfree ? '📺' : p.id === 'energy_pack' ? ART.icon('energy') : ART.icon('gem'))
+          : ART.item('bigchest')}</div>
         <div class="sCName">${p.name}</div><div class="sCDesc">${what}</div>
         <button class="buyBtn${owned ? '' : ' cash'}" data-iap="${p.id}"${owned ? ' disabled' : ''}>${owned ? 'Owned' : p.price}</button></div>`;
     };
@@ -3250,7 +3259,7 @@ export async function startGame() {
   }
   function storagePop() {
     const list = stored();
-    pop('📦 Producer storage', `<div class="noteLine" style="margin-top:0">The board holds <b>${capProd()}</b> producers (${prodCount()} now). Store one from its panel, swap here.</div>
+    pop(ART.uiIcon('ic_box', '📦') + ' Producer storage', `<div class="noteLine" style="margin-top:0">The board holds <b>${capProd()}</b> producers (${prodCount()} now). Store one from its panel, swap here.</div>
       ${list.length ? list.map((s: any, k: number) => `<div class="enRow"><span class="enIc">${ART.producer(PRODS[s.p].art)}</span>
         <div><b>${PRODS[s.p].name}</b><i>Level ${s.lv || 1}</i></div><button class="buyBtn" data-place="${k}">Place</button></div>`).join('')
         : '<div class="evOff">Nothing in storage.</div>'}`, 'energy');
@@ -3262,10 +3271,14 @@ export async function startGame() {
   function eventTick() {
     evSettle();
     const e = evNow(), b = B();
-    for (let i = 0; i < N; i++) if (b[i] && b[i].ev && (!e || b[i].ev !== e.key)) { b[i] = null; paintBoard(); }
+    // guests from an ended event, or ones an older version placed uninvited, pack up
+    for (let i = 0; i < N; i++) if (b[i] && b[i].ev && (!e || b[i].ev !== e.key || S.ev.join !== e.key)) { b[i] = null; paintBoard(); }
     if (!e || view !== 'board' || !S.tut) return;
     const k = EV_PROD[e.theme.id]; if (!k || b.some((c: any) => c && c.ev === e.key)) return;
     if ((S.ev.placed || '') === e.key + S.world) return;
+    // the guest only comes when invited from the event screen — dropped on a new
+    // player's board unasked it is just a mystery stall full of things nobody wants
+    if (S.ev.join !== e.key) return;
     const fr = freeCells(); if (!fr.length) return;
     const i = fr[fr.length - 1];
     b[i] = { ...mkProd(k), ev: e.key }; S.ev.placed = e.key + S.world;
@@ -3538,7 +3551,7 @@ export async function startGame() {
     const st = miniState;
     $('#miniBody').innerHTML = `<div class="digGrid">${st.cells.map((c: any, i: number) =>
       `<button class="digCell${c.open ? ' open' : ''}${c.open && c.kind === 'cavein' ? ' bad' : ''}" data-d="${i}"${c.open || st.done ? ' disabled' : ''}>`
-      + (c.open ? (c.kind === 'cavein' ? '💥' : c.kind === 'coins' ? '🪙' : ART.item(c.id)) : '') + '</button>').join('')}</div>`;
+      + (c.open ? (c.kind === 'cavein' ? ART.uiIcon('dig_rubble', '💥') : c.kind === 'coins' ? ART.icon('coin') : ART.item(c.id)) : ART.uiIcon('dig_grass', '')) + '</button>').join('')}</div>`;
     const total = st.bank.reduce((a: number, r: any) => a + (r.coins || 0), 0);
     $('#miniFoot').innerHTML = st.done
       ? `<button class="big" id="digOut">Collect</button>`
@@ -3653,7 +3666,7 @@ export async function startGame() {
       `<button class="mktCrate${c.open ? ' open' : ''}${st.kept === i ? ' kept' : ''}" data-m="${i}">`
       + (c.open ? `<div class="mktArt">${c.coins ? '🪙' : ART.item(c.id)}</div>
            <div class="mktLab">${c.coins ? c.coins + ' coins' : ITEMS[c.id].name}</div>`
-        : '<div class="mktArt">📦</div><div class="mktLab">?</div>') + '</button>').join('')}</div>`;
+        : `<div class="mktArt">${ART.uiIcon('mystery_box', '📦')}</div><div class="mktLab">?</div>`) + '</button>').join('')}</div>`;
     $('#miniFoot').innerHTML = st.kept >= 0 ? '' :
       `<div class="miniStat">${st.flips < 2 ? `Peeks left: <b>${2 - st.flips}</b>` : 'Now choose one to keep.'}</div>`;
     $('#miniBody').querySelectorAll('[data-m]').forEach((b: any) => b.onclick = () => market(+b.dataset.m));
@@ -3825,8 +3838,8 @@ export async function startGame() {
     return `<div class="sceneWrap camp">
       <div class="sceneImg"></div><div class="sceneVig"></div>
       <div class="sceneName">${w.name}<i>lv ${wlv()}</i></div>
-      <button class="starMapBtn" data-pop="galaxy"><span>🌌</span><b>Galaxy</b></button>
-      <button class="starMapBtn store" data-pop="store"><span>📦</span><b>Storage ${stored().length}</b></button>
+      <button class="starMapBtn" data-pop="galaxy"><span>${ART.uiIcon('ic_galaxy', '🌌')}</span><b>Galaxy</b></button>
+      <button class="starMapBtn store" data-pop="store"><span>${ART.uiIcon('ic_box', '📦')}</span><b>Storage ${stored().length}</b></button>
       ${ents}
     </div>`;
   }
@@ -3875,7 +3888,7 @@ export async function startGame() {
       </div>`;
     }).join('');
     return `<div class="gal2"><div class="galSky"></div>
-      <div class="galTop"><button class="galBack" data-pop="camp">↩ Camp</button><b>🌌 Galaxy</b><span class="galFuel">⛽ ${S.fuel}/${CONFIG.rocket.fuelToLaunch}</span></div>
+      <div class="galTop"><button class="galBack" data-pop="camp">↩ Camp</button><b>${ART.uiIcon('ic_galaxy', '🌌')} Galaxy</b><span class="galFuel">⛽ ${S.fuel}/${CONFIG.rocket.fuelToLaunch}</span></div>
       <div class="galScroll" id="galScroll"><div class="galPath" style="height:${H}px">
         <svg class="galSvg" viewBox="0 0 100 ${H}" preserveAspectRatio="none" style="height:${H}px">
           <path d="${path}" class="galRoute"/><path d="${lit}" class="galRoute lit"/></svg>
