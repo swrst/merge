@@ -15,7 +15,7 @@ export const ASKS = {
   wood: ['The porch needs mending.', 'Firewood for tonight!', 'Building a bird table.'],
   stone: ['Fixing the garden wall.', 'For my rock collection!', 'The path is all mud.'],
   berry: ['Sunday baking!', 'Snacks for the picnic.', 'The birds are hungry.'],
-  water: ['The garden is thirsty.', 'Bath day for Biscuit!', 'Tea for everyone.'],
+  water: ['The garden is thirsty.', 'Bath day for Mayor Snorb!', 'Tea for everyone.'],
   grass: ['Bedding for the barn.', 'The goats are hungry.', 'Thatching the roof.'],
   flower: ['For my window box.', 'A gift for the new neighbour.', 'The bees need these.'],
   honey: ['Honey cake time!', 'For my sore throat.', 'Sweetening the jam.'],
@@ -29,7 +29,7 @@ export const ASKS = {
   bakery: ['Breakfast for the village!', 'The oven is hungry.', 'Bread for the picnic.'],
   tea: ['Tea time at four.', 'Guests are coming!', 'A calming cup, please.'],
   pond: ['The pond looks empty.', 'For the koi garden.', 'The frogs want friends.'],
-  toys: ['The Blinkies are bored!', 'A present for Timmy.', 'Toy day tomorrow!'],
+  toys: ['The Blinkies are bored!', 'A present for Gorbo.', 'Toy day tomorrow!'],
   visitor: ['Our visitors look lost.', 'They want to go home.', 'Making friends from space!'],
 
   /* ----------------------------------------------------------- Crater Camp */

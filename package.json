@@ -26,6 +26,7 @@
     "vite": "^8.3.0"
   },
   "dependencies": {
+    "@capacitor-community/admob": "^8.1.0",
     "@capacitor/android": "^8.5.2",
     "@capacitor/app": "^8.1.1",
     "@capacitor/core": "^8.5.2",
@@ -33,6 +34,7 @@
     "@capacitor/ios": "^8.5.2",
     "@capacitor/preferences": "^8.0.1",
     "@capacitor/status-bar": "^8.0.3",
+    "@revenuecat/purchases-capacitor": "^13.7.0",
     "gsap": "^3.15.0",
     "pixi.js": "^8.21.0"
   }

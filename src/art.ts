@@ -771,16 +771,17 @@ export const ART = (function () {
       <path d="M43 70 q7 7 14 0" stroke="#b5562f" stroke-width="4" fill="none" stroke-linecap="round"/>
       <circle cx="31" cy="66" r="4.5" fill="#ff9aa6" opacity=".6"/><circle cx="71" cy="66" r="4.5" fill="#ff9aa6" opacity=".6"/></svg>`,
 
-    biscuit: () => `<svg viewBox="0 0 100 100" class="face"><defs>${rg('bqS', '#f7c98a', '#cf9046')}</defs>
-      <circle cx="50" cy="52" r="40" fill="#fdf0d8"/>
-      <ellipse cx="22" cy="46" rx="11" ry="20" fill="#b9762f" transform="rotate(-14 22 46)"/>
-      <ellipse cx="78" cy="46" rx="11" ry="20" fill="#b9762f" transform="rotate(14 78 46)"/>
-      <circle cx="50" cy="54" r="30" fill="url(#bqS)"/>
-      <ellipse cx="50" cy="68" rx="17" ry="13" fill="#ffe9c9"/>
-      <ellipse cx="50" cy="61" rx="7" ry="5.5" fill="#43301f"/>
-      <path d="M50 66 v5 M50 71 q-6 5 -10 1 M50 71 q6 5 10 1" stroke="#43301f" stroke-width="3" fill="none" stroke-linecap="round"/>
-      <circle cx="38" cy="47" r="5.5" fill="#3c2a1c"/><circle cx="62" cy="47" r="5.5" fill="#3c2a1c"/>
-      <circle cx="40" cy="45" r="2" fill="#fff"/><circle cx="64" cy="45" r="2" fill="#fff"/></svg>`,
+    biscuit: () => `<svg viewBox="0 0 100 100" class="face"><defs>${rg('bqS', '#e4e07a', '#9a9a2c')}</defs>
+      <circle cx="50" cy="52" r="40" fill="#fbf7d8"/>
+      <ellipse cx="50" cy="62" rx="34" ry="28" fill="url(#bqS)"/>
+      <rect x="36" y="12" width="28" height="22" rx="3" fill="#2c2433"/><rect x="28" y="31" width="44" height="6" rx="3" fill="#2c2433"/>
+      <rect x="36" y="27" width="28" height="4" fill="#c0392b"/>
+      <circle cx="40" cy="52" r="7" fill="#fff"/><circle cx="60" cy="52" r="7" fill="#fff"/>
+      <circle cx="41" cy="53" r="3.5" fill="#2a2a1c"/><circle cx="59" cy="53" r="3.5" fill="#2a2a1c"/>
+      <path d="M33 46 l12 3 M67 46 l-12 3" stroke="#5b5a1c" stroke-width="3" stroke-linecap="round"/>
+      <path d="M50 64 q-10 -2 -18 8 q-2 4 2 4 q6 -6 16 -6 q10 0 16 6 q4 0 2 -4 q-8 -10 -18 -8Z" fill="#6b4a2a"/>
+      <path d="M42 78 q8 4 16 0" stroke="#5b5a1c" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <circle cx="74" cy="44" r="2.5" fill="#bfe8ff"/></svg>`,
 
     bloop: () => `<svg viewBox="0 0 100 100" class="face"><defs>${rg('blS', '#b6f79b', '#3ea656')}</defs>
       <circle cx="50" cy="52" r="40" fill="#e8ffe4"/>
@@ -929,7 +930,7 @@ export const ART = (function () {
     grandma: { body: '#b493e6', trim: '#7c5ec4', kind: 'dress' },
     timmy: { body: '#4fb8ff', trim: '#1f7fd0' },
     gigi: { body: '#ffd166', trim: '#dc9a0c', kind: 'dress' },
-    biscuit: { body: '#e8a55a', trim: '#b9762f', kind: 'dog' },
+    biscuit: { body: '#c9c55a', trim: '#8a8a26', kind: 'blob' },
     bloop: { body: '#7fd88f', trim: '#3ea656', kind: 'blob' },
     zib: { body: '#57d3a0', trim: '#1c8a63', kind: 'blob' },
     luma: { body: '#ff9ccc', trim: '#d63a92', kind: 'blob' },

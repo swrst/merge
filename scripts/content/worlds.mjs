@@ -8,7 +8,7 @@ export const WORLDS = [
     heart: 'Meadow Heart',
     /* what the Heart wants, stage by stage — each stage visibly wakes the world */
     bloom: [
-      { need: 3, title: 'A Green Thread', text: 'Colour creeps back into the grass. Bloop says the soil remembers you.' },
+      { need: 3, title: 'A Green Thread', text: 'Colour creeps back into the grass. Dr. Zonk says the soil remembers you.' },
       { need: 6, title: 'The Meadow Stirs', text: 'Seeds you never planted push up overnight. The Vault is answering.' },
       { need: 10, title: 'Full Bloom', text: 'The meadow is awake. One world down — and the sky is full of dark ones.' },
     ],
@@ -71,21 +71,21 @@ export const LOCKS = {
 };
 
 export const CHARACTERS = {
-  pip: { name: 'Pip', lines: ['Ooh, is that for me?', 'You are quick at this!', 'Perfect. Just perfect.'] },
-  grandma: { name: 'Granny Fern', lines: ['Bless you, dear.', 'My garden thanks you.', 'Just like the old days.'] },
-  timmy: { name: 'Timmy', lines: ['Whoa, cool!', 'Can I keep it?', 'You are the best!'] },
-  gigi: { name: 'Gigi', lines: ['Darling, exquisite.', 'Simply divine.', 'You have taste.'] },
-  biscuit: { name: 'Biscuit', lines: ['Woof!', 'Wag wag wag.', 'Arf! Arf!'] },
+  pip: { name: 'Zorp', lines: ['Ooh, is that for me?', 'You are quick at this!', 'Perfect. Just perfect.'] },
+  grandma: { name: 'Nana Gloop', lines: ['Bless you, dear.', 'My garden thanks you.', 'Just like the old days.'] },
+  timmy: { name: 'Gorbo', lines: ['Whoa, cool!', 'Can I keep it?', 'You are the best!'] },
+  gigi: { name: 'Madame Fleeb', lines: ['Darling, exquisite.', 'Simply divine.', 'You have taste.'] },
+  biscuit: { name: 'Mayor Snorb', lines: ['On behalf of the council: thanks.', 'This will look great in my speech.', 'Vote Snorb!'] },
   mumbo: {
-    name: 'Mumbo', lines: ['Fresh from the oven!', 'Smells like home.', 'One more batch!'],
+    name: 'Chef Gubbo', lines: ['Fresh from the oven!', 'Smells like home.', 'One more batch!'],
     face: { kind: 'blob', mat: 'peach', accent: 'cream' },
   },
   pim: {
-    name: 'Lady Pim', lines: ['How delightful.', 'Tea solves most things.', 'Pinkies up, dear.'],
+    name: 'Duchess Splatt', lines: ['How delightful.', 'Tea solves most things.', 'Pinkies up, dear.'],
     face: { kind: 'crystal', mat: 'rose', accent: 'gold' },
   },
   bloop: {
-    name: 'Bloop', lines: ['The Vault remembers this one.', 'Good. Keep going.', 'One more thread, re-woven.'],
+    name: 'Dr. Zonk', lines: ['The Vault remembers this one.', 'Good. Keep going.', 'One more thread, re-woven.'],
     face: { kind: 'blob', mat: 'jade', accent: 'cream' },
   },
   zib: { name: 'Zib', lines: ['Beep! Trade good!', 'Zib approve.', 'Shiny! Very shiny!'], face: { kind: 'blob', mat: 'mint', accent: 'cream' } },
@@ -126,7 +126,7 @@ export const STORY = [
   { id: 'e9', at: { world: 'earth', lvl: 9 }, who: 'timmy', title: 'Lights in the Sky',
     text: 'I saw something fall behind the hill last night. Not a meteor — it was blinking. Blinking on purpose! I need a telescope. Please?' },
   { id: 'e10', at: { world: 'earth', lvl: 10 }, who: 'timmy', title: 'Little Visitors',
-    text: 'It was a SAUCER. A tiny one. And there is an egg in it, and the egg is humming. Bloop says they are travellers who got lost when the Bloom went dark. We have to help them get home!' },
+    text: 'It was a SAUCER. A tiny one. And there is an egg in it, and the egg is humming. Dr. Zonk says they are travellers who got lost when the Bloom went dark. We have to help them get home!' },
   /* --- Crater Camp --- */
   { id: 'l4', at: { world: 'luna', lvl: 4 }, who: 'rokk', title: 'Night Shift',
     text: 'LIGHT LEVELS: INSUFFICIENT. CREW MORALE: ALSO INSUFFICIENT. Request: lanterns. Many lanterns. Rokk does not like the dark side. Rokk will deny saying that.' },

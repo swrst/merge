@@ -43,7 +43,7 @@ export interface ProducerDef {
   /** generated art, when `art` is not a hand-drawn key */
   spec?: ArtSpec & { ground?: string };
   /** 'battery' banks charges and refills itself; 'once' runs dry and vanishes */
-  mode: 'battery' | 'once';
+  mode: 'battery' | 'once' | 'energy';
   /** battery: charges at level 1, and how long one charge takes to come back */
   cap?: number;
   every?: number;
