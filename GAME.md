@@ -814,3 +814,11 @@ Running out of energy opens the energy popup.
 - **Sounds** (scripts/make-audio.py, `python3 scripts/make-audio.py lift land swap hover click nope` rebuilds only these): lift, land, swap, hover tick, a soft "uh-uh" instead of the buzzer, and a quiet tok on every button.
 - **Fixes**: art that wasn't preloaded yet (event visitors, fresh chains) is now loaded on demand; before, the Lantern Stall sat invisible. `#fff` float text was rendering dark blue. Contract glow now follows items you move. The contract row no longer collapses, so the board can't jump under your finger. A full board now points you at a mergeable pair.
 - `scripts/ux-check.mjs`: a 1-minute regression for all of the above.
+
+## v19 — art drop
+- Meadow chains painted: Village Bakery, Tea Garden, Lily Pond, Toy Box, plus their producers (windmill, tea bush, lily pond, toy chest).
+- Event chains painted (Star Shower, Lantern Festival, Candy Carnival) and the three event guests (falling star, lantern stall, candy cart).
+- Moon: Dust Flats and Ice Fields chains.
+- Portraits + full figures: Chef Gubbo, Duchess Splatt, Dr. Zonk, the player, Zib, Luma, Rokk, Nix, Vulk, Ember, Marin, Kelpa, Sirra, Zephyr.
+- Painted UI wired in: gem pack art in the shop, ad button + icon, leaderboard medals, event banners, Galaxy/Storage icons, toolbox, Crater Dig tiles, mystery crates in the Alien Market, the accelerator.
+- Event guests no longer drop onto the board uninvited: the event popup has an "Invite" button. Guests placed by older versions pack up.
