@@ -4,7 +4,7 @@
 import { Application, Container, Graphics, Sprite, Text, Texture } from 'pixi.js';
 import gsap from 'gsap';
 import { ART } from './art';
-import { ITEMS, CHAINS } from './content';
+import { ITEMS, CHAINS, PRODUCERS } from './content';
 
 export type Cell = { b?: number; p?: string; id?: string; ch?: number; at?: number; bub?: string; until?: number; tmp?: number; pr?: number } | null;
 
@@ -166,7 +166,7 @@ class PixiBoard {
     add('coin', ART.iconSvg('coin'), ART.spriteUi('icon_coin') || undefined);
     // shared tiles, plus each world's own set when it has been painted (tile_light_luna …)
     const tiles = ['tile_light', 'tile_dark', 'tile_locked'];
-    [...tiles, 'bubble_film', ...Object.keys(THEME).flatMap(w => tiles.map(t => t + '_' + w))].forEach(k => {
+    [...tiles, 'bubble_film', 'meteor', ...Object.keys(THEME).flatMap(w => tiles.map(t => t + '_' + w))].forEach(k => {
       const url = ART.spriteUi(k); if (url) add('ui:' + k, '', url);
     });
     await Promise.all(jobs);
@@ -407,7 +407,7 @@ class PixiBoard {
       gsap.to(film.scale, { x: 1.05, y: 0.96, duration: 0.8, yoyo: true, repeat: -1, ease: 'sine.inOut' });
       gsap.to(s.art, { y: p.y - this.cell * 0.04, duration: 1.1, yoyo: true, repeat: -1, ease: 'sine.inOut' });
     } else if (c.p) {
-      s.art = this.sprite('p:' + c.p, i, 0.96);
+      s.art = this.sprite('p:' + (PRODUCERS[c.p]?.art || c.p), i, 0.96);
       this.idleBob(i);
       if (c.tmp) {
         // a visitor's producer: a little clock badge says it will not stay
@@ -713,15 +713,18 @@ class PixiBoard {
   /** meteor streaks in from the top-right and slams into a tile */
   meteor(i: number, onHit: () => void) {
     const p = this.center(i);
-    const sp = new Sprite(this.texture('i:scrap'));
+    // a painted meteor (ui/meteor.png, trail included) when there is one
+    const painted = !!this.tex['ui:meteor'];
+    const sp = new Sprite(this.tex['ui:meteor'] || this.texture('i:scrap'));
     sp.anchor.set(0.5);
-    sp.width = sp.height = this.cell * 1.2;
+    sp.width = sp.height = this.cell * (this.tex['ui:meteor'] ? 1.8 : 1.2);
     sp.position.set(this.app.screen.width + 60, -60);
     this.lDrag.addChild(sp);
     const trail = new Graphics();
     this.lFx.addChild(trail);
     const tl = gsap.timeline({
       onUpdate: () => {
+        if (painted) return;                       // the painting carries its own fire trail
         trail.clear();
         trail.moveTo(sp.x + 40, sp.y - 40).lineTo(sp.x, sp.y).stroke({ color: 0xffb03c, width: this.cell * 0.22, alpha: 0.5 });
       },
@@ -732,7 +735,7 @@ class PixiBoard {
       },
     });
     tl.to(sp, { x: p.x, y: p.y, duration: 0.85, ease: 'power2.in' })
-      .to(sp, { rotation: 6, duration: 0.85, ease: 'none' }, 0);
+      .to(sp, { rotation: painted ? 0.15 : 6, duration: 0.85, ease: 'none' }, 0);
   }
 
   /* ----------------------------------------------------------- highlights */

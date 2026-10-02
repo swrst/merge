@@ -1445,3 +1445,48 @@ html.ui-dig_grass .digCell:not(.open){background:linear-gradient(180deg,#8ccf5a,
 html.ui-btn_ad .big.adBtn{background:var(--ui-btn_ad) center/100% 100% no-repeat!important;box-shadow:none!important;color:#fff;text-shadow:0 2px 0 rgba(60,20,120,.5)}
 html.ui-btn_ad .big.adBtn{padding-left:16%!important}
 html.ui-btn_ad .big.adBtn .uiIc{display:none}
+/* rocket panel */
+.rkWrap{display:flex;justify-content:center;margin:-4px 0 6px}
+.rkImg{height:150px;width:auto;filter:drop-shadow(0 6px 8px rgba(0,0,0,.2))}
+.rkWrap svg{height:140px;width:auto}
+.rkParts{display:flex;flex-direction:column;gap:5px;margin:4px 0 8px}
+.rkPart{display:flex;align-items:center;gap:6px;background:#fff8ea;border:2px solid #f0dcb4;border-radius:12px;padding:4px 8px}
+.rkPart>b{width:70px;text-align:left;font-size:12px;color:#6b4a24}
+.rkPart.done{background:#eaf9df;border-color:#9fd67e}
+.rkSteps{flex:1;display:flex;align-items:center;justify-content:center;gap:2px}
+.rkSteps i{font-style:normal;color:#c9a678;font-weight:800}
+.rkStep{position:relative;width:38px;height:38px;border-radius:10px;opacity:.35;filter:grayscale(.8)}
+.rkStep.have{opacity:1;filter:none}
+.rkStep svg,.rkStep img{width:100%;height:100%}
+.rkStep em{position:absolute;right:-4px;bottom:-4px;background:#4fb63a;color:#fff;font-style:normal;font-size:10px;font-weight:800;border-radius:8px;padding:0 4px;border:1.5px solid #fff}
+.rkTick{width:16px;color:#4fb63a;font-weight:900}
+/* contract sheet */
+.pop.csheet .popBody{gap:8px}
+.csHead{display:flex;gap:10px;align-items:flex-end;margin-bottom:6px}
+.csFig{width:86px;height:110px;flex:none}
+.csFig svg,.csFig img{width:100%;height:100%;object-fit:contain}
+.csSay{flex:1;background:#fff;border-radius:14px;padding:8px 10px;font-size:13px;font-weight:600;color:#5c4327;position:relative;box-shadow:0 2px 0 rgba(150,105,50,.18)}
+.csSay:before{content:'';position:absolute;left:-7px;bottom:14px;border:7px solid transparent;border-right-color:#fff;border-left:0}
+.csRew{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
+.csRew span{display:flex;align-items:center;gap:3px;background:#fff6dc;border-radius:10px;padding:2px 7px 2px 3px}
+.csRew span svg,.csRew span img{width:20px;height:20px}
+.csRew b{font-size:12px;color:#8a5a14}
+.csNeed{background:#fff8ea;border:2px solid #f0dcb4;border-radius:14px;padding:7px 8px;margin-bottom:6px}
+.csNeed.ok{background:#eefbe6;border-color:#a9dc8a}
+.csTop{display:flex;align-items:center;gap:8px}
+.csArt{width:46px;height:46px;flex:none}.csArt svg,.csArt img{width:100%;height:100%}
+.csName{flex:1;text-align:left}.csName b{display:block;font-size:14px;color:#5c3d1a}.csName i{font-style:normal;font-size:11px;font-weight:700;color:#a57b3e}
+.csNeed.ok .csName i{color:#3f9d2c}
+.csGo{display:flex;flex-direction:column;align-items:center;gap:1px;background:#fff;border:2px solid #9fd67e;border-radius:12px;padding:3px 6px;cursor:pointer;box-shadow:0 3px 0 #7cb85c}
+.csGo:active{transform:translateY(2px);box-shadow:0 1px 0 #7cb85c}
+.csGo svg,.csGo img{width:38px;height:38px}.csGo span{font-size:9.5px;font-weight:800;color:#3f8f2a}
+.csPath{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:2px;margin-top:6px}
+.csPath i{font-style:normal;color:#c9a678;font-weight:800;font-size:12px}
+.csStep{position:relative;width:30px;height:30px;opacity:.35;filter:grayscale(.7);display:flex;align-items:center;justify-content:center;font-weight:800;color:#b49464}
+.csStep.have,.csStep.goal{opacity:1;filter:none}.csStep.goal{outline:2px dashed #e0a43a;border-radius:8px}
+.csStep svg,.csStep img{width:100%;height:100%}
+.csStep em{position:absolute;right:-5px;bottom:-4px;background:#4fb63a;color:#fff;font-style:normal;font-size:9px;font-weight:800;border-radius:7px;padding:0 3px;border:1.5px solid #fff}
+.tSkip.hide{display:none}
+.sSecT .uiIc,.cardTitle .uiIc{width:24px;height:24px;vertical-align:-6px}
+.wheelPin .uiIc{width:34px;height:34px}.wHub .uiIc{width:100%;height:100%}
+.tut:not(.on) .tDim,.tut:not(.on) .tBubble{pointer-events:none}

@@ -120,7 +120,7 @@ export const PRODUCERS = [
   ['vela', 12, 'kitepost|Kite Post|leaf:rose/cloud|nrg:1|kitetail kitetail kitetail kitediamond|a striped post on a cloud with ribbons and a kite tangled on top'],
 
   /* ------------------------------------------------------ everywhere / ship */
-  ['*', 0, 'wreck|Rocket Wreck|scrapwreck|bat:12/20|bolt spring wire glass bolt spring wire glass boltpack coil circuit tankglass|a crashed little rocket on its side, panels loose, smoke wisp'],
+  ['*', 0, 'wreck|Rocket Wreck|scrapwreck|bat:16/8|bolt spring wire glass bolt spring wire glass boltpack coil circuit tankglass|a crashed little rocket on its side, panels loose, smoke wisp'],
   ['*', 0, 'crater|Meteor Crater|crater|once:7|fuelore scrap fuelore fuelore scrap fuelore starcore|a smoking meteor crater with a glowing rock in its centre'],
 ];
 

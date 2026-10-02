@@ -24,9 +24,11 @@ if (await page.locator('#tSkip').isVisible().catch(() => false)) await page.clic
 const shoo = async () => {
   for (let k = 0; k < 12 && await page.locator('#talk.open').count(); k++) { await page.click('#talk'); await page.waitForTimeout(250); }
   if (await page.locator('#pop.open').count()) { await page.click('#popX', { force: true }); await page.waitForTimeout(250); }
-  for (let n = 0; n < 4 && await page.locator('#modal.open').count(); n++) { await page.click('#mBtn'); await page.waitForTimeout(300); }
+  for (let n = 0; n < 4 && await page.locator('#modal.open').count(); n++) { await page.click('#mBtn'); await page.waitForTimeout(650); }
 };
 await page.waitForTimeout(2500); await shoo();
+// the just-in-time tips dim the screen; this run is about dragging, so mark them seen
+await page.evaluate(() => { const s = window.__game.state(); s.tipsOff = 1; window.__game.v9.jitOff(); });
 
 const ids = await page.evaluate(() => {
   const g = window.__game, ch = Object.values(g.chains).find(c => c.world === 'earth' && c.items.length >= 4);
@@ -102,7 +104,30 @@ const missing = await page.evaluate(async () => {
 });
 must(missing.length === 0, 'lift / land / swap / hover / click / nope are all there' + (missing.length ? ' (missing ' + missing + ')' : ''));
 
-console.log('\n7. Console');
+console.log('\n7. One dialog at a time');
+await page.evaluate(() => { window.__game.v9.modal('pip', 'First', 'one', 'OK'); window.__game.v9.modal('pip', 'Second', 'two', 'OK'); });
+await page.waitForTimeout(300);
+must(await page.textContent('#mTitle') === 'First', 'a second dialog does not replace the open one');
+await page.click('#mBtn'); await page.waitForTimeout(900);
+must(await page.textContent('#mTitle') === 'Second' && await page.locator('#modal.open').count() === 1, 'it shows once the first is closed');
+await page.click('#mBtn'); await page.waitForTimeout(500);
+
+console.log('\n8. Contract sheet');
+await page.evaluate(() => { const s = window.__game.state(); s.orders = []; window.__game.roll && s.orders.push(window.__game.roll()); window.__game.hud(); });
+const oid = await page.evaluate(() => window.__game.state().orders[0]?.id);
+await page.evaluate(id => window.__game.v9.contractSheet(id), oid);
+await page.waitForTimeout(500);
+must(await page.locator('#pop.open.csheet .csNeed').count() >= 1, 'tapping a contract opens the sheet with what it needs');
+await page.evaluate(() => window.__game.v9.closePop()); await page.waitForTimeout(400);
+
+console.log('\n9. Just-in-time tips');
+await page.evaluate(() => { const s = window.__game.state(); s.coach = {}; s.tipsOff = 0; const b = s.boards[s.world]; for (let i = 0; i < b.length; i++) if (b[i] && !b[i].b) b[i] = null; b[20] = { id: 'chest' }; s.orders = []; window.__board.sync(b); window.__game.hud(); });
+await page.waitForFunction(() => window.__game.v9.jitOn(), null, { timeout: 8000 }).catch(() => {});
+must(await page.evaluate(() => window.__game.v9.jitOn()), 'a tip lights up the first chest');
+await page.mouse.click(10, 500); await page.waitForTimeout(500);
+must(!(await page.evaluate(() => window.__game.v9.jitOn())), 'tapping the dark area closes it');
+
+console.log('\n10. Console');
 must(errors.length === 0, 'no console errors' + (errors.length ? ':\n    ' + errors.slice(0, 5).join('\n    ') : ''));
 await page.screenshot({ path: '/tmp/ux-end.png' });
 await browser.close();

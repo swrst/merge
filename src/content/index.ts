@@ -139,7 +139,7 @@ export interface Config {
     snackPerStep: number; bagPerStep: number;
   };
   /** merge combos: how close together merges must be, and what a step pays */
-  streak: { windowMs: number; minFor: number; coinPerStep: number; maxStep: number };
+  streak: { windowMs: number; minFor: number; coinPerStep: number; maxStep: number; xpPerStep?: number };
   /** the login calendar, one entry per day of the streak */
   daily: { rewards: { kind: string; n?: number; id?: string; label: string }[] };
   /** the timed cargo event */

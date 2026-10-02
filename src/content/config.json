@@ -71,7 +71,8 @@
     "windowMs": 3500,
     "minFor": 3,
     "coinPerStep": 6,
-    "maxStep": 8
+    "maxStep": 8,
+    "xpPerStep": 2
   },
   "daily": {
     "rewards": [
@@ -378,7 +379,7 @@
     "bigchest": {
       "items": 5,
       "maxTier": 3,
-      "coins": 120
+      "coins": 0
     }
   },
   "daily2": {
@@ -410,7 +411,7 @@
       {
         "id": "meteor",
         "name": "Meteor Shower",
-        "icon": "\u2604\ufe0f",
+        "icon": "☄️",
         "token": "Star Shards",
         "who": "bloop",
         "blurb": "Shards fall whenever you merge big things and fill contracts."
@@ -418,7 +419,7 @@
       {
         "id": "bloom",
         "name": "Bloom Festival",
-        "icon": "\ud83c\udf38",
+        "icon": "🌸",
         "token": "Petals",
         "who": "gigi",
         "blurb": "Every big merge and every contract scatters petals."
@@ -426,7 +427,7 @@
       {
         "id": "carnival",
         "name": "Comet Carnival",
-        "icon": "\ud83c\udfaa",
+        "icon": "🎪",
         "token": "Tickets",
         "who": "timmy",
         "blurb": "Win tickets by merging high and filling contracts."
@@ -584,7 +585,7 @@
     "research": [
       {
         "id": "battery",
-        "icon": "\ud83d\udd0b",
+        "icon": "🔋",
         "name": "Bigger Battery",
         "d": "+8 max energy",
         "max": 5,
@@ -598,7 +599,7 @@
       },
       {
         "id": "solar",
-        "icon": "\u2600\ufe0f",
+        "icon": "☀️",
         "name": "Solar Charger",
         "d": "Energy comes back 12% faster",
         "max": 5,
@@ -612,7 +613,7 @@
       },
       {
         "id": "lucky",
-        "icon": "\ud83c\udf40",
+        "icon": "🍀",
         "name": "Lucky Taps",
         "d": "4% chance a tap drops two things",
         "max": 5,
@@ -626,7 +627,7 @@
       },
       {
         "id": "golden",
-        "icon": "\u2728",
+        "icon": "✨",
         "name": "Golden Touch",
         "d": "3% chance a drop is one step higher",
         "max": 5,
@@ -640,7 +641,7 @@
       },
       {
         "id": "patch",
-        "icon": "\ud83c\udf31",
+        "icon": "🌱",
         "name": "Quick Patches",
         "d": "Free patches refill 15% faster",
         "max": 4,
@@ -653,7 +654,7 @@
       },
       {
         "id": "trader",
-        "icon": "\ud83e\udd1d",
+        "icon": "🤝",
         "name": "Haggling",
         "d": "+8% coins from contracts",
         "max": 5,
@@ -667,7 +668,7 @@
       },
       {
         "id": "pocket",
-        "icon": "\ud83c\udf92",
+        "icon": "🎒",
         "name": "Deep Pockets",
         "d": "+2 storage bag slots",
         "max": 3,

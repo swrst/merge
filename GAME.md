@@ -822,3 +822,13 @@ Running out of energy opens the energy popup.
 - Portraits + full figures: Chef Gubbo, Duchess Splatt, Dr. Zonk, the player, Zib, Luma, Rokk, Nix, Vulk, Ember, Marin, Kelpa, Sirra, Zephyr.
 - Painted UI wired in: gem pack art in the shop, ad button + icon, leaderboard medals, event banners, Galaxy/Storage icons, toolbox, Crater Dig tiles, mystery crates in the Alien Market, the accelerator.
 - Event guests no longer drop onto the board uninvited: the event popup has an "Invite" button. Guests placed by older versions pack up.
+
+## v20 — pacing, coins, rocket, dialogs, contract sheet, tips
+- **Longer chapters**: each chapter also needs contracts filled since the last one (📜 1 → 2 → 3 … up to 5; the launch chapter 3). Shown in the chapter strip and the Goals card.
+- **Coins only from contracts and events**: merge combos pay XP, discoveries pay XP + energy, chests no longer drop coins, selling pays half the listed value, contract pay trimmed (~×1.5–2.1 of item value instead of ×2–3).
+- **Producers no longer retire**: at max level they keep working (they used to be swapped for a random producer after 60 taps).
+- **Rocket**: the Rocket Wreck was invisible (its art key differs from its id; only its green charge bar showed) — fixed. Wreck now 16 charges, refills in 8 min. New rocket panel: painted rocket stage, each part's 3-step chain with what you hold, "Show me the wreck".
+- **One dialog at a time**: game-raised dialogs queue behind the open one (a dialog the player asked for still replaces it); story scenes wait for an open dialog; toasts queue (max 3, no duplicates).
+- **Contract sheet** (tap a contract): character + line + rewards, each needed item with its chain path and counts, the producer button that points at it; closing lights up every useful tile.
+- **Tutorial**: intro adds energy and coins steps; afterwards just-in-time spotlight tips for contracts, the contract sheet, chapters needing contracts, chests, bubbles, empty producers, a full board, the wreck, craters, visitors, events, shop, lab, boosters, discoveries, achievements, low energy. Each shows once; tapping the dark area closes it.
+- Art hooks waiting for paintings: `ui/meteor.png`, `ui/sec_*` section icons, `ui/wheel_pin.png`, `ui/wheel_hub.png`. List in `art/WORLD1-MISSING.md`.
