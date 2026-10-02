@@ -158,7 +158,7 @@ class PixiBoard {
     producerArts.forEach(a => add('p:' + a, ART.producer(a), ART.spriteProducer(a)));
     ['earth', 'luna', 'cindra'].forEach(w => add('w:' + w, ART.weed(w)));
     add('coin', ART.iconSvg('coin'), ART.spriteUi('icon_coin') || undefined);
-    ['tile_light', 'tile_dark', 'tile_locked'].forEach(k => {
+    ['tile_light', 'tile_dark', 'tile_locked', 'bubble_film'].forEach(k => {
       const url = ART.spriteUi(k); if (url) add('ui:' + k, '', url);
     });
     await Promise.all(jobs);
@@ -339,7 +339,9 @@ class PixiBoard {
     s.key = key ?? this.keyOf(c);
     if (!c) return;
     if (c.b) {
+      // a painted overgrown tile already carries its weeds
       s.art = this.sprite('w:' + this.theme, i, 0.78);
+      if (this.tex['ui:tile_locked']) s.art.alpha = 0;
       const t = new Text({ text: 'lv' + c.b, style: { fontFamily: 'Fredoka, sans-serif', fontSize: this.cell * 0.22, fontWeight: '700', fill: 0xffffff } });
       t.anchor.set(0.5);
       const p = this.center(i);
@@ -355,12 +357,16 @@ class PixiBoard {
       s.art.alpha = 0.8;
       const film = new Container();
       const g = new Graphics();
+      if (this.tex['ui:bubble_film']) {
+        const fs = new Sprite(this.tex['ui:bubble_film']); fs.anchor.set(0.5); fs.width = fs.height = R * 2.15; fs.alpha = 0.92; film.addChild(fs);
+      } else {
       g.circle(0, 0, R).fill({ color: 0x9fdcff, alpha: 0.3 });
       g.circle(0, 0, R).stroke({ color: 0x58b8f0, alpha: 1, width: 3.5 });
       g.circle(0, 0, R - 3.5).stroke({ color: 0xffffff, alpha: 0.75, width: 1.6 });
       g.arc(0, 0, R * 0.78, Math.PI * 1.05, Math.PI * 1.45).stroke({ color: 0xffffff, alpha: 0.9, width: R * 0.12, cap: 'round' });
       g.circle(R * 0.42, R * 0.45, R * 0.08).fill({ color: 0xffffff, alpha: 0.7 });
       g.arc(0, 0, R * 0.9, Math.PI * 0.1, Math.PI * 0.45).stroke({ color: 0xff9fe0, alpha: 0.45, width: 2 });
+      }
       film.addChild(g);
       if (c.pr) {
         const tag = new Container();
