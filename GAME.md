@@ -772,3 +772,34 @@ The empty plot in the camp says which level opens it.
 - **Undo sell**: an Undo button stays for 4 seconds after selling.
 - **Chapter prizes**: each chapter's Goals card shows what it unlocks (producer, visitor, Lab, chest, new world).
 - **Art**: a boot screen with the splash and logo, a new app icon and Android splash, painted overgrown tiles, the soap bubble, the tutorial hand, the chapter bar, coach bubble, name tag, level-up banner with rays, research/fun/event-token/settings icons.
+
+## v16 — gems, purchases, rewarded ads, producer storage, more Meadow, event guests
+
+**Gems 💎** (premium currency; chip in the top bar).
+- **Earned:** 25 to start, +3 per level (+5 extra every 5th), +2 per chapter (+10 for a launch), achievements (3/6/12/25), friendship gifts, the wheel, and the event leaderboard prize.
+- **Spent:** big energy refill, finishing the accelerator early, filling an empty producer, keeping a bubble, the Galaxy Chest.
+
+**Purchases** (`src/iap.ts`, test mode until a billing plugin is wired): Starter Pack (once), 4 gem packs, Energy Crate, Ad-Free Pass. They're in the 💎 Gems section of the shop.
+
+**Rewarded ads** (`watchAd()`, test video until AdMob is wired; capped per day):
+- +25 energy
+- keep a bubble free
+- refill a producer
+- −15 min on the accelerator
+- an extra wheel spin
+- double the daily gift
+- collect discoveries ×2
+
+Running out of energy opens the energy popup.
+
+**Producer storage:** the board holds 7 producers. New unlocks past that go to storage; swap them via Map → 📦 Storage or a producer's panel.
+
+**Sunny Meadow:** 22 chapters.
+- New chains: Village Bakery, Tea Garden, Lily Pond, Toy Box.
+- New producers: Windmill, Tea Bush, Lily Pond, Toy Chest.
+- New characters: Mumbo the baker and Lady Pim.
+- The Clay Pit is now part of the story.
+
+**Events:**
+- Each theme brings a temporary guest producer: Falling Star, Lantern Stall or Candy Cart. Its chains (Falling Stars, Festival Lanterns, Candy Carnival) give big event points.
+- A 20-player leaderboard (simulated on the device until there is a server) pays gems by final rank.

@@ -243,6 +243,125 @@
     "cap": 16,
     "every": 112500
   },
+  "windmill": {
+    "name": "Windmill",
+    "art": "windmill",
+    "drops": [
+      "flour",
+      "flour",
+      "flour",
+      "dough"
+    ],
+    "spec": {
+      "shape": "tower",
+      "mat": "wood",
+      "ground": "grass"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "teabush": {
+    "name": "Tea Bush",
+    "art": "teabush",
+    "drops": [
+      "tealeaf",
+      "tealeaf",
+      "teabundle"
+    ],
+    "spec": {
+      "shape": "bush",
+      "mat": "leaf",
+      "ground": "moss"
+    },
+    "mode": "battery",
+    "cap": 10,
+    "every": 360000
+  },
+  "lilypond": {
+    "name": "Lily Pond",
+    "art": "lilypond",
+    "drops": [
+      "ponddrop",
+      "ponddrop",
+      "ponddrop",
+      "lilypad"
+    ],
+    "spec": {
+      "shape": "wave",
+      "mat": "water",
+      "ground": "moss"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "toychest": {
+    "name": "Toy Chest",
+    "art": "toychest",
+    "drops": [
+      "block",
+      "block",
+      "spintop"
+    ],
+    "spec": {
+      "shape": "chest",
+      "mat": "cherry",
+      "ground": "moss"
+    },
+    "mode": "battery",
+    "cap": 10,
+    "every": 360000
+  },
+  "fallingstar": {
+    "name": "Falling Star",
+    "art": "fallingstar",
+    "drops": [
+      "starbit",
+      "starbit",
+      "starbunch"
+    ],
+    "spec": {
+      "shape": "star",
+      "mat": "star",
+      "ground": "slate"
+    },
+    "mode": "battery",
+    "cap": 12,
+    "every": 225000
+  },
+  "lanternstall": {
+    "name": "Lantern Stall",
+    "art": "lanternstall",
+    "drops": [
+      "paperlantern",
+      "paperlantern",
+      "lanternstring"
+    ],
+    "spec": {
+      "shape": "house",
+      "mat": "rose",
+      "ground": "moss"
+    },
+    "mode": "battery",
+    "cap": 12,
+    "every": 225000
+  },
+  "candycart": {
+    "name": "Candy Cart",
+    "art": "candycart",
+    "drops": [
+      "candydrop",
+      "candydrop",
+      "lollipop"
+    ],
+    "spec": {
+      "shape": "crate",
+      "mat": "cherry",
+      "ground": "moss"
+    },
+    "mode": "battery",
+    "cap": 12,
+    "every": 225000
+  },
   "geyser": {
     "name": "Moon Geyser",
     "art": "geyser",

@@ -21,7 +21,7 @@ export const AD_UNITS = {
   interstitialiOS: 'ca-app-pub-3940256099942544/4411468910',
 };
 
-export type Placement = 'energy' | 'doubleReward' | 'skipTimer';
+export type Placement = 'energy' | 'doubleReward' | 'skipTimer' | 'bubble' | 'recharge' | 'spin' | 'gift' | 'disc';
 
 let enabled = false;
 

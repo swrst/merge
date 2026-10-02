@@ -115,6 +115,8 @@ const CHAR_ROWS = [
   ['gigi', 'Gigi', 'a glamorous village florist and tailor in her forties, a big sun hat with flowers, cat-eye sunglasses pushed up, a measuring tape round her neck'],
   ['biscuit', 'Biscuit', 'a fluffy golden corgi-like village dog with a red bandana, tongue out, ears up, very happy'],
   ['bloop', 'Bloop', 'a small round jade-green jelly alien with one big shiny eye, two tiny antennae with glowing tips, a cream belly, slightly wobbly, very sweet'],
+  ['mumbo', 'Mumbo', 'a stout cheerful peach-coloured alien baker with a tall chef hat over two little antennae, flour on his cheeks, a striped apron'],
+  ['pim', 'Lady Pim', 'an elegant rose-quartz crystal alien lady with faceted cheeks, a tiny teacup hat, a lace collar and gold earrings'],
   /* the other worlds' folk, so every contract card has a painted face */
   ['zib', 'Zib', 'a small mint-green blob alien trader with brass goggles pushed up and a satchel bursting with shiny bits'],
   ['luma', 'Luma', 'a soft rose-pink glowing jelly alien holding a little lantern, dreamy half-closed eyes'],

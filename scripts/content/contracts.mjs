@@ -26,6 +26,10 @@ export const ASKS = {
   garden: ['Butterflies for the garden.', 'The meadow needs life.'],
   veggie: ['Stew for the whole village.', 'Market day tomorrow!', 'For my rabbit.'],
   stargaze: ['I saw a light in the sky...', 'Star charts need lenses.', 'For the night watch.'],
+  bakery: ['Breakfast for the village!', 'The oven is hungry.', 'Bread for the picnic.'],
+  tea: ['Tea time at four.', 'Guests are coming!', 'A calming cup, please.'],
+  pond: ['The pond looks empty.', 'For the koi garden.', 'The frogs want friends.'],
+  toys: ['The Blinkies are bored!', 'A present for Timmy.', 'Toy day tomorrow!'],
   visitor: ['Our visitors look lost.', 'They want to go home.', 'Making friends from space!'],
 
   /* ----------------------------------------------------------- Crater Camp */
@@ -108,9 +112,11 @@ export const ASKS = {
 export const LIKES = {
   pip: ['wood', 'stone', 'veggie', 'visitor', 'water'],
   grandma: ['berry', 'honey', 'flower', 'cloth', 'mush', 'clay'],
-  timmy: ['stone', 'stargaze', 'visitor', 'feather', 'garden', 'wood'],
+  timmy: ['stone', 'stargaze', 'visitor', 'feather', 'garden', 'wood', 'toys', 'pond'],
   gigi: ['flower', 'cloth', 'clay', 'feather', 'honey', 'berry'],
-  biscuit: ['wood', 'berry', 'water', 'grass', 'veggie'],
+  biscuit: ['wood', 'berry', 'water', 'grass', 'veggie', 'toys'],
+  mumbo: ['bakery', 'berry', 'honey', 'veggie', 'grass', 'water'],
+  pim: ['tea', 'flower', 'clay', 'pond', 'honey', 'cloth'],
   bloop: ['star', 'relic', 'glow', 'crystal', 'garden', 'aurorac', 'starc'],
   zib: ['silver', 'dust', 'rover', 'dish', 'meteorite', 'iron', 'copper'],
   luma: ['glow', 'lantern', 'comet', 'lunamoth', 'crystal', 'starc', 'planets', 'nebula'],

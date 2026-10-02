@@ -4,7 +4,7 @@ export const WORLDS = [
   {
     key: 'earth', name: 'Sunny Meadow', subtitle: 'Home world', planet: 'earth',
     tapCost: 1, perk: 'rain',
-    folks: ['pip', 'grandma', 'timmy', 'gigi', 'biscuit'],
+    folks: ['pip', 'grandma', 'timmy', 'gigi', 'biscuit', 'mumbo', 'pim'],
     heart: 'Meadow Heart',
     /* what the Heart wants, stage by stage — each stage visibly wakes the world */
     bloom: [
@@ -76,6 +76,14 @@ export const CHARACTERS = {
   timmy: { name: 'Timmy', lines: ['Whoa, cool!', 'Can I keep it?', 'You are the best!'] },
   gigi: { name: 'Gigi', lines: ['Darling, exquisite.', 'Simply divine.', 'You have taste.'] },
   biscuit: { name: 'Biscuit', lines: ['Woof!', 'Wag wag wag.', 'Arf! Arf!'] },
+  mumbo: {
+    name: 'Mumbo', lines: ['Fresh from the oven!', 'Smells like home.', 'One more batch!'],
+    face: { kind: 'blob', mat: 'peach', accent: 'cream' },
+  },
+  pim: {
+    name: 'Lady Pim', lines: ['How delightful.', 'Tea solves most things.', 'Pinkies up, dear.'],
+    face: { kind: 'crystal', mat: 'rose', accent: 'gold' },
+  },
   bloop: {
     name: 'Bloop', lines: ['The Vault remembers this one.', 'Good. Keep going.', 'One more thread, re-woven.'],
     face: { kind: 'blob', mat: 'jade', accent: 'cream' },

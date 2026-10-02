@@ -276,6 +276,118 @@
       "Making friends from space!"
     ]
   },
+  "bakery": {
+    "name": "Village Bakery",
+    "world": "earth",
+    "unlock": 10,
+    "items": [
+      "flour",
+      "dough",
+      "roll",
+      "loaf",
+      "breadbasket",
+      "buntower",
+      "bakeryoven"
+    ],
+    "asks": [
+      "Breakfast for the village!",
+      "The oven is hungry.",
+      "Bread for the picnic."
+    ]
+  },
+  "tea": {
+    "name": "Tea Garden",
+    "world": "earth",
+    "unlock": 10,
+    "items": [
+      "tealeaf",
+      "teabundle",
+      "teacup",
+      "teapot",
+      "teaset",
+      "teaparty"
+    ],
+    "asks": [
+      "Tea time at four.",
+      "Guests are coming!",
+      "A calming cup, please."
+    ]
+  },
+  "pond": {
+    "name": "Lily Pond",
+    "world": "earth",
+    "unlock": 10,
+    "items": [
+      "ponddrop",
+      "lilypad",
+      "lotus",
+      "pondfrog",
+      "koipair",
+      "koipond",
+      "moonbridge"
+    ],
+    "asks": [
+      "The pond looks empty.",
+      "For the koi garden.",
+      "The frogs want friends."
+    ]
+  },
+  "toys": {
+    "name": "Toy Box",
+    "world": "earth",
+    "unlock": 10,
+    "items": [
+      "block",
+      "spintop",
+      "toyrobot",
+      "toyrocket",
+      "puppets",
+      "toyshop"
+    ],
+    "asks": [
+      "The Blinkies are bored!",
+      "A present for Timmy.",
+      "Toy day tomorrow!"
+    ]
+  },
+  "ev_star": {
+    "name": "Falling Stars",
+    "world": "any",
+    "unlock": 1,
+    "items": [
+      "starbit",
+      "starbunch",
+      "starjar",
+      "cometlamp",
+      "starthrone"
+    ]
+  },
+  "ev_lantern": {
+    "name": "Festival Lanterns",
+    "world": "any",
+    "unlock": 1,
+    "items": [
+      "paperlantern",
+      "lanternstring",
+      "flowerlantern",
+      "lanternarch",
+      "lanternboat",
+      "skyfestival"
+    ]
+  },
+  "ev_candy": {
+    "name": "Candy Carnival",
+    "world": "any",
+    "unlock": 1,
+    "items": [
+      "candydrop",
+      "lollipop",
+      "candyjar",
+      "cupcakes",
+      "carousel",
+      "candycastle"
+    ]
+  },
   "moon": {
     "name": "Moon Rocks",
     "world": "luna",

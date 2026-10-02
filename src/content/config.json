@@ -2,7 +2,8 @@
   "board": {
     "cols": 6,
     "rows": 8,
-    "starterItems": 4
+    "starterItems": 4,
+    "maxProducers": 7
   },
   "start": {
     "coins": 120,
@@ -568,9 +569,9 @@
       },
       {
         "r": {
-          "item": "bigchest"
+          "gems": 5
         },
-        "w": 3,
+        "w": 4,
         "c": "#ffffff"
       }
     ]
@@ -677,5 +678,31 @@
         ]
       }
     ]
+  },
+  "gems": {
+    "start": 25,
+    "perLevel": 3,
+    "everyFiveLevels": 5,
+    "perChapter": 2,
+    "refill": {
+      "gems": 10,
+      "energy": 60
+    },
+    "rushMinPerGem": 10,
+    "galaxyChest": 60
+  },
+  "ads": {
+    "simulate": true,
+    "caps": {
+      "energy": 5,
+      "bubble": 3,
+      "recharge": 3,
+      "spin": 3,
+      "gift": 1,
+      "disc": 3,
+      "skipTimer": 5
+    },
+    "energy": 25,
+    "skipMin": 15
   }
 }
