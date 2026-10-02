@@ -3,6 +3,7 @@ import { ART } from './art';
 import { startGame } from './game';
 import { hydrateSave, startSaveMirror, setupChrome } from './native';
 import { ads } from './ads';
+import { iap } from './iap';
 
 function paintHudIcons() {
   ['icCoin', 'shopCoinIc', 'labCoinIc'].forEach(id => {
@@ -25,6 +26,7 @@ async function main() {
   setupChrome();
   startSaveMirror();
   ads.init();
+  iap.init();
   startGame();
 }
 

@@ -1,6 +1,6 @@
 {
   "pip": {
-    "name": "Pip",
+    "name": "Zorp",
     "lines": [
       "Ooh, is that for me?",
       "You are quick at this!",
@@ -15,7 +15,7 @@
     ]
   },
   "grandma": {
-    "name": "Granny Fern",
+    "name": "Nana Gloop",
     "lines": [
       "Bless you, dear.",
       "My garden thanks you.",
@@ -31,7 +31,7 @@
     ]
   },
   "timmy": {
-    "name": "Timmy",
+    "name": "Gorbo",
     "lines": [
       "Whoa, cool!",
       "Can I keep it?",
@@ -49,7 +49,7 @@
     ]
   },
   "gigi": {
-    "name": "Gigi",
+    "name": "Madame Fleeb",
     "lines": [
       "Darling, exquisite.",
       "Simply divine.",
@@ -65,11 +65,11 @@
     ]
   },
   "biscuit": {
-    "name": "Biscuit",
+    "name": "Mayor Snorb",
     "lines": [
-      "Woof!",
-      "Wag wag wag.",
-      "Arf! Arf!"
+      "On behalf of the council: thanks.",
+      "This will look great in my speech.",
+      "Vote Snorb!"
     ],
     "likes": [
       "wood",
@@ -81,7 +81,7 @@
     ]
   },
   "mumbo": {
-    "name": "Mumbo",
+    "name": "Chef Gubbo",
     "lines": [
       "Fresh from the oven!",
       "Smells like home.",
@@ -102,7 +102,7 @@
     ]
   },
   "pim": {
-    "name": "Lady Pim",
+    "name": "Duchess Splatt",
     "lines": [
       "How delightful.",
       "Tea solves most things.",
@@ -123,7 +123,7 @@
     ]
   },
   "bloop": {
-    "name": "Bloop",
+    "name": "Dr. Zonk",
     "lines": [
       "The Vault remembers this one.",
       "Good. Keep going.",

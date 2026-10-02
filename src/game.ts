@@ -95,7 +95,7 @@ export async function startGame() {
   const regenMs = () => Math.round(CONFIG.energy.regenMs / (1 + vaultLv('brisk') * 0.2 + res('solar') * 0.12));
   const meteorScale = () => 1 - vaultLv('comet') * 0.3;
   const shopOpen = () => S.lvl >= CONFIG.unlocks.shopAtLevel;
-  /* The lab is a building, not a level reward: it stays invisible until Bloop
+  /* The lab is a building, not a level reward: it stays invisible until Dr. Zonk
      has a rocket to cannibalise and the player pays for the build. */
   const labOpen = () => !!(S.lab && S.lab.built);
   const labOffered = () => false;                  // the story builds the lab now (Meadow chapter 5)
@@ -837,7 +837,7 @@ export async function startGame() {
     $('#luSub').textContent = 'Energy refilled • weeds cleared';
     lu.classList.remove('show'); void lu.offsetWidth; lu.classList.add('show');
     setTimeout(() => lu.classList.remove('show'), 2100);
-    // on a story world Bloop arrives with a chapter (Mend the Old Well), not a level
+    // on a story world Dr. Zonk arrives with a chapter (Mend the Old Well), not a level
     if (S.lvl >= CONFIG.meteor.firstAtLevel && !S.met && !scripted('earth')) setTimeout(meteorStory, 1800);
   }
   function prog(id: string, add?: number, setTo?: number) {
@@ -1409,7 +1409,7 @@ export async function startGame() {
       S.lab.tries = (S.lab.tries || 0) + 1;
       sfx.no(); shake(); haptic('light');
       const clue = (S.lab.tries % CONFIG.lab.clueEvery === 0) ? giveClue() : null;
-      toast('💨 Pfft — those two do not react.' + (clue ? ' But Bloop spotted a clue!' : ''));
+      toast('💨 Pfft — those two do not react.' + (clue ? ' But Dr. Zonk spotted a clue!' : ''));
       renderLab(); renderHUD(); save(); return;
     }
     consumeOne(a); consumeOne(b);
@@ -1429,7 +1429,7 @@ export async function startGame() {
   function buyRecipe(id: string) {
     const r = RECIPES.filter(x => x.id === id)[0]; if (!r || S.lab.disc[id]) return;
     const price = Math.round(r.coins * 1.5);
-    if (S.coins < price) { sfx.no(); toast('Bloop wants ' + price + ' coins for that hint.'); return; }
+    if (S.coins < price) { sfx.no(); toast('Dr. Zonk wants ' + price + ' coins for that hint.'); return; }
     spend(price); S.lab.disc[id] = 1;
     sfx.coin();
     toast('📘 Recipe bought: <b>' + ITEMS[r.result].name + '</b>');
@@ -1552,7 +1552,7 @@ export async function startGame() {
             <button class="buyBtn" data-learn="${r2.id}" ${S.coins < price ? 'disabled' : ''}>${coin}${price}</button>
           </div>${clue ? `<div class="rClue">First ingredient: <b>${ITEMS[r2.inputs[0]].name}</b></div>` : ''}</div>`;
       }).join('')}</div>
-      <div class="noteLine">Buy a rumour and Bloop writes the whole recipe down for you.</div>`, 'Close');
+      <div class="noteLine">Buy a rumour and Dr. Zonk writes the whole recipe down for you.</div>`, 'Close');
     setTimeout(() => document.querySelectorAll('[data-learn]').forEach((e: any) =>
       e.onclick = () => { closeModal(); buyRecipe(e.dataset.learn); }), 30);
   }
@@ -1568,7 +1568,7 @@ export async function startGame() {
           <span><b>Achievements</b><i>${ar ? ar + ' ready to claim!' : 'Long-term goals with big rewards'}</i></span><span class="qGo">›</span></button>`
       + dailyCard()
       + `<div class="card"><div class="cardTitle">🎯 Getting started</div>
-        <div class="noteLine" style="margin-top:0">The first steps with Pip and Bloop: ${MISSIONS.length - questsLeft()}/${MISSIONS.length} done.</div>
+        <div class="noteLine" style="margin-top:0">The first steps with Zorp and Dr. Zonk: ${MISSIONS.length - questsLeft()}/${MISSIONS.length} done.</div>
         <button class="big blue" id="openQuests">📜 Open the quest list</button></div>`
       + vaultCard();
     host.querySelectorAll('[data-dchest]').forEach((b: any) => b.onclick = () => claimDaily(+b.dataset.dchest));
@@ -1929,7 +1929,7 @@ export async function startGame() {
 
   /* ========================================================== ANTI-SOFTLOCK
      A full board with no possible merge is the one state a merge game must
-     never leave a player in. Bloop turns up and clears the cheap clutter. */
+     never leave a player in. Dr. Zonk turns up and clears the cheap clutter. */
   let rescueAt = 0;
   function boardStuck() {
     if (freeCells().length) return false;
@@ -1949,7 +1949,7 @@ export async function startGame() {
     let coins = 0;
     idx.slice(0, take).forEach(i => { coins += ITEMS[b[i].id].sell; sparkle(i, 8, '#ffe9a8'); b[i] = null; });
     S.coins += coins; bumpChip('#chipCoins'); sfx.boost(); confetti();
-    toast('🧹 Bloop cleared ' + take + ' bits and left you <b>' + coins + '</b> coins.');
+    toast('🧹 Dr. Zonk cleared ' + take + ' bits and left you <b>' + coins + '</b> coins.');
     paintBoard(); renderHUD(); renderOrders(); save();
   }
   function checkStuck(now: number) {
@@ -2310,7 +2310,7 @@ export async function startGame() {
     const bits: string[] = [];
     if (p.unlock) bits.push(`<span class="prz">${ART.producer(PRODS[p.unlock].art)}<b>${PRODS[p.unlock].name}</b></span>`);
     if (p.temp) bits.push(`<span class="prz">${ART.producer(PRODS[p.temp.p].art)}<b>${PRODS[p.temp.p].name} visits</b></span>`);
-    if (p.lab) bits.push(`<span class="prz">${ART.icon('flask')}<b>Bloop's Lab</b></span>`);
+    if (p.lab) bits.push(`<span class="prz">${ART.icon('flask')}<b>Dr. Zonk's Lab</b></span>`);
     if (p.gift) { const gi = p.gift === 'chest' ? (p.launch ? 'bigchest' : 'chest') : p.gift; bits.push(`<span class="prz">${ART.item(gi)}<b>${ITEMS[gi].name}</b></span>`); }
     if (p.launch) bits.push(`<span class="prz">🚀<b>A new world</b></span>`);
     return bits.length ? `<div class="przRow"><i>🎁 Unlocks</i>${bits.join('')}</div>` : '';
@@ -3039,7 +3039,7 @@ export async function startGame() {
     while (picks.length < 8) picks.push(rnd(['pebble', 'twig', 'berry', 'dew', 'grass', 'bulbseed', 'nectar', 'caplet']));
     const cards = picks.concat(picks).sort(() => Math.random() - 0.5);
     miniState = { k: 'pairs', cards, open: [] as number[], got: new Set<number>(), flips: c.flips || 24, won: [] as string[], busy: false };
-    openMini('🛸 Alien Pairs', 'Bloop shuffled some things under the cups. Find the pairs!');
+    openMini('🛸 Alien Pairs', 'Dr. Zonk shuffled some things under the cups. Find the pairs!');
     drawPairs();
   }
   function drawPairs() {
@@ -3266,7 +3266,7 @@ export async function startGame() {
     { k: 'goals', at: '#tabRocket', say: '<b>Goals</b>: story chapters and daily tasks with chests.', when: () => projDone('earth') >= 2 },
     { k: 'fun', at: '#tabFun', say: '<b>Fun</b>: a free daily spin, events and mini-games.', when: () => S.lvl >= SP().unlockLevel },
     { k: 'shop', at: '#tabShop', say: 'The <b>Shop</b> opened: a free gift every day.', when: () => shopOpen() },
-    { k: 'lab', at: '#tabLab', say: "<b>Bloop's Lab</b>: recycle spare items into 🧪 and research upgrades.", when: () => labOpen() },
+    { k: 'lab', at: '#tabLab', say: "<b>Dr. Zonk's Lab</b>: recycle spare items into 🧪 and research upgrades.", when: () => labOpen() },
     { k: 'recycle', at: '#tabLab', say: 'Tip: tap any spare item, then <b>🧪</b> to recycle it into Science.', when: () => labOpen() && !!S.coach.lab },
     { k: 'tools', at: '#tools .toolbox', say: 'Your <b>boosters</b>. Tap to see what each one does.', when: () => !!document.querySelector('#tools .toolbox') },
     { k: 'disc', at: '#tabBook', say: 'You found something new! Collect <b>discovery presents</b> in the Album.', when: () => (S.disc || []).length >= 3 },
@@ -3542,7 +3542,7 @@ export async function startGame() {
       `<i class="${st.marks[i] ? 'hit' : 'miss'}"></i>`).join('');
     const p = payout(rewards);
     $('#miniSub').innerHTML = hits === st.rounds
-      ? '<b>Perfect brew!</b> Bloop is quietly impressed, which is rare.'
+      ? '<b>Perfect brew!</b> Dr. Zonk is quietly impressed, which is rare.'
       : hits ? `<b>${hits} of ${st.rounds}.</b> Serviceable.` : 'Not a drop. Steadier hands next time.';
     $('#miniFoot').innerHTML = `<div class="miniStat">${payoutLine(p)}</div><button class="big" id="brewDone">Done</button>`;
     $('#brewDone').onclick = closeMini;
@@ -3719,7 +3719,7 @@ export async function startGame() {
       S.met ? 'Rocket' : '???',
       S.met ? (allParts() ? 'Ready · ⛽' + S.fuel + '/3' : built + '/4 parts') : 'nothing here yet',
       'ship' + (S.met && allParts() && S.fuel >= CONFIG.rocket.fuelToLaunch ? ' ready' : ''));
-    if (labOpen()) ents += spot('lab', PAD.lab, ART.spriteUi('camp_lab') ? `<img class="campImg" src="${ART.spriteUi('camp_lab')}">` : ART.icon('flask'), "Bloop's Lab", S.acc && !accLeft() ? '⚗️ ready!' : '🧪 ' + S.sci, 'lab' + (S.acc && !accLeft() ? ' ready' : ''));
+    if (labOpen()) ents += spot('lab', PAD.lab, ART.spriteUi('camp_lab') ? `<img class="campImg" src="${ART.spriteUi('camp_lab')}">` : ART.icon('flask'), "Dr. Zonk's Lab", S.acc && !accLeft() ? '⚗️ ready!' : '🧪 ' + S.sci, 'lab' + (S.acc && !accLeft() ? ' ready' : ''));
     ents += spot('heart', PAD.heart, ART.spriteUi('camp_heart_on') ? `<img class="campImg" src="${ART.spriteUi(worldAwake() ? 'camp_heart_on' : 'camp_heart_off')}">` : ART.item(worldAwake() ? 'bloomheart' : 'bloomcore'),
       w.heart, worldAwake() ? 'Awake' : fed() + '/' + bloomGoal() + ' Bloom', 'heart');
 

@@ -109,27 +109,28 @@ const readOf = (n, len) => len <= 1 ? 7 : Math.min(7, 1 + Math.round(n * 6 / (le
 const rows = [];
 /* the Sunny Meadow cast and Bloop — the faces of the story scenes */
 const CHAR_ROWS = [
-  ['pip', 'Pip', 'a cheerful village kid of about ten with messy chestnut hair, freckles, an orange t-shirt and blue dungarees, a leaf stuck in the hair'],
-  ['grandma', 'Granny Fern', 'a kind round-faced grandmother with a silver bun, round glasses, rosy cheeks, a lilac cardigan and a little flower pinned on it'],
-  ['timmy', 'Timmy', 'an excitable small boy with a blue cap on backwards, big curious eyes, a gap-toothed grin and a toy spyglass on a string'],
-  ['gigi', 'Gigi', 'a glamorous village florist and tailor in her forties, a big sun hat with flowers, cat-eye sunglasses pushed up, a measuring tape round her neck'],
-  ['biscuit', 'Biscuit', 'a fluffy golden corgi-like village dog with a red bandana, tongue out, ears up, very happy'],
-  ['bloop', 'Bloop', 'a small round jade-green jelly alien with one big shiny eye, two tiny antennae with glowing tips, a cream belly, slightly wobbly, very sweet'],
-  ['mumbo', 'Mumbo', 'a stout cheerful peach-coloured alien baker with a tall chef hat over two little antennae, flour on his cheeks, a striped apron'],
-  ['pim', 'Lady Pim', 'an elegant rose-quartz crystal alien lady with faceted cheeks, a tiny teacup hat, a lace collar and gold earrings'],
+  ['pip', 'Zorp', 'a lanky teenage alien slacker, lime-green skin, three eyestalks of different lengths (one droopy), a huge overbite, a slouchy hoodie with the hood over the stalks, bored half-lidded eyes but a sneaky grin'],
+  ['grandma', 'Nana Gloop', 'a tiny ancient purple blob grandmother with a towering beehive hairdo full of curlers, thick pop-bottle glasses that make her eyes enormous, one snaggle tooth, a knitted shawl and a suspicious squint'],
+  ['timmy', 'Gorbo', 'a stocky orange alien kid-brother type, one giant eye in the middle of a wide flat head, a gap in his teeth, a propeller beanie, a slingshot in his back pocket, mischievous grin'],
+  ['gigi', 'Madame Fleeb', 'a tall skinny pink alien fashion diva with four arms (one holding a long bubble-wand holder, one a hand mirror), a long neck, heavy blue eyeshadow, a giant feathered hat and a sneer of superiority'],
+  ['biscuit', 'Mayor Snorb', 'a pompous fat slug-like alien mayor, yellow-olive skin, tiny arms, a sash and a too-small top hat, a big droopy moustache made of tentacles, sweating, giving a fake politician smile'],
+  ['bloop', 'Dr. Zonk', 'a frazzled blue alien scientist with an oversized brain bulging out of a cracked glass dome on his head, wild white eyebrows, a singed lab coat, mismatched goggles, one eye twitching'],
+  ['mumbo', 'Chef Gubbo', 'a huge round red alien cook with three chins, a tiny chef hat on top of two antennae, a stained apron, a ladle in one of his four hands, tasting from it with a giant purple tongue'],
+  ['pim', 'Duchess Splatt', 'a snooty teal octopus-like alien aristocrat with a pearl necklace on every tentacle, a lorgnette, a tiny tiara and a nose turned up so high you see the nostrils'],
+  ['player', 'You (the traveller)', 'a scruffy space-trucker astronaut, chunky battered orange spacesuit with patches and duct tape, helmet off under one arm, stubble, a confident lopsided grin, a coffee thermos clipped to the belt'],
   /* the other worlds' folk, so every contract card has a painted face */
-  ['zib', 'Zib', 'a small mint-green blob alien trader with brass goggles pushed up and a satchel bursting with shiny bits'],
-  ['luma', 'Luma', 'a soft rose-pink glowing jelly alien holding a little lantern, dreamy half-closed eyes'],
-  ['rokk', 'Rokk', 'a sturdy square steel-grey robot with a glowing sapphire visor for eyes, rivets, a tiny antenna, very polite'],
-  ['nix', 'Nix', 'a lilac amethyst crystal creature with faceted cheeks and a collector\'s monocle, slightly smug smile'],
-  ['vulk', 'Vulk', 'a stocky living-flame blacksmith spirit, ember-orange with a soot-streaked leather apron and a hammer on the shoulder'],
-  ['ember', 'Ember', 'a small cheerful flame sprite, gold and orange, sparks for freckles'],
-  ['marin', 'Marin', 'a sapphire-blue fish-folk harbourmaster with a little captain\'s hat and a calm smile'],
-  ['kelpa', 'Kelpa', 'a kelp-green blob gardener with seaweed hair and a tiny trowel'],
-  ['sirra', 'Sirra', 'a coral-pink fish-folk singer with pearl earrings and a shell hair clip'],
-  ['zephyr', 'Zephyr', 'a fluffy white cloud creature with mint cheeks, a little aviator scarf blowing in the wind'],
-  ['halo', 'Halo', 'a shimmering aurora crystal being, teal-to-violet, with tiny stars floating around its head'],
-  ['wren', 'Wren', 'a topaz-gold songbird person with a twig-nest hat and bright round eyes'],
+  ['zib', 'Zib', 'a short mint-green junk-dealer alien with a crooked nose, a dozen mismatched wristwatches up both arms, brass goggles pushed up and a shifty salesman grin'],
+  ['luma', 'Luma', 'a glowing rose-pink jellyfish alien hippie, long dangling tentacles, a flower crown, dreamy spaced-out half-closed eyes and a peace-sign gesture'],
+  ['rokk', 'Rokk', 'a dented steel-grey retro robot butler with one flickering sapphire eye, a bow tie, a rusty dent in his head and a deeply tired expression'],
+  ['nix', 'Nix', 'a lilac crystal alien snob collector, faceted bald head, a monocle, a pencil moustache and a very smug smile'],
+  ['vulk', 'Vulk', 'a hulking lava-rock blacksmith alien, cracks glowing orange, a soot-streaked apron, a massive underbite and a hammer resting on one shoulder'],
+  ['ember', 'Ember', 'a tiny hyperactive flame gremlin, gold and orange, wide crazy eyes, sparks flying off, too many teeth'],
+  ['marin', 'Marin', 'a grumpy old sapphire fish-man harbourmaster, bulging fish eyes, a pipe, a captain\'s hat and a scraggly barnacle beard'],
+  ['kelpa', 'Kelpa', 'a lumpy kelp-green swamp alien gardener with seaweed comb-over, a tiny trowel and a goofy buck-toothed grin'],
+  ['sirra', 'Sirra', 'a coral-pink fish-folk lounge singer, big pouty lips, heavy eyelashes, pearl earrings and a microphone shaped like a shell'],
+  ['zephyr', 'Zephyr', 'a puffy white cloud alien pilot with a long aviator scarf, goggles, a tiny moustache and puffed-out cheeks mid-blow'],
+  ['halo', 'Halo', 'a tall gaunt aurora-crystal mystic, teal-to-violet, three serene closed eyes, tiny stars orbiting the head, slightly creepy calm smile'],
+  ['wren', 'Wren', 'a scrawny topaz bird-alien gossip, long neck, beady eyes, a twig-nest hat and a beak open mid-chatter'],
 ];
 const add = (path, kind, name, group, prompt, batch, negative = NEGATIVE) =>
   rows.push({ path, kind, name, group, batch, prompt, negative });
@@ -296,9 +297,11 @@ UI2.forEach(([p, name, desc]) => add(`src/sprites/${p}`, 'ui', name, 'interface 
 /* story portraits: head-and-shoulders, used big in the story scenes and small
    on the contract cards */
 CHAR_ROWS.forEach(([k, name, look]) => add(`src/sprites/chars/${k}.png`, 'char', name, 'character portrait',
-  `${name}, a character portrait for a cosy mobile merge game in the style of Travel Town: ${look}. Head and shoulders, `
-  + 'facing the viewer slightly turned, big friendly eyes, warm expressive smile, soft painterly semi-3D rendering, '
-  + 'warm light from the upper left, thin warm-brown outline, centred, filling most of a 512x512 square, transparent background.',
+  `${name}, a character portrait for a mobile merge game: ${look}. Funny, weird-looking adult cartoon alien in the spirit of `
+  + 'grown-up TV cartoons like The Simpsons or Futurama (odd proportions, overbites, bulging eyes, a clear personality flaw), '
+  + 'NOT a baby or kids-show mascot. Rendered in the game\'s existing style: soft glossy painterly semi-3D, saturated colour, '
+  + 'warm light from the upper left, thin warm-brown outline. Head and shoulders, slightly turned, '
+  + 'centred, filling most of a 512x512 square, transparent background, no text.',
   'portraits'));
 
 /* ------------------------------------------------------- animation sheets */
