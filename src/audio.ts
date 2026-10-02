@@ -85,8 +85,13 @@ class Audio {
   }
 
   /** Fire an effect. Unknown names, muted state and a dead context are all no-ops. */
+  private lastAt: Record<string, number> = {};
   play(name: string, o: Opts = {}) {
     if (this.broken || !this.sfxOn) return;
+    // a menu button already clicked; the screen's own tap on top of it is just mud
+    const now = performance.now();
+    if ((name === 'tap' || name === 'click') && now - (this.lastAt.click || -1e9) < 90) return;
+    this.lastAt[name] = now;
     if (!this.ctx) { this.unlock(); if (!this.ctx) return; }
     const go = (buf: AudioBuffer | null) => {
       if (!buf || !this.ctx || !this.sfxOn) return;

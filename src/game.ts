@@ -238,7 +238,7 @@ export async function startGame() {
     coin: () => audio.playVary('coin', 0.05),
     sell: () => audio.playVary('sell', 0.05),
     boom: () => { audio.play('meteor'); audio.duck(2.4, 0.18); },
-    no: () => audio.play('error', { gain: 0.8 }),
+    no: () => audio.play('nope', { gain: 0.9 }),
     install: () => { audio.play('install'); audio.duck(1.2); },
     fuel: () => audio.play('fuel'),
     dig: () => audio.playVary('dig', 0.1),
@@ -249,6 +249,10 @@ export async function startGame() {
     boost: () => audio.play('boost'),
     bag: () => audio.playVary('bag', 0.08, 0.8),
     streak: (n: number) => audio.play('streak' + clamp(n, 1, 5)),
+    lift: () => audio.playVary('lift', 0.06, 0.7),
+    land: () => audio.playVary('land', 0.08, 0.8),
+    swap: () => audio.playVary('swap', 0.05, 0.8),
+    hover: () => audio.playVary('hover', 0.04, 0.5),
   };
   /** the music bed a world plays */
   /** every world has its own bed now (see scripts/make-audio.py) */
@@ -260,7 +264,12 @@ export async function startGame() {
     const t = $('#toast'); t.innerHTML = msg; t.classList.add('show');
     clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2100);
   }
-  const hex = (c?: string) => c ? parseInt(c.replace('#', ''), 16) : undefined;
+  const hex = (c?: string) => {
+    if (!c) return undefined;
+    let h = c.replace('#', '');
+    if (h.length === 3) h = h.split('').map(x => x + x).join('');   // '#fff' is white, not 0x000fff
+    return parseInt(h, 16);
+  };
   function floatText(i: number, txt: string, color?: string) { board.floatText(i, txt, hex(color) ?? 0xffffff); }
   function sparkle(i: number, n?: number, color?: string) { board.burst(i, hex(color) ?? 0xffd45e, n || 12); }
   function confetti() {
@@ -277,6 +286,8 @@ export async function startGame() {
   let lastClick: HTMLElement | null = null;
   document.addEventListener('pointerdown', (e: any) => {
     lastClick = (e.target && e.target.closest) ? e.target.closest('button') : null;
+    // every button answers the finger with the same soft tok
+    if (lastClick && !(lastClick as HTMLButtonElement).disabled) audio.play('click', { gain: 0.7 });
   }, true);
   function floatOn(target: HTMLElement | null, txt: string, color?: string) {
     const host = $('#app'); if (!host) return;
@@ -291,6 +302,49 @@ export async function startGame() {
     host.appendChild(d);
     setTimeout(() => d.remove(), 1300);
   }
+  /* Rewards travel. Coins fly from where they were earned into the coin
+     counter, items fly off the board into the card that asked for them — the
+     player sees where everything went instead of numbers changing on their own. */
+  type XY = { x: number; y: number };
+  const cellXY = (i: number): XY => board.clientCenter(i);
+  const elXY = (e: Element | null): XY | null => {
+    if (!e) return null; const r = e.getBoundingClientRect();
+    return r.width ? { x: r.left + r.width / 2, y: r.top + r.height / 2 } : null;
+  };
+  function flyTo(from: XY, to: Element | null, html: string, n = 1, opt: { size?: number; onEach?: () => void; delay?: number } = {}) {
+    const host = $('#app'), dst = elXY(to); if (!host || !dst) return;
+    const a = host.getBoundingClientRect(), size = opt.size || 30;
+    for (let k = 0; k < n; k++) {
+      const d = el('div', 'flyIc'); d.innerHTML = html;
+      d.style.width = d.style.height = size + 'px';
+      host.appendChild(d);
+      const sx = from.x - a.left + (n > 1 ? (Math.random() - 0.5) * 40 : 0), sy = from.y - a.top + (n > 1 ? (Math.random() - 0.5) * 30 : 0);
+      const ex = dst.x - a.left, ey = dst.y - a.top;
+      // a little hop out first, then a curved flight into the target
+      const hx = sx + (Math.random() - 0.5) * 50, hy = sy - 30 - Math.random() * 30;
+      const frames: Keyframe[] = [{ transform: `translate(${sx - size / 2}px,${sy - size / 2}px) scale(.4)`, opacity: 0 },
+        { transform: `translate(${hx - size / 2}px,${hy - size / 2}px) scale(1.15)`, opacity: 1, offset: 0.25 }];
+      for (let j = 1; j <= 5; j++) {
+        const t2 = j / 5, mx = (hx + ex) / 2 + 40, my = Math.min(hy, ey) - 40;
+        const x = (1 - t2) * (1 - t2) * hx + 2 * (1 - t2) * t2 * mx + t2 * t2 * ex;
+        const y = (1 - t2) * (1 - t2) * hy + 2 * (1 - t2) * t2 * my + t2 * t2 * ey;
+        frames.push({ transform: `translate(${x - size / 2}px,${y - size / 2}px) scale(${1.1 - 0.45 * t2})`, opacity: 1, offset: 0.25 + 0.75 * t2 });
+      }
+      const anim = d.animate(frames, { duration: 720 + k * 25, delay: (opt.delay || 0) + k * 70, easing: 'cubic-bezier(.45,.05,.55,.95)', fill: 'both' });
+      anim.onfinish = () => {
+        d.remove();
+        if (to instanceof HTMLElement) { to.classList.remove('bump'); void to.offsetWidth; to.classList.add('bump'); }
+        opt.onEach?.();
+      };
+    }
+  }
+  const coinHtml = () => ART.icon('coin');
+  function flyCoins(from: XY, amount: number, delay = 0) {
+    const n = clamp(Math.ceil(amount / 6), 1, 8);
+    flyTo(from, $('#chipCoins'), coinHtml(), n, { delay, onEach: () => audio.playVary('coin', 0.08, 0.35) });
+  }
+  function flyXp(from: XY, delay = 0) { flyTo(from, $('#lvl'), ART.icon('star'), 3, { delay, size: 26 }); }
+
   /** pay coins, and make the payment visible wherever the player pressed */
   function spend(n: number) {
     S.coins -= n; bumpChip('#chipCoins');
@@ -307,9 +361,20 @@ export async function startGame() {
         if (!a || a.b) return null;
         if (!c) return 'move';
         if (mergeResult(a.id, c.id)) return 'merge';
-        return null;
+        // anything else that can move trades places, the way every merge game does it;
+        // two of a finished chain just bounce back (there is nothing to make)
+        if (c.b || c.bub || (a.id && a.id === c.id)) return null;
+        return 'swap';
       },
       canDrag: (i: number) => { const c = B()[i]; return !!c && !c.b && !c.bub; },
+      matches: (from: number) => {
+        const b = B(), a = b[from], out: number[] = [];
+        if (!a || !a.id) return out;
+        for (let k = 0; k < N; k++) if (k !== from && b[k] && b[k].id && !b[k].bub && mergeResult(a.id, b[k].id)) out.push(k);
+        return out;
+      },
+      onLift: () => { sfx.lift(); haptic('light'); hideInfo(); },
+      onHover: (kind) => { if (kind === 'merge') { sfx.hover(); haptic('light'); } },
     });
     // Rasterising every item before the first frame grows with the catalogue
     // (500+ now). Wait only for the world you are standing in, plus the shared
@@ -328,8 +393,11 @@ export async function startGame() {
     sel = null; board.setSelected(null); hideInfo();
     if (!a) return;
     if (c && mergeResult(a.id, c.id)) { tryMerge(from, to); return; }
-    if (!c) { b[to] = a; b[from] = null; board.sync(b); sfx.pop(); save(); return; }
-    board.settle(from);
+    if (!c) { b[to] = a; b[from] = null; board.sync(b); board.land(to); sfx.land(); updateWanted(); save(); return; }
+    if (!c.b && !c.bub && !(a.id && a.id === c.id)) {
+      b[to] = a; b[from] = c; board.sync(b); board.swapLand(from, to); sfx.swap(); haptic('light'); updateWanted(); save(); return;
+    }
+    sfx.no(); board.settle(from);
   }
   function paintCell(_i?: number, _anim?: string) { board.sync(B()); }
   function paintBoard() { board.sync(B()); board.setSelected(sel); board.setHint(hintPair); }
@@ -494,6 +562,7 @@ export async function startGame() {
     return Math.random() < (biasHigh ? 0.5 : 0.28) ? ids[1] : ids[0];
   }
 
+  let ordersMinH = 0;
   function renderOrders(newIds?: string[]) {
     const host = $('#orders'); host.innerHTML = '';
     if (S.ship) host.appendChild(shipCard());
@@ -507,6 +576,7 @@ export async function startGame() {
       const ready = o.needs.every(nd => held(nd.id) >= nd.qty);
       if (ready) o.needs.forEach(nd => { claim[nd.id] = (claim[nd.id] || 0) + nd.qty; });
       const card = el('div', 'order' + ((o as any).vis ? ' visitor' : '') + (ready ? ' ready' : '') + (newIds && newIds.indexOf(o.id) >= 0 ? ' newin' : ''));
+      card.dataset.oid = o.id;
       const ch = CHARS[o.char];
       card.innerHTML =
         `<div class="oTop">
@@ -534,6 +604,9 @@ export async function startGame() {
       host.appendChild(card);
     });
     orderArrows(); updateWanted(); renderStrip();
+    // never let the row collapse between contracts: if it shrinks, the whole
+    // board jumps up under the player's finger mid-drag
+    if (host.offsetHeight > (ordersMinH || 0) && S.orders.length) { ordersMinH = host.offsetHeight; host.style.minHeight = ordersMinH + 'px'; }
     // the order row is the tallest variable block above the board; once it has
     // settled the board re-measures so its last row never hides under the dock
     board.layout();
@@ -758,8 +831,14 @@ export async function startGame() {
       renderOrders();
       return;
     }
-    o.needs.forEach(nd => { let left = nd.qty; for (let i = 0; i < N && left; i++) if (b[i] && b[i].id === nd.id) { b[i] = null; left--; sparkle(i, 8, '#ffe9a8'); } });
-    S.coins += o.coins; bumpChip('#chipCoins');
+    const card = document.querySelector(`.order[data-oid="${id}"]`);
+    const cardXY = elXY(card) || elXY($('#orders'));
+    o.needs.forEach(nd => { let left = nd.qty; for (let i = 0; i < N && left; i++) if (b[i] && b[i].id === nd.id) {
+      flyTo(cellXY(i), card, ART.item(nd.id), 1, { size: 40 });
+      b[i] = null; left--; sparkle(i, 8, '#ffe9a8');
+    } });
+    S.coins += o.coins;
+    if (cardXY) { flyCoins(cardXY, o.coins, 380); flyXp(cardXY, 480); }
     const idx = S.orders.findIndex(x => x.id === id);
     S.orders.splice(idx, 1);
     S.orderCap = undefined;
@@ -864,7 +943,13 @@ export async function startGame() {
     const b = B(), c = b[i]; if (!c || !c.p) return;
     const p = PRODS[c.p];
     const spot = nearFree(i);
-    if (spot < 0) { sfx.no(); toast('No space! Merge some items first.'); return; }
+    if (spot < 0) {
+      sfx.no(); board.bump(i);
+      const pr = findPair();
+      toast(pr ? 'Board full! Merge the glowing pair to make room.' : 'Board full! Sell or bag something to make room.');
+      if (pr) { hintPair = pr; board.setHint(pr); setTimeout(() => { hintPair = null; board.setHint(null); }, 2400); }
+      return;
+    }
     if (c.tmp) {
       // a visitor's producer: free taps, no energy, and it leaves when it runs out
       c.ch = (c.ch ?? 0) - 1;
@@ -986,8 +1071,8 @@ export async function startGame() {
     const b = B(), c = b[i]; if (!c || !c.id) return;
     const wanted = S.orders.some(o => o.needs.some(nd => nd.id === c.id));
     if (wanted) { sfx.no(); toast('Someone ordered that! Keep it.'); return; }
-    S.coins += ITEMS[c.id].sell; bumpChip('#chipCoins'); sfx.sell();
-    floatText(i, '+' + ITEMS[c.id].sell, '#ffe07a');
+    S.coins += ITEMS[c.id].sell; sfx.sell();
+    floatText(i, '+' + ITEMS[c.id].sell, '#ffe07a'); flyCoins(cellXY(i), ITEMS[c.id].sell);
     const sold = { i, id: c.id, coins: ITEMS[c.id].sell, w: S.world };
     b[i] = null; sel = null; tally('sell'); paintCell(i); renderHUD(); renderOrders(); save();
     showUndo(sold);
@@ -1066,7 +1151,7 @@ export async function startGame() {
       return;
     }
     hintPair = p; board.setHint(hintPair); if (manual) sfx.tap();
-    toast('💡 These two match — drag one onto the other!');
+    toast('💡 These two match — drag one onto the other, or double-tap it!');
     setTimeout(() => { hintPair = null; board.setHint(null); }, 2400);
   }
 
@@ -1818,7 +1903,7 @@ export async function startGame() {
     if (S.streak < cfg.minFor) return;
     const step = Math.min(S.streak - cfg.minFor + 1, cfg.maxStep);
     const coins = cfg.coinPerStep * step;
-    S.coins += coins; bumpChip('#chipCoins');
+    S.coins += coins; flyCoins(cellXY(cell), coins, 200);
     sfx.streak(Math.min(step, 5));
     floatText(cell, 'COMBO ×' + S.streak + '  +' + coins, '#ffe07a');
     board.ringPulse(cell, 0xffd45e);
@@ -4176,11 +4261,37 @@ export async function startGame() {
     if (c.bub) { pick(null); hideInfo(); tapBubble(i); return; }
     if (c.p) { pick(null); hideInfo(); useProducer(i); return; }
     if (isChest(c.id) && sel !== i && !(sel !== null && B()[sel] && mergeResult(B()[sel].id, c.id))) { pick(null); hideInfo(); openChest(i); return; }
-    if (sel === null) { pick(i); showInfo(i); return; }
+    // double-tap: the item finds its nearest twin and merges with it — no dragging needed
+    const now = Date.now(), dbl = lastTap.i === i && now - lastTap.t < 400;
+    lastTap = { i, t: dbl ? 0 : now };
+    if (dbl) {
+      const twin = nearestTwin(i);
+      if (twin >= 0) { pick(null); hideInfo(); tryMerge(i, twin); S.tipDbl = 1; return; }
+      if (!nextOf(c.id)) toast(ITEMS[c.id].name + ' is already the best in its chain!');
+      else toast('No twin on the board yet — make another ' + ITEMS[c.id].name + '.');
+    }
+    if (sel === null) {
+      pick(i); showInfo(i);
+      if (!S.tipDbl && S.tut && nearestTwin(i) >= 0) { S.tipDbl = 1; setTimeout(() => toast('💡 Tip: <b>double-tap</b> an item to merge it with its twin.'), 500); }
+      return;
+    }
     if (sel === i) { pick(null); hideInfo(); return; }
     const a = B()[sel];
     if (a && mergeResult(a.id, c.id)) { const f = sel; pick(null); hideInfo(); tryMerge(f, i); return; }
     pick(i); showInfo(i);
+  }
+  let lastTap = { i: -1, t: 0 };
+  /** the closest tile this one would merge with, or -1 */
+  function nearestTwin(i: number) {
+    const b = B(), a = b[i]; if (!a || !a.id) return -1;
+    let best = -1, bd = 1e9;
+    const ci = i % COLS, ri = Math.floor(i / COLS);
+    for (let k = 0; k < N; k++) {
+      if (k === i || !b[k] || !b[k].id || b[k].bub || !mergeResult(a.id, b[k].id)) continue;
+      const d = Math.hypot(k % COLS - ci, Math.floor(k / COLS) - ri);
+      if (d < bd) { bd = d; best = k; }
+    }
+    return best;
   }
   function hideInfo() { $('#infoBar').classList.remove('on', 'undo'); }
   /** sold something by mistake? a few seconds to take it back */

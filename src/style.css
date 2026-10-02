@@ -1421,3 +1421,8 @@ html.ui-levelup_banner .luCard{background:var(--ui-levelup_banner) center/contai
 .starMapBtn.store{top:106px;background:linear-gradient(180deg,#d59a57,#a9702f)}
 .xplabel{white-space:nowrap;font-size:8.5px}
 .evHead{align-items:flex-start}
+
+/* rewards flying into the HUD (flyTo in game.ts) */
+.flyIc{position:absolute;left:0;top:0;z-index:240;pointer-events:none;will-change:transform;filter:drop-shadow(0 3px 4px rgba(60,30,0,.35))}
+.flyIc svg,.flyIc img{width:100%;height:100%;display:block}
+.orb.bump,.order.bump{animation:chipPop .38s ease}

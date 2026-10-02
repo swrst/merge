@@ -11,8 +11,14 @@ export type Cell = { b?: number; p?: string; id?: string; ch?: number; at?: numb
 export type Hooks = {
   onTap: (i: number) => void;
   onDrop: (from: number, to: number) => void;
-  dropKind: (from: number, to: number) => 'merge' | 'move' | null;
+  dropKind: (from: number, to: number) => 'merge' | 'move' | 'swap' | null;
   canDrag: (i: number) => boolean;
+  /** every tile the dragged item could merge with, so they can glow */
+  matches?: (from: number) => number[];
+  /** the item left the board under the finger */
+  onLift?: (i: number) => void;
+  /** the finger moved over a new drop target */
+  onHover?: (kind: 'merge' | 'move' | 'swap' | null) => void;
 };
 
 /* Two tile colours per world, laid out as a checkerboard the way every game in
@@ -187,7 +193,30 @@ class PixiBoard {
     this.slots.forEach(s => { if (s.art && (s.art as any).texture === Texture.EMPTY) s.key = ''; });
   }
   private texture(key: string): Texture {
+    if (!this.tex[key]) this.need(key);
     return this.tex[key] || Texture.EMPTY;
+  }
+  /* Something landed on the board before the idle loader got to its art (an
+     event visitor, a fresh chain): fetch that one now, then redraw whatever was
+     drawn blank. Without this a producer could sit there invisible for a minute. */
+  private wanting = new Set<string>();
+  private lastCells: Cell[] | null = null;
+  private need(key: string) {
+    if (this.wanting.has(key)) return;
+    const [kind, id] = [key.slice(0, 2), key.slice(2)];
+    let job: Promise<Texture> | null = null;
+    if (kind === 'i:') { const u = ART.spriteItem(id); job = u ? this.fromUrl(u) : this.rasterise(ART.item(id)); }
+    else if (kind === 'p:') { const u = ART.spriteProducer(id); job = u ? this.fromUrl(u) : this.rasterise(ART.producer(id)); }
+    if (!job) return;
+    this.wanting.add(key);
+    job.then(t => {
+      this.wanting.delete(key);
+      if (this.tex[key]) return;
+      this.tex[key] = t;
+      if (t === Texture.EMPTY) return;
+      this.unstale();
+      if (this.lastCells) this.sync(this.lastCells);
+    });
   }
 
   /* A blank board is the worst bug this game can have, and there are two ways
@@ -244,16 +273,6 @@ class PixiBoard {
     const c = this.center(i);
     return { x: r.left + c.x, y: r.top + c.y };
   }
-  private cellAt(gx: number, gy: number): number {
-    const step = this.cell + this.gap;
-    const c = Math.floor((gx - this.ox) / step), r = Math.floor((gy - this.oy) / step);
-    if (c < 0 || r < 0 || c >= this.cols || r >= this.rows) return -1;
-    // ignore taps that land in the gutter between tiles
-    const lx = gx - this.ox - c * step, ly = gy - this.oy - r * step;
-    if (lx > this.cell + 2 || ly > this.cell + 2) return -1;
-    return r * this.cols + c;
-  }
-
   setTheme(t: string) { this.theme = THEME[t] ? t : 'earth'; this.layout(); }
   /** the on-canvas size of one tile, for anything that has to draw over us */
   cellSize() { return this.cell; }
@@ -325,6 +344,7 @@ class PixiBoard {
 
   sync(cells: Cell[]) {
     if (this.slots.length < cells.length) return;       // not built yet: the first sync after init draws it
+    this.lastCells = cells;
     for (let i = 0; i < cells.length; i++) {
       const key = this.keyOf(cells[i]);
       if (this.slots[i].key === key) continue;
@@ -543,24 +563,82 @@ class PixiBoard {
     a.aura = a.spin = undefined;
     a.key = 'e';
     this.drawTile(from);
+    const tier = ITEMS[newId]?.tier || 1;
     if (flyer) {
       this.lDrag.addChild(flyer);
       gsap.killTweensOf(flyer); gsap.killTweensOf(flyer.scale);
-      gsap.to(flyer, { x: target.x, y: target.y, duration: 0.16, ease: 'power2.in' });
-      gsap.to(flyer.scale, { x: 0.02, y: 0.02, duration: 0.16, ease: 'power2.in', onComplete: () => flyer.destroy() });
+      gsap.to(flyer, { x: target.x, y: target.y, rotation: 0, duration: 0.13, ease: 'power2.in' });
+      gsap.to(flyer.scale, { x: flyer.scale.x * 0.5, y: flyer.scale.y * 0.5, duration: 0.13, ease: 'power2.in', onComplete: () => flyer.destroy() });
     }
-    if (b.art) { gsap.killTweensOf(b.art); gsap.killTweensOf(b.art.scale); }
-    b.pending = gsap.delayedCall(0.15, () => {
+    // the partner squashes to take the hit
+    if (b.art && !b.art.destroyed) {
+      if (b.idle) { b.idle.kill(); b.idle = undefined; }
+      gsap.killTweensOf(b.art); gsap.killTweensOf(b.art.scale);
+      const sc = this.spriteScale(to);
+      gsap.to(b.art.scale, { x: sc * 1.25, y: sc * 0.8, duration: 0.12, ease: 'power2.out' });
+    }
+    b.pending = gsap.delayedCall(0.13, () => {
       this.slots[to].pending = undefined;
       this.fill(to, { id: newId }, 'i' + newId);
       const s = this.slots[to]; if (!s.art) return;
       if (s.idle) { s.idle.kill(); s.idle = undefined; }
       const sc = this.spriteScale(to);
-      gsap.fromTo(s.art.scale, { x: sc * 0.25, y: sc * 0.25 }, { x: sc, y: sc, duration: 0.5, ease: 'elastic.out(1,0.5)', onComplete: () => this.idleBob(to) });
-      gsap.fromTo(s.art, { rotation: -0.3 }, { rotation: 0, duration: 0.45, ease: 'back.out(3)' });
+      gsap.fromTo(s.art.scale, { x: sc * 0.35, y: sc * 0.35 }, { x: sc, y: sc, duration: 0.55, ease: 'elastic.out(1.1,0.45)', onComplete: () => this.idleBob(to) });
+      gsap.fromTo(s.art, { rotation: -0.25 }, { rotation: 0, duration: 0.45, ease: 'back.out(3)' });
+      this.flash(to, tier);
       this.ringPulse(to, 0xffe9a0);
-      this.burst(to, 0xffd45e, 12);
+      this.stars(to, 5 + Math.min(tier, 8));
+      this.burst(to, 0xffd45e, 6 + tier);
+      if (tier >= 6) this.shake(0.25);
     });
+  }
+  /** a soft white flash where two things became one */
+  flash(i: number, tier = 1) {
+    const p = this.center(i), g = new Graphics();
+    g.circle(0, 0, this.cell * 0.42).fill({ color: 0xffffff, alpha: 0.9 });
+    g.circle(0, 0, this.cell * 0.6).fill({ color: 0xfff1b8, alpha: 0.35 });
+    g.position.set(p.x, p.y);
+    this.lFx.addChild(g);
+    const big = 1.2 + Math.min(tier, 8) * 0.06;
+    gsap.fromTo(g.scale, { x: 0.4, y: 0.4 }, { x: big, y: big, duration: 0.3, ease: 'power2.out' });
+    gsap.to(g, { alpha: 0, duration: 0.32, ease: 'power1.in', onComplete: () => g.destroy() });
+    // rays for the good ones
+    if (tier >= 4) {
+      const r = new Graphics();
+      for (let k = 0; k < 8; k++) {
+        const an = (k / 8) * Math.PI * 2, w = 0.12;
+        r.moveTo(0, 0)
+          .lineTo(Math.cos(an - w) * this.cell, Math.sin(an - w) * this.cell)
+          .lineTo(Math.cos(an + w) * this.cell, Math.sin(an + w) * this.cell)
+          .closePath().fill({ color: 0xfff3b0, alpha: 0.5 });
+      }
+      r.position.set(p.x, p.y);
+      this.lTile.addChild(r);
+      gsap.fromTo(r.scale, { x: 0.3, y: 0.3 }, { x: 1.3, y: 1.3, duration: 0.6, ease: 'power2.out' });
+      gsap.to(r, { rotation: 0.6, alpha: 0, duration: 0.7, ease: 'power1.in', onComplete: () => r.destroy() });
+    }
+  }
+  /** little five-point stars thrown out of a merge */
+  stars(i: number, n = 7) {
+    const p = this.center(i);
+    const cols = [0xffe066, 0xffffff, 0xffb84d, 0xfff3b0];
+    for (let k = 0; k < n; k++) {
+      const g = new Graphics(), R = this.cell * (0.07 + Math.random() * 0.05);
+      const pts: number[] = [];
+      for (let j = 0; j < 10; j++) {
+        const an = -Math.PI / 2 + j * Math.PI / 5, rr = j % 2 ? R * 0.45 : R;
+        pts.push(Math.cos(an) * rr, Math.sin(an) * rr);
+      }
+      g.poly(pts).fill({ color: cols[k % cols.length] }).stroke({ color: 0xc98a1c, width: 1, alpha: 0.6 });
+      g.position.set(p.x, p.y);
+      this.lFx.addChild(g);
+      const an = (k / n) * Math.PI * 2 + Math.random() * 0.5, dist = this.cell * (0.6 + Math.random() * 0.5);
+      const tl = gsap.timeline({ onComplete: () => g.destroy() });
+      tl.to(g, { x: p.x + Math.cos(an) * dist, y: p.y + Math.sin(an) * dist - this.cell * 0.2, duration: 0.5, ease: 'power3.out' })
+        .to(g, { y: '+=' + this.cell * 0.3, alpha: 0, duration: 0.35, ease: 'power1.in' });
+      gsap.to(g, { rotation: (Math.random() - 0.5) * 6, duration: 0.85 });
+      gsap.fromTo(g.scale, { x: 0.3, y: 0.3 }, { x: 1, y: 1, duration: 0.25, ease: 'back.out(3)' });
+    }
   }
   /** the item the game just took off the board (a rocket part, a can of fuel)
    *  appears for a beat and flies away, so it never just blinks out */
@@ -798,16 +876,46 @@ class PixiBoard {
   }
 
   /* --------------------------------------------------------------- input */
+  /** the tile under a point, with no dead gutters: the gap between two tiles
+   *  belongs to whichever centre is closer */
+  private nearCell(gx: number, gy: number): number {
+    const step = this.cell + this.gap;
+    const c = Math.floor((gx - this.ox + this.gap / 2) / step), r = Math.floor((gy - this.oy + this.gap / 2) / step);
+    if (c < 0 || r < 0 || c >= this.cols || r >= this.rows) return -1;
+    return r * this.cols + c;
+  }
+  /** Where a drop should land. A finger is a blunt tool: when it ends up beside
+   *  a tile that would merge, and nowhere useful itself, the item is pulled the
+   *  rest of the way — the "magnet" every good merge game has. */
+  private target(from: number, gx: number, gy: number): { to: number; kind: 'merge' | 'move' | 'swap' | null } {
+    const at = this.nearCell(gx, gy);
+    const kindAt = at >= 0 && at !== from ? this.hooks.dropKind(from, at) : null;
+    if (kindAt === 'merge') return { to: at, kind: kindAt };
+    // over an empty tile the pull is weak (you may want it beside its twin);
+    // over something it cannot go on, the twin next door wins easily
+    let best = -1, bestD = this.cell * (kindAt === 'move' ? 0.62 : 0.95);
+    const c0 = at >= 0 ? at % this.cols : -1, r0 = at >= 0 ? Math.floor(at / this.cols) : -1;
+    if (at >= 0) for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) {
+      const c = c0 + dc, r = r0 + dr;
+      if ((!dc && !dr) || c < 0 || r < 0 || c >= this.cols || r >= this.rows) continue;
+      const k = r * this.cols + c;
+      if (k === from || this.hooks.dropKind(from, k) !== 'merge') continue;
+      const p = this.center(k), d = Math.hypot(p.x - gx, p.y - gy);
+      if (d < bestD) { bestD = d; best = k; }
+    }
+    if (best >= 0) return { to: best, kind: 'merge' };
+    return { to: at, kind: kindAt };
+  }
   private down = (e: any) => {
-    const i = this.cellAt(e.global.x, e.global.y);
+    const i = this.nearCell(e.global.x, e.global.y);
     if (i < 0) { this.hooks.onTap(-1); return; }
-    this.drag = { i, x: e.global.x, y: e.global.y, moved: false };
+    this.drag = { i, x: e.global.x, y: e.global.y, moved: false, vx: 0, lx: e.global.x };
   };
   private move = (e: any) => {
     const d = this.drag; if (!d) return;
     const dx = e.global.x - d.x, dy = e.global.y - d.y;
     if (!d.moved) {
-      if (Math.hypot(dx, dy) < 7) return;
+      if (Math.hypot(dx, dy) < 6) return;
       if (!this.hooks.canDrag(d.i)) { this.drag = null; return; }
       const s = this.slots[d.i];
       if (!s.art) { this.drag = null; return; }
@@ -817,34 +925,49 @@ class PixiBoard {
       gsap.killTweensOf(d.sprite); gsap.killTweensOf(d.sprite.scale);
       this.lDrag.addChild(d.sprite);
       const sc = this.spriteScale(d.i);
-      gsap.to(d.sprite.scale, { x: sc * 1.2, y: sc * 1.2, duration: 0.14, ease: 'back.out(2)' });
-      d.ghostRing = null;
+      gsap.to(d.sprite.scale, { x: sc * 1.22, y: sc * 1.22, duration: 0.16, ease: 'back.out(2.4)' });
+      // lift the halo off the empty tile with it
+      const slot = this.slots[d.i] as any;
+      [slot.aura, slot.spin].forEach((o: any) => { if (o) o.visible = false; });
+      this.showMatches(d.i);
+      this.hooks.onLift?.(d.i);
     }
-    d.sprite.position.set(e.global.x, e.global.y - this.cell * 0.22);
-    const over = this.cellAt(e.global.x, e.global.y);
-    if (over !== d.over) {
-      d.over = over;
-      this.highlightDrop(d.i, over);
+    // the item rides a little above the finger, so the finger never hides it,
+    // and leans into the direction it is being pulled
+    d.sprite.position.set(e.global.x, e.global.y - this.cell * 0.32);
+    d.vx = d.vx * 0.6 + (e.global.x - d.lx) * 0.4; d.lx = e.global.x;
+    const lean = Math.max(-0.28, Math.min(0.28, d.vx * 0.025));
+    gsap.to(d.sprite, { rotation: lean, duration: 0.18, overwrite: 'auto' });
+    const t = this.target(d.i, e.global.x, e.global.y);
+    if (t.to !== d.over || t.kind !== d.overKind) {
+      d.over = t.to; d.overKind = t.kind;
+      this.highlightDrop(d.i, t.to, t.kind);
+      if (t.to !== d.i) this.hooks.onHover?.(t.kind);
     }
   };
   private up = (e: any) => {
     const d = this.drag; this.drag = null;
     if (!d) return;
     this.clearDropHighlight();
+    this.hideMatches();
     if (!d.moved) { this.hooks.onTap(d.i); return; }
-    const to = this.cellAt(e.global.x, e.global.y);
+    const slot = this.slots[d.i] as any;
+    [slot.aura, slot.spin].forEach((o: any) => { if (o && !o.destroyed) o.visible = true; });
+    const t = this.target(d.i, e.global.x, e.global.y);
+    const to = t.to, kind = to >= 0 && to !== d.i ? t.kind : null;
     const home = this.center(d.i);
-    const kind = to >= 0 && to !== d.i ? this.hooks.dropKind(d.i, to) : null;
     const sc = this.spriteScale(d.i);
+    this.lastDrop = { x: d.sprite.x, y: d.sprite.y };
+    gsap.to(d.sprite, { rotation: 0, duration: 0.15, overwrite: 'auto' });
     if (!kind) {                                   // snap back
       // Re-home the sprite NOW, not when the tween ends: while it sat in the
       // drag layer it floated above every tile, and a sync() landing in that
       // window destroyed it out from under the tween — which is how an item
       // could overlap its neighbour and then vanish.
       this.lItem.addChild(d.sprite);
-      gsap.to(d.sprite, { x: home.x, y: home.y, duration: 0.25, ease: 'back.out(2)' });
+      gsap.to(d.sprite, { x: home.x, y: home.y, duration: 0.28, ease: 'back.out(2)' });
       gsap.to(d.sprite.scale, {
-        x: sc, y: sc, duration: 0.2,
+        x: sc, y: sc, duration: 0.22,
         onComplete: () => { if (!d.sprite.destroyed) this.idleBob(d.i); },
       });
       return;
@@ -853,22 +976,105 @@ class PixiBoard {
     gsap.to(d.sprite.scale, { x: sc, y: sc, duration: 0.12 });
     this.hooks.onDrop(d.i, to);                    // game decides what happens
   };
+  /** where the last drag was let go, so a move can glide from there */
+  private lastDrop: { x: number; y: number } | null = null;
   private dropRing: Graphics | null = null;
-  private highlightDrop(from: number, to: number) {
+  private dropLift: number | null = null;
+  private highlightDrop(from: number, to: number, kind: 'merge' | 'move' | 'swap' | null) {
     this.clearDropHighlight();
-    if (to < 0 || to === from) return;
-    const kind = this.hooks.dropKind(from, to);
-    if (!kind) return;
+    if (to < 0 || to === from || !kind) return;
     const p = this.center(to), g = new Graphics();
-    g.roundRect(-this.cell / 2, -this.cell / 2, this.cell, this.cell, this.cell * 0.24)
-      .stroke({ color: kind === 'merge' ? 0x6ee04a : 0x8fd9ff, width: 4 });
+    const col = kind === 'merge' ? 0x6ee04a : kind === 'swap' ? 0xffcb3d : 0x8fd9ff;
+    if (kind === 'merge') g.roundRect(-this.cell / 2, -this.cell / 2, this.cell, this.cell, this.cell * 0.24).fill({ color: 0x8ce46a, alpha: 0.28 });
+    g.roundRect(-this.cell / 2, -this.cell / 2, this.cell, this.cell, this.cell * 0.24).stroke({ color: col, width: 4 });
     g.position.set(p.x, p.y);
     this.lFx.addChild(g);
-    gsap.fromTo(g.scale, { x: 0.9, y: 0.9 }, { x: 1, y: 1, duration: 0.18, ease: 'back.out(3)' });
+    gsap.fromTo(g.scale, { x: 0.86, y: 0.86 }, { x: 1, y: 1, duration: 0.2, ease: 'back.out(3)' });
     this.dropRing = g;
+    // the partner leans in to meet it
+    if (kind === 'merge') {
+      const s = this.slots[to];
+      if (s.art && !s.art.destroyed) {
+        if (s.idle) { s.idle.kill(); s.idle = undefined; }
+        const sc = this.spriteScale(to);
+        gsap.to(s.art.scale, { x: sc * 1.14, y: sc * 1.14, duration: 0.16, ease: 'back.out(3)', overwrite: 'auto' });
+        this.dropLift = to;
+      }
+    }
   }
   private clearDropHighlight() {
-    if (this.dropRing) { gsap.killTweensOf(this.dropRing); this.dropRing.destroy(); this.dropRing = null; }
+    if (this.dropRing) { gsap.killTweensOf(this.dropRing); gsap.killTweensOf(this.dropRing.scale); this.dropRing.destroy(); this.dropRing = null; }
+    if (this.dropLift !== null) {
+      const k = this.dropLift, s = this.slots[k]; this.dropLift = null;
+      if (s.art && !s.art.destroyed && !(s as any).matchGlow) {
+        const sc = this.spriteScale(k);
+        gsap.to(s.art.scale, { x: sc, y: sc, duration: 0.15, overwrite: 'auto', onComplete: () => { if (!s.idle && s.art && !s.art.destroyed) this.idleBob(k); } });
+      } else if (s.art && !s.art.destroyed) {
+        const sc = this.spriteScale(k);
+        gsap.to(s.art.scale, { x: sc * 1.06, y: sc * 1.06, duration: 0.15, overwrite: 'auto' });
+      }
+    }
+  }
+  /** while dragging, every tile it could merge with breathes and glows */
+  private glows: Graphics[] = [];
+  private showMatches(from: number) {
+    this.hideMatches();
+    const list = this.hooks.matches ? this.hooks.matches(from) : [];
+    list.forEach(k => {
+      const s = this.slots[k] as any; if (!s.art || s.art.destroyed) return;
+      const p = this.center(k), g = new Graphics();
+      const h = this.cell / 2 - 2;
+      g.roundRect(-h, -h, h * 2, h * 2, this.cell * 0.2).fill({ color: 0xfff1a8, alpha: 0.55 })
+        .stroke({ color: 0xffc83d, width: 3, alpha: 0.95 });
+      g.circle(0, 0, this.cell * 0.34).fill({ color: 0xffffff, alpha: 0.35 });
+      g.position.set(p.x, p.y);
+      this.lTile.addChild(g);
+      gsap.fromTo(g, { alpha: 0.55 }, { alpha: 1, duration: 0.45, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+      this.glows.push(g);
+      s.matchGlow = true;
+      if (s.idle) { s.idle.kill(); s.idle = undefined; }
+      const sc = this.spriteScale(k);
+      s.idle = gsap.to(s.art.scale, { x: sc * 1.06, y: sc * 1.06, duration: 0.45, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+    });
+  }
+  private hideMatches() {
+    this.glows.forEach(g => { gsap.killTweensOf(g); g.destroy(); });
+    this.glows = [];
+    this.slots.forEach((s: any, k) => {
+      if (!s.matchGlow) return;
+      s.matchGlow = false;
+      if (s.idle) { s.idle.kill(); s.idle = undefined; }
+      if (s.art && !s.art.destroyed) {
+        const sc = this.spriteScale(k);
+        gsap.to(s.art.scale, { x: sc, y: sc, duration: 0.15, overwrite: 'auto', onComplete: () => { if (!s.idle && s.art && !s.art.destroyed) this.idleBob(k); } });
+      }
+    });
+  }
+
+  /** a moved item glides from where it was let go and settles with a squash */
+  land(i: number, from?: { x: number; y: number } | null) {
+    const s = this.slots[i]; if (!s.art || s.art.destroyed) return;
+    const src = from === undefined ? this.lastDrop : from;
+    const p = this.center(i), sc = this.spriteScale(i);
+    if (s.idle) { s.idle.kill(); s.idle = undefined; }
+    gsap.killTweensOf(s.art); gsap.killTweensOf(s.art.scale);
+    if (src) s.art.position.set(src.x, src.y);
+    gsap.to(s.art, { x: p.x, y: p.y, duration: 0.2, ease: 'power2.out' });
+    const art = s.art;
+    gsap.timeline({ onComplete: () => { if (s.art === art && !art.destroyed && !s.idle) this.idleBob(i); } })
+      .to(s.art.scale, { x: sc * 1.12, y: sc * 0.88, duration: 0.08, delay: 0.14 })
+      .to(s.art.scale, { x: sc * 0.95, y: sc * 1.06, duration: 0.09 })
+      .to(s.art.scale, { x: sc, y: sc, duration: 0.18, ease: 'elastic.out(1,0.5)' });
+  }
+  /** two items trade places: the dragged one lands, the other hops across */
+  swapLand(a: number, b: number) {
+    this.land(b);
+    this.land(a, this.center(b));
+  }
+  /** the page position of the last drop, for effects drawn in the DOM */
+  pointToClient(x: number, y: number) {
+    const r = this.app.canvas.getBoundingClientRect();
+    return { x: r.left + x, y: r.top + y };
   }
 
   /** snap a sprite back home after the game refuses a drop */
@@ -876,7 +1082,9 @@ class PixiBoard {
     const s = this.slots[i]; if (!s.art || s.art.destroyed) return;
     if (s.art.parent !== this.lItem) this.lItem.addChild(s.art);
     const p = this.center(i);
-    gsap.to(s.art, { x: p.x, y: p.y, duration: 0.2, ease: 'back.out(2)' });
+    gsap.to(s.art, { x: p.x, y: p.y, rotation: 0, duration: 0.25, ease: 'back.out(2)' });
+    // a little head-shake: that drop was not allowed
+    gsap.fromTo(s.art, { rotation: 0.18 }, { rotation: 0, duration: 0.4, ease: 'elastic.out(1,0.3)', delay: 0.05 });
   }
 }
 

@@ -426,6 +426,45 @@ def s_error():
     return master(lowpass_fast(buzz, 900) * env(n, 0.005, 0.1, 0.3, 0.1, 0.02), 0.55)
 
 
+def s_lift():
+    """Picking an item up: a tiny rising bloop, light as a bubble leaving water."""
+    b = bloop(420, 900, 0.07)
+    return master(mixdown([(0, b, 0.6), (0.01, kalimba(note(19), 0.12), 0.14)], 0.16), 0.42)
+
+
+def s_land():
+    """Setting an item down on an empty tile: a soft round thump with a wooden tick."""
+    n = int(SR * 0.16)
+    thump = sine(150, 0.16) * expdecay(n, 0.035)
+    thump = thump + fit(bloop(520, 260, 0.06), n) * 0.5
+    tick = marimba(note(4), 0.12, soft=0.7)
+    return master(mixdown([(0, thump, 0.7), (0.005, tick, 0.3)], 0.18), 0.5)
+
+
+def s_swap():
+    """Two items trading places: two quick bloops passing each other."""
+    a = bloop(380, 700, 0.07)
+    b = bloop(700, 380, 0.07)
+    return master(mixdown([(0, a, 0.55), (0.06, b, 0.55), (0.11, kalimba(note(12), 0.14), 0.18)], 0.26), 0.5)
+
+
+def s_hover():
+    """Over a tile it would merge with: the faintest glass tick, a promise."""
+    return master(glass(note(26), 0.18), 0.28)
+
+
+def s_click():
+    """A menu button: a short soft tok, quieter than the board's tap."""
+    return master(mixdown([(0, marimba(note(-5), 0.09, soft=0.9), 0.8), (0, bloop(500, 650, 0.03), 0.25)], 0.1), 0.3)
+
+
+def s_nope():
+    """A refused move: a gentle two-note 'uh-uh', not a buzzer."""
+    a = kalimba(note(4), 0.12)
+    b = kalimba(note(0), 0.18)
+    return master(lowpass_fast(mixdown([(0, a, 0.6), (0.09, b, 0.6)], 0.3), 2400), 0.45)
+
+
 def s_whoosh():
     n = int(SR * 0.4)
     sw = highpass_fast(noise(0.4), 700) * np.concatenate(
@@ -655,13 +694,20 @@ def main():
         'streak4': s_streak(3), 'streak5': s_streak(4),
         'bag': s_bag(),
         'boost': s_boost(),
+        'lift': s_lift(), 'land': s_land(), 'swap': s_swap(), 'hover': s_hover(),
+        'click': s_click(), 'nope': s_nope(),
     }
+    only = [a for a in sys.argv[1:] if not a.startswith('-')]
+    if only:
+        sfx = {k: v for k, v in sfx.items() if k in only}
     total = 0
     for name, buf in sfx.items():
         size = write(name, buf, quality='1')
         total += size
         print(f'  sfx  {name:<10} {len(buf)/SR:5.2f}s  {size/1024:6.1f} kB')
 
+    if only:
+        return
     for maker in (earth_theme, luna_theme, cindra_theme, nerith_theme, vela_theme):
         name, l, r = maker()
         size = write(name, l, stereo=r, quality='0')
