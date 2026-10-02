@@ -164,7 +164,9 @@ class PixiBoard {
     producerArts.forEach(a => add('p:' + a, ART.producer(a), ART.spriteProducer(a)));
     ['earth', 'luna', 'cindra'].forEach(w => add('w:' + w, ART.weed(w)));
     add('coin', ART.iconSvg('coin'), ART.spriteUi('icon_coin') || undefined);
-    ['tile_light', 'tile_dark', 'tile_locked', 'bubble_film'].forEach(k => {
+    // shared tiles, plus each world's own set when it has been painted (tile_light_luna …)
+    const tiles = ['tile_light', 'tile_dark', 'tile_locked'];
+    [...tiles, 'bubble_film', ...Object.keys(THEME).flatMap(w => tiles.map(t => t + '_' + w))].forEach(k => {
       const url = ART.spriteUi(k); if (url) add('ui:' + k, '', url);
     });
     await Promise.all(jobs);
@@ -302,8 +304,9 @@ class PixiBoard {
     const dark = ((i % this.cols) + ((i / this.cols) | 0)) % 2 === 1;
     g.clear();
     const art = this.tileArt[i];
-    const paint = this.tex[locked ? 'ui:tile_locked' : dark ? 'ui:tile_dark' : 'ui:tile_light']
-      || (locked ? undefined : this.tex['ui:tile_light']);
+    const kind = locked ? 'tile_locked' : dark ? 'tile_dark' : 'tile_light';
+    const paint = this.tex['ui:' + kind + '_' + this.theme] || this.tex['ui:' + kind]
+      || (locked ? undefined : this.tex['ui:tile_light_' + this.theme] || this.tex['ui:tile_light']);
     if (art) art.visible = !!paint;
     if (paint && art) {
       // a painted tile carries its own light and shade; only the rarity frame is drawn over it
@@ -361,7 +364,7 @@ class PixiBoard {
     if (c.b) {
       // a painted overgrown tile already carries its weeds
       s.art = this.sprite('w:' + this.theme, i, 0.78);
-      if (this.tex['ui:tile_locked']) s.art.alpha = 0;
+      if (this.tex['ui:tile_locked_' + this.theme] || this.tex['ui:tile_locked']) s.art.alpha = 0;
       const t = new Text({ text: 'lv' + c.b, style: { fontFamily: 'Fredoka, sans-serif', fontSize: this.cell * 0.22, fontWeight: '700', fill: 0xffffff } });
       t.anchor.set(0.5);
       const p = this.center(i);
