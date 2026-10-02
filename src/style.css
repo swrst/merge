@@ -1341,3 +1341,51 @@ html.ui-dock_btn .rail.dock .railBtn.on:before{content:"";position:absolute;left
 .spot.heart .spotArt{width:74px;height:82px}
 .sceneName{top:12px;left:12px}
 .starMapBtn{top:56px}
+
+/* ============================================================ v15 art + features */
+/* boot screen: the splash with the logo, gone as soon as the board is ready */
+.bootScr{position:absolute;inset:0;z-index:500;background:#7fd2fb var(--ui-splash) center/cover no-repeat;display:flex;flex-direction:column;align-items:center;transition:opacity .5s}
+.bootScr.gone{opacity:0;pointer-events:none}
+.bootLogo{width:82%;height:28%;margin-top:9%;background:var(--ui-logo) center/contain no-repeat;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35));animation:bob 2.4s ease-in-out infinite}
+.bootBar{margin-top:auto;margin-bottom:12%;width:56%;height:14px;border-radius:99px;background:rgba(60,35,10,.5);border:3px solid #fff;overflow:hidden}
+.bootBar i{display:block;height:100%;width:40%;border-radius:99px;background:linear-gradient(90deg,#ffd75e,#ff9f2e);animation:bootLoad 1.4s ease-in-out infinite}
+@keyframes bootLoad{0%{transform:translateX(-100%)}100%{transform:translateX(260%)}}
+/* painted frames */
+html.ui-strip_bg .questBtn{background:var(--ui-strip_bg) center/100% 100% no-repeat;border-color:transparent;box-shadow:none;padding-left:10px;padding-right:12px}
+html.ui-coach_bg .coachBub{background:var(--ui-coach_bg) center/100% 100% no-repeat;border:0;box-shadow:none;padding:16px 16px 10px 10px}
+html.ui-name_tag .tkName{background:var(--ui-name_tag) center/100% 100% no-repeat;box-shadow:none;padding:6px 26px 8px}
+html.ui-portrait_ring .qFace,html.ui-portrait_ring .avatar{background:#fff6e0;box-shadow:0 0 0 3px #e9a82a,0 2px 4px rgba(0,0,0,.25);border:0}
+#tHand img{width:58px;height:auto;filter:drop-shadow(0 4px 6px rgba(0,0,0,.35))}
+html.ui-hand #tHand{font-size:0}
+/* level up: painted banner over spinning rays */
+html.ui-levelup_banner .luCard{background:var(--ui-levelup_banner) center/contain no-repeat;border:0;box-shadow:none;padding:58px 70px 40px;min-width:300px;text-align:center}
+.luRays{position:absolute;left:50%;top:50%;width:420px;height:420px;margin:-210px 0 0 -210px;background:var(--ui-fx_rays) center/contain no-repeat;opacity:.9;animation:spinSlow 8s linear infinite}
+.levelup .luCard{position:relative}
+/* icons */
+.resIc .uiIc{width:34px;height:34px}
+.qChip .uiIc{width:22px;height:22px}
+#sndBtn .uiIc,#musBtn .uiIc{width:24px;height:24px;margin-right:4px;vertical-align:-6px}
+/* undo */
+.undoBtn{display:none;background:linear-gradient(180deg,#9fd8ff,#3f9de6);color:#fff;box-shadow:0 3px 0 #2b74b0}
+.infoBar.undo .undoBtn{display:block}
+.infoBar.undo #btnSell,.infoBar.undo #btnStash,.infoBar.undo #btnRecycle{display:none!important}
+/* discoveries */
+.card.disc{background:linear-gradient(180deg,#fffbe9,#fff0c2);box-shadow:0 0 0 2px #ffd46a,0 4px 0 rgba(200,140,30,.3)}
+.card.disc .uiIc{width:30px;height:30px;vertical-align:-8px}
+.discRow{display:flex;gap:4px;flex-wrap:wrap;align-items:center;margin:6px 0 0}
+.discIt{width:36px;height:36px;border-radius:10px;background:#fff;box-shadow:0 2px 0 rgba(150,105,50,.18)}.discIt svg,.discIt img{width:100%;height:100%}
+.discRow i{font-style:normal;font-weight:800;color:#b07c1e;font-size:12px}
+/* achievements */
+.achCard{display:flex;align-items:center;gap:10px;width:100%;text-align:left;font-family:inherit;color:#5c4327}
+.achCard.ready{background:linear-gradient(180deg,#fffbe9,#fff0c2);box-shadow:0 0 0 2px #ffd46a,0 4px 0 rgba(200,140,30,.3);animation:readyBob 1.6s ease-in-out infinite}
+.achCard b{display:block;font-size:14px}.achCard i{font-style:normal;font-size:11px;font-weight:600;color:#9a7a4e}
+.achIc .uiIc{width:44px;height:44px}.achIc{font-size:34px}
+.achList{display:flex;flex-direction:column;gap:2px}
+.enRow.ach.ready{background:linear-gradient(180deg,#fffbe9,#fff0c2);box-shadow:0 0 0 2px #ffd46a}
+.achDim{color:#e2d3b5}
+.achBar{display:block;height:6px;border-radius:99px;background:#eddfc2;margin-top:4px;overflow:hidden}.achBar em{display:block;height:100%;background:linear-gradient(90deg,#ffd75e,#ff9f2e)}
+.achDone{font-size:20px;color:#3f9a28;font-weight:900;padding:0 10px}
+/* chapter prize preview */
+.przRow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0 2px;padding:6px 8px;border-radius:12px;background:#fff8e6;border:2px dashed #f0cf8a}
+.przRow i{font-style:normal;font-size:11px;font-weight:800;color:#b07c1e}
+.prz{display:flex;align-items:center;gap:4px;font-size:11px}.prz svg,.prz img{width:30px;height:30px}.prz b{color:#5c4327}

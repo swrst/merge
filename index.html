@@ -11,6 +11,7 @@
 </head>
 <body>
 <div class="app" id="app">
+  <div class="bootScr" id="bootScr"><div class="bootLogo"></div><div class="bootBar"><i></i></div></div>
   <!-- the board sits on the same painted world the camp is drawn in, pushed
        back with a blur and a warm wash so the tiles stay readable -->
   <div class="scene" id="scene"><div class="sceneBack"></div><div class="sceneWash"></div>
@@ -60,6 +61,7 @@
     <button class="sellBtn alt" id="btnStash">Stash</button>
     <button class="sellBtn sci" id="btnRecycle">🧪</button>
     <button class="sellBtn" id="btnSell">Sell</button>
+    <button class="sellBtn undoBtn" id="btnUndo">↩ Undo</button>
     <button class="xBtn" id="infoClose">✕</button>
   </div>
 
@@ -70,7 +72,7 @@
     <button class="tab railBtn" data-v="rocket" id="tabRocket"><span class="ti">📜</span><i>Goals</i><span class="dot" id="dotRocket" style="display:none"></span></button>
     <button class="tab railBtn" data-v="fun" id="tabFun"><span class="ti">🎪</span><i>Fun</i><span class="dot" id="dotFun" style="display:none"></span></button>
     <button class="tab railBtn" data-v="lab" id="tabLab"><span class="ti">🔬</span><i>Lab</i><span class="dot" id="dotLab" style="display:none"></span></button>
-    <button class="tab railBtn" data-v="book" id="tabBook"><span class="ti">📖</span><i>Album</i></button>
+    <button class="tab railBtn" data-v="book" id="tabBook"><span class="ti">📖</span><i>Album</i><span class="dot" id="dotBook" style="display:none"></span></button>
     <button class="tab railBtn" data-v="shop" id="tabShop"><span class="ti">🛒</span><i>Shop</i><span class="dot" id="dotShop" style="display:none"></span></button>
   </div>
 
@@ -143,7 +145,7 @@
 
   <div class="toast" id="toast"></div>
 
-  <div class="levelup" id="levelup"><div class="luCard"><div class="luT" id="luTxt">LEVEL 2!</div><div class="luS" id="luSub">Energy refilled</div></div></div>
+  <div class="levelup" id="levelup"><div class="luRays"></div><div class="luCard"><div class="luT" id="luTxt">LEVEL 2!</div><div class="luS" id="luSub">Energy refilled</div></div></div>
 
   <div class="modal" id="modal"><div class="mBoxW">
     <div class="face" id="mFace"></div>

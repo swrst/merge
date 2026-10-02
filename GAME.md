@@ -764,3 +764,11 @@ The empty plot in the camp says which level opens it.
   - Beside each planet, a card with its name, theme, chapter progress and one clear action (fly back, launch, or what still needs restoring).
 - **Sprites.** `npm run art:optimize` now re-centres every item, producer and portrait and scales it to a consistent fill (86% / 92% / 94%).
 - **Ribbon titles** sit inside the painted band.
+
+## v15 — discoveries, achievements, undo, chapter prizes, full painted UI
+
+- **Discoveries**: the first time you make any item (tier 2+) a present waits in the Album (coins, XP, energy for big finds). The Album button shows a dot.
+- **Achievements** (🏆 in Goals): 7 long-term goals with 3–4 tiers each: merges, contracts, discoveries, chests, chapters, friendship, level. Rewards grow to coins and wheel spins.
+- **Undo sell**: an Undo button stays for 4 seconds after selling.
+- **Chapter prizes**: each chapter's Goals card shows what it unlocks (producer, visitor, Lab, chest, new world).
+- **Art**: a boot screen with the splash and logo, a new app icon and Android splash, painted overgrown tiles, the soap bubble, the tutorial hand, the chapter bar, coach bubble, name tag, level-up banner with rays, research/fun/event-token/settings icons.

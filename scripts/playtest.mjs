@@ -541,19 +541,19 @@ must(sleeping.length === 0, 'and no contract asks for something that has not wok
 head('A world level brings the next producer');
 let before2 = await page.evaluate(() => {
   const g = window.__game;
-  return { live: g.liveChains().length, prods: g.cells().filter(c => c && c.p).length };
+  return { live: g.liveChains().length, prods: g.cells().filter(c => c && c.p && !c.tmp && c.p !== 'crater').length };
 });
 // not yet: a fresh world is level 1 and the next plot waits for level 2
 await page.evaluate(() => window.__game.grow());
 await page.waitForTimeout(400);
-let mid = await page.evaluate(() => window.__game.cells().filter(c => c && c.p).length);
+let mid = await page.evaluate(() => window.__game.cells().filter(c => c && c.p && !c.tmp && c.p !== 'crater').length);
 must(mid === before2.prods, 'nothing new takes root before its world level');
 await set(() => { const g = window.__game, st = g.state(); st.wlv[st.world] = 2; });
 await page.evaluate(() => window.__game.grow());
 await page.waitForTimeout(1200);
 const after4 = await page.evaluate(() => {
   const g = window.__game;
-  return { live: g.liveChains().length, prods: g.cells().filter(c => c && c.p).length };
+  return { live: g.liveChains().length, prods: g.cells().filter(c => c && c.p && !c.tmp && c.p !== "crater").length };
 });
 must(after4.prods > before2.prods, `reaching the level planted a new producer (${before2.prods} -> ${after4.prods})`);
 must(after4.live > before2.live, `and woke its chain (${before2.live} -> ${after4.live} awake)`);
