@@ -36,7 +36,7 @@ const closeModal = async () => {
   let n = 0;
   while (await page.locator('#modal.open').count() && n++ < 4) {
     if (process.env.MODALS) console.log('   [modal] ' + await page.textContent('#mTitle'));
-    await page.click('#mBtn'); await page.waitForTimeout(300);
+    await page.click('#mBtn'); await page.waitForTimeout(650);   // a queued dialog follows ~450ms after
   }
 };
 const tapCell = async (i) => {
@@ -126,6 +126,9 @@ if (await page.locator('#tSkip').isVisible().catch(() => false)) {
   await page.waitForTimeout(500);
 }
 await page.waitForTimeout(700); await closeModal();
+// just-in-time tips dim the screen and would eat these scripted clicks; this
+// run checks the systems, so the tips count as seen (ux-check covers them)
+await page.evaluate(() => { const s = window.__game.state(); s.tipsOff = 1; window.__game.v9.jitOff(); });
 
 /* ------------------------------------------------------------------ curve */
 head('XP curve is a real climb');
@@ -563,7 +566,7 @@ head('Restoration projects');
 await set(() => {
   const g = window.__game, s = g.state(), b = g.cells();
   for (let i = 0; i < b.length; i++) if (b[i] && b[i].id) b[i] = null;
-  s.proj.vela = 0; s.coins = 5000;
+  s.proj.vela = 0; s.coins = 5000; s.cSince = { earth: 99, luna: 99, cindra: 99, nerith: 99, vela: 99 };
   const fr = []; for (let i = 0; i < b.length; i++) if (!b[i]) fr.push(i);
   b[fr[0]] = { id: 'cloudpuff' }; b[fr[1]] = { id: 'aurorasilk' };
   window.__board.sync(b);
@@ -887,7 +890,7 @@ must(after3.ch === after3.cap, 'handed over full');
 must(after3.drops > grew.dropsBefore, `dropping ${after3.drops} different things now, up from ${grew.dropsBefore}`);
 await closeModal();
 
-head('A maxed producer eventually goes to seed');
+head('A maxed producer stays on the board');
 await tab('board');
 // the producer tested above, by its cell: later levels plant more batteries
 await page.evaluate(i => {
@@ -905,8 +908,7 @@ const seeded = await page.evaluate(i => {
   const g = window.__game, c = g.cells()[i];
   return { p: c && c.p, lv: c && g.plv(c), coins: g.state().coins };
 }, prod.i);
-must(seeded.lv === 1, `it went to seed and a level-1 ${seeded.p} took its place`);
-must(seeded.coins > 0, `paying out ${seeded.coins} coins on the way`);
+must(seeded.p === prod.k && seeded.lv === 4, `a maxed ${seeded.p} keeps working instead of being swapped out (lv ${seeded.lv})`);
 await closeModal();
 
 head('The quest button and the "where do I get one?" panel');
@@ -927,13 +929,17 @@ await tab('board');
 const askedFor = await page.locator('#orders [data-need]').first().getAttribute('data-need');
 const askedLen = await page.evaluate(id => window.__game.chains[window.__game.items[id].chain].items.length, askedFor);
 await page.locator('#orders [data-need]').first().click({ force: true }); await page.waitForTimeout(900);
-// chains run 2 to 8 steps (rocket parts are 3), so count against the one asked for
-must(await page.locator('.chainWrap .chStep').count() === askedLen, `tapping a contract item draws its whole chain (${askedLen} steps)`);
-must(await page.locator('.chStep.want').count() === 1, 'with the one they asked for highlighted');
+// it opens the contract sheet: each need with its chain path up to the item asked for
+const askedTier = await page.evaluate(id => window.__game.items[id].tier, askedFor);
+const pathLen = await page.locator('#pop.open .csNeed').first().locator('.csStep').count();
+must(await page.locator('#pop.open.csheet').count() === 1, 'tapping a contract item opens the contract sheet');
+must(pathLen === askedTier, `with its chain path up to the item (${pathLen} of ${askedLen} steps)`);
+must(await page.locator('#pop.open .csStep.goal').count() >= 1, 'and the one they asked for highlighted');
 const srcOn = await page.evaluate(id => { const g = window.__game, ch = g.items[id].chain;
   return g.cells().some(c => c && c.p && g.prods[c.p].drops.some(d => g.items[d].chain === ch)); }, askedFor);
-must(await page.locator('.srcBox').count() === (srcOn ? 1 : 0), srcOn ? 'and points at the producer that starts it' : 'and says where it comes from (its producer is not on this board)');
-await closeModal();
+const goBtn = await page.locator('#pop.open .csGo').count();
+must(srcOn ? goBtn >= 1 : true, srcOn ? 'and a button that points at the producer' : 'its producer is not on this board');
+await page.evaluate(() => window.__game.v9.closePop()); await page.waitForTimeout(400);
 
 head('The guided intro');
 {
@@ -985,7 +991,7 @@ must((await S()).world === 'earth', 'back home in the meadow');
 await set(() => {
   const g = window.__game, s = g.state(), b = g.cells();
   for (let i = 0; i < b.length; i++) if (b[i] && (b[i].id || (b[i].p && b[i].p !== 'tree'))) b[i] = null;
-  s.proj.earth = 0; s.coins = 5000; s.vis = null; s.guestBack = null; s.pendingPlant = null;
+  s.proj.earth = 0; s.coins = 5000; s.cSince = { earth: 99, luna: 99, cindra: 99, nerith: 99, vela: 99 }; s.vis = null; s.guestBack = null; s.pendingPlant = null;
   const fr = []; for (let i = 0; i < b.length; i++) if (!b[i]) fr.push(i);
   b[fr[0]] = { id: 'branch' }; b[fr[1]] = { id: 'branch' };
   window.__board.sync(b);
@@ -1000,7 +1006,7 @@ must(!s.boards.earth.some(c => c && c.p && c.p !== 'tree' && c.p !== 'rocks'), '
 await set(() => {
   const g = window.__game, s = g.state(), b = g.cells();
   for (let i = 0; i < b.length; i++) if (b[i] && b[i].id) b[i] = null;
-  s.proj.earth = 2;
+  s.proj.earth = 2; s.cSince = { earth: 99 };
   const fr = []; for (let i = 0; i < b.length; i++) if (!b[i]) fr.push(i);
   const pj = window.__game.state().proj; void pj;
   ['jam', 'berries', 'berries'].forEach((id, k) => { b[fr[k]] = { id }; });
@@ -1022,7 +1028,7 @@ head('Chapter 5 builds the Lab');
 await set(() => {
   const g = window.__game, s = g.state(), b = g.cells();
   for (let i = 0; i < b.length; i++) if (b[i] && b[i].id) b[i] = null;
-  s.proj.earth = 4; s.lab.built = 0; s.coins = 5000; s.vis = null; s.guestBack = null;
+  s.proj.earth = 4; s.lab.built = 0; s.coins = 5000; s.cSince = { earth: 99, luna: 99, cindra: 99, nerith: 99, vela: 99 }; s.vis = null; s.guestBack = null;
   const fr = []; for (let i = 0; i < b.length; i++) if (!b[i]) fr.push(i);
   ['scrap', 'lumber', 'geode'].forEach((id, k) => { b[fr[k]] = { id }; });
   window.__board.sync(b);

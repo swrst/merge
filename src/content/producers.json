@@ -1368,8 +1368,8 @@
       "tankglass"
     ],
     "mode": "battery",
-    "cap": 12,
-    "every": 100000
+    "cap": 16,
+    "every": 30000
   },
   "crater": {
     "name": "Meteor Crater",
