@@ -2,7 +2,7 @@
 
 Paste the **setup message** first, then the sheets. Save into `Desktop\chatgpt art` (any file name is fine; one collage of all sheets also works — it gets cut the same way).
 
-To do: 90 items in 15 chains, 13 producers, the board tiles.
+To do: 76 items in 13 chains, 13 producers, the board tiles.
 
 ---
 
@@ -26,32 +26,6 @@ Attach **STYLE-REFERENCE.png** (in the chatgpt art folder) as the style referenc
 ---
 
 ## Sheet 1 → `nerith_sheet1.png`
-
-Grid: **4 columns × 4 rows**. Rows 1–2: the "Shell Bed" chain; Rows 3–4: the "Kelp Forest" chain.
-
-**Shell Bed** (rows 1–2):
-1. Shell Chip — a small pink shell fragment
-2. Sea Shell — a single pink scallop shell
-3. Great Shell — a big spiral conch
-4. Nautilus — a striped nautilus shell
-5. Shell Horn — a conch horn with a gold mouthpiece
-6. Shell Throne — a throne made of a giant scallop shell
-7. Shell Palace — a palace built of giant spiral shells on a pink sandbar
-8. EMPTY
-
-**Kelp Forest** (rows 3–4):
-1. Kelp Leaf — a single wavy kelp leaf
-2. Kelp Frond — a tall kelp frond with air bladders
-3. Kelp Coil — a coiled rope of kelp
-4. Kelp Bale — a bundled bale of kelp
-5. Kelp Grove — a tall swaying kelp tree
-6. Tide Grove — a hut woven from kelp with glowing windows
-7. Kelp Cathedral — a towering spire of woven kelp and glowing lanterns
-8. EMPTY
-
----
-
-## Sheet 2 → `nerith_sheet2.png`
 
 Grid: **4 columns × 4 rows**. Rows 1–2: the "Pearl Diving" chain; Rows 3–4: the "Coral Reef" chain.
 
@@ -77,7 +51,7 @@ Grid: **4 columns × 4 rows**. Rows 1–2: the "Pearl Diving" chain; Rows 3–4:
 
 ---
 
-## Sheet 3 → `nerith_sheet3.png`
+## Sheet 2 → `nerith_sheet2.png`
 
 Grid: **4 columns × 4 rows**. Rows 1–2: the "Fish Market" chain; Rows 3–4: the "Tide Pools" chain.
 
@@ -100,7 +74,7 @@ Grid: **4 columns × 4 rows**. Rows 1–2: the "Fish Market" chain; Rows 3–4: 
 
 ---
 
-## Sheet 4 → `nerith_sheet4.png`
+## Sheet 3 → `nerith_sheet3.png`
 
 Grid: **4 columns × 4 rows**. Rows 1–2: the "Salt Pans" chain; Rows 3–4: the "Sunken Finds" chain.
 
@@ -125,7 +99,7 @@ Grid: **4 columns × 4 rows**. Rows 1–2: the "Salt Pans" chain; Rows 3–4: th
 
 ---
 
-## Sheet 5 → `nerith_sheet5.png`
+## Sheet 4 → `nerith_sheet4.png`
 
 Grid: **4 columns × 4 rows**. Rows 1–2: the "Deep Lights" chain; Rows 3–4: the "Reef Critters" chain.
 
@@ -149,7 +123,7 @@ Grid: **4 columns × 4 rows**. Rows 1–2: the "Deep Lights" chain; Rows 3–4: 
 
 ---
 
-## Sheet 6 → `nerith_sheet6.png`
+## Sheet 5 → `nerith_sheet5.png`
 
 Grid: **4 columns × 4 rows**. Rows 1–2: the "Turtle Cove" chain; Rows 3–4: the "Harbour" chain.
 
@@ -172,7 +146,7 @@ Grid: **4 columns × 4 rows**. Rows 1–2: the "Turtle Cove" chain; Rows 3–4: 
 
 ---
 
-## Sheet 7 → `nerith_sheet7.png`
+## Sheet 6 → `nerith_sheet6.png`
 
 Grid: **4 columns × 4 rows**. Rows 1–2: the "Sea Glass" chain; Rows 3–4: the "Urchin Garden" chain.
 
@@ -194,7 +168,7 @@ Grid: **4 columns × 4 rows**. Rows 1–2: the "Sea Glass" chain; Rows 3–4: th
 
 ---
 
-## Sheet 8 → `nerith_sheet8.png`
+## Sheet 7 → `nerith_sheet7.png`
 
 Grid: **4 columns × 2 rows**. Rows 1–2: the "Manta Glide" chain.
 
@@ -208,7 +182,7 @@ Grid: **4 columns × 2 rows**. Rows 1–2: the "Manta Glide" chain.
 
 ---
 
-## Sheet 9 → `nerith_sheet9.png` (producers)
+## Sheet 8 → `nerith_sheet8.png` (producers)
 
 Grid: **3 columns × 3 rows**. PRODUCERS: things the player taps to get items, so they read as scenery, not loot. Each stands on its own small round mound (the mound is part of the object and the only ground shown), slightly taller than wide, a touch bigger and more detailed than items.
 
@@ -224,7 +198,7 @@ Grid: **3 columns × 3 rows**. PRODUCERS: things the player taps to get items, s
 
 ---
 
-## Sheet 10 → `nerith_sheet10.png` (producers)
+## Sheet 9 → `nerith_sheet9.png` (producers)
 
 Grid: **2 columns × 2 rows**. PRODUCERS: things the player taps to get items, so they read as scenery, not loot. Each stands on its own small round mound (the mound is part of the object and the only ground shown), slightly taller than wide, a touch bigger and more detailed than items.
 
@@ -235,7 +209,7 @@ Grid: **2 columns × 2 rows**. PRODUCERS: things the player taps to get items, s
 
 ---
 
-## Sheet 11 → `nerith_tiles.png` (board tiles)
+## Sheet 10 → `nerith_tiles.png` (board tiles)
 
 Grid: **3 columns × 1 row**, wide gaps. Merge-board squares for Tidal Shallows, matching the shape, corner radius and bevel of the plain board tiles in STYLE-REFERENCE.png. Straight from above, perfectly square, calm in the middle.
 1. Light tile — Tidal Shallows ground, very subtle texture.

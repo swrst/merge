@@ -2,7 +2,7 @@
 
 Paste the **setup message** first, then the sheets. Save into `Desktop\chatgpt art` (any file name is fine; one collage of all sheets also works — it gets cut the same way).
 
-To do: 94 items in 15 chains, 13 producers, the board tiles.
+To do: 51 items in 8 chains, 0 producers.
 
 ---
 
@@ -27,31 +27,6 @@ Attach **STYLE-REFERENCE.png** (in the chatgpt art folder) as the style referenc
 
 ## Sheet 1 → `vela_sheet1.png`
 
-Grid: **4 columns × 4 rows**. Rows 1–2: the "Cloud Bank" chain; Rows 3–4: the "Aurora Weave" chain.
-
-**Cloud Bank** (rows 1–2):
-1. Wisp — a tiny wisp of cloud
-2. Cloudlet — a small round cloud
-3. Cloud Puff — a big fluffy cloud
-4. Thunderhead — a dark cloud with a gold lightning bolt
-5. Cloud Castle — a castle built on a cloud
-6. Cloud City — a city of cloud towers joined by rainbow bridges
-7. Sky Kingdom — a grand floating kingdom of white-and-gold palaces on a cloud island
-8. EMPTY
-
-**Aurora Weave** (rows 3–4):
-1. Aurora Thread — a glowing teal thread
-2. Aurora Silk — a folded shimmering silk
-3. Aurora Veil — a floating ribbon of aurora light
-4. Aurora Cloak — a cloak made of aurora light on a stand
-5. Aurora Crown — a crown of aurora light with star points
-6. Aurora Harp — a golden harp strung with aurora light
-7–8. EMPTY
-
----
-
-## Sheet 2 → `vela_sheet2.png`
-
 Grid: **4 columns × 4 rows**. Rows 1–2: the "Star Nursery" chain; Rows 3–4: the "Wind Currents" chain.
 
 **Star Nursery** (rows 1–2):
@@ -75,31 +50,7 @@ Grid: **4 columns × 4 rows**. Rows 1–2: the "Star Nursery" chain; Rows 3–4:
 
 ---
 
-## Sheet 3 → `vela_sheet3.png`
-
-Grid: **4 columns × 4 rows**. Rows 1–2: the "Sky Orchard" chain; Rows 3–4: the "Chime Tower" chain.
-
-**Sky Orchard** (rows 1–2):
-1. Sky Seed — a floating mint seed with a tiny wing
-2. Sky Bud — a blossom floating on a cloud
-3. Sky Fruit — a round golden floating fruit
-4. Sky Basket — a basket of sky fruit hanging from a balloon
-5. Cloud Feast — a cloud cake topped with sky fruit
-6. Orchard Isle — a floating island with a fruit tree and a little house
-7–8. EMPTY
-
-**Chime Tower** (rows 3–4):
-1. Chime Shard — a small silver chime rod
-2. Chime Bell — a silver bell
-3. Chime Ring — a ring of hanging chimes
-4. Chime Tower — a tall tower of chimes
-5. Sky Bell — a great golden bell glowing with aurora
-6. Chime Cathedral — a soaring golden cathedral full of bells and aurora light
-7–8. EMPTY
-
----
-
-## Sheet 4 → `vela_sheet4.png`
+## Sheet 2 → `vela_sheet2.png`
 
 Grid: **4 columns × 4 rows**. Rows 1–2: the "Prism Array" chain; Rows 3–4: the "Sky Nest" chain.
 
@@ -123,7 +74,7 @@ Grid: **4 columns × 4 rows**. Rows 1–2: the "Prism Array" chain; Rows 3–4: 
 
 ---
 
-## Sheet 5 → `vela_sheet5.png`
+## Sheet 3 → `vela_sheet3.png`
 
 Grid: **4 columns × 4 rows**. Rows 1–2: the "Drift Yards" chain; Rows 3–4: the "Star Critters" chain.
 
@@ -147,7 +98,7 @@ Grid: **4 columns × 4 rows**. Rows 1–2: the "Drift Yards" chain; Rows 3–4: 
 
 ---
 
-## Sheet 6 → `vela_sheet6.png`
+## Sheet 4 → `vela_sheet4.png`
 
 Grid: **4 columns × 4 rows**. Rows 1–2: the "Satellite Works" chain; Rows 3–4: the "Nebula Jars" chain.
 
@@ -169,78 +120,4 @@ Grid: **4 columns × 4 rows**. Rows 1–2: the "Satellite Works" chain; Rows 3�
 5. Nebula Lamp — a lantern glowing with nebula colours
 6. Bottled Galaxy — a corked bottle with a whole spiral galaxy inside
 7–8. EMPTY
-
----
-
-## Sheet 7 → `vela_sheet7.png`
-
-Grid: **4 columns × 4 rows**. Rows 1–2: the "Starflower Beds" chain; Rows 3–4: the "Tiny Planets" chain.
-
-**Starflower Beds** (rows 1–2):
-1. Starseed — a tiny glowing seed shaped like a star
-2. Star Sprout — a sprout with star-tipped leaves
-3. Starflower — a flower with star-shaped petals
-4. Starflower Pot — a pot of starflowers
-5. Celestial Garden — a floating flowerbed of starflowers under a glowing arch
-6. Starflower Meadow — a floating meadow island carpeted in glowing starflowers
-7–8. EMPTY
-
-**Tiny Planets** (rows 3–4):
-1. Planet Dust — a tiny floating speck of rock
-2. Planetoid — a small lumpy planetoid
-3. Mini Planet — a tiny round planet with seas and green land
-4. Ringed Planet — a planet with a wide cream ring
-5. Twin Planets — two little planets orbiting each other
-6. Orrery — a brass orrery with planets on arms
-7. Galaxy Swirl — a small spiral galaxy floating and glowing
-8. Pocket Universe — a glass sphere holding galaxies and stars
-
----
-
-## Sheet 8 → `vela_sheet8.png`
-
-Grid: **4 columns × 2 rows**. Rows 1–2: the "Sky Kites" chain.
-
-**Sky Kites** (rows 1–2):
-1. Kite Tail — a ribbon kite tail with bows
-2. Kite — a diamond kite with a bow tail
-3. Box Kite — a box kite with striped panels
-4. Dragon Kite — a long glowing dragon kite coiling through the sky
-5–8. EMPTY
-
----
-
-## Sheet 9 → `vela_sheet9.png` (producers)
-
-Grid: **3 columns × 3 rows**. PRODUCERS: things the player taps to get items, so they read as scenery, not loot. Each stands on its own small round mound (the mound is part of the object and the only ground shown), slightly taller than wide, a touch bigger and more detailed than items.
-
-1. Star Cradle — a crescent-shaped cradle holding a sleeping little star
-2. Wind Vane — a tall silver weathervane on a cloud, spinning
-3. Sky Orchard — a small tree growing out of a cloud, heavy with golden fruit
-4. Chime Post — a silver post hung with wind chimes
-5. Prism Stand — a glass prism on a stand throwing a small rainbow
-6. Sky Nest — a big fluffy nest on a cloud with an egg inside
-7. Silk Loom — a spinning wheel on a cloud with pink silk
-8. Star Den — a cosy cloud cave glittering with stars, a little star-sprite peeking out
-9. Solar Array — a small tilted rack of blue solar panels on a cloud
-
----
-
-## Sheet 10 → `vela_sheet10.png` (producers)
-
-Grid: **2 columns × 2 rows**. PRODUCERS: things the player taps to get items, so they read as scenery, not loot. Each stands on its own small round mound (the mound is part of the object and the only ground shown), slightly taller than wide, a touch bigger and more detailed than items.
-
-1. Nebula Pool — a swirling pool of pink-violet nebula gas in a cloud hollow
-2. Star Bed — a round cloud planter of glowing star-tipped sprouts
-3. Gravity Well — a swirling vortex of violet light pulling tiny rocks into orbit
-4. Kite Post — a striped post on a cloud with ribbons and a kite tangled on top
-
----
-
-## Sheet 11 → `vela_tiles.png` (board tiles)
-
-Grid: **3 columns × 1 row**, wide gaps. Merge-board squares for Aurora Reach, matching the shape, corner radius and bevel of the plain board tiles in STYLE-REFERENCE.png. Straight from above, perfectly square, calm in the middle.
-1. Light tile — Aurora Reach ground, very subtle texture.
-2. Dark tile — the same, slightly deeper, for a gentle checkerboard.
-3. Locked tile — the same tile buried under this world's "not yours yet" cover (ash, rubble, sand, cloud…), friendly, with a couple of small sparkles.
 

@@ -1674,3 +1674,24 @@ html.ui-reward_card .rwcArt,html.ui-reward_card .rwcArt img,html.ui-reward_card 
 .fbMood{display:flex;justify-content:center;gap:8px;margin-top:8px}
 .fbM{font-size:26px;width:46px;height:46px;border-radius:50%;border:2px solid transparent;background:#fff;box-shadow:0 2px 0 rgba(150,105,50,.25)}
 .fbM.on{border-color:#4cb83a;transform:scale(1.12)}
+img.emo{height:1.2em;width:auto;vertical-align:-.25em;margin:0 .04em;display:inline-block;pointer-events:none}
+
+/* v26: Power ×2 and the Moon Pup */
+.hintTag.x2{font-weight:800;color:#7a5326}
+.hintTag.x2.on{background:linear-gradient(180deg,#ffe07a,#f5b120);color:#5a3a00;box-shadow:0 0 0 2px #fff,0 0 12px rgba(255,190,40,.8);animation:readyBob 1.2s ease-in-out infinite}
+.qChip.pup{padding-left:2px}
+.qChip.pup .pupImg{width:30px;height:30px;object-fit:contain;margin:-6px 0 -4px}
+.qChip.pup.ready{background:linear-gradient(180deg,#fff3c2,#ffd86b);box-shadow:0 0 0 2px #fff,0 0 12px rgba(255,200,60,.8);animation:readyBob 1s ease-in-out infinite}
+.qChip.pup.ready .pupImg{animation:pupWag .5s ease-in-out infinite alternate}
+@keyframes pupWag{from{transform:rotate(-8deg)}to{transform:rotate(8deg)}}
+.pupBox{text-align:center}
+.pupStage{position:relative;height:170px;display:flex;align-items:flex-end;justify-content:center}
+.pupStage .pupImg{width:170px;height:170px;object-fit:contain;transform:scale(var(--s,1));transform-origin:50% 100%;animation:pupIdle 2.4s ease-in-out infinite}
+@keyframes pupIdle{0%,100%{translate:0 0}50%{translate:0 -4px}}
+.pupStage.petted .pupImg{animation:pupPet .6s cubic-bezier(.3,1.7,.5,1)}
+@keyframes pupPet{0%{transform:scale(var(--s,1))}30%{transform:scale(calc(var(--s,1)*1.12),calc(var(--s,1)*.88))}60%{transform:scale(calc(var(--s,1)*.95),calc(var(--s,1)*1.08))}100%{transform:scale(var(--s,1))}}
+.pupHeart{position:absolute;bottom:60px;font-style:normal;font-size:22px;animation:heartUp 1.3s ease-out forwards;pointer-events:none}
+@keyframes heartUp{0%{opacity:0;transform:translateY(0) scale(.5)}20%{opacity:1}100%{opacity:0;transform:translateY(-110px) scale(1.2)}}
+.pupName{display:block;font:700 18px Fredoka,system-ui,sans-serif;color:#6b4510;margin:4px 0}
+.rwcWho .pupImg{width:100%;height:100%;object-fit:contain;transform:none}
+#ribbon .rbIc .pupImg{width:30px;height:30px;object-fit:contain}

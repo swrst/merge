@@ -1,8 +1,6 @@
 /* MERGE ROCKET - core game loop. Earth -> rebuild a rocket -> new worlds. */
 import { ART } from './art';
 // the painted backdrops the camp and the lab stand on
-import campEarthBg from './scenes/camp_earth.webp';
-import labRoomBg from './scenes/lab.webp';
 import SCENE_ANCHORS from './sprites/scenes/anchors.json';
 import { haptic } from './native';
 import { board } from './board';
@@ -552,6 +550,7 @@ export async function startGame() {
     add('research', 'Lab', L2().research.filter((r: any) => res(r.id) < r.max && S.sci >= researchCost(r)).length ? 1 : 0, ART.uiIcon('cl_flask', '🧪'), 'You can afford new research', () => setView('lab'));
     const essence = B().some((c: any) => c && c.id && bloomValue(c.id) > 0);
     add('bloom', 'World', essence && !worldAwake() ? 1 : 0, ART.uiIcon('ic_globe', '🌍'), 'Wake the world with your essence', () => setView('map'));
+    add('pup', '', S.pup && !pupLeft() ? 1 : 0, pupArt(), 'Your Moon Pup fetched a gift!', () => pupPop());
     add('chapter', '', projReady(curProject()) ? 1 : 0, ART.uiIcon('cl_build', '🚀'), 'Chapter ready to build!', () => ($('#btnQuests') as HTMLElement).click());
     return out;
   }
@@ -1154,7 +1153,7 @@ export async function startGame() {
       if (c.ch >= cap) c.at = Date.now();          // start the clock on the first tap
       c.ch--;
     } else if (p.mode === 'energy') {
-      const cost = ecost(p, plv(c));
+      const cost = ecost(p, plv(c)) * (boostOn() ? 2 : 1);
       if (S.energy < cost) {
         sfx.no(); bumpChip('#chipEnergy');
         toast(`Out of energy — ${p.name} costs <b>${cost} ⚡</b> a tap.`);
@@ -1167,6 +1166,8 @@ export async function startGame() {
     // The wreck is not a slot machine: it hands out pieces for the part you are
     // furthest from finishing, so the rocket always creeps forward.
     let id = (c.p === 'wreck' && !allParts() ? partPiece() : null) || rnd(dropsOf(p, plv(c)));
+    // Power ×2: double energy, the drop comes one step up the chain
+    if (boostOn() && p.mode === 'energy' && !c.tmp && nextOf(id) && !ITEMS[id].part) id = nextOf(id) as string;
     // Golden Touch: now and then the drop arrives one step up
     if (res('golden') && Math.random() < res('golden') * 0.03 && nextOf(id) && !ITEMS[id].part) { id = nextOf(id) as string; setTimeout(() => floatText(spot, '✨ Golden!', '#ffe07a'), 300); }
     b[spot] = { id }; gotItem(id);
@@ -3051,7 +3052,7 @@ export async function startGame() {
   /** the world you are standing in, painted: its own picture if one was dropped
    *  into public/sprites/scenes, otherwise the meadow */
   function applyScene() {
-    const url = ART.spriteScene(S.world) || campEarthBg;
+    const url = ART.spriteScene(S.world) || ART.spriteScene('earth');
     $('#app').style.setProperty('--camp', `url(${url})`);
   }
 
@@ -3136,11 +3137,11 @@ export async function startGame() {
     if (c.r.spin) one(ART.uiIcon('ic_spin', '🎡'), '+' + c.r.spin + ' spin');
     if (c.r.boost) one(rewardIcon({ boost: c.r.boost }), (SHOP.boosters.find((x: any) => x.id === c.r.boost) || { name: c.r.boost }).name);
     el.innerHTML = `<div class="rwcRays"></div><div class="rwcCard"><div class="rwcRib">${c.title}</div>
-      ${c.who ? `<div class="rwcWho">${ART.char(c.who)}</div>` : ''}
+      ${c.who ? `<div class="rwcWho">${c.who.startsWith('<') ? c.who : ART.char(c.who)}</div>` : ''}
       <div class="rwcLine">${c.line}</div><div class="rwcRow">${parts.join('')}</div>
       <button class="big" id="rwcGo">Collect</button></div>`;
     el.className = 'open';
-    sfx.unlock(); if (c.who) setTimeout(() => sfx.voice(c.who, 3), 250);
+    sfx.unlock(); if (c.who && !c.who.startsWith('<')) setTimeout(() => sfx.voice(c.who, 3), 250); else if (c.who) setTimeout(sfx.boing, 250);
     ($('#rwcGo') as HTMLElement).onclick = () => {
       grant(c.r); confetti(); haptic('medium');
       el!.className = 'close';
@@ -3774,19 +3775,90 @@ export async function startGame() {
     const by = $('#enBuy'); if (by) by.onclick = () => { buyRefill(); energyPop(); };
   }
 
+  /* --------------------------------------------------------- Power ×2
+     The Travel Town trick for players with energy to burn: every tap costs
+     double and every drop arrives one step higher. A switch, remembered. */
+  const BOOST_LV = 8;
+  const boostOn = () => !!S.boost2 && S.lvl >= BOOST_LV;
+  function renderBoost() {
+    const t = $('#tools'); if (!t) return;
+    let b = document.getElementById('btnX2');
+    if (S.lvl < BOOST_LV) { if (b) b.remove(); return; }
+    if (!b) {
+      b = document.createElement('button'); b.id = 'btnX2'; b.className = 'hintTag x2';
+      t.insertBefore(b, t.firstChild);
+      b.onclick = () => {
+        S.boost2 = S.boost2 ? 0 : 1; sfx.tap(); haptic('light'); renderBoost(); save();
+        toast(S.boost2 ? '⚡×2 on: taps cost double energy, drops arrive <b>one step higher</b>.' : '⚡×2 off.');
+      };
+    }
+    b.classList.toggle('on', !!S.boost2);
+    b.textContent = S.boost2 ? '⚡×2 ON' : '⚡×2';
+  }
+
+  /* ---------------------------------------------------------- Moon Pup
+     A pet that turns up at level 6 and fetches a little gift every half hour
+     or so. Collecting its gifts grows it through five sizes; a bigger pup
+     fetches sooner and brings better things. Tap it in between just to pet it. */
+  const PUP_LV = 6;
+  const PUP_SIZES = [
+    { at: 0, name: 'Pup', mins: 40 }, { at: 5, name: 'Puppy', mins: 35 }, { at: 15, name: 'Good Pup', mins: 30 },
+    { at: 35, name: 'Big Pup', mins: 25 }, { at: 70, name: 'Mega Pup', mins: 20 }];
+  const pupSize = () => { const n = (S.pup && S.pup.n) || 0; let k = 0; PUP_SIZES.forEach((x, i) => { if (n >= x.at) k = i; }); return k; };
+  const pupLeft = () => S.pup ? Math.max(0, S.pup.at + PUP_SIZES[pupSize()].mins * 60000 - Date.now()) : 0;
+  const pupArt = (k = pupSize()) => `<img class="pupImg" style="--s:${(0.6 + k * 0.1).toFixed(2)}" src="${ART.spriteChar('pup' + (k + 1))}" alt="Moon Pup">`;
+  function pupTick() {
+    if (S.pup || S.lvl < PUP_LV || !S.tut || view !== 'board' || popOpen() || $('#modal').classList.contains('open') || $('#talk').classList.contains('open')) return;
+    S.pup = { at: Date.now() - 39 * 60000, n: 0, pet: 0 }; save();
+    talkScene([['bloop', 'Something followed me out of the crater. It is fluffy. It has three ears. It will not leave.'],
+      ['pip', 'A Moon Pup! It wants to help — it fetches things!'],
+      ['bloop', 'Be kind to it. Collect what it brings and it will grow. Somehow.']], () => renderQuick());
+  }
+  function pupGift(): Reward {
+    const k = pupSize(), r = Math.random();
+    if (r < 0.34) return { energy: 6 + k * 3 };
+    if (r < 0.58) return { coins: 25 + k * 20 };
+    if (r < 0.66 && k >= 2) return { gems: 1 + Math.floor(k / 2) };
+    return { item: miniItem(Math.min(2 + Math.floor(k / 2), 4), 1 + (k >= 3 ? 1 : 0)) };
+  }
+  function pupPop() {
+    if (!S.pup) return;
+    if (!pupLeft()) {
+      const before = pupSize(), r = pupGift();
+      S.pup.at = Date.now(); S.pup.n++; save(); renderQuick();
+      const grew = pupSize() > before;
+      rewardCard(pupArt(), 'Moon Pup fetched!', grew ? `<b>It grew!</b> Your pup is now a <b>${PUP_SIZES[pupSize()].name}</b> and fetches faster.` : 'Woof-blorp! It drops something at your feet.', r);
+      return;
+    }
+    const k = pupSize(), nx = PUP_SIZES[k + 1];
+    pop('🐶 Moon Pup', `<div class="pupBox"><div class="pupStage" id="pupStage">${pupArt()}</div>
+      <b class="pupName">${PUP_SIZES[k].name}</b>
+      <div class="noteLine">Next fetch in <b>${mmss(pupLeft())}</b>. ${nx ? `Collect <b>${nx.at - S.pup.n}</b> more gifts and it grows into a <b>${nx.name}</b>.` : 'Fully grown. The goodest pup in the galaxy.'}</div>
+      ${nx ? `<div class="catBar"><i style="width:${Math.round((S.pup.n - PUP_SIZES[k].at) / (nx.at - PUP_SIZES[k].at) * 100)}%"></i></div>` : ''}
+      <button class="big soft" id="pupPet">Pet the pup</button></div>`, 'fun');
+    ($('#pupPet') as HTMLElement).onclick = () => {
+      const st = $('#pupStage'); st.classList.remove('petted'); void (st as HTMLElement).offsetWidth; st.classList.add('petted');
+      for (let h = 0; h < 5; h++) { const e = document.createElement('i'); e.className = 'pupHeart'; e.textContent = '💗'; e.style.left = (30 + Math.random() * 40) + '%'; e.style.animationDelay = (h * 0.08) + 's'; st.appendChild(e); setTimeout(() => e.remove(), 1400); }
+      sfx.boing(); haptic('light');
+      // a little thank-you, at most once an hour
+      if (Date.now() - (S.pup.pet || 0) > 3600000) { S.pup.pet = Date.now(); S.energy += 3; bumpChip('#chipEnergy'); toast('The pup loves you. +3 ⚡'); renderHUD(); save(); }
+    };
+  }
+
   /* -------------------------------------------- quick chips over the board */
   function renderQuick() {
     const host = $('#quick'); if (!host) return;
     const e = evNow(), bits: string[] = [];
     if (e) bits.push(`<button class="qChip ev" data-q="event">${ART.uiIcon('tok_' + e.theme.id, e.theme.icon)}<b>${S.ev.key === e.key ? S.ev.pts : 0}</b><i>${dhm(e.ends - Date.now())}</i></button>`);
     if (S.lvl >= SP().unlockLevel && spinsLeft()) bits.push(`<button class="qChip spin" data-q="spin">${ART.uiIcon('ic_spin', '🎡')}<b>${spinsLeft()}</b></button>`);
+    if (S.pup) bits.push(`<button class="qChip pup${pupLeft() ? '' : ' ready'}" data-q="pup">${pupArt()}<i>${pupLeft() ? mmss(pupLeft()) : 'gift!'}</i></button>`);
     if (S.acc) bits.push(`<button class="qChip acc" data-q="acc">${ART.uiIcon('ic_lab', '⚗️')}<i>${accLeft() ? mmss(accLeft()) : 'done!'}</i></button>`);
     const html = bits.join('');
     if (host.dataset.h === html) return;
     host.dataset.h = html; host.innerHTML = html;
     host.querySelectorAll('[data-q]').forEach((b: any) => b.onclick = () => {
       const k = b.dataset.q;
-      if (k === 'event') eventPop(); else if (k === 'spin') spinPop(); else { labTab = 'acc'; setView('lab'); }
+      if (k === 'event') eventPop(); else if (k === 'spin') spinPop(); else if (k === 'pup') pupPop(); else { labTab = 'acc'; setView('lab'); }
     });
   }
 
@@ -4745,6 +4817,7 @@ export async function startGame() {
     while (S.energy < maxEnergy() && now - S.eAt >= per) { S.eAt += per; S.energy++; renderHUD(); }
     if (S.energy >= maxEnergy()) S.eAt = now;
     tickProducers();
+    pupTick(); renderBoost();
     board.heal();
     sweepSpecials();
     // snack cooldown
@@ -4811,6 +4884,42 @@ export async function startGame() {
       sc.appendChild(e);
     }
   }
+  /* Painted emoji: the copy is written with emoji (easy to read in code), and
+     the page swaps each one for its painted icon as it appears, everywhere —
+     popups, screens, toasts, buttons. An emoji without a painting stays. */
+  const EMO: Record<string, string> = {
+    '🪙': 'icon_coin', '💎': 'icon_gem', '⚡': 'icon_energy', '🧪': 'icon_flask', '🔒': 'sec_lock', '⏳': 'cl_timer',
+    '🎁': 'ic_gift', '🏆': 'ic_trophy', '📦': 'ic_box', '🎡': 'ic_spin', '🔬': 'ic_microscope', '🛒': 'ic_cart',
+    '🎪': 'ic_tent', '📖': 'ic_album2', '🗺️': 'ic_map2', '🗺': 'ic_map2', '🔑': 'ic_key', '🔔': 'cl_bell',
+  };
+  const EMO_RE = new RegExp(Object.keys(EMO).filter(k => ART.spriteUi(EMO[k])).sort((a, b) => b.length - a.length).join('|'), 'g');
+  function paintEmoji(root: Node) {
+    if (!EMO_RE.source || EMO_RE.source === '(?:)') return;
+    const walk = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode: (n: any) => {
+        const p = n.parentElement;
+        if (!p || /^(TEXTAREA|INPUT|SCRIPT|STYLE|OPTION)$/.test(p.tagName) || p.closest('.noEmo')) return NodeFilter.FILTER_REJECT;
+        EMO_RE.lastIndex = 0;
+        return EMO_RE.test(n.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+      },
+    } as any);
+    const hits: Text[] = []; let n: Node | null;
+    while ((n = walk.nextNode())) hits.push(n as Text);
+    for (const t of hits) {
+      const frag = document.createDocumentFragment(), v = t.nodeValue || ''; let at = 0;
+      v.replace(EMO_RE, (m, i) => {
+        if (i > at) frag.appendChild(document.createTextNode(v.slice(at, i)));
+        const img = document.createElement('img'); img.className = 'emo'; img.alt = m; img.src = ART.spriteUi(EMO[m]); img.draggable = false;
+        frag.appendChild(img); at = i + m.length; return m;
+      });
+      if (at < v.length) frag.appendChild(document.createTextNode(v.slice(at)));
+      t.replaceWith(frag);
+    }
+  }
+  new MutationObserver(ms => { for (const m of ms) { if (m.type === 'characterData') { if (m.target.parentNode) paintEmoji(m.target.parentNode); } else m.addedNodes.forEach(x => paintEmoji(x)); } })
+    .observe(document.body, { childList: true, subtree: true, characterData: true });
+  setTimeout(() => paintEmoji(document.body), 0);
+
   async function boot() {
     if (import.meta.env.DEV) {
       const problems = validateContent();
@@ -4929,7 +5038,7 @@ export async function startGame() {
     if (bagHas()) renderBag();
     // the painted backdrops, handed to CSS as variables
     applyScene();
-    $('#app').style.setProperty('--labbg', `url(${ART.spriteScene('lab') || labRoomBg})`);
+    $('#app').style.setProperty('--labbg', `url(${ART.spriteScene('lab')})`);
     $('#miniClose').onclick = closeMini;
     $('#btnQuests').onclick = () => { tutFire('quests'); const pj = curProject(); if (pj && projReady(pj)) buildProject(); else { sfx.tap(); setView('rocket'); } };
     applyBloomSkin();

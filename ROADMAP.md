@@ -15,13 +15,13 @@
 
 **Next**
 
-1. **Rewards screen.** Every "you got X" moment should use one reward card: item art, a burst, and **Collect**. Today it's a mix of modal, toast and floating text.
+1. **Rewards screen.** ✅ The reward card exists (daily delivery, achievements, pup). Still to do: chests, event track, level-up.
 2. **Contract cards.** Make the character bigger, put a progress ring around the card, and turn the card itself into a gold "GIVE" button when ready. Remove the separate tick.
 3. **Board chrome.**
    - The event ribbon and bag chip above the board eat a row on small phones. Move them into the HUD as small chips.
    - Give the hint button a painted icon only, no label.
 4. **Typography.** Fredoka for titles and numbers, a rounded sans for body text. Cap body copy at about 2 lines per card.
-5. **Icons.** Replace the remaining emoji in section titles and buttons (📜 🧪 💎 🪙 ⚡) with painted icons. Prompts are in `art/WORLD1-MISSING.md` §4.
+5. **Icons.** ✅ Emoji with a painted twin are swapped automatically (`EMO` in `game.ts`).
 6. **Haptics + sound pass** on every button. Already wired, but should be checked on a real phone.
 
 ## 2. Next worlds
@@ -31,7 +31,7 @@
 | Sunny Meadow | 22 chapters with dialogue, fully painted. |
 | **Crater Camp (Moon)** | Fully painted. **Dialogue added to all 10 chapters in v23** (Nana Luma, Rokk, Nix, Zib, Dr. Zonk). |
 | **Ember Hollow (Cindra)** | 15 chains / 101 items / 13 producers in the catalogue. **Dialogue for all 10 chapters added in v23** (Vulk, Ember, Rokk, Dr. Zonk). **Art prompts: `art/CINDRA-PROMPT.md`** (11 sheets). |
-| Tidal Shallows, Aurora Reach | Catalogue and chapters exist. Dialogue and art come next. Generate their prompts with `node scripts/world-prompt.mjs nerith` / `vela`. |
+| Tidal Shallows, Aurora Reach | Catalogue and chapters exist. Aurora Reach is about half painted; Tidal Shallows has 2 chains. Prompts for what is missing: `art/NERITH-PROMPT.md`, `art/VELA-PROMPT.md`. Dialogue comes next. |
 
 **Moon and Cindra depth.** Both have 10 chapters against the Meadow's 22. Add 4–6 each, using the chains no chapter asks for yet (Moon: helium, meteorite, moonmelon; Cindra: phoenix, steam, sulfur), and one new producer per 2 chapters.
 
@@ -55,11 +55,25 @@ Ordered by player value per effort.
    - Find all crowns of one world for a permanent perk (+5% drops in that world).
    - The trophy shelf already counts them.
 5. **Daily tasks 2.0**: 3 tasks per day plus a weekly chest for 15 tasks. A daily loop exists; make it weekly.
-6. **Pets**: one Moon Pup follows you between worlds and auto-collects one finished contract per hour. Upgrade it with Moon Critters items.
+6. **Pets**: ✅ the Moon Pup (level 6) fetches a gift every 20–40 minutes and grows through 5 sizes. Next: let it auto-deliver a contract at its biggest size.
 7. **Decorations**: spend coins on camp decorations (fences, lamps, statues) shown on the camp scene. This is a coin sink that players actually enjoy.
 8. **Seasonal skins**: Halloween / winter tile sets and producer hats. Cheap art, big perceived freshness.
 9. **Side games to keep:** Alien Pairs, Crater Dig, Market.
 10. **Side games to add:** Rocket Race (time-attack merges) and Delivery Run (fill 5 contracts in 10 minutes for a chest).
+
+## 3b. Done in v25–v26
+
+- **Power ×2** (level 8): taps cost double energy, and drops arrive one step higher. This is Travel Town's "Power Boost".
+- **Moon Pup** companion.
+- **Late-Meadow chains:** Picnic, Alien Pets, Music, Weather, Rocket Parts.
+- **Helpers:** Blorb, Glimmer, Oops, the Grub Brothers.
+- **Tester build:** feedback, tester tools, `build-apk.bat`.
+
+**Next, from the genre:**
+- **Scissors booster** (split an item into two of the step below).
+- **"Out of energy" offer** (energy + gems at a discount).
+- **Album card sets:** 9 cards, set reward.
+- **Special event board** with its own chains.
 
 ## 4. Store-ready plumbing (done in v23)
 

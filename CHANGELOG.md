@@ -1,0 +1,38 @@
+# Changelog
+
+- **v25**
+  - Ember Hollow fully painted; Aurora Reach half painted; Tidal Shallows started.
+  - 5 late-Meadow chains (Picnic, Alien Pets, Music, Weather, Rocket Parts) with story producers.
+  - New helpers: Postie Blorb, Captain Glimmer, Madame Oops, the Grub Brothers; Halo and Wren painted.
+  - Reward card for daily delivery and achievements.
+  - Painted icons replace the emoji everywhere.
+  - Tester build: feedback, tester tools, APK script.
+  - Repo cleanup.
+- **v24**
+  - Badges with counts and a slide-in ribbon for everything claimable.
+  - Music rebuilt as phrases plus ambience with rests.
+  - UI and voice sounds.
+- **v23**
+  - One button system and dialog ✕.
+  - "Find it" cards; Settings as switches.
+  - Mock-first services: ads, purchases, store, notifications, games, analytics.
+  - Welcome-back message; Moon and Cindra dialogue.
+- **v22**
+  - New alien cast in the Meadow; the Moon fully painted.
+- **v21**
+  - Playtest bot (`scripts/bot.mjs`); pacing and economy tuning (no coins from merging, sqrt sell prices, trophy shelf).
+- **v20**
+  - Longer chains; costs ×4; rocket rebuild redone.
+  - Popup queue, contract sheet, just-in-time tips.
+- **v19**
+  - Big art drop (Meadow and UI).
+- **v18**
+  - Merge feel: swap, magnet drop, double-tap merge, match glow.
+- **v16**
+  - Gems, purchases, rewarded ads, producer storage, event guests, more Meadow.
+- **v15**
+  - Discoveries, achievements, undo, chapter prizes, painted UI.
+- **v9–v10**
+  - Lab, side games, events, story scenes, Travel Town-style UI.
+- **v7–v8**
+  - Main loop: restore the world, then leave it; the Meadow becomes a story.
