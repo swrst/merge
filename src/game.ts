@@ -289,6 +289,25 @@ export async function startGame() {
     land: () => audio.playVary('land', 0.08, 0.8),
     swap: () => audio.playVary('swap', 0.05, 0.8),
     hover: () => audio.playVary('hover', 0.04, 0.5),
+    open: () => audio.playVary('open', 0.04, 0.8),
+    close: () => audio.playVary('close', 0.04, 0.7),
+    tab: () => audio.playVary('tab', 0.05, 0.7),
+    unlock: () => { audio.play('unlock'); audio.duck(1.4, 0.4); },
+    ready: () => audio.play('ready', { gain: 0.8 }),
+    collect: () => { audio.play('collect'); audio.duck(1.2, 0.4); },
+    boing: () => audio.playVary('boing', 0.1, 0.8),
+    /** alien chatter: a few gibberish syllables, pitched per character so
+        everyone has their own voice (Pip squeaks, Rokk rumbles) */
+    voice: (who: string, words = 3) => {
+      let h = 0; for (const ch of who) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+      const base = 0.75 + (h % 9) * 0.075;
+      let at = 0;
+      for (let k = 0; k < words; k++) {
+        const syl = 'blip' + (1 + ((h >> (k * 3)) + k) % 6);
+        audio.play(syl, { rate: base * (0.92 + Math.random() * 0.18), gain: 0.55, delay: at });
+        at += 0.09 + Math.random() * 0.06;
+      }
+    },
   };
   /** the music bed a world plays */
   /** every world has its own bed now (see scripts/make-audio.py) */
@@ -505,16 +524,88 @@ export async function startGame() {
     $('#dotWorld').style.display = essence && !worldAwake() ? '' : 'none';
     $('#tabShop').classList.toggle('locked', !shopOpen());
     $('#tabLab').classList.toggle('hide', !labOpen());
-    $('#dotRocket').style.display = tasksDone() > 0 || achReady() > 0 ? '' : 'none';
-    $('#dotBook').style.display = (S.disc || []).length ? '' : 'none';
     renderStrip();
-    $('#dotShop').style.display = (shopNews() || (labOffered() && !S.lab.built)) ? '' : 'none';
-    $('#dotFun').style.display = (evNow() || (S.lvl >= SP().unlockLevel && spinsLeft() > 0)) ? '' : 'none';
-    $('#dotLab').style.display = (S.acc && !accLeft()) || L2().research.some((r: any) => res(r.id) < r.max && S.sci >= researchCost(r)) ? '' : 'none';
+    claimWatch();
     renderTools(); updateWanted();
     if (view === 'shop') $('#shopCoins').textContent = S.coins;
     if (view === 'lab') $('#labCoins').textContent = S.coins;
   }
+  /* ------------------------------------------------ "there is something for you"
+     Every claimable thing is listed here once. The dock shows a counted badge
+     that pops when the count goes up, and anything NEW slides in as a ribbon
+     at the top ("Achievement ready — Claim") with a doorbell sound; tapping it
+     goes straight there. Nothing is announced on load, only as it happens. */
+  type Claim = { k: string; tab: string; n: number; icon: string; say: string; go: () => void };
+  function claims(): Claim[] {
+    const out: Claim[] = [];
+    const add = (k: string, tab: string, n: number, icon: string, say: string, go: () => void) => { if (n > 0) out.push({ k, tab, n, icon, say, go }); };
+    const ar = achReady(), td = tasksDone();
+    add('ach', 'Rocket', ar, ART.uiIcon('ic_trophy', '🏆'), ar > 1 ? `${ar} achievements to claim` : 'Achievement ready to claim', () => setView('rocket'));
+    add('task', 'Rocket', td, ART.uiIcon('ic_tick', '✅'), 'Daily task done — reward waiting', () => setView('rocket'));
+    add('disc', 'Book', (S.disc || []).length, ART.uiIcon('badge_new', '🆕'), 'New discovery in your Album', () => setView('book'));
+    add('shop', 'Shop', shopNews() ? 1 : 0, ART.uiIcon('ic_gift', '🎁'), 'Free gift in the Trading Post', () => setView('shop'));
+    add('labOffer', 'Shop', labOffered() && !S.lab.built ? 1 : 0, ART.uiIcon('ic_lab', '🔬'), 'The Lab can be built', () => setView('shop'));
+    const e = evNow();
+    add('event', 'Fun', e && S.ev.join !== (e as any).key ? 1 : 0, ART.uiIcon('ic_event', '🎪'), 'An event has started!', () => setView('fun'));
+    add('spin', 'Fun', S.lvl >= SP().unlockLevel ? spinsLeft() : 0, ART.uiIcon('ic_spin', '🎡'), 'Free spin on the Lucky Wheel', () => setView('fun'));
+    add('acc', 'Lab', S.acc && !accLeft() ? 1 : 0, ART.uiIcon('ic_lab', '🧪'), 'Lab accelerator is ready', () => setView('lab'));
+    add('research', 'Lab', L2().research.filter((r: any) => res(r.id) < r.max && S.sci >= researchCost(r)).length ? 1 : 0, ART.uiIcon('ic_lab', '🧪'), 'You can afford new research', () => setView('lab'));
+    const essence = B().some((c: any) => c && c.id && bloomValue(c.id) > 0);
+    add('bloom', 'World', essence && !worldAwake() ? 1 : 0, ART.uiIcon('ic_map', '🌍'), 'Wake the world with your essence', () => setView('map'));
+    add('chapter', '', projReady(curProject()) ? 1 : 0, ART.uiIcon('ic_star', '🚀'), 'Chapter ready to build!', () => ($('#btnQuests') as HTMLElement).click());
+    return out;
+  }
+  let claimSeen: Record<string, number> | null = null;
+  const badgeN: Record<string, number> = {};
+  function claimWatch() {
+    const list = claims();
+    // dock badges: a number, and a pop when it grows
+    const per: Record<string, number> = { Rocket: 0, Book: 0, Shop: 0, Fun: 0, Lab: 0, World: 0 };
+    list.forEach(c => { if (c.tab) per[c.tab] += c.n; });
+    for (const [tab, n] of Object.entries(per)) {
+      const d = document.getElementById('dot' + tab); if (!d) continue;
+      d.style.display = n ? '' : 'none';
+      d.textContent = n > 1 ? (n > 9 ? '9+' : String(n)) : '';
+      if (n > (badgeN[tab] || 0) && claimSeen) { d.classList.remove('bump'); void d.offsetWidth; d.classList.add('bump'); }
+      badgeN[tab] = n;
+    }
+    const now: Record<string, number> = {};
+    list.forEach(c => { now[c.k] = c.n; });
+    if (claimSeen) {
+      // the main tutorial owns the screen while it runs
+      const fresh = !S.tut || tutOn() || jit ? [] : list.filter(c => c.n > (claimSeen![c.k] || 0) && c.k !== 'disc');
+      fresh.forEach(c => ribbon(c));
+    }
+    claimSeen = now;
+  }
+  const ribbonQ: Claim[] = [];
+  let ribbonOn = false;
+  function ribbon(c: Claim) {
+    if (ribbonQ.some(q => q.k === c.k)) return;
+    ribbonQ.push(c); if (!ribbonOn) ribbonNext();
+  }
+  function ribbonNext() {
+    if (!ribbonQ.length) { ribbonOn = false; return; }
+    ribbonOn = true;
+    // only over the board, never on top of a screen, popup or dialog (it would sit on their ✕)
+    if (view !== 'board' || popOpen() || $('#modal').classList.contains('open') || $('#talk').classList.contains('open') || jit) {
+      setTimeout(ribbonNext, 1500); return;
+    }
+    const c = ribbonQ.shift()!;
+    // it may have been claimed meanwhile
+    if (!claims().some(x => x.k === c.k)) { ribbonNext(); return; }
+    let r = document.getElementById('ribbon');
+    if (!r) { r = document.createElement('div'); r.id = 'ribbon'; $('#app').appendChild(r); }
+    r.innerHTML = `<span class="rbIc">${c.icon}</span><span class="rbTx">${c.say}</span><span class="rbGo">${c.k === 'chapter' ? 'Build' : c.k === 'event' || c.k === 'bloom' ? 'Go' : 'Claim'}</span>`;
+    r.className = 'show';
+    sfx.ready(); haptic('light');
+    const done = () => { r!.className = 'hide'; clearTimeout(t); setTimeout(ribbonNext, 450); };
+    // only the button is live: a ribbon over the contracts must never eat a tap meant for them
+    (r.querySelector('.rbGo') as HTMLElement).onclick = (ev) => { ev.stopPropagation(); done(); c.go(); };
+    const t = setTimeout(done, 3800);
+  }
+  (window as any).__claims = () => claims().map(c => c.k);
+
   /* The chapter strip: the main quest is always on screen, with the things it
      needs, and it lights up the moment you can build it. */
   let stripKey = '';
@@ -1282,9 +1373,10 @@ export async function startGame() {
     if (v === 'shop' && !shopOpen()) { sfx.no(); toast('The Trading Post opens at Level ' + CONFIG.unlocks.shopAtLevel + '!'); return; }
     if (v === 'lab' && !labOpen()) { sfx.no(); toast('The Lab opens in Meadow chapter 5 — keep restoring!'); return; }
     view = v;
+    if (v !== 'board') { const rb = document.getElementById('ribbon'); if (rb && rb.className === 'show') rb.className = 'hide'; }
     if (v === 'map') tutFire('world');
     openBag(false);
-    if (v !== 'board') sfx.whoosh();
+    if (v !== view || v !== 'board') sfx.tab();
     SCREENS.forEach(k => $('#sc-' + k).classList.toggle('open', v === k));
     // over a painted scene the rail shrinks to little round pips, so it stops
     // standing on the scenery it floats over
@@ -2474,7 +2566,7 @@ export async function startGame() {
     b[i] = mkProd(k);
     if (plots().indexOf(k) < 0) plots().push(k);
     S.pendingPlant = null;
-    sparkle(i, 22, '#b7f59a'); sfx.discover();
+    sparkle(i, 22, '#b7f59a'); sfx.unlock();
     paintBoard();
   }
   /** a guest producer from the story: free taps for a while, then it moves on */
@@ -2997,7 +3089,7 @@ export async function startGame() {
     if (r.spin) S.spin.tok += r.spin;
     if (r.boost) giveBoost(r.boost);
     if (r.item && giveItem(r.item) < 0) { S.bag.push(r.item); toast('Board full — the ' + ITEMS[r.item].name + ' went into your bag.'); }
-    sfx.coin(); paintBoard(); renderHUD(); save();
+    sfx.collect(); paintBoard(); renderHUD(); save();
   }
 
   /* ------------------------------------------------------- generic popup */
@@ -3007,9 +3099,10 @@ export async function startGame() {
     $('#popBody').innerHTML = html;
     $('#pop').className = 'pop open ' + cls;
     popClose = onClose || null;
-    sfx.whoosh();
+    sfx.open();
   }
   function closePop() {
+    if ($('#pop').classList.contains('open')) sfx.close();
     $('#pop').classList.remove('open');
     const f = popClose; popClose = null; if (f) f();
     renderHUD(); save();
@@ -3047,7 +3140,9 @@ export async function startGame() {
     $('#tkName').textContent = (CHARS[who] && CHARS[who].name) || who;
     $('#tkText').innerHTML = text;
     t.classList.remove('beat'); void t.offsetWidth; t.classList.add('beat');
-    sfx.tap();
+    // a few syllables of gibberish, more for a longer line, now and then a boing
+    sfx.voice(who, clamp(Math.round(text.replace(/<[^>]+>/g, '').length / 28), 2, 5));
+    if (/!{2}|\?!|haha|oops|whoa|boing/i.test(text) && Math.random() < 0.5) setTimeout(sfx.boing, 420);
   }
   /** play the current chapter's opening conversation (once, unless asked) */
   function chapterIntro(force = false) {
@@ -4478,9 +4573,10 @@ export async function startGame() {
     // "Close" is not an action: it gets the quiet button, the real action stays the loud one
     $('#mBtn').className = 'big' + (/^close$/i.test(btn || 'OK') ? ' soft' : '');
     $('#modal').classList.remove('lite');
+    if (!$('#modal').classList.contains('open')) sfx.open();
     $('#modal').classList.add('open');
   }
-  const closeModal = () => { $('#modal').classList.remove('open'); setTimeout(nextModal, 450); };
+  const closeModal = () => { sfx.close(); $('#modal').classList.remove('open'); setTimeout(nextModal, 450); };
   /** something to do once the player has read the modal (a story beat chains on) */
   let afterModal: (() => void) | null = null;
   $('#mBtn') && ($('#mBtn').onclick = () => { closeModal(); const f = afterModal; afterModal = null; if (f) setTimeout(f, 250); });

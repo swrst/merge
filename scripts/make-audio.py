@@ -137,6 +137,16 @@ def saw(f, dur, detune=0.0):
     return x * 0.5
 
 
+def flute(f, dur):
+    """A soft breathy whistle: sine with slow vibrato, a little air, gentle swell."""
+    n = int(SR * dur); tt = t(dur)
+    vib = 1 + 0.006 * np.sin(2 * np.pi * 5.2 * tt) * np.clip(tt / 0.35, 0, 1)
+    ph = 2 * np.pi * np.cumsum(f * vib) / SR
+    x = np.sin(ph) + 0.18 * np.sin(2 * ph) + 0.05 * np.sin(3 * ph)
+    x += lowpass_fast(noise(dur), 2400, 1) * 0.06
+    return x * env(n, min(0.09, dur * 0.3), 0.1, 0.8, min(0.25, dur * 0.4), max(0, dur - 0.45)) * 0.7
+
+
 def warmpad(f, dur, cut=1500):
     """Three detuned saws through a gentle filter, breathing in and out."""
     x = saw(f, dur, 0) + saw(f, dur, 0.004) * 0.8 + saw(f, dur, -0.005) * 0.8
@@ -517,6 +527,74 @@ def s_boost():
 
 
 # -------------------------------------------------------------------- music
+
+# ------------------------------------------------------- v24: UI and voices
+def s_open():
+    """A popup opening: a soft rising bubble with a tiny glassy top."""
+    b = bloop(260, 560, 0.13)
+    top = glass(note(19), 0.4)
+    return master(reverb(mixdown([(0, b, .6), (0.05, top, .22)], 0.5), .25, .18), 0.5)
+
+
+def s_close():
+    """A popup closing: the same bubble, falling, softer."""
+    b = bloop(520, 240, 0.12)
+    return master(mixdown([(0, b, .55), (0.02, marimba(note(0), 0.15, soft=0.8), .2)], 0.3), 0.42)
+
+
+def s_tab():
+    """Switching screens: a light wooden double-tick, like a page turning."""
+    return master(mixdown([(0, marimba(note(4), 0.12, soft=0.8), .5), (0.05, marimba(note(11), 0.12, soft=0.8), .4)], 0.25), 0.4)
+
+
+def s_unlock():
+    """Something new is unlocked: a bright 'ta-da' of three kalimba notes and sparkle."""
+    parts = [(0.0, kalimba(note(12), .6), .45), (0.09, kalimba(note(16), .6), .45),
+             (0.18, kalimba(note(19), .9), .5), (0.18, glass(note(31), 1.0), .2)]
+    parts.append((0.15, sparkle(1.2, 7, 4), .25))
+    return master(reverb(mixdown(parts, 1.5), .45, .3), 0.8)
+
+
+def s_ready():
+    """'You can claim something': a friendly two-note doorbell, ding-dong."""
+    return master(reverb(mixdown([(0, glass(note(16), .9), .55), (0.2, glass(note(9), 1.1), .5)], 1.4), .4, .25), 0.6)
+
+
+def s_collect():
+    """Collecting a reward: a coin shimmer under a quick happy marimba run."""
+    parts = [(i * 0.06, marimba(note(n), .3, soft=.35), .4) for i, n in enumerate([7, 12, 16, 19, 24])]
+    parts += [(0.05 + i * 0.07, s_coin_raw(1 + i * .06), .22) for i in range(4)]
+    parts.append((0.28, sparkle(0.9, 6, 9), .22))
+    return master(reverb(mixdown(parts, 1.2), .35, .22), 0.85)
+
+
+def s_coin_raw(p=1.0):
+    return glass(1800 * p, .25) + fit(glass(2700 * p, .2), int(SR * .25)) * .5
+
+
+def s_boing():
+    """A cartoon spring, for silly moments (poking an alien, a full board)."""
+    n = int(SR * .45); tt = np.arange(n) / SR
+    f = 180 + 140 * np.sin(2 * np.pi * 11 * tt) * np.exp(-tt * 5) + 120 * tt
+    x = np.sin(2 * np.pi * np.cumsum(f) / SR) * expdecay(n, .18)
+    return master(x * .8, 0.55)
+
+
+def s_blip(k):
+    """Alien gibberish: one syllable of a voice — two formants over a buzzy pitch
+       that wobbles. Strung together quickly it sounds like chatter."""
+    r = np.random.default_rng(40 + k)
+    dur = [.09, .11, .08, .13, .1, .12][k]; n = int(SR * dur); tt = np.arange(n) / SR
+    f0 = [330, 280, 400, 240, 360, 300][k] * (1 + .12 * np.sin(2 * np.pi * r.uniform(8, 16) * tt))
+    ph = 2 * np.pi * np.cumsum(f0) / SR
+    src = sum(np.sin(ph * h) / h for h in range(1, 9))
+    vowels = [(700, 1200), (400, 2000), (300, 900), (600, 1700), (500, 1000), (350, 2300)]
+    f1, f2 = vowels[k]
+    # crude formants: two resonant band pulls made from low/high passes
+    v = highpass_fast(lowpass_fast(src, f2 * 1.2), f1 * .6)
+    return master(v * env(n, .008, dur * .4, .6, dur * .4), 0.45)
+
+
 def music(name, bpm, bars, chords, mel, *, pad_gain=0.2, bass_oct=-24,
           lead='marimba', arp=(0, 2, 1, 2), arp_gain=0.16, arp_oct=12,
           shake=None, reverb_mix=0.34, cut=1600, mel_oct=12, mel_gain=0.3, air=0.0):
@@ -563,7 +641,10 @@ def music(name, bpm, bars, chords, mel, *, pad_gain=0.2, bass_oct=-24,
         if off is None:
             continue
         f = note(off + mel_oct)
-        sig = marimba(f, ln * beat, soft=0.45) if lead == 'marimba' else kalimba(f, ln * beat)
+        if lead == 'marimba': sig = marimba(f, ln * beat, soft=0.45)
+        elif lead == 'glass': sig = glass(f, max(0.6, ln * beat + 0.5)) * 0.8
+        elif lead == 'flute': sig = flute(f, ln * beat)
+        else: sig = kalimba(f, ln * beat)
         add(at * beat, sig, mel_gain, 0.5 + 0.1 * math.sin(at * 1.7))
 
     if air:
@@ -672,48 +753,45 @@ def vela_theme():
 # --------------------------------------------------------------------- main
 def main():
     sfx = {
-        'tap': s_tap(),
-        'pop': s_pop(1.0),
-        'pop_hi': s_pop(1.25),
-        'merge1': s_merge(1), 'merge2': s_merge(2), 'merge3': s_merge(3),
-        'merge4': s_merge(4), 'merge5': s_merge(5), 'merge6': s_merge(6),
-        'merge7': s_merge(7), 'merge8': s_merge(8), 'merge_crown': s_crown(),
-        'coin': s_coin(),
-        'sell': s_sell(),
-        'levelup': s_levelup(),
-        'discover': s_discover(),
-        'install': s_install(),
-        'fuel': s_fuel(),
-        'meteor': s_meteor(),
-        'dig': s_dig(),
-        'error': s_error(),
-        'whoosh': s_whoosh(),
-        'launch': s_launch(),
-        'build': s_build(),
-        'streak1': s_streak(0), 'streak2': s_streak(1), 'streak3': s_streak(2),
-        'streak4': s_streak(3), 'streak5': s_streak(4),
-        'bag': s_bag(),
-        'boost': s_boost(),
-        'lift': s_lift(), 'land': s_land(), 'swap': s_swap(), 'hover': s_hover(),
-        'click': s_click(), 'nope': s_nope(),
+        'tap': lambda: s_tap(),
+        'pop': lambda: s_pop(1.0),
+        'pop_hi': lambda: s_pop(1.25),
+        'merge1': lambda: s_merge(1), 'merge2': lambda: s_merge(2), 'merge3': lambda: s_merge(3),
+        'merge4': lambda: s_merge(4), 'merge5': lambda: s_merge(5), 'merge6': lambda: s_merge(6),
+        'merge7': lambda: s_merge(7), 'merge8': lambda: s_merge(8), 'merge_crown': lambda: s_crown(),
+        'coin': lambda: s_coin(),
+        'sell': lambda: s_sell(),
+        'levelup': lambda: s_levelup(),
+        'discover': lambda: s_discover(),
+        'install': lambda: s_install(),
+        'fuel': lambda: s_fuel(),
+        'meteor': lambda: s_meteor(),
+        'dig': lambda: s_dig(),
+        'error': lambda: s_error(),
+        'whoosh': lambda: s_whoosh(),
+        'launch': lambda: s_launch(),
+        'build': lambda: s_build(),
+        'streak1': lambda: s_streak(0), 'streak2': lambda: s_streak(1), 'streak3': lambda: s_streak(2),
+        'streak4': lambda: s_streak(3), 'streak5': lambda: s_streak(4),
+        'bag': lambda: s_bag(),
+        'boost': lambda: s_boost(),
+        'lift': lambda: s_lift(), 'land': lambda: s_land(), 'swap': lambda: s_swap(), 'hover': lambda: s_hover(),
+        'click': lambda: s_click(), 'nope': lambda: s_nope(),
+        'open': lambda: s_open(), 'close': lambda: s_close(), 'tab': lambda: s_tab(), 'unlock': lambda: s_unlock(),
+        'ready': lambda: s_ready(), 'collect': lambda: s_collect(), 'boing': lambda: s_boing(),
+        **{f'blip{k + 1}': (lambda k=k: s_blip(k)) for k in range(6)},
     }
     only = [a for a in sys.argv[1:] if not a.startswith('-')]
     if only:
         sfx = {k: v for k, v in sfx.items() if k in only}
     total = 0
-    for name, buf in sfx.items():
+    for name, make in sfx.items():
+        buf = make()
         size = write(name, buf, quality='1')
         total += size
         print(f'  sfx  {name:<10} {len(buf)/SR:5.2f}s  {size/1024:6.1f} kB')
 
-    if only:
-        return
-    for maker in (earth_theme, luna_theme, cindra_theme, nerith_theme, vela_theme):
-        name, l, r = maker()
-        size = write(name, l, stereo=r, quality='0')
-        total += size
-        print(f'  mus  {name:<12} {len(l)/SR:5.2f}s  {size/1024:6.1f} kB')
-
+    # the music lives in scripts/make-music.py now (phrases + ambience)
     print(f'\ntotal {total/1024:.0f} kB in {OUT}')
 
 
