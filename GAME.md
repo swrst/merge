@@ -411,10 +411,70 @@ pure tone with a slightly sharp second partial) do most of the work, over **detu
 pads** through a gentle filter. A tap is a quiet low tok; a merge is two marimba notes a
 fourth apart, climbing a pentatonic step for every tier you reach.
 
-Each of the five worlds has its own 23–31 second bed: a pad holding the chord, a soft
-bass on the downbeat, a kalimba arpeggio keeping time instead of a drum kit, and a
-melody **with rests in it** — a note on every beat is a ringtone, not a soundtrack. The
-reverb tail is wrapped back onto the head so the loop has no seam.
+**Music never loops the same 30 seconds any more** (`scripts/make-music.py`):
+
+- Each world has **four phrases** (`music_<w>_1..4`). They share a key and tempo but have different chords, a different melody from a small seeded composer (pentatonic, motif / answer / motif / cadence, with plenty of rests) and a different lead: marimba, kalimba, flute or glass.
+- Each world also has an **ambience loop** (`amb_<w>`): birds and wind on the Meadow, a hum and sparkle on the Moon, crackle on Cindra, a swell on Nerith.
+- The MusicDirector in `src/audio.ts` plays one or two phrases, then lets the ambience carry alone for 25–60 s, then picks a phrase that isn't the last one.
+- Music sits lower than before (0.26).
+
+**UI and voice sounds** (v24):
+
+- `open` / `close` for popups and dialogs, `tab` for screens.
+- `ready` (a ding-dong) when something becomes claimable.
+- `collect` for rewards, `unlock` when a producer is planted.
+- `boing` for silly lines.
+- Six gibberish syllables (`blip1..6`) that every character "speaks" in story scenes, pitched per character so each has their own voice.
+
+Rebuild single effects with `python3 scripts/make-audio.py open close ...`; rebuild the music with `python3 scripts/make-music.py` (about 8 minutes per world).
+
+### Something to claim
+`claims()` in `game.ts` lists everything that waits for the player:
+
+- achievements, finished daily tasks, discoveries
+- the shop gift, building the Lab
+- a new event, free spins
+- the accelerator and affordable research
+- waking the world, a buildable chapter
+
+The dock tabs show a **counted badge** that bumps when the count grows. Anything new slides in as a **ribbon** under the HUD with a Claim / Build / Go button and the doorbell sound.
+
+- Ribbons show only over the board, never over a screen, popup, dialog or tip, and never during the intro.
+- Only the button takes taps, so a ribbon never eats a tap meant for a contract.
+
+### Reward card
+Every "you got this" moment that matters (daily delivery, achievements) shows one painted card.
+
+- It has the giver's face, the rewards drawn big, and a **Collect** button.
+- The reward is granted on Collect, so it can't be missed.
+- Cards queue, and they float above any popup.
+
+The helpers who run the side things:
+
+| Helper | Runs |
+|---|---|
+| **Postie Blorb** | daily delivery |
+| **Captain Glimmer** | achievements |
+| **Madame Oops** | the Lucky Wheel |
+| **The Grub Brothers** | the Market |
+
+### Late Meadow (v25)
+Five new story chains, each with a producer that a chapter unlocks:
+
+| Chapter | Producer | Chain |
+|---|---|---|
+| e16 | Picnic Hamper | **Picnic Day** |
+| e18 | Egg Nest | **Alien Pets** |
+| e19 | Busking Robot | **Meadow Music** |
+| e20 | Weather Balloon | **Weather Watch** |
+| e21 | Scrap Hull | **Rocket Parts** |
+
+Chapters 19–22 ask for one item from them. Ember Hollow (world 3) is now fully painted.
+
+### Tester build
+- **Settings** shows the build (`SERVICES.app.build`) and has **Send feedback**. The report carries the build, the device, the story position and the last caught errors; it goes by email if `app.supportEmail` is set, otherwise to the clipboard.
+- **Tester tools:** tap the version line 5× (only when `testerTools` is true).
+- How to build and hand out the APK is in `TESTING.md`.
 
 ### Presentation and feel
 - All artwork is hand-written SVG (`src/art.ts`), rasterised into GPU textures at startup.
@@ -429,7 +489,7 @@ reverb tail is wrapped back onto the head so the loop has no seam.
   reads as physical rather than as flat rounded rectangles.
 - The camp and the lab are **painted scenes**, not forms: one illustration each, the
   interactive things standing on it.
-- **Sound is a real audio pack**, not blips: 27 effects and three music beds, all synthesised
+- **Sound is a real audio pack**, not blips: 40 effects, four phrases plus an ambience bed per world, all synthesised
   by `scripts/make-audio.py` (no sampled material, nothing to license) and encoded to ~510 kB
   of Ogg Vorbis. Merges are pitched by tier, repeats get slight pitch drift, music crossfades
   between worlds and ducks under the big moments. Effects and music toggle separately in ⚙️.

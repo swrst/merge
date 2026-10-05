@@ -13,7 +13,11 @@ export const SERVICES = {
     androidPackage: 'dev.artursolak.mergerocket',
     iosAppStoreId: '',                  // ← numeric id from App Store Connect, once the app record exists
     privacyUrl: '',                     // ← your privacy policy page (required by both stores)
-    supportEmail: '',
+    supportEmail: '',                   // ← where "Send feedback" goes; empty = feedback is copied to the clipboard
+    /** shown in Settings and stamped on every feedback report */
+    build: '0.25 test',
+    /** test builds: tap the version line 5× in Settings for the tester tools */
+    testerTools: true,
   },
 
   ads: {

@@ -49,7 +49,9 @@ Rules for every SHEET:
 - Inside a chain each step is clearly bigger, richer and more special than the last; step 1 tiny and plain, the last step a grand crown piece with a little sparkle.
 - Square, 2048×2048 if you can. Every object must still read as a 60-pixel icon.
 
-Attach as style reference: \`src/sprites/items/twig.png\`, \`log.png\`, \`treehouse.png\`, \`mrock.png\`, \`moonpalace.png\` and \`src/sprites/producers/geyser.png\`.
+Attach **STYLE-REFERENCE.png** (in the chatgpt art folder) as the style reference.
+
+**Send each sheet as its own message and save each result separately at full size.** Collages of many sheets in one picture come out too small to use.
 `);
 let n = 0;
 for (let i = 0; i < list.length; i += 2) {
@@ -72,7 +74,7 @@ for (let i = 0; i < prods.length; i += 9) {
   out.push('');
 }
 if (tilesMissing) {
-  out.push(`---\n\n## Sheet ${++n} → \`${tag}_tiles.png\` (board tiles)\n\nGrid: **3 columns × 1 row**, wide gaps. Merge-board squares for ${world.name}, matching the shape, size, corner radius and bevel of \`src/sprites/ui/tile_light.png\`, \`tile_dark.png\`, \`tile_locked.png\` (attach them). Straight from above, perfectly square, calm in the middle.
+  out.push(`---\n\n## Sheet ${++n} → \`${tag}_tiles.png\` (board tiles)\n\nGrid: **3 columns × 1 row**, wide gaps. Merge-board squares for ${world.name}, matching the shape, corner radius and bevel of the plain board tiles in STYLE-REFERENCE.png. Straight from above, perfectly square, calm in the middle.
 1. Light tile — ${world.name} ground, very subtle texture.
 2. Dark tile — the same, slightly deeper, for a gentle checkerboard.
 3. Locked tile — the same tile buried under this world's "not yours yet" cover (ash, rubble, sand, cloud…), friendly, with a couple of small sparkles.

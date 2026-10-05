@@ -350,6 +350,106 @@
       "Toy day tomorrow!"
     ]
   },
+  "picnic": {
+    "name": "Picnic Day",
+    "world": "earth",
+    "unlock": 10,
+    "items": [
+      "crumb",
+      "sandwich",
+      "picnicbasket",
+      "picnicblanket",
+      "lemonadeset",
+      "picnicparasol",
+      "gardenparty",
+      "picnicpavilion"
+    ],
+    "asks": [
+      "Picnic on the hill!",
+      "Lunch for the workers.",
+      "A snack for the road."
+    ]
+  },
+  "pets": {
+    "name": "Alien Pets",
+    "world": "earth",
+    "unlock": 10,
+    "items": [
+      "petegg",
+      "hatchegg",
+      "blobling",
+      "blobpup",
+      "pupbed",
+      "puphouse",
+      "petpark",
+      "petpalace"
+    ],
+    "asks": [
+      "A friend for the Blinkies.",
+      "Pets need a home.",
+      "Look how fluffy!"
+    ]
+  },
+  "music": {
+    "name": "Meadow Music",
+    "world": "earth",
+    "unlock": 10,
+    "items": [
+      "notepebble",
+      "whistle",
+      "ukulele",
+      "drum",
+      "jukebox",
+      "oneband",
+      "bandstand",
+      "concertshell"
+    ],
+    "asks": [
+      "The barn dance is tonight!",
+      "A song for the launch.",
+      "Music for the parade."
+    ]
+  },
+  "parts": {
+    "name": "Rocket Parts",
+    "world": "earth",
+    "unlock": 10,
+    "items": [
+      "hexbolt",
+      "gear",
+      "fin",
+      "nosecone",
+      "booster",
+      "fueltin",
+      "engineblock",
+      "minirocket"
+    ],
+    "asks": [
+      "The rocket needs this!",
+      "Spare parts, please.",
+      "Zonk dropped another bolt."
+    ]
+  },
+  "weather": {
+    "name": "Weather Watch",
+    "world": "earth",
+    "unlock": 10,
+    "items": [
+      "raindrop",
+      "puffcloud",
+      "raincloud2",
+      "rainbowcloud",
+      "weathervane",
+      "weatherstation",
+      "cloudmachine",
+      "sundial"
+    ],
+    "asks": [
+      "Will it rain tomorrow?",
+      "Rain for the veggies.",
+      "Rainbows for the kids."
+    ]
+  },
   "ev_star": {
     "name": "Falling Stars",
     "world": "any",

@@ -22,7 +22,12 @@
       "bakery",
       "tea",
       "pond",
-      "toys"
+      "toys",
+      "picnic",
+      "pets",
+      "music",
+      "parts",
+      "weather"
     ],
     "start": [
       {
@@ -56,7 +61,9 @@
       "nix",
       "vulk",
       "kelpa",
-      "zephyr"
+      "zephyr",
+      "blorb",
+      "grubs"
     ],
     "grow": [
       {
@@ -213,6 +220,41 @@
       },
       {
         "producer": "toychest",
+        "atLevel": 99,
+        "cells": [
+          19
+        ]
+      },
+      {
+        "producer": "picnichamper",
+        "atLevel": 99,
+        "cells": [
+          19
+        ]
+      },
+      {
+        "producer": "eggnest",
+        "atLevel": 99,
+        "cells": [
+          19
+        ]
+      },
+      {
+        "producer": "buskbot",
+        "atLevel": 99,
+        "cells": [
+          19
+        ]
+      },
+      {
+        "producer": "rockethull",
+        "atLevel": 99,
+        "cells": [
+          19
+        ]
+      },
+      {
+        "producer": "weatherballoon",
         "atLevel": 99,
         "cells": [
           19
@@ -456,7 +498,7 @@
             1
           ],
           [
-            "cake",
+            "pie",
             1
           ],
           [
@@ -474,11 +516,11 @@
           ],
           [
             "pip",
-            "Let's do it again! A hay bale for seats, a cake, and a barrel of water."
+            "Let's do it again! A hay bale for seats, a berry pie, and a barrel of water."
           ],
           [
             "bloop",
-            "What is cake. I would like to learn about cake."
+            "What is pie. I would like to learn about pie."
           ]
         ],
         "text": "Everyone came. Dr. Zonk had three slices. Sirra arrived late with a packet of flower seeds, \"for a little colour, darling\"."
@@ -769,6 +811,7 @@
         "coins": 2080,
         "xp": 320,
         "gift": "chest",
+        "unlock": "picnichamper",
         "talk": [
           [
             "mumbo",
@@ -783,7 +826,7 @@
             "A bakery! Warm buns every morning!"
           ]
         ],
-        "text": "The bakery is open. Chef Gubbo hands you the first warm bun — and a chest of thanks."
+        "text": "The bakery is open. Chef Gubbo hands you the first warm bun, a chest of thanks — and a picnic hamper. \"Sandwiches travel. Bakeries do not.\""
       },
       {
         "id": "e17",
@@ -839,6 +882,7 @@
         "coins": 2560,
         "xp": 360,
         "gift": "chest",
+        "unlock": "eggnest",
         "talk": [
           [
             "pim",
@@ -853,7 +897,7 @@
             "Finally, someone with manners."
           ]
         ],
-        "text": "Tea is served under the parasol. Duchess Splatt declares the meadow \"almost civilised\"."
+        "text": "Tea is served under the parasol. Duchess Splatt declares the meadow \"almost civilised\". Under her chair: a nest of spotted lilac eggs. \"Not mine, darling. Probably.\""
       },
       {
         "id": "e19",
@@ -869,24 +913,25 @@
             1
           ],
           [
-            "fountain",
+            "picnicbasket",
             1
           ]
         ],
         "coins": 2800,
         "xp": 380,
         "gift": "chest",
+        "unlock": "buskbot",
         "talk": [
           [
             "timmy",
-            "The pond needs a garden! A fountain, an urn and Nana Luma's teapot!"
+            "The pond needs a garden party! An urn, Nana Luma's teapot and a picnic basket!"
           ],
           [
             "timmy",
             "For the frogs. Frogs with THREE EYES deserve nice things."
           ]
         ],
-        "text": "Fountain, urn and teapot by the pond: the three-eyed frogs are holding a tea party."
+        "text": "Picnic by the pond: the three-eyed frogs are holding a tea party. A battered busking robot wanders in, plays one chord, and refuses to leave."
       },
       {
         "id": "e20",
@@ -898,7 +943,7 @@
             1
           ],
           [
-            "teaset",
+            "blobpup",
             1
           ],
           [
@@ -909,6 +954,7 @@
         "coins": 3040,
         "xp": 400,
         "gift": "chest",
+        "unlock": "weatherballoon",
         "talk": [
           [
             "bloop",
@@ -923,7 +969,7 @@
             "The Mayor agrees. More toys, please, before they find the fuel tank."
           ]
         ],
-        "text": "The Blinkies are busy with new toys. Nothing has been chewed for an entire hour."
+        "text": "The Blinkies have a pet now. Nothing has been chewed for an entire hour. Dr. Zonk ties a weather balloon to a crate: \"We launch on a clear day. I need to know which one.\""
       },
       {
         "id": "e21",
@@ -935,7 +981,7 @@
             1
           ],
           [
-            "koipair",
+            "drum",
             1
           ],
           [
@@ -946,6 +992,7 @@
         "coins": 3280,
         "xp": 420,
         "gift": "chest",
+        "unlock": "rockethull",
         "talk": [
           [
             "pip",
@@ -953,10 +1000,10 @@
           ],
           [
             "pip",
-            "A toy robot to lead it, koi for the pond float, and a bun tower for after."
+            "A toy robot to lead it, a drum to keep the beat, and a bun tower for after."
           ]
         ],
-        "text": "The best parade the meadow has ever seen. Then everyone turns to look at the rocket."
+        "text": "The best parade the meadow has ever seen. Then everyone turns to look at the rocket — and the pile of scrap behind it. \"Spare parts,\" says Dr. Zonk. \"Lots of spare parts.\""
       },
       {
         "id": "e22",
@@ -966,7 +1013,7 @@
         "rocket": true,
         "needs": [
           [
-            "cart",
+            "nosecone",
             1
           ],
           [
@@ -992,7 +1039,7 @@
           ],
           [
             "pip",
-            "A cart for the fuel, a telescope for the pilot, and an aqueduct for the water. We will miss you, Dr. Zonk."
+            "A nose cone for the top, a telescope for the pilot, and an aqueduct for the water. We will miss you, Dr. Zonk."
           ],
           [
             "bloop",
@@ -1053,7 +1100,9 @@
       "zib",
       "luma",
       "rokk",
-      "nix"
+      "nix",
+      "oops",
+      "glimmer"
     ],
     "grow": [
       {

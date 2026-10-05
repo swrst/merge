@@ -151,7 +151,18 @@ must(await page.evaluate(() => window.__game.state().gems) === g0 + 80, 'buy gra
 must(await page.evaluate(() => window.__game.v9.services.analytics.recent.some(e => e.name === 'purchase_end')), 'and analytics saw it');
 await page.evaluate(() => window.__game.view('board')); await page.waitForTimeout(400);
 
-console.log('\n11. Console');
+console.log('\n11. Something to claim is visible');
+await page.evaluate(() => { const s = window.__game.state(); s.tipsOff = 1; window.__game.v9.jitOff(); s.spin.tok = (s.spin.tok || 0) + 2; s.lvl = Math.max(s.lvl, 10); window.__game.hud(); });
+await page.waitForFunction(() => document.querySelector('#ribbon.show'), null, { timeout: 5000 }).catch(async () => console.log('   state:', await page.evaluate(() => ({ view: document.querySelector('.screen.open')?.id, pop: document.querySelector('#pop.open') ? 1 : 0, modal: document.querySelector('#modal.open') ? 1 : 0, talk: document.querySelector('#talk.open') ? 1 : 0, rwc: document.querySelector('#rwc')?.className, rb: document.querySelector('#ribbon')?.className, claims: window.__claims() }))));
+must(await page.locator('#ribbon.show').count() === 1, 'a new claimable slides in as a ribbon');
+must((await page.textContent('#dotFun')).trim().length > 0 && await page.locator('#dotFun').isVisible(), 'and the dock badge shows a count');
+const rbText = (await page.textContent('#ribbon')).trim(); await page.locator('#ribbon .rbGo').click(); await page.waitForTimeout(700);
+must(await page.locator('#pop.open, .screen.open').count() >= 1, 'tapping the ribbon goes straight there (' + rbText + ')');
+await page.evaluate(() => { window.__game.v9.closePop(); window.__game.view('board'); }); await page.waitForTimeout(400);
+const snd = await page.evaluate(async () => { const out = []; for (const n of ['open', 'close', 'tab', 'unlock', 'ready', 'collect', 'blip1', 'amb_earth', 'music_earth_1']) { const r = await fetch('/src/audio/' + n + '.ogg'); if (!r.ok) out.push(n); } return out; });
+must(snd.length === 0, 'new ui sounds, voices and music phrases exist' + (snd.length ? ' (missing ' + snd + ')' : ''));
+
+console.log('\n12. Console');
 must(errors.length === 0, 'no console errors' + (errors.length ? ':\n    ' + errors.slice(0, 5).join('\n    ') : ''));
 await page.screenshot({ path: '/tmp/ux-end.png' });
 await browser.close();

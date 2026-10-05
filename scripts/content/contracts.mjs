@@ -30,6 +30,11 @@ export const ASKS = {
   tea: ['Tea time at four.', 'Guests are coming!', 'A calming cup, please.'],
   pond: ['The pond looks empty.', 'For the koi garden.', 'The frogs want friends.'],
   toys: ['The Blinkies are bored!', 'A present for Ember.', 'Toy day tomorrow!'],
+  picnic: ['Picnic on the hill!', 'Lunch for the workers.', 'A snack for the road.'],
+  pets: ['A friend for the Blinkies.', 'Pets need a home.', 'Look how fluffy!'],
+  music: ['The barn dance is tonight!', 'A song for the launch.', 'Music for the parade.'],
+  parts: ['The rocket needs this!', 'Spare parts, please.', 'Zonk dropped another bolt.'],
+  weather: ['Will it rain tomorrow?', 'Rain for the veggies.', 'Rainbows for the kids.'],
   visitor: ['Our visitors look lost.', 'They want to go home.', 'Making friends from space!'],
 
   /* ----------------------------------------------------------- Crater Camp */
@@ -110,14 +115,18 @@ export const ASKS = {
 /* Each character's favourite chains, in no particular order. They can live
    in more than one world; a contract only picks from chains awake right here. */
 export const LIKES = {
-  pip: ['wood', 'stone', 'veggie', 'visitor', 'water'],
-  grandma: ['berry', 'honey', 'flower', 'cloth', 'mush', 'clay'],
-  timmy: ['stone', 'stargaze', 'visitor', 'feather', 'garden', 'wood', 'toys', 'pond'],
+  pip: ['wood', 'stone', 'veggie', 'visitor', 'water', 'parts'],
+  grandma: ['berry', 'honey', 'flower', 'cloth', 'mush', 'clay', 'weather', 'picnic'],
+  timmy: ['stone', 'stargaze', 'visitor', 'feather', 'garden', 'wood', 'toys', 'pond', 'pets', 'music'],
   gigi: ['flower', 'cloth', 'clay', 'feather', 'honey', 'berry'],
-  biscuit: ['wood', 'berry', 'water', 'grass', 'veggie', 'toys'],
-  mumbo: ['bakery', 'berry', 'honey', 'veggie', 'grass', 'water'],
-  pim: ['tea', 'flower', 'clay', 'pond', 'honey', 'cloth'],
-  bloop: ['star', 'relic', 'glow', 'crystal', 'garden', 'aurorac', 'starc'],
+  biscuit: ['wood', 'berry', 'water', 'grass', 'veggie', 'toys', 'weather', 'music'],
+  mumbo: ['bakery', 'berry', 'honey', 'veggie', 'grass', 'water', 'picnic'],
+  pim: ['tea', 'flower', 'clay', 'pond', 'honey', 'cloth', 'picnic', 'pets'],
+  blorb: ['picnic', 'bakery', 'parts', 'weather', 'wood', 'cloth'],
+  grubs: ['veggie', 'berry', 'mush', 'pets', 'garden', 'honey'],
+  oops: ['moon', 'crystal', 'glow', 'ice', 'dust'],
+  glimmer: ['moon', 'dust', 'glow', 'crystal', 'ice'],
+  bloop: ['star', 'relic', 'glow', 'crystal', 'garden', 'aurorac', 'starc', 'parts', 'weather'],
   zib: ['silver', 'dust', 'rover', 'dish', 'meteorite', 'iron', 'copper'],
   luma: ['glow', 'lantern', 'comet', 'lunamoth', 'crystal', 'starc', 'planets', 'nebula'],
   rokk: ['stone', 'wood', 'clay', 'dust', 'ice', 'rover', 'meteorite', 'helium', 'iron', 'steam', 'basalt'],

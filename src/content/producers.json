@@ -311,6 +311,91 @@
     "cap": 10,
     "every": 360000
   },
+  "picnichamper": {
+    "name": "Picnic Hamper",
+    "art": "picnichamper",
+    "drops": [
+      "crumb",
+      "crumb",
+      "crumb",
+      "sandwich"
+    ],
+    "spec": {
+      "shape": "basket",
+      "mat": "straw",
+      "ground": "moss"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "eggnest": {
+    "name": "Egg Nest",
+    "art": "eggnest",
+    "drops": [
+      "petegg",
+      "petegg",
+      "hatchegg"
+    ],
+    "spec": {
+      "shape": "egg",
+      "mat": "lilac",
+      "ground": "moss"
+    },
+    "mode": "battery",
+    "cap": 10,
+    "every": 360000
+  },
+  "buskbot": {
+    "name": "Busking Robot",
+    "art": "buskbot",
+    "drops": [
+      "notepebble",
+      "notepebble",
+      "notepebble",
+      "whistle"
+    ],
+    "spec": {
+      "shape": "totem",
+      "mat": "steel",
+      "ground": "moss"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "rockethull": {
+    "name": "Scrap Hull",
+    "art": "rockethull",
+    "drops": [
+      "hexbolt",
+      "hexbolt",
+      "hexbolt",
+      "gear"
+    ],
+    "spec": {
+      "shape": "tower",
+      "mat": "steel",
+      "ground": "moss"
+    },
+    "mode": "energy",
+    "cost": 1
+  },
+  "weatherballoon": {
+    "name": "Weather Balloon",
+    "art": "weatherballoon",
+    "drops": [
+      "raindrop",
+      "raindrop",
+      "puffcloud"
+    ],
+    "spec": {
+      "shape": "balloon",
+      "mat": "sapphire",
+      "ground": "moss"
+    },
+    "mode": "battery",
+    "cap": 12,
+    "every": 225000
+  },
   "fallingstar": {
     "name": "Falling Star",
     "art": "fallingstar",

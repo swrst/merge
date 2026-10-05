@@ -9,7 +9,9 @@
    and the game plays on in silence. */
 
 /** music sits well under the effects: it is a bed, not a soundtrack */
-const MUSIC_VOL = 0.35;
+const MUSIC_VOL = 0.26;
+/** the ambience bed sits under the music, and alone in the quiet stretches */
+const AMB_VOL = 0.5;
 
 const urls = import.meta.glob('./audio/*.ogg', {
   eager: true, query: '?url', import: 'default',
@@ -58,7 +60,7 @@ class Audio {
 
   /** Pull every effect into memory in the background; music waits until asked. */
   private warm() {
-    const names = Object.keys(SRC).filter(n => !n.startsWith('music_'));
+    const names = Object.keys(SRC).filter(n => !n.startsWith('music_') && !n.startsWith('amb_'));
     let i = 0;
     const step = () => {
       if (i >= names.length) return;
@@ -113,40 +115,89 @@ class Audio {
     this.play(name, { rate: 1 + (Math.random() * 2 - 1) * spread, gain });
   }
 
-  /** Swap the music bed, crossfading out whatever is playing. Idempotent. */
+  /* ------------------------------------------------------------ the music
+     A world has four phrases (music_<w>_1..4) and an ambience loop (amb_<w>).
+     The director plays a phrase, sometimes a second one, then lets the
+     ambience carry alone for a while, then picks a different phrase. Nothing
+     repeats back to back, and the quiet stretches are what stop it grating.
+     Older single-loop beds (music_<w>) still work if that is all there is. */
+  private world: string | null = null;
+  private amb: { src: AudioBufferSourceNode; gain: GainNode } | null = null;
+  private phraseTimer: any = 0;
+  private lastPhrase = '';
+  private runLeft = 0;
   playMusic(name: string | null) {
     this.wanted = name;
     if (this.broken || !name) { if (!name) this.stopMusic(); return; }
     if (!this.ctx) return;                       // starts on the first gesture
-    if (this.current && this.current.name === name) return;
+    const w = name.replace(/^music_/, '');
+    if (this.world === w) return;
+    this.stopMusic();
+    this.world = w;
+    const phrases = Object.keys(SRC).filter(n => n.startsWith('music_' + w + '_'));
+    if (!phrases.length && SRC[name]) { this.loopOne(name); return; }
+    this.startAmb('amb_' + w);
+    this.runLeft = 1 + (Math.random() < 0.5 ? 1 : 0);
+    clearTimeout(this.phraseTimer);
+    this.phraseTimer = setTimeout(() => this.nextPhrase(w, phrases), 2500);
+  }
+  private nextPhrase(w: string, phrases: string[]) {
+    if (this.world !== w || !this.ctx) return;
+    const pool = phrases.filter(p => p !== this.lastPhrase);
+    const pick = pool[Math.floor(Math.random() * pool.length)] || phrases[0];
+    this.lastPhrase = pick;
+    this.buffer(pick).then(buf => {
+      if (!buf || !this.ctx || this.world !== w) return;
+      const now = this.ctx.currentTime, src = this.ctx.createBufferSource(), g = this.ctx.createGain();
+      src.buffer = buf; g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(1, now + 1.5);
+      src.connect(g); g.connect(this.musicBus); src.start(now);
+      if (this.current) { try { this.current.src.stop(now + 1.5); } catch { } }
+      this.current = { name: pick, src, gain: g };
+      // after this phrase: another one, or a quiet stretch with just the ambience
+      this.runLeft--;
+      const rest = this.runLeft > 0 ? 0 : 25000 + Math.random() * 35000;
+      if (this.runLeft <= 0) this.runLeft = 1 + (Math.random() < 0.6 ? 1 : 0);
+      clearTimeout(this.phraseTimer);
+      this.phraseTimer = setTimeout(() => this.nextPhrase(w, phrases), buf.duration * 1000 - 600 + rest);
+    });
+    // the next one loads in the background while this one plays
+    phrases.forEach(p => this.buffer(p));
+  }
+  private startAmb(name: string) {
+    if (!SRC[name]) return;
+    this.buffer(name).then(buf => {
+      if (!buf || !this.ctx || 'amb_' + this.world !== name) return;
+      const now = this.ctx.currentTime, src = this.ctx.createBufferSource(), g = this.ctx.createGain();
+      src.buffer = buf; src.loop = true;
+      g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(AMB_VOL, now + 3);
+      src.connect(g); g.connect(this.musicBus); src.start(now);
+      this.amb = { src, gain: g };
+    });
+  }
+  private loopOne(name: string) {
     this.buffer(name).then(buf => {
       if (!buf || !this.ctx || this.wanted !== name) return;
-      const now = this.ctx.currentTime;
-      if (this.current) {
-        const old = this.current;
-        old.gain.gain.cancelScheduledValues(now);
-        old.gain.gain.setValueAtTime(old.gain.gain.value, now);
-        old.gain.gain.linearRampToValueAtTime(0, now + 1.1);
-        try { old.src.stop(now + 1.2); } catch { }
-      }
-      const src = this.ctx.createBufferSource();
+      const now = this.ctx.currentTime, src = this.ctx.createBufferSource(), g = this.ctx.createGain();
       src.buffer = buf; src.loop = true;
-      const g = this.ctx.createGain();
-      g.gain.setValueAtTime(0, now);
-      g.gain.linearRampToValueAtTime(1, now + 1.4);
-      src.connect(g); g.connect(this.musicBus);
-      src.start(now);
+      g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(1, now + 1.4);
+      src.connect(g); g.connect(this.musicBus); src.start(now);
       this.current = { name, src, gain: g };
     });
   }
 
   stopMusic() {
-    if (!this.ctx || !this.current) return;
-    const now = this.ctx.currentTime, old = this.current;
-    old.gain.gain.cancelScheduledValues(now);
-    old.gain.gain.linearRampToValueAtTime(0, now + 0.6);
-    try { old.src.stop(now + 0.7); } catch { }
-    this.current = null;
+    clearTimeout(this.phraseTimer);
+    this.world = null;
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    [this.current, this.amb].forEach(o => {
+      if (!o) return;
+      o.gain.gain.cancelScheduledValues(now);
+      o.gain.gain.setValueAtTime(o.gain.gain.value, now);
+      o.gain.gain.linearRampToValueAtTime(0, now + 0.8);
+      try { o.src.stop(now + 0.9); } catch { }
+    });
+    this.current = null; this.amb = null;
   }
 
   /** Dip the music for a moment so a big effect lands. */
@@ -167,7 +218,7 @@ class Audio {
     this.musicOn = on;
     if (!this.ctx) return;
     this.musicBus.gain.value = on ? MUSIC_VOL : 0;
-    if (on && this.wanted && !this.current) this.playMusic(this.wanted);
+    if (on && this.wanted && !this.world) this.playMusic(this.wanted);
   }
 }
 

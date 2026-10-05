@@ -196,7 +196,6 @@ button{font-family:inherit;cursor:pointer;border:none}
 .cell .tbar{position:absolute;bottom:2px;left:6px;right:6px;height:3px;border-radius:2px;background:rgba(140,100,40,.2);overflow:hidden}
 .cell .tbar i{display:block;height:100%;background:#ffb02e;border-radius:2px}
 .cell.pop .art{animation:popIn .42s cubic-bezier(.3,1.7,.5,1)}
-@keyframes popIn{0%{transform:scale(.2) rotate(-18deg)}70%{transform:scale(1.18) rotate(4deg)}100%{transform:scale(1) rotate(0)}}
 .cell.drop .art{animation:dropIn .45s cubic-bezier(.3,1.5,.5,1)}
 @keyframes dropIn{0%{transform:translateY(-26px) scale(.7);opacity:0}70%{transform:translateY(3px) scale(1.08);opacity:1}100%{transform:translateY(0) scale(1)}}
 .ghost{position:fixed;width:62px;height:62px;pointer-events:none;z-index:200;transform:translate(-50%,-50%) scale(1.18);
@@ -1594,3 +1593,84 @@ html.ui-btn_disabled .big:disabled,html.ui-btn_disabled .big.off,html .big.off{b
 .devH{font-size:11px;font-weight:800;color:#6b55b5;margin:6px 0 4px;text-transform:uppercase;letter-spacing:.04em}
 .devBtn{display:block;width:100%;margin:4px 0;padding:6px 8px;border-radius:10px;border:0;background:#fff;color:#4a3a80;font-size:12px;text-align:left;cursor:pointer;box-shadow:0 2px 0 #d6cdf3}
 .devList{margin:0;padding-left:16px;font-size:10.5px;color:#4a3a80;max-height:110px;overflow:auto}
+
+/* ---------------------------------------------------- v24: claim badges + ribbon */
+.tab .dot{left:auto;min-width:15px;width:auto;height:15px;padding:0 3px;box-sizing:border-box;font:800 9.5px/11px Fredoka,system-ui,sans-serif;
+  color:#fff;text-align:center;font-style:normal}
+.tab .dot.bump{animation:dotPop .55s cubic-bezier(.3,1.8,.5,1),readyBob 1s ease-in-out .55s infinite}
+@keyframes dotPop{0%{transform:scale(.3)}60%{transform:scale(1.45)}100%{transform:scale(1)}}
+#ribbon{position:absolute;left:50%;width:max-content;top:calc(env(safe-area-inset-top,0px) + 62px);z-index:80;display:flex;align-items:center;gap:8px;
+  max-width:min(92vw,400px);padding:6px 6px 6px 8px;border-radius:999px;border:3px solid #fff;
+  background:linear-gradient(180deg,#fff7df,#ffe6a8);box-shadow:0 5px 0 rgba(170,110,30,.35),0 10px 24px rgba(80,40,0,.25);
+  color:#6b4510;font:700 13.5px/1.15 Fredoka,system-ui,sans-serif;transform:translate(-50%,-160%);opacity:0;pointer-events:none;
+  transition:transform .45s cubic-bezier(.3,1.5,.5,1),opacity .25s}
+#ribbon.show{transform:translate(-50%,0);opacity:1;pointer-events:auto;animation:rbWiggle 2.4s ease-in-out .6s infinite}
+#ribbon.hide{transform:translate(-50%,-160%);opacity:0}
+#ribbon .rbIc{width:34px;height:34px;flex:none;display:grid;place-items:center;font-size:24px;border-radius:50%;background:#fff;
+  box-shadow:inset 0 -2px 0 rgba(0,0,0,.08);animation:rbSpin .7s cubic-bezier(.3,1.6,.5,1)}
+#ribbon .rbIc img{width:30px;height:30px;object-fit:contain}
+#ribbon .rbTx{flex:1;min-width:0;text-align:left}
+#ribbon .rbGo{flex:none;padding:7px 13px;border-radius:999px;background:linear-gradient(180deg,#8ce46a,#4cb83a);color:#fff;
+  box-shadow:0 3px 0 #2f8a25;text-shadow:0 1px 0 rgba(0,0,0,.2);font-size:13px}
+@keyframes rbWiggle{0%,86%,100%{rotate:0deg}90%{rotate:-2deg}94%{rotate:2deg}}
+@keyframes rbSpin{0%{transform:scale(0) rotate(-90deg)}100%{transform:scale(1) rotate(0)}}
+
+/* screens and popups: a softer entrance with a little settle */
+.screen.open > *{animation:scIn .4s ease-out both}
+.screen.open > *:nth-child(2){animation-delay:.05s}
+.screen.open > *:nth-child(3){animation-delay:.1s}
+@keyframes scIn{0%{opacity:0;transform:translateY(12px)}100%{opacity:1;transform:none}}
+#talk.open.beat #tkFace{animation:talkBounce .45s cubic-bezier(.3,1.7,.5,1)}
+@keyframes talkBounce{0%{transform:translateY(0) scale(1,1)}30%{transform:translateY(4px) scale(1.06,.93)}65%{transform:translateY(-6px) scale(.97,1.04)}100%{transform:none}}
+@media (prefers-reduced-motion:reduce){#ribbon.show,.tab .dot.bump,.screen.open > *{animation:none}}
+.tab,.railBtn,.rail.dock .railBtn{overflow:visible}
+.rail.dock .railBtn .dot{top:-6px;right:-6px;min-width:19px;height:19px;font-size:11px;line-height:15px;box-shadow:0 2px 4px rgba(120,20,10,.35);z-index:2}
+#ribbon.show{pointer-events:none}
+#ribbon.show .rbGo{pointer-events:auto;cursor:pointer}
+
+/* ---------------------------------------------------------- v25: reward card */
+#rwc{position:absolute;inset:0;z-index:210;display:none;align-items:center;justify-content:center;background:rgba(40,25,10,.55);padding:20px}
+#rwc.open,#rwc.close{display:flex}
+#rwc.close{animation:rwcOut .3s ease-in forwards}
+@keyframes rwcOut{to{opacity:0}}
+.rwcCard{position:relative;width:min(86vw,320px);padding:58px 18px 18px;text-align:center;border-radius:26px;
+  background:linear-gradient(180deg,#fffaf0,#ffeccd);border:4px solid #ffcf4a;box-shadow:0 0 0 3px #c98a14,0 14px 40px rgba(0,0,0,.35);
+  animation:rwcIn .5s cubic-bezier(.3,1.5,.5,1)}
+html.ui-reward_card .rwcCard{background:var(--ui-reward_card) center/100% 100% no-repeat;border:0;box-shadow:none;border-radius:0;width:min(84vw,300px);aspect-ratio:190/227;padding:47% 12% 9%;display:flex;flex-direction:column;justify-content:center;box-sizing:border-box}
+@keyframes rwcIn{0%{transform:scale(.4) rotate(-6deg);opacity:0}100%{transform:none;opacity:1}}
+.rwcRays{position:absolute;left:50%;top:50%;width:560px;height:560px;margin:-280px 0 0 -280px;opacity:.7;pointer-events:none;
+  background:repeating-conic-gradient(rgba(255,226,120,.55) 0 10deg,transparent 10deg 20deg);border-radius:50%;
+  -webkit-mask:radial-gradient(circle,#000 25%,transparent 68%);mask:radial-gradient(circle,#000 25%,transparent 68%);animation:spinSlow 14s linear infinite}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
+.rwcRib{position:absolute;left:50%;top:-14px;transform:translateX(-50%);white-space:nowrap;padding:8px 22px;border-radius:12px;
+  background:linear-gradient(180deg,#ff6b5e,#d63a2f);color:#fff;font:700 18px/1 Fredoka,system-ui,sans-serif;text-shadow:0 2px 0 rgba(0,0,0,.25);box-shadow:0 4px 0 #9c2219}
+html.ui-reward_card .rwcRib{top:30.5%;background:none;box-shadow:none;font-size:17px;padding:0;line-height:1.2;transform:translate(-50%,-50%) rotate(-1deg);max-width:70%;overflow:hidden;text-overflow:ellipsis}
+html.ui-reward_card .rwcWho{left:-6px;top:4%}
+html.ui-reward_card .rwcLine{font-size:13px;margin:0 0 8px}
+html.ui-reward_card .rwcRow{margin-bottom:10px}
+html.ui-reward_card .rwcArt,html.ui-reward_card .rwcArt img,html.ui-reward_card .rwcArt svg,html.ui-reward_card .rwcArt .uiIc{width:54px;height:54px}
+.rwcWho{position:absolute;left:-14px;top:-30px;width:78px;height:78px;border-radius:50%;background:#fff;border:3px solid #ffcf4a;overflow:hidden;
+  box-shadow:0 4px 10px rgba(0,0,0,.25);animation:talkBounce .6s .2s cubic-bezier(.3,1.7,.5,1) both}
+.rwcWho img,.rwcWho svg{width:100%;height:100%;object-fit:cover}
+.rwcLine{font:500 14px/1.3 Fredoka,system-ui,sans-serif;color:#6b4510;margin:4px 0 12px}
+.rwcRow{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.rwcIt{display:flex;flex-direction:column;align-items:center;gap:4px;animation:rwcPop .5s cubic-bezier(.3,1.8,.5,1) both}
+.rwcIt:nth-child(2){animation-delay:.12s}.rwcIt:nth-child(3){animation-delay:.24s}
+@keyframes rwcPop{0%{transform:scale(0)}100%{transform:scale(1)}}
+.rwcArt{width:64px;height:64px;display:grid;place-items:center}
+.rwcArt img,.rwcArt svg,.rwcArt .uiIc{width:64px;height:64px;object-fit:contain}
+.rwcIt b{font:700 15px/1 Fredoka,system-ui,sans-serif;color:#6b4510}
+.hostRow{display:flex;align-items:center;gap:8px;margin:14px 0 6px;text-align:left}
+.hostRow i{font-style:normal;font-size:13px;color:#7a5326;background:#fff;border-radius:12px;padding:6px 10px;box-shadow:0 2px 0 rgba(150,105,50,.2)}
+.hostFace{display:inline-block;flex:none;width:46px;height:46px;border-radius:50%;overflow:hidden;background:#fff;border:2px solid #ffcf4a;vertical-align:middle;margin-right:6px}
+.hostFace img,.hostFace svg{width:100%;height:100%;object-fit:cover}
+
+/* v25: tester build bits */
+.verLine{margin-top:10px;text-align:center;font-size:11px;color:#a58552;user-select:none}
+.ttBox{margin-top:10px;padding:10px;border-radius:14px;background:#efe6ff;text-align:center;font-size:12px;color:#5b4590}
+.ttRow{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0}
+.ttBox i{font-size:10.5px;opacity:.75}
+.fbWrap textarea{width:100%;box-sizing:border-box;border-radius:14px;border:2px solid #e8cf9c;padding:10px;font:500 14px/1.3 Fredoka,system-ui,sans-serif;background:#fffaf0;color:#5a3d12;resize:none;margin:8px 0}
+.fbMood{display:flex;justify-content:center;gap:8px;margin-top:8px}
+.fbM{font-size:26px;width:46px;height:46px;border-radius:50%;border:2px solid transparent;background:#fff;box-shadow:0 2px 0 rgba(150,105,50,.25)}
+.fbM.on{border-color:#4cb83a;transform:scale(1.12)}
