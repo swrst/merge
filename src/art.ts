@@ -1117,6 +1117,7 @@ export const ART = (function () {
     spriteProducer: (k: string) => SPRITE.producer[k] || '',
     spriteScene: (k: string) => SPRITE.scene[k] || '',
     spriteUi: (k: string) => SPRITE.ui[k] || '',
+    spriteChar: (k: string) => SPRITE.char[k] || '',
     /** a full-length painted figure for story scenes, else the portrait */
     charFull: (k: string) => SPRITE.char[k + '_full']
       ? `<svg viewBox="0 0 100 100" class="face"><image href="${SPRITE.char[k + '_full']}" x="0" y="0" width="100" height="100"/></svg>` : charArt(k),

@@ -1,113 +1,54 @@
-# Painted art — how to drop it in
+# Art: how it gets into the game
 
-Every drawing in this game is generated from a shape and a material. That is why
-504 items cost no drawing time, and it is also the ceiling: code can draw a
-convincing toy, but it cannot paint one the way a person can.
+## Where the files go
 
-So the game takes painted files too. Put one in and it replaces the generated
-drawing **everywhere** — board, order cards, catalogue, camp, backdrop — with no
-code change, no manifest, no content rebuild.
+| Folder | What | File name |
+|---|---|---|
+| `src/sprites/items/` | merge items | `<item id>.png` |
+| `src/sprites/producers/` | producers | `<producer art>.png` |
+| `src/sprites/chars/` | characters | `<id>.png` (head) + `<id>_full.png` (full body) |
+| `src/sprites/ui/` | UI | see below |
+| `src/sprites/scenes/` | painted backgrounds | `.webp` |
 
-```
-src/sprites/items/<item id>.png           twig.png, royaljelly.png, gemstone.png
-src/sprites/producers/<producer art>.png  tree.png, bush.png, rocks.png
-src/sprites/scenes/<world>.webp           earth.webp, luna.webp, cindra.webp,
-                                          nerith.webp, vela.webp, lab.webp
-```
+- A file present = painted. A file missing = the generated stand-in drawing from `src/artgen.ts`.
+- No code change is needed. Ids are in `art/CATALOGUE.md` and in `scripts/content/*.mjs`.
 
-Reload in dev, or `npm run build` for the single-file `MergeRocket.html` — the
-sprites are inlined into it, so the one file still works with no server. (That is
-why they live under `src/` and not `public/`.)
+## The workflow
 
-## What to name them
+1. Generate a sheet with ChatGPT using the prompt packs in `art/` (`NERITH-PROMPT.md`, `VELA-PROMPT.md`).
+   - Each pack lists **only what is still missing**.
+   - Rebuild a pack with `node scripts/world-prompt.mjs <world>`.
+   - Attach `STYLE-REFERENCE.png`, and send **one sheet per picture**; collages come out too small.
+2. Save the result into `Desktop\chatgpt art`.
+3. Cut each object out (alpha segmentation), rename it to its id, and drop it into the folder above.
+   - Rename the source sheet `_USED`.
+4. Run `npm run art:optimize`: items and producers become 256 px palette PNGs, and the subject is recentred.
+5. Run `npm run art:manifest`: the catalogue and prompt data are refreshed.
 
-`npm run art` prints everything still generated, grouped by chain, with the name
-of the thing so you know what to draw:
+## UI files
 
-```
-$ npm run art
-painted 0 of 612 assets
+UI files are picked up by name:
 
-    scenes                   0/6   world backdrop
-    ui                       0/19   interface
-    starters                 0/11   producer (Sunny Meadow)
-    chain-wood               0/8   Woodworks (Sunny Meadow)
-    ...
-```
+- **As images:** `ART.uiIcon('<name>')`.
+- **As CSS:** the root gets class `ui-<name>` and variable `--ui-<name>`.
 
-`npm run art -- --todo` prints just the paths, one per line, for feeding to a
-batch job. `npm run art -- --batch chain-wood` prints one batch's prompts, and
-`/art/sheet.html` (under `npm run dev`) checks the files you dropped in.
-
-You do not have to do all of them. Paint the chains you look at most — the two
-starters of each world and the first three tiers — and the rest keeps its
-generated art; they sit side by side without looking broken, because the
-generated art already wears the same contour and the same light.
-
-## The brief
-
-**Items.** Square, **transparent background**, 256×256 (512 if you want headroom).
-One object, centred, filling about 80% of the frame with a little air around it.
-Three-quarter view from slightly above, as if it were sitting on a table in front
-of you. One warm light from the upper left, a soft shadow pooling under the object
-— the shadow is part of the sprite, it sits on the tile. Thick dark-brown contour
-all the way round, about 6px at 256. Saturated, friendly colours, a glossy
-highlight on the top surface. No text, no drop shadow onto a background, no
-background at all.
-
-**Producers.** Same, but the object stands on a little patch of ground (a mound of
-grass, sand, rock — whatever suits the world) and can be a touch taller than wide.
-
-**Scenes.** 1086×1448 (3:4), no transparency, painted background art: a place you
-are standing in, with the middle of the frame left uncluttered — the board panel,
-the plinths and the rocket pad are drawn on top of it. The camp scenes want a
-clear flat foreground with 3–5 round plinths or clearings across the bottom third
-for the producers to stand on, and a distinct pad on the left for the rocket.
-
-A prompt that gets close to the reference style:
-
-> cartoon mobile game asset, <the thing>, 3/4 view, thick dark outline, soft
-> baked lighting from upper left, glossy highlight, saturated warm palette,
-> centred on a transparent background, no text, Travel Town / Merge Mansion
-> style, high detail, square
-
-## What the code does on top
-
-Whatever the source, every item is put through one more pass before it reaches a
-tile (`inked()` in `src/art.ts`): the silhouette is dilated into a single thick
-warm-dark contour, and an offset copy of itself is subtracted to lay a band of
-shade inside the bottom edge and a lip of light along the top. That is what makes
-a hundred unrelated objects read as one box of toys. A painted sprite gets it too,
-which is why painted and generated art can share a board without clashing — if a
-sprite already has its own heavy outline the extra one just reads as a rim.
-
-## Painted UI
-
-Files in `src/sprites/ui/` skin the interface the same way, with no code change:
-
-| File | Replaces |
+| Group | Files |
 |---|---|
-| `btn_green.png`, `btn_gold.png`, `btn_blue.png` | the big action buttons (9-sliced, so any width works) |
-| `btn_round.png` | the side-rail and scene buttons |
-| `panel_wood.png` | every pop-up panel (9-sliced) |
-| `tile_light.png`, `tile_dark.png`, `tile_locked.png` | the board checkerboard and overgrown tiles |
-| `icon_<name>.png` (`icon_coin`, `icon_energy`, `icon_star`, …) | that icon everywhere it is shown |
+| Board tiles | `tile_light`, `tile_dark`, `tile_locked`, plus per world `tile_light_<world>` etc. |
+| Section titles | `sec_*` |
+| Claim ribbon and inline icons | `cl_*`, `ic_*` |
+| Currencies | `icon_*` |
+| Events | `banner_<event>`, `tok_<event>` |
+| Side games | `fun_*` |
+| Lucky Wheel | `wheel`, `wheel_pin`, `wheel_hub` |
+| Reward card | `reward_card` |
+| Meteor | `meteor` (rock bottom-left, trail to top-right) |
 
-Also hooked up: `bar_track.png` + `bar_fill.png` (the XP bar) and `badge_ready.png`
-(the tick on a filled contract slot).
+**Emoji.** Any emoji in the game's text that has a painted twin is swapped for it automatically (`EMO` in `src/game.ts`). Paint an icon, add it to that map, and every emoji of that kind changes.
 
-Not hooked up yet: `icon_gem`, `icon_bloom`, `frame_rare`, `ribbon`, `order_card`,
-`plinth`, and the `fx/` sprite sheets. Painting them is fine; they will show once
-the game uses them.
+## Still to paint
 
-## Keep the files small
-
-Every sprite is inlined into the single-file `MergeRocket.html`, so size adds up
-fast (500 items at 250 kB each would be a 125 MB page). After adding a batch, run:
-
-```bash
-npm run art:optimize    # items/producers -> 256 px palette PNG, scenes -> WebP q80
-```
-
-It is safe to run repeatedly and leaves files that are already small alone.
-
+- **Tidal Shallows (Nerith):** most chains, the producers and the tiles. See `art/NERITH-PROMPT.md`.
+- **Aurora Reach (Vela):** 8 chains. See `art/VELA-PROMPT.md`.
+- **Higher-resolution redos** of the v25 collage art: the Meadow side chains, the new producers and the helpers. Generate them one sheet at a time.
+- **Unused art kept for later** (decorations, hats, holiday tiles, Moon Pup, Zib's faces, event banners, backgrounds) is in `art/library/`.
