@@ -279,7 +279,7 @@
             1
           ]
         ],
-        "coins": 20,
+        "coins": 80,
         "xp": 25,
         "unlock": "bush",
         "talk": [
@@ -312,7 +312,7 @@
             2
           ]
         ],
-        "coins": 30,
+        "coins": 120,
         "xp": 40,
         "temp": {
           "p": "raincloud",
@@ -349,7 +349,7 @@
             2
           ]
         ],
-        "coins": 50,
+        "coins": 200,
         "xp": 60,
         "unlock": "well",
         "event": "meteor",
@@ -387,7 +387,7 @@
             1
           ]
         ],
-        "coins": 80,
+        "coins": 320,
         "xp": 80,
         "lab": true,
         "talk": [
@@ -420,7 +420,7 @@
             1
           ]
         ],
-        "coins": 100,
+        "coins": 400,
         "xp": 100,
         "unlock": "meadow",
         "gift": "chest",
@@ -458,7 +458,7 @@
             1
           ]
         ],
-        "coins": 140,
+        "coins": 560,
         "xp": 120,
         "unlock": "flowerbed",
         "talk": [
@@ -491,7 +491,7 @@
             1
           ]
         ],
-        "coins": 180,
+        "coins": 720,
         "xp": 140,
         "gift": "chest",
         "temp": {
@@ -525,7 +525,7 @@
             1
           ]
         ],
-        "coins": 220,
+        "coins": 880,
         "xp": 160,
         "unlock": "mosslog",
         "talk": [
@@ -554,7 +554,7 @@
             1
           ]
         ],
-        "coins": 260,
+        "coins": 1040,
         "xp": 180,
         "unlock": "cottonpatch",
         "talk": [
@@ -587,7 +587,7 @@
             1
           ]
         ],
-        "coins": 300,
+        "coins": 1200,
         "xp": 200,
         "unlock": "nestbox",
         "talk": [
@@ -616,7 +616,7 @@
             1
           ]
         ],
-        "coins": 340,
+        "coins": 1360,
         "xp": 220,
         "temp": {
           "p": "crashsite",
@@ -653,7 +653,7 @@
             1
           ]
         ],
-        "coins": 380,
+        "coins": 1520,
         "xp": 240,
         "unlock": "vegpatch",
         "gift": "chest",
@@ -687,7 +687,7 @@
             1
           ]
         ],
-        "coins": 420,
+        "coins": 1680,
         "xp": 260,
         "unlock": "tinkerbench",
         "talk": [
@@ -720,7 +720,7 @@
             1
           ]
         ],
-        "coins": 480,
+        "coins": 1920,
         "xp": 300,
         "gift": "chest",
         "talk": [
@@ -757,7 +757,7 @@
             1
           ]
         ],
-        "coins": 520,
+        "coins": 2080,
         "xp": 320,
         "unlock": "windmill",
         "talk": [
@@ -794,7 +794,7 @@
             1
           ]
         ],
-        "coins": 580,
+        "coins": 2320,
         "xp": 340,
         "unlock": "claypit",
         "talk": [
@@ -827,7 +827,7 @@
             1
           ]
         ],
-        "coins": 640,
+        "coins": 2560,
         "xp": 360,
         "unlock": "teabush",
         "talk": [
@@ -864,7 +864,7 @@
             1
           ]
         ],
-        "coins": 700,
+        "coins": 2800,
         "xp": 380,
         "unlock": "lilypond",
         "talk": [
@@ -897,7 +897,7 @@
             1
           ]
         ],
-        "coins": 760,
+        "coins": 3040,
         "xp": 400,
         "unlock": "toychest",
         "gift": "chest",
@@ -935,7 +935,7 @@
             1
           ]
         ],
-        "coins": 820,
+        "coins": 3280,
         "xp": 420,
         "gift": "chest",
         "talk": [
@@ -974,7 +974,7 @@
             1
           ]
         ],
-        "coins": 560,
+        "coins": 2240,
         "xp": 360,
         "gift": "bigchest",
         "talk": [
@@ -1202,7 +1202,7 @@
             1
           ]
         ],
-        "coins": 60,
+        "coins": 240,
         "xp": 30,
         "text": "A little ring of glow around the tents. The dark is smaller already."
       },
@@ -1220,7 +1220,7 @@
             1
           ]
         ],
-        "coins": 90,
+        "coins": 360,
         "xp": 45,
         "text": "WALL: STANDING. WIND: BLOCKED. ROKK: PROUD."
       },
@@ -1238,7 +1238,7 @@
             1
           ]
         ],
-        "coins": 130,
+        "coins": 520,
         "xp": 60,
         "gift": "chest",
         "text": "Nix has arranged the crystals by colour, then by size, then by mood."
@@ -1257,7 +1257,7 @@
             1
           ]
         ],
-        "coins": 180,
+        "coins": 720,
         "xp": 80,
         "text": "Rokk walks the far side at night now. Humming. Rokk does not hum. Rokk is humming."
       },
@@ -1275,7 +1275,7 @@
             1
           ]
         ],
-        "coins": 240,
+        "coins": 960,
         "xp": 100,
         "gift": "chest",
         "text": "The comet's ice was full of old seeds. Luma planted every one."
@@ -1299,7 +1299,7 @@
             1
           ]
         ],
-        "coins": 320,
+        "coins": 1280,
         "xp": 140,
         "gift": "chest",
         "text": "Beep! Pad ready! Zib tested it. Zib only exploded a little. Ember Hollow is in range now!"
@@ -1318,7 +1318,7 @@
             1
           ]
         ],
-        "coins": 380,
+        "coins": 1520,
         "xp": 170,
         "text": "The pups have a burrow with a view. They bounce off the walls. Literally."
       },
@@ -1336,7 +1336,7 @@
             1
           ]
         ],
-        "coins": 460,
+        "coins": 1840,
         "xp": 210,
         "gift": "chest",
         "text": "Six wheels, one drill, zero brakes. Zib loves it."
@@ -1355,7 +1355,7 @@
             1
           ]
         ],
-        "coins": 540,
+        "coins": 2160,
         "xp": 250,
         "text": "WARM. The whole crew slept through the night for the first time."
       },
@@ -1377,7 +1377,7 @@
             1
           ]
         ],
-        "coins": 700,
+        "coins": 2800,
         "xp": 340,
         "gift": "chest",
         "text": "The dish turns, the stars answer. Crater Camp is part of the sky again."
@@ -1590,7 +1590,7 @@
             1
           ]
         ],
-        "coins": 80,
+        "coins": 320,
         "xp": 35,
         "text": "The forge breathes. Vulk pretends it was nothing. It was not nothing."
       },
@@ -1608,7 +1608,7 @@
             2
           ]
         ],
-        "coins": 120,
+        "coins": 480,
         "xp": 50,
         "text": "Hammers, tongs and one very large spoon. Vulk will not explain the spoon."
       },
@@ -1626,7 +1626,7 @@
             1
           ]
         ],
-        "coins": 170,
+        "coins": 680,
         "xp": 70,
         "gift": "chest",
         "text": "Ember sells beads to travellers who have not arrived yet. She says they will."
@@ -1645,7 +1645,7 @@
             1
           ]
         ],
-        "coins": 230,
+        "coins": 920,
         "xp": 90,
         "text": "Very, very spicy. Nobody complained. Nobody could speak."
       },
@@ -1663,7 +1663,7 @@
             1
           ]
         ],
-        "coins": 300,
+        "coins": 1200,
         "xp": 120,
         "gift": "chest",
         "text": "The bell rings at sunset. The vents seem to quieten when it does."
@@ -1687,7 +1687,7 @@
             1
           ]
         ],
-        "coins": 380,
+        "coins": 1520,
         "xp": 160,
         "gift": "chest",
         "text": "It will not melt. Probably. Blorp. Tidal Shallows is next — pack a towel."
@@ -1706,7 +1706,7 @@
             1
           ]
         ],
-        "coins": 450,
+        "coins": 1800,
         "xp": 200,
         "text": "Tiny flames curled in warm stone. They follow Ember everywhere now."
       },
@@ -1724,7 +1724,7 @@
             1
           ]
         ],
-        "coins": 540,
+        "coins": 2160,
         "xp": 240,
         "gift": "chest",
         "text": "A hall of stone columns, cool inside, warm outside. Meetings happen there now."
@@ -1743,7 +1743,7 @@
             2
           ]
         ],
-        "coins": 640,
+        "coins": 2560,
         "xp": 290,
         "text": "PRESSURE: NOMINAL. HOLLOW: POWERED. ROKK: ALSO NOMINAL."
       },
@@ -1765,7 +1765,7 @@
             1
           ]
         ],
-        "coins": 800,
+        "coins": 3200,
         "xp": 380,
         "gift": "chest",
         "text": "Fire and garden at the same time, without either winning. Cindra is reborn."
@@ -1978,7 +1978,7 @@
             1
           ]
         ],
-        "coins": 100,
+        "coins": 400,
         "xp": 40,
         "text": "Sand you can actually walk on. Kelpa made a sandcastle. Then another. Then eleven."
       },
@@ -1996,7 +1996,7 @@
             1
           ]
         ],
-        "coins": 150,
+        "coins": 600,
         "xp": 55,
         "text": "Little corals in neat rows. The first fish arrived an hour later."
       },
@@ -2014,7 +2014,7 @@
             1
           ]
         ],
-        "coins": 210,
+        "coins": 840,
         "xp": 75,
         "gift": "chest",
         "text": "The market smells of salt and gossip. Exactly right."
@@ -2033,7 +2033,7 @@
             1
           ]
         ],
-        "coins": 270,
+        "coins": 1080,
         "xp": 95,
         "text": "Enough stores for the whole winter. Marin counted twice."
       },
@@ -2051,7 +2051,7 @@
             1
           ]
         ],
-        "coins": 340,
+        "coins": 1360,
         "xp": 125,
         "gift": "chest",
         "text": "The old skiff floats again. Sirra swears it is the same boat her grandmother sailed."
@@ -2075,7 +2075,7 @@
             1
           ]
         ],
-        "coins": 420,
+        "coins": 1680,
         "xp": 170,
         "gift": "chest",
         "text": "It bobs a bit. The rocket does not mind. Aurora Reach — the last world — is in range."
@@ -2094,7 +2094,7 @@
             1
           ]
         ],
-        "coins": 500,
+        "coins": 2000,
         "xp": 210,
         "text": "Every hatchling made it to the water. Kelpa counted every single one, out loud."
       },
@@ -2112,7 +2112,7 @@
             1
           ]
         ],
-        "coins": 600,
+        "coins": 2400,
         "xp": 260,
         "gift": "chest",
         "text": "Boats come and go. Some of them from worlds you woke."
@@ -2131,7 +2131,7 @@
             1
           ]
         ],
-        "coins": 700,
+        "coins": 2800,
         "xp": 310,
         "text": "The shallows glow green at night. The humming is louder now."
       },
@@ -2153,7 +2153,7 @@
             1
           ]
         ],
-        "coins": 880,
+        "coins": 3520,
         "xp": 400,
         "gift": "chest",
         "text": "The domes break the surface, glittering. Nerith breathes again."
@@ -2366,7 +2366,7 @@
             1
           ]
         ],
-        "coins": 120,
+        "coins": 480,
         "xp": 45,
         "text": "A cloud you can stand on. Zephyr has been jumping on it for an hour."
       },
@@ -2384,7 +2384,7 @@
             2
           ]
         ],
-        "coins": 180,
+        "coins": 720,
         "xp": 60,
         "text": "One stripe of colour across the dark. Halo keeps looking up."
       },
@@ -2402,7 +2402,7 @@
             1
           ]
         ],
-        "coins": 250,
+        "coins": 1000,
         "xp": 85,
         "gift": "chest",
         "text": "Golden fruit on floating branches. The birds found it before anyone."
@@ -2421,7 +2421,7 @@
             1
           ]
         ],
-        "coins": 320,
+        "coins": 1280,
         "xp": 110,
         "text": "The chimes play a tune nobody taught them. Halo says it is the Vault singing back."
       },
@@ -2439,7 +2439,7 @@
             1
           ]
         ],
-        "coins": 400,
+        "coins": 1600,
         "xp": 140,
         "gift": "chest",
         "text": "Nests on every cloud. The sky birds are home."
@@ -2462,7 +2462,7 @@
             1
           ]
         ],
-        "coins": 480,
+        "coins": 1920,
         "xp": 180,
         "gift": "chest",
         "text": "Balloons between the islands. Everyone can visit everyone now."
@@ -2481,7 +2481,7 @@
             1
           ]
         ],
-        "coins": 560,
+        "coins": 2240,
         "xp": 220,
         "text": "The little star-kits have a den of their own. They glow brighter when you visit."
       },
@@ -2499,7 +2499,7 @@
             1
           ]
         ],
-        "coins": 660,
+        "coins": 2640,
         "xp": 270,
         "gift": "chest",
         "text": "Every camp on every world can talk to every other. Zib has not stopped beeping."
@@ -2518,7 +2518,7 @@
             1
           ]
         ],
-        "coins": 760,
+        "coins": 3040,
         "xp": 320,
         "text": "Flowers that glow, planets that spin, a garden in the sky."
       },
@@ -2540,7 +2540,7 @@
             1
           ]
         ],
-        "coins": 950,
+        "coins": 3800,
         "xp": 420,
         "gift": "chest",
         "text": "Five worlds, all lit. The Vault is empty and the galaxy is full. That was the whole idea."

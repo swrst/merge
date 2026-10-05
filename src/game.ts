@@ -850,7 +850,7 @@ export async function startGame() {
     return {
       id: 'o' + (oid++), char, say, give, nrg,
       needs,
-      coins: Math.round((Math.round(worth * (1.5 + Math.random() * 0.6)) + 6) * coinMult() * (1 + res('trader') * 0.08)),
+      coins: Math.round((Math.round(worth * (1.1 + Math.random() * 0.4)) + 5) * coinMult() * (1 + res('trader') * 0.08)),
       xp: Math.round((CONFIG.xp.orderBase + needs.reduce((a, nd) => a + ITEMS[nd.id].tier * 2 + nd.qty, 0)) * xpMult()),
     };
   }
@@ -977,7 +977,7 @@ export async function startGame() {
     sfx.big(); haptic('medium'); confetti();
     const lu = $('#levelup');
     $('#luTxt').textContent = 'LEVEL ' + S.lvl + '!';
-    $('#luSub').textContent = 'Energy refilled • weeds cleared';
+    $('#luSub').textContent = `+${CONFIG.energy.levelUp || 20} energy • +${CFG.gems.perLevel} 💎`;
     lu.classList.remove('show'); void lu.offsetWidth; lu.classList.add('show');
     setTimeout(() => lu.classList.remove('show'), 2100);
     // on a story world Dr. Zonk arrives with a chapter (Mend the Old Well), not a level
@@ -1131,8 +1131,20 @@ export async function startGame() {
     if (S.fuel >= CONFIG.rocket.fuelToLaunch) setTimeout(() => { toast('Tank is FULL! Open 🗺️ Map and launch!'); }, 900);
     renderRocket(); renderHUD(); save();
   }
-  /** selling is a clear-out, not an income: half the listed value */
-  const sellOf = (id: string) => Math.max(1, Math.round(ITEMS[id].sell * 0.5));
+  /* The trophy shelf: a crowned item can be retired to the Album. It frees the
+     tile, pays a little XP and a gem, and the shelf remembers how many you made. */
+  function showcase(i: number) {
+    const b = B(), c = b[i]; if (!c || !c.id || nextOf(c.id)) return;
+    const d = ITEMS[c.id];
+    S.trophy = S.trophy || {}; S.trophy[c.id] = (S.trophy[c.id] || 0) + 1;
+    b[i] = null; sel = null; board.setSelected(null); hideInfo();
+    flyTo(cellXY(i), $('#tabBook'), ART.item(c.id), 1, { size: 44 });
+    addGems(1); addXp(d.tier * 2); sfx.discover(); sparkle(i, 18, '#ffe07a');
+    toast(`🏆 <b>${d.name}</b> is on your trophy shelf! +1 💎`);
+    paintBoard(); renderHUD(); renderOrders(); save();
+  }
+  /** selling is a clear-out, not an income: it pays on a square-root curve, so a crown is a few dozen coins, not hundreds */
+  const sellOf = (id: string) => Math.max(1, Math.round(Math.sqrt(ITEMS[id].sell) * 2));
   function sellItem(i: number) {
     const b = B(), c = b[i]; if (!c || !c.id) return;
     const wanted = S.orders.some(o => o.needs.some(nd => nd.id === c.id));
@@ -1225,6 +1237,7 @@ export async function startGame() {
   /* ============================================================== SCREENS */
   const SCREENS = ['shop', 'lab', 'rocket', 'book', 'map'];
   function setView(v: string) {
+    if (v !== 'board') { hideInfo(); sel = null; board.setSelected(null); }   // the item bar belongs to the board
     if (v === 'fun') { if (view !== 'board') setView('board'); funPop(); return; }
     if (popOpen()) closePop();
     if (v === 'shop' && !shopOpen()) { sfx.no(); toast('The Trading Post opens at Level ' + CONFIG.unlocks.shopAtLevel + '!'); return; }
@@ -1807,6 +1820,8 @@ export async function startGame() {
       `<div class="card"><div class="cardTitle">${ART.uiIcon('sec_collection', '🗂️')} Collection <span class="pCount">${found}/${total}</span></div>
         <div class="catBar"><i style="width:${Math.round(found / total * 100)}%"></i></div>
         <div class="noteLine">Everything you have ever made is kept here. Tap a chain to see all its steps and where it starts.</div></div>
+      ${Object.keys(S.trophy || {}).length ? `<div class="card"><div class="cardTitle">${ART.uiIcon('ic_trophy', '🏆')} Trophy shelf <span class="pCount">${Object.values(S.trophy).reduce((a: number, n: any) => a + n, 0)}</span></div>
+        <div class="trophyRow">${Object.entries(S.trophy).map(([id, n]: [string, any]) => `<span class="trophy">${ART.item(id)}${n > 1 ? `<em>×${n}</em>` : ''}</span>`).join('')}</div></div>` : ''}
       <div class="shopTabs">${worlds.map(w => `<button class="sTab${w === albumWorld ? ' on' : ''}" data-aw="${w}">${WORLDS[w].name}</button>`).join('')}</div>
       <div class="aGrid">${here.map(k => tile(k, awake.indexOf(k) < 0 && !CHAINS[k].items.some(id => S.seen[id]) ? CHAINS[k].unlock : 0)).join('')}</div>
       ${shared.length ? `<div class="sSecT" style="margin-top:12px">✨ Everywhere</div><div class="aGrid">${shared.map(k => tile(k)).join('')}</div>` : ''}`;
@@ -1970,7 +1985,7 @@ export async function startGame() {
     if (S.streak < cfg.minFor) return;
     const step = Math.min(S.streak - cfg.minFor + 1, cfg.maxStep);
     // merging never pays coins — a combo pays XP (and event points while one runs)
-    const xp = (cfg.xpPerStep || 2) * step;
+    const xp = Math.min(3, (cfg.xpPerStep || 1) * step);
     addXp(xp); flyXp(cellXY(cell), 150);
     sfx.streak(Math.min(step, 5));
     floatText(cell, 'COMBO ×' + S.streak + '  +' + xp + ' XP', '#ffe07a');
@@ -4485,11 +4500,17 @@ export async function startGame() {
     const c = B()[i]; if (!c || !c.id) return;
     const d = ITEMS[c.id], nx = nextOf(c.id);
     $('#infoBar').classList.add('on');
-    $('#infoTxt').innerHTML = `<b>${d.name}</b> · sells for ${sellOf(c.id)} 🪙${nx ? ` · 2 make a ${ITEMS[nx].name}` : ' · top tier!'}`;
+    $('#infoTxt').innerHTML = `<b>${d.name}</b><i>${nx ? `2 make a ${ITEMS[nx].name}` : 'Top of its chain!'}</i>`;
+    $('#btnSell').innerHTML = `Sell ${sellOf(c.id)} ${ART.icon('coin')}`;
     $('#btnSell').onclick = () => { sellItem(i); $('#infoBar').classList.remove('on'); };
     const st = $('#btnStash');
     st.style.display = bagHas() ? '' : 'none';
     st.onclick = () => stashItem(i);
+    // a finished chain has nowhere to go: put it on the trophy shelf instead
+    const sh = $('#btnShow');
+    sh.style.display = nx ? 'none' : '';
+    sh.innerHTML = ART.uiIcon('ic_trophy', '🏆') + ' Shelf';
+    sh.onclick = () => showcase(i);
     const rc = $('#btnRecycle');
     rc.style.display = labOpen() ? '' : 'none';
     rc.innerHTML = '🧪 +' + sciOf(c.id);
@@ -4511,7 +4532,8 @@ export async function startGame() {
     const sb = $('#btnSnack'); sb.disabled = cd > 0 || S.energy >= maxEnergy();
     sb.textContent = cd > 0 ? Math.ceil(cd / 1000) + 's' : '🍪 +' + snackAmt();
     // idle hint
-    if (view === 'board' && now - lastAct > CONFIG.hint.idleMs && !hintPair) { showHint(false); lastAct = now; }
+    // the idle hint is for someone looking at the board, not reading a popup
+    if (view === 'board' && now - lastAct > CONFIG.hint.idleMs && !hintPair && !popOpen() && !dialogBusy() && !tutOn()) { showHint(false); lastAct = now; }
     shipTick(now);
     orderTick(now);
     visitorTick(now);
@@ -4662,7 +4684,7 @@ export async function startGame() {
       grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed, ecost,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
       fly: (w: string) => galaxyTap(w), view: (v: string) => setView(v),
-      v9: { funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, rocketPanel, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; renderLab(); } },
+      curProject: () => curProject(), v9: { funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, rocketPanel, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; renderLab(); } },
     };
     setInterval(tick, 500);
     setInterval(save, 8000);

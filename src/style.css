@@ -1490,3 +1490,34 @@ html.ui-btn_ad .big.adBtn .uiIc{display:none}
 .sSecT .uiIc,.cardTitle .uiIc{width:24px;height:24px;vertical-align:-6px}
 .wheelPin .uiIc{width:34px;height:34px}.wHub .uiIc{width:100%;height:100%}
 .tut:not(.on) .tDim,.tut:not(.on) .tBubble{pointer-events:none}
+.sellBtn.gold{background:linear-gradient(180deg,#fff2b8,#ffd34d);box-shadow:0 3px 0 #dc9a0c}
+.sellBtn .uiIc{width:16px;height:16px;vertical-align:-3px}
+.trophyRow{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.trophy{position:relative;width:48px;height:48px;background:radial-gradient(circle,#fff6d0,#ffe9a8);border-radius:12px}
+.trophy svg,.trophy img{width:100%;height:100%}
+.trophy em{position:absolute;right:-4px;bottom:-4px;font-style:normal;font-size:10px;font-weight:800;background:#c98a1c;color:#fff;border-radius:8px;padding:0 4px}
+#infoTxt{display:flex;flex-direction:column;line-height:1.15;min-width:0}
+#infoTxt b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#infoTxt i{font-style:normal;font-size:10.5px;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#btnSell svg,#btnSell img{width:14px;height:14px;vertical-align:-3px}
+
+/* ------------------------------------------------- narrow phones (≤380px)
+   360-wide Androids are common: six dock buttons, four HUD chips and the
+   chapter strip all have to fit without anything falling off the edge. */
+@media (max-width:380px){
+  .rail.dock{gap:0;padding-left:3px;padding-right:3px}
+  .rail.dock .railBtn,.app.sceneOn .rail.dock .railBtn{width:auto;flex:1 1 0;min-width:0;max-width:56px;height:52px;border-radius:16px}
+  .rail.dock .railBtn .ti,.app.sceneOn .rail.dock .railBtn .ti{font-size:20px}
+  .rail.dock .railBtn i{font-size:8.5px}
+  .hud{gap:4px;padding-left:6px;padding-right:6px}
+  .chip{min-width:0;padding:2px 7px 2px 3px;font-size:12px;gap:2px}
+  .chip .ic{width:20px;height:20px}
+  .xpwrap{width:44px}
+  .lvlBox{padding-right:7px;gap:4px}
+  #btnQuests .qNeeds{flex-wrap:wrap;row-gap:2px}
+  #btnQuests .qNeed em{font-size:9.5px}
+  .infoBar .sellBtn{padding:6px 8px;font-size:10.5px}
+  #infoTxt{flex:1 1 auto}
+}
+/* a dialog taller than the screen scrolls inside instead of losing its top */
+.mBody{max-height:calc(100dvh - 230px);overflow-y:auto;overscroll-behavior:contain}

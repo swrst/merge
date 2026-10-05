@@ -832,3 +832,13 @@ Running out of energy opens the energy popup.
 - **Contract sheet** (tap a contract): character + line + rewards, each needed item with its chain path and counts, the producer button that points at it; closing lights up every useful tile.
 - **Tutorial**: intro adds energy and coins steps; afterwards just-in-time spotlight tips for contracts, the contract sheet, chapters needing contracts, chests, bubbles, empty producers, a full board, the wreck, craters, visitors, events, shop, lab, boosters, discoveries, achievements, low energy. Each shows once; tapping the dark area closes it.
 - Art hooks waiting for paintings: `ui/meteor.png`, `ui/sec_*` section icons, `ui/wheel_pin.png`, `ui/wheel_hub.png`. List in `art/WORLD1-MISSING.md`.
+
+## v21 — playtest-bot pass
+- `scripts/bot.mjs`: a new-player bot that plays a fresh save (contracts → chapters → merges → producer taps, opens chests, shelves crowns), warps time while it has to wait, and logs actions/minutes per chapter plus what every open contract still needs and whether its producer is on the board.
+- What it found and what changed:
+  - Merge combos were levelling players far too fast (level 27 by chapter 4, every level-up = +20 energy): combo XP now capped at 3.
+  - Coins piled up with nothing to buy (6–7k by chapter 6 against chapter costs of 50–140): chapter coin costs ×4, contract pay ~×1.1–1.5 of item value.
+  - Crowned items clogged the board: new 🏆 **Shelf** button on a top-tier item retires it to a trophy shelf in the Album (+1 💎, a little XP).
+  - Selling pays on a square-root curve (a crown sells for ~60 coins, not ~500).
+- UI fixes from screenshot review: the selected-item bar no longer follows you onto other screens; the idle hint no longer fires over popups; the item bar shows name + "2 make a …" and the price on the Sell button; level-up banner says what it actually gives (+energy, +gems).
+- Narrow phones (≤380px): the dock, HUD chips and chapter strip fit (six dock buttons were spilling off a 360px screen); tall dialogs scroll inside instead of losing their top.
