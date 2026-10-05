@@ -1310,7 +1310,6 @@ html.ui-ic_tick .order .oTick{background:none;border:0;box-shadow:none}
 html.ui-btn_give .btnDeliver.on.oTick{background:none}
 .orders{padding-bottom:10px}
 /* the item-info modal: one clear button, a quiet close */
-.modal.lite #mBtn{background:none!important;border-image:none!important;box-shadow:none!important;color:#9a7a4e;font-size:13px;padding:6px;margin-top:4px;text-decoration:underline}
 .mSay{font-size:13px;font-weight:600;color:#6b5236;line-height:1.35;margin-bottom:6px}
 /* toolbox */
 .toolbox .ic{width:22px;height:22px}
@@ -1521,3 +1520,77 @@ html.ui-btn_ad .big.adBtn .uiIc{display:none}
 }
 /* a dialog taller than the screen scrolls inside instead of losing its top */
 .mBody{max-height:calc(100dvh - 230px);overflow-y:auto;overscroll-behavior:contain}
+
+/* ===================================================== v23 button system
+   Three kinds of button, used the same way everywhere:
+     .big        the one action this screen is about (green)
+     .big.gold   spend something (coins, gems)
+     .big.blue / .big.soft   everything secondary: settings, "show me", close
+   Pill-shaped, a fixed height, never wider than a thumb-sweep, a pressed state
+   that actually moves. The stretched painted 9-slices made long labels look
+   like smeared banners, so the buttons are drawn here instead. */
+html .big,html .big.blue,html .big.gold{
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  width:100%;max-width:290px;min-height:48px;margin:10px auto 0;padding:8px 18px;
+  border:0!important;border-image:none!important;border-radius:999px!important;
+  font-size:16px;font-weight:800;letter-spacing:.01em;line-height:1.1;
+  transition:transform .08s ease,box-shadow .08s ease,filter .15s}
+html .big:not(.blue):not(.gold):not(.soft):not(.adBtn):not(:disabled):not(.off){
+  background:linear-gradient(180deg,#9df07a 0%,#5fcf3f 48%,#41b02c 100%)!important;color:#fff;
+  text-shadow:0 2px 0 rgba(30,100,20,.55);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.55),inset 0 -3px 0 rgba(0,0,0,.08),0 4px 0 #2e8a20,0 7px 12px rgba(40,120,30,.3)!important}
+html .big.gold:not(:disabled){
+  background:linear-gradient(180deg,#fff0a8 0%,#ffd23f 50%,#f2b316 100%)!important;color:#6b4206;text-shadow:0 1px 0 rgba(255,255,255,.6);
+  box-shadow:inset 0 2px 0 rgba(255,255,255,.7),0 4px 0 #c98a0c,0 7px 12px rgba(200,140,20,.3)!important}
+html .big.blue:not(:disabled),html .big.soft{
+  background:linear-gradient(180deg,#fffdf6,#ffefcf)!important;color:#7a5326;text-shadow:none;font-size:15px;
+  box-shadow:inset 0 0 0 2px #f0d7a6,0 4px 0 #dcbc82,0 6px 10px rgba(150,105,50,.18)!important}
+html .big.soft{min-height:40px;max-width:200px;font-size:14px}
+html .big:active:not(:disabled){transform:translateY(3px)}
+html .big:not(.blue):not(.gold):not(.soft):active:not(:disabled){box-shadow:inset 0 2px 0 rgba(255,255,255,.4),0 1px 0 #2e8a20!important}
+html .big.gold:active:not(:disabled){box-shadow:0 1px 0 #c98a0c!important}
+html .big.blue:active:not(:disabled),html .big.soft:active{box-shadow:inset 0 0 0 2px #f0d7a6,0 1px 0 #dcbc82!important}
+html .big:disabled,html .big.off{background:linear-gradient(180deg,#eee4d2,#d6c8ae)!important;color:#a08a68!important;text-shadow:none!important;
+  box-shadow:0 3px 0 #c1b08e!important}
+html .big .uiIc{width:22px;height:22px;flex:none}
+html .big.adBtn{max-width:290px;border-radius:999px!important;flex-direction:column;gap:0}
+/* the dialog's corner ✕ — same as the popups' */
+.mBoxW{position:relative}
+.mX{position:absolute;top:-10px;right:-10px;width:38px;height:38px;border-radius:50%;border:3px solid #fff;
+  background:linear-gradient(180deg,#ff8a78,#e8443a);color:#fff;font-size:17px;font-weight:900;line-height:1;
+  box-shadow:0 3px 0 #b02e22,0 5px 10px rgba(0,0,0,.25);z-index:2;cursor:pointer}
+html.ui-btn_close .mX{background:var(--ui-btn_close) center/100% 100% no-repeat;border-color:transparent;box-shadow:none;color:transparent}
+/* a producer to go and find, as one tappable card instead of a banner button */
+.srcCard{display:flex;align-items:center;gap:10px;width:100%;margin-top:8px;padding:6px 8px 6px 6px;border:0;border-radius:16px;
+  background:#fff;box-shadow:inset 0 0 0 2px #cdeab8,0 3px 0 #b5dc98;cursor:pointer;text-align:left}
+.srcCard:active{transform:translateY(2px);box-shadow:inset 0 0 0 2px #cdeab8,0 1px 0 #b5dc98}
+.srcCard svg,.srcCard img{width:48px;height:48px;flex:none}
+.srcTxt{flex:1;min-width:0}.srcTxt b{display:block;font-size:14px;color:#4a3216}.srcTxt i{font-style:normal;font-size:11px;color:#8a6a3c}
+.srcGo{flex:none;background:linear-gradient(180deg,#9df07a,#41b02c);color:#fff;font-weight:800;font-size:13px;padding:7px 12px;border-radius:999px;
+  text-shadow:0 1px 0 rgba(30,100,20,.5);box-shadow:0 3px 0 #2e8a20}
+/* settings switches */
+.optList{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.optRow{display:flex;align-items:center;gap:10px;width:100%;padding:8px 10px;border:0;border-radius:16px;background:#fff;
+  box-shadow:inset 0 0 0 2px #f0dcb4,0 3px 0 #e2c690;cursor:pointer;text-align:left}
+.optRow b{flex:1;font-size:15px;color:#5c3d1a}
+.optIc{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:20px}.optIc .uiIc{width:28px;height:28px}
+.sw{width:50px;height:28px;border-radius:999px;background:#d9cbb0;position:relative;transition:background .2s;flex:none;box-shadow:inset 0 2px 3px rgba(0,0,0,.15)}
+.sw i{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 2px 3px rgba(0,0,0,.25);transition:left .2s}
+.sw.on{background:linear-gradient(180deg,#8fe46a,#4fb63a)}.sw.on i{left:25px}
+.optDanger{display:block;margin:14px auto 0;background:none;border:0;color:#c0573a;font-weight:800;font-size:13px;cursor:pointer;padding:6px 10px;border-radius:10px}
+.optDanger.sure{background:#ffe1d8;color:#a8321a}
+html .big.alt:not(:disabled){background:linear-gradient(180deg,#fffdf6,#ffefcf)!important;color:#7a5326;text-shadow:none;box-shadow:inset 0 0 0 2px #f0d7a6,0 4px 0 #dcbc82!important}
+html.ui-btn_disabled .big:disabled,html.ui-btn_disabled .big.off,html .big.off{background:linear-gradient(180deg,#eee4d2,#d6c8ae)!important;color:#9a8463!important;text-shadow:none!important;box-shadow:0 3px 0 #c1b08e!important}
+/* mocked store / services */
+.restoreBtn{display:block;margin:4px auto 10px;background:none;border:0;color:#9a7a4e;font-weight:700;font-size:12px;text-decoration:underline;cursor:pointer}
+.mockSheet{position:absolute;inset:0;z-index:260;background:rgba(20,14,6,.6);display:flex;align-items:flex-end;justify-content:center}
+.msBox{width:100%;max-width:420px;background:#fff;border-radius:22px 22px 0 0;padding:16px 16px calc(18px + env(safe-area-inset-bottom,0px));text-align:center;font-family:inherit}
+.msHead{font-size:12px;font-weight:800;color:#8a8a8a;text-transform:uppercase;letter-spacing:.08em}
+.msName{font-size:18px;font-weight:800;color:#333;margin-top:6px}.msPrice{font-size:22px;font-weight:800;color:#1a73e8;margin:4px 0}
+.msNote{font-size:12px;color:#777;margin-bottom:6px}
+.msFail{margin-top:10px;background:none;border:0;color:#c0573a;font-size:12px;font-weight:700;cursor:pointer}
+.fakeSkip{margin-top:10px;background:rgba(255,255,255,.2);color:#fff;border:1px solid rgba(255,255,255,.5);border-radius:999px;padding:5px 12px;font-weight:700;cursor:pointer}
+.devBox{margin-top:14px;padding:10px;border-radius:12px;background:#f4f0ff;border:2px dashed #b9a6ef;text-align:left}
+.devH{font-size:11px;font-weight:800;color:#6b55b5;margin:6px 0 4px;text-transform:uppercase;letter-spacing:.04em}
+.devBtn{display:block;width:100%;margin:4px 0;padding:6px 8px;border-radius:10px;border:0;background:#fff;color:#4a3a80;font-size:12px;text-align:left;cursor:pointer;box-shadow:0 2px 0 #d6cdf3}
+.devList{margin:0;padding-left:16px;font-size:10.5px;color:#4a3a80;max-height:110px;overflow:auto}
