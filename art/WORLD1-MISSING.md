@@ -2,26 +2,8 @@
 
 Save every image into `Desktop\chatgpt art` with the file name given. I cut, rename and wire everything in.
 
-## 1. Characters (5 to replace, 2 new) — the most visible gap
-Zorp, Nana Gloop, Gorbo and Madame Fleeb still show the old childish art. Mayor Snorb has no picture at all.
-
-## Setup message (send first, once)
-We're redoing the whole cast of my mobile merge game "Merge Rocket". Style of the PAINTING stays exactly like the attached reference (our producers/UI): soft glossy painterly semi-3D, saturated colour, warm light from upper left, thin warm-brown outline.
-But the CHARACTERS change: funny, weird-looking ADULT cartoon aliens — think The Simpsons / Futurama / Rick and Morty energy: odd proportions, overbites, bulging or extra eyes, droopy stalks, sweaty, smug, tired, a visible personality flaw. Not cute, not babies, not a kids-show mascot. No humans, no dogs.
-Rules for every image: one character, transparent background, 1024x1024, no text. For each character make TWO files:
-1. `<id>.png` — head and shoulders, centred, face in the upper-middle (it's shown at 150px and at 36px in a circle, so the silhouette must read tiny).
-2. `<id>_full.png` — full body standing, same pose language, feet at the bottom.
-Keep the cast consistent with each other: same rendering, same light, same outline weight.
-
-- **Zorp** → `pip.png` + `pip_full.png`: a lanky teenage alien slacker, lime-green skin, three eyestalks of different lengths (one droopy), a huge overbite, a slouchy hoodie with the hood over the stalks, bored half-lidded eyes but a sneaky grin
-- **Nana Gloop** → `grandma.png` + `grandma_full.png`: a tiny ancient purple blob grandmother with a towering beehive hairdo full of curlers, thick pop-bottle glasses that make her eyes enormous, one snaggle tooth, a knitted shawl and a suspicious squint
-- **Gorbo** → `timmy.png` + `timmy_full.png`: a stocky orange alien kid-brother type, one giant eye in the middle of a wide flat head, a gap in his teeth, a propeller beanie, a slingshot in his back pocket, mischievous grin
-- **Madame Fleeb** → `gigi.png` + `gigi_full.png`: a tall skinny pink alien fashion diva with four arms (one holding a long bubble-wand holder, one a hand mirror), a long neck, heavy blue eyeshadow, a giant feathered hat and a sneer of superiority
-- **Mayor Snorb** → `biscuit.png` + `biscuit_full.png`: a pompous fat slug-like alien mayor, yellow-olive skin, tiny arms, a sash and a too-small top hat, a big droopy moustache made of tentacles, sweating, giving a fake politician smile
-
-For later worlds (same rules):
-- **Halo** → `halo.png` + `halo_full.png`: a tall gaunt aurora-crystal mystic, teal-to-violet, three serene closed eyes, tiny stars orbiting the head, slightly creepy calm smile
-- **Wren** → `wren.png` + `wren_full.png`: a scrawny topaz bird-alien gossip, long neck, beady eyes, a twig-nest hat and a beak open mid-chatter
+## 1. Characters
+Done: the Meadow cast now wears the new paintings (Zib, Nana Luma, Ember, Sirra, Mayor Marin, plus Chef Gubbo, Duchess Splatt, Dr. Zonk, Rokk, Nix, Vulk, Kelpa, Zephyr as customers). Still without a picture, for the sky world: **Halo** and **Wren** — prompts in `CHARACTERS-PROMPT.md`.
 
 ---
 

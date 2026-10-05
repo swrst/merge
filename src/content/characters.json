@@ -1,6 +1,6 @@
 {
   "pip": {
-    "name": "Zorp",
+    "name": "Zib",
     "lines": [
       "Ooh, is that for me?",
       "You are quick at this!",
@@ -15,7 +15,7 @@
     ]
   },
   "grandma": {
-    "name": "Nana Gloop",
+    "name": "Nana Luma",
     "lines": [
       "Bless you, dear.",
       "My garden thanks you.",
@@ -31,7 +31,7 @@
     ]
   },
   "timmy": {
-    "name": "Gorbo",
+    "name": "Ember",
     "lines": [
       "Whoa, cool!",
       "Can I keep it?",
@@ -49,7 +49,7 @@
     ]
   },
   "gigi": {
-    "name": "Madame Fleeb",
+    "name": "Sirra",
     "lines": [
       "Darling, exquisite.",
       "Simply divine.",
@@ -65,11 +65,11 @@
     ]
   },
   "biscuit": {
-    "name": "Mayor Snorb",
+    "name": "Mayor Marin",
     "lines": [
       "On behalf of the council: thanks.",
       "This will look great in my speech.",
-      "Vote Snorb!"
+      "Vote Marin!"
     ],
     "likes": [
       "wood",
@@ -167,7 +167,7 @@
     ]
   },
   "luma": {
-    "name": "Luma",
+    "name": "Nana Luma",
     "lines": [
       "It glows just right.",
       "The dark is smaller now.",
@@ -202,6 +202,9 @@
       "accent": "sapphire"
     },
     "likes": [
+      "stone",
+      "wood",
+      "clay",
       "dust",
       "ice",
       "rover",
@@ -225,6 +228,9 @@
       "accent": "lilac"
     },
     "likes": [
+      "stone",
+      "flower",
+      "stargaze",
       "crystal",
       "moon",
       "silver",
@@ -246,6 +252,9 @@
       "accent": "gold"
     },
     "likes": [
+      "wood",
+      "clay",
+      "bakery",
       "magma",
       "iron",
       "forge",
@@ -312,6 +321,10 @@
       "accent": "jade"
     },
     "likes": [
+      "water",
+      "pond",
+      "veggie",
+      "garden",
       "kelp",
       "coralc",
       "urchin",
@@ -354,6 +367,10 @@
       "accent": "mint"
     },
     "likes": [
+      "feather",
+      "flower",
+      "grass",
+      "tea",
       "cloudc",
       "wind",
       "kite",

@@ -4,7 +4,7 @@ export const WORLDS = [
   {
     key: 'earth', name: 'Sunny Meadow', subtitle: 'Home world', planet: 'earth',
     tapCost: 1, perk: 'rain',
-    folks: ['pip', 'grandma', 'timmy', 'gigi', 'biscuit', 'mumbo', 'pim'],
+    folks: ['pip', 'grandma', 'timmy', 'gigi', 'biscuit', 'mumbo', 'pim', 'rokk', 'nix', 'vulk', 'kelpa', 'zephyr'],
     heart: 'Meadow Heart',
     /* what the Heart wants, stage by stage — each stage visibly wakes the world */
     bloom: [
@@ -71,11 +71,11 @@ export const LOCKS = {
 };
 
 export const CHARACTERS = {
-  pip: { name: 'Zorp', lines: ['Ooh, is that for me?', 'You are quick at this!', 'Perfect. Just perfect.'] },
-  grandma: { name: 'Nana Gloop', lines: ['Bless you, dear.', 'My garden thanks you.', 'Just like the old days.'] },
-  timmy: { name: 'Gorbo', lines: ['Whoa, cool!', 'Can I keep it?', 'You are the best!'] },
-  gigi: { name: 'Madame Fleeb', lines: ['Darling, exquisite.', 'Simply divine.', 'You have taste.'] },
-  biscuit: { name: 'Mayor Snorb', lines: ['On behalf of the council: thanks.', 'This will look great in my speech.', 'Vote Snorb!'] },
+  pip: { name: 'Zib', lines: ['Ooh, is that for me?', 'You are quick at this!', 'Perfect. Just perfect.'] },
+  grandma: { name: 'Nana Luma', lines: ['Bless you, dear.', 'My garden thanks you.', 'Just like the old days.'] },
+  timmy: { name: 'Ember', lines: ['Whoa, cool!', 'Can I keep it?', 'You are the best!'] },
+  gigi: { name: 'Sirra', lines: ['Darling, exquisite.', 'Simply divine.', 'You have taste.'] },
+  biscuit: { name: 'Mayor Marin', lines: ['On behalf of the council: thanks.', 'This will look great in my speech.', 'Vote Marin!'] },
   mumbo: {
     name: 'Chef Gubbo', lines: ['Fresh from the oven!', 'Smells like home.', 'One more batch!'],
     face: { kind: 'blob', mat: 'peach', accent: 'cream' },
@@ -89,7 +89,7 @@ export const CHARACTERS = {
     face: { kind: 'blob', mat: 'jade', accent: 'cream' },
   },
   zib: { name: 'Zib', lines: ['Beep! Trade good!', 'Zib approve.', 'Shiny! Very shiny!'], face: { kind: 'blob', mat: 'mint', accent: 'cream' } },
-  luma: { name: 'Luma', lines: ['It glows just right.', 'The dark is smaller now.', 'Light travels. So do you.'], face: { kind: 'blob', mat: 'rose', accent: 'cream' } },
+  luma: { name: 'Nana Luma', lines: ['It glows just right.', 'The dark is smaller now.', 'Light travels. So do you.'], face: { kind: 'blob', mat: 'rose', accent: 'cream' } },
   rokk: { name: 'Rokk', lines: ['UNIT PLEASED.', 'CATALOGUED. THANK YOU.', 'STRUCTURAL INTEGRITY: LOVELY.'], face: { kind: 'robot', mat: 'steel', accent: 'sapphire' } },
   nix: { name: 'Nix', lines: ['Mmm. Acceptable.', 'I collect these, you know.', 'Do not tell the others.'], face: { kind: 'crystal', mat: 'amethyst', accent: 'lilac' } },
   vulk: { name: 'Vulk', lines: ['HOT WORK. GOOD WORK.', 'The forge approves.', 'Ash to soil. Ha!'], face: { kind: 'flame', mat: 'ember', accent: 'gold' } },

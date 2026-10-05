@@ -842,3 +842,8 @@ Running out of energy opens the energy popup.
   - Selling pays on a square-root curve (a crown sells for ~60 coins, not ~500).
 - UI fixes from screenshot review: the selected-item bar no longer follows you onto other screens; the idle hint no longer fires over popups; the item bar shows name + "2 make a …" and the price on the Sell button; level-up banner says what it actually gives (+energy, +gems).
 - Narrow phones (≤380px): the dock, HUD chips and chapter strip fit (six dock buttons were spilling off a 360px screen); tall dialogs scroll inside instead of losing their top.
+
+## v22 — new cast in the Meadow, the Moon fully painted
+- The Meadow cast wears the new paintings: Zorp → **Zib**, Nana Gloop → **Nana Luma**, Gorbo → **Ember**, Madame Fleeb → **Sirra**, Mayor Snorb → **Mayor Marin** (all story text renamed). Rokk, Nix, Vulk, Kelpa and Zephyr now also turn up as Meadow customers from the start (with Meadow favourites added to their likes).
+- New Meadow chains come early: Village Bakery (windmill) at chapter 3, Tea Garden at 8, Toy Box at 12, Lily Pond at 15 (they used to wait until 16–20). Chapter texts updated.
+- Crater Camp (Moon): every item of all 15 chains, all 13 producers and the moon board tiles cut from the Luna sheet collage.
