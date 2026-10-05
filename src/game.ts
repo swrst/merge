@@ -1733,7 +1733,7 @@ export async function startGame() {
           <span><b>Achievements</b><i>${ar ? ar + ' ready to claim!' : 'Long-term goals with big rewards'}</i></span><span class="qGo">›</span></button>`
       + dailyCard()
       + `<div class="card"><div class="cardTitle">${ART.uiIcon('sec_quest', '🎯')} Getting started</div>
-        <div class="noteLine" style="margin-top:0">The first steps with Zorp and Dr. Zonk: ${MISSIONS.length - questsLeft()}/${MISSIONS.length} done.</div>
+        <div class="noteLine" style="margin-top:0">The first steps with Zib and Dr. Zonk: ${MISSIONS.length - questsLeft()}/${MISSIONS.length} done.</div>
         <button class="big blue" id="openQuests">📜 Open the quest list</button></div>`
       + vaultCard();
     host.querySelectorAll('[data-dchest]').forEach((b: any) => b.onclick = () => claimDaily(+b.dataset.dchest));

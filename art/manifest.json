@@ -6086,46 +6086,46 @@
   {
     "path": "src/sprites/chars/pip.png",
     "kind": "char",
-    "name": "Zorp",
+    "name": "Zib",
     "group": "character portrait",
     "batch": "portraits",
-    "prompt": "Zorp, a character portrait for a mobile merge game: a lanky teenage alien slacker, lime-green skin, three eyestalks of different lengths (one droopy), a huge overbite, a slouchy hoodie with the hood over the stalks, bored half-lidded eyes but a sneaky grin. Funny, weird-looking adult cartoon alien in the spirit of grown-up TV cartoons like The Simpsons or Futurama (odd proportions, overbites, bulging eyes, a clear personality flaw), NOT a baby or kids-show mascot. Rendered in the game's existing style: soft glossy painterly semi-3D, saturated colour, warm light from the upper left, thin warm-brown outline. Head and shoulders, slightly turned, centred, filling most of a 512x512 square, transparent background, no text.",
+    "prompt": "Zib, a character portrait for a mobile merge game: a short mint-green junk-dealer alien with a crooked nose, a dozen mismatched wristwatches up both arms, brass goggles pushed up and a shifty salesman grin. Funny, weird-looking adult cartoon alien in the spirit of grown-up TV cartoons like The Simpsons or Futurama (odd proportions, overbites, bulging eyes, a clear personality flaw), NOT a baby or kids-show mascot. Rendered in the game's existing style: soft glossy painterly semi-3D, saturated colour, warm light from the upper left, thin warm-brown outline. Head and shoulders, slightly turned, centred, filling most of a 512x512 square, transparent background, no text.",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
     "path": "src/sprites/chars/grandma.png",
     "kind": "char",
-    "name": "Nana Gloop",
+    "name": "Nana Luma",
     "group": "character portrait",
     "batch": "portraits",
-    "prompt": "Nana Gloop, a character portrait for a mobile merge game: a tiny ancient purple blob grandmother with a towering beehive hairdo full of curlers, thick pop-bottle glasses that make her eyes enormous, one snaggle tooth, a knitted shawl and a suspicious squint. Funny, weird-looking adult cartoon alien in the spirit of grown-up TV cartoons like The Simpsons or Futurama (odd proportions, overbites, bulging eyes, a clear personality flaw), NOT a baby or kids-show mascot. Rendered in the game's existing style: soft glossy painterly semi-3D, saturated colour, warm light from the upper left, thin warm-brown outline. Head and shoulders, slightly turned, centred, filling most of a 512x512 square, transparent background, no text.",
+    "prompt": "Nana Luma, a character portrait for a mobile merge game: a glowing rose-pink jellyfish alien hippie, long dangling tentacles, a flower crown, dreamy spaced-out half-closed eyes and a peace-sign gesture. Funny, weird-looking adult cartoon alien in the spirit of grown-up TV cartoons like The Simpsons or Futurama (odd proportions, overbites, bulging eyes, a clear personality flaw), NOT a baby or kids-show mascot. Rendered in the game's existing style: soft glossy painterly semi-3D, saturated colour, warm light from the upper left, thin warm-brown outline. Head and shoulders, slightly turned, centred, filling most of a 512x512 square, transparent background, no text.",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
     "path": "src/sprites/chars/timmy.png",
     "kind": "char",
-    "name": "Gorbo",
+    "name": "Ember",
     "group": "character portrait",
     "batch": "portraits",
-    "prompt": "Gorbo, a character portrait for a mobile merge game: a stocky orange alien kid-brother type, one giant eye in the middle of a wide flat head, a gap in his teeth, a propeller beanie, a slingshot in his back pocket, mischievous grin. Funny, weird-looking adult cartoon alien in the spirit of grown-up TV cartoons like The Simpsons or Futurama (odd proportions, overbites, bulging eyes, a clear personality flaw), NOT a baby or kids-show mascot. Rendered in the game's existing style: soft glossy painterly semi-3D, saturated colour, warm light from the upper left, thin warm-brown outline. Head and shoulders, slightly turned, centred, filling most of a 512x512 square, transparent background, no text.",
+    "prompt": "Ember, a character portrait for a mobile merge game: a tiny hyperactive flame gremlin, gold and orange, wide crazy eyes, sparks flying off, too many teeth. Funny, weird-looking adult cartoon alien in the spirit of grown-up TV cartoons like The Simpsons or Futurama (odd proportions, overbites, bulging eyes, a clear personality flaw), NOT a baby or kids-show mascot. Rendered in the game's existing style: soft glossy painterly semi-3D, saturated colour, warm light from the upper left, thin warm-brown outline. Head and shoulders, slightly turned, centred, filling most of a 512x512 square, transparent background, no text.",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
     "path": "src/sprites/chars/gigi.png",
     "kind": "char",
-    "name": "Madame Fleeb",
+    "name": "Sirra",
     "group": "character portrait",
     "batch": "portraits",
-    "prompt": "Madame Fleeb, a character portrait for a mobile merge game: a tall skinny pink alien fashion diva with four arms (one holding a long bubble-wand holder, one a hand mirror), a long neck, heavy blue eyeshadow, a giant feathered hat and a sneer of superiority. Funny, weird-looking adult cartoon alien in the spirit of grown-up TV cartoons like The Simpsons or Futurama (odd proportions, overbites, bulging eyes, a clear personality flaw), NOT a baby or kids-show mascot. Rendered in the game's existing style: soft glossy painterly semi-3D, saturated colour, warm light from the upper left, thin warm-brown outline. Head and shoulders, slightly turned, centred, filling most of a 512x512 square, transparent background, no text.",
+    "prompt": "Sirra, a character portrait for a mobile merge game: a coral-pink fish-folk lounge singer, big pouty lips, heavy eyelashes, pearl earrings and a microphone shaped like a shell. Funny, weird-looking adult cartoon alien in the spirit of grown-up TV cartoons like The Simpsons or Futurama (odd proportions, overbites, bulging eyes, a clear personality flaw), NOT a baby or kids-show mascot. Rendered in the game's existing style: soft glossy painterly semi-3D, saturated colour, warm light from the upper left, thin warm-brown outline. Head and shoulders, slightly turned, centred, filling most of a 512x512 square, transparent background, no text.",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
     "path": "src/sprites/chars/biscuit.png",
     "kind": "char",
-    "name": "Mayor Snorb",
+    "name": "Mayor Marin",
     "group": "character portrait",
     "batch": "portraits",
-    "prompt": "Mayor Snorb, a character portrait for a mobile merge game: a pompous fat slug-like alien mayor, yellow-olive skin, tiny arms, a sash and a too-small top hat, a big droopy moustache made of tentacles, sweating, giving a fake politician smile. Funny, weird-looking adult cartoon alien in the spirit of grown-up TV cartoons like The Simpsons or Futurama (odd proportions, overbites, bulging eyes, a clear personality flaw), NOT a baby or kids-show mascot. Rendered in the game's existing style: soft glossy painterly semi-3D, saturated colour, warm light from the upper left, thin warm-brown outline. Head and shoulders, slightly turned, centred, filling most of a 512x512 square, transparent background, no text.",
+    "prompt": "Mayor Marin, a character portrait for a mobile merge game: a grumpy old sapphire fish-man harbourmaster, bulging fish eyes, a pipe, a captain's hat and a scraggly barnacle beard. Funny, weird-looking adult cartoon alien in the spirit of grown-up TV cartoons like The Simpsons or Futurama (odd proportions, overbites, bulging eyes, a clear personality flaw), NOT a baby or kids-show mascot. Rendered in the game's existing style: soft glossy painterly semi-3D, saturated colour, warm light from the upper left, thin warm-brown outline. Head and shoulders, slightly turned, centred, filling most of a 512x512 square, transparent background, no text.",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {

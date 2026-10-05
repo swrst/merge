@@ -51,7 +51,12 @@
       "gigi",
       "biscuit",
       "mumbo",
-      "pim"
+      "pim",
+      "rokk",
+      "nix",
+      "vulk",
+      "kelpa",
+      "zephyr"
     ],
     "grow": [
       {
@@ -285,7 +290,7 @@
         "talk": [
           [
             "pip",
-            "Nana Gloop's garden used to be the prettiest in the valley."
+            "Nana Luma's garden used to be the prettiest in the valley."
           ],
           [
             "grandma",
@@ -296,11 +301,11 @@
             "Two rocks and a log. We can do that!"
           ]
         ],
-        "text": "A tidy border round the garden. Nana Gloop peeked over it and spotted a berry bush that is ready to fruit again."
+        "text": "A tidy border round the garden. Nana Luma peeked over it and spotted a berry bush that is ready to fruit again."
       },
       {
         "id": "e3",
-        "name": "Nana Gloop's Jam",
+        "name": "Nana Luma's Jam",
         "who": "grandma",
         "needs": [
           [
@@ -314,6 +319,7 @@
         ],
         "coins": 120,
         "xp": 40,
+        "unlock": "windmill",
         "temp": {
           "p": "raincloud",
           "taps": 16,
@@ -333,7 +339,7 @@
             "The pie tin is hereby confiscated. Mayoral privilege."
           ]
         ],
-        "text": "The first jar of jam in years! And look — a rain cloud is drifting over the meadow. Catch the drops while it is here."
+        "text": "The first jar of jam in years! Chef Gubbo was so moved he put up a windmill on the hill — flour for everyone. And a rain cloud is drifting over: catch the drops while it is here."
       },
       {
         "id": "e4",
@@ -431,14 +437,14 @@
           ],
           [
             "pip",
-            "The goats keep eating hats. Nana Gloop's, the Mayor's, mine..."
+            "The goats keep eating hats. Nana Luma's, the Mayor's, mine..."
           ],
           [
             "grandma",
             "My second-best hat. Two lumber piles and a pie for the carpenter, please."
           ]
         ],
-        "text": "Mayor Snorb cuts a ribbon on the new fence (twice — the first take was bad), and the hay meadow behind it is growing tall again."
+        "text": "Mayor Marin cuts a ribbon on the new fence (twice — the first take was bad), and the hay meadow behind it is growing tall again."
       },
       {
         "id": "e7",
@@ -475,7 +481,7 @@
             "What is cake. I would like to learn about cake."
           ]
         ],
-        "text": "Everyone came. Dr. Zonk had three slices. Madame Fleeb arrived late with a packet of flower seeds, \"for a little colour, darling\"."
+        "text": "Everyone came. Dr. Zonk had three slices. Sirra arrived late with a packet of flower seeds, \"for a little colour, darling\"."
       },
       {
         "id": "e8",
@@ -493,6 +499,7 @@
         ],
         "coins": 720,
         "xp": 140,
+        "unlock": "teabush",
         "gift": "chest",
         "temp": {
           "p": "hive",
@@ -509,7 +516,7 @@
             "A bouquet for the stall, and a gemstone for the sign. People notice a gemstone."
           ]
         ],
-        "text": "Colour on every stall — and the flowers brought the bees back! A wild hive has settled for a while. Catch its honey."
+        "text": "Colour on every stall! A tea bush sprouted by the market, and the flowers brought the bees back — a wild hive has settled for a while. Catch its honey."
       },
       {
         "id": "e9",
@@ -538,7 +545,7 @@
             "And a cake to put it on, I suppose. Quickly, before the bees move on."
           ]
         ],
-        "text": "Honey cakes for everyone. Nana Gloop says the old mossy log in the woods is sprouting mushrooms again — she knows a recipe."
+        "text": "Honey cakes for everyone. Nana Luma says the old mossy log in the woods is sprouting mushrooms again — she knows a recipe."
       },
       {
         "id": "e10",
@@ -600,7 +607,7 @@
             "A bolt of cloth and a straw hat. I will do the rest. I always do the rest."
           ]
         ],
-        "text": "Warm coats for the whole village. The birds have come back to nest in Gorbo's old bird box."
+        "text": "Warm coats for the whole village. The birds have come back to nest in Ember's old bird box."
       },
       {
         "id": "e12",
@@ -618,6 +625,7 @@
         ],
         "coins": 1360,
         "xp": 220,
+        "unlock": "toychest",
         "temp": {
           "p": "crashsite",
           "taps": 20,
@@ -630,14 +638,14 @@
           ],
           [
             "pip",
-            "Birds do not care about garlands, Gorbo."
+            "Birds do not care about garlands, Ember."
           ],
           [
             "timmy",
             "THESE birds do."
           ]
         ],
-        "text": "The birds sang all evening. Then Gorbo came running: something small crashed behind the hill — and it is blinking!"
+        "text": "The birds sang all evening, and someone left a painted toy chest by the barn. Then Ember came running: something small crashed behind the hill — and it is blinking!"
       },
       {
         "id": "e13",
@@ -671,7 +679,7 @@
             "Help one grow up, and keep a speckled egg warm for the next. They are far from home. Like me."
           ]
         ],
-        "text": "The little visitors are safe and very hungry. Zorp dug a veggie patch so nobody goes to bed without supper."
+        "text": "The little visitors are safe and very hungry. Zib dug a veggie patch so nobody goes to bed without supper."
       },
       {
         "id": "e14",
@@ -722,6 +730,7 @@
         ],
         "coins": 1920,
         "xp": 300,
+        "unlock": "lilypond",
         "gift": "chest",
         "talk": [
           [
@@ -737,7 +746,7 @@
             "And a basket of veggies, because nobody stargazes on an empty stomach."
           ]
         ],
-        "text": "Through the spyglass: the Moon, and on it, tiny lights. \"Crater Camp,\" whispers Dr. Zonk. \"Friends.\""
+        "text": "Through the spyglass: the Moon, and on it, tiny lights. \"Crater Camp,\" whispers Dr. Zonk. \"Friends.\" Back on the ground, the old hollow behind the barn has filled with water — a lily pond!"
       },
       {
         "id": "e16",
@@ -759,7 +768,7 @@
         ],
         "coins": 2080,
         "xp": 320,
-        "unlock": "windmill",
+        "gift": "chest",
         "talk": [
           [
             "mumbo",
@@ -767,14 +776,14 @@
           ],
           [
             "mumbo",
-            "Bring me carrots, hay for the oven floor and a bundle of veggies, and I will build us a windmill."
+            "Bring me carrots, hay for the oven floor and a bundle of veggies, and I will build us a proper bakery."
           ],
           [
             "pip",
-            "A windmill! Real bread again!"
+            "A bakery! Warm buns every morning!"
           ]
         ],
-        "text": "The windmill turns. Flour, at last — Chef Gubbo is already humming over a bowl of dough."
+        "text": "The bakery is open. Chef Gubbo hands you the first warm bun — and a chest of thanks."
       },
       {
         "id": "e17",
@@ -807,7 +816,7 @@
             "A loaf for the potters, a nest and a quilt to pack the kiln. There is clay by the river."
           ]
         ],
-        "text": "The old clay pit by the river is open again. Madame Fleeb has already ordered twelve vases."
+        "text": "The old clay pit by the river is open again. Sirra has already ordered twelve vases."
       },
       {
         "id": "e18",
@@ -829,7 +838,7 @@
         ],
         "coins": 2560,
         "xp": 360,
-        "unlock": "teabush",
+        "gift": "chest",
         "talk": [
           [
             "pim",
@@ -844,7 +853,7 @@
             "Finally, someone with manners."
           ]
         ],
-        "text": "A tea bush takes root by the cottage. Duchess Splatt declares the meadow \"almost civilised\"."
+        "text": "Tea is served under the parasol. Duchess Splatt declares the meadow \"almost civilised\"."
       },
       {
         "id": "e19",
@@ -866,18 +875,18 @@
         ],
         "coins": 2800,
         "xp": 380,
-        "unlock": "lilypond",
+        "gift": "chest",
         "talk": [
           [
             "timmy",
-            "I found a dry hollow behind the barn. It used to be a pond — Nana Gloop said so!"
+            "The pond needs a garden! A fountain, an urn and Nana Luma's teapot!"
           ],
           [
             "timmy",
-            "If we fill it, the frogs come back. Frogs with THREE EYES."
+            "For the frogs. Frogs with THREE EYES deserve nice things."
           ]
         ],
-        "text": "Water fills the hollow, lily pads open, and somewhere a three-eyed frog says hello."
+        "text": "Fountain, urn and teapot by the pond: the three-eyed frogs are holding a tea party."
       },
       {
         "id": "e20",
@@ -899,7 +908,6 @@
         ],
         "coins": 3040,
         "xp": 400,
-        "unlock": "toychest",
         "gift": "chest",
         "talk": [
           [
@@ -912,10 +920,10 @@
           ],
           [
             "bloop",
-            "The Mayor agrees. A toy chest, please, before they find the fuel tank."
+            "The Mayor agrees. More toys, please, before they find the fuel tank."
           ]
         ],
-        "text": "A painted toy chest appears. The Blinkies have not chewed anything for an entire hour."
+        "text": "The Blinkies are busy with new toys. Nothing has been chewed for an entire hour."
       },
       {
         "id": "e21",

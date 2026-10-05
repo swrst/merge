@@ -109,11 +109,11 @@ const readOf = (n, len) => len <= 1 ? 7 : Math.min(7, 1 + Math.round(n * 6 / (le
 const rows = [];
 /* the Sunny Meadow cast and Bloop — the faces of the story scenes */
 const CHAR_ROWS = [
-  ['pip', 'Zorp', 'a lanky teenage alien slacker, lime-green skin, three eyestalks of different lengths (one droopy), a huge overbite, a slouchy hoodie with the hood over the stalks, bored half-lidded eyes but a sneaky grin'],
-  ['grandma', 'Nana Gloop', 'a tiny ancient purple blob grandmother with a towering beehive hairdo full of curlers, thick pop-bottle glasses that make her eyes enormous, one snaggle tooth, a knitted shawl and a suspicious squint'],
-  ['timmy', 'Gorbo', 'a stocky orange alien kid-brother type, one giant eye in the middle of a wide flat head, a gap in his teeth, a propeller beanie, a slingshot in his back pocket, mischievous grin'],
-  ['gigi', 'Madame Fleeb', 'a tall skinny pink alien fashion diva with four arms (one holding a long bubble-wand holder, one a hand mirror), a long neck, heavy blue eyeshadow, a giant feathered hat and a sneer of superiority'],
-  ['biscuit', 'Mayor Snorb', 'a pompous fat slug-like alien mayor, yellow-olive skin, tiny arms, a sash and a too-small top hat, a big droopy moustache made of tentacles, sweating, giving a fake politician smile'],
+  ['pip', 'Zib', 'a short mint-green junk-dealer alien with a crooked nose, a dozen mismatched wristwatches up both arms, brass goggles pushed up and a shifty salesman grin'],   /* wears zib's painting since v22 */
+  ['grandma', 'Nana Luma', 'a glowing rose-pink jellyfish alien hippie, long dangling tentacles, a flower crown, dreamy spaced-out half-closed eyes and a peace-sign gesture'],   /* wears luma's painting since v22 */
+  ['timmy', 'Ember', 'a tiny hyperactive flame gremlin, gold and orange, wide crazy eyes, sparks flying off, too many teeth'],   /* wears ember's painting since v22 */
+  ['gigi', 'Sirra', 'a coral-pink fish-folk lounge singer, big pouty lips, heavy eyelashes, pearl earrings and a microphone shaped like a shell'],   /* wears sirra's painting since v22 */
+  ['biscuit', 'Mayor Marin', 'a grumpy old sapphire fish-man harbourmaster, bulging fish eyes, a pipe, a captain\'s hat and a scraggly barnacle beard'],   /* wears marin's painting since v22 */
   ['bloop', 'Dr. Zonk', 'a frazzled blue alien scientist with an oversized brain bulging out of a cracked glass dome on his head, wild white eyebrows, a singed lab coat, mismatched goggles, one eye twitching'],
   ['mumbo', 'Chef Gubbo', 'a huge round red alien cook with three chins, a tiny chef hat on top of two antennae, a stained apron, a ladle in one of his four hands, tasting from it with a giant purple tongue'],
   ['pim', 'Duchess Splatt', 'a snooty teal octopus-like alien aristocrat with a pearl necklace on every tentacle, a lorgnette, a tiny tiara and a nose turned up so high you see the nostrils'],
