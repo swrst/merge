@@ -11,7 +11,8 @@
       "stone",
       "veggie",
       "visitor",
-      "water"
+      "water",
+      "parts"
     ]
   },
   "grandma": {
@@ -27,7 +28,9 @@
       "flower",
       "cloth",
       "mush",
-      "clay"
+      "clay",
+      "weather",
+      "picnic"
     ]
   },
   "timmy": {
@@ -45,7 +48,9 @@
       "garden",
       "wood",
       "toys",
-      "pond"
+      "pond",
+      "pets",
+      "music"
     ]
   },
   "gigi": {
@@ -77,7 +82,9 @@
       "water",
       "grass",
       "veggie",
-      "toys"
+      "toys",
+      "weather",
+      "music"
     ]
   },
   "mumbo": {
@@ -98,7 +105,8 @@
       "honey",
       "veggie",
       "grass",
-      "water"
+      "water",
+      "picnic"
     ]
   },
   "pim": {
@@ -119,7 +127,9 @@
       "clay",
       "pond",
       "honey",
-      "cloth"
+      "cloth",
+      "picnic",
+      "pets"
     ]
   },
   "bloop": {
@@ -141,7 +151,9 @@
       "crystal",
       "garden",
       "aurorac",
-      "starc"
+      "starc",
+      "parts",
+      "weather"
     ]
   },
   "zib": {
@@ -417,6 +429,88 @@
       "chime",
       "starling",
       "cloudc"
+    ]
+  },
+  "blorb": {
+    "name": "Postie Blorb",
+    "lines": [
+      "Parcel! Sign here. Any leg.",
+      "Phew. Six legs, still late.",
+      "Special delivery!"
+    ],
+    "face": {
+      "kind": "blob",
+      "mat": "sapphire",
+      "accent": "gold"
+    },
+    "likes": [
+      "picnic",
+      "bakery",
+      "parts",
+      "weather",
+      "wood",
+      "cloth"
+    ]
+  },
+  "oops": {
+    "name": "Madame Oops",
+    "lines": [
+      "I foresaw this! Mostly.",
+      "The ball is cracked but the vibes are clear.",
+      "Oops. I mean: destiny!"
+    ],
+    "face": {
+      "kind": "blob",
+      "mat": "lilac",
+      "accent": "gold"
+    },
+    "likes": [
+      "moon",
+      "crystal",
+      "glow",
+      "ice",
+      "dust"
+    ]
+  },
+  "grubs": {
+    "name": "The Grub Brothers",
+    "lines": [
+      "Deal! (He means deal.)",
+      "Best prices on the planet. Only prices on the planet.",
+      "One of us is happy."
+    ],
+    "face": {
+      "kind": "blob",
+      "mat": "mint",
+      "accent": "honey"
+    },
+    "likes": [
+      "veggie",
+      "berry",
+      "mush",
+      "pets",
+      "garden",
+      "honey"
+    ]
+  },
+  "glimmer": {
+    "name": "Captain Glimmer",
+    "lines": [
+      "MAGNIFICENT!",
+      "Another triumph — for ME. And you.",
+      "The crowd goes wild!"
+    ],
+    "face": {
+      "kind": "robot",
+      "mat": "gold",
+      "accent": "cherry"
+    },
+    "likes": [
+      "moon",
+      "dust",
+      "glow",
+      "crystal",
+      "ice"
     ]
   }
 }

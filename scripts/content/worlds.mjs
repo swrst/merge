@@ -4,7 +4,7 @@ export const WORLDS = [
   {
     key: 'earth', name: 'Sunny Meadow', subtitle: 'Home world', planet: 'earth',
     tapCost: 1, perk: 'rain',
-    folks: ['pip', 'grandma', 'timmy', 'gigi', 'biscuit', 'mumbo', 'pim', 'rokk', 'nix', 'vulk', 'kelpa', 'zephyr'],
+    folks: ['pip', 'grandma', 'timmy', 'gigi', 'biscuit', 'mumbo', 'pim', 'rokk', 'nix', 'vulk', 'kelpa', 'zephyr', 'blorb', 'grubs'],
     heart: 'Meadow Heart',
     /* what the Heart wants, stage by stage — each stage visibly wakes the world */
     bloom: [
@@ -17,7 +17,7 @@ export const WORLDS = [
   {
     key: 'luna', name: 'Crater Camp', subtitle: 'Luna', planet: 'luna',
     tapCost: 1, perk: 'gravity',
-    folks: ['bloop', 'zib', 'luma', 'rokk', 'nix'],
+    folks: ['bloop', 'zib', 'luma', 'rokk', 'nix', 'oops', 'glimmer'],
     heart: 'Crater Heart',
     bloom: [
       { need: 3, title: 'Dust Remembers', text: 'Glow spores drift up out of the regolith. Nothing has grown here in an age.' },
@@ -100,6 +100,11 @@ export const CHARACTERS = {
   zephyr: { name: 'Zephyr', lines: ['Caught on the updraft!', 'Lighter than that, even.', 'Whoosh. Straight up.'], face: { kind: 'cloud', mat: 'cloud', accent: 'mint' } },
   halo: { name: 'Halo', lines: ['The sky is stitching itself.', 'Colour, at last.', 'The Vault is singing back.'], face: { kind: 'crystal', mat: 'aurora', accent: 'star' } },
   wren: { name: 'Wren', lines: ['Chirrup! Lovely!', 'For the nest, for the nest.', 'Up we go!'], face: { kind: 'bird', mat: 'topaz', accent: 'gold' } },
+  /* v25: the helpers who run the side things */
+  blorb: { name: 'Postie Blorb', lines: ['Parcel! Sign here. Any leg.', 'Phew. Six legs, still late.', 'Special delivery!'], face: { kind: 'blob', mat: 'sapphire', accent: 'gold' } },
+  oops: { name: 'Madame Oops', lines: ['I foresaw this! Mostly.', 'The ball is cracked but the vibes are clear.', 'Oops. I mean: destiny!'], face: { kind: 'blob', mat: 'lilac', accent: 'gold' } },
+  grubs: { name: 'The Grub Brothers', lines: ['Deal! (He means deal.)', 'Best prices on the planet. Only prices on the planet.', 'One of us is happy.'], face: { kind: 'blob', mat: 'mint', accent: 'honey' } },
+  glimmer: { name: 'Captain Glimmer', lines: ['MAGNIFICENT!', 'Another triumph — for ME. And you.', 'The crowd goes wild!'], face: { kind: 'robot', mat: 'gold', accent: 'cherry' } },
 };
 
 /* The through-line. Beats fire on world level or on story flags. */

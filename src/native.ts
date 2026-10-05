@@ -51,6 +51,8 @@ export async function setupChrome() {
     const { App } = await import('@capacitor/app');
     App.addListener('backButton', () => {
       // a story scene steps on, a small popup or side game closes, before anything else
+      const rwc = document.querySelector('#rwc.open #rwcGo') as HTMLElement | null;
+      if (rwc) { rwc.click(); return; }
       const talk = document.querySelector('#talk.open') as HTMLElement | null;
       if (talk) { talk.click(); return; }
       const modal = document.querySelector('#modal.open') as HTMLElement | null;

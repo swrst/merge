@@ -541,18 +541,18 @@ export async function startGame() {
     const add = (k: string, tab: string, n: number, icon: string, say: string, go: () => void) => { if (n > 0) out.push({ k, tab, n, icon, say, go }); };
     const ar = achReady(), td = tasksDone();
     add('ach', 'Rocket', ar, ART.uiIcon('ic_trophy', '🏆'), ar > 1 ? `${ar} achievements to claim` : 'Achievement ready to claim', () => setView('rocket'));
-    add('task', 'Rocket', td, ART.uiIcon('ic_tick', '✅'), 'Daily task done — reward waiting', () => setView('rocket'));
+    add('task', 'Rocket', td, ART.uiIcon('cl_tasks', '✅'), 'Daily task done — reward waiting', () => setView('rocket'));
     add('disc', 'Book', (S.disc || []).length, ART.uiIcon('badge_new', '🆕'), 'New discovery in your Album', () => setView('book'));
-    add('shop', 'Shop', shopNews() ? 1 : 0, ART.uiIcon('ic_gift', '🎁'), 'Free gift in the Trading Post', () => setView('shop'));
-    add('labOffer', 'Shop', labOffered() && !S.lab.built ? 1 : 0, ART.uiIcon('ic_lab', '🔬'), 'The Lab can be built', () => setView('shop'));
+    add('shop', 'Shop', shopNews() ? 1 : 0, ART.uiIcon('cl_gift', '🎁'), 'Free gift in the Trading Post', () => setView('shop'));
+    add('labOffer', 'Shop', labOffered() && !S.lab.built ? 1 : 0, ART.uiIcon('ic_microscope', '🔬'), 'The Lab can be built', () => setView('shop'));
     const e = evNow();
     add('event', 'Fun', e && S.ev.join !== (e as any).key ? 1 : 0, ART.uiIcon('ic_event', '🎪'), 'An event has started!', () => setView('fun'));
     add('spin', 'Fun', S.lvl >= SP().unlockLevel ? spinsLeft() : 0, ART.uiIcon('ic_spin', '🎡'), 'Free spin on the Lucky Wheel', () => setView('fun'));
-    add('acc', 'Lab', S.acc && !accLeft() ? 1 : 0, ART.uiIcon('ic_lab', '🧪'), 'Lab accelerator is ready', () => setView('lab'));
-    add('research', 'Lab', L2().research.filter((r: any) => res(r.id) < r.max && S.sci >= researchCost(r)).length ? 1 : 0, ART.uiIcon('ic_lab', '🧪'), 'You can afford new research', () => setView('lab'));
+    add('acc', 'Lab', S.acc && !accLeft() ? 1 : 0, ART.uiIcon('cl_timer', '🧪'), 'Lab accelerator is ready', () => setView('lab'));
+    add('research', 'Lab', L2().research.filter((r: any) => res(r.id) < r.max && S.sci >= researchCost(r)).length ? 1 : 0, ART.uiIcon('cl_flask', '🧪'), 'You can afford new research', () => setView('lab'));
     const essence = B().some((c: any) => c && c.id && bloomValue(c.id) > 0);
-    add('bloom', 'World', essence && !worldAwake() ? 1 : 0, ART.uiIcon('ic_map', '🌍'), 'Wake the world with your essence', () => setView('map'));
-    add('chapter', '', projReady(curProject()) ? 1 : 0, ART.uiIcon('ic_star', '🚀'), 'Chapter ready to build!', () => ($('#btnQuests') as HTMLElement).click());
+    add('bloom', 'World', essence && !worldAwake() ? 1 : 0, ART.uiIcon('ic_globe', '🌍'), 'Wake the world with your essence', () => setView('map'));
+    add('chapter', '', projReady(curProject()) ? 1 : 0, ART.uiIcon('cl_build', '🚀'), 'Chapter ready to build!', () => ($('#btnQuests') as HTMLElement).click());
     return out;
   }
   let claimSeen: Record<string, number> | null = null;
@@ -1518,6 +1518,41 @@ export async function startGame() {
     prog('upgrade', 1);
     renderShop(); renderHUD(); save();
   }
+  /* --------------------------------------------------------- feedback
+     Testers write a line; the report carries what we need to reproduce it:
+     build, device, where they are in the game, and the last errors caught. */
+  function feedbackPop() {
+    pop('✉️ Feedback', `<div class="fbWrap"><div class="noteLine">What was fun, what was confusing, what broke? One line is plenty.</div>
+      <div class="fbMood">${['😍', '🙂', '😐', '🙁', '🐞'].map(m => `<button class="fbM" data-m="${m}">${m}</button>`).join('')}</div>
+      <textarea id="fbText" rows="5" placeholder="e.g. I didn't know where to get Rocket Fins"></textarea>
+      <button class="big" id="fbSend">${SERVICES.app.supportEmail ? 'Send by email' : 'Copy report'}</button>
+      <div class="noteLine">Your game state and device type are attached. Nothing else.</div></div>`, 'fun');
+    let mood = '';
+    document.querySelectorAll<HTMLElement>('.fbM').forEach(b => b.onclick = () => { mood = b.dataset.m || ''; document.querySelectorAll('.fbM').forEach(x => x.classList.toggle('on', x === b)); sfx.tap(); });
+    ($('#fbSend') as HTMLElement).onclick = async () => {
+      const txt = (($('#fbText') as HTMLTextAreaElement).value || '').trim();
+      const pj = curProject();
+      const body = [mood + ' ' + txt, '', '---',
+        `build ${SERVICES.app.build} · ${isNative ? 'app' : 'web'} · ${navigator.userAgent}`,
+        `screen ${innerWidth}×${innerHeight} @${devicePixelRatio}`,
+        `world ${S.world} · level ${S.lvl} · world level ${wlv()} · chapter ${pj ? pj.id + ' ' + pj.name : 'done'}`,
+        `energy ${S.energy} · coins ${S.coins} · gems ${S.gems} · played ${Math.round((S.playMs || 0) / 60000)} min`,
+        'errors: ' + (errLog().slice(-5).join(' | ') || 'none')].join('\n');
+      analytics.track('feedback', { mood });
+      if (SERVICES.app.supportEmail) {
+        location.href = `mailto:${SERVICES.app.supportEmail}?subject=${encodeURIComponent('Merge Rocket feedback ' + mood)}&body=${encodeURIComponent(body)}`;
+      } else {
+        try { await navigator.clipboard.writeText(body); toast('Report copied — paste it in a message to the developer. Thank you!'); }
+        catch { toast('Could not copy — take a screenshot instead. Thank you!'); }
+      }
+      closePop();
+    };
+  }
+  const errLog = (): string[] => { try { return JSON.parse(localStorage.getItem('mr_err') || '[]'); } catch { return []; } };
+  const logErr = (m: string) => { try { const l = errLog(); l.push(new Date().toISOString().slice(5, 16) + ' ' + m.slice(0, 160)); localStorage.setItem('mr_err', JSON.stringify(l.slice(-20))); } catch { } };
+  window.addEventListener('error', e => logErr(e.message || String(e)));
+  window.addEventListener('unhandledrejection', (e: any) => logErr('promise: ' + (e.reason && e.reason.message || e.reason)));
+
   /* ------------------------------------------------ shop: gift, energy, chests */
   const today = () => dayKey(new Date());
   const giftReady = () => S.shop.gift !== today();
@@ -1526,12 +1561,10 @@ export async function startGame() {
   function claimGift() {
     if (!giftReady()) { sfx.no(); toast('Come back tomorrow for the next gift!'); return; }
     S.shop.gift = today();
-    const at = giveItem('chest');
-    S.energy += CFG.shop2.freeGiftEnergy; bumpChip('#chipEnergy');
-    sfx.boost(); confetti(); if (at >= 0) sparkle(at, 16, '#ffe9a8');
-    toast(`🎁 Free gift: a Supply Chest and +${CFG.shop2.freeGiftEnergy} ⚡!`);
     S.giftAd = today();
-    renderShop(); renderHUD(); save();
+    save(); renderShop();
+    rewardCard('blorb', 'Daily delivery!', '<b>Postie Blorb:</b> "Parcel! Sign here. Any leg. Phew."',
+      { item: 'chest', energy: CFG.shop2.freeGiftEnergy }, () => renderShop());
   }
   function buyRefill() {
     const price = refillPrice();
@@ -3081,6 +3114,39 @@ export async function startGame() {
     if (r.sci) return '<span class="rwEmoji">🧪</span>';
     return '';
   }
+  /* One reward card for every "you got X" moment: the painted card, who gave
+     it, the things themselves big, and a single Collect. It floats above any
+     popup, and the reward is only granted on Collect, so it can't be missed. */
+  const rwcQ: { who: string; title: string; line: string; r: Reward; after?: () => void }[] = [];
+  function rewardCard(who: string, title: string, line: string, r: Reward, after?: () => void) {
+    rwcQ.push({ who, title, line, r, after });
+    if (!document.getElementById('rwc')?.classList.contains('open')) rewardNext();
+  }
+  function rewardNext() {
+    const c = rwcQ.shift(); if (!c) return;
+    let el = document.getElementById('rwc');
+    if (!el) { el = document.createElement('div'); el.id = 'rwc'; $('#app').appendChild(el); }
+    const parts: string[] = [];
+    const one = (icon: string, n: string) => parts.push(`<div class="rwcIt"><span class="rwcArt">${icon}</span><b>${n}</b></div>`);
+    if (c.r.item) one(ART.item(c.r.item), ITEMS[c.r.item].name);
+    if (c.r.coins) one(ART.icon('coin'), '+' + c.r.coins);
+    if (c.r.gems) one(ART.icon('gem'), '+' + c.r.gems);
+    if (c.r.energy) one(ART.icon('energy'), '+' + c.r.energy);
+    if (c.r.sci) one('<span class="rwEmoji">🧪</span>', '+' + c.r.sci);
+    if (c.r.spin) one(ART.uiIcon('ic_spin', '🎡'), '+' + c.r.spin + ' spin');
+    if (c.r.boost) one(rewardIcon({ boost: c.r.boost }), (SHOP.boosters.find((x: any) => x.id === c.r.boost) || { name: c.r.boost }).name);
+    el.innerHTML = `<div class="rwcRays"></div><div class="rwcCard"><div class="rwcRib">${c.title}</div>
+      ${c.who ? `<div class="rwcWho">${ART.char(c.who)}</div>` : ''}
+      <div class="rwcLine">${c.line}</div><div class="rwcRow">${parts.join('')}</div>
+      <button class="big" id="rwcGo">Collect</button></div>`;
+    el.className = 'open';
+    sfx.unlock(); if (c.who) setTimeout(() => sfx.voice(c.who, 3), 250);
+    ($('#rwcGo') as HTMLElement).onclick = () => {
+      grant(c.r); confetti(); haptic('medium');
+      el!.className = 'close';
+      setTimeout(() => { el!.className = ''; if (c.after) c.after(); rewardNext(); }, 320);
+    };
+  }
   function grant(r: Reward) {
     if (r.energy) { S.energy += r.energy; bumpChip('#chipEnergy'); }
     if (r.coins) { S.coins += r.coins; bumpChip('#chipCoins'); }
@@ -3100,6 +3166,7 @@ export async function startGame() {
     $('#pop').className = 'pop open ' + cls;
     popClose = onClose || null;
     sfx.open();
+    { const rb = document.getElementById('ribbon'); if (rb && rb.className === 'show') rb.className = 'hide'; }
   }
   function closePop() {
     if ($('#pop').classList.contains('open')) sfx.close();
@@ -3327,7 +3394,7 @@ export async function startGame() {
   }
   function spinPop() {
     if (S.lvl < SP().unlockLevel) { sfx.no(); toast(`The Lucky Wheel opens at level ${SP().unlockLevel}.`); return; }
-    pop('🎡 Lucky Wheel', `${wheelHTML()}
+    pop('🎡 Lucky Wheel', `<div class="hostRow"><span class="hostFace">${ART.char('oops')}</span><i>${['I foresaw this spin! Mostly.', 'The ball is cracked but the vibes are clear.', 'Spin, darling. Destiny is waiting. Or lunch.'][Math.floor(Math.random() * 3)]}</i></div>${wheelHTML()}
       <div class="noteLine" id="spinNote">${freeSpin() ? 'One <b>free spin</b> every day.' : 'Free spin used today.'} You have <b>${spinsLeft()}</b> spin${spinsLeft() === 1 ? '' : 's'}.</div>
       <button class="big gold" id="spinGo"${spinsLeft() ? '' : ' disabled'}>${spinsLeft() ? 'SPIN!' : 'Come back tomorrow'}</button>
       ${spinsLeft() ? '' : adBtn('spin', 'Watch: one more spin', 'spinAd')}
@@ -3591,8 +3658,8 @@ export async function startGame() {
       const a = ACH.find(x => x.id === b.dataset.ach)!; const t = achTier(a);
       if (t >= a.at.length || a.v() < a.at[t]) return;
       S.ach = S.ach || {}; S.ach[a.id] = t + 1;
-      const rw = achReward(t); grant(rw); confetti(); toast(`🏆 ${a.name}: <b>${rewardText(rw)}</b>`);
-      achPop(); renderHUD();
+      const rw = achReward(t); save(); achPop(); renderHUD();
+      rewardCard('glimmer', '🏆 ' + a.name, '<b>Captain Glimmer:</b> "MAGNIFICENT! A triumph — mostly mine, but yours too."', rw, () => { if (popOpen()) achPop(); });
     });
   }
 
@@ -3923,7 +3990,7 @@ export async function startGame() {
       ? { coins: 120 + Math.floor(Math.random() * 260) }
       : { id: miniItem(4, 2) });
     miniState = { crates, flips: 0, kept: -1 };
-    openMini('🛸 Alien Market', 'Zib lets you peek inside <b>two</b> crates. You walk away with <b>one</b>.');
+    openMini('🛸 Alien Market', `<span class="hostFace">${ART.char('grubs')}</span>The Grub Brothers let you peek inside <b>two</b> crates. You walk away with <b>one</b>. (One of them is not happy about it.)`);
     drawMarket();
   }
   function drawMarket() {
@@ -4788,6 +4855,12 @@ export async function startGame() {
       S.snackAt = Date.now(); S.energy = Math.min(maxEnergy(), S.energy + snackAmt());
       bumpChip('#chipEnergy'); sfx.coin(); toast('🍪 Yum! +' + snackAmt() + ' energy'); renderHUD(); save();
     };
+    let testerOn = false;
+    const testerPanel = () => `<div class="ttBox"><b>🧪 Tester tools</b><div class="ttRow">
+        <button class="buyBtn" data-tt="energy">+100 ⚡</button><button class="buyBtn" data-tt="coins">+2000 🪙</button>
+        <button class="buyBtn" data-tt="gems">+100 💎</button><button class="buyBtn" data-tt="refill">Refill sources</button>
+        <button class="buyBtn" data-tt="chapter">Give chapter items</button><button class="buyBtn" data-tt="level">+500 XP</button></div>
+        <i>These are only for testing and are not in the store build.</i></div>`;
     $('#btnGear').onclick = () => {
       // settings are switches, not a stack of shouting buttons
       const row = (id: string, ic: string, label: string, on: boolean) =>
@@ -4797,7 +4870,10 @@ export async function startGame() {
           ${row('musBtn', ART.uiIcon(S.music ? 'ic_music' : 'ic_nomusic', '🎵'), 'Music', !!S.music)}
           ${row('tipBtn', ART.uiIcon('ic_hint', '💡'), 'Tips', !S.tipsOff)}
         </div>
+        <button class="big soft" id="fbBtn">✉️ Send feedback</button>
         <button class="optDanger" id="resetBtn">Start a new game</button>
+        <div class="verLine" id="verLine">Merge Rocket ${SERVICES.app.build}</div>
+        ${testerOn ? testerPanel() : ''}
         ${import.meta.env.DEV ? devPanel() : ''}`;
       modal('pip', 'Settings', draw(), 'Close');
       const bind = () => {
@@ -4814,6 +4890,19 @@ export async function startGame() {
           if (k === 'signin') await games.signIn();
           if (k === 'away') goingAway();
           redraw();
+        });
+        const fb = $('#fbBtn'); if (fb) fb.onclick = () => { closeModal(); setTimeout(feedbackPop, 500); };
+        const vl = $('#verLine'); let taps = 0;
+        if (vl) vl.onclick = () => { if (SERVICES.app.testerTools && ++taps >= 5) { testerOn = true; redraw(); toast('🧪 Tester tools on'); } };
+        document.querySelectorAll<HTMLElement>('[data-tt]').forEach(b => b.onclick = () => {
+          const k = b.dataset.tt;
+          if (k === 'energy') { S.energy += 100; bumpChip('#chipEnergy'); }
+          if (k === 'coins') { S.coins += 2000; bumpChip('#chipCoins'); }
+          if (k === 'gems') addGems(100);
+          if (k === 'refill') B().forEach((c: any) => { if (c && c.p) { c.ch = undefined; c.ready = 0; } });
+          if (k === 'chapter') { const pj = curProject(); if (pj) { pj.needs.forEach(([id, q]: [string, number]) => { for (let n = 0; n < q; n++) if (giveItem(id) < 0) S.bag.push(id); }); S.coins = Math.max(S.coins, pj.coins); } }
+          if (k === 'level') addXp(500);
+          sfx.collect(); paintBoard(); renderHUD(); save();
         });
         if (rb) rb.onclick = () => {
           // a whole save is one tap from gone: ask first
@@ -4855,6 +4944,7 @@ export async function startGame() {
       curProject: () => curProject(), v9: { funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, rocketPanel, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; renderLab(); } },
     };
     setInterval(tick, 500);
+    setInterval(() => { if (!document.hidden) S.playMs = (S.playMs || 0) + 5000; }, 5000);
     setInterval(save, 8000);
     // the shell asks for a save when the app goes to the background
     window.addEventListener('mr:save', () => goingAway());

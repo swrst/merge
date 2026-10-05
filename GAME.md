@@ -442,6 +442,40 @@ The dock tabs show a **counted badge** that bumps when the count grows. Anything
 - Ribbons show only over the board, never over a screen, popup, dialog or tip, and never during the intro.
 - Only the button takes taps, so a ribbon never eats a tap meant for a contract.
 
+### Reward card
+Every "you got this" moment that matters (daily delivery, achievements) shows one painted card.
+
+- It has the giver's face, the rewards drawn big, and a **Collect** button.
+- The reward is granted on Collect, so it can't be missed.
+- Cards queue, and they float above any popup.
+
+The helpers who run the side things:
+
+| Helper | Runs |
+|---|---|
+| **Postie Blorb** | daily delivery |
+| **Captain Glimmer** | achievements |
+| **Madame Oops** | the Lucky Wheel |
+| **The Grub Brothers** | the Market |
+
+### Late Meadow (v25)
+Five new story chains, each with a producer that a chapter unlocks:
+
+| Chapter | Producer | Chain |
+|---|---|---|
+| e16 | Picnic Hamper | **Picnic Day** |
+| e18 | Egg Nest | **Alien Pets** |
+| e19 | Busking Robot | **Meadow Music** |
+| e20 | Weather Balloon | **Weather Watch** |
+| e21 | Scrap Hull | **Rocket Parts** |
+
+Chapters 19–22 ask for one item from them. Ember Hollow (world 3) is now fully painted.
+
+### Tester build
+- **Settings** shows the build (`SERVICES.app.build`) and has **Send feedback**. The report carries the build, the device, the story position and the last caught errors; it goes by email if `app.supportEmail` is set, otherwise to the clipboard.
+- **Tester tools:** tap the version line 5× (only when `testerTools` is true).
+- How to build and hand out the APK is in `TESTING.md`.
+
 ### Presentation and feel
 - All artwork is hand-written SVG (`src/art.ts`), rasterised into GPU textures at startup.
 - Characters are round cartoon portraits, and order cards show the **whole customer** as a

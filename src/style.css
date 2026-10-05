@@ -1627,3 +1627,50 @@ html.ui-btn_disabled .big:disabled,html.ui-btn_disabled .big.off,html .big.off{b
 .rail.dock .railBtn .dot{top:-6px;right:-6px;min-width:19px;height:19px;font-size:11px;line-height:15px;box-shadow:0 2px 4px rgba(120,20,10,.35);z-index:2}
 #ribbon.show{pointer-events:none}
 #ribbon.show .rbGo{pointer-events:auto;cursor:pointer}
+
+/* ---------------------------------------------------------- v25: reward card */
+#rwc{position:absolute;inset:0;z-index:210;display:none;align-items:center;justify-content:center;background:rgba(40,25,10,.55);padding:20px}
+#rwc.open,#rwc.close{display:flex}
+#rwc.close{animation:rwcOut .3s ease-in forwards}
+@keyframes rwcOut{to{opacity:0}}
+.rwcCard{position:relative;width:min(86vw,320px);padding:58px 18px 18px;text-align:center;border-radius:26px;
+  background:linear-gradient(180deg,#fffaf0,#ffeccd);border:4px solid #ffcf4a;box-shadow:0 0 0 3px #c98a14,0 14px 40px rgba(0,0,0,.35);
+  animation:rwcIn .5s cubic-bezier(.3,1.5,.5,1)}
+html.ui-reward_card .rwcCard{background:var(--ui-reward_card) center/100% 100% no-repeat;border:0;box-shadow:none;border-radius:0;width:min(84vw,300px);aspect-ratio:190/227;padding:47% 12% 9%;display:flex;flex-direction:column;justify-content:center;box-sizing:border-box}
+@keyframes rwcIn{0%{transform:scale(.4) rotate(-6deg);opacity:0}100%{transform:none;opacity:1}}
+.rwcRays{position:absolute;left:50%;top:50%;width:560px;height:560px;margin:-280px 0 0 -280px;opacity:.7;pointer-events:none;
+  background:repeating-conic-gradient(rgba(255,226,120,.55) 0 10deg,transparent 10deg 20deg);border-radius:50%;
+  -webkit-mask:radial-gradient(circle,#000 25%,transparent 68%);mask:radial-gradient(circle,#000 25%,transparent 68%);animation:spinSlow 14s linear infinite}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
+.rwcRib{position:absolute;left:50%;top:-14px;transform:translateX(-50%);white-space:nowrap;padding:8px 22px;border-radius:12px;
+  background:linear-gradient(180deg,#ff6b5e,#d63a2f);color:#fff;font:700 18px/1 Fredoka,system-ui,sans-serif;text-shadow:0 2px 0 rgba(0,0,0,.25);box-shadow:0 4px 0 #9c2219}
+html.ui-reward_card .rwcRib{top:30.5%;background:none;box-shadow:none;font-size:17px;padding:0;line-height:1.2;transform:translate(-50%,-50%) rotate(-1deg);max-width:70%;overflow:hidden;text-overflow:ellipsis}
+html.ui-reward_card .rwcWho{left:-6px;top:4%}
+html.ui-reward_card .rwcLine{font-size:13px;margin:0 0 8px}
+html.ui-reward_card .rwcRow{margin-bottom:10px}
+html.ui-reward_card .rwcArt,html.ui-reward_card .rwcArt img,html.ui-reward_card .rwcArt svg,html.ui-reward_card .rwcArt .uiIc{width:54px;height:54px}
+.rwcWho{position:absolute;left:-14px;top:-30px;width:78px;height:78px;border-radius:50%;background:#fff;border:3px solid #ffcf4a;overflow:hidden;
+  box-shadow:0 4px 10px rgba(0,0,0,.25);animation:talkBounce .6s .2s cubic-bezier(.3,1.7,.5,1) both}
+.rwcWho img,.rwcWho svg{width:100%;height:100%;object-fit:cover}
+.rwcLine{font:500 14px/1.3 Fredoka,system-ui,sans-serif;color:#6b4510;margin:4px 0 12px}
+.rwcRow{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.rwcIt{display:flex;flex-direction:column;align-items:center;gap:4px;animation:rwcPop .5s cubic-bezier(.3,1.8,.5,1) both}
+.rwcIt:nth-child(2){animation-delay:.12s}.rwcIt:nth-child(3){animation-delay:.24s}
+@keyframes rwcPop{0%{transform:scale(0)}100%{transform:scale(1)}}
+.rwcArt{width:64px;height:64px;display:grid;place-items:center}
+.rwcArt img,.rwcArt svg,.rwcArt .uiIc{width:64px;height:64px;object-fit:contain}
+.rwcIt b{font:700 15px/1 Fredoka,system-ui,sans-serif;color:#6b4510}
+.hostRow{display:flex;align-items:center;gap:8px;margin:14px 0 6px;text-align:left}
+.hostRow i{font-style:normal;font-size:13px;color:#7a5326;background:#fff;border-radius:12px;padding:6px 10px;box-shadow:0 2px 0 rgba(150,105,50,.2)}
+.hostFace{display:inline-block;flex:none;width:46px;height:46px;border-radius:50%;overflow:hidden;background:#fff;border:2px solid #ffcf4a;vertical-align:middle;margin-right:6px}
+.hostFace img,.hostFace svg{width:100%;height:100%;object-fit:cover}
+
+/* v25: tester build bits */
+.verLine{margin-top:10px;text-align:center;font-size:11px;color:#a58552;user-select:none}
+.ttBox{margin-top:10px;padding:10px;border-radius:14px;background:#efe6ff;text-align:center;font-size:12px;color:#5b4590}
+.ttRow{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:8px 0}
+.ttBox i{font-size:10.5px;opacity:.75}
+.fbWrap textarea{width:100%;box-sizing:border-box;border-radius:14px;border:2px solid #e8cf9c;padding:10px;font:500 14px/1.3 Fredoka,system-ui,sans-serif;background:#fffaf0;color:#5a3d12;resize:none;margin:8px 0}
+.fbMood{display:flex;justify-content:center;gap:8px;margin-top:8px}
+.fbM{font-size:26px;width:46px;height:46px;border-radius:50%;border:2px solid transparent;background:#fff;box-shadow:0 2px 0 rgba(150,105,50,.25)}
+.fbM.on{border-color:#4cb83a;transform:scale(1.12)}

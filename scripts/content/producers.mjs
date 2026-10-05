@@ -45,6 +45,12 @@ export const PRODUCERS = [
   ['earth', 99, 'teabush|Tea Bush|bush:leaf/moss|bat:10/60|tealeaf tealeaf teabundle|a neat round tea bush with fresh green tips'],
   ['earth', 99, 'lilypond|Lily Pond|wave:water/moss|nrg:1|ponddrop ponddrop ponddrop lilypad|a small round pond with lily pads and a reed'],
   ['earth', 99, 'toychest|Toy Chest|chest:cherry/moss|bat:10/60|block block spintop|a painted toy chest, lid open, toys peeking out'],
+  /* v25 */
+  ['earth', 99, 'picnichamper|Picnic Hamper|basket:straw/moss|nrg:1|crumb crumb crumb sandwich|a picnic hamper on little legs with a checked cloth'],
+  ['earth', 99, 'eggnest|Egg Nest|egg:lilac/moss|bat:10/60|petegg petegg hatchegg|a grassy nest of lilac spotted eggs'],
+  ['earth', 99, 'buskbot|Busking Robot|totem:steel/moss|nrg:1|notepebble notepebble notepebble whistle|a little robot playing guitar next to a speaker'],
+  ['earth', 99, 'rockethull|Scrap Hull|tower:steel/moss|nrg:1|hexbolt hexbolt hexbolt gear|an old rocket hull lying in the grass, full of parts'],
+  ['earth', 99, 'weatherballoon|Weather Balloon|balloon:sapphire/moss|bat:12/45|raindrop raindrop puffcloud|a striped weather balloon tied to a crate'],
 
   /* event guests: planted while an event runs, gone when it ends */
   ['*', 0, 'fallingstar|Falling Star|star:star/slate|bat:12/45|starbit starbit starbunch|a fallen glowing star sitting in a little crater'],

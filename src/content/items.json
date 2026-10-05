@@ -1389,6 +1389,475 @@
       ]
     }
   },
+  "crumb": {
+    "name": "Crumbs",
+    "chain": "picnic",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "pebble",
+      "mat": "dough"
+    }
+  },
+  "sandwich": {
+    "name": "Sandwich",
+    "chain": "picnic",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "bread",
+      "mat": "dough",
+      "accent": "leaf"
+    }
+  },
+  "picnicbasket": {
+    "name": "Picnic Basket",
+    "chain": "picnic",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "basket",
+      "mat": "straw",
+      "accent": "cherry"
+    }
+  },
+  "picnicblanket": {
+    "name": "Picnic Blanket",
+    "chain": "picnic",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "crate",
+      "mat": "cherry",
+      "accent": "straw"
+    }
+  },
+  "lemonadeset": {
+    "name": "Lemonade Set",
+    "chain": "picnic",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "jar",
+      "mat": "glass",
+      "accent": "honey"
+    }
+  },
+  "picnicparasol": {
+    "name": "Parasol Picnic",
+    "chain": "picnic",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "rose",
+      "accent": "cream"
+    }
+  },
+  "gardenparty": {
+    "name": "Garden Party",
+    "chain": "picnic",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "house",
+      "mat": "cream",
+      "accent": "rose",
+      "deco": [
+        "motes"
+      ]
+    }
+  },
+  "picnicpavilion": {
+    "name": "Picnic Pavilion",
+    "chain": "picnic",
+    "tier": 8,
+    "sell": 980,
+    "art": {
+      "shape": "house",
+      "mat": "gold",
+      "accent": "rose",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "petegg": {
+    "name": "Spotted Egg",
+    "chain": "pets",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "egg",
+      "mat": "lilac",
+      "accent": "cream"
+    }
+  },
+  "hatchegg": {
+    "name": "Peeking Egg",
+    "chain": "pets",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "egg",
+      "mat": "lilac",
+      "accent": "star"
+    }
+  },
+  "blobling": {
+    "name": "Blobling",
+    "chain": "pets",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "slime",
+      "mat": "lilac"
+    }
+  },
+  "blobpup": {
+    "name": "Blob Pup",
+    "chain": "pets",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "slime",
+      "mat": "lilac",
+      "accent": "cream"
+    }
+  },
+  "pupbed": {
+    "name": "Pup Bed",
+    "chain": "pets",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "pot",
+      "mat": "lilac",
+      "accent": "rose"
+    }
+  },
+  "puphouse": {
+    "name": "Pup House",
+    "chain": "pets",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "lilac",
+      "accent": "gold"
+    }
+  },
+  "petpark": {
+    "name": "Pet Playground",
+    "chain": "pets",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "house",
+      "mat": "mint",
+      "accent": "lilac",
+      "deco": [
+        "motes"
+      ]
+    }
+  },
+  "petpalace": {
+    "name": "Pet Palace",
+    "chain": "pets",
+    "tier": 8,
+    "sell": 980,
+    "art": {
+      "shape": "house",
+      "mat": "gold",
+      "accent": "lilac",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "notepebble": {
+    "name": "Music Note",
+    "chain": "music",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "pebble",
+      "mat": "lilac",
+      "accent": "gold"
+    }
+  },
+  "whistle": {
+    "name": "Whistle",
+    "chain": "music",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "gem",
+      "mat": "honey",
+      "accent": "gold"
+    }
+  },
+  "ukulele": {
+    "name": "Ukulele",
+    "chain": "music",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "totem",
+      "mat": "wood",
+      "accent": "honey"
+    }
+  },
+  "drum": {
+    "name": "Drum",
+    "chain": "music",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "barrel",
+      "mat": "cherry",
+      "accent": "gold"
+    }
+  },
+  "jukebox": {
+    "name": "Jukebox",
+    "chain": "music",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "tower",
+      "mat": "cherry",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "oneband": {
+    "name": "One-Alien Band",
+    "chain": "music",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "totem",
+      "mat": "mint",
+      "accent": "gold"
+    }
+  },
+  "bandstand": {
+    "name": "Bandstand",
+    "chain": "music",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "house",
+      "mat": "sapphire",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "concertshell": {
+    "name": "Concert Shell",
+    "chain": "music",
+    "tier": 8,
+    "sell": 980,
+    "art": {
+      "shape": "arch",
+      "mat": "gold",
+      "accent": "rose",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
+  "hexbolt": {
+    "name": "Hex Bolt",
+    "chain": "parts",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "pebble",
+      "mat": "steel"
+    }
+  },
+  "gear": {
+    "name": "Gear",
+    "chain": "parts",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "gem",
+      "mat": "steel",
+      "accent": "slate"
+    }
+  },
+  "fin": {
+    "name": "Rocket Fin",
+    "chain": "parts",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "leaf",
+      "mat": "steel",
+      "accent": "sapphire"
+    }
+  },
+  "nosecone": {
+    "name": "Nose Cone",
+    "chain": "parts",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "prism",
+      "mat": "cherry",
+      "accent": "steel"
+    }
+  },
+  "booster": {
+    "name": "Booster",
+    "chain": "parts",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "barrel",
+      "mat": "steel",
+      "accent": "gold"
+    }
+  },
+  "fueltin": {
+    "name": "Fuel Tin",
+    "chain": "parts",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "barrel",
+      "mat": "steel",
+      "accent": "ember"
+    }
+  },
+  "engineblock": {
+    "name": "Engine Block",
+    "chain": "parts",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "crate",
+      "mat": "steel",
+      "accent": "copper"
+    }
+  },
+  "minirocket": {
+    "name": "Mini Rocket",
+    "chain": "parts",
+    "tier": 8,
+    "sell": 980,
+    "art": {
+      "shape": "tower",
+      "mat": "cherry",
+      "accent": "steel",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "raindrop": {
+    "name": "Raindrop",
+    "chain": "weather",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "droplet",
+      "mat": "water"
+    }
+  },
+  "puffcloud": {
+    "name": "Puff Cloud",
+    "chain": "weather",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "cloud",
+      "mat": "cloud"
+    }
+  },
+  "raincloud2": {
+    "name": "Rain Cloud",
+    "chain": "weather",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "cloud",
+      "mat": "cloud",
+      "accent": "water"
+    }
+  },
+  "rainbowcloud": {
+    "name": "Rainbow Cloud",
+    "chain": "weather",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "cloud",
+      "mat": "cloud",
+      "accent": "aurora"
+    }
+  },
+  "weathervane": {
+    "name": "Weather Vane",
+    "chain": "weather",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "totem",
+      "mat": "copper",
+      "accent": "gold"
+    }
+  },
+  "weatherstation": {
+    "name": "Weather Station",
+    "chain": "weather",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "tower",
+      "mat": "steel",
+      "accent": "sapphire"
+    }
+  },
+  "cloudmachine": {
+    "name": "Cloud Machine",
+    "chain": "weather",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "house",
+      "mat": "cloud",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "sundial": {
+    "name": "Rainbow Sundial",
+    "chain": "weather",
+    "tier": 8,
+    "sell": 980,
+    "art": {
+      "shape": "arch",
+      "mat": "gold",
+      "accent": "aurora",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
   "starbit": {
     "name": "Star Bit",
     "chain": "ev_star",

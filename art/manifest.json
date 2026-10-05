@@ -315,6 +315,51 @@
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
+    "path": "src/sprites/producers/picnichamper.png",
+    "kind": "producer",
+    "name": "Picnic Hamper",
+    "group": "producer (Sunny Meadow)",
+    "batch": "producers",
+    "prompt": "Picnic Hamper — a picnic hamper on little legs with a checked cloth, standing on its own small round mound of bright moss green. A source the player taps for Crumbs, Sandwich. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/producers/eggnest.png",
+    "kind": "producer",
+    "name": "Egg Nest",
+    "group": "producer (Sunny Meadow)",
+    "batch": "producers",
+    "prompt": "Egg Nest — a grassy nest of lilac spotted eggs, standing on its own small round mound of bright moss green. A source the player taps for Spotted Egg, Peeking Egg. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/producers/buskbot.png",
+    "kind": "producer",
+    "name": "Busking Robot",
+    "group": "producer (Sunny Meadow)",
+    "batch": "producers",
+    "prompt": "Busking Robot — a little robot playing guitar next to a speaker, standing on its own small round mound of bright moss green. A source the player taps for Music Note, Whistle. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/producers/rockethull.png",
+    "kind": "producer",
+    "name": "Scrap Hull",
+    "group": "producer (Sunny Meadow)",
+    "batch": "producers",
+    "prompt": "Scrap Hull — an old rocket hull lying in the grass, full of parts, standing on its own small round mound of bright moss green. A source the player taps for Hex Bolt, Gear. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/producers/weatherballoon.png",
+    "kind": "producer",
+    "name": "Weather Balloon",
+    "group": "producer (Sunny Meadow)",
+    "batch": "producers",
+    "prompt": "Weather Balloon — a striped weather balloon tied to a crate, standing on its own small round mound of bright moss green. A source the player taps for Raindrop, Puff Cloud. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
     "path": "src/sprites/producers/fallingstar.png",
     "kind": "producer",
     "name": "Falling Star",
@@ -1932,6 +1977,366 @@
     "group": "Toy Box (Sunny Meadow)",
     "batch": "chain-toys",
     "prompt": "Toy Shop — a cosy toy shop stall full of toys under a striped awning. Step 6 of 6 in the \"Toy Box\" merge chain, so it must read as the crown of the chain: a small monument, radiant, unmistakably the best. One step up from the Puppet Theatre, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/crumb.png",
+    "kind": "item",
+    "name": "Crumbs",
+    "group": "Picnic Day (Sunny Meadow)",
+    "batch": "chain-picnic",
+    "prompt": "Crumbs — a few golden bread crumbs. Step 1 of 8 in the \"Picnic Day\" merge chain, so it must read as the smallest, plainest thing in its chain — tiny, humble, no decoration. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/sandwich.png",
+    "kind": "item",
+    "name": "Sandwich",
+    "group": "Picnic Day (Sunny Meadow)",
+    "batch": "chain-picnic",
+    "prompt": "Sandwich — a fat triangle sandwich with lettuce poking out. Step 2 of 8 in the \"Picnic Day\" merge chain, so it must read as a step up: a little bigger, a little tidier, still found rather than made. One step up from the Crumbs, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/picnicbasket.png",
+    "kind": "item",
+    "name": "Picnic Basket",
+    "group": "Picnic Day (Sunny Meadow)",
+    "batch": "chain-picnic",
+    "prompt": "Picnic Basket — a wicker picnic basket with a gingham lid. Step 3 of 8 in the \"Picnic Day\" merge chain, so it must read as clearly made, not found: neat shape, one small metal or painted detail. One step up from the Sandwich, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/picnicblanket.png",
+    "kind": "item",
+    "name": "Picnic Blanket",
+    "group": "Picnic Day (Sunny Meadow)",
+    "batch": "chain-picnic",
+    "prompt": "Picnic Blanket — a checked blanket spread out with the basket on it. Step 4 of 8 in the \"Picnic Day\" merge chain, so it must read as handsome: richer colour, a trim or a band, a faint sheen. One step up from the Picnic Basket, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/lemonadeset.png",
+    "kind": "item",
+    "name": "Lemonade Set",
+    "group": "Picnic Day (Sunny Meadow)",
+    "batch": "chain-picnic",
+    "prompt": "Lemonade Set — a jug of lemonade with glasses and fruit on a little board. Step 5 of 8 in the \"Picnic Day\" merge chain, so it must read as handsome: richer colour, a trim or a band, a faint sheen. One step up from the Picnic Blanket, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/picnicparasol.png",
+    "kind": "item",
+    "name": "Parasol Picnic",
+    "group": "Picnic Day (Sunny Meadow)",
+    "batch": "chain-picnic",
+    "prompt": "Parasol Picnic — a picnic laid out under a pink striped parasol. Step 6 of 8 in the \"Picnic Day\" merge chain, so it must read as precious: fine detailing, gold or gem accents, a soft glow around it. One step up from the Lemonade Set, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/gardenparty.png",
+    "kind": "item",
+    "name": "Garden Party",
+    "group": "Picnic Day (Sunny Meadow)",
+    "batch": "chain-picnic",
+    "prompt": "Garden Party — a round garden-party table set with cakes and flowers. Step 7 of 8 in the \"Picnic Day\" merge chain, so it must read as a showpiece: ornate, glowing, a few floating motes of light. One step up from the Parasol Picnic, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/picnicpavilion.png",
+    "kind": "item",
+    "name": "Picnic Pavilion",
+    "group": "Picnic Day (Sunny Meadow)",
+    "batch": "chain-picnic",
+    "prompt": "Picnic Pavilion — a golden pavilion with bunting over a picnic feast. Step 8 of 8 in the \"Picnic Day\" merge chain, so it must read as the crown of the chain: a small monument, radiant, unmistakably the best. One step up from the Garden Party, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/petegg.png",
+    "kind": "item",
+    "name": "Spotted Egg",
+    "group": "Alien Pets (Sunny Meadow)",
+    "batch": "chain-pets",
+    "prompt": "Spotted Egg — a lilac egg with purple spots. Step 1 of 8 in the \"Alien Pets\" merge chain, so it must read as the smallest, plainest thing in its chain — tiny, humble, no decoration. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/hatchegg.png",
+    "kind": "item",
+    "name": "Peeking Egg",
+    "group": "Alien Pets (Sunny Meadow)",
+    "batch": "chain-pets",
+    "prompt": "Peeking Egg — a cracked egg with one curious eye peeking out. Step 2 of 8 in the \"Alien Pets\" merge chain, so it must read as a step up: a little bigger, a little tidier, still found rather than made. One step up from the Spotted Egg, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/blobling.png",
+    "kind": "item",
+    "name": "Blobling",
+    "group": "Alien Pets (Sunny Meadow)",
+    "batch": "chain-pets",
+    "prompt": "Blobling — a tiny lilac blob hatchling with floppy ears. Step 3 of 8 in the \"Alien Pets\" merge chain, so it must read as clearly made, not found: neat shape, one small metal or painted detail. One step up from the Peeking Egg, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/blobpup.png",
+    "kind": "item",
+    "name": "Blob Pup",
+    "group": "Alien Pets (Sunny Meadow)",
+    "batch": "chain-pets",
+    "prompt": "Blob Pup — a playful lilac blob pup with a collar. Step 4 of 8 in the \"Alien Pets\" merge chain, so it must read as handsome: richer colour, a trim or a band, a faint sheen. One step up from the Blobling, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/pupbed.png",
+    "kind": "item",
+    "name": "Pup Bed",
+    "group": "Alien Pets (Sunny Meadow)",
+    "batch": "chain-pets",
+    "prompt": "Pup Bed — the blob pup curled up asleep in a round cushion bed. Step 5 of 8 in the \"Alien Pets\" merge chain, so it must read as handsome: richer colour, a trim or a band, a faint sheen. One step up from the Blob Pup, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/puphouse.png",
+    "kind": "item",
+    "name": "Pup House",
+    "group": "Alien Pets (Sunny Meadow)",
+    "batch": "chain-pets",
+    "prompt": "Pup House — a little dome-shaped pet house with a round door. Step 6 of 8 in the \"Alien Pets\" merge chain, so it must read as precious: fine detailing, gold or gem accents, a soft glow around it. One step up from the Pup Bed, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/petpark.png",
+    "kind": "item",
+    "name": "Pet Playground",
+    "group": "Alien Pets (Sunny Meadow)",
+    "batch": "chain-pets",
+    "prompt": "Pet Playground — a tiny pet playground with a slide and swings. Step 7 of 8 in the \"Alien Pets\" merge chain, so it must read as a showpiece: ornate, glowing, a few floating motes of light. One step up from the Pup House, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/petpalace.png",
+    "kind": "item",
+    "name": "Pet Palace",
+    "group": "Alien Pets (Sunny Meadow)",
+    "batch": "chain-pets",
+    "prompt": "Pet Palace — a golden domed pet palace with towers and a velvet cushion. Step 8 of 8 in the \"Alien Pets\" merge chain, so it must read as the crown of the chain: a small monument, radiant, unmistakably the best. One step up from the Pet Playground, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/notepebble.png",
+    "kind": "item",
+    "name": "Music Note",
+    "group": "Meadow Music (Sunny Meadow)",
+    "batch": "chain-music",
+    "prompt": "Music Note — a purple music note sitting on a pebble. Step 1 of 8 in the \"Meadow Music\" merge chain, so it must read as the smallest, plainest thing in its chain — tiny, humble, no decoration. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/whistle.png",
+    "kind": "item",
+    "name": "Whistle",
+    "group": "Meadow Music (Sunny Meadow)",
+    "batch": "chain-music",
+    "prompt": "Whistle — a little brass whistle. Step 2 of 8 in the \"Meadow Music\" merge chain, so it must read as a step up: a little bigger, a little tidier, still found rather than made. One step up from the Music Note, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/ukulele.png",
+    "kind": "item",
+    "name": "Ukulele",
+    "group": "Meadow Music (Sunny Meadow)",
+    "batch": "chain-music",
+    "prompt": "Ukulele — a small wooden ukulele. Step 3 of 8 in the \"Meadow Music\" merge chain, so it must read as clearly made, not found: neat shape, one small metal or painted detail. One step up from the Whistle, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/drum.png",
+    "kind": "item",
+    "name": "Drum",
+    "group": "Meadow Music (Sunny Meadow)",
+    "batch": "chain-music",
+    "prompt": "Drum — a round marching drum with gold rims. Step 4 of 8 in the \"Meadow Music\" merge chain, so it must read as handsome: richer colour, a trim or a band, a faint sheen. One step up from the Ukulele, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/jukebox.png",
+    "kind": "item",
+    "name": "Jukebox",
+    "group": "Meadow Music (Sunny Meadow)",
+    "batch": "chain-music",
+    "prompt": "Jukebox — a glowing retro jukebox. Step 5 of 8 in the \"Meadow Music\" merge chain, so it must read as handsome: richer colour, a trim or a band, a faint sheen. One step up from the Drum, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/oneband.png",
+    "kind": "item",
+    "name": "One-Alien Band",
+    "group": "Meadow Music (Sunny Meadow)",
+    "batch": "chain-music",
+    "prompt": "One-Alien Band — a green alien playing guitar with a speaker beside it. Step 6 of 8 in the \"Meadow Music\" merge chain, so it must read as precious: fine detailing, gold or gem accents, a soft glow around it. One step up from the Jukebox, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/bandstand.png",
+    "kind": "item",
+    "name": "Bandstand",
+    "group": "Meadow Music (Sunny Meadow)",
+    "batch": "chain-music",
+    "prompt": "Bandstand — a round bandstand gazebo with lights. Step 7 of 8 in the \"Meadow Music\" merge chain, so it must read as a showpiece: ornate, glowing, a few floating motes of light. One step up from the One-Alien Band, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/concertshell.png",
+    "kind": "item",
+    "name": "Concert Shell",
+    "group": "Meadow Music (Sunny Meadow)",
+    "batch": "chain-music",
+    "prompt": "Concert Shell — a golden concert shell stage with spotlights and speakers. Step 8 of 8 in the \"Meadow Music\" merge chain, so it must read as the crown of the chain: a small monument, radiant, unmistakably the best. One step up from the Bandstand, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/hexbolt.png",
+    "kind": "item",
+    "name": "Hex Bolt",
+    "group": "Rocket Parts (Sunny Meadow)",
+    "batch": "chain-parts",
+    "prompt": "Hex Bolt — a chunky steel bolt. Step 1 of 8 in the \"Rocket Parts\" merge chain, so it must read as the smallest, plainest thing in its chain — tiny, humble, no decoration. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/gear.png",
+    "kind": "item",
+    "name": "Gear",
+    "group": "Rocket Parts (Sunny Meadow)",
+    "batch": "chain-parts",
+    "prompt": "Gear — a silver gear wheel. Step 2 of 8 in the \"Rocket Parts\" merge chain, so it must read as a step up: a little bigger, a little tidier, still found rather than made. One step up from the Hex Bolt, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/fin.png",
+    "kind": "item",
+    "name": "Rocket Fin",
+    "group": "Rocket Parts (Sunny Meadow)",
+    "batch": "chain-parts",
+    "prompt": "Rocket Fin — a curved silver rocket fin. Step 3 of 8 in the \"Rocket Parts\" merge chain, so it must read as clearly made, not found: neat shape, one small metal or painted detail. One step up from the Gear, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/nosecone.png",
+    "kind": "item",
+    "name": "Nose Cone",
+    "group": "Rocket Parts (Sunny Meadow)",
+    "batch": "chain-parts",
+    "prompt": "Nose Cone — a red and white rocket nose cone. Step 4 of 8 in the \"Rocket Parts\" merge chain, so it must read as handsome: richer colour, a trim or a band, a faint sheen. One step up from the Rocket Fin, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/booster.png",
+    "kind": "item",
+    "name": "Booster",
+    "group": "Rocket Parts (Sunny Meadow)",
+    "batch": "chain-parts",
+    "prompt": "Booster — a small silver booster tube. Step 5 of 8 in the \"Rocket Parts\" merge chain, so it must read as handsome: richer colour, a trim or a band, a faint sheen. One step up from the Nose Cone, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/fueltin.png",
+    "kind": "item",
+    "name": "Fuel Tin",
+    "group": "Rocket Parts (Sunny Meadow)",
+    "batch": "chain-parts",
+    "prompt": "Fuel Tin — a round fuel canister with an orange band. Step 6 of 8 in the \"Rocket Parts\" merge chain, so it must read as precious: fine detailing, gold or gem accents, a soft glow around it. One step up from the Booster, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/engineblock.png",
+    "kind": "item",
+    "name": "Engine Block",
+    "group": "Rocket Parts (Sunny Meadow)",
+    "batch": "chain-parts",
+    "prompt": "Engine Block — a heavy engine block with a big nozzle. Step 7 of 8 in the \"Rocket Parts\" merge chain, so it must read as a showpiece: ornate, glowing, a few floating motes of light. One step up from the Fuel Tin, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/minirocket.png",
+    "kind": "item",
+    "name": "Mini Rocket",
+    "group": "Rocket Parts (Sunny Meadow)",
+    "batch": "chain-parts",
+    "prompt": "Mini Rocket — a shiny little rocket on a launch stand. Step 8 of 8 in the \"Rocket Parts\" merge chain, so it must read as the crown of the chain: a small monument, radiant, unmistakably the best. One step up from the Engine Block, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/raindrop.png",
+    "kind": "item",
+    "name": "Raindrop",
+    "group": "Weather Watch (Sunny Meadow)",
+    "batch": "chain-weather",
+    "prompt": "Raindrop — a single blue raindrop. Step 1 of 8 in the \"Weather Watch\" merge chain, so it must read as the smallest, plainest thing in its chain — tiny, humble, no decoration. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/puffcloud.png",
+    "kind": "item",
+    "name": "Puff Cloud",
+    "group": "Weather Watch (Sunny Meadow)",
+    "batch": "chain-weather",
+    "prompt": "Puff Cloud — a small fluffy white cloud. Step 2 of 8 in the \"Weather Watch\" merge chain, so it must read as a step up: a little bigger, a little tidier, still found rather than made. One step up from the Raindrop, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/raincloud2.png",
+    "kind": "item",
+    "name": "Rain Cloud",
+    "group": "Weather Watch (Sunny Meadow)",
+    "batch": "chain-weather",
+    "prompt": "Rain Cloud — a grey-blue cloud raining little drops. Step 3 of 8 in the \"Weather Watch\" merge chain, so it must read as clearly made, not found: neat shape, one small metal or painted detail. One step up from the Puff Cloud, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/rainbowcloud.png",
+    "kind": "item",
+    "name": "Rainbow Cloud",
+    "group": "Weather Watch (Sunny Meadow)",
+    "batch": "chain-weather",
+    "prompt": "Rainbow Cloud — a cloud with a little rainbow arching out of it. Step 4 of 8 in the \"Weather Watch\" merge chain, so it must read as handsome: richer colour, a trim or a band, a faint sheen. One step up from the Rain Cloud, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/weathervane.png",
+    "kind": "item",
+    "name": "Weather Vane",
+    "group": "Weather Watch (Sunny Meadow)",
+    "batch": "chain-weather",
+    "prompt": "Weather Vane — a rooster weather vane on a post. Step 5 of 8 in the \"Weather Watch\" merge chain, so it must read as handsome: richer colour, a trim or a band, a faint sheen. One step up from the Rainbow Cloud, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/weatherstation.png",
+    "kind": "item",
+    "name": "Weather Station",
+    "group": "Weather Watch (Sunny Meadow)",
+    "batch": "chain-weather",
+    "prompt": "Weather Station — a little weather station with cups spinning on top. Step 6 of 8 in the \"Weather Watch\" merge chain, so it must read as precious: fine detailing, gold or gem accents, a soft glow around it. One step up from the Weather Vane, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/cloudmachine.png",
+    "kind": "item",
+    "name": "Cloud Machine",
+    "group": "Weather Watch (Sunny Meadow)",
+    "batch": "chain-weather",
+    "prompt": "Cloud Machine — a brass dome machine puffing out clouds. Step 7 of 8 in the \"Weather Watch\" merge chain, so it must read as a showpiece: ornate, glowing, a few floating motes of light. One step up from the Weather Station, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/sundial.png",
+    "kind": "item",
+    "name": "Rainbow Sundial",
+    "group": "Weather Watch (Sunny Meadow)",
+    "batch": "chain-weather",
+    "prompt": "Rainbow Sundial — a golden sundial with a rainbow arching over it. Step 8 of 8 in the \"Weather Watch\" merge chain, so it must read as the crown of the chain: a small monument, radiant, unmistakably the best. One step up from the Cloud Machine, and its outline must be clearly different from it. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
