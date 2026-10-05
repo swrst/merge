@@ -127,7 +127,31 @@ must(await page.evaluate(() => window.__game.v9.jitOn()), 'a tip lights up the f
 await page.mouse.click(10, 500); await page.waitForTimeout(500);
 must(!(await page.evaluate(() => window.__game.v9.jitOn())), 'tapping the dark area closes it');
 
-console.log('\n10. Console');
+console.log('\n10. Mocked ads and store');
+await page.evaluate(() => { const s = window.__game.state(); s.energy = 5; s.adc = { day: 0, n: {} }; window.__game.v9.services.mockControls.ad = 'complete'; window.__game.v9.energyPop(); });
+await page.waitForTimeout(500);
+await page.locator('#enAd').click({ force: true });
+await page.waitForTimeout(3600);
+must(await page.evaluate(() => window.__game.state().energy) > 5, 'a finished test video pays out');
+await page.evaluate(() => { window.__game.v9.closePop(); const s = window.__game.state(); s.energy = 5; window.__game.v9.services.mockControls.ad = 'skip'; window.__game.v9.energyPop(); });
+await page.waitForTimeout(500);
+await page.locator('#enAd').click({ force: true });
+await page.waitForTimeout(3600);
+must(await page.evaluate(() => window.__game.state().energy) === 5, 'a skipped one does not');
+await page.evaluate(() => window.__game.v9.closePop());
+const g0 = await page.evaluate(() => { const s = window.__game.state(); s.lvl = Math.max(s.lvl, 8); window.__game.v9.services.mockControls.purchase = 'ask'; window.__game.view('shop'); return s.gems; });
+await page.waitForTimeout(900);
+await page.locator('[data-iap="gems_s"]').click({ force: true }); await page.waitForTimeout(400);
+must(await page.locator('.mockSheet').count() === 1, 'buying opens the test purchase sheet');
+await page.locator('.mockSheet [data-r="cancelled"]').click(); await page.waitForTimeout(400);
+must(await page.evaluate(() => window.__game.state().gems) === g0, 'cancel grants nothing');
+await page.locator('[data-iap="gems_s"]').click({ force: true }); await page.waitForTimeout(400);
+await page.locator('.mockSheet [data-r="ok"]').click(); await page.waitForTimeout(600);
+must(await page.evaluate(() => window.__game.state().gems) === g0 + 80, 'buy grants the gems');
+must(await page.evaluate(() => window.__game.v9.services.analytics.recent.some(e => e.name === 'purchase_end')), 'and analytics saw it');
+await page.evaluate(() => window.__game.view('board')); await page.waitForTimeout(400);
+
+console.log('\n11. Console');
 must(errors.length === 0, 'no console errors' + (errors.length ? ':\n    ' + errors.slice(0, 5).join('\n    ') : ''));
 await page.screenshot({ path: '/tmp/ux-end.png' });
 await browser.close();

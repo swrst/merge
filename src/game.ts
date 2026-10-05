@@ -6,8 +6,7 @@ import labRoomBg from './scenes/lab.webp';
 import SCENE_ANCHORS from './sprites/scenes/anchors.json';
 import { haptic } from './native';
 import { board } from './board';
-import { ads } from './ads';
-import { iap, PRODUCTS } from './iap';
+import { ads, iap, PRODUCTS, analytics, store, notify, games, mockControls, SERVICES } from './services';
 import { isNative } from './native';
 import { audio } from './audio';
 import {
@@ -218,7 +217,44 @@ export async function startGame() {
     } catch (e) { }
     return fresh();
   }
-  function save() { try { localStorage.setItem(SAVE, JSON.stringify(S)); } catch (e) { } }
+  function save() { S.seenAt = Date.now(); try { localStorage.setItem(SAVE, JSON.stringify(S)); } catch (e) { } }
+  /* The app is going to the background: save, back the save up to the player's
+     account, and leave a couple of friendly reminders on the phone. */
+  /* Coming back after a while: say what happened while you were gone, so the
+     first thing you see is "your stuff is ready", not a board that looks the same. */
+  function welcomeBack(): string {
+    const at = S.seenAt; if (!at || !S.tut) return '';
+    const gone = Date.now() - at; if (gone < 20 * 60000) return '';
+    const e = Math.min(maxEnergy() - S.energy, Math.floor(gone / regenMs()));
+    const b = (S.boards && S.boards[S.world]) || [];
+    const full = b.filter((c: any) => c && c.p && PRODS[c.p] && PRODS[c.p].mode === 'battery' && (c.ch || 0) < capOf(PRODS[c.p], plv(c))).length;
+    const bits = [e > 0 ? `+${e} ⚡` : '', full ? `${full} producer${full > 1 ? 's' : ''} refilled` : ''].filter(Boolean);
+    analytics.track('return', { minutes: Math.round(gone / 60000) });
+    return bits.length ? `👋 Welcome back! While you were away (${dhm(gone)}): ${bits.join(' · ')}` : '';
+  }
+  /** dev builds only: drive the mocked store, ads and services from Settings */
+  function devPanel() {
+    const ev = analytics.recent.slice(0, 6).map(e => `<li><b>${e.name}</b> ${e.props ? JSON.stringify(e.props).slice(0, 60) : ''}</li>`).join('');
+    const notes = notify.pending.map(n => `<li>${new Date(n.at).toLocaleString()} — ${n.title}</li>`).join('') || '<li>none (send the app to the background)</li>';
+    return `<div class="devBox"><div class="devH">Developer · services (${ads.live ? 'AdMob' : 'mock ads'}, ${iap.live ? 'RevenueCat' : 'mock store'})</div>
+      <button class="devBtn" data-dev="ad">Ad result: <b>${mockControls.ad}</b></button>
+      <button class="devBtn" data-dev="buy">Purchase result: <b>${mockControls.purchase}</b></button>
+      <button class="devBtn" data-dev="review">Test review prompt</button>
+      <button class="devBtn" data-dev="signin">Games sign-in: <b>${games.signedIn ? games.player : 'signed out'}</b></button>
+      <button class="devBtn" data-dev="away">Simulate going to background</button>
+      <div class="devH">Notifications scheduled</div><ul class="devList">${notes}</ul>
+      <div class="devH">Last analytics events</div><ul class="devList">${ev || '<li>none yet</li>'}</ul></div>`;
+  }
+  function goingAway() {
+    save();
+    try { games.cloudSave(JSON.stringify(S)); } catch { }
+    const notes: { id: number; at: number; title: string; body: string }[] = [];
+    const missing = maxEnergy() - S.energy;
+    if (missing > 5) notes.push({ id: 1, at: Date.now() + missing * regenMs(), title: 'Energy is full! ⚡', body: 'Your producers are ready to tap again.' });
+    const t = new Date(); t.setDate(t.getDate() + 1); t.setHours(10, 0, 0, 0);
+    notes.push({ id: 2, at: t.getTime(), title: 'A daily gift is waiting 🎁', body: 'Come back to keep your streak going.' });
+    notify.schedule(notes);
+  }
   const B = () => S.boards[S.world];
   const W = () => WORLDS[S.world];
 
@@ -690,9 +726,9 @@ export async function startGame() {
     modal(S.met ? 'bloop' : 'pip', ITEMS[id].name,
       `<div class="chainWrap">${steps}</div>
        <div class="noteLine" style="text-align:left">${where}</div>
-       ${src && src.on ? `<div class="srcBox">${ART.producer(PRODS[src.k].art)}
-          <div><b>${PRODS[src.k].name}</b><i>${(B()[src.i].ch ?? 0)}/${capOf(PRODS[src.k], plv(B()[src.i]))} charges</i></div></div>
-         <button class="big blue" id="showSrc">📍 Show me on the board</button>` : ''}`,
+       ${src && src.on ? `<button class="srcCard" id="showSrc">${ART.producer(PRODS[src.k].art)}
+          <span class="srcTxt"><b>${PRODS[src.k].name}</b><i>${(B()[src.i].ch ?? 0)}/${capOf(PRODS[src.k], plv(B()[src.i]))} charges · on your board</i></span>
+          <span class="srcGo">Find it</span></button>` : ''}`,
       'Close');
     $('#modal').classList.add('lite');
     setTimeout(() => {
@@ -916,6 +952,7 @@ export async function startGame() {
     }
     if (o.nrg) { S.energy += o.nrg; bumpChip('#chipEnergy'); setTimeout(() => toast(`⚡ +${o.nrg} energy from ${CHARS[o.char].name}`), 700); }
     prog('deliver', 1); tally('deliver'); mileTick();
+    analytics.track('contract_done', { coins: o.coins, needs: o.needs.length });
     S.cSince = S.cSince || {}; S.cSince[S.world] = (S.cSince[S.world] || 0) + 1;
     befriend(o.char); stat('deliver');
     evPts(CFG.event.points.contract + CFG.event.points.perNeed * o.needs.length);
@@ -945,6 +982,8 @@ export async function startGame() {
     }
   }
   function onLevel() {
+    analytics.track('level_up', { level: S.lvl });
+    games.submitScore('level', S.lvl);
     addGems(CFG.gems.perLevel + (S.lvl % 5 === 0 ? CFG.gems.everyFiveLevels : 0));
     // a level is a treat, not a free refill: a top-up that never overfills
     S.energy = Math.max(S.energy, Math.min(maxEnergy(), S.energy + (CONFIG.energy.levelUp || 20)));
@@ -1509,6 +1548,14 @@ export async function startGame() {
     host.querySelectorAll('[data-gift]').forEach((b: any) => b.onclick = claimGift);
     host.querySelectorAll('[data-giftad]').forEach((b: any) => b.onclick = () => watchAd('gift', () => { S.giftAd2 = today(); giveItem('chest'); sfx.boost(); toast('🎁 Another Supply Chest!'); renderShop(); paintBoard(); save(); }));
     host.querySelectorAll('[data-iap]').forEach((b: any) => b.onclick = () => buyProduct(b.dataset.iap));
+    const rs = document.getElementById('iapRestore');
+    if (rs) rs.onclick = async () => {
+      const ids = await iap.restore();
+      let n = 0;
+      ids.forEach(id => { const p = PRODUCTS.find(x => x.id === id); if (p && p.once && !S.bought[id]) { S.bought[id] = 1; if (p.adfree) S.adfree = 1; n++; } });
+      toast(iap.live ? (n ? `Restored ${n} purchase${n > 1 ? 's' : ''}.` : 'Nothing to restore on this account.') : 'Test mode — there is no store account to restore from yet.');
+      renderShop(); save();
+    };
     { const gc = $('#gemChest'); if (gc) gc.onclick = () => { if (spendGems(CFG.gems.galaxyChest, 'chest')) { giveItem('bigchest'); giveBoost('wand'); giveBoost('bomb'); sfx.discover(); toast('🌌 Galaxy Chest: a Treasure Chest and 2 boosters!'); paintBoard(); renderShop(); save(); } }; }
     { const gr = $('#gemRefill'); if (gr) gr.onclick = () => { gemRefill(); renderShop(); }; }
     if (shopTab === 'gems') setTimeout(() => { const sec = $('#sh-gems'); if (sec) host.scrollTo({ top: sec.offsetTop - 50 }); }, 50);
@@ -1734,7 +1781,7 @@ export async function startGame() {
       + dailyCard()
       + `<div class="card"><div class="cardTitle">${ART.uiIcon('sec_quest', '🎯')} Getting started</div>
         <div class="noteLine" style="margin-top:0">The first steps with Zib and Dr. Zonk: ${MISSIONS.length - questsLeft()}/${MISSIONS.length} done.</div>
-        <button class="big blue" id="openQuests">📜 Open the quest list</button></div>`
+        <button class="big soft" id="openQuests">Open the quest list</button></div>`
       + vaultCard();
     host.querySelectorAll('[data-dchest]').forEach((b: any) => b.onclick = () => claimDaily(+b.dataset.dchest));
     host.querySelectorAll('[data-vault]').forEach((b: any) => b.onclick = () => vaultBuy(b.dataset.vault));
@@ -2451,6 +2498,9 @@ export async function startGame() {
     p.needs.forEach(([id, q]: [string, number]) => { for (let k = 0; k < q; k++) consumeOne(id); });
     spend(p.coins);
     S.proj[S.world] = projDone() + 1;
+    analytics.track('chapter_built', { world: S.world, chapter: projDone(), level: S.lvl });
+    // ask for a rating once, right after a win, never in the first minutes
+    if (!S.reviewAsked && S.world === 'earth' && projDone() >= SERVICES.store.askReviewAfterChapter) { S.reviewAsked = 1; setTimeout(() => store.requestReview(), 4000); }
     S.cSince = S.cSince || {}; S.cSince[S.world] = 0;
     addXp(p.xp);
     let gift = '';
@@ -3281,12 +3331,12 @@ export async function startGame() {
     if (!adLeft(k)) { sfx.no(); toast('No more of those today — back tomorrow!'); return; }
     S.adc.n[k] = (S.adc.n[k] || 0) + 1; save();
     if (S.adfree) { reward(); return; }
-    if (ads.available) { if (await ads.rewarded(k)) reward(); else toast('The video did not finish.'); return; }
-    if (!CFG.ads.simulate && isNative) { toast('No video available right now.'); S.adc.n[k]--; return; }
-    // test mode until AdMob is wired up: a short fake "ad" so the flow can be tried
-    const o = el('div', 'fakeAd'); o.innerHTML = '<div><b>📺 Ad</b><i>test video — real ads come with AdMob</i><span class="fakeBar"><em></em></span></div>';
-    $('#app').appendChild(o); sfx.whoosh();
-    setTimeout(() => { o.remove(); reward(); }, 2600);
+    sfx.whoosh();
+    const r = await ads.rewarded(k);
+    if (r === 'rewarded') { reward(); return; }
+    // a skipped or missing video does not use up one of today's views
+    S.adc.n[k] = Math.max(0, (S.adc.n[k] || 0) - 1); save();
+    toast(r === 'nofill' ? 'No video available right now — try again in a bit.' : 'The video was closed early — no reward this time.');
   }
   const adBtn = (k: string, label: string, id: string) => `<button class="big adBtn" id="${id}"${adLeft(k) ? '' : ' disabled'}>${ART.uiIcon('ic_ad', '📺')} ${label}${S.adfree ? '' : ` <i>${adLeft(k)} left today</i>`}</button>`;
 
@@ -3306,6 +3356,7 @@ export async function startGame() {
     };
     return `<div class="sSec"><div class="sSecT">💎 Gems & packs ${iap.live ? '' : '<i class="testTag">test mode</i>'}</div>
       <div class="shopGrid">${PRODUCTS.map(card).join('')}</div></div>
+      <button class="restoreBtn" id="iapRestore">Restore purchases</button>
       <div class="sSec"><div class="sSecT">✨ Spend gems</div><div class="shopGrid">
         <div class="sCard"><div class="sCArt">${ART.item('bigchest')}</div><div class="sCName">Galaxy Chest</div><div class="sCDesc">A Treasure Chest + 2 boosters</div>
           <button class="buyBtn gem" id="gemChest">💎 ${CFG.gems.galaxyChest}</button></div>
@@ -3315,7 +3366,9 @@ export async function startGame() {
   }
   async function buyProduct(id: string) {
     const p: any = PRODUCTS.find(x => x.id === id); if (!p || (p.once && S.bought[id])) return;
-    if (!(await iap.buy(p))) return;
+    const r = await iap.buy(p);
+    if (r === 'cancelled') return;
+    if (r === 'failed') { sfx.no(); toast('The purchase did not go through. Nothing was charged.'); return; }
     if (p.once) S.bought[id] = 1;
     if (p.adfree) S.adfree = 1;
     grant({ gems: p.gems, energy: p.energy, coins: p.coins, item: p.item });
@@ -4150,7 +4203,7 @@ export async function startGame() {
         ? 'She flies. Open the galaxy and pick somewhere to go.'
         : 'Tap the <b>Rocket Wreck</b> for pieces. Two pieces merge into the next step; the last step bolts itself onto the rocket.'}</div>
        ${allParts() ? `<button class="big" id="toGalaxy">🌌 Open the galaxy</button>`
-        : wreckAt >= 0 ? `<button class="big" id="toWreck">🔧 Show me the wreck</button>` : ''}`, 'Close');
+        : wreckAt >= 0 ? `<button class="srcCard" id="toWreck">${ART.producer('scrapwreck')}<span class="srcTxt"><b>Rocket Wreck</b><i>tap it for rocket pieces</i></span><span class="srcGo">Find it</span></button>` : ''}`, 'Close');
     setTimeout(() => {
       const g = $('#toGalaxy');
       if (g) g.onclick = () => { closeModal(); worldTab = 'galaxy'; setView('map'); renderWorldScreen(); };
@@ -4290,6 +4343,7 @@ export async function startGame() {
     const wasOn = tutAt >= 0;
     tutAt = -1;
     S.tut = 1; save();
+    analytics.track('tutorial_end', { during: wasOn ? 1 : 0 });
     coachT = Date.now() + 8000;          // a breather before the first just-in-time tip
     // the daily calendar and the story beats queue up behind the intro rather
     // than popping a modal over the one button you were told to press
@@ -4421,6 +4475,8 @@ export async function startGame() {
     $('#mTitle').textContent = title;
     $('#mBody').innerHTML = body;
     $('#mBtn').textContent = btn || 'OK';
+    // "Close" is not an action: it gets the quiet button, the real action stays the loud one
+    $('#mBtn').className = 'big' + (/^close$/i.test(btn || 'OK') ? ' soft' : '');
     $('#modal').classList.remove('lite');
     $('#modal').classList.add('open');
   }
@@ -4428,6 +4484,7 @@ export async function startGame() {
   /** something to do once the player has read the modal (a story beat chains on) */
   let afterModal: (() => void) | null = null;
   $('#mBtn') && ($('#mBtn').onclick = () => { closeModal(); const f = afterModal; afterModal = null; if (f) setTimeout(f, 250); });
+  $('#mX') && ($('#mX').onclick = () => ($('#mBtn') as HTMLElement).click());
 
   /* ================================================================ INPUT */
   /* Pointer handling lives in board.ts (Pixi hit-testing): it calls back into
@@ -4597,6 +4654,7 @@ export async function startGame() {
       if (problems.length) console.error('[content]\n' + problems.join('\n'));
     }
     S = load();
+    const away = welcomeBack();
     // a save that names a world it never built a board for would land on nothing
     if (!WORLDS[S.world]) S.world = CONFIG.start.world;
     if (!S.boards[S.world]) S.boards[S.world] = freshBoard(S.world);
@@ -4630,31 +4688,45 @@ export async function startGame() {
       if (S.energy >= maxEnergy()) { toast('Energy is already full!'); return; }
       // once an ad network is wired up this becomes "watch to refill"; until then
       // ads.rewarded() resolves false and the snack is simply free
-      const watched = ads.available ? await ads.rewarded('energy') : false;
-      if (ads.available && !watched) { toast('No snack right now — try again in a moment.'); return; }
+      // the snack is free: no video in front of a small kindness
       S.snackAt = Date.now(); S.energy = Math.min(maxEnergy(), S.energy + snackAmt());
       bumpChip('#chipEnergy'); sfx.coin(); toast('🍪 Yum! +' + snackAmt() + ' energy'); renderHUD(); save();
     };
     $('#btnGear').onclick = () => {
-      modal('pip', 'Settings', `<button class="big blue" id="sndBtn" style="margin-top:2px">${S.sound ? ART.uiIcon('ic_sound', '🔊') + ' Sound effects: ON' : ART.uiIcon('ic_mute', '🔇') + ' Sound effects: OFF'}</button>
-        <button class="big blue" id="musBtn">${S.music ? ART.uiIcon('ic_music', '🎵') + ' Music: ON' : ART.uiIcon('ic_nomusic', '🎵') + ' Music: OFF'}</button>
-        <button class="big blue" id="tipBtn">${ART.uiIcon('ic_hint', '💡')} Tips: ${S.tipsOff ? 'OFF' : 'ON'}</button>
-        <button class="big gold" id="resetBtn">Start a new game</button>`, 'Close');
-      setTimeout(() => {
-        const sb2 = $('#sndBtn'), mb = $('#musBtn'), rb = $('#resetBtn');
-        if (sb2) sb2.onclick = () => {
-          S.sound = S.sound ? 0 : 1; audio.setSfx(!!S.sound); save();
-          sb2.innerHTML = S.sound ? ART.uiIcon('ic_sound', '🔊') + ' Sound effects: ON' : ART.uiIcon('ic_mute', '🔇') + ' Sound effects: OFF';
-          if (S.sound) sfx.tap();
+      // settings are switches, not a stack of shouting buttons
+      const row = (id: string, ic: string, label: string, on: boolean) =>
+        `<button class="optRow" id="${id}"><span class="optIc">${ic}</span><b>${label}</b><span class="sw${on ? ' on' : ''}"><i></i></span></button>`;
+      const draw = () => `<div class="optList">
+          ${row('sndBtn', ART.uiIcon(S.sound ? 'ic_sound' : 'ic_mute', '🔊'), 'Sound effects', !!S.sound)}
+          ${row('musBtn', ART.uiIcon(S.music ? 'ic_music' : 'ic_nomusic', '🎵'), 'Music', !!S.music)}
+          ${row('tipBtn', ART.uiIcon('ic_hint', '💡'), 'Tips', !S.tipsOff)}
+        </div>
+        <button class="optDanger" id="resetBtn">Start a new game</button>
+        ${import.meta.env.DEV ? devPanel() : ''}`;
+      modal('pip', 'Settings', draw(), 'Close');
+      const bind = () => {
+        const sb2 = $('#sndBtn'), mb = $('#musBtn'), tb = $('#tipBtn'), rb = $('#resetBtn');
+        const redraw = () => { $('#mBody').innerHTML = draw(); bind(); save(); };
+        if (sb2) sb2.onclick = () => { S.sound = S.sound ? 0 : 1; audio.setSfx(!!S.sound); if (S.sound) sfx.tap(); redraw(); };
+        if (mb) mb.onclick = () => { S.music = S.music ? 0 : 1; audio.setMusic(!!S.music); redraw(); };
+        if (tb) tb.onclick = () => { S.tipsOff = S.tipsOff ? 0 : 1; if (S.tipsOff) coachOff(); else S.coach = {}; redraw(); };
+        document.querySelectorAll<HTMLElement>('[data-dev]').forEach(b => b.onclick = async () => {
+          const k = b.dataset.dev;
+          if (k === 'ad') { const o = ['complete', 'skip', 'nofill'] as const; mockControls.ad = o[(o.indexOf(mockControls.ad) + 1) % o.length]; }
+          if (k === 'buy') { const o = ['ask', 'success', 'cancel', 'error'] as const; mockControls.purchase = o[(o.indexOf(mockControls.purchase) + 1) % o.length]; }
+          if (k === 'review') { closeModal(); store.requestReview(); return; }
+          if (k === 'signin') await games.signIn();
+          if (k === 'away') goingAway();
+          redraw();
+        });
+        if (rb) rb.onclick = () => {
+          // a whole save is one tap from gone: ask first
+          if (rb.dataset.sure) { localStorage.removeItem(SAVE); location.reload(); return; }
+          rb.dataset.sure = '1'; rb.textContent = 'Tap again to erase everything'; rb.classList.add('sure');
+          setTimeout(() => { if (document.body.contains(rb)) { delete rb.dataset.sure; rb.textContent = 'Start a new game'; rb.classList.remove('sure'); } }, 3500);
         };
-        if (mb) mb.onclick = () => {
-          S.music = S.music ? 0 : 1; audio.setMusic(!!S.music); save();
-          mb.innerHTML = S.music ? ART.uiIcon('ic_music', '🎵') + ' Music: ON' : ART.uiIcon('ic_nomusic', '🎵') + ' Music: OFF';
-        };
-        if (rb) rb.onclick = () => { localStorage.removeItem(SAVE); location.reload(); };
-        const tb = $('#tipBtn');
-        if (tb) tb.onclick = () => { S.tipsOff = S.tipsOff ? 0 : 1; if (S.tipsOff) coachOff(); else S.coach = {}; save(); tb.innerHTML = ART.uiIcon('ic_hint', '💡') + ' Tips: ' + (S.tipsOff ? 'OFF' : 'ON'); };
-      }, 30);
+      };
+      setTimeout(bind, 30);
     };
     $('#chipEnergy').onclick = () => energyPop();
     $('#chipCoins').onclick = () => setView('shop');
@@ -4684,13 +4756,14 @@ export async function startGame() {
       grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed, ecost,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
       fly: (w: string) => galaxyTap(w), view: (v: string) => setView(v),
-      curProject: () => curProject(), v9: { funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, rocketPanel, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; renderLab(); } },
+      curProject: () => curProject(), v9: { funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, rocketPanel, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; renderLab(); } },
     };
     setInterval(tick, 500);
     setInterval(save, 8000);
     // the shell asks for a save when the app goes to the background
-    window.addEventListener('mr:save', () => save());
-    document.addEventListener('visibilitychange', () => { if (document.hidden) save(); });
+    window.addEventListener('mr:save', () => goingAway());
+    document.addEventListener('visibilitychange', () => { if (document.hidden) goingAway(); });
+    store.init(toast);
 
     $('#tNext').onclick = () => { sfx.tap(); tutNext(); };
     $('#tSkip').onclick = () => { sfx.tap(); tutEnd(); toast('Intro skipped. The chapter bar above the board shows what to do next.'); };
@@ -4699,6 +4772,7 @@ export async function startGame() {
     } else {
       $('#tut').style.display = 'none';
       setTimeout(checkDaily, 1200);
+      if (away) setTimeout(() => toast(away), 3200);
       setTimeout(() => checkStory(), 1800);
     }
   }
