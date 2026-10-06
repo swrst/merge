@@ -474,28 +474,26 @@ Chapters 19–22 ask for one item from them. Ember Hollow (world 3) is now fully
 ### Power ×2 (level 8)
 The **⚡×2** switch next to Hint makes every energy tap cost double, and the drop comes out one step up its chain. Battery producers and visitors' producers are not affected. The switch is remembered between sessions.
 
-### Moon Pup (the pet)
-It turns up the first time you are on the Moon, at level 10 or above. Its chip sits above the board.
+### The pet (an alien)
+A **Gloopling** crawls out of a crater the first time you are on the Moon, at level 10 or above. It only appears once its ChatGPT art is in the game (`chars/pet_<form>.png` for all 8 forms); until then the feature stays hidden.
 
-**Fetching.** Every 20–40 minutes it brings a gift on a reward card. A fed pup fetches 20% faster; a hungry one takes 40% longer.
+**Fetching.** It brings a gift every 20–40 minutes. A fed pet fetches faster, a hungry one slower.
 
-**Feeding.** Its panel lists the spare items on your board: nothing a contract or chapter wants, and no specials. A bigger item fills more food and gives more XP (4 × tier²). Food runs down over 8 hours.
-
-**Levels.** XP comes from feeding, gifts and petting. It levels up to 25.
+**Feeding.** Feed it spare items from your board; bigger items give more XP. Food runs down over 8 hours. Petting it also gives a little XP.
 
 **Evolution:**
-- Level 5: **Moon Pup** becomes a **Puppy**.
+- Level 5: **Gloopling** becomes a **Gloop**.
 - Level 10: you **choose a path**:
 
   | Path | Final form (level 20) | Good at |
   |---|---|---|
-  | Star Hound | Nova Guardian | energy gifts; energy refills 10% → 20% faster |
-  | Crater Hound | Moonstone Titan | higher-tier items and chests |
-  | Comet Hound | Comet King | coins and gems; contracts pay 10% → 20% more |
+  | Starjelly | Nova Wobbler | energy; faster energy refill |
+  | Rockmuncher | Boulderbelly | items and chests |
+  | Fizzwhip | Comet Emperor | coins and gems; contracts pay more |
 
 - Each evolution plays a full-screen scene.
 
-**Art.** Painted forms go in `chars/pet_<form>.png`. Until then, the growth sprites are used, tinted per path.
+**Art files:** `pet_<form>.png`, plus `pet_<form>_sad.png` for when it's hungry. The forms are `baby`, `pup`, `star`, `crater`, `comet`, `nova`, `titan` and `king`.
 
 ### Storage and placing producers
 - When something is in storage, a 📦 chip sits above the board.
@@ -506,6 +504,9 @@ It turns up the first time you are on the Moon, at level 10 or above. Its chip s
 
 ### New producers
 A new producer rises in the middle of the screen with what it makes, then flies onto its tile.
+
+### Only ChatGPT art
+A world opens only when every item and producer in it is painted; until then the map shows **🎨 Coming soon**. A character without a head portrait shows the top of its full-body painting.
 
 ### First-time explanations
 The first Star Scrap, Star Core, Relic, Bloom Essence, Wildcard, Fuel and rocket piece each get a short explanation of what it is for and where to take it. They are off when Tips are off.

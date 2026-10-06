@@ -47,14 +47,19 @@ UI files are picked up by name:
 
 ## Still to paint
 
-Everything below is in `art/ALL-ART-PROMPT.md` (21 images):
+Everything below is in `art/ALL-ART-PROMPT.md` (23 images):
 
-- **The pet:** 8 evolution forms and 4 moods.
+- **The pet:** 8 alien evolution forms and their sad versions.
+- **Characters:** proper portraits for Blorb, Oops, the Grub Brothers, Glimmer, Halo and Wren.
 - **Aurora Reach (Vela):** 8 chains.
 - **Tidal Shallows (Nerith):** most chains, the producers and the tiles.
 - **Higher-resolution redos** of the v25 collage art: the Meadow side chains, the new producers and the helpers.
 - **Unused art kept for later** (decorations, hats, holiday tiles, Moon Pup, Zib's faces, event banners, backgrounds) is in `art/library/`.
 
-## The pet's forms
+## The pet
 
-Each form is `src/sprites/chars/pet_<form>.png`, where the form is one of `baby`, `pup`, `star`, `crater`, `comet`, `nova`, `titan`, `king`. Until a form is painted, the game draws the pup growth sprites (`pup1`–`pup5`) tinted for that branch.
+Each form is `chars/pet_<form>.png` (`baby`, `pup`, `star`, `crater`, `comet`, `nova`, `titan`, `king`), with an optional `pet_<form>_sad.png`. The pet stays hidden until all 8 forms are painted.
+
+## Only ChatGPT art
+
+Nothing drawn by code is shown in its place. A world stays **"Coming soon"** until every item and producer in it is painted.

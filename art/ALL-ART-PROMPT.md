@@ -1,45 +1,113 @@
-# Merge Rocket — ALL the art still to paint (one prompt)
+# Merge Rocket — art prompts (23 images)
 
-**How to use:** paste everything below the line into ChatGPT in one message, attach **STYLE-REFERENCE.png**, and ask it to produce the images **one by one, each as a separate full-size picture** (say "next" between them if it stops). There are **21 images**. Save them all into `Desktop\chatgpt art`; file names don't matter.
+**How it works:** ChatGPT makes ONE picture per reply. So:
+1. Start a new chat, attach **STYLE-REFERENCE.png**, and paste **Message 1**.
+2. Then paste **Prompt 1**, wait for the picture, paste **Prompt 2**, and so on. One prompt = one picture.
+3. Save every picture into `Desktop\chatgpt art`. Names don't matter.
+
+If a picture comes out wrong (wrong grid, merged objects, a dog instead of an alien…), say "again, follow the prompt exactly" and paste the same prompt again.
 
 ---
 
-You are the illustrator for my mobile merge game **"Merge Rocket"** (Travel Town style, space theme: a cosy merge board on alien planets). The attached STYLE-REFERENCE.png shows our finished art — match it EXACTLY:
+## Message 1 — setup (attach STYLE-REFERENCE.png)
+
+You are the illustrator for my mobile merge game "Merge Rocket" (Travel Town style, space theme). I will send you prompts one at a time; **each prompt is exactly ONE image**. Do not combine prompts, do not make collages.
+
+Match the attached reference EXACTLY:
 - one chunky, rounded, toy-like object per cell; soft glossy painterly semi-3D; bright saturated colours
 - warm key light from the upper left with one soft white highlight; the shaded side a richer version of the base colour (never grey or black)
-- thin darker warm-brown outline; a small soft contact shadow; three-quarter view from about 30° above
-- characters are funny, weird-looking adult cartoon aliens and creatures — never scary
+- thin darker warm-brown outline; small soft contact shadow; three-quarter view from about 30° above
+- creatures and characters are weird, funny ALIENS — never Earth animals, never scary
 
-**Rules for EVERY image:**
-- Make **21 separate images**, in the order below, **one image per reply**. Never put two sheets in one picture.
-- Each image is a square **2048×2048**. Exactly the grid asked for; every object centred in its own cell with **wide empty gaps** — nothing touches or overlaps a neighbour, including smoke, beams and tails.
-- Plain flat **pure white** background. No grid lines, no frames, no labels, no text, no numbers anywhere.
-- Read cells left→right, then the next row. Cells marked EMPTY stay empty.
-- In a chain each step is clearly bigger, richer and more special than the one before; step 1 tiny and plain, the last a grand showpiece with a little sparkle.
-- **Producers** (things you tap to get items) stand on their own small round mound — the only ground shown — and are a bit bigger and more detailed than items.
-- Every object must still read clearly at 60 pixels.
+Rules for every image:
+- square **2048×2048**, plain flat **pure-white background**
+- exactly the grid I ask for; every object centred in its own cell with **wide empty gaps** (nothing touches or overlaps, including tails, smoke and beams)
+- no text, labels, numbers or grid lines anywhere
+- read cells left→right, then the next row; cells marked EMPTY stay empty
+- in a chain each step is clearly bigger and grander than the one before
+- every object must still read clearly at 60 pixels
 
-Start with Image 1 now; after each image, continue with the next one until all 21 are done.
+Reply "Ready" and wait for Prompt 1.
 
-### Image 1 — the Moon Pup evolution line (pet)
-Grid **4 columns × 2 rows**, one creature per cell, full body, standing on a tiny soft shadow, facing slightly left, friendly and funny (not babyish-cute, not scary). The SAME creature evolving: a chubby cream blob-dog alien with three floppy ears and a glowing antenna tip.
-1. **Moon Pup** — tiny baby, huge eyes, stubby legs, antenna a little glowing bead
-2. **Puppy** — a bit bigger, playful, tongue out, ears flopping
-3. **Star Hound** — teal-and-silver, star-shaped spots, a glowing star on its antenna, sleek and fast-looking
-4. **Crater Hound** — sandy-brown with rocky shoulder plates, a miner's lamp antenna, big digging paws
-5. **Comet Hound** — violet with a sparkling comet tail, gold coin-shaped spots
-6. **Nova Guardian** (Star Hound grown up) — tall, regal, teal glowing mane of starlight, small aurora wings
-7. **Moonstone Titan** (Crater Hound grown up) — huge, gentle, moon-rock armour with glowing crystal veins
-8. **Comet King** (Comet Hound grown up) — majestic violet with a long comet-fire tail and a tiny gold crown
+---
 
-### Image 2 — Moon Pup moods
-Grid **4 columns × 1 row**, the small **Puppy** from image 1, same character: 1. happy with hearts, 2. eating with crumbs flying, 3. asleep curled up with "z"s, 4. hungry and sad holding an empty bowl.
+## Prompt 1 — Pet evolution line
 
-**Aurora Reach images** — Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Friendly and inviting, never scary. A world of clouds, aurora light and stars.
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
 
-### Image 3 — Aurora Reach
+Grid **4 columns × 2 rows**: 8 creatures, one per cell, full body, standing (or floating) on a tiny soft shadow, three-quarter view.
+They are **weird ALIEN pets** from another planet — NOT dogs, NOT cats, NOT any Earth animal, no fur, no dog ears or snouts. Squishy, glossy, a bit gross and very funny, but friendly. In this order:
+1. **Gloopling** (baby): a tiny translucent mint-green jelly blob with ONE huge eye on a wobbly stalk, two stubby feet and a little glowing dot inside its belly.
+2. **Gloop** (grown baby): the same mint jelly, bigger, now with THREE eyes on stalks of different lengths, four stubby legs, a wide goofy grin with one tooth, and a brighter belly glow.
+3. **Starjelly**: a floating jellyfish-like alien, teal and white, with star-shaped glowing spots, dangling tentacles with tiny stars on the tips, and three sleepy eyes.
+4. **Nova Wobbler** (Starjelly's final form): a big regal floating jelly with a teal crown of glowing frills, a swirling galaxy visible inside its see-through body, many tentacles and wise half-closed eyes.
+5. **Rockmuncher**: a squat rock-skinned alien with a huge underbite full of pebble teeth, crystals growing on its back, four eyes in a row and chunky claws.
+6. **Boulderbelly** (Rockmuncher's final form): a huge round moon-rock beast with glowing crystal veins, tiny arms, a giant happy mouth, a little moss on top and six small eyes.
+7. **Fizzwhip**: a violet gas-cloud critter with a fizzing comet tail, a bubbly body, two eyes on antennae and tiny gold coin-shaped freckles.
+8. **Comet Emperor** (Fizzwhip's final form): a majestic violet-and-gold comet creature with a long sparkling flame tail, a little gold crown floating above its head, many shimmering eyes and a smug grin.
 
-Grid: **4 columns × 4 rows**. Rows 1–2: the "Star Nursery" chain; Rows 3–4: the "Wind Currents" chain.
+---
+
+## Prompt 2 — Pet moods
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+Grid **4 columns × 2 rows**: the SAME 8 alien pets from the previous image, in the same order and the same design, but each one **hungry and sad**: droopy eyes, a pleading look, holding or looking at an empty bowl.
+
+---
+
+## Prompt 3 — Characters: Postie Blorb and Madame Oops
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+Grid **2 columns × 2 rows**. These are funny, weird-looking ADULT cartoon aliens (odd proportions, a visible personality flaw), never babies, never scary.
+- Cell 1 (top-left): **Postie Blorb**, head and shoulders, face filling the cell.
+- Cell 2 (top-right): **Postie Blorb**, full body standing, feet at the bottom.
+- Cell 3 (bottom-left): **Madame Oops**, head and shoulders.
+- Cell 4 (bottom-right): **Madame Oops**, full body standing.
+
+Postie Blorb: a sweaty, out-of-breath pale-blue alien mail carrier with six legs, a bulging satchel of parcels, a too-small cap and one eye always on his wristwatch.
+Madame Oops: an accident-prone violet alien fortune-teller with a cracked crystal ball, a turban sliding off her head and a nervous grin.
+
+---
+
+## Prompt 4 — Characters: The Grub Brothers and Captain Glimmer
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+Grid **2 columns × 2 rows**. These are funny, weird-looking ADULT cartoon aliens (odd proportions, a visible personality flaw), never babies, never scary.
+- Cell 1 (top-left): **The Grub Brothers**, head and shoulders, face filling the cell.
+- Cell 2 (top-right): **The Grub Brothers**, full body standing, feet at the bottom.
+- Cell 3 (bottom-left): **Captain Glimmer**, head and shoulders.
+- Cell 4 (bottom-right): **Captain Glimmer**, full body standing.
+
+The Grub Brothers: two identical yellow-green worm aliens sharing ONE baseball cap, one smiling and one scowling (draw both worms together as one character).
+Captain Glimmer: a pompous gold-plated robot event host with a megaphone, light-bulb eyes and a tiny red cape.
+
+---
+
+## Prompt 5 — Characters: Halo and Wren
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+Grid **2 columns × 2 rows**. These are funny, weird-looking ADULT cartoon aliens (odd proportions, a visible personality flaw), never babies, never scary.
+- Cell 1 (top-left): **Halo**, head and shoulders, face filling the cell.
+- Cell 2 (top-right): **Halo**, full body standing, feet at the bottom.
+- Cell 3 (bottom-left): **Wren**, head and shoulders.
+- Cell 4 (bottom-right): **Wren**, full body standing.
+
+Halo: a tall, gaunt aurora-crystal mystic, teal-to-violet, with three serene closed eyes, tiny stars orbiting the head and a slightly creepy calm smile.
+Wren: a scrawny topaz bird-alien gossip with a long neck, beady eyes, a twig-nest hat and its beak open mid-chatter.
+
+---
+
+## Prompt 6 — Aurora Reach
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+World: **Aurora Reach**, a world of clouds, aurora light and stars. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Friendly and inviting, never scary.
+
+Grid **4 columns × 4 rows**. Rows 1–2: the "Star Nursery" chain; Rows 3–4: the "Wind Currents" chain.
 
 **Star Nursery** (rows 1–2):
 1. Stardust — a pinch of glittering gold stardust
@@ -60,9 +128,15 @@ Grid: **4 columns × 4 rows**. Rows 1–2: the "Star Nursery" chain; Rows 3–4:
 6. Storm Eye — a swirling storm with a calm glowing eye
 7–8. EMPTY
 
-### Image 4 — Aurora Reach
+---
 
-Grid: **4 columns × 4 rows**. Rows 1–2: the "Prism Array" chain; Rows 3–4: the "Sky Nest" chain.
+## Prompt 7 — Aurora Reach
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+World: **Aurora Reach**, a world of clouds, aurora light and stars. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Friendly and inviting, never scary.
+
+Grid **4 columns × 4 rows**. Rows 1–2: the "Prism Array" chain; Rows 3–4: the "Sky Nest" chain.
 
 **Prism Array** (rows 1–2):
 1. Light Mote — a tiny mote of light
@@ -82,9 +156,15 @@ Grid: **4 columns × 4 rows**. Rows 1–2: the "Prism Array" chain; Rows 3–4: 
 6. Sky Roc — a huge gentle bird with dawn-coloured wings spread wide
 7–8. EMPTY
 
-### Image 5 — Aurora Reach
+---
 
-Grid: **4 columns × 4 rows**. Rows 1–2: the "Drift Yards" chain; Rows 3–4: the "Star Critters" chain.
+## Prompt 8 — Aurora Reach
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+World: **Aurora Reach**, a world of clouds, aurora light and stars. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Friendly and inviting, never scary.
+
+Grid **4 columns × 4 rows**. Rows 1–2: the "Drift Yards" chain; Rows 3–4: the "Star Critters" chain.
 
 **Drift Yards** (rows 1–2):
 1. Silk Scrap — a scrap of pink silk
@@ -104,9 +184,15 @@ Grid: **4 columns × 4 rows**. Rows 1–2: the "Drift Yards" chain; Rows 3–4: 
 7. Celestial Fox — a majestic fox made of night sky, gold markings
 8. Constellation Beast — a giant gentle beast outlined in stars, glowing lines between them
 
-### Image 6 — Aurora Reach
+---
 
-Grid: **4 columns × 4 rows**. Rows 1–2: the "Satellite Works" chain; Rows 3–4: the "Nebula Jars" chain.
+## Prompt 9 — Aurora Reach
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+World: **Aurora Reach**, a world of clouds, aurora light and stars. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Friendly and inviting, never scary.
+
+Grid **4 columns × 4 rows**. Rows 1–2: the "Satellite Works" chain; Rows 3–4: the "Nebula Jars" chain.
 
 **Satellite Works** (rows 1–2):
 1. Solar Cell — a single blue solar cell tile
@@ -127,11 +213,15 @@ Grid: **4 columns × 4 rows**. Rows 1–2: the "Satellite Works" chain; Rows 3�
 6. Bottled Galaxy — a corked bottle with a whole spiral galaxy inside
 7–8. EMPTY
 
-**Tidal Shallows images** — Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Friendly and inviting, never scary. A warm seaside world of shells, reefs and harbours.
+---
 
-### Image 7 — Tidal Shallows
+## Prompt 10 — Tidal Shallows
 
-Grid: **4 columns × 4 rows**. Rows 1–2: the "Pearl Diving" chain; Rows 3–4: the "Coral Reef" chain.
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+World: **Tidal Shallows**, a warm seaside world of shells, reefs and harbours. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Friendly and inviting, never scary.
+
+Grid **4 columns × 4 rows**. Rows 1–2: the "Pearl Diving" chain; Rows 3–4: the "Coral Reef" chain.
 
 **Pearl Diving** (rows 1–2):
 1. Grain of Grit — a tiny grain of sand
@@ -153,9 +243,15 @@ Grid: **4 columns × 4 rows**. Rows 1–2: the "Pearl Diving" chain; Rows 3–4:
 7. Reef Crown — a giant crown of living coral set with pearls, fish circling it
 8. EMPTY
 
-### Image 8 — Tidal Shallows
+---
 
-Grid: **4 columns × 4 rows**. Rows 1–2: the "Fish Market" chain; Rows 3–4: the "Tide Pools" chain.
+## Prompt 11 — Tidal Shallows
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+World: **Tidal Shallows**, a warm seaside world of shells, reefs and harbours. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Friendly and inviting, never scary.
+
+Grid **4 columns × 4 rows**. Rows 1–2: the "Fish Market" chain; Rows 3–4: the "Tide Pools" chain.
 
 **Fish Market** (rows 1–2):
 1. Minnow — a tiny mint fish
@@ -174,9 +270,15 @@ Grid: **4 columns × 4 rows**. Rows 1–2: the "Fish Market" chain; Rows 3–4: 
 5. Tidal Heart — a blue heart-shaped gem with a tide inside
 6–8. EMPTY
 
-### Image 9 — Tidal Shallows
+---
 
-Grid: **4 columns × 4 rows**. Rows 1–2: the "Salt Pans" chain; Rows 3–4: the "Sunken Finds" chain.
+## Prompt 12 — Tidal Shallows
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+World: **Tidal Shallows**, a warm seaside world of shells, reefs and harbours. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Friendly and inviting, never scary.
+
+Grid **4 columns × 4 rows**. Rows 1–2: the "Salt Pans" chain; Rows 3–4: the "Sunken Finds" chain.
 
 **Salt Pans** (rows 1–2):
 1. Salt Grain — a small heap of salt
@@ -197,9 +299,15 @@ Grid: **4 columns × 4 rows**. Rows 1–2: the "Salt Pans" chain; Rows 3–4: th
 7. Drowned City — ancient domed city towers rising out of the shallows, glowing windows
 8. EMPTY
 
-### Image 10 — Tidal Shallows
+---
 
-Grid: **4 columns × 4 rows**. Rows 1–2: the "Deep Lights" chain; Rows 3–4: the "Reef Critters" chain.
+## Prompt 13 — Tidal Shallows
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+World: **Tidal Shallows**, a warm seaside world of shells, reefs and harbours. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Friendly and inviting, never scary.
+
+Grid **4 columns × 4 rows**. Rows 1–2: the "Deep Lights" chain; Rows 3–4: the "Reef Critters" chain.
 
 **Deep Lights** (rows 1–2):
 1. Plankton Mote — a tiny glowing speck of plankton
@@ -219,9 +327,15 @@ Grid: **4 columns × 4 rows**. Rows 1–2: the "Deep Lights" chain; Rows 3–4: 
 7. Tide Kraken — a giant gentle kraken wearing a pearl crown, arms curled around a wave
 8. EMPTY
 
-### Image 11 — Tidal Shallows
+---
 
-Grid: **4 columns × 4 rows**. Rows 1–2: the "Turtle Cove" chain; Rows 3–4: the "Harbour" chain.
+## Prompt 14 — Tidal Shallows
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+World: **Tidal Shallows**, a warm seaside world of shells, reefs and harbours. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Friendly and inviting, never scary.
+
+Grid **4 columns × 4 rows**. Rows 1–2: the "Turtle Cove" chain; Rows 3–4: the "Harbour" chain.
 
 **Turtle Cove** (rows 1–2):
 1. Turtle Egg — a round leathery egg half buried in sand
@@ -240,9 +354,15 @@ Grid: **4 columns × 4 rows**. Rows 1–2: the "Turtle Cove" chain; Rows 3–4: 
 7. Submarine — a round yellow submarine with portholes and a periscope
 8. EMPTY
 
-### Image 12 — Tidal Shallows
+---
 
-Grid: **4 columns × 4 rows**. Rows 1–2: the "Sea Glass" chain; Rows 3–4: the "Urchin Garden" chain.
+## Prompt 15 — Tidal Shallows
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+World: **Tidal Shallows**, a warm seaside world of shells, reefs and harbours. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Friendly and inviting, never scary.
+
+Grid **4 columns × 4 rows**. Rows 1–2: the "Sea Glass" chain; Rows 3–4: the "Urchin Garden" chain.
 
 **Sea Glass** (rows 1–2):
 1. Glass Pebble — a frosted blue-green glass pebble
@@ -260,9 +380,15 @@ Grid: **4 columns × 4 rows**. Rows 1–2: the "Sea Glass" chain; Rows 3–4: th
 4. Starfish Crown — a crown of starfish on a gold band
 5–8. EMPTY
 
-### Image 13 — Tidal Shallows
+---
 
-Grid: **4 columns × 2 rows**. Rows 1–2: the "Manta Glide" chain.
+## Prompt 16 — Tidal Shallows
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+World: **Tidal Shallows**, a warm seaside world of shells, reefs and harbours. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Friendly and inviting, never scary.
+
+Grid **4 columns × 2 rows**. Rows 1–2: the "Manta Glide" chain.
 
 **Manta Glide** (rows 1–2):
 1. Manta Egg — a dark blue egg case with curly corners
@@ -272,9 +398,15 @@ Grid: **4 columns × 2 rows**. Rows 1–2: the "Manta Glide" chain.
 5. Sky Manta — a giant manta flying above the waves trailing light
 6–8. EMPTY
 
-### Image 14 — Tidal Shallows (producers)
+---
 
-Grid: **3 columns × 3 rows**. PRODUCERS: things the player taps to get items, so they read as scenery, not loot. Each stands on its own small round mound (the mound is part of the object and the only ground shown), slightly taller than wide, a touch bigger and more detailed than items.
+## Prompt 17 — Tidal Shallows (producers)
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+World: **Tidal Shallows**, a warm seaside world of shells, reefs and harbours. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Friendly and inviting, never scary.
+
+Grid **3 columns × 3 rows**. PRODUCERS: things the player taps to get items, so they read as scenery, not loot. Each stands on its own small round mound (the mound is part of the object and the only ground shown), slightly taller than wide, a touch bigger and more detailed than items.
 
 1. Oyster Bed — a cluster of oysters, one open showing a pearl
 2. Coral Head — a rounded coral head with little branches
@@ -286,25 +418,45 @@ Grid: **3 columns × 3 rows**. PRODUCERS: things the player taps to get items, s
 8. Squid Reef — a pink reef with clear jelly eggs tucked between the branches
 9. Nesting Beach — a sandy mound with turtle eggs and tiny tracks to the water
 
-### Image 15 — Tidal Shallows (producers)
+---
 
-Grid: **2 columns × 2 rows**. PRODUCERS: things the player taps to get items, so they read as scenery, not loot. Each stands on its own small round mound (the mound is part of the object and the only ground shown), slightly taller than wide, a touch bigger and more detailed than items.
+## Prompt 18 — Tidal Shallows (producers)
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+World: **Tidal Shallows**, a warm seaside world of shells, reefs and harbours. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Friendly and inviting, never scary.
+
+Grid **2 columns × 2 rows**. PRODUCERS: things the player taps to get items, so they read as scenery, not loot. Each stands on its own small round mound (the mound is part of the object and the only ground shown), slightly taller than wide, a touch bigger and more detailed than items.
 
 1. Old Dock — a short wooden jetty with coiled rope and a lantern post
 2. Glass Beach — a patch of beach glittering with frosted sea glass
 3. Urchin Rock — a tide rock covered in violet sea urchins
 4. Manta Deep — a round deep-blue pool with a manta shadow gliding in it
 
-### Image 16 — Tidal Shallows (board tiles)
+---
 
-Grid: **3 columns × 1 row**, wide gaps. Merge-board squares for Tidal Shallows, matching the shape, corner radius and bevel of the plain board tiles in STYLE-REFERENCE.png. Straight from above, perfectly square, calm in the middle.
+## Prompt 19 — Tidal Shallows (board tiles)
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+World: **Tidal Shallows**, a warm seaside world of shells, reefs and harbours. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Friendly and inviting, never scary.
+
+Grid **3 columns × 1 row**, wide gaps. Merge-board squares for Tidal Shallows, matching the shape, corner radius and bevel of the plain board tiles in STYLE-REFERENCE.png. Straight from above, perfectly square, calm in the middle.
 1. Light tile — Tidal Shallows ground, very subtle texture.
 2. Dark tile — the same, slightly deeper, for a gentle checkerboard.
 3. Locked tile — the same tile buried under this world's "not yours yet" cover (ash, rubble, sand, cloud…), friendly, with a couple of small sparkles.
 
-### Image 17 — Sunny Meadow (sharper redo)
-Grid **4 columns × 4 rows**. Rows 1–2: Picnic Day; rows 3–4: Alien Pets. Sunny Meadow palette: warm greens, sky blue, cream, cherry red.
+---
 
+## Prompt 20 — Sunny Meadow: Picnic Day + Alien Pets
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+World: **Sunny Meadow**, warm greens, sky blue, cream and cherry red.
+
+Grid **4 columns × 4 rows**. Rows 1–2: the "Picnic Day" chain; rows 3–4: the "Alien Pets" chain. Each chain is 8 steps, getting bigger and grander.
+
+**Picnic Day**:
 1. Crumbs — a few golden bread crumbs
 2. Sandwich — a fat triangle sandwich with lettuce poking out
 3. Picnic Basket — a wicker picnic basket with a gingham lid
@@ -314,18 +466,27 @@ Grid **4 columns × 4 rows**. Rows 1–2: Picnic Day; rows 3–4: Alien Pets. Su
 7. Garden Party — a round garden-party table set with cakes and flowers
 8. Picnic Pavilion — a golden pavilion with bunting over a picnic feast
 
+**Alien Pets**:
 1. Spotted Egg — a lilac egg with purple spots
 2. Peeking Egg — a cracked egg with one curious eye peeking out
-3. Blobling — a tiny lilac blob hatchling with floppy ears
-4. Blob Pup — a playful lilac blob pup with a collar
-5. Pup Bed — the blob pup curled up asleep in a round cushion bed
-6. Pup House — a little dome-shaped pet house with a round door
+3. Blobling — a tiny lilac alien blob hatchling with one big eye on a stalk
+4. Blobbo — a playful three-eyed lilac alien blob wearing a little collar
+5. Blob Bed — the lilac alien blob curled up asleep in a round cushion bed
+6. Blob House — a little dome-shaped alien pet house with a round door
 7. Pet Playground — a tiny pet playground with a slide and swings
 8. Pet Palace — a golden domed pet palace with towers and a velvet cushion
 
-### Image 18 — Sunny Meadow (sharper redo)
-Grid **4 columns × 4 rows**. Rows 1–2: Meadow Music; rows 3–4: Rocket Parts. Sunny Meadow palette: warm greens, sky blue, cream, cherry red.
+---
 
+## Prompt 21 — Sunny Meadow: Meadow Music + Rocket Parts
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+World: **Sunny Meadow**, warm greens, sky blue, cream and cherry red.
+
+Grid **4 columns × 4 rows**. Rows 1–2: the "Meadow Music" chain; rows 3–4: the "Rocket Parts" chain. Each chain is 8 steps, getting bigger and grander.
+
+**Meadow Music**:
 1. Music Note — a purple music note sitting on a pebble
 2. Whistle — a little brass whistle
 3. Ukulele — a small wooden ukulele
@@ -335,6 +496,7 @@ Grid **4 columns × 4 rows**. Rows 1–2: Meadow Music; rows 3–4: Rocket Parts
 7. Bandstand — a round bandstand gazebo with lights
 8. Concert Shell — a golden concert shell stage with spotlights and speakers
 
+**Rocket Parts**:
 1. Hex Bolt — a chunky steel bolt
 2. Gear — a silver gear wheel
 3. Rocket Fin — a curved silver rocket fin
@@ -344,9 +506,17 @@ Grid **4 columns × 4 rows**. Rows 1–2: Meadow Music; rows 3–4: Rocket Parts
 7. Engine Block — a heavy engine block with a big nozzle
 8. Mini Rocket — a shiny little rocket on a launch stand
 
-### Image 19 — Sunny Meadow (sharper redo)
-Grid **4 columns × 2 rows**. Rows 1–2: Weather Watch. Sunny Meadow palette: warm greens, sky blue, cream, cherry red.
+---
 
+## Prompt 22 — Sunny Meadow: Weather Watch
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+World: **Sunny Meadow**, warm greens, sky blue, cream and cherry red.
+
+Grid **4 columns × 2 rows**. Rows 1–2: the "Weather Watch" chain. Each chain is 8 steps, getting bigger and grander.
+
+**Weather Watch**:
 1. Raindrop — a single blue raindrop
 2. Puff Cloud — a small fluffy white cloud
 3. Rain Cloud — a grey-blue cloud raining little drops
@@ -356,8 +526,18 @@ Grid **4 columns × 2 rows**. Rows 1–2: Weather Watch. Sunny Meadow palette: w
 7. Cloud Machine — a brass dome machine puffing out clouds
 8. Rainbow Sundial — a golden sundial with a rainbow arching over it
 
-### Image 20 — Sunny Meadow producers (sharper redo)
-Grid **3 columns × 2 rows**, producers (each on its own small grassy mound): 1. Picnic Hamper on little legs with a checked cloth, 2. Egg Nest of lilac spotted eggs, 3. Busking Robot playing guitar next to a speaker, 4. Scrap Rocket Hull lying in the grass full of parts, 5. Weather Balloon tied to a crate, 6. EMPTY
+---
 
-### Image 21 — the helpers (sharper redo)
-Grid **4 columns × 2 rows**. Top row head-and-shoulders, bottom row full body of the same character: 1. **Postie Blorb** — sweaty pale-blue six-legged mail alien, bulging satchel, tiny cap. 2. **Madame Oops** — clumsy violet fortune-teller, cracked crystal ball, turban sliding off. 3. **The Grub Brothers** — two yellow-green worms sharing one cap, one smiling one scowling. 4. **Captain Glimmer** — pompous gold robot event host with a megaphone and a tiny cape.
+## Prompt 23 — Sunny Meadow: new producers
+
+Same style as the reference. ONE image only, square 2048×2048, plain pure-white background, every object centred in its own cell with wide empty gaps (nothing touches), no text, no labels, no grid lines.
+
+Grid **3 columns × 2 rows**. PRODUCERS: things the player taps to get items, so they read as scenery, not loot. Each stands on its own small round grassy mound (the only ground shown) and is a bit bigger and more detailed than items.
+1. Picnic Hamper — a picnic hamper on little legs with a checked cloth
+2. Egg Nest — a grassy nest of lilac spotted eggs
+3. Busking Robot — a little robot playing guitar next to a speaker
+4. Scrap Hull — an old rocket hull lying in the grass, full of parts
+5. Weather Balloon — a striped weather balloon tied to a crate
+6. EMPTY
+
+---
