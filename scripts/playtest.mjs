@@ -198,7 +198,29 @@ const chains = await page.evaluate(() => {
 const partChains = ['hull', 'engine', 'nav', 'tank'].filter(k => chains[k]);
 must(partChains.length >= 3, `wreck spread pieces over ${partChains.length} part chains: ${JSON.stringify(chains)}`);
 
+head('No contract ever asks for a rocket piece or star scrap');
+const early = await page.evaluate(() => {
+  const g = window.__game, s = g.state(), keep = s.wreck; s.wreck = 0;
+  let bad = 0, partGift = 0;
+  for (let i = 0; i < 80; i++) {
+    const o = g.roll();
+    if (o.needs.some(nd => ['star', 'hull', 'engine', 'nav', 'tank'].includes(g.items[nd.id].chain))) bad++;
+    if (o.give && ['hull', 'engine', 'nav', 'tank'].includes(g.items[o.give].chain)) partGift++;
+  }
+  s.wreck = keep; return { bad, partGift };
+});
+must(early.bad === 0, `${early.bad}/80 contracts asked for a rocket piece or scrap`);
+must(early.partGift === 0, `before the wreck turns up nobody pays in rocket pieces (${early.partGift})`);
+
+head('Star Scrap and Star Cores fly into the pouch');
+const pouch0 = await page.evaluate(() => { const s = window.__game.state(); s.wal = s.wal || {}; return (s.wal.scrap || 0) + (s.wal.starcore || 0); });
+await set(() => { const b = window.__game.state().boards.earth; let n = 0; for (let i = 0; i < b.length && n < 2; i++) if (!b[i]) { b[i] = { id: n ? 'starcore' : 'scrap' }; n++; } });
+await page.waitForTimeout(2500);
+const pouch1 = await page.evaluate(() => { const s = window.__game.state(); return { n: (s.wal.scrap || 0) + (s.wal.starcore || 0), onBoard: s.boards.earth.filter(c => c && (c.id === 'scrap' || c.id === 'starcore')).length }; });
+must(pouch1.n === pouch0 + 2 && pouch1.onBoard === 0, `scrap and cores left the board for the pouch (${pouch0} -> ${pouch1.n}, ${pouch1.onBoard} still on board)`);
+
 head('Orders pay you back with rocket pieces');
+await set(() => { window.__game.state().wreck = 1; });
 const gift = await page.evaluate(() => {
   const g = window.__game, parts = ['hull', 'engine', 'nav', 'tank'];
   let withGift = 0, partGift = 0;

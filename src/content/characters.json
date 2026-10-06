@@ -157,10 +157,10 @@
     ]
   },
   "zib": {
-    "name": "Zib",
+    "name": "Kix",
     "lines": [
       "Beep! Trade good!",
-      "Zib approve.",
+      "Kix approve.",
       "Shiny! Very shiny!"
     ],
     "face": {
@@ -179,7 +179,7 @@
     ]
   },
   "luma": {
-    "name": "Nana Luma",
+    "name": "Moonbeam",
     "lines": [
       "It glows just right.",
       "The dark is smaller now.",
@@ -277,7 +277,7 @@
     ]
   },
   "ember": {
-    "name": "Ember",
+    "name": "Fizz",
     "lines": [
       "Still warm. I like that.",
       "Careful — it bites.",
@@ -300,7 +300,7 @@
     ]
   },
   "marin": {
-    "name": "Marin",
+    "name": "Harbourmaster Brine",
     "lines": [
       "The current brought you.",
       "Salt and patience, friend.",
@@ -346,7 +346,7 @@
     ]
   },
   "sirra": {
-    "name": "Sirra",
+    "name": "Pearl",
     "lines": [
       "Listen — the water is humming.",
       "Pearls for patience.",

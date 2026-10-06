@@ -85,7 +85,7 @@ const step = () => page.evaluate(() => {
       return true;
     };
     // what is still missing, weighted: a chain nobody has started counts most
-    const have = id => b.filter(c => c && c.id === id).length;
+    const have = id => b.filter(c => c && c.id === id).length + ((S.wal && S.wal[id]) || 0);
     const urgent = {};
     S.orders.forEach(o => o.needs.forEach(nd => { if (have(nd.id) < nd.qty) urgent[chainOf(nd.id)] = (urgent[chainOf(nd.id)] || 0) + 3; }));
     if (pj) pj.needs.forEach(([id, q]) => { if (have(id) < q) urgent[chainOf(id)] = (urgent[chainOf(id)] || 0) + 4; });
@@ -128,7 +128,7 @@ while (Date.now() - t0 < 25 * 60 * 1000) {
   if (actions % 150 === 0) {
     const diag = await page.evaluate(() => { const g = window.__game, S = g.state(), b = g.cells();
       const src = id => { const base = g.chains[g.items[id].chain].items[0]; return b.some(c => c && c.p && g.prods[c.p].drops.includes(base)) ? 'src' : 'NOSRC'; };
-      const have = id => b.filter(c => c && c.id === id).length;
+      const have = id => b.filter(c => c && c.id === id).length + ((S.wal && S.wal[id]) || 0);
       const pj = g.curProject();
       return S.orders.map(o => o.needs.map(nd => `${nd.id}(t${g.items[nd.id].tier}) ${have(nd.id)}/${nd.qty} ${src(nd.id)}`).join(' + ')).join(' | ')
         + ' || CH: ' + (pj ? pj.needs.map(([id, q]) => `${id} ${have(id)}/${q} ${src(id)}`).join(', ') + ' coins ' + pj.coins : '-'); });

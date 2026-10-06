@@ -3,7 +3,7 @@
     "cols": 6,
     "rows": 8,
     "starterItems": 4,
-    "maxProducers": 7
+    "maxProducers": 8
   },
   "start": {
     "coins": 120,
@@ -13,7 +13,7 @@
   "energy": {
     "base": 40,
     "perLevel": 2,
-    "regenMs": 100000,
+    "regenMs": 90000,
     "snack": {
       "amount": 15,
       "cooldownMs": 14400000

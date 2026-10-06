@@ -686,9 +686,10 @@ button{font-family:inherit;cursor:pointer;border:none}
 .questRow.done .qBox{background:linear-gradient(180deg,#8fe86d,#4fb63a);box-shadow:0 2px 0 #3c8f2c}
 .questRow.now .qBox{background:linear-gradient(180deg,#ffe07a,#ffcb3d);color:#7a4f06;box-shadow:0 2px 0 #dc9a0c}
 .qMain{flex:1;min-width:0}
-.qMain b{font-size:12px;font-weight:700;color:#6b5236;display:block;line-height:1.2}
-.questRow.done .qMain b{color:#9a7a4e;text-decoration:line-through}
+.qMain>b{font-size:12px;font-weight:700;color:#6b5236;display:block;line-height:1.2}
+.questRow.done .qMain>b{color:#9a7a4e;text-decoration:line-through}
 .qMain i{display:block;font-style:normal;font-size:10.5px;font-weight:600;color:#9a7a4e;line-height:1.25;margin-top:2px}
+.qMain i b{display:inline;font-size:inherit;color:#6b5236}
 .qBar{height:5px;border-radius:99px;background:#eddfc2;overflow:hidden;margin-top:4px}
 .qBar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#ffd75e,#ff9f2e);margin:0}
 .qNum{font-size:9.5px;font-weight:700;color:#b79760}
@@ -1780,3 +1781,10 @@ img.emo{height:1.2em;width:auto;vertical-align:-.25em;margin:0 .04em;display:inl
 .modal{padding-top:calc(env(safe-area-inset-top,0px) + 62px)}
 .mBoxW{max-height:calc(100% - 10px);display:flex;flex-direction:column}
 .mBoxW .mBody{overflow-y:auto;min-height:0;-webkit-overflow-scrolling:touch}
+/* v30 Star Pouch: scrap and cores live here, not on the board */
+.pouchRow{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;margin:6px 0 8px;padding:7px 10px;
+  background:#fff8e6;border:2px solid #f0dcae;border-radius:14px;font-size:13px;font-weight:700;color:#6b4a1e}
+.pouchRow svg.art{width:26px;height:26px;flex:none}
+.pouchRow .buyBtn{margin-left:4px;font-size:12px;padding:6px 10px;min-width:0}
+.buyBtn .cost,.buyBtn .cost.ok{color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.35);font-size:14px}
+.buyBtn .cost .art{width:22px;height:22px}

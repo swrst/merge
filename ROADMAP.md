@@ -61,6 +61,17 @@ Ordered by player value per effort.
 9. **Side games to keep:** Alien Pairs, Crater Dig, Market.
 10. **Side games to add:** Rocket Race (time-attack merges) and Delivery Run (fill 5 contracts in 10 minutes for a chest).
 
+### v30 shortlist (fits the space story, small art cost)
+1. **Meteor Shower weekend.** A meteor every couple of minutes for 48 h. Craters drop event tokens as well as scrap, and there is a "catch the falling star" tap mini-game on the board.
+2. **Pet expeditions.** Send the alien pet to a world you already woke, for 1–4 h. It comes back with a rare item, a relic or Star Cores. It gives the pet a job after evolving.
+3. **Postcards from home.** After you leave a world, its people send a postcard now and then: a request for one item from their world, paid in gems. It keeps old worlds alive and reuses their chains.
+4. **Black Hole bin.** A tiny black hole beside the board swallows unwanted items for event points or Science instead of coins. It is a fun, visual way to clear the board.
+5. **Zonk's Experiment of the Day.** One lab recipe a day is "hot": brewing it pays double and fills an event bar.
+6. **Rocket Race.** A 90-second side game: make as many tier-4 items as possible from a fixed board. Weekly leaderboard against the bots that already exist.
+7. **Camp decorations.** Coins buy lamps, fences, statues and flags placed on the camp painting, with one set per world. This needs only small painted props.
+8. **Constellation sky.** The lit constellations are drawn across the map's sky, so the permanent perks are visible.
+9. **Season track** (as in 1. above): a free and a golden row of 30 tiers, fed by every event.
+
 ## 3b. Done in v25–v26
 
 - **Power ×2** (level 8): taps cost double energy, and drops arrive one step higher. This is Travel Town's "Power Boost".

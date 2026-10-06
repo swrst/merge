@@ -434,14 +434,14 @@
           ],
           [
             "bloop",
-            "I need a little workshop to fix it. Some star scrap, some lumber, one shiny geode for the lens."
+            "My ship is in pieces somewhere in your woods. To fix it I need a workshop first: one Star Scrap from my crater, some lumber, and a shiny geode for the lens."
           ],
           [
             "timmy",
             "A real star-traveller! From a DIFFERENT planet! Can I help? CAN I?"
           ]
         ],
-        "text": "Dr. Zonk's Lab hums to life. Bring it things you do not need and it turns them into 🧪 Science — Science buys upgrades that last for ever."
+        "text": "Dr. Zonk's Lab hums to life. Bring it things you do not need and it turns them into 🧪 Science — Science buys upgrades that last for ever. \"The ship can wait,\" says Dr. Zonk. \"First I want to see this planet. And its pie.\""
       },
       {
         "id": "e6",
@@ -777,7 +777,7 @@
             "And a basket of veggies, because nobody stargazes on an empty stomach."
           ]
         ],
-        "text": "Through the spyglass: the Moon, and on it, tiny lights. \"Crater Camp,\" whispers Dr. Zonk. \"Friends.\" Back on the ground, the old hollow behind the barn has filled with water — a lily pond!"
+        "text": "Through the spyglass: the Moon, and on it, tiny lights. \"Crater Camp,\" whispers Dr. Zonk. \"Friends.\" Back on the ground, the old hollow behind the barn has filled with water — a lily pond! And at the edge of the woods, half-buried in ferns: Dr. Zonk's ship. In pieces. Time to build a rocket."
       },
       {
         "id": "e16",
@@ -997,7 +997,7 @@
             "A toy robot to lead it, a drum to keep the beat, and a bun tower for after."
           ]
         ],
-        "text": "The best parade the meadow has ever seen. Then everyone turns to look at the rocket — and the pile of scrap behind it. \"Spare parts,\" says Dr. Zonk. \"Lots of spare parts.\""
+        "text": "The best parade the meadow has ever seen. Then everyone turns to look at the rocket. \"Nearly there,\" says Dr. Zonk, patting a wobbly fin. The fin falls off. \"Nearly-ish.\""
       },
       {
         "id": "e22",
@@ -1230,7 +1230,7 @@
       {
         "need": 6,
         "title": "The Craters Sing",
-        "text": "Light pools in the low places. Luma says it sounds like a choir tuning up."
+        "text": "Light pools in the low places. Moonbeam says it sounds like a choir tuning up."
       },
       {
         "need": 10,
@@ -1267,7 +1267,7 @@
           ],
           [
             "zib",
-            "Zib stowed away in the cargo hold. Zib regrets nothing. Zib is cold."
+            "Kix stowed away in the cargo hold. Kix regrets nothing. Kix is cold."
           ]
         ],
         "text": "A little ring of glow around the tents. The dark is smaller already."
@@ -1299,7 +1299,7 @@
           ],
           [
             "zib",
-            "Zib could sell him a wall. Zib will not. Zib is being nice. Note it."
+            "Kix could sell him a wall. Kix will not. Kix is being nice. Note it."
           ]
         ],
         "text": "WALL: STANDING. WIND: BLOCKED. ROKK: PROUD."
@@ -1392,7 +1392,7 @@
             "Blorp. She is right. I checked. I hate it when the hippie is right."
           ]
         ],
-        "text": "The comet's ice was full of old seeds. Nana Luma planted every one."
+        "text": "The comet's ice was full of old seeds. Moonbeam planted every one."
       },
       {
         "id": "l6",
@@ -1419,18 +1419,18 @@
         "talk": [
           [
             "zib",
-            "Zib has a business proposal. A launch pad. Zib builds, you pay, everybody flies."
+            "Kix has a business proposal. A launch pad. Kix builds, you pay, everybody flies."
           ],
           [
             "zib",
-            "Moon brick, moon star, one beacon so the pilot does not miss. Zib missed once. Long story."
+            "Moon brick, moon star, one beacon so the pilot does not miss. Kix missed once. Long story."
           ],
           [
             "bloop",
             "There is a fire planet in range. Ember Hollow. Bring a towel. And a fire extinguisher."
           ]
         ],
-        "text": "Beep! Pad ready! Zib tested it. Zib only exploded a little. Ember Hollow is in range now!"
+        "text": "Beep! Pad ready! Kix tested it. Kix only exploded a little. Ember Hollow is in range now!"
       },
       {
         "id": "l7",
@@ -1480,7 +1480,7 @@
         "talk": [
           [
             "zib",
-            "Zib found an old rover. Zib needs a garage. And a silver cup. For the grand opening."
+            "Kix found an old rover. Kix needs a garage. And a silver cup. For the grand opening."
           ],
           [
             "rokk",
@@ -1491,7 +1491,7 @@
             "There will be a SMALL grand opening."
           ]
         ],
-        "text": "Six wheels, one drill, zero brakes. Zib loves it."
+        "text": "Six wheels, one drill, zero brakes. Kix loves it."
       },
       {
         "id": "l9",
@@ -1835,7 +1835,7 @@
             "Two beads and a big mushroom for the stall roof. Travellers will come. They will! Probably!"
           ]
         ],
-        "text": "Ember sells beads to travellers who have not arrived yet. She says they will."
+        "text": "Fizz sells beads to travellers who have not arrived yet. She says they will."
       },
       {
         "id": "c4",
@@ -1966,7 +1966,7 @@
             "One salamander and an ember egg — they need a nest of their own!"
           ]
         ],
-        "text": "Tiny flames curled in warm stone. They follow Ember everywhere now."
+        "text": "Tiny flames curled in warm stone. They follow Fizz everywhere now."
       },
       {
         "id": "c8",
@@ -2246,7 +2246,7 @@
       {
         "need": 8,
         "title": "Reefs Return",
-        "text": "Coral climbing the old ruins, fish following it up. Sirra will not stop humming."
+        "text": "Coral climbing the old ruins, fish following it up. Pearl will not stop humming."
       },
       {
         "need": 12,
@@ -2332,7 +2332,7 @@
         "talk": [
           [
             "marin",
-            "Harbourmaster Marin. Forty years on this pier. Thirty-nine of them grumpy."
+            "Harbourmaster Brine. Forty years on this pier. Thirty-nine of them grumpy."
           ],
           [
             "marin",
@@ -2371,7 +2371,7 @@
             "A salt brick and a coil of kelp for the drying racks. Please."
           ]
         ],
-        "text": "Enough stores for the whole winter. Marin counted twice."
+        "text": "Enough stores for the whole winter. Brine counted twice."
       },
       {
         "id": "n5",
@@ -2400,7 +2400,7 @@
             "A driftwood boat to patch her with and a pearl for luck. Sailors are superstitious. I am VERY superstitious."
           ]
         ],
-        "text": "The old skiff floats again. Sirra swears it is the same boat her grandmother sailed."
+        "text": "The old skiff floats again. Pearl swears it is the same boat her grandmother sailed."
       },
       {
         "id": "n6",
@@ -2979,18 +2979,18 @@
         "talk": [
           [
             "zib",
-            "Zib has found a business opportunity. Satellites! Every world talking to every world. Zib sells the phones."
+            "Kix has found a business opportunity. Satellites! Every world talking to every world. Kix sells the phones."
           ],
           [
             "bloop",
-            "Zib. That is just a network."
+            "Kix. That is just a network."
           ],
           [
             "zib",
-            "A comm satellite and a nebula jar for power. Zib will handle the rest. Zib always handles the rest."
+            "A comm satellite and a nebula jar for power. Kix will handle the rest. Kix always handles the rest."
           ]
         ],
-        "text": "Every camp on every world can talk to every other. Zib has not stopped beeping."
+        "text": "Every camp on every world can talk to every other. Kix has not stopped beeping."
       },
       {
         "id": "v9",

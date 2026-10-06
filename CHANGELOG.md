@@ -1,5 +1,18 @@
 # Changelog
 
+- **v30**
+  - Contracts never ask for rocket pieces or Star Scrap. Old saves drop any such contract on load, so nothing waits forever.
+  - Rocket comes later: Dr. Zonk lands in chapter 4 (crater, no wreck), and his ship turns up after chapter 15, Stargazing Night. You build it from chapter 16 to the launch in chapter 22. Until then there are no rocket pieces, no fuel ore from craters and no Fuel Brewing.
+  - Star Pouch: Star Scrap and Star Cores fly off the board into a pouch. The Forge and Constellations spend from it, and Constellations can fuse 2 Scrap into 1 Core.
+  - Unique names: Luna's trader is Kix, the Luna hippie is Moonbeam, Cindra's bead seller is Fizz, the Shallows' harbourmaster is Brine, the pearl diver is Pearl. Earth keeps Zib, Nana Luma, Ember, Sirra, Mayor Marin.
+  - Funnier Dr. Zonk arrival, wreck and "not yet" lines; chapter 5, 15 and 21 texts fit the new order.
+  - Quests: the rocket quests sit later in the list; quest hints no longer break mid-sentence.
+  - Forge cost buttons are readable; build label 0.30.
+  - Pacing:
+    - Contract difficulty follows your level, not the faster world level, and climbs one tier every 4 levels (a tier-7 ask at level 8 is gone).
+    - Chapters need at most 3 contracts.
+    - Energy refills every 90 s.
+  - A new story producer always lands on the board. When the board already holds the maximum (now 8 producers), the one nothing currently needs moves to 📦 storage, and the popup says so.
 - **v29**
   - Slower levels: XP curve ×5 and contracts pay less XP. Features open later: wheel 5, pairs 6, ⚡×2 8, events 9, pet 10.
   - Story order:
