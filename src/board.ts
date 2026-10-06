@@ -259,6 +259,7 @@ class PixiBoard {
     this.oy = Math.round((h - gh) / 2);
     for (let i = 0; i < this.tiles.length; i++) this.drawTile(i);
     for (let i = 0; i < this.slots.length; i++) this.placeSlot(i);
+    this.placeTags();
     this.laying = false;
   }
   pos(i: number) {
@@ -314,7 +315,7 @@ class PixiBoard {
       // a painted tile carries its own light and shade; only the rarity frame is drawn over it
       art.texture = paint; art.position.set(p.x, p.y); art.width = c; art.height = c;
       if (this.slots[i] && this.slots[i].key.startsWith('u')) g.roundRect(p.x + 2, p.y + 2, c - 4, c - 4, R).fill({ color: 0x7cc8ff, alpha: 0.35 });
-      if (this.wanted.has(i)) g.roundRect(p.x + 2, p.y + 2, c - 4, c - 4, R).fill({ color: 0x8ce46a, alpha: 0.38 }).stroke({ color: 0x4fb63a, width: 2.5, alpha: 0.95 });
+      if (this.wanted.has(i)) g.roundRect(p.x + 2, p.y + 2, c - 4, c - 4, R).fill({ color: 0xffd75e, alpha: 0.55 }).stroke({ color: 0xff9f1c, width: 3, alpha: 1 });
       if (r) {
         const col = r === 3 ? 0xffb02e : r === 2 ? 0xc78cff : 0x8fd6ff;
         g.roundRect(p.x + 1, p.y + 1, c - 2, c - 2, R - 1)
@@ -325,7 +326,7 @@ class PixiBoard {
     g.roundRect(p.x, p.y, c, c, R)
       .fill({ color: locked ? (dark ? th.lockLo : th.lock) : (dark ? th.tileLo : th.tile) });
     if (this.slots[i] && this.slots[i].key.startsWith('u')) g.roundRect(p.x + 2, p.y + 2, c - 4, c - 4, R).fill({ color: 0x7cc8ff, alpha: 0.35 });
-    if (this.wanted.has(i)) g.roundRect(p.x + 2, p.y + 2, c - 4, c - 4, R).fill({ color: 0x8ce46a, alpha: 0.38 }).stroke({ color: 0x4fb63a, width: 2.5, alpha: 0.95 });
+    if (this.wanted.has(i)) g.roundRect(p.x + 2, p.y + 2, c - 4, c - 4, R).fill({ color: 0xffd75e, alpha: 0.55 }).stroke({ color: 0xff9f1c, width: 3, alpha: 1 });
     if (!locked) {
       // one soft light from the top, one soft shade at the foot
       g.roundRect(p.x + c * 0.06, p.y + c * 0.05, c * 0.88, c * 0.2, c * 0.1)
@@ -755,12 +756,52 @@ class PixiBoard {
   }
   /** items a ready contract or chapter is about to take: their tiles glow green */
   private wanted = new Set<number>();
+  /* Something a customer can take right now is told apart three ways, none of
+     them the green a producer uses: its tile turns gold, the item does a little
+     "pick me!" wiggle every couple of seconds, and a gift tag sits on its corner. */
+  private wantTags: Record<number, Container> = {};
+  private wantTick = false;
   setWanted(list: number[]) {
     const nw = new Set(list);
     if (nw.size === this.wanted.size && list.every(k => this.wanted.has(k))) return;
     const old = this.wanted; this.wanted = nw;
-    old.forEach(k => { if (!nw.has(k)) this.drawTile(k); });
+    old.forEach(k => { if (!nw.has(k)) { this.drawTile(k); this.dropTag(k); const a = this.slots[k] && this.slots[k].art; if (a) a.rotation = 0; } });
     nw.forEach(k => { if (!old.has(k)) this.drawTile(k); });
+    this.placeTags();
+    if (!this.wantTick) {
+      this.wantTick = true;
+      this.app.ticker.add(() => {
+        const t = performance.now() / 1000;
+        this.wanted.forEach(k => {
+          const a = this.slots[k] && this.slots[k].art; if (!a || (this.drag && this.drag.moved && this.drag.i === k)) return;
+          const ph = (t + k * 0.13) % 2.2;                 // wiggle for 0.5 s, rest the rest
+          a.rotation = ph < 0.5 ? Math.sin(ph / 0.5 * Math.PI * 4) * 0.13 * (1 - ph / 0.5) : 0;
+          const tag = this.wantTags[k];
+          if (tag) tag.scale.set(1 + 0.12 * Math.max(0, Math.sin(t * 4 + k)));
+        });
+      });
+    }
+  }
+  private dropTag(k: number) { const tg = this.wantTags[k]; if (tg) { tg.destroy({ children: true }); delete this.wantTags[k]; } }
+  private placeTags() {
+    Object.keys(this.wantTags).forEach(k => { if (!this.wanted.has(+k)) this.dropTag(+k); });
+    this.wanted.forEach(k => {
+      if (!this.slots[k] || !this.slots[k].key) { this.dropTag(k); return; }
+      let tg = this.wantTags[k];
+      const r = Math.max(7, this.cell * 0.15);
+      if (!tg) {
+        tg = new Container();
+        const g = new Graphics();
+        g.circle(0, 0, r).fill({ color: 0xff7a1a }).stroke({ color: 0xffffff, width: 2.5 });
+        const tx = new Text({ text: '★', style: { fontSize: r * 1.3, fill: 0xffffff, fontWeight: '700' } });
+        tx.anchor.set(0.5, 0.55);
+        tg.addChild(g, tx);
+        this.lFx.addChild(tg);
+        this.wantTags[k] = tg;
+      }
+      const p = this.pos(k);
+      tg.position.set(p.x + this.cell - r * 0.7, p.y + r * 0.7);
+    });
   }
   setHint(list: number[] | null) {
     this.slots.forEach((s, k) => {
