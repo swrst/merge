@@ -511,7 +511,7 @@ await shot('cindra');
 
 /* ------------------------------------------------- the v6 systems */
 head('Nerith and Vela');
-must(!(await page.evaluate(() => window.__game.v9.painted('nerith'))), 'a world without all its ChatGPT art stays "Coming soon"');
+must(await page.evaluate(() => ['earth', 'luna', 'cindra', 'nerith', 'vela'].every(w => window.__game.v9.painted(w))), 'every world is fully painted (no stand-in art)');
 // the rest of the run uses these worlds as a test bed, stand-in art and all
 await page.evaluate(() => window.__game.v9.paintAll());
 await travel('nerith');

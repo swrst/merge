@@ -1,5 +1,14 @@
 # Changelog
 
+- **v27**
+  - Every world fully painted: Tidal Shallows and Aurora Reach finished, plus sharper Meadow side chains and producers.
+  - Alien pet line (Gloopling → Gloop → Starjelly/Rockmuncher/Fizzwhip → finals) with feeding, levels and evolution.
+  - Proper portraits for the helpers.
+  - Story dialogue for every Tidal Shallows and Aurora Reach chapter.
+  - Only ChatGPT art is ever shown.
+  - Playtest fixes:
+    - claim banners, map dot, free-gift banner
+    - new-producer reveal, tap-to-place storage, first-time explanations
 - **v25**
   - Ember Hollow fully painted; Aurora Reach half painted; Tidal Shallows started.
   - 5 late-Meadow chains (Picnic, Alien Pets, Music, Weather, Rocket Parts) with story producers.
