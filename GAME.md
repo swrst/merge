@@ -301,12 +301,20 @@ the game never shows a locked door it has not explained. The twist on top of mer
   made your first.
 
 ### Events and story
-- The first meteor (level 3) is the story beat: Professor Bloop crawls out of the wreck.
-- The wreck is a **one-time** producer dropping broken bits across four chains:
+- Chapter 4's meteor is the story beat: Dr. Zonk crash-lands and leaves a **crater**, not a
+  wreck. His ship is "in pieces somewhere in the woods". Before the ship turns up, craters give
+  only Star Scrap (and the odd Star Core), never Fuel Ore.
+- **The rocket is the end of the Meadow, not the middle of it.** Dr. Zonk's wreck turns up after
+  chapter 15 (Stargazing Night, where everyone sees where home is). From then until chapter 22
+  (the Launch Pad) you build the rocket. Before that there are no rocket pieces anywhere: not in
+  contracts, contract rewards, the shop, crates or the Album. The 🚀 spot on the map says "Not yet".
+  A save that already started building keeps going.
+- The wreck is a producer dropping broken bits across four chains:
   Bolt → Bolt Pack → **Hull**, Spring → Coil → **Engine**, Wire → Circuit → **Nav Dish**,
   Glass → Tank Glass → **Fuel Tank**. It aims its drops at the part you are furthest from
-  finishing, and the moment the rocket is whole it is picked clean and vanishes — leftover
-  bits are cashed in, and the part chains stop appearing in orders and in the shop.
+  finishing, and the moment the rocket is whole it is picked clean and vanishes.
+- **Contracts never ask for rocket pieces or Star Scrap.** Those get used up elsewhere, so a
+  contract for one could wait forever. Old saves holding such a contract lose it on load.
 - Finished parts install themselves onto the rocket, which visually assembles in the 🚀 tab.
 - **Meteors after that are the fuel loop.** They are rare (3½–6 minutes apart, announced, one
   crater at a time) and each leaves a **Meteor Crater**: a producer good for 7 digs of Star
@@ -328,10 +336,14 @@ Hearts: +15 % coins, +25 % XP, faster energy, an extra contract slot, more bag s
 meteors that arrive sooner. Each stacks two or three times, applies in every world, and is
 the only sink big enough to keep the lab worth running.
 
-### ✨ Star Forge
-What meteor stars are for. Star Scrap and Star Cores buy instant favours in the shop:
-refill energy, top up every producer at once, swap the whole contract board, or pull a
-meteor down on demand.
+### ✨ Star Pouch, Star Forge, Constellations
+Star Scrap and Star Cores never sit on the board. The moment one lands it flies into the
+**Star Pouch** (counts shown in the Shop's Rocket & lab section and in Constellations).
+- **Star Forge** (Shop) spends scrap and cores on instant favours: refill energy, top up every
+  producer, swap the contract board, pull a meteor down.
+- **Constellations** (🎪 Fun) spend Star Cores on blessings that last forever, in every world.
+  **Fuse 2 Scrap → 1 Core** there.
+- The Lab can still use scrap as a sample, and chapter 5 (Dr. Zonk's Workshop) needs one.
 
 ### 🎒 Storage bag
 The board is the scarce resource in a merge game, so the bag is the release valve. It does
