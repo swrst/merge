@@ -4030,7 +4030,7 @@ export async function startGame() {
   function petBranch() {
     if (popOpen()) closePop();
     const opts = ['star', 'crater', 'comet'];
-    pop('✨ Evolution!', `<div class="noteLine" style="margin-top:16px">Your Puppy is ready to evolve. <b>Choose its path</b> — this is forever.</div>
+    pop('✨ Evolution!', `<div class="noteLine" style="margin-top:16px">Your ${petForm().name} is ready to evolve. <b>Choose its path</b> — this is forever.</div>
       <div class="evoPick">${opts.map(k => `<button class="evoOpt" data-evo="${k}"><span class="evoArt">${pupArt(PET_FORMS[k])}</span><b>${PET_FORMS[k].name}</b><i>${PET_FORMS[k].perk}</i><em>→ ${PET_FORMS[PET_NEXT[k]].name}</em></button>`).join('')}</div>`, 'fun');
     document.querySelectorAll<HTMLElement>('[data-evo]').forEach(b => b.onclick = () => { closePop(); petEvolve(b.dataset.evo!); });
   }

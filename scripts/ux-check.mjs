@@ -176,9 +176,15 @@ await page.waitForTimeout(600);
 { const q = await pt(bx); await page.mouse.click(q.x, q.y); await page.waitForTimeout(700); }
 const after = await page.evaluate(() => { const s = window.__game.state(); return { e: s.energy, items: s.boards[s.world].filter(c => c && c.id).map(c => window.__game.items[c.id].tier) }; });
 must(after.e <= 18 && after.items.length === 1 && after.items[0] >= 2, `⚡×2 tap costs double and drops a step higher (energy ${after.e}, tier ${after.items[0]})`);
-await page.evaluate(() => { const s = window.__game.state(); s.boost2 = 0; s.pup = { at: 0, n: 4 }; window.__game.hud(); });
+await page.evaluate(() => { const s = window.__game.state(); s.boost2 = 0; s.pup = { at: 0, n: 4, form: 'baby', lv: 1, xp: 0, food: Date.now() }; window.__game.hud(); });
 await page.waitForTimeout(1200);
-must(await page.locator('.qChip.pup').count() === 0, 'no pet chip until the pet art is painted (only ChatGPT art)');
+await page.locator('.qChip.pup').click({ force: true }); await page.waitForTimeout(900);
+must(await page.locator('#rwc.open').count() === 1, 'a ready pet brings a reward card');
+await page.locator('#rwcGo').click(); await page.waitForTimeout(700);
+must(await page.evaluate(() => window.__game.state().pup.n) === 5, 'and collecting it counts');
+await page.locator('.qChip.pup').click({ force: true }); await page.waitForTimeout(900);
+must(await page.locator('#pop.open .pupStage img').count() === 1 && await page.evaluate(() => /pet_baby/.test(document.querySelector('#pop.open .pupStage img').src) || document.querySelector('#pop.open .pupStage img').src.startsWith('data:')), 'its panel shows the painted alien');
+await page.evaluate(() => window.__game.v9.closePop()); await page.waitForTimeout(300);
 
 console.log('\n13. Console');
 must(errors.length === 0, 'no console errors' + (errors.length ? ':\n    ' + errors.slice(0, 5).join('\n    ') : ''));

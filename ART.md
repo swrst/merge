@@ -15,7 +15,7 @@
 
 ## The workflow
 
-1. Paste **`art/ALL-ART-PROMPT.md`** into ChatGPT. It is one prompt with everything still to paint.
+1. Write one prompt per image (see the last batch's format) and paste them into ChatGPT one by one.
    - Attach `STYLE-REFERENCE.png`, and get **one image per reply**; collages come out too small.
    - `node scripts/world-prompt.mjs <world>` prints one world's missing sheets on its own.
 2. Save the result into `Desktop\chatgpt art`.
@@ -47,14 +47,11 @@ UI files are picked up by name:
 
 ## Still to paint
 
-Everything below is in `art/ALL-ART-PROMPT.md` (23 images):
+Nothing. Every item, producer, character, tile and pet form in the game is painted (Oct 6).
 
-- **The pet:** 8 alien evolution forms and their sad versions.
-- **Characters:** proper portraits for Blorb, Oops, the Grub Brothers, Glimmer, Halo and Wren.
-- **Aurora Reach (Vela):** 8 chains.
-- **Tidal Shallows (Nerith):** most chains, the producers and the tiles.
-- **Higher-resolution redos** of the v25 collage art: the Meadow side chains, the new producers and the helpers.
-- **Unused art kept for later** (decorations, hats, holiday tiles, Moon Pup, Zib's faces, event banners, backgrounds) is in `art/library/`.
+`art/library/` keeps cut-outs for future features: decorations, hats, holiday tiles, event banners and backgrounds.
+
+To make prompts for new content, `node scripts/world-prompt.mjs <world>` lists whatever is unpainted. Write them one image per prompt, with `STYLE-REFERENCE.png` attached.
 
 ## The pet
 
