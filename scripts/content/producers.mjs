@@ -38,7 +38,7 @@ export const PRODUCERS = [
   ['earth', 10, 'crashsite|Crash Site|planet:steel/clay|bat:10/60|oddegg oddegg blinky|a small silver saucer nose-down in the dirt, dome cracked, little lights still blinking'],
 
   /* story guests: never planted by level, only by a chapter of the story */
-  ['earth', 99, 'raincloud|Rain Cloud|cloud:water/cloud|bat:16/30|dew dew dew puddle|a fat grey-blue rain cloud drizzling onto a little puddle'],
+  ['earth', 99, 'raincloud|Rain Cloud|cloud:water/cloud|bat:10/30|raindrop raindrop puffcloud|a fat grey-blue rain cloud drizzling onto a little puddle'],
 
   /* v16: story unlocks for the later Meadow chapters */
   ['earth', 99, 'windmill|Windmill|tower:wood/grass|nrg:1|flour flour flour dough|a small stone windmill with turning cloth sails'],

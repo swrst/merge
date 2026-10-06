@@ -4,7 +4,7 @@ export const WORLDS = [
   {
     key: 'earth', name: 'Sunny Meadow', subtitle: 'Home world', planet: 'earth',
     tapCost: 1, perk: 'rain',
-    folks: ['pip', 'grandma', 'timmy', 'gigi', 'biscuit', 'mumbo', 'pim', 'rokk', 'nix', 'vulk', 'kelpa', 'zephyr', 'blorb', 'grubs'],
+    folks: ['pip', 'grandma', 'timmy', 'gigi', 'biscuit', 'mumbo', 'pim', 'blorb', 'grubs'],
     heart: 'Meadow Heart',
     /* what the Heart wants, stage by stage — each stage visibly wakes the world */
     bloom: [

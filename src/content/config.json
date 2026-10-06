@@ -21,9 +21,9 @@
     "levelUp": 20
   },
   "xp": {
-    "base": 8,
-    "perLevel": 7,
-    "growth": 2.6,
+    "base": 40,
+    "perLevel": 40,
+    "growth": 8,
     "perMerge": 1,
     "orderBase": 3
   },
@@ -342,7 +342,7 @@
       "cost": 0,
       "cooldownMs": 2400000,
       "flips": 24,
-      "unlockLevel": 4
+      "unlockLevel": 6
     }
   },
   "visitor": {
@@ -403,7 +403,7 @@
     }
   },
   "event": {
-    "unlockLevel": 4,
+    "unlockLevel": 9,
     "cycleH": 96,
     "activeH": 72,
     "epoch": 1767571200000,
@@ -517,7 +517,7 @@
     ]
   },
   "spin": {
-    "unlockLevel": 3,
+    "unlockLevel": 5,
     "segments": [
       {
         "r": {

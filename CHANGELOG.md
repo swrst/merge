@@ -1,5 +1,19 @@
 # Changelog
 
+- **v29**
+  - Slower levels: XP curve ×5 and contracts pay less XP. Features open later: wheel 5, pairs 6, ⚡×2 8, events 9, pet 10.
+  - Story order:
+    - The Old Well comes in chapter 3 (no rain-cloud stand-in).
+    - The Windmill comes with the bakery (chapter 16).
+    - The rain cloud is a short weather guest in chapter 20 with its own drops.
+    - Every late-Meadow producer has a chapter.
+  - Only characters you have met in the story bring contracts.
+  - When an event ends, its leftover items sell themselves.
+  - Camp map:
+    - the painting is fitted to the phone's width, so producers sit on their plinths
+    - no "??? nothing here yet"
+    - no Storage button (storage lives in the 📦 chip above the board)
+  - Tall dialogs keep the character's face on screen and scroll.
 - **v27**
   - Every world fully painted: Tidal Shallows and Aurora Reach finished, plus sharper Meadow side chains and producers.
   - Alien pet line (Gloopling → Gloop → Starjelly/Rockmuncher/Fizzwhip → finals) with feeding, levels and evolution.
