@@ -1516,7 +1516,7 @@
     }
   },
   "blobpup": {
-    "name": "Blob Pup",
+    "name": "Blobbo",
     "chain": "pets",
     "tier": 4,
     "sell": 32,
@@ -1527,7 +1527,7 @@
     }
   },
   "pupbed": {
-    "name": "Pup Bed",
+    "name": "Blob Bed",
     "chain": "pets",
     "tier": 5,
     "sell": 78,
@@ -1538,7 +1538,7 @@
     }
   },
   "puphouse": {
-    "name": "Pup House",
+    "name": "Blob House",
     "chain": "pets",
     "tier": 6,
     "sell": 185,

@@ -178,10 +178,7 @@ const after = await page.evaluate(() => { const s = window.__game.state(); retur
 must(after.e <= 18 && after.items.length === 1 && after.items[0] >= 2, `⚡×2 tap costs double and drops a step higher (energy ${after.e}, tier ${after.items[0]})`);
 await page.evaluate(() => { const s = window.__game.state(); s.boost2 = 0; s.pup = { at: 0, n: 4 }; window.__game.hud(); });
 await page.waitForTimeout(1200);
-await page.locator('.qChip.pup').click({ force: true }); await page.waitForTimeout(900);
-must(await page.locator('#rwc.open').count() === 1, 'a ready pup brings a reward card');
-await page.locator('#rwcGo').click(); await page.waitForTimeout(700);
-must(await page.evaluate(() => window.__game.state().pup.n) === 5, 'collecting it counts toward growing (5 = Puppy)');
+must(await page.locator('.qChip.pup').count() === 0, 'no pet chip until the pet art is painted (only ChatGPT art)');
 
 console.log('\n13. Console');
 must(errors.length === 0, 'no console errors' + (errors.length ? ':\n    ' + errors.slice(0, 5).join('\n    ') : ''));

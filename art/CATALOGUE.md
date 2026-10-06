@@ -73,7 +73,7 @@ Wooden Block → Spinning Top → Toy Robot → Wind-up Rocket → Puppet Theatr
 Crumbs → Sandwich → Picnic Basket → Picnic Blanket → Lemonade Set → Parasol Picnic → Garden Party → Picnic Pavilion
 
 **Alien Pets** · 8 steps · Lv 10 · from the Egg Nest  
-Spotted Egg → Peeking Egg → Blobling → Blob Pup → Pup Bed → Pup House → Pet Playground → Pet Palace
+Spotted Egg → Peeking Egg → Blobling → Blobbo → Blob Bed → Blob House → Pet Playground → Pet Palace
 
 **Meadow Music** · 8 steps · Lv 10 · from the Busking Robot  
 Music Note → Whistle → Ukulele → Drum → Jukebox → One-Alien Band → Bandstand → Concert Shell

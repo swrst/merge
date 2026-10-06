@@ -514,7 +514,7 @@ export async function startGame() {
     const app = $('#app');
     WORLD_ORDER.forEach(w => app.classList.toggle(w, S.world === w));
     $('#worldName').textContent = W().name;
-    $('#worldIcon').innerHTML = ART.planet(W().planet);
+    $('#worldIcon').innerHTML = ART.uiIcon('planet_' + S.world, ART.planet(W().planet));
     const m = curMission();
     $('#tabRocket').classList.toggle('locked', false);
     $('#tabMap').classList.toggle('locked', false);
@@ -551,7 +551,7 @@ export async function startGame() {
     add('research', 'Lab', L2().research.filter((r: any) => res(r.id) < r.max && S.sci >= researchCost(r)).length ? 1 : 0, ART.uiIcon('cl_flask', '🧪'), 'You can afford new research', () => setView('lab'));
     // only essence you have not been to the Heart with yet: the dot is news, not a nag
     add('bloom', 'World', !worldAwake() && essenceOnBoard() > (S.bloomSeen || 0) ? 1 : 0, ART.uiIcon('ic_globe', '🌍'), 'Wake the world with your essence', () => setView('map'));
-    add('pup', '', S.pup && !pupLeft() ? 1 : 0, pupArt(), 'Your Moon Pup fetched a gift!', () => pupPop());
+    add('pup', '', petOn() && !pupLeft() ? 1 : 0, pupArt(), 'Your pet fetched a gift!', () => pupPop());
     add('chapter', '', projReady(curProject()) ? 1 : 0, ART.uiIcon('cl_build', '🚀'), 'Chapter ready to build!', () => ($('#btnQuests') as HTMLElement).click());
     return out;
   }
@@ -2962,8 +2962,14 @@ export async function startGame() {
   /** somewhere you have already been: flying back costs nothing */
   const visited = (w: string) => w === 'earth' || !!S.unlocked[w];
   /** a new world opens on the map once the previous one's launch project is built */
+  /** a world only opens once every item and producer in it is painted — no stand-in art, ever */
+  const paintedCache: Record<string, boolean> = {};
+  const painted = (w: string) => paintedCache[w] ?? (paintedCache[w] =
+    WORLDS[w].chains.every((c: string) => CHAINS[c].items.every(id => !!ART.spriteItem(id)))
+    && [...WORLDS[w].start, ...(WORLDS[w].grow || [])].every((x: any) => !!ART.spriteProducer(PRODS[x.producer].art || x.producer)));
   const reachable = (w: string) => {
     const i = WORLD_ORDER.indexOf(w);
+    if (!painted(w)) return false;
     if (visited(w)) return true;
     const prev = WORLD_ORDER[i - 1];
     if (i <= 0 || !visited(prev)) return false;
@@ -2974,7 +2980,7 @@ export async function startGame() {
     const free = visited(w);
     if (!free && (S.fuel < CONFIG.rocket.fuelToLaunch || !allParts())) return;
     if (!free) S.fuel -= CONFIG.rocket.fuelToLaunch;
-    const cut = $('#cut'); $('#cutRocket').innerHTML = ART.rocket({ hull: 1, engine: 1, nav: 1, tank: 1 }, { flame: true });
+    const cut = $('#cut'); $('#cutRocket').innerHTML = ART.spriteUi('rocket_3') ? `<img class="rkImg" src="${ART.spriteUi('rocket_3')}">` : ART.rocket({ hull: 1, engine: 1, nav: 1, tank: 1 }, { flame: true });
     $('#cutTitle').textContent = 'Blasting off!';
     $('#cutSub').textContent = 'Destination: ' + WORLDS[w].name;
     const warpHost = $('#warps'); warpHost.innerHTML = '';
@@ -3888,15 +3894,17 @@ export async function startGame() {
      Art: chars/pet_<form>.png when painted, the pup growth sprites until then. */
   type PetForm = { id: string; name: string; stage: number; art: string; tint?: string; perk: string; mins: number };
   const PET_FORMS: Record<string, PetForm> = {
-    baby: { id: 'baby', name: 'Moon Pup', stage: 1, art: 'pup1', perk: 'Fetches a little something now and then.', mins: 40 },
-    pup: { id: 'pup', name: 'Puppy', stage: 2, art: 'pup3', perk: 'Fetches faster and better.', mins: 34 },
-    star: { id: 'star', name: 'Star Hound', stage: 3, art: 'pup4', tint: 'hue-rotate(185deg) saturate(1.3)', perk: 'Brings <b>energy</b>. Your energy refills <b>10% faster</b>.', mins: 28 },
-    crater: { id: 'crater', name: 'Crater Hound', stage: 3, art: 'pup4', tint: 'sepia(.5) saturate(1.6) hue-rotate(-15deg)', perk: 'Digs up <b>items</b>, sometimes a chest.', mins: 28 },
-    comet: { id: 'comet', name: 'Comet Hound', stage: 3, art: 'pup4', tint: 'hue-rotate(250deg) saturate(1.4)', perk: 'Brings <b>coins and gems</b>. Contracts pay <b>10% more</b>.', mins: 28 },
-    nova: { id: 'nova', name: 'Nova Guardian', stage: 4, art: 'pup5', tint: 'hue-rotate(185deg) saturate(1.5) brightness(1.08)', perk: 'Lots of <b>energy</b>. Energy refills <b>20% faster</b>.', mins: 22 },
-    titan: { id: 'titan', name: 'Moonstone Titan', stage: 4, art: 'pup5', tint: 'sepia(.6) saturate(1.8) hue-rotate(-15deg)', perk: 'Higher-tier <b>items</b> and chests.', mins: 22 },
-    king: { id: 'king', name: 'Comet King', stage: 4, art: 'pup5', tint: 'hue-rotate(250deg) saturate(1.6) brightness(1.08)', perk: '<b>Coins and gems</b>. Contracts pay <b>20% more</b>.', mins: 22 },
+    baby: { id: 'baby', name: 'Gloopling', stage: 1, art: 'pet_baby', perk: 'Fetches a little something now and then.', mins: 40 },
+    pup: { id: 'pup', name: 'Gloop', stage: 2, art: 'pet_pup', perk: 'Fetches faster and better.', mins: 34 },
+    star: { id: 'star', name: 'Starjelly', stage: 3, art: 'pet_star', perk: 'Brings <b>energy</b>. Your energy refills <b>10% faster</b>.', mins: 28 },
+    crater: { id: 'crater', name: 'Rockmuncher', stage: 3, art: 'pet_crater', perk: 'Digs up <b>items</b>, sometimes a chest.', mins: 28 },
+    comet: { id: 'comet', name: 'Fizzwhip', stage: 3, art: 'pet_comet', perk: 'Brings <b>coins and gems</b>. Contracts pay <b>10% more</b>.', mins: 28 },
+    nova: { id: 'nova', name: 'Nova Wobbler', stage: 4, art: 'pet_nova', perk: 'Lots of <b>energy</b>. Energy refills <b>20% faster</b>.', mins: 22 },
+    titan: { id: 'titan', name: 'Boulderbelly', stage: 4, art: 'pet_titan', perk: 'Higher-tier <b>items</b> and chests.', mins: 22 },
+    king: { id: 'king', name: 'Comet Emperor', stage: 4, art: 'pet_king', perk: '<b>Coins and gems</b>. Contracts pay <b>20% more</b>.', mins: 22 },
   };
+  /** the pet only exists in the game once ChatGPT has painted its line */
+  const petPainted = () => ['baby', 'pup', 'star', 'crater', 'comet', 'nova', 'titan', 'king'].every(k => !!ART.spriteChar('pet_' + k));
   const PET_NEXT: Record<string, string> = { star: 'nova', crater: 'titan', comet: 'king' };
   const PET_EVOLVE = { pup: 5, branch: 10, final: 20 };
   const PET_MAXLV = 25;
@@ -3906,11 +3914,12 @@ export async function startGame() {
     const p = pet(); if (!p) return;
     if (p.form) return;
     // a pup from v26 (gifts only): keep its progress as levels
-    p.form = 'baby'; p.lv = 1; p.xp = (p.n || 0) * 6; p.food = Date.now(); p.name = p.name || 'Moon Pup';
+    p.form = 'baby'; p.lv = 1; p.xp = (p.n || 0) * 6; p.food = Date.now(); delete p.name;
     while (p.lv < PET_MAXLV && p.xp >= petXpNeed(p.lv)) { p.xp -= petXpNeed(p.lv); p.lv++; }
     if (p.lv >= PET_EVOLVE.pup) p.form = 'pup';
   }
   const petForm = (): PetForm => PET_FORMS[(pet() && pet().form) || 'baby'];
+  const petOn = () => !!pet() && petPainted();
   /** 0..100: full after a meal, empty eight hours later */
   const petFood = () => pet() ? clamp(100 - (Date.now() - (pet().food || 0)) / (8 * 36000), 0, 100) : 0;
   const petMood = () => { const f = petFood(); return f > 60 ? 'happy' : f > 25 ? 'ok' : 'hungry'; };
@@ -3920,10 +3929,9 @@ export async function startGame() {
     return Math.max(0, pet().at + mins * 60000 - Date.now());
   };
   function pupArt(form = petForm(), cls = '') {
-    const painted = ART.spriteChar('pet_' + form.id);
-    const src = painted || ART.spriteChar(form.art);
-    const style = painted || !form.tint ? '' : `filter:${form.tint};`;
-    return `<img class="pupImg ${cls}" style="${style}--s:${(0.62 + form.stage * 0.1).toFixed(2)}" src="${src}" alt="${form.name}">`;
+    const mood = pet() && form === petForm() ? petMood() : '';
+    const src = (mood === 'hungry' && ART.spriteChar('pet_' + form.id + '_sad')) || ART.spriteChar('pet_' + form.id);
+    return `<img class="pupImg ${cls}" style="--s:${(0.62 + form.stage * 0.1).toFixed(2)}" src="${src}" alt="${form.name}">`;
   }
   /** perks other systems read */
   const petRegen = () => { const f = pet() && pet().form; return f === 'star' ? 0.1 : f === 'nova' ? 0.2 : 0; };
@@ -3931,12 +3939,13 @@ export async function startGame() {
 
   const PET_LV = 10;
   function pupTick() {
+    if (!petPainted()) return;
     if (pet()) { petMigrate(); return; }
     // it comes from the Moon: the first time you are there (and settled in)
     if (S.lvl < PET_LV || S.world === 'earth' || !S.tut || view !== 'board' || popOpen() || $('#modal').classList.contains('open') || $('#talk').classList.contains('open')) return;
     S.pup = { at: Date.now() - 38 * 60000, n: 0, pet: 0, form: 'baby', lv: 1, xp: 0, food: Date.now() }; save();
-    talkScene([['bloop', 'Something followed me out of a crater. It is fluffy. It has three ears. It will not leave.'],
-      ['zib', 'A Moon Pup! Zib knows these. They fetch things. They eat things. They GROW, friend.'],
+    talkScene([['bloop', 'Something crawled out of a crater and into my lab coat. It is squishy. It has too many eyes. It will not leave.'],
+      ['zib', 'A Gloopling! Zib knows these. They fetch things. They eat things. They CHANGE, friend.'],
       ['bloop', 'Feed it your spare items and collect what it brings. If it is happy, it will evolve. Into what, nobody knows.']], () => { renderQuick(); setTimeout(pupPop, 600); });
   }
   function petGainXp(n: number) {
@@ -3992,7 +4001,7 @@ export async function startGame() {
     if (!pupLeft() && !stay) {
       const r = pupGift();
       pet().at = Date.now(); pet().n = (pet().n || 0) + 1; save(); renderQuick();
-      rewardCard(pupArt(), `${petForm().name} fetched!`, ['Woof-blorp! It drops something at your feet.', 'It looks very proud of itself.', 'It wags all three ears.'][Math.floor(Math.random() * 3)], r, () => petGainXp(6));
+      rewardCard(pupArt(), `${petForm().name} fetched!`, ['Blorp! It spits something out at your feet.', 'It looks very proud of itself.', 'All its eyes blink at you, one after the other.'][Math.floor(Math.random() * 3)], r, () => petGainXp(6));
       return;
     }
     const p = pet(), f = petForm(), mood = petMood(), food = Math.round(petFood());
@@ -4045,7 +4054,7 @@ export async function startGame() {
     if (e) bits.push(`<button class="qChip ev" data-q="event">${ART.uiIcon('tok_' + e.theme.id, e.theme.icon)}<b>${S.ev.key === e.key ? S.ev.pts : 0}</b><i>${dhm(e.ends - Date.now())}</i></button>`);
     if (S.lvl >= SP().unlockLevel && spinsLeft()) bits.push(`<button class="qChip spin" data-q="spin">${ART.uiIcon('ic_spin', '🎡')}<b>${spinsLeft()}</b></button>`);
     if (stored().length) bits.push(`<button class="qChip store" data-q="store">${ART.uiIcon('ic_box', '📦')}<b>${stored().length}</b></button>`);
-    if (S.pup) bits.push(`<button class="qChip pup${pupLeft() ? '' : ' ready'}" data-q="pup">${pupArt()}<i>${pupLeft() ? mmss(pupLeft()) : 'gift!'}</i></button>`);
+    if (petOn()) bits.push(`<button class="qChip pup${pupLeft() ? '' : ' ready'}" data-q="pup">${pupArt()}<i>${pupLeft() ? mmss(pupLeft()) : 'gift!'}</i></button>`);
     if (S.acc) bits.push(`<button class="qChip acc" data-q="acc">${ART.uiIcon('ic_lab', '⚗️')}<i>${accLeft() ? mmss(accLeft()) : 'done!'}</i></button>`);
     const html = bits.join('');
     if (host.dataset.h === html) return;
@@ -4421,7 +4430,7 @@ export async function startGame() {
     const built = Object.keys(S.parts).filter(k => S.parts[k]).length;
     let ents = spot('rocket', PAD.rocket,
       S.met ? (ART.spriteUi('rocket_0') ? `<img class="campImg" src="${ART.spriteUi('rocket_' + (built >= 4 ? 3 : built >= 3 ? 2 : built >= 1 ? 1 : 0))}">`
-        : built ? ART.rocket(S.parts) : '<div class="spotGhost">🚀</div>') : '<div class="spotGhost">🚀</div>',
+        : built ? (ART.spriteUi('rocket_0') ? `<img class="rkImg" src="${ART.spriteUi('rocket_' + (built >= 4 ? 3 : built >= 3 ? 2 : built >= 1 ? 1 : 0))}">` : ART.rocket(S.parts)) : '<div class="spotGhost">🚀</div>') : '<div class="spotGhost">🚀</div>',
       S.met ? 'Rocket' : '???',
       S.met ? (allParts() ? 'Ready · ⛽' + S.fuel + '/3' : built + '/4 parts') : 'nothing here yet',
       'ship' + (S.met && allParts() && S.fuel >= CONFIG.rocket.fuelToLaunch ? ' ready' : ''));
@@ -4483,6 +4492,7 @@ export async function startGame() {
       const prog = seen && list.length ? `<div class="gpBar"><i style="width:${Math.round(done / list.length * 100)}%"></i></div>
         <em>📜 ${done}/${list.length} chapters${worldDone(k) ? ' · restored ✨' : ''}</em>` : '';
       const btn = here ? '<span class="gpHere">📍 You are here</span>'
+        : !painted(k) ? '<span class="gpNeed">🎨 Coming soon</span>'
         : !reached ? `<span class="gpNeed">🔒 ${prev && visited(prev) ? `Restore ${WORLDS[prev].name} · ${projDone(prev)}/${projList(prev).length}` : 'Far away'}</span>`
           : seen ? `<button class="gpGo" data-world="${k}">Fly back ✈️</button>`
             : can ? `<button class="gpGo launch" data-world="${k}">LAUNCH 🚀</button>`
@@ -4577,6 +4587,7 @@ export async function startGame() {
   function galaxyTap(k: string) {
     if (k === S.world) { worldTab = 'camp'; sfx.tap(); renderWorldScreen(); return; }
     const i = WORLD_ORDER.indexOf(k), prev = WORLD_ORDER[i - 1];
+    if (!painted(k)) { sfx.no(); toast(`🎨 <b>${WORLDS[k].name}</b> is coming soon — it is still being painted.`); return; }
     if (!reachable(k)) {
       sfx.no();
       if (!visited(prev)) toast('🔒 Fly to ' + WORLDS[prev].name + ' first.');
@@ -5254,7 +5265,7 @@ export async function startGame() {
       grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed, ecost,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
       fly: (w: string) => galaxyTap(w), view: (v: string) => setView(v),
-      curProject: () => curProject(), v9: { storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, rocketPanel, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; renderLab(); } },
+      curProject: () => curProject(), v9: { paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, rocketPanel, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; renderLab(); } },
     };
     setInterval(tick, 500);
     setInterval(() => { if (!document.hidden) S.playMs = (S.playMs || 0) + 5000; }, 5000);

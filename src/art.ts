@@ -1088,6 +1088,8 @@ export const ART = (function () {
   }
   function charArt(k: string) {
     if (SPRITE.char[k]) return `<svg viewBox="0 0 100 100" class="face"><image href="${SPRITE.char[k]}" x="0" y="0" width="100" height="100"/></svg>`;
+    // no painted head: show the top of the painted full body rather than a drawn stand-in
+    if (SPRITE.char[k + '_full']) return `<svg viewBox="0 0 100 100" class="face"><image href="${SPRITE.char[k + '_full']}" x="-35" y="-6" width="170" height="170" preserveAspectRatio="xMidYMin meet"/></svg>`;
     if ((CHAR as Record<string, unknown>)[k]) return get(CHAR, k);
     const sp = FSPEC[k];
     if (!sp) return get(CHAR, k);
@@ -1103,6 +1105,7 @@ export const ART = (function () {
     figure: (k: string) => {
       // a painted portrait beats the assembled figure everywhere it is shown
       if (SPRITE.char[k]) return `<svg viewBox="0 0 100 100" class="fig portrait"><image href="${SPRITE.char[k]}" x="0" y="0" width="100" height="100"/></svg>`;
+      if (SPRITE.char[k + '_full']) return `<svg viewBox="0 0 100 100" class="fig portrait"><image href="${SPRITE.char[k + '_full']}" x="0" y="0" width="100" height="100"/></svg>`;
       const key = 'f' + k; if (!cache[key]) cache[key] = figure(k); return cache[key];
     },
     /** a painted ui/icon_<k>.png wins over the drawn icon */
