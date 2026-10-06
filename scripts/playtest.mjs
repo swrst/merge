@@ -72,7 +72,8 @@ const tab = async (v) => {
     const x = page.locator('.screen.open .scClose');
     if (await x.count()) await x.first().click({ force: true });
   } else {
-    await page.locator(`[data-v="${v}"]`).click({ force: true });
+    // Album, Lab and games live on the map now; open the pages directly
+    await page.evaluate((v) => window.__game.view(v), v);
   }
   // the screen slides in; on a software renderer that can take a while to
   // settle, and half-way through it everything is 200px lower than it looks
@@ -242,11 +243,11 @@ await set(() => {
   b[12] = { id: 'gem' }; b[13] = { id: 'scrap' };
 });
 await page.waitForTimeout(300);
-must(await page.locator('#tabLab.hide').count() === 1, 'the Lab tab is hidden before it exists');
+must(await page.evaluate(() => { window.__game.view('map'); const n = document.querySelectorAll('[data-hub=lab]').length; window.__game.view('board'); return n; }) === 0, 'the Lab is not on the map before it exists');
 // the story builds the lab (Meadow chapter 5) — here we just switch it on
 await set(() => { window.__game.state().lab.built = 1; });
 await page.waitForTimeout(300);
-must(await page.locator('#tabLab.hide').count() === 0, 'the Lab tab appears once built');
+must(await page.evaluate(() => { window.__game.view('map'); const n = document.querySelectorAll('[data-hub=lab]').length; window.__game.view('board'); return n; }) === 1, 'the Lab shows on the map once built');
 
 head('Research Lab');
 await set(() => {
@@ -257,7 +258,7 @@ await set(() => {
 });
 await tab('lab');
 must(await page.locator('#sc-lab.open').count() === 1, 'lab screen opens');
-await page.evaluate(() => document.querySelector('[data-ltab="fusion"]').click()); await page.waitForTimeout(400);
+await page.waitForTimeout(400);
 await shot('lab-empty');
 const recipeCount = await page.evaluate(() => window.__game.recipes.length);
 // the rumours are a pop-up off the bench now
@@ -374,7 +375,7 @@ console.log('   [shop]', JSON.stringify(shopDiag));
 await tapUI('[data-up="bag"]'); await page.waitForTimeout(450);
 must((await S()).up.bag === 1, 'Storage Bag bought');
 await tab('board');
-must(await page.locator('#tools .toolBtn').count() >= 1, 'the bag button appears above the board');
+must(await page.locator('#btnStore').count() === 1, 'the storage button sits at the bottom');
 must(await page.evaluate(() => {
   const r = document.querySelector('#board canvas').getBoundingClientRect();
   const el = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
@@ -405,7 +406,7 @@ await tapUI('#btnStash'); await page.waitForTimeout(500);
 after = await S();
 must(after.bag.length === 1 && after.bag[0] === 'gem', 'the item moved into the bag');
 must(!after.boards.earth[12], 'and left the board');
-await tapUI('#tools .toolBtn');
+await tapUI('#btnStore');
 // the tray slides up; on software GL that can take well over its 0.3s, and a
 // click mid-slide lands outside the viewport
 await page.waitForFunction(() => /^(none|matrix\(1, 0, 0, 1, 0, 0\))$/.test(getComputedStyle(document.querySelector('#bagTray')).transform));
@@ -942,13 +943,12 @@ head('The quest button and the "where do I get one?" panel');
 await tab('board');
 await set(() => { const st = window.__game.state(); st.mp = {}; st.proj[st.world] = 0; });
 await page.waitForTimeout(300);
-const qTxt = await page.textContent('#btnQuests .qTxt');
-must(/Ch\. \d+/.test(qTxt), `the chapter strip is always on screen: "${qTxt}"`);
-must(await page.locator('#btnQuests .qNeed').count() >= 1, 'and shows what the chapter needs');
-await page.locator('#btnQuests').click({ force: true }); await page.waitForTimeout(900);
-// once the rocket stands, the strip points at the restoration project and the
-// starter quests live one tap further, on the Goals screen
-if (await page.locator('#openQuests').count()) { await page.evaluate(() => document.querySelector('#openQuests').click()); await page.waitForTimeout(700); }
+const qTxt = await page.textContent('#btnQuests .cwT');
+must(/Ch\. \d+/.test(qTxt), `the chapter widget is always on screen: "${qTxt}"`);
+await page.locator('#btnQuests').click({ force: true }); await page.waitForTimeout(700);
+must(await page.locator('#pop.open .pNeed').count() >= 1, 'and tapping it shows what the chapter needs');
+await page.evaluate(() => window.__game.v9.closePop());
+await page.evaluate(() => window.__game.v9.questsPop()); await page.waitForTimeout(700);
 must(await page.locator('.questRow').count() >= 15, `the quest list shows all ${await page.locator('.questRow').count()} of them`);
 must(await page.locator('.questRow.now').count() === 1, 'with the current one called out');
 await closeModal();
@@ -1083,6 +1083,7 @@ must(s.sci === 9 && !s.boards.earth.some(c => c && c.id === 'geode'), `recycling
 await set(() => { window.__game.state().sci = 100; });
 const e0 = await page.evaluate(() => window.__game.maxEnergy());
 await tab('lab');
+await page.evaluate(() => window.__game.v9.labTab('research')); await page.waitForTimeout(300);
 await page.evaluate(() => document.querySelector('[data-res="battery"]').click()); await page.waitForTimeout(300);
 s = await S();
 must(s.res.battery === 1 && s.sci === 85, 'Bigger Battery research costs 15 Science');
@@ -1092,7 +1093,7 @@ await set(() => {
   const fr = []; for (let i = 0; i < b.length; i++) if (!b[i]) fr.push(i);
   b[fr[0]] = { id: 'log' }; window.__board.sync(b);
 });
-await page.evaluate(() => document.querySelector('[data-ltab="acc"]').click()); await page.waitForTimeout(300);
+await page.evaluate(() => window.__game.v9.labTab('acc')); await page.waitForTimeout(300);
 await page.evaluate(() => document.querySelector('#accLoad').click()); await page.waitForTimeout(400);
 await page.evaluate(() => document.querySelector('[data-acc="log"]').click()); await page.waitForTimeout(400);
 s = await S();
@@ -1136,6 +1137,30 @@ const pairOf = cards.findIndex((h, k) => k > 0 && h === cards[0]);
 await page.locator('.pCard').nth(0).click(); await page.locator('.pCard').nth(pairOf).click(); await page.waitForTimeout(900);
 must(await page.locator('.pCard.got').count() === 2, 'a matching pair stays face up');
 await page.evaluate(() => document.querySelector('#miniClose').click()); await page.waitForTimeout(300);
+
+head('New producers wait for the old ones to be maxed; old ones retire');
+await page.evaluate(() => window.__game.view('board'));
+await set(() => {
+  const g = window.__game, s = g.state(), b = s.boards.earth;
+  s.world = 'earth'; s.proj.earth = 5; s.talked = { e6: 1 }; s.coins = 99999; s.store = {};
+  for (let i = 0; i < b.length; i++) b[i] = null;
+  b[0] = { p: 'tree', lv: 1 }; b[1] = { p: 'rocks', lv: 1 }; b[2] = { p: 'bush', lv: 1, ch: 5, at: Date.now() }; b[3] = { p: 'well', lv: 1 };
+  b[10] = { id: 'lumber' }; b[11] = { id: 'lumber' }; b[12] = { id: 'pie' };
+  s.cSince = { earth: 9 };
+  window.__board.sync(b);
+});
+await page.evaluate(() => window.__game.v9.chapterSheet()); await page.waitForTimeout(400);
+const ups = await page.locator('#pop.open .upRow').count();
+must(ups === 3, `chapter 6 asks for the Rock Pile, Berry Bush and Well at max level first, not the retiring tree (${ups})`);
+must(await page.locator('#pop.open #btnProject.off').count() === 1, 'and cannot be built yet');
+for (let k = 0; k < 6; k++) { const b = page.locator('#pop.open [data-upg]').first(); if (!(await b.count())) break; await b.click({ force: true }); await page.waitForTimeout(250); }
+await page.evaluate(() => window.__game.v9.closePop());
+await page.evaluate(() => window.__game.v9.buildProject()); await page.waitForTimeout(3000);
+await closeModal();
+const after6 = await S();
+must(!after6.boards.earth.some(c => c && c.p === 'tree'), 'building chapter 6 retires the Big Tree');
+must(after6.proj.earth === 6, 'and the chapter is built');
+must(after6.boards.earth.some(c => c && c.p === 'rocks' && c.lv === 3), 'the maxed producers stay');
 
 head('Console');
 must(errors.length === 0, errors.length ? `console errors:\n${errors.join('\n')}` : 'no console errors');

@@ -1,5 +1,28 @@
 # Changelog
 
+- **v31**
+  - Travel Town layout:
+    - top: level, energy, coins, gems, shop, settings (always visible, on every page)
+    - left column: chapter card (tap for what it needs, BUILD when ready), Goals, event/spin/pet chips
+    - customers stand in a row with a small card of what they want
+    - big board
+    - bottom: 📦 storage · item line · 🌌 galaxy
+  - Album, Games and the Lab open from the map. The bottom dock is gone.
+  - Dynamic sizing: the whole game scales to the device. A tablet gets the same layout, bigger; on a wide screen it is a centred column with the world painted around it.
+  - The Lab is a room: its painting fills the page. Fusion is the bench; Research and Grow (accelerator) are stations.
+  - Producer pacing (Meadow):
+    - From chapter 6, a chapter that brings a new producer needs the current ones at max level first. The chapter card has upgrade buttons.
+    - Producers retire when the story is done with them, with a thank-you payout: Big Tree after 6, Well 7, Rock Pile 8, Berry Bush 9, Tea Bush 10, Flower Bed and Bird Box 12, Toy Chest 13, Hay Meadow 14, Veggie Patch 17, Clay Pit 19, Windmill, Egg Nest and Busker Bot 21.
+    - Mossy Log, Cotton Patch and Picnic Hamper are short visitors.
+    - Usually 2–5 producers are on the board at once.
+    - Max level is 3, and upgrades are cheaper early on.
+  - Less text and fewer popups:
+    - shorter chapter dialogue
+    - first-time explanations are one-line toasts
+    - banners only for chapter ready, pet gift and events
+    - 7 coach tips instead of 22, with at least 2 minutes between them
+    - no shop or crater dialogs
+  - Storage bag has 2 free slots from the start.
 - **v30**
   - Contracts never ask for rocket pieces or Star Scrap. Old saves drop any such contract on load, so nothing waits forever.
   - Rocket comes later: Dr. Zonk lands in chapter 4 (crater, no wreck), and his ship turns up after chapter 15, Stargazing Night. You build it from chapter 16 to the launch in chapter 22. Until then there are no rocket pieces, no fuel ore from craters and no Fuel Brewing.

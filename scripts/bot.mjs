@@ -45,6 +45,15 @@ const step = () => page.evaluate(() => {
   // a chapter ready to build
   const q = document.querySelector('#btnQuests.ready');
   if (q) { q.click(); return 'build'; }
+  // the chapter wants producers maxed first: upgrade one when the coins are there
+  const pj0 = g.curProject ? g.curProject() : null;
+  if (pj0) {
+    const ups = g.v9.upNeeds(pj0);
+    for (const u of ups) {
+      const at = b.findIndex(c => c && c.p === u.k && !c.tmp);
+      if (at >= 0 && S.coins >= g.v9.upCost(g.prods[u.k], u.lv)) { g.v9.upgradeProducer(at); return 'upgrade:' + u.k; }
+    }
+  }
   // what the open contracts and the chapter still want
   const want = new Set();
   S.orders.forEach(o => o.needs.forEach(nd => want.add(nd.id)));

@@ -300,6 +300,9 @@ the game never shows a locked door it has not explained. The twist on top of mer
 - Relics pay for the next round of upgrades, and collectors start ordering them once you have
   made your first.
 
+### Producer pacing (Meadow)
+A chapter that brings a new producer (from chapter 6 on) first needs every producer you have at max level (3), except the ones that chapter retires. Producers retire when no later chapter needs their chain (`retire: [...]` on the chapter), so the board usually holds 2–5 producers. Short-lived ones (Mossy Log, Cotton Patch, Picnic Hamper) arrive as visitors with a set number of taps.
+
 ### Events and story
 - Chapter 4's meteor is the story beat: Dr. Zonk crash-lands and leaves a **crater**, not a
   wreck. His ship is "in pieces somewhere in the woods". Before the ship turns up, craters give

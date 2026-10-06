@@ -1788,3 +1788,145 @@ img.emo{height:1.2em;width:auto;vertical-align:-.25em;margin:0 .04em;display:inl
 .pouchRow .buyBtn{margin-left:4px;font-size:12px;padding:6px 10px;min-width:0}
 .buyBtn .cost,.buyBtn .cost.ok{color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.35);font-size:14px}
 .buyBtn .cost .art{width:22px;height:22px}
+
+/* =====================================================================
+   v31 — Travel Town layout
+   One column: HUD (always on top, every page), a slim widget column beside
+   the customers, a big board, and storage · item line · galaxy at the bottom.
+   main.ts zooms the whole shell to the device, so sizes here are for a
+   400 x 860 phone.
+   ===================================================================== */
+.hidden{display:none!important}
+body.native .app,.app{border-radius:0;box-shadow:none}
+body.wide{background:#10182a}
+body.wide:before{content:"";position:fixed;inset:-40px;background:var(--camp) center/cover no-repeat;filter:blur(18px) brightness(.62) saturate(1.1)}
+body.wide .app{box-shadow:0 0 60px rgba(0,0,0,.55)}
+
+/* HUD: level · energy · coins · gems · shop · settings. It sits over every page. */
+.app .hud{z-index:60;gap:5px;padding:calc(6px + env(safe-area-inset-top,0px)) 8px 4px}
+.app .hud .chip{min-width:0;flex:1 1 0;padding:2px 8px 2px 3px;font-size:13px}
+.app .hud .lvlBox{flex:none;padding-right:8px}
+.app .hud .xpwrap{width:46px}
+.hudShop{flex:none;width:40px;height:40px;border-radius:14px;padding:0;display:flex;align-items:center;justify-content:center}
+.hudShop .ti{font-size:22px}
+.hudShop .uiIc{width:34px;height:34px}
+.app .hud .iconBtn{flex:none;margin-left:0}
+.hudShop.locked{opacity:.45}
+
+/* widgets left, customers right */
+.topRow{position:relative;z-index:6;flex:none;display:flex;align-items:stretch;gap:4px;padding:0 0 0 6px;min-height:118px}
+.side{flex:none;width:62px;display:flex;flex-direction:column;gap:5px;padding-top:2px}
+.sideW{position:relative;width:62px;border-radius:14px;padding:3px 2px 4px;background:linear-gradient(180deg,#fffdf7,#ffe9c2);
+  border:2.5px solid #fff;box-shadow:0 3px 0 rgba(150,105,50,.3),0 5px 10px rgba(0,0,0,.14);display:flex;flex-direction:column;align-items:center;gap:1px;
+  font-size:10px;font-weight:700;color:#8a6a3c;overflow:visible}
+.sideW .ti{font-size:18px;line-height:1}
+.sideW .uiIc{width:26px;height:26px}
+.sideW i{font-style:normal;font-size:9.5px;font-weight:800;line-height:1}
+.sideW .dot{position:absolute;top:-5px;right:-5px}
+.chapW .cwFace{width:34px;height:34px;border-radius:50%;overflow:hidden;background:#fff4dc;display:flex;align-items:flex-end;justify-content:center}
+.chapW .cwFace svg,.chapW .cwFace img,.chapW .cwFace .fig,.chapW .cwFace>*{width:100%;height:100%;object-fit:cover}
+.chapW .cwT{font-size:10.5px;font-weight:800;color:#6b4a20;line-height:1.1;white-space:nowrap}
+.chapW .cwBar{width:48px;height:6px;border-radius:9px;background:#ead6b0;overflow:hidden}
+.chapW .cwBar i{display:block;height:100%;background:linear-gradient(90deg,#8fe86d,#4fb63a);border-radius:9px}
+.chapW.ready{background:linear-gradient(180deg,#f3ffe9,#c9f2b4);box-shadow:0 0 0 3px #8ce46a,0 0 16px rgba(110,220,80,.75);animation:readyBob 1.4s ease-in-out infinite}
+.chapW.ready .cwT{color:#2f7a1c}
+.side .quick{display:flex;flex-direction:column;gap:5px;margin:0}
+.side .qChip{width:62px;justify-content:center;flex-direction:column;border-radius:14px;padding:3px 2px;gap:0}
+.side .qChip i,.side .qChip b{font-size:9.5px;line-height:1.1}
+.side .qChip.store{display:none}
+
+/* customers: a figure standing, a little card of wants at their feet */
+.app .orderWrap{flex:1 1 auto;min-width:0;position:relative}
+.app .orders{gap:2px;padding:0 4px 4px;align-items:flex-end;height:100%}
+.app .order,html.ui-card_order .app .order{width:auto;min-width:78px;flex:none;background:none;border:0;border-image:none;box-shadow:none;padding:0 2px;
+  display:flex;flex-direction:column;align-items:center;animation:none}
+.app .order .oFig{width:auto;height:70px;background:radial-gradient(ellipse at 50% 96%,rgba(80,50,20,.28),rgba(80,50,20,0) 60%);border-radius:0}
+.app .order .oFig .fig{width:56px;height:70px}
+.app .order .oFig .fig.portrait{width:56px;height:56px;margin-top:10px}
+.app .order .oNeeds{margin:-4px 0 0;gap:2px;padding:3px 4px;background:#fffdf6;border-radius:12px;box-shadow:0 2px 0 rgba(150,105,50,.3),0 3px 8px rgba(0,0,0,.15)}
+.app .order .oNeed{flex:none;width:34px;height:34px;padding:0;border:0;border-radius:9px;background:#fff3dc;justify-content:center}
+.app .order .oNeed .art{width:30px;height:30px}
+.app .order .oNeed b{position:absolute;bottom:-3px;right:-2px;font-size:9px;background:#fff;border-radius:6px;padding:0 2px;line-height:1.2}
+.app .order .oNeed.done{background:#dff7cf;border:0}
+.app .order .oNeed.done:after{width:14px;height:14px;top:-4px;right:-4px;font-size:9px}
+.app .order.ready{box-shadow:none!important}
+.app .order.ready .oNeeds{box-shadow:0 0 0 2.5px #8ce46a,0 0 12px rgba(110,220,80,.7)}
+.app .order .oTick{position:absolute;right:-2px;top:34px;bottom:auto;width:32px;height:32px}
+.app .order .oTick .uiIc{width:32px;height:32px}
+.app .order.ship{width:auto}
+.app .oMile{right:8px;bottom:-4px}
+.app .oArrow{height:34px;width:22px}
+
+/* the board takes everything that is left */
+.app .stage{margin:2px 6px 4px;padding:5px;border-width:3px;border-radius:20px}
+.app .stage .tools{position:absolute;top:-14px;right:10px;z-index:7;display:flex;gap:4px}
+.app .stage .tools .hintTag{background:#fffdf6;border:2px solid #fff;box-shadow:0 2px 0 rgba(150,105,50,.3);padding:1px 8px;font-size:11px}
+.app .stage .tools #btnSnack{display:none}
+.app .stage .tools .toolBtn{width:30px;height:30px}
+
+/* bottom: storage · what you tapped · galaxy */
+.bottomBar{position:relative;z-index:46;flex:none;display:flex;align-items:center;gap:6px;padding:2px 8px calc(8px + env(safe-area-inset-bottom,0px))}
+.bbBtn{position:relative;flex:none;width:54px;height:54px;border-radius:18px;padding:0;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(180deg,#fffdf7,#ffe9c2);border:3px solid #fff;box-shadow:0 4px 0 rgba(150,105,50,.32),0 6px 12px rgba(0,0,0,.18)}
+.bbBtn .ti{font-size:26px;line-height:1}
+.bbBtn .uiIc{width:40px;height:40px}
+.bbBtn .n{position:absolute;top:-6px;right:-6px;min-width:19px;height:19px;border-radius:99px;background:#ff5e57;color:#fff;font-size:11px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;border:2px solid #fff;padding:0 3px}
+.galBtn{background:linear-gradient(180deg,#9fd8ff,#5a8fe0);border-color:#fff}
+.bbBtn .dot{position:absolute;top:-5px;right:-5px;width:16px;height:16px;border-radius:50%;background:#ff5e57;border:2px solid #fff;font-size:9px;color:#fff;
+  display:flex;align-items:center;justify-content:center}
+.bbBtn:active{transform:translateY(2px)}
+.app .bottomBar .infoBar{position:static;flex:1 1 auto;min-width:0;display:flex;height:54px;margin:0;padding:4px 6px 4px 10px;border-radius:16px;
+  background:#fffdf6;border:3px solid #fff;box-shadow:0 3px 0 rgba(150,105,50,.25);font-size:11px;align-items:center;gap:4px}
+.app .bottomBar .infoBar:not(.on)>*{display:none}
+.app .bottomBar .infoBar:not(.on):before{content:"";flex:1}
+.app .bottomBar .infoBar #infoTxt{flex:1;min-width:0;overflow:hidden;line-height:1.2;max-height:44px}
+.app .bottomBar .infoBar .sellBtn{padding:6px 8px;font-size:11px}
+.app .bottomBar .infoBar .xBtn{display:none}
+
+/* pages open under the HUD and use the whole height */
+.app .screen{top:var(--hudH,52px);bottom:0;border-radius:22px 22px 0 0}
+.app .scCoins:not(.sciChip){display:none}
+.campRail{position:absolute;left:8px;top:58px;z-index:6;display:flex;flex-direction:column;gap:8px}
+.hubBtn{position:relative;width:60px;height:60px;border-radius:18px;background:linear-gradient(180deg,#fffdf7,#ffe9c2);border:3px solid #fff;
+  box-shadow:0 4px 0 rgba(150,105,50,.32),0 6px 12px rgba(0,0,0,.2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:0}
+.hubBtn .ti{font-size:24px;line-height:1}
+.hubBtn .uiIc{width:36px;height:36px}
+.hubBtn i{font-style:normal;font-size:10px;font-weight:800;color:#8a6a3c}
+.hubBtn .dot{position:absolute;top:-6px;right:-6px;min-width:17px;height:17px;border-radius:99px;background:#ff5e57;border:2px solid #fff;color:#fff;font-size:9px;
+  display:flex;align-items:center;justify-content:center}
+
+/* the chapter card */
+.chHead{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:6px}
+.chHead .pFace{width:64px;height:64px}
+.upHead{margin:10px 0 4px;font-size:12px;font-weight:800;color:#8a5f26;text-align:center}
+.upRow{display:flex;align-items:center;gap:8px;background:#fff8e6;border-radius:12px;padding:4px 6px;margin-bottom:4px}
+.upArt{width:38px;height:38px;flex:none}
+.upArt>*{width:100%;height:100%}
+.upTx{flex:1;display:flex;flex-direction:column;font-size:12px}
+.upTx i{font-style:normal;font-size:10.5px;color:#9a7a4e}
+.upSt{font-style:normal;font-size:11px;color:#9a7a4e}
+.trayProd{margin-left:6px;font-size:11px;padding:3px 8px}
+.app .order .oFig{height:84px;display:flex;align-items:flex-end;justify-content:center}
+.app .order .oFig .stand{height:84px;width:auto;max-width:76px;object-fit:contain;object-position:bottom;filter:drop-shadow(0 3px 3px rgba(60,40,20,.3));animation:bob 3s ease-in-out infinite}
+.app .order .oFig .stand.bust{height:62px;border-radius:50%}
+.app .order.ready .oFig .stand{animation:figHop .6s ease-in-out infinite}
+.app .topRow{min-height:130px}
+/* the Lab is a room: its painting is the whole page */
+.app .screen.lab{background:#1f1636 var(--labbg) center/cover no-repeat}
+.app .screen.lab .scHead{position:absolute;left:0;right:0;top:0;z-index:5;background:linear-gradient(180deg,rgba(20,12,40,.55),rgba(20,12,40,0));padding:10px 12px 18px}
+.app .screen.lab .scTitle{color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.6)}
+.app .screen.lab .scBody{padding:0;overflow:hidden}
+.app .screen.lab .sceneWrap{position:absolute;inset:0;height:auto;border-radius:0}
+.app .screen.lab .labBar{left:84px;right:12px}
+.labStations{position:absolute;left:10px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:6;display:flex;flex-direction:column;gap:8px}
+.labStations .hubBtn .ti{font-size:26px}
+.labStations .hubBtn i{font-size:9.5px}
+.labStations .hubBtn .dot{width:14px;height:14px;min-width:0}
+.app{--dockH:62px}
+.app .screen{z-index:50}
+.app .screen.scene{top:var(--hudH,52px);bottom:0;border-radius:0}
+.app .screen.lab .scTitle{display:block;font-size:17px}
+.app .screen.scene .scHead{padding-top:8px}
+.app .galTop{background:linear-gradient(180deg,rgba(10,8,40,.95) 60%,rgba(10,8,40,0));padding-bottom:14px;padding-right:56px}
+.app .galScroll{top:56px}
