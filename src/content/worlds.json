@@ -57,11 +57,6 @@
       "biscuit",
       "mumbo",
       "pim",
-      "rokk",
-      "nix",
-      "vulk",
-      "kelpa",
-      "zephyr",
       "blorb",
       "grubs"
     ],
@@ -361,12 +356,7 @@
         ],
         "coins": 120,
         "xp": 40,
-        "unlock": "windmill",
-        "temp": {
-          "p": "raincloud",
-          "taps": 16,
-          "mins": 20
-        },
+        "unlock": "well",
         "talk": [
           [
             "grandma",
@@ -381,11 +371,11 @@
             "The pie tin is hereby confiscated. Mayoral privilege."
           ]
         ],
-        "text": "The first jar of jam in years! Chef Gubbo was so moved he put up a windmill on the hill — flour for everyone. And a rain cloud is drifting over: catch the drops while it is here."
+        "text": "The first jar of jam in years! Washing the jars, Nana Luma remembered the old well behind her cottage. It still has a bucket. It is yours now."
       },
       {
         "id": "e4",
-        "name": "Mend the Old Well",
+        "name": "Water for the Garden",
         "who": "grandma",
         "needs": [
           [
@@ -399,23 +389,22 @@
         ],
         "coins": 200,
         "xp": 60,
-        "unlock": "well",
         "event": "meteor",
         "talk": [
           [
             "grandma",
-            "That cloud reminded me — the village well dried up the year the Bloom went."
+            "The garden has not had a proper drink since the Bloom went."
           ],
           [
             "pip",
-            "If we fill it once, maybe it remembers how to fill itself?"
+            "Tap the well for dewdrops! Two dewdrops make a puddle, two puddles make a jug."
           ],
           [
             "grandma",
-            "Bring water while the cloud is here, dear. Puddles merge into a jug."
+            "One jug and two puddles, dear. The roses will weep with joy. Quietly."
           ]
         ],
-        "text": "The well is singing again, so water is here to stay. ...Wait. What is that in the sky?"
+        "text": "The garden drinks and the roses perk up. ...Wait. What is that in the sky?"
       },
       {
         "id": "e5",
@@ -811,7 +800,7 @@
         "coins": 2080,
         "xp": 320,
         "gift": "chest",
-        "unlock": "picnichamper",
+        "unlock": "windmill",
         "talk": [
           [
             "mumbo",
@@ -826,7 +815,7 @@
             "A bakery! Warm buns every morning!"
           ]
         ],
-        "text": "The bakery is open. Chef Gubbo hands you the first warm bun, a chest of thanks — and a picnic hamper. \"Sandwiches travel. Bakeries do not.\""
+        "text": "The bakery is open. Chef Gubbo hands you the first warm bun, a chest of thanks — and puts up a windmill on the hill. Flour for everyone!"
       },
       {
         "id": "e17",
@@ -882,7 +871,7 @@
         "coins": 2560,
         "xp": 360,
         "gift": "chest",
-        "unlock": "eggnest",
+        "unlock": "picnichamper",
         "talk": [
           [
             "pim",
@@ -897,7 +886,7 @@
             "Finally, someone with manners."
           ]
         ],
-        "text": "Tea is served under the parasol. Duchess Splatt declares the meadow \"almost civilised\". Under her chair: a nest of spotted lilac eggs. \"Not mine, darling. Probably.\""
+        "text": "Tea is served under the parasol. Duchess Splatt declares the meadow \"almost civilised\". She leaves her picnic hamper behind. On purpose, she says."
       },
       {
         "id": "e19",
@@ -920,7 +909,7 @@
         "coins": 2800,
         "xp": 380,
         "gift": "chest",
-        "unlock": "buskbot",
+        "unlock": "eggnest",
         "talk": [
           [
             "timmy",
@@ -931,7 +920,7 @@
             "For the frogs. Frogs with THREE EYES deserve nice things."
           ]
         ],
-        "text": "Picnic by the pond: the three-eyed frogs are holding a tea party. A battered busking robot wanders in, plays one chord, and refuses to leave."
+        "text": "Picnic by the pond: the three-eyed frogs are holding a tea party. Under the picnic blanket: a nest of spotted lilac eggs, wobbling."
       },
       {
         "id": "e20",
@@ -954,7 +943,12 @@
         "coins": 3040,
         "xp": 400,
         "gift": "chest",
-        "unlock": "weatherballoon",
+        "unlock": "buskbot",
+        "temp": {
+          "p": "raincloud",
+          "taps": 10,
+          "mins": 12
+        },
         "talk": [
           [
             "bloop",
@@ -969,7 +963,7 @@
             "The Mayor agrees. More toys, please, before they find the fuel tank."
           ]
         ],
-        "text": "The Blinkies have a pet now. Nothing has been chewed for an entire hour. Dr. Zonk ties a weather balloon to a crate: \"We launch on a clear day. I need to know which one.\""
+        "text": "The Blinkies have a pet now. Nothing has been chewed for an entire hour. A battered busking robot wanders in, plays one chord, and refuses to leave. And a little rain cloud drifts over: catch its raindrops before it moves on."
       },
       {
         "id": "e21",
@@ -1032,6 +1026,7 @@
         "coins": 2240,
         "xp": 360,
         "gift": "bigchest",
+        "unlock": "weatherballoon",
         "talk": [
           [
             "bloop",

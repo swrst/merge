@@ -955,7 +955,11 @@ export async function startGame() {
       return ids.length ? rnd(ids) : CHAINS[ck].items[0];
     };
     // Who is asking, first — then what they would plausibly want.
-    const folks = W().folks.concat(S.met ? ['bloop'] : []);
+    // only people you have already met in the story come to the board with a contract
+    const metIn = new Set<string>([W().folks[0], W().folks[1]]);
+    projList(S.world).forEach((p: any) => { if (S.talked && S.talked[p.id] && p.talk) p.talk.forEach(([who]: [string, string]) => metIn.add(who)); });
+    const metFolks = W().folks.filter(f => metIn.has(f) || (S.proj[S.world] || 0) >= projList(S.world).length);
+    const folks = (metFolks.length >= 2 ? metFolks : W().folks).concat(S.met ? ['bloop'] : []);
     const fans = folks.filter(f => (CHARS[f].likes || []).some(c => open.indexOf(c) >= 0));
     const busy = S.orders.map(o => o.char);
     const pickFrom = (fans.length ? fans : folks).filter(f => busy.indexOf(f) < 0);
@@ -1002,7 +1006,7 @@ export async function startGame() {
       id: 'o' + (oid++), char, say, give, nrg,
       needs,
       coins: Math.round((Math.round(worth * (1.1 + Math.random() * 0.4)) + 5) * coinMult() * (1 + res('trader') * 0.08)),
-      xp: Math.round((CONFIG.xp.orderBase + needs.reduce((a, nd) => a + ITEMS[nd.id].tier * 2 + nd.qty, 0)) * xpMult()),
+      xp: Math.round((CONFIG.xp.orderBase + needs.reduce((a, nd) => a + ITEMS[nd.id].tier + nd.qty, 0)) * xpMult()),
     };
   }
   /** How many contracts are on offer right now. It drifts between a floor and
@@ -1834,7 +1838,7 @@ export async function startGame() {
     const blind = RECIPES.filter(r2 => !S.lab.disc[r2.id]);
 
     host.innerHTML = `<div class="sceneWrap lab">
-      <div class="sceneImg"></div><div class="sceneVig"></div>
+      <div class="sceneBlur"></div><div class="sceneImg"></div><div class="sceneVig"></div>
       <div class="sceneBtns"><button class="sceneBtn" data-labpop="book">📘</button>
         ${blind.length ? `<button class="sceneBtn" data-labpop="rumours">❓</button>` : ''}</div>
       ${labSpot('s0', labPad().a, a ? ART.item(a) : SOCKET,
@@ -3671,6 +3675,13 @@ export async function startGame() {
     const e = evNow(), b = B();
     // guests from an ended event, or ones an older version placed uninvited, pack up
     for (let i = 0; i < N; i++) if (b[i] && b[i].ev && (!e || b[i].ev !== e.key || S.ev.join !== e.key)) { b[i] = null; paintBoard(); }
+    // when the event is over its souvenirs are no use on the board: they sell themselves
+    if (!e || S.ev.join !== e.key) {
+      let n = 0, coins = 0;
+      for (let i = 0; i < N; i++) { const c = b[i]; if (c && c.id && /^ev_/.test(ITEMS[c.id].chain)) { n++; coins += 15 * ITEMS[c.id].tier * ITEMS[c.id].tier; b[i] = null; } }
+      if (S.bag) { const keep = S.bag.filter((id: string) => !/^ev_/.test(ITEMS[id].chain)); n += S.bag.length - keep.length; S.bag = keep; }
+      if (n) { S.coins += coins; bumpChip('#chipCoins'); paintBoard(); save(); setTimeout(() => toast(`🎪 The event packed up. Your <b>${n}</b> leftover event item${n > 1 ? 's' : ''} sold for <b>${coins} 🪙</b>.`), 800); }
+    }
     if (!e || view !== 'board' || !S.tut) return;
     const k = EV_PROD[e.theme.id]; if (!k || b.some((c: any) => c && c.ev === e.key)) return;
     if ((S.ev.placed || '') === e.key + S.world) return;
@@ -4428,7 +4439,7 @@ export async function startGame() {
     for (let i = 0; i < N; i++) if (b[i] && b[i].p && PRODS[b[i].p].mode !== 'once' && !b[i].tmp && !b[i].ev) prods.push({ i, k: b[i].p });
 
     const built = Object.keys(S.parts).filter(k => S.parts[k]).length;
-    let ents = spot('rocket', PAD.rocket,
+    let ents = !S.met ? '' : spot('rocket', PAD.rocket,
       S.met ? (ART.spriteUi('rocket_0') ? `<img class="campImg" src="${ART.spriteUi('rocket_' + (built >= 4 ? 3 : built >= 3 ? 2 : built >= 1 ? 1 : 0))}">`
         : built ? (ART.spriteUi('rocket_0') ? `<img class="rkImg" src="${ART.spriteUi('rocket_' + (built >= 4 ? 3 : built >= 3 ? 2 : built >= 1 ? 1 : 0))}">` : ART.rocket(S.parts)) : '<div class="spotGhost">🚀</div>') : '<div class="spotGhost">🚀</div>',
       S.met ? 'Rocket' : '???',
@@ -4442,7 +4453,7 @@ export async function startGame() {
       const p = PRODS[pr.k], c = b[pr.i], lv = plv(c), cap = capOf(p, lv);
       const can = lv < PMAX && S.coins >= upCost(p, lv);
       ents += spot('p' + pr.i, PROD_PADS[n], ART.producer(p.art), p.name,
-        can ? '⬆ ' + upCost(p, lv) + ' 🪙' : '',
+        can ? '⬆ Upgrade ' + upCost(p, lv) + ' 🪙' : '',
         can ? 'ready' : '', lv > 1 ? 'Lv' + lv : '');
     });
     // the next plinth stands empty until you have grown everything on this one
@@ -4453,10 +4464,9 @@ export async function startGame() {
     }
 
     return `<div class="sceneWrap camp">
-      <div class="sceneImg"></div><div class="sceneVig"></div>
+      <div class="sceneBlur"></div><div class="sceneImg"></div><div class="sceneVig"></div>
       <div class="sceneName">${w.name}<i>lv ${wlv()}</i></div>
       <button class="starMapBtn" data-pop="galaxy"><span>${ART.uiIcon('ic_galaxy', '🌌')}</span><b>Galaxy</b></button>
-      <button class="starMapBtn store" data-pop="store"><span>${ART.uiIcon('ic_box', '📦')}</span><b>Storage ${stored().length}</b></button>
       ${ents}
     </div>`;
   }
@@ -4535,8 +4545,10 @@ export async function startGame() {
     });
   }
 
-  /* The picture is drawn `cover`, so it is cropped differently on every phone.
-     Work out that crop and put each spot where its plinth actually landed. */
+  /* The picture is fitted to the WIDTH of the phone (a tall phone used to crop
+     away the plinths at the sides) and sits on the bottom; the strip of sky
+     left above it is the same painting, blurred. Every spot then lands exactly
+     on its plinth. */
   function placeSpots(sel = '#mapBody') {
     const host = $(sel); if (!host) return;
     const wrap = host.querySelector('.sceneWrap') as HTMLElement;
@@ -4544,15 +4556,16 @@ export async function startGame() {
     const W2 = wrap.clientWidth, H = wrap.clientHeight;
     if (!W2 || !H) return;
     const iw = 1086, ih = 1448;
-    const sc = Math.max(W2 / iw, H / ih);
+    // keep the plinths' band (x 7%–93%) on screen; crop only bare edges
+    const sc = Math.max(H / ih, W2 / iw) * iw > W2 / 0.86 ? W2 / (0.86 * iw) : Math.max(W2 / iw, H / ih);
     const dw = iw * sc, dh = ih * sc;
-    const ox = (W2 - dw) / 2, oy = (H - dh) / 2;
+    const ox = (W2 - dw) / 2, oy = dh < H ? H - dh : Math.max(H - dh, (H - dh) / 2);
+    const img = wrap.querySelector('.sceneImg') as HTMLElement;
+    if (img) { img.style.backgroundSize = `${dw}px ${dh}px`; img.style.backgroundPosition = `${ox}px ${oy}px`; }
+    wrap.classList.toggle('fitw', oy > 0); wrap.style.setProperty('--fadeTop', Math.max(0, oy - 10) + 'px');
     host.querySelectorAll('[data-fx]').forEach((e: any) => {
-      // a tall phone crops the painting hard at the sides, so keep the label
-      // chips on screen even when their plinth has been cropped half away
-      const x = ox + +e.dataset.fx * dw;
-      e.style.left = Math.max(48, Math.min(W2 - 48, x)) + 'px';
-      e.style.top = Math.max(70, Math.min(H - 42, oy + +e.dataset.fy * dh)) + 'px';
+      e.style.left = (ox + +e.dataset.fx * dw) + 'px';
+      e.style.top = (oy + +e.dataset.fy * dh) + 'px';
     });
   }
   window.addEventListener('resize', () => {

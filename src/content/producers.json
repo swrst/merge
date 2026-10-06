@@ -229,10 +229,9 @@
     "name": "Rain Cloud",
     "art": "raincloud",
     "drops": [
-      "dew",
-      "dew",
-      "dew",
-      "puddle"
+      "raindrop",
+      "raindrop",
+      "puffcloud"
     ],
     "spec": {
       "shape": "cloud",
@@ -240,8 +239,8 @@
       "ground": "cloud"
     },
     "mode": "battery",
-    "cap": 16,
-    "every": 112500
+    "cap": 10,
+    "every": 180000
   },
   "windmill": {
     "name": "Windmill",

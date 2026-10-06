@@ -1768,3 +1768,15 @@ img.emo{height:1.2em;width:auto;vertical-align:-.25em;margin:0 .04em;display:inl
 @keyframes evoPulse{0%{filter:brightness(1)}20%{filter:brightness(3) saturate(0)}30%{filter:brightness(1)}45%{filter:brightness(4) saturate(0)}55%{filter:brightness(1.2)}70%{filter:brightness(6) saturate(0);transform:scale(1.1)}85%{filter:brightness(8) saturate(0);transform:scale(.9)}100%{filter:brightness(12) saturate(0);transform:scale(1.25);opacity:.9}}
 @keyframes evoReveal{0%{transform:scale(.3);filter:brightness(8)}100%{transform:none;filter:none}}
 #evoGo{z-index:1}
+
+/* v28: the painting is fitted to the phone's width; the sky above it is the same painting, blurred */
+.sceneBlur{position:absolute;inset:-20px;background-size:cover;background-position:center top;filter:blur(14px) saturate(1.1) brightness(1.02);transform:scale(1.05)}
+.sceneWrap.camp .sceneBlur{background-image:var(--camp)}
+.sceneWrap.lab .sceneBlur{background-image:var(--labbg)}
+.sceneImg{background-repeat:no-repeat}
+.sceneImg{-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 0) ;}
+.sceneWrap.fitw .sceneImg{-webkit-mask-image:linear-gradient(180deg,transparent var(--fadeTop,0px),#000 calc(var(--fadeTop,0px) + 70px));mask-image:linear-gradient(180deg,transparent var(--fadeTop,0px),#000 calc(var(--fadeTop,0px) + 70px))}
+/* a tall dialog keeps its character's face on screen and scrolls inside */
+.modal{padding-top:calc(env(safe-area-inset-top,0px) + 62px)}
+.mBoxW{max-height:calc(100% - 10px);display:flex;flex-direction:column}
+.mBoxW .mBody{overflow-y:auto;min-height:0;-webkit-overflow-scrolling:touch}

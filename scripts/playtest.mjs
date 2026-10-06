@@ -138,7 +138,7 @@ const curve = await page.evaluate(() => {
   const c = window.__game.config;
   return Array.from({ length: 10 }, (_, k) => Math.round(c.xp.base + k * c.xp.perLevel + c.xp.growth * k * k));
 });
-must(curve[0] === 8 && curve[9] > 250, `levels 1..10 cost ${curve.join(', ')}`);
+must(curve[0] >= 30 && curve[9] > 600, `levels 1..10 cost ${curve.join(', ')}`);
 must(curve.reduce((a, b) => a + b, 0) > 1000, 'over 1000 XP to reach level 11');
 const cfg = await page.evaluate(() => window.__game.config);
 must(cfg.energy.regenMs >= 30000, `energy trickles back every ${cfg.energy.regenMs / 1000}s`);
@@ -1021,13 +1021,8 @@ await tab('rocket');
 await page.evaluate(() => document.querySelector('#btnProject').click()); await page.waitForTimeout(1800);
 await closeModal(); await tab('board');
 s = await S();
-must(s.boards.earth.some(c => c && c.p === 'raincloud' && c.tmp), 'chapter 3 brings a temporary Rain Cloud');
-must(s.vis && s.vis.story, 'as a story guest');
-await set(() => { window.__game.state().vis.until = Date.now() - 1; });
-await page.waitForTimeout(2500);
-s = await S();
-must(!s.boards.earth.some(c => c && c.tmp), 'which moves on when its time is up');
-must(s.guestBack && s.guestBack.p === 'raincloud', 'and comes back while the chapter still needs water');
+must(s.boards.earth.some(c => c && c.p === 'well'), 'chapter 3 plants the Old Well (water for good, no stand-in cloud)');
+must(!s.boards.earth.some(c => c && c.p === 'windmill'), 'and no Windmill yet: that comes with the bakery');
 
 head('Chapter 5 builds the Lab');
 await set(() => {
@@ -1110,6 +1105,7 @@ if (evOn) {
   s = await S();
   must(s.ev.pts >= 2, `a tier-4 merge earns event points (${s.ev.pts})`);
 } else ok('(no event running right now — skipped the points check)');
+await page.evaluate(() => window.__game.v9.closePop()); await page.waitForTimeout(300);
 await set(() => { const s = window.__game.state(); s.mini.pairs = 0; });
 await page.evaluate(() => window.__game.v9.playPairs()); await page.waitForTimeout(400);
 must(await page.locator('#mini.open .pCard').count() === 16, 'Alien Pairs deals 16 cards');
