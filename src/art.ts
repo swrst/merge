@@ -1108,6 +1108,9 @@ export const ART = (function () {
       if (SPRITE.char[k + '_full']) return `<svg viewBox="0 0 100 100" class="fig portrait"><image href="${SPRITE.char[k + '_full']}" x="0" y="0" width="100" height="100"/></svg>`;
       const key = 'f' + k; if (!cache[key]) cache[key] = figure(k); return cache[key];
     },
+    /** a customer standing in the order row: the full-length painting if there is one */
+    standing: (k: string) => SPRITE.char[k + '_full'] ? `<img class="fig stand" src="${SPRITE.char[k + '_full']}" alt="" draggable="false">`
+      : SPRITE.char[k] ? `<img class="fig stand bust" src="${SPRITE.char[k]}" alt="" draggable="false">` : '',
     /** a painted ui/icon_<k>.png wins over the drawn icon */
     icon: (k: string) => SPRITE.ui['icon_' + k]
       ? `<img class="ic" src="${SPRITE.ui['icon_' + k]}" alt="" draggable="false">`

@@ -21,71 +21,72 @@
     <div class="lvlBox"><span class="avatar" id="avatar"></span><div class="orb" id="lvl">1</div>
       <div class="xpwrap"><div class="xplabel">XP <span id="xpTxt">0/6</span></div><div class="xpbar"><i id="xpFill"></i></div></div>
     </div>
+    <div class="chip" id="chipEnergy"><span id="icEnergy"></span><span id="energy">0/50</span></div>
     <div class="chip" id="chipCoins"><span id="icCoin"></span><span id="coins">0</span></div>
     <div class="chip" id="chipGems"><span id="icGem"></span><span id="gems">0</span></div>
-    <div class="chip" id="chipEnergy"><span id="icEnergy"></span><span id="energy">0/50</span></div>
+    <button class="hudShop tab" data-v="shop" id="tabShop"><span class="ti">🛒</span><span class="dot" id="dotShop" style="display:none"></span></button>
     <button class="iconBtn" id="btnGear">⚙️</button>
   </div>
 
-  <div class="orderWrap">
-    <button class="oArrow l" id="oLeft">‹</button>
-    <div class="orders" id="orders"></div>
-    <div class="oMile" id="oMile" title="Contracts until the next chest"></div>
-    <button class="oArrow r" id="oRight">›</button>
-    <!-- one "what now?" line instead of two: Zib says it and it opens the list -->
-    <button class="questBtn" id="btnQuests">
-      <span class="qFace" id="guideFace"></span>
-      <span class="qCol"><b class="qTxt" id="questTxt">Quests</b><i id="guideTxt">Welcome!</i></span>
-      <span class="dot" id="dotQuest" style="display:none"></span></button>
+  <!-- Travel Town layout: a slim column of widgets on the left, the customers
+       standing in a row on the right, the board under them, and only storage,
+       the item line and the galaxy at the bottom -->
+  <div class="topRow">
+    <div class="side" id="side">
+      <button class="sideW chapW" id="btnQuests"></button>
+      <button class="sideW tab" data-v="rocket" id="tabRocket"><span class="ti">📜</span><i>Goals</i><span class="dot" id="dotRocket" style="display:none"></span></button>
+      <div class="quick" id="quick"></div>
+    </div>
+    <div class="orderWrap">
+      <button class="oArrow l" id="oLeft">‹</button>
+      <div class="orders" id="orders"></div>
+      <div class="oMile" id="oMile" title="Contracts until the next chest"></div>
+      <button class="oArrow r" id="oRight">›</button>
+    </div>
   </div>
 
   <div class="stage" id="stage">
-    <div class="stageTop">
-      <div class="worldTag"><span id="worldIcon"></span><span id="worldName">Sunny Meadow</span></div>
-      <div class="quick" id="quick"></div>
-      <div class="tools" id="tools">
-        <button class="hintTag" id="btnSnack">🍪 +20</button>
-        <button class="hintTag" id="btnHint"><span class="hintIc">💡</span> Hint</button>
-      </div>
+    <div class="tools" id="tools">
+      <button class="hintTag" id="btnSnack">🍪 +20</button>
+      <button class="hintTag" id="btnHint"><span class="hintIc">💡</span></button>
     </div>
     <div class="board" id="board"></div>
     <div class="fx" id="fx"></div>
     <div class="tray" id="bagTray">
-      <div class="trayHead"><b id="bagTitle">Storage bag</b><button class="xBtn" id="bagClose">✕</button></div>
+      <div class="trayHead"><b id="bagTitle">Storage</b><button class="xBtn" id="bagClose">✕</button></div>
       <div class="traySlots" id="bagSlots"></div>
-      <div class="trayNote">Tap a board item, then <b>Stash</b> — tap it here to bring it back.</div>
+      <div class="trayNote">Tap an item, then <b>Stash</b>.</div>
     </div>
   </div>
 
-  <div class="infoBar" id="infoBar">
-    <div id="infoTxt"></div>
-    <button class="sellBtn alt" id="btnStash">Stash</button>
-    <button class="sellBtn sci" id="btnRecycle">🧪</button>
-    <button class="sellBtn gold" id="btnShow" style="display:none">🏆</button>
-    <button class="sellBtn" id="btnSell">Sell</button>
-    <button class="sellBtn undoBtn" id="btnUndo">↩ Undo</button>
-    <button class="xBtn" id="infoClose">✕</button>
+  <div class="bottomBar" id="bottomBar">
+    <button class="bbBtn" id="btnStore"><span class="ti">📦</span><span class="n" id="storeN"></span></button>
+    <div class="infoBar" id="infoBar">
+      <div id="infoTxt"></div>
+      <button class="sellBtn alt" id="btnStash">Stash</button>
+      <button class="sellBtn sci" id="btnRecycle">🧪</button>
+      <button class="sellBtn gold" id="btnShow" style="display:none">🏆</button>
+      <button class="sellBtn" id="btnSell">Sell</button>
+      <button class="sellBtn undoBtn" id="btnUndo">↩ Undo</button>
+      <button class="xBtn" id="infoClose">✕</button>
+    </div>
+    <button class="bbBtn tab galBtn" data-v="map" id="tabMap"><span class="ti">🌌</span><span class="dot" id="dotWorld" style="display:none"></span></button>
   </div>
-
-  <!-- Bottom dock, Travel Town style: big round buttons, each opens a popup
-       over the board instead of a screen that replaces it. -->
-  <div class="rail dock" id="rail">
-    <button class="tab railBtn" data-v="map" id="tabMap"><span class="ti">🌍</span><i>Map</i><span class="dot" id="dotWorld" style="display:none"></span></button>
-    <button class="tab railBtn" data-v="rocket" id="tabRocket"><span class="ti">📜</span><i>Goals</i><span class="dot" id="dotRocket" style="display:none"></span></button>
-    <button class="tab railBtn" data-v="fun" id="tabFun"><span class="ti">🎪</span><i>Fun</i><span class="dot" id="dotFun" style="display:none"></span></button>
-    <button class="tab railBtn" data-v="lab" id="tabLab"><span class="ti">🔬</span><i>Lab</i><span class="dot" id="dotLab" style="display:none"></span></button>
-    <button class="tab railBtn" data-v="book" id="tabBook"><span class="ti">📖</span><i>Album</i><span class="dot" id="dotBook" style="display:none"></span></button>
-    <button class="tab railBtn" data-v="shop" id="tabShop"><span class="ti">🛒</span><i>Shop</i><span class="dot" id="dotShop" style="display:none"></span></button>
+  <!-- what used to be dock tabs now live on the map; kept as hidden hooks -->
+  <div class="hidden" id="rail" aria-hidden="true">
+    <button class="tab" data-v="fun" id="tabFun"><span class="dot" id="dotFun"></span></button>
+    <button class="tab" data-v="lab" id="tabLab"><span class="dot" id="dotLab"></span></button>
+    <button class="tab" data-v="book" id="tabBook"><span class="dot" id="dotBook"></span></button>
   </div>
 
   <div class="scrim" id="scrim"></div>
   <div class="screen" id="sc-shop">
     <div class="scHead"><div class="scTitle">🛒 Trading Post</div>
-      <div class="scCoins"><span id="shopCoinIc"></span><span id="shopCoins">0</span></div>
+      <span class="hidden" id="shopCoinIc"></span><span class="hidden" id="shopCoins">0</span>
       <button class="iconBtn scClose">✕</button></div>
     <div class="scBody" id="shopBody"></div>
   </div>
-  <div class="screen lab" id="sc-lab">
+  <div class="screen scene lab" id="sc-lab">
     <div class="scHead"><div class="scTitle">🔬 Dr. Zonk's Lab</div>
       <div class="scCoins sciChip"><span>🧪</span><span id="labCoins">0</span></div>
       <button class="iconBtn scClose">✕</button></div>

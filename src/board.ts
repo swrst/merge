@@ -80,7 +80,7 @@ class PixiBoard {
     this.app = new Application();
     await this.app.init({
       resizeTo: host, backgroundAlpha: 0, antialias: true,
-      resolution: Math.min(window.devicePixelRatio || 1, 2.5), autoDensity: true,
+      resolution: Math.min((window.devicePixelRatio || 1) * ((window as any).__zk || 1), 3.5), autoDensity: true,
     });
     host.appendChild(this.app.canvas);
     this.app.canvas.style.touchAction = 'none';
@@ -272,9 +272,11 @@ class PixiBoard {
   /** cell centre in page coordinates, for DOM effects */
   clientCenter(i: number) {
     const r = this.app.canvas.getBoundingClientRect();
-    const c = this.center(i);
-    return { x: r.left + c.x, y: r.top + c.y };
+    const c = this.center(i), k = this.zoom(r);
+    return { x: r.left + c.x * k, y: r.top + c.y * k };
   }
+  /** the page is CSS-zoomed to fit the device: page pixels per canvas pixel */
+  zoom(r: DOMRect) { const w = this.app.canvas.clientWidth; return w ? r.width / w : 1; }
   setTheme(t: string) { this.theme = THEME[t] ? t : 'earth'; this.layout(); }
   /** the on-canvas size of one tile, for anything that has to draw over us */
   cellSize() { return this.cell; }
@@ -1079,8 +1081,8 @@ class PixiBoard {
   }
   /** the page position of the last drop, for effects drawn in the DOM */
   pointToClient(x: number, y: number) {
-    const r = this.app.canvas.getBoundingClientRect();
-    return { x: r.left + x, y: r.top + y };
+    const r = this.app.canvas.getBoundingClientRect(), k = this.zoom(r);
+    return { x: r.left + x * k, y: r.top + y * k };
   }
 
   /** snap a sprite back home after the game refuses a drop */

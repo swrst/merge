@@ -294,23 +294,19 @@
         "talk": [
           [
             "pip",
-            "Oh! A visitor! Nobody has come up the old path in years."
+            "A visitor! Nobody has come up this path in years."
           ],
           [
             "pip",
-            "Ever since the Bloom faded, the meadow just... stopped. Brambles everywhere."
-          ],
-          [
-            "pip",
-            "Tap the Big Tree for twigs, put two together and you get a branch. Two branches and we can clear the path!"
+            "Tap the Big Tree for twigs. Two twigs make a branch. Two branches clear the path!"
           ]
         ],
-        "text": "You can see the road to the village again! And look what was under the brambles — an old rock pile. It is yours now."
+        "text": "The path is clear — and there was a rock pile under the brambles."
       },
       {
         "id": "e2",
         "name": "A Stone Border",
-        "who": "pip",
+        "who": "grandma",
         "needs": [
           [
             "rock",
@@ -326,19 +322,15 @@
         "unlock": "bush",
         "talk": [
           [
-            "pip",
-            "Nana Luma's garden used to be the prettiest in the valley."
+            "grandma",
+            "The weeds walk into my garden like they own it. Rude."
           ],
           [
             "grandma",
-            "Used to be, dear. Now the weeds walk right in. A stone border would keep them out."
-          ],
-          [
-            "pip",
-            "Two rocks and a log. We can do that!"
+            "Two rocks and a log for a border, dear."
           ]
         ],
-        "text": "A tidy border round the garden. Nana Luma peeked over it and spotted a berry bush that is ready to fruit again."
+        "text": "A tidy border. Behind it, a berry bush is fruiting again."
       },
       {
         "id": "e3",
@@ -360,18 +352,14 @@
         "talk": [
           [
             "grandma",
-            "Berries! Real berries! My hands remember the recipe even if my head does not."
-          ],
-          [
-            "grandma",
-            "One jar of jam and two bunches for the pie tin, and we shall have a proper tea."
+            "Berries! One jar of jam, two bunches for the pie tin."
           ],
           [
             "biscuit",
             "The pie tin is hereby confiscated. Mayoral privilege."
           ]
         ],
-        "text": "The first jar of jam in years! Washing the jars, Nana Luma remembered the old well behind her cottage. It still has a bucket. It is yours now."
+        "text": "First jam in years! Washing the jars, Nana remembered the old well."
       },
       {
         "id": "e4",
@@ -392,19 +380,11 @@
         "event": "meteor",
         "talk": [
           [
-            "grandma",
-            "The garden has not had a proper drink since the Bloom went."
-          ],
-          [
             "pip",
-            "Tap the well for dewdrops! Two dewdrops make a puddle, two puddles make a jug."
-          ],
-          [
-            "grandma",
-            "One jug and two puddles, dear. The roses will weep with joy. Quietly."
+            "Tap the well: dewdrops make puddles, puddles make a jug."
           ]
         ],
-        "text": "The garden drinks and the roses perk up. ...Wait. What is that in the sky?"
+        "text": "The roses perk up. ...Wait. What is that in the sky?"
       },
       {
         "id": "e5",
@@ -434,14 +414,14 @@
           ],
           [
             "bloop",
-            "My ship is in pieces somewhere in your woods. To fix it I need a workshop first: one Star Scrap from my crater, some lumber, and a shiny geode for the lens."
+            "I need a workshop: one Star Scrap, some lumber and a shiny geode."
           ],
           [
             "timmy",
-            "A real star-traveller! From a DIFFERENT planet! Can I help? CAN I?"
+            "A REAL alien! Can I help? CAN I?"
           ]
         ],
-        "text": "Dr. Zonk's Lab hums to life. Bring it things you do not need and it turns them into 🧪 Science — Science buys upgrades that last for ever. \"The ship can wait,\" says Dr. Zonk. \"First I want to see this planet. And its pie.\""
+        "text": "Dr. Zonk's Lab hums to life. Recycle spare things there for 🧪 Science."
       },
       {
         "id": "e6",
@@ -461,21 +441,20 @@
         "xp": 100,
         "unlock": "meadow",
         "gift": "chest",
+        "retire": [
+          "tree"
+        ],
         "talk": [
           [
             "biscuit",
-            "Citizens! As your Mayor I declare the fence... broken. Also my hat was eaten."
-          ],
-          [
-            "pip",
-            "The goats keep eating hats. Nana Luma's, the Mayor's, mine..."
+            "Citizens! The fence is broken. Also a goat ate my hat."
           ],
           [
             "grandma",
-            "My second-best hat. Two lumber piles and a pie for the carpenter, please."
+            "Two lumber piles and a pie for the carpenter, please."
           ]
         ],
-        "text": "Mayor Marin cuts a ribbon on the new fence (twice — the first take was bad), and the hay meadow behind it is growing tall again."
+        "text": "The fence stands. The Big Tree gave its last wood for it and rests now. The hay meadow is growing tall."
       },
       {
         "id": "e7",
@@ -498,21 +477,20 @@
         "coins": 560,
         "xp": 120,
         "unlock": "flowerbed",
+        "retire": [
+          "well"
+        ],
         "talk": [
           [
             "grandma",
-            "The whole village used to eat together at harvest. Long tables, lanterns, too much cake."
-          ],
-          [
-            "pip",
-            "Let's do it again! A hay bale for seats, a berry pie, and a barrel of water."
+            "A harvest supper! Hay bales for seats, a pie, a barrel of water."
           ],
           [
             "bloop",
             "What is pie. I would like to learn about pie."
           ]
         ],
-        "text": "Everyone came. Dr. Zonk had three slices. Sirra arrived late with a packet of flower seeds, \"for a little colour, darling\"."
+        "text": "Dr. Zonk had three slices. The old well has done its job, and Sirra brought flower seeds."
       },
       {
         "id": "e8",
@@ -532,6 +510,9 @@
         "xp": 140,
         "unlock": "teabush",
         "gift": "chest",
+        "retire": [
+          "rocks"
+        ],
         "temp": {
           "p": "hive",
           "taps": 18,
@@ -540,14 +521,14 @@
         "talk": [
           [
             "gigi",
-            "Darling, a village without a flower market is just a lot of houses."
+            "Darling, a village without a flower market is just houses."
           ],
           [
             "gigi",
-            "A bouquet for the stall, and a gemstone for the sign. People notice a gemstone."
+            "A bouquet for the stall and a gem for the sign."
           ]
         ],
-        "text": "Colour on every stall! A tea bush sprouted by the market, and the flowers brought the bees back — a wild hive has settled for a while. Catch its honey."
+        "text": "The market is open! The rock pile is all used up, a tea bush sprouted, and wild bees moved in for a while."
       },
       {
         "id": "e9",
@@ -565,18 +546,21 @@
         ],
         "coins": 880,
         "xp": 160,
-        "unlock": "mosslog",
+        "retire": [
+          "bush"
+        ],
+        "temp": {
+          "p": "mosslog",
+          "taps": 16,
+          "mins": 30
+        },
         "talk": [
           [
             "gigi",
-            "Honey cake! The recipe calls for real honeycomb, not the sad syrup kind."
-          ],
-          [
-            "grandma",
-            "And a cake to put it on, I suppose. Quickly, before the bees move on."
+            "Honey cake! Real honeycomb, quickly, before the bees leave."
           ]
         ],
-        "text": "Honey cakes for everyone. Nana Luma says the old mossy log in the woods is sprouting mushrooms again — she knows a recipe."
+        "text": "Honey cakes for all. The berry bush is picked clean. In the woods, a mossy log is sprouting mushrooms."
       },
       {
         "id": "e10",
@@ -588,28 +572,31 @@
             1
           ],
           [
-            "fountain",
+            "teacup",
             1
           ]
         ],
         "coins": 1040,
         "xp": 180,
-        "unlock": "cottonpatch",
+        "retire": [
+          "teabush"
+        ],
+        "temp": {
+          "p": "cottonpatch",
+          "taps": 24,
+          "mins": 40
+        },
         "talk": [
           [
             "grandma",
-            "My mother made forest tea every spring. Mushrooms and well water, nothing more."
-          ],
-          [
-            "grandma",
-            "Bring me a ring of caps, and a fountain for the square while you are at it. We had one once."
+            "My mother's forest tea: a ring of mushrooms and a cup of fresh leaves."
           ],
           [
             "bloop",
-            "On my world, tea is a colour. Here it is a drink. Fascinating."
+            "On my world, tea is a colour. Fascinating."
           ]
         ],
-        "text": "The fountain splashes in the square. Behind it, the old cotton patch is fluffing up white."
+        "text": "Tea for everyone. A cotton patch fluffs up for a little while — Sirra has ideas."
       },
       {
         "id": "e11",
@@ -631,14 +618,14 @@
         "talk": [
           [
             "gigi",
-            "Autumn is coming and everyone is dressed like a scarecrow. No offence to the scarecrow."
+            "Everyone is dressed like a scarecrow. No offence to the scarecrow."
           ],
           [
             "gigi",
-            "A bolt of cloth and a straw hat. I will do the rest. I always do the rest."
+            "A bolt of cloth and a straw hat. I do the rest. I always do the rest."
           ]
         ],
-        "text": "Warm coats for the whole village. The birds have come back to nest in Ember's old bird box."
+        "text": "Warm coats for all. The birds are back in Ember's old bird box."
       },
       {
         "id": "e12",
@@ -646,7 +633,7 @@
         "who": "timmy",
         "needs": [
           [
-            "nest",
+            "speckegg",
             1
           ],
           [
@@ -657,6 +644,10 @@
         "coins": 1360,
         "xp": 220,
         "unlock": "toychest",
+        "retire": [
+          "flowerbed",
+          "nestbox"
+        ],
         "temp": {
           "p": "crashsite",
           "taps": 20,
@@ -665,7 +656,7 @@
         "talk": [
           [
             "timmy",
-            "The songbirds are back but they need somewhere cosy. A nest! And a garland so it looks nice!"
+            "A speckled egg to keep warm, and a garland so it looks nice!"
           ],
           [
             "pip",
@@ -676,7 +667,7 @@
             "THESE birds do."
           ]
         ],
-        "text": "The birds sang all evening, and someone left a painted toy chest by the barn. Then Ember came running: something small crashed behind the hill — and it is blinking!"
+        "text": "The birds sing all evening. Then something small crashes behind the hill — blinking!"
       },
       {
         "id": "e13",
@@ -688,7 +679,7 @@
             1
           ],
           [
-            "speckegg",
+            "toyrobot",
             1
           ]
         ],
@@ -696,21 +687,20 @@
         "xp": 240,
         "unlock": "vegpatch",
         "gift": "chest",
+        "retire": [
+          "toychest"
+        ],
         "talk": [
           [
             "bloop",
-            "Blorp! Those are Blinkies. Babies. They hatch from the eggs in that wreck."
+            "Blinkies! Babies. Far from home, like me."
           ],
           [
             "timmy",
-            "Can we keep one?! Can we?"
-          ],
-          [
-            "bloop",
-            "Help one grow up, and keep a speckled egg warm for the next. They are far from home. Like me."
+            "Help one grow up, and give it a toy robot. Can we keep it?!"
           ]
         ],
-        "text": "The little visitors are safe and very hungry. Zib dug a veggie patch so nobody goes to bed without supper."
+        "text": "The little visitors are safe and very hungry. Zib dug a veggie patch."
       },
       {
         "id": "e14",
@@ -729,17 +719,20 @@
         "coins": 1680,
         "xp": 260,
         "unlock": "tinkerbench",
+        "retire": [
+          "meadow"
+        ],
         "talk": [
           [
             "biscuit",
-            "The crows are a threat to civic order. I have drafted a strongly worded letter."
+            "The crows threaten civic order. I drafted a strongly worded letter."
           ],
           [
             "pip",
-            "Or... two carrots for the Blinkies and a scarecrow for the crows?"
+            "Or two carrots and a scarecrow?"
           ]
         ],
-        "text": "The garden thrives. Dr. Zonk dragged an old tinker bench out of the barn: \"for lenses. We need to see where we are going.\""
+        "text": "The meadow gave its last hay to the scarecrow. Dr. Zonk drags out a tinker bench: \"For lenses.\""
       },
       {
         "id": "e15",
@@ -748,10 +741,6 @@
         "needs": [
           [
             "spyglass",
-            1
-          ],
-          [
-            "statue",
             1
           ],
           [
@@ -766,18 +755,14 @@
         "talk": [
           [
             "timmy",
-            "Dr. Zonk says his home is up THERE. Somewhere. Behind the Moon."
-          ],
-          [
-            "bloop",
-            "A spyglass to find the way. A statue to mark this spot, so we can always come back."
+            "Dr. Zonk says his home is up THERE. Behind the Moon!"
           ],
           [
             "grandma",
-            "And a basket of veggies, because nobody stargazes on an empty stomach."
+            "A spyglass, and veggies. Nobody stargazes on an empty stomach."
           ]
         ],
-        "text": "Through the spyglass: the Moon, and on it, tiny lights. \"Crater Camp,\" whispers Dr. Zonk. \"Friends.\" Back on the ground, the old hollow behind the barn has filled with water — a lily pond! And at the edge of the woods, half-buried in ferns: Dr. Zonk's ship. In pieces. Time to build a rocket."
+        "text": "The Moon has tiny lights. \"Friends,\" whispers Dr. Zonk. And in the woods: his ship. In pieces. Time to build a rocket!"
       },
       {
         "id": "e16",
@@ -789,12 +774,12 @@
             1
           ],
           [
-            "bale",
+            "vegbundle",
             1
           ],
           [
-            "vegbundle",
-            1
+            "lilypad",
+            2
           ]
         ],
         "coins": 2080,
@@ -804,18 +789,14 @@
         "talk": [
           [
             "mumbo",
-            "Hello hello! Chef Gubbo, baker. Well — baker without a bakery."
+            "Chef Gubbo, baker. Well — baker without a bakery."
           ],
           [
             "mumbo",
-            "Bring me carrots, hay for the oven floor and a bundle of veggies, and I will build us a proper bakery."
-          ],
-          [
-            "pip",
-            "A bakery! Warm buns every morning!"
+            "Carrots, veggies and lily pads to wrap the dough. Trust me."
           ]
         ],
-        "text": "The bakery is open. Chef Gubbo hands you the first warm bun, a chest of thanks — and puts up a windmill on the hill. Flour for everyone!"
+        "text": "The bakery is open, and a windmill turns on the hill. Flour for everyone!"
       },
       {
         "id": "e17",
@@ -827,28 +808,31 @@
             1
           ],
           [
-            "nest",
+            "vegbundle",
             1
           ],
           [
-            "quilt",
+            "lotus",
             1
           ]
         ],
         "coins": 2320,
         "xp": 340,
         "unlock": "claypit",
+        "retire": [
+          "vegpatch"
+        ],
         "talk": [
           [
             "gigi",
-            "Bread on the table but no bowls to put it in. Uncivilised, darling."
+            "Bread but no bowls. Uncivilised, darling."
           ],
           [
             "gigi",
-            "A loaf for the potters, a nest and a quilt to pack the kiln. There is clay by the river."
+            "A loaf, veggies and a lotus for the potters. There is clay by the river."
           ]
         ],
-        "text": "The old clay pit by the river is open again. Sirra has already ordered twelve vases."
+        "text": "The clay pit is open. The veggie patch is resting. Sirra ordered twelve vases."
       },
       {
         "id": "e18",
@@ -864,29 +848,29 @@
             2
           ],
           [
-            "bouquet",
+            "lotus",
             1
           ]
         ],
         "coins": 2560,
         "xp": 360,
         "gift": "chest",
-        "unlock": "picnichamper",
+        "temp": {
+          "p": "picnichamper",
+          "taps": 14,
+          "mins": 30
+        },
         "talk": [
           [
             "pim",
-            "Duchess Splatt, delighted. I have come a very long way for a proper cup of tea."
-          ],
-          [
-            "pim",
-            "Pots for the seedlings, rolls for the guests and flowers for the table, if you would be so kind."
+            "Duchess Splatt. I have come a very long way for a proper cup of tea."
           ],
           [
             "grandma",
             "Finally, someone with manners."
           ]
         ],
-        "text": "Tea is served under the parasol. Duchess Splatt declares the meadow \"almost civilised\". She leaves her picnic hamper behind. On purpose, she says."
+        "text": "Tea under the parasol. The Duchess leaves her picnic hamper behind. On purpose."
       },
       {
         "id": "e19",
@@ -894,7 +878,7 @@
         "who": "timmy",
         "needs": [
           [
-            "teapot",
+            "lotus",
             1
           ],
           [
@@ -910,17 +894,16 @@
         "xp": 380,
         "gift": "chest",
         "unlock": "eggnest",
+        "retire": [
+          "claypit"
+        ],
         "talk": [
           [
             "timmy",
-            "The pond needs a garden party! An urn, Nana Luma's teapot and a picnic basket!"
-          ],
-          [
-            "timmy",
-            "For the frogs. Frogs with THREE EYES deserve nice things."
+            "A party for the frogs! Frogs with THREE EYES deserve nice things."
           ]
         ],
-        "text": "Picnic by the pond: the three-eyed frogs are holding a tea party. Under the picnic blanket: a nest of spotted lilac eggs, wobbling."
+        "text": "The three-eyed frogs hold a tea party. Under the blanket: wobbling lilac eggs."
       },
       {
         "id": "e20",
@@ -928,7 +911,7 @@
         "who": "bloop",
         "needs": [
           [
-            "lotus",
+            "pondfrog",
             1
           ],
           [
@@ -936,7 +919,7 @@
             1
           ],
           [
-            "vegcrate",
+            "loaf",
             1
           ]
         ],
@@ -952,18 +935,14 @@
         "talk": [
           [
             "bloop",
-            "The little Blinkies are bored. Bored Blinkies chew rockets."
+            "Bored Blinkies chew rockets."
           ],
           [
             "biscuit",
-            "They chewed my sash. My OFFICIAL sash."
-          ],
-          [
-            "bloop",
-            "The Mayor agrees. More toys, please, before they find the fuel tank."
+            "They chewed my OFFICIAL sash."
           ]
         ],
-        "text": "The Blinkies have a pet now. Nothing has been chewed for an entire hour. A battered busking robot wanders in, plays one chord, and refuses to leave. And a little rain cloud drifts over: catch its raindrops before it moves on."
+        "text": "The Blinkies have a pet now. A busking robot wanders in, plays one chord, and refuses to leave."
       },
       {
         "id": "e21",
@@ -971,15 +950,15 @@
         "who": "pip",
         "needs": [
           [
-            "toyrobot",
-            1
-          ],
-          [
             "drum",
             1
           ],
           [
-            "buntower",
+            "breadbasket",
+            1
+          ],
+          [
+            "blobpup",
             1
           ]
         ],
@@ -987,17 +966,18 @@
         "xp": 420,
         "gift": "chest",
         "unlock": "rockethull",
+        "retire": [
+          "windmill",
+          "eggnest",
+          "buskbot"
+        ],
         "talk": [
           [
             "pip",
-            "Everyone is here: Chef Gubbo, Duchess Splatt, the Blinkies... let us have a parade before the launch!"
-          ],
-          [
-            "pip",
-            "A toy robot to lead it, a drum to keep the beat, and a bun tower for after."
+            "A parade before the launch! A drum, a bread basket and a blob pup to lead it."
           ]
         ],
-        "text": "The best parade the meadow has ever seen. Then everyone turns to look at the rocket. \"Nearly there,\" says Dr. Zonk, patting a wobbly fin. The fin falls off. \"Nearly-ish.\""
+        "text": "Best parade ever. \"Nearly there,\" says Dr. Zonk, patting a fin. The fin falls off."
       },
       {
         "id": "e22",
@@ -1015,12 +995,8 @@
             1
           ],
           [
-            "aqueduct",
-            1
-          ],
-          [
-            "toyrocket",
-            1
+            "lotus",
+            2
           ]
         ],
         "coins": 2240,
@@ -1030,18 +1006,14 @@
         "talk": [
           [
             "bloop",
-            "The rocket is nearly ready. It needs a pad that will not crack, and water to cool the engines."
-          ],
-          [
-            "pip",
-            "A nose cone for the top, a telescope for the pilot, and an aqueduct for the water. We will miss you, Dr. Zonk."
+            "A nose cone, a telescope, and pond water to cool the engines."
           ],
           [
             "bloop",
-            "Miss? No. You are coming too."
+            "Miss you? No. You are coming too."
           ]
         ],
-        "text": "The pad holds, the rocket stands, the meadow is awake. Sunny Meadow is restored — and Luna is waiting."
+        "text": "The rocket stands. Sunny Meadow is awake — and the Moon is waiting."
       }
     ]
   },
