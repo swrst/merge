@@ -22,6 +22,8 @@ await page.waitForFunction(() => window.__game && window.__board, null, { timeou
 await page.waitForTimeout(1500);
 if (await page.locator('#tSkip').isVisible().catch(() => false)) await page.click('#tSkip');
 const shoo = async () => {
+  // a new producer flying in, or a reward card: take them
+  for (let k = 0; k < 4 && await page.locator('#npw.open #npGo, #rwc.open #rwcGo').count(); k++) { await page.locator('#npw.open #npGo, #rwc.open #rwcGo').first().click({ force: true }); await page.waitForTimeout(900); }
   for (let k = 0; k < 12 && await page.locator('#talk.open').count(); k++) { await page.click('#talk'); await page.waitForTimeout(250); }
   if (await page.locator('#pop.open').count()) { await page.click('#popX', { force: true }); await page.waitForTimeout(250); }
   for (let n = 0; n < 4 && await page.locator('#modal.open').count(); n++) { await page.click('#mBtn'); await page.waitForTimeout(650); }

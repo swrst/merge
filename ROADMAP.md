@@ -31,7 +31,7 @@
 | Sunny Meadow | 22 chapters with dialogue, fully painted. |
 | **Crater Camp (Moon)** | Fully painted. **Dialogue added to all 10 chapters in v23** (Nana Luma, Rokk, Nix, Zib, Dr. Zonk). |
 | **Ember Hollow (Cindra)** | 15 chains / 101 items / 13 producers in the catalogue. **Dialogue for all 10 chapters added in v23** (Vulk, Ember, Rokk, Dr. Zonk). **Art prompts: `art/CINDRA-PROMPT.md`** (11 sheets). |
-| Tidal Shallows, Aurora Reach | Catalogue and chapters exist. Aurora Reach is about half painted; Tidal Shallows has 2 chains. Prompts for what is missing: `art/NERITH-PROMPT.md`, `art/VELA-PROMPT.md`. Dialogue comes next. |
+| Tidal Shallows, Aurora Reach | Catalogue and chapters exist. Aurora Reach is about half painted; Tidal Shallows has 2 chains. Everything missing is in `art/ALL-ART-PROMPT.md`. Dialogue comes next. |
 
 **Moon and Cindra depth.** Both have 10 chapters against the Meadow's 22. Add 4–6 each, using the chains no chapter asks for yet (Moon: helium, meteorite, moonmelon; Cindra: phoenix, steam, sulfur), and one new producer per 2 chapters.
 

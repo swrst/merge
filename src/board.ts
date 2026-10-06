@@ -376,12 +376,12 @@ class PixiBoard {
          item sits small and pale inside a bright soap film drawn ON TOP of it,
          the tile goes blue, and a gold price tag hangs off the bottom. */
       const p = this.center(i), R = this.cell * 0.46;
-      s.art = this.sprite('i:' + c.bub, i, 0.6);
-      s.art.alpha = 0.8;
+      s.art = this.sprite('i:' + c.bub, i, 0.66);
+      s.art.alpha = 1;
       const film = new Container();
       const g = new Graphics();
       if (this.tex['ui:bubble_film']) {
-        const fs = new Sprite(this.tex['ui:bubble_film']); fs.anchor.set(0.5); fs.width = fs.height = R * 2.15; fs.alpha = 0.92; film.addChild(fs);
+        const fs = new Sprite(this.tex['ui:bubble_film']); fs.anchor.set(0.5); fs.width = fs.height = R * 2.15; fs.alpha = 0.85; film.addChild(fs);
       } else {
       g.circle(0, 0, R).fill({ color: 0x9fdcff, alpha: 0.3 });
       g.circle(0, 0, R).stroke({ color: 0x58b8f0, alpha: 1, width: 3.5 });

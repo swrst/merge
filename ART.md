@@ -15,10 +15,9 @@
 
 ## The workflow
 
-1. Generate a sheet with ChatGPT using the prompt packs in `art/` (`NERITH-PROMPT.md`, `VELA-PROMPT.md`).
-   - Each pack lists **only what is still missing**.
-   - Rebuild a pack with `node scripts/world-prompt.mjs <world>`.
-   - Attach `STYLE-REFERENCE.png`, and send **one sheet per picture**; collages come out too small.
+1. Paste **`art/ALL-ART-PROMPT.md`** into ChatGPT. It is one prompt with everything still to paint.
+   - Attach `STYLE-REFERENCE.png`, and get **one image per reply**; collages come out too small.
+   - `node scripts/world-prompt.mjs <world>` prints one world's missing sheets on its own.
 2. Save the result into `Desktop\chatgpt art`.
 3. Cut each object out (alpha segmentation), rename it to its id, and drop it into the folder above.
    - Rename the source sheet `_USED`.
@@ -48,7 +47,14 @@ UI files are picked up by name:
 
 ## Still to paint
 
-- **Tidal Shallows (Nerith):** most chains, the producers and the tiles. See `art/NERITH-PROMPT.md`.
-- **Aurora Reach (Vela):** 8 chains. See `art/VELA-PROMPT.md`.
-- **Higher-resolution redos** of the v25 collage art: the Meadow side chains, the new producers and the helpers. Generate them one sheet at a time.
+Everything below is in `art/ALL-ART-PROMPT.md` (21 images):
+
+- **The pet:** 8 evolution forms and 4 moods.
+- **Aurora Reach (Vela):** 8 chains.
+- **Tidal Shallows (Nerith):** most chains, the producers and the tiles.
+- **Higher-resolution redos** of the v25 collage art: the Meadow side chains, the new producers and the helpers.
 - **Unused art kept for later** (decorations, hats, holiday tiles, Moon Pup, Zib's faces, event banners, backgrounds) is in `art/library/`.
+
+## The pet's forms
+
+Each form is `src/sprites/chars/pet_<form>.png`, where the form is one of `baby`, `pup`, `star`, `crater`, `comet`, `nova`, `titan`, `king`. Until a form is painted, the game draws the pup growth sprites (`pup1`–`pup5`) tinted for that branch.
