@@ -474,12 +474,41 @@ Chapters 19–22 ask for one item from them. Ember Hollow (world 3) is now fully
 ### Power ×2 (level 8)
 The **⚡×2** switch next to Hint makes every energy tap cost double, and the drop comes out one step up its chain. Battery producers and visitors' producers are not affected. The switch is remembered between sessions.
 
-### Moon Pup (level 6)
-Dr. Zonk brings a pup out of the crater. Its chip sits above the board.
+### Moon Pup (the pet)
+It turns up the first time you are on the Moon, at level 10 or above. Its chip sits above the board.
 
-- **Fetching:** every 20–40 minutes it brings a gift on a reward card: energy, coins, gems, or a low-tier item from your chains.
-- **Growing:** collecting gifts grows it through Pup, Puppy, Good Pup, Big Pup and Mega Pup (5 / 15 / 35 / 70 gifts). Each size fetches sooner and brings better things.
-- **Petting:** tap it between fetches to pet it, for +3 ⚡ at most once an hour.
+**Fetching.** Every 20–40 minutes it brings a gift on a reward card. A fed pup fetches 20% faster; a hungry one takes 40% longer.
+
+**Feeding.** Its panel lists the spare items on your board: nothing a contract or chapter wants, and no specials. A bigger item fills more food and gives more XP (4 × tier²). Food runs down over 8 hours.
+
+**Levels.** XP comes from feeding, gifts and petting. It levels up to 25.
+
+**Evolution:**
+- Level 5: **Moon Pup** becomes a **Puppy**.
+- Level 10: you **choose a path**:
+
+  | Path | Final form (level 20) | Good at |
+  |---|---|---|
+  | Star Hound | Nova Guardian | energy gifts; energy refills 10% → 20% faster |
+  | Crater Hound | Moonstone Titan | higher-tier items and chests |
+  | Comet Hound | Comet King | coins and gems; contracts pay 10% → 20% more |
+
+- Each evolution plays a full-screen scene.
+
+**Art.** Painted forms go in `chars/pet_<form>.png`. Until then, the growth sprites are used, tinted per path.
+
+### Storage and placing producers
+- When something is in storage, a 📦 chip sits above the board.
+- Pick a producer, then **tap where it goes**:
+  - an empty tile places it;
+  - a producer on the board swaps places with it.
+- To store a producer, tap it on the board and press **Store**.
+
+### New producers
+A new producer rises in the middle of the screen with what it makes, then flies onto its tile.
+
+### First-time explanations
+The first Star Scrap, Star Core, Relic, Bloom Essence, Wildcard, Fuel and rocket piece each get a short explanation of what it is for and where to take it. They are off when Tips are off.
 
 ### Tester build
 - **Settings** shows the build (`SERVICES.app.build`) and has **Send feedback**. The report carries the build, the device, the story position and the last caught errors; it goes by email if `app.supportEmail` is set, otherwise to the clipboard.

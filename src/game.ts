@@ -87,9 +87,9 @@ export async function startGame() {
   /* Relic Vault perks feed straight into the numbers the rest of the game reads,
      so a perk is bought once and then never has to be remembered again. */
   const vaultLv = (id: string) => (typeof S !== 'undefined' && S && S.vault && S.vault[id]) || 0;
-  const coinMult = () => 1 + vaultLv('rich') * 0.15 + (starPerk('plough') ? 0.1 : 0);
+  const coinMult = () => 1 + vaultLv('rich') * 0.15 + (starPerk('plough') ? 0.1 : 0) + petCoins();
   const xpMult = () => 1 + vaultLv('wise') * 0.25;
-  const regenMs = () => Math.round(CONFIG.energy.regenMs / (1 + vaultLv('brisk') * 0.2 + res('solar') * 0.12));
+  const regenMs = () => Math.round(CONFIG.energy.regenMs / (1 + vaultLv('brisk') * 0.2 + res('solar') * 0.12 + petRegen()));
   const meteorScale = () => 1 - vaultLv('comet') * 0.3;
   const shopOpen = () => S.lvl >= CONFIG.unlocks.shopAtLevel;
   /* The lab is a building, not a level reward: it stays invisible until Dr. Zonk
@@ -518,8 +518,6 @@ export async function startGame() {
     const m = curMission();
     $('#tabRocket').classList.toggle('locked', false);
     $('#tabMap').classList.toggle('locked', false);
-    const essence = B().some((c: any) => c && c.id && bloomValue(c.id) > 0);
-    $('#dotWorld').style.display = essence && !worldAwake() ? '' : 'none';
     $('#tabShop').classList.toggle('locked', !shopOpen());
     $('#tabLab').classList.toggle('hide', !labOpen());
     renderStrip();
@@ -533,23 +531,26 @@ export async function startGame() {
      that pops when the count goes up, and anything NEW slides in as a ribbon
      at the top ("Achievement ready — Claim") with a doorbell sound; tapping it
      goes straight there. Nothing is announced on load, only as it happens. */
-  type Claim = { k: string; tab: string; n: number; icon: string; say: string; go: () => void };
+  type Claim = { k: string; tab: string; n: number; icon: string; say: string; go: () => void; quiet?: boolean };
+  const essenceOnBoard = () => B().reduce((a: number, c: any) => a + (c && c.id ? bloomValue(c.id) : 0), 0);
   function claims(): Claim[] {
     const out: Claim[] = [];
-    const add = (k: string, tab: string, n: number, icon: string, say: string, go: () => void) => { if (n > 0) out.push({ k, tab, n, icon, say, go }); };
+    const add = (k: string, tab: string, n: number, icon: string, say: string, go: () => void, quiet = false) => { if (n > 0) out.push({ k, tab, n, icon, say, go, quiet }); };
     const ar = achReady(), td = tasksDone();
     add('ach', 'Rocket', ar, ART.uiIcon('ic_trophy', '🏆'), ar > 1 ? `${ar} achievements to claim` : 'Achievement ready to claim', () => setView('rocket'));
     add('task', 'Rocket', td, ART.uiIcon('cl_tasks', '✅'), 'Daily task done — reward waiting', () => setView('rocket'));
     add('disc', 'Book', (S.disc || []).length, ART.uiIcon('badge_new', '🆕'), 'New discovery in your Album', () => setView('book'));
-    add('shop', 'Shop', shopNews() ? 1 : 0, ART.uiIcon('cl_gift', '🎁'), 'Free gift in the Trading Post', () => setView('shop'));
+    add('shop', 'Shop', shopOpen() && giftReady() ? 1 : 0, ART.uiIcon('cl_gift', '🎁'), 'Free gift in the Trading Post', () => setView('shop'));
+    // a restocked shelf is news, not a present: a badge, never a "free gift" banner
+    add('shopnew', 'Shop', shopOpen() && !giftReady() && S.shop.at > (S.shop.seenAt || 0) ? 1 : 0, ART.uiIcon('ic_cart', '🛒'), 'New stock in the Trading Post', () => setView('shop'), true);
     add('labOffer', 'Shop', labOffered() && !S.lab.built ? 1 : 0, ART.uiIcon('ic_microscope', '🔬'), 'The Lab can be built', () => setView('shop'));
     const e = evNow();
     add('event', 'Fun', e && S.ev.join !== (e as any).key ? 1 : 0, ART.uiIcon('ic_event', '🎪'), 'An event has started!', () => setView('fun'));
     add('spin', 'Fun', S.lvl >= SP().unlockLevel ? spinsLeft() : 0, ART.uiIcon('ic_spin', '🎡'), 'Free spin on the Lucky Wheel', () => setView('fun'));
     add('acc', 'Lab', S.acc && !accLeft() ? 1 : 0, ART.uiIcon('cl_timer', '🧪'), 'Lab accelerator is ready', () => setView('lab'));
     add('research', 'Lab', L2().research.filter((r: any) => res(r.id) < r.max && S.sci >= researchCost(r)).length ? 1 : 0, ART.uiIcon('cl_flask', '🧪'), 'You can afford new research', () => setView('lab'));
-    const essence = B().some((c: any) => c && c.id && bloomValue(c.id) > 0);
-    add('bloom', 'World', essence && !worldAwake() ? 1 : 0, ART.uiIcon('ic_globe', '🌍'), 'Wake the world with your essence', () => setView('map'));
+    // only essence you have not been to the Heart with yet: the dot is news, not a nag
+    add('bloom', 'World', !worldAwake() && essenceOnBoard() > (S.bloomSeen || 0) ? 1 : 0, ART.uiIcon('ic_globe', '🌍'), 'Wake the world with your essence', () => setView('map'));
     add('pup', '', S.pup && !pupLeft() ? 1 : 0, pupArt(), 'Your Moon Pup fetched a gift!', () => pupPop());
     add('chapter', '', projReady(curProject()) ? 1 : 0, ART.uiIcon('cl_build', '🚀'), 'Chapter ready to build!', () => ($('#btnQuests') as HTMLElement).click());
     return out;
@@ -572,13 +573,16 @@ export async function startGame() {
     list.forEach(c => { now[c.k] = c.n; });
     if (claimSeen) {
       // the main tutorial owns the screen while it runs
-      const fresh = !S.tut || tutOn() || jit ? [] : list.filter(c => c.n > (claimSeen![c.k] || 0) && c.k !== 'disc');
+      const fresh = !S.tut || tutOn() || jit ? [] : list.filter(c => c.n > (claimSeen![c.k] || 0) && c.k !== 'disc' && !c.quiet);
+      // a banner for something already claimed goes away at once
+      const rb = document.getElementById('ribbon');
+      if (rb && rb.className === 'show' && ribbonCur && !now[ribbonCur]) rb.className = 'hide';
       fresh.forEach(c => ribbon(c));
     }
     claimSeen = now;
   }
   const ribbonQ: Claim[] = [];
-  let ribbonOn = false;
+  let ribbonOn = false, ribbonCur = '';
   function ribbon(c: Claim) {
     if (ribbonQ.some(q => q.k === c.k)) return;
     ribbonQ.push(c); if (!ribbonOn) ribbonNext();
@@ -587,10 +591,10 @@ export async function startGame() {
     if (!ribbonQ.length) { ribbonOn = false; return; }
     ribbonOn = true;
     // only over the board, never on top of a screen, popup or dialog (it would sit on their ✕)
-    if (view !== 'board' || popOpen() || $('#modal').classList.contains('open') || $('#talk').classList.contains('open') || jit) {
+    if (view !== 'board' || popOpen() || $('#modal').classList.contains('open') || $('#talk').classList.contains('open') || jit || placing !== null) {
       setTimeout(ribbonNext, 1500); return;
     }
-    const c = ribbonQ.shift()!;
+    const c = ribbonQ.shift()!; ribbonCur = c.k;
     // it may have been claimed meanwhile
     if (!claims().some(x => x.k === c.k)) { ribbonNext(); return; }
     let r = document.getElementById('ribbon');
@@ -666,7 +670,28 @@ export async function startGame() {
     return inv;
   }
   /** record an item the player has just obtained — feeds the Guide catalogue */
+  /* The odd things — meteor finds, relics, essence, wildcards, rocket pieces —
+     are not obvious. The first time one turns up, someone says what it is for
+     and where to take it. Once per kind. */
+  const EXPLAIN: Record<string, { who: string; title: string; say: string }> = {
+    scrap: { who: 'bloop', title: 'Star Scrap', say: 'Space metal from the meteor! <b>Merge two into a Star Core</b>, or spend scrap in the 🛒 Shop’s <b>Star Forge</b> for instant favours (energy, refilled producers, a new set of contracts).' },
+    starcore: { who: 'bloop', title: 'A Star Core!', say: 'This is the good stuff. Collect them for <b>Constellations</b> (🎪 Fun → Constellations): trace a star shape and get a <b>blessing that lasts forever</b>, in every world. Keep them on your board — they are counted from there.' },
+    relic: { who: 'bloop', title: 'A Relic!', say: 'Rare and ancient. Take relics to the <b>Relic Vault</b> in 📜 Goals: each one buys a perk that lasts forever — more coins, more XP, faster energy, an extra contract.' },
+    bloom: { who: 'grandma', title: 'Bloom Essence', say: 'Life for this world! Merge essence up (Spark → Mote → Core → Heart) and feed it to the <b>world’s Heart</b> on the 🌍 Map. Every stage wakes the world a little more — and pays well.' },
+    rainbow: { who: 'pip', title: 'A Wildcard!', say: 'Drop it on <b>any</b> item and it turns into that item’s next step. Save it for the one you are missing.' },
+    fuel: { who: 'bloop', title: 'Rocket Fuel', say: 'Fuel ore comes from <b>meteor craters</b>. Merge ore into canisters and tanks; the rocket needs fuel to fly to the next world.' },
+    part: { who: 'bloop', title: 'A rocket piece', say: 'Merge pieces of the same kind until they make a <b>whole part</b> — the rocket needs a hull, an engine, navigation and a tank. Check the rocket in 📜 Goals.' },
+  };
+  function explainFirst(id: string) {
+    const d = ITEMS[id]; if (!d) return;
+    const key = EXPLAIN[id] ? id : (d.part || ['hull', 'engine', 'nav', 'tank'].includes(d.chain)) ? 'part' : EXPLAIN[d.chain] ? d.chain : '';
+    if (!key || S.tipsOff || (S.told || (S.told = {}))[key]) return;
+    S.told[key] = 1;
+    const e = EXPLAIN[key];
+    setTimeout(() => modal(e.who, e.title, `<div class="explainArt">${ART.item(id)}</div><div class="noteLine" style="text-align:left">${e.say}</div>`, 'Got it'), 700);
+  }
   function gotItem(id: string) {
+    if (S.tut) explainFirst(id);
     // a first-ever find is a little present waiting in the Album
     if (!S.seen[id] && ITEMS[id].tier >= 2 && !ITEMS[id].part) { (S.disc = S.disc || []).push(id); }
     S.seen[id] = 1; S.made[id] = (S.made[id] || 0) + 1;
@@ -1375,7 +1400,7 @@ export async function startGame() {
     if (v === 'lab' && !labOpen()) { sfx.no(); toast('The Lab opens in Meadow chapter 5 — keep restoring!'); return; }
     view = v;
     if (v !== 'board') { const rb = document.getElementById('ribbon'); if (rb && rb.className === 'show') rb.className = 'hide'; }
-    if (v === 'map') tutFire('world');
+    if (v === 'map') { tutFire('world'); S.bloomSeen = essenceOnBoard(); }
     openBag(false);
     if (v !== view || v !== 'board') sfx.tab();
     SCREENS.forEach(k => $('#sc-' + k).classList.toggle('open', v === k));
@@ -2453,11 +2478,8 @@ export async function startGame() {
     plots().push(nxt);
     const p = PRODS[nxt];
     const chains = [...new Set(p.drops.map(d => CHAINS[ITEMS[d].chain].name))];
-    sfx.discover(); confetti(); paintBoard(); renderHUD(); save();
-    setTimeout(() => modal(W().folks[0] || 'bloop', 'Something new took root',
-      `${W().name} reached level ${wlv()}, and a <b>${p.name}</b> has taken root.`
-      + `<div class="noteLine">It starts the <b>${chains.join('</b> and <b>')}</b> chain${chains.length > 1 ? 's' : ''}.</div>`,
-      'Show me'), 700);
+    paintBoard(); renderHUD(); save();
+    producerReveal(nxt, i, 'Something new took root!', `${W().name} reached level ${wlv()}. It starts the <b>${chains.join('</b> and <b>')}</b> chain${chains.length > 1 ? 's' : ''}.`);
   }
 
   function worldEvent(now: number) {
@@ -2585,12 +2607,51 @@ export async function startGame() {
   const worldDone = (w?: string) => projList(w).length > 0 && projDone(w) >= projList(w).length;
   /** a world told as a story: its chapters hand out the producers, not its level */
   const scripted = (w?: string) => projList(w).some((p: any) => p.unlock || p.temp) && !worldDone(w);
+  /* A new producer is a moment, not a sparkle: it rises in the middle of the
+     screen on golden rays with what it makes underneath, then flies down onto
+     its tile. Queued, so two at once play one after the other. */
+  const revealQ: { k: string; i: number; title: string; line: string }[] = [];
+  function producerReveal(k: string, i: number, title: string, line: string) {
+    revealQ.push({ k, i, title, line });
+    if (!document.getElementById('npw')?.classList.contains('open')) revealNext();
+  }
+  function revealNext() {
+    const r = revealQ.shift(); if (!r) return;
+    // wait for any dialog or story scene to finish first
+    if (dialogBusy() || $('#talk').classList.contains('open') || document.getElementById('rwc')?.classList.contains('open')) { revealQ.unshift(r); setTimeout(revealNext, 700); return; }
+    let el = document.getElementById('npw');
+    if (!el) { el = document.createElement('div'); el.id = 'npw'; $('#app').appendChild(el); }
+    const p = PRODS[r.k], drops = [...new Set(p.drops as string[])].slice(0, 3);
+    el.innerHTML = `<div class="rwcRays"></div><div class="npCard"><div class="npTag">${r.title}</div>
+      <div class="npArt" id="npArt">${ART.producer(p.art)}</div><b class="npName">${p.name}</b>
+      <div class="npLine">${r.line}</div>
+      <div class="npDrops">${drops.map(d => `<span>${ART.item(d)}</span>`).join('<i>·</i>')}</div>
+      <button class="big" id="npGo">Place it!</button></div>`;
+    el.className = 'open'; sfx.unlock(); haptic('medium');
+    ($('#npGo') as HTMLElement).onclick = () => {
+      const art = $('#npArt') as HTMLElement, from = art.getBoundingClientRect(), to = cellXY(r.i);
+      const fly = art.cloneNode(true) as HTMLElement; fly.className = 'npFly';
+      Object.assign(fly.style, { left: from.left + 'px', top: from.top + 'px', width: from.width + 'px', height: from.height + 'px' });
+      document.body.appendChild(fly);
+      el!.className = 'close';
+      requestAnimationFrame(() => {
+        const s2 = Math.max(0.2, (board.cellSize ? board.cellSize() : 60) / from.width);
+        fly.style.transform = `translate(${to.x - from.left - from.width / 2}px, ${to.y - from.top - from.height / 2}px) scale(${s2})`;
+      });
+      sfx.whoosh();
+      setTimeout(() => {
+        fly.remove(); el!.className = ''; board.bump(r.i); sparkle(r.i, 26, '#ffe9a8'); sfx.build(); haptic('heavy'); confetti();
+        setTimeout(revealNext, 500);
+      }, 620);
+    };
+  }
+
   /** plant a producer the story has just given you, and say so */
   function plantProducer(k: string) {
     const b = B(); if (b.some(c => c && c.p === k) || stored().some((s: any) => s.p === k)) return;
     if (prodCount() >= capProd()) {
-      stored().push({ p: k, lv: 1 }); S.pendingPlant = null; save();
-      setTimeout(() => toast(`📦 The board is full of producers, so the <b>${PRODS[k].name}</b> waits in storage. Swap it in from the 🗺️ Map.`), 1200);
+      stored().push({ p: k, lv: 1 }); S.pendingPlant = null; save(); renderQuick();
+      setTimeout(() => toast(`📦 Your board is full of producers, so the <b>${PRODS[k].name}</b> waits in storage. Tap 📦 above the board to swap it in.`), 1200);
       return;
     }
     const g = (W().grow || []).find(x => x.producer === k);
@@ -2600,8 +2661,8 @@ export async function startGame() {
     b[i] = mkProd(k);
     if (plots().indexOf(k) < 0) plots().push(k);
     S.pendingPlant = null;
-    sparkle(i, 22, '#b7f59a'); sfx.unlock();
     paintBoard();
+    producerReveal(k, i, 'New producer!', `Tap it on your board to get its items.`);
   }
   /** a guest producer from the story: free taps for a while, then it moves on */
   function spawnGuest(t: any, who: string) {
@@ -3551,28 +3612,50 @@ export async function startGame() {
   const counted = (c: any) => c && c.p && !c.tmp && !c.ev && PRODS[c.p].mode !== 'once' && c.p !== 'wreck';
   const prodCount = () => B().filter(counted).length;
   const stored = (): any[] => (S.store[S.world] = S.store[S.world] || []);
+  /* Producer storage, done properly: the 📦 chip sits over the board whenever
+     something is stored; pick one and then tap where it should go — an empty
+     tile places it, a producer on the board swaps places with it. */
+  let placing: number | null = null;
   function storeProducer(i: number) {
     const c = B()[i]; if (!counted(c)) return;
     stored().push({ p: c.p, lv: c.lv, ch: c.ch, at: c.at });
     B()[i] = null; sfx.whoosh(); sparkle(i, 14, '#ffe9a8');
-    toast(`📦 <b>${PRODS[c.p].name}</b> went to storage. Bring it back from the 🗺️ Map.`);
-    paintBoard(); renderOrders(); save();
+    toast(`📦 <b>${PRODS[c.p].name}</b> is in storage — tap 📦 above the board to put it back.`);
+    paintBoard(); renderOrders(); renderQuick(); save();
   }
-  function placeStored(k: number) {
+  function startPlacing(k: number) {
     const st = stored()[k]; if (!st) return;
-    if (prodCount() >= capProd()) { sfx.no(); toast(`The board holds ${capProd()} producers — store one first.`); return; }
-    const fr = freeCells(); if (!fr.length) { sfx.no(); toast('No free tile.'); return; }
-    const i = fr[Math.floor(fr.length / 2)];
-    B()[i] = { p: st.p, lv: st.lv, ch: st.ch, at: st.at }; stored().splice(k, 1);
-    sparkle(i, 18, '#b7f59a'); sfx.discover(); paintBoard(); renderOrders(); save();
+    placing = k; closePop(); setView('board');
+    let bar = document.getElementById('placeBar');
+    if (!bar) { bar = document.createElement('div'); bar.id = 'placeBar'; $('#app').appendChild(bar); }
+    bar.innerHTML = `<span class="pbArt">${ART.producer(PRODS[st.p].art)}</span><span>Tap an <b>empty tile</b> for the ${PRODS[st.p].name}${prodCount() >= capProd() ? ', or a <b>producer</b> to swap' : ', or a producer to swap'}.</span><button class="xBtn" id="pbX">✕</button>`;
+    bar.className = 'on'; sfx.tap();
+    ($('#pbX') as HTMLElement).onclick = stopPlacing;
+    board.setHint(null);
+  }
+  function stopPlacing() { placing = null; const bar = document.getElementById('placeBar'); if (bar) bar.className = ''; }
+  /** the tap that lands while a stored producer is in hand */
+  function placeAt(i: number) {
+    const k = placing as number, st = stored()[k]; if (!st) { stopPlacing(); return; }
+    const c = B()[i];
+    const put = () => { B()[i] = { p: st.p, lv: st.lv, ch: st.ch, at: st.at }; };
+    if (!c) {
+      if (prodCount() >= capProd()) { sfx.no(); toast(`The board holds ${capProd()} producers — tap one of them to swap.`); return; }
+      stored().splice(k, 1); put();
+    } else if (counted(c)) {
+      stored().splice(k, 1, { p: c.p, lv: c.lv, ch: c.ch, at: c.at }); put();
+      toast(`Swapped: the <b>${PRODS[c.p].name}</b> went to storage.`);
+    } else { sfx.no(); toast('Pick an empty tile, or a producer to swap with.'); return; }
+    stopPlacing(); board.bump(i); sparkle(i, 18, '#b7f59a'); sfx.build(); haptic('medium');
+    paintBoard(); renderOrders(); renderQuick(); save();
   }
   function storagePop() {
     const list = stored();
-    pop(ART.uiIcon('ic_box', '📦') + ' Producer storage', `<div class="noteLine" style="margin-top:0">The board holds <b>${capProd()}</b> producers (${prodCount()} now). Store one from its panel, swap here.</div>
+    pop(ART.uiIcon('ic_box', '📦') + ' Producer storage', `<div class="noteLine" style="margin-top:0">Your board holds <b>${capProd()}</b> producers (${prodCount()} now). Pick one, then tap an empty tile — or a producer to swap with.</div>
       ${list.length ? list.map((s: any, k: number) => `<div class="enRow"><span class="enIc">${ART.producer(PRODS[s.p].art)}</span>
-        <div><b>${PRODS[s.p].name}</b><i>Level ${s.lv || 1}</i></div><button class="buyBtn" data-place="${k}">Place</button></div>`).join('')
-        : '<div class="evOff">Nothing in storage.</div>'}`, 'energy');
-    document.querySelectorAll<HTMLElement>('[data-place]').forEach(b => b.onclick = () => { placeStored(+b.dataset.place!); storagePop(); });
+        <div><b>${PRODS[s.p].name}</b><i>Level ${s.lv || 1}</i></div><button class="buyBtn green" data-place="${k}">Place</button></div>`).join('')
+        : '<div class="evOff">Nothing in storage. Tap a producer, then <b>Store</b>, to make room.</div>'}`, 'energy');
+    document.querySelectorAll<HTMLElement>('[data-place]').forEach(b => b.onclick = () => startPlacing(+b.dataset.place!));
   }
 
   /* ---------------------------------------------- event guests and rivals */
@@ -3660,7 +3743,8 @@ export async function startGame() {
       if (t >= a.at.length || a.v() < a.at[t]) return;
       S.ach = S.ach || {}; S.ach[a.id] = t + 1;
       const rw = achReward(t); save(); achPop(); renderHUD();
-      rewardCard('glimmer', '🏆 ' + a.name, '<b>Captain Glimmer:</b> "MAGNIFICENT! A triumph — mostly mine, but yours too."', rw, () => { if (popOpen()) achPop(); });
+      if (view === 'rocket') renderRocket();
+      rewardCard('glimmer', '🏆 ' + a.name, '<b>Captain Glimmer:</b> "MAGNIFICENT! A triumph — mostly mine, but yours too."', rw, () => { if (popOpen()) achPop(); if (view === 'rocket') renderRocket(); renderHUD(); });
     });
   }
 
@@ -3796,53 +3880,162 @@ export async function startGame() {
     b.textContent = S.boost2 ? '⚡×2 ON' : '⚡×2';
   }
 
-  /* ---------------------------------------------------------- Moon Pup
-     A pet that turns up at level 6 and fetches a little gift every half hour
-     or so. Collecting its gifts grows it through five sizes; a bigger pup
-     fetches sooner and brings better things. Tap it in between just to pet it. */
-  const PUP_LV = 6;
-  const PUP_SIZES = [
-    { at: 0, name: 'Pup', mins: 40 }, { at: 5, name: 'Puppy', mins: 35 }, { at: 15, name: 'Good Pup', mins: 30 },
-    { at: 35, name: 'Big Pup', mins: 25 }, { at: 70, name: 'Mega Pup', mins: 20 }];
-  const pupSize = () => { const n = (S.pup && S.pup.n) || 0; let k = 0; PUP_SIZES.forEach((x, i) => { if (n >= x.at) k = i; }); return k; };
-  const pupLeft = () => S.pup ? Math.max(0, S.pup.at + PUP_SIZES[pupSize()].mins * 60000 - Date.now()) : 0;
-  const pupArt = (k = pupSize()) => `<img class="pupImg" style="--s:${(0.6 + k * 0.1).toFixed(2)}" src="${ART.spriteChar('pup' + (k + 1))}" alt="Moon Pup">`;
+  /* ============================================================ MOON PUP
+     A pet that turns up when you first reach the Moon. It fetches a gift every
+     half hour or so, eats spare items from your board, gains levels, and
+     EVOLVES: Pup → Puppy → (your choice of three hounds) → their final form.
+     Each branch is good at something different, so the choice matters.
+     Art: chars/pet_<form>.png when painted, the pup growth sprites until then. */
+  type PetForm = { id: string; name: string; stage: number; art: string; tint?: string; perk: string; mins: number };
+  const PET_FORMS: Record<string, PetForm> = {
+    baby: { id: 'baby', name: 'Moon Pup', stage: 1, art: 'pup1', perk: 'Fetches a little something now and then.', mins: 40 },
+    pup: { id: 'pup', name: 'Puppy', stage: 2, art: 'pup3', perk: 'Fetches faster and better.', mins: 34 },
+    star: { id: 'star', name: 'Star Hound', stage: 3, art: 'pup4', tint: 'hue-rotate(185deg) saturate(1.3)', perk: 'Brings <b>energy</b>. Your energy refills <b>10% faster</b>.', mins: 28 },
+    crater: { id: 'crater', name: 'Crater Hound', stage: 3, art: 'pup4', tint: 'sepia(.5) saturate(1.6) hue-rotate(-15deg)', perk: 'Digs up <b>items</b>, sometimes a chest.', mins: 28 },
+    comet: { id: 'comet', name: 'Comet Hound', stage: 3, art: 'pup4', tint: 'hue-rotate(250deg) saturate(1.4)', perk: 'Brings <b>coins and gems</b>. Contracts pay <b>10% more</b>.', mins: 28 },
+    nova: { id: 'nova', name: 'Nova Guardian', stage: 4, art: 'pup5', tint: 'hue-rotate(185deg) saturate(1.5) brightness(1.08)', perk: 'Lots of <b>energy</b>. Energy refills <b>20% faster</b>.', mins: 22 },
+    titan: { id: 'titan', name: 'Moonstone Titan', stage: 4, art: 'pup5', tint: 'sepia(.6) saturate(1.8) hue-rotate(-15deg)', perk: 'Higher-tier <b>items</b> and chests.', mins: 22 },
+    king: { id: 'king', name: 'Comet King', stage: 4, art: 'pup5', tint: 'hue-rotate(250deg) saturate(1.6) brightness(1.08)', perk: '<b>Coins and gems</b>. Contracts pay <b>20% more</b>.', mins: 22 },
+  };
+  const PET_NEXT: Record<string, string> = { star: 'nova', crater: 'titan', comet: 'king' };
+  const PET_EVOLVE = { pup: 5, branch: 10, final: 20 };
+  const PET_MAXLV = 25;
+  const petXpNeed = (lv: number) => 20 + lv * 15;
+  const pet = () => S.pup as any;
+  function petMigrate() {
+    const p = pet(); if (!p) return;
+    if (p.form) return;
+    // a pup from v26 (gifts only): keep its progress as levels
+    p.form = 'baby'; p.lv = 1; p.xp = (p.n || 0) * 6; p.food = Date.now(); p.name = p.name || 'Moon Pup';
+    while (p.lv < PET_MAXLV && p.xp >= petXpNeed(p.lv)) { p.xp -= petXpNeed(p.lv); p.lv++; }
+    if (p.lv >= PET_EVOLVE.pup) p.form = 'pup';
+  }
+  const petForm = (): PetForm => PET_FORMS[(pet() && pet().form) || 'baby'];
+  /** 0..100: full after a meal, empty eight hours later */
+  const petFood = () => pet() ? clamp(100 - (Date.now() - (pet().food || 0)) / (8 * 36000), 0, 100) : 0;
+  const petMood = () => { const f = petFood(); return f > 60 ? 'happy' : f > 25 ? 'ok' : 'hungry'; };
+  const pupLeft = () => {
+    if (!pet()) return 0;
+    const mins = petForm().mins * (petMood() === 'happy' ? 0.8 : petMood() === 'hungry' ? 1.4 : 1);
+    return Math.max(0, pet().at + mins * 60000 - Date.now());
+  };
+  function pupArt(form = petForm(), cls = '') {
+    const painted = ART.spriteChar('pet_' + form.id);
+    const src = painted || ART.spriteChar(form.art);
+    const style = painted || !form.tint ? '' : `filter:${form.tint};`;
+    return `<img class="pupImg ${cls}" style="${style}--s:${(0.62 + form.stage * 0.1).toFixed(2)}" src="${src}" alt="${form.name}">`;
+  }
+  /** perks other systems read */
+  const petRegen = () => { const f = pet() && pet().form; return f === 'star' ? 0.1 : f === 'nova' ? 0.2 : 0; };
+  const petCoins = () => { const f = pet() && pet().form; return f === 'comet' ? 0.1 : f === 'king' ? 0.2 : 0; };
+
+  const PET_LV = 10;
   function pupTick() {
-    if (S.pup || S.lvl < PUP_LV || !S.tut || view !== 'board' || popOpen() || $('#modal').classList.contains('open') || $('#talk').classList.contains('open')) return;
-    S.pup = { at: Date.now() - 39 * 60000, n: 0, pet: 0 }; save();
-    talkScene([['bloop', 'Something followed me out of the crater. It is fluffy. It has three ears. It will not leave.'],
-      ['pip', 'A Moon Pup! It wants to help — it fetches things!'],
-      ['bloop', 'Be kind to it. Collect what it brings and it will grow. Somehow.']], () => renderQuick());
+    if (pet()) { petMigrate(); return; }
+    // it comes from the Moon: the first time you are there (and settled in)
+    if (S.lvl < PET_LV || S.world === 'earth' || !S.tut || view !== 'board' || popOpen() || $('#modal').classList.contains('open') || $('#talk').classList.contains('open')) return;
+    S.pup = { at: Date.now() - 38 * 60000, n: 0, pet: 0, form: 'baby', lv: 1, xp: 0, food: Date.now() }; save();
+    talkScene([['bloop', 'Something followed me out of a crater. It is fluffy. It has three ears. It will not leave.'],
+      ['zib', 'A Moon Pup! Zib knows these. They fetch things. They eat things. They GROW, friend.'],
+      ['bloop', 'Feed it your spare items and collect what it brings. If it is happy, it will evolve. Into what, nobody knows.']], () => { renderQuick(); setTimeout(pupPop, 600); });
+  }
+  function petGainXp(n: number) {
+    const p = pet(); if (!p || p.lv >= PET_MAXLV) return;
+    p.xp += n;
+    let up = false;
+    while (p.lv < PET_MAXLV && p.xp >= petXpNeed(p.lv)) { p.xp -= petXpNeed(p.lv); p.lv++; up = true; }
+    if (!up) return;
+    toast(`🐾 ${p.name || petForm().name} reached <b>level ${p.lv}</b>!`);
+    sfx.coin();
+    const f = petForm();
+    if (f.id === 'baby' && p.lv >= PET_EVOLVE.pup) setTimeout(() => petEvolve('pup'), 900);
+    else if (f.id === 'pup' && p.lv >= PET_EVOLVE.branch) setTimeout(petBranch, 900);
+    else if (f.stage === 3 && p.lv >= PET_EVOLVE.final) setTimeout(() => petEvolve(PET_NEXT[f.id]), 900);
   }
   function pupGift(): Reward {
-    const k = pupSize(), r = Math.random();
-    if (r < 0.34) return { energy: 6 + k * 3 };
-    if (r < 0.58) return { coins: 25 + k * 20 };
-    if (r < 0.66 && k >= 2) return { gems: 1 + Math.floor(k / 2) };
-    return { item: miniItem(Math.min(2 + Math.floor(k / 2), 4), 1 + (k >= 3 ? 1 : 0)) };
+    const f = petForm(), k = f.stage, r = Math.random(), lv = pet().lv || 1;
+    const tierUp = (f.id === 'crater' || f.id === 'titan') ? 1 : 0;
+    const energy = { energy: 5 + k * 3 + Math.floor(lv / 3) }, coins = { coins: 20 + k * 18 + lv * 2 };
+    if (f.id === 'star' || f.id === 'nova') return r < 0.75 ? { energy: energy.energy + (f.id === 'nova' ? 8 : 4) } : coins;
+    if (f.id === 'comet' || f.id === 'king') return r < 0.55 ? { coins: coins.coins * 2 } : r < 0.85 ? { gems: f.id === 'king' ? 3 : 2 } : energy;
+    if (tierUp) return r < 0.12 ? { item: f.id === 'titan' ? 'bigchest' : 'chest' } : { item: miniItem(Math.min(3 + tierUp + Math.floor(k / 2), 5), 2) };
+    if (r < 0.35) return energy;
+    if (r < 0.6) return coins;
+    return { item: miniItem(Math.min(2 + Math.floor(k / 2), 4), 1) };
   }
-  function pupPop() {
-    if (!S.pup) return;
-    if (!pupLeft()) {
-      const before = pupSize(), r = pupGift();
-      S.pup.at = Date.now(); S.pup.n++; save(); renderQuick();
-      const grew = pupSize() > before;
-      rewardCard(pupArt(), 'Moon Pup fetched!', grew ? `<b>It grew!</b> Your pup is now a <b>${PUP_SIZES[pupSize()].name}</b> and fetches faster.` : 'Woof-blorp! It drops something at your feet.', r);
+  /** what it would eat: spare items on the board, not specials, not what a contract wants */
+  function petFoodList() {
+    const want = new Set<string>();
+    S.orders.forEach((o: any) => o.needs.forEach((nd: any) => want.add(nd.id)));
+    const pj = curProject(); if (pj) pj.needs.forEach(([id]: [string, number]) => want.add(id));
+    const got: Record<string, number> = {};
+    B().forEach((c: any) => {
+      if (!c || !c.id || want.has(c.id)) return;
+      const d = ITEMS[c.id]; if (!d || d.part || ['star', 'relic', 'bloom', 'chest', 'wild', 'hull', 'engine', 'nav', 'tank', 'fuel'].includes(d.chain)) return;
+      got[c.id] = (got[c.id] || 0) + 1;
+    });
+    return Object.entries(got).sort((a, b) => ITEMS[a[0]].tier - ITEMS[b[0]].tier).slice(0, 12);
+  }
+  function petFeed(id: string) {
+    const b = B(), at = b.findIndex((c: any) => c && c.id === id); if (at < 0) return;
+    const t = ITEMS[id].tier, xp = 4 * t * t;
+    board.consume(at, id); b[at] = null;
+    pet().food = Date.now() - (100 - Math.min(100, petFood() + 20 * t)) * 8 * 36000;
+    sfx.pop(); setTimeout(() => sfx.voice('pup', 2), 120); haptic('light');
+    const st = $('#pupStage'); if (st) { st.classList.remove('eating'); void (st as HTMLElement).offsetWidth; st.classList.add('eating'); }
+    petGainXp(xp); paintBoard(); renderOrders(); save();
+    setTimeout(() => { if (popOpen() && document.getElementById('pupStage')) pupPop(true); }, 650);
+  }
+  function pupPop(stay = false) {
+    if (!pet()) return;
+    petMigrate();
+    if (!pupLeft() && !stay) {
+      const r = pupGift();
+      pet().at = Date.now(); pet().n = (pet().n || 0) + 1; save(); renderQuick();
+      rewardCard(pupArt(), `${petForm().name} fetched!`, ['Woof-blorp! It drops something at your feet.', 'It looks very proud of itself.', 'It wags all three ears.'][Math.floor(Math.random() * 3)], r, () => petGainXp(6));
       return;
     }
-    const k = pupSize(), nx = PUP_SIZES[k + 1];
-    pop('🐶 Moon Pup', `<div class="pupBox"><div class="pupStage" id="pupStage">${pupArt()}</div>
-      <b class="pupName">${PUP_SIZES[k].name}</b>
-      <div class="noteLine">Next fetch in <b>${mmss(pupLeft())}</b>. ${nx ? `Collect <b>${nx.at - S.pup.n}</b> more gifts and it grows into a <b>${nx.name}</b>.` : 'Fully grown. The goodest pup in the galaxy.'}</div>
-      ${nx ? `<div class="catBar"><i style="width:${Math.round((S.pup.n - PUP_SIZES[k].at) / (nx.at - PUP_SIZES[k].at) * 100)}%"></i></div>` : ''}
-      <button class="big soft" id="pupPet">Pet the pup</button></div>`, 'fun');
+    const p = pet(), f = petForm(), mood = petMood(), food = Math.round(petFood());
+    const need = p.lv >= PET_MAXLV ? 0 : petXpNeed(p.lv);
+    const evoAt = f.id === 'baby' ? PET_EVOLVE.pup : f.id === 'pup' ? PET_EVOLVE.branch : f.stage === 3 ? PET_EVOLVE.final : 0;
+    const feed = petFoodList();
+    pop('🐾 ' + (p.name || f.name), `<div class="pupBox">
+      <div class="pupStage ${mood}" id="pupStage">${pupArt(f)}<span class="pupMood">${mood === 'happy' ? '💗' : mood === 'hungry' ? '🍖?' : '🙂'}</span>${pupLeft() ? '<span class="pupZ">z<i>z</i><b>z</b></span>' : ''}</div>
+      <b class="pupName">${f.name} <small>Lv ${p.lv}</small></b>
+      <div class="pupBars"><span>XP</span><div class="catBar"><i style="width:${need ? Math.round(p.xp / need * 100) : 100}%"></i></div>
+        <span>Food</span><div class="catBar food"><i style="width:${food}%"></i></div></div>
+      <div class="noteLine">${f.perk} ${evoAt ? `<br><b>Evolves at level ${evoAt}.</b>` : '<br>Final form!'}</div>
+      <div class="noteLine">Next gift in <b>${mmss(pupLeft())}</b>${mood === 'happy' ? ' (fed: faster)' : mood === 'hungry' ? ' — <b>hungry, so slower</b>' : ''}.</div>
+      <div class="petFeed"><b>Feed it a spare item</b> <i>(bigger items, more XP)</i>
+        <div class="petFoods">${feed.length ? feed.map(([id, n]) => `<button class="petFood" data-feed="${id}">${ART.item(id)}<em>×${n}</em><small>+${4 * ITEMS[id].tier * ITEMS[id].tier} XP</small></button>`).join('') : '<div class="evOff">Nothing spare on the board right now.</div>'}</div></div>
+      <button class="big soft" id="pupPet">Pet ${f.name}</button></div>`, 'fun');
+    document.querySelectorAll<HTMLElement>('[data-feed]').forEach(b => b.onclick = () => petFeed(b.dataset.feed!));
     ($('#pupPet') as HTMLElement).onclick = () => {
       const st = $('#pupStage'); st.classList.remove('petted'); void (st as HTMLElement).offsetWidth; st.classList.add('petted');
-      for (let h = 0; h < 5; h++) { const e = document.createElement('i'); e.className = 'pupHeart'; e.textContent = '💗'; e.style.left = (30 + Math.random() * 40) + '%'; e.style.animationDelay = (h * 0.08) + 's'; st.appendChild(e); setTimeout(() => e.remove(), 1400); }
-      sfx.boing(); haptic('light');
-      // a little thank-you, at most once an hour
-      if (Date.now() - (S.pup.pet || 0) > 3600000) { S.pup.pet = Date.now(); S.energy += 3; bumpChip('#chipEnergy'); toast('The pup loves you. +3 ⚡'); renderHUD(); save(); }
+      for (let h = 0; h < 6; h++) { const e = document.createElement('i'); e.className = 'pupHeart'; e.textContent = '💗'; e.style.left = (25 + Math.random() * 50) + '%'; e.style.animationDelay = (h * 0.08) + 's'; st.appendChild(e); setTimeout(() => e.remove(), 1400); }
+      sfx.boing(); sfx.voice('pup', 2); haptic('light');
+      if (Date.now() - (p.pet || 0) > 3600000) { p.pet = Date.now(); S.energy += 3; bumpChip('#chipEnergy'); petGainXp(3); toast('It loves you. +3 ⚡'); renderHUD(); save(); }
     };
+  }
+  /* level 10: you choose what it becomes */
+  function petBranch() {
+    if (popOpen()) closePop();
+    const opts = ['star', 'crater', 'comet'];
+    pop('✨ Evolution!', `<div class="noteLine" style="margin-top:16px">Your Puppy is ready to evolve. <b>Choose its path</b> — this is forever.</div>
+      <div class="evoPick">${opts.map(k => `<button class="evoOpt" data-evo="${k}"><span class="evoArt">${pupArt(PET_FORMS[k])}</span><b>${PET_FORMS[k].name}</b><i>${PET_FORMS[k].perk}</i><em>→ ${PET_FORMS[PET_NEXT[k]].name}</em></button>`).join('')}</div>`, 'fun');
+    document.querySelectorAll<HTMLElement>('[data-evo]').forEach(b => b.onclick = () => { closePop(); petEvolve(b.dataset.evo!); });
+  }
+  /* the evolution scene: glow, white silhouette, pulses, then the new form */
+  function petEvolve(to: string) {
+    const from = petForm(), nf = PET_FORMS[to]; if (!nf) return;
+    let el = document.getElementById('evo');
+    if (!el) { el = document.createElement('div'); el.id = 'evo'; $('#app').appendChild(el); }
+    el.innerHTML = `<div class="rwcRays"></div><div class="evoTxt">What? <b>${from.name}</b> is evolving!</div>
+      <div class="evoStage"><span class="evoA">${pupArt(from)}</span><span class="evoB">${pupArt(nf)}</span></div><button class="big" id="evoGo" style="visibility:hidden">Hooray!</button>`;
+    el.className = 'open'; sfx.discover(); audio.duck(4, 0.15); haptic('heavy');
+    setTimeout(() => { el!.classList.add('done'); sfx.unlock(); confetti(); ($('.evoTxt') as HTMLElement).innerHTML = `It became a <b>${nf.name}</b>!<br><small>${nf.perk}</small>`; ($('#evoGo') as HTMLElement).style.visibility = ''; }, 3200);
+    pet().form = to; save();
+    ($('#evoGo') as HTMLElement).onclick = () => { el!.className = ''; renderQuick(); renderHUD(); };
   }
 
   /* -------------------------------------------- quick chips over the board */
@@ -3851,14 +4044,24 @@ export async function startGame() {
     const e = evNow(), bits: string[] = [];
     if (e) bits.push(`<button class="qChip ev" data-q="event">${ART.uiIcon('tok_' + e.theme.id, e.theme.icon)}<b>${S.ev.key === e.key ? S.ev.pts : 0}</b><i>${dhm(e.ends - Date.now())}</i></button>`);
     if (S.lvl >= SP().unlockLevel && spinsLeft()) bits.push(`<button class="qChip spin" data-q="spin">${ART.uiIcon('ic_spin', '🎡')}<b>${spinsLeft()}</b></button>`);
+    if (stored().length) bits.push(`<button class="qChip store" data-q="store">${ART.uiIcon('ic_box', '📦')}<b>${stored().length}</b></button>`);
     if (S.pup) bits.push(`<button class="qChip pup${pupLeft() ? '' : ' ready'}" data-q="pup">${pupArt()}<i>${pupLeft() ? mmss(pupLeft()) : 'gift!'}</i></button>`);
     if (S.acc) bits.push(`<button class="qChip acc" data-q="acc">${ART.uiIcon('ic_lab', '⚗️')}<i>${accLeft() ? mmss(accLeft()) : 'done!'}</i></button>`);
     const html = bits.join('');
     if (host.dataset.h === html) return;
+    // same chips as before, only the numbers moved: update the text in place, so
+    // a tap that lands mid-update is never lost to a rebuilt button
+    const tmp = document.createElement('div'); tmp.innerHTML = html;
+    const fresh = Array.from(tmp.children) as HTMLElement[], old = Array.from(host.children) as HTMLElement[];
+    const sig = (e: HTMLElement) => e.dataset.q + '|' + e.className + '|' + (e.querySelector('img')?.getAttribute('src') || '');
+    if (fresh.length === old.length && fresh.every((e, k) => sig(e) === sig(old[k]))) {
+      fresh.forEach((e, k) => ['b', 'i'].forEach(t => { const a2 = e.querySelector(t), b2 = old[k].querySelector(t); if (a2 && b2 && a2.textContent !== b2.textContent) b2.textContent = a2.textContent; }));
+      host.dataset.h = html; return;
+    }
     host.dataset.h = html; host.innerHTML = html;
     host.querySelectorAll('[data-q]').forEach((b: any) => b.onclick = () => {
       const k = b.dataset.q;
-      if (k === 'event') eventPop(); else if (k === 'spin') spinPop(); else if (k === 'pup') pupPop(); else { labTab = 'acc'; setView('lab'); }
+      if (k === 'event') eventPop(); else if (k === 'spin') spinPop(); else if (k === 'pup') pupPop(); else if (k === 'store') storagePop(); else { labTab = 'acc'; setView('lab'); }
     });
   }
 
@@ -4730,6 +4933,7 @@ export async function startGame() {
     lastAct = Date.now();
     audio.unlock();                                   // the first gesture starts the mixer
     const pick = (k: number | null) => { sel = k; board.setSelected(k); };
+    if (placing !== null) { placeAt(i); return; }
     if (!c) { pick(null); hideInfo(); return; }
     if (c.b) {
       sfx.no(); pick(null); hideInfo();
@@ -4889,7 +5093,7 @@ export async function startGame() {
      popups, screens, toasts, buttons. An emoji without a painting stays. */
   const EMO: Record<string, string> = {
     '🪙': 'icon_coin', '💎': 'icon_gem', '⚡': 'icon_energy', '🧪': 'icon_flask', '🔒': 'sec_lock', '⏳': 'cl_timer',
-    '🎁': 'ic_gift', '🏆': 'ic_trophy', '📦': 'ic_box', '🎡': 'ic_spin', '🔬': 'ic_microscope', '🛒': 'ic_cart',
+    '📜': 'ic_scroll', '🎁': 'ic_gift', '🏆': 'ic_trophy', '📦': 'ic_box', '🎡': 'ic_spin', '🔬': 'ic_microscope', '🛒': 'ic_cart',
     '🎪': 'ic_tent', '📖': 'ic_album2', '🗺️': 'ic_map2', '🗺': 'ic_map2', '🔑': 'ic_key', '🔔': 'cl_bell',
   };
   const EMO_RE = new RegExp(Object.keys(EMO).filter(k => ART.spriteUi(EMO[k])).sort((a, b) => b.length - a.length).join('|'), 'g');
@@ -5050,7 +5254,7 @@ export async function startGame() {
       grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed, ecost,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
       fly: (w: string) => galaxyTap(w), view: (v: string) => setView(v),
-      curProject: () => curProject(), v9: { funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, rocketPanel, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; renderLab(); } },
+      curProject: () => curProject(), v9: { storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, rocketPanel, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; renderLab(); } },
     };
     setInterval(tick, 500);
     setInterval(() => { if (!document.hidden) S.playMs = (S.playMs || 0) + 5000; }, 5000);

@@ -31,6 +31,8 @@ const S = () => page.evaluate(() => JSON.parse(JSON.stringify(window.__game.stat
 const set = async (fn) => { await page.evaluate(fn); await page.evaluate(() => window.__game.hud()); };
 const closeModal = async () => {
   // story scenes and small popups sit over everything: tap through / close them
+  // a new producer flying in, or a reward card: take them
+  for (let k = 0; k < 4 && await page.locator('#npw.open #npGo, #rwc.open #rwcGo').count(); k++) { await page.locator('#npw.open #npGo, #rwc.open #rwcGo').first().click({ force: true }); await page.waitForTimeout(900); }
   for (let k = 0; k < 12 && await page.locator('#talk.open').count(); k++) { await page.click('#talk'); await page.waitForTimeout(260); }
   if (await page.locator('#pop.open').count()) { await page.click('#popX', { force: true }); await page.waitForTimeout(250); }
   let n = 0;
