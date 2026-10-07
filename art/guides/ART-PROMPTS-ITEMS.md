@@ -4,7 +4,7 @@ Every item gets redrawn simpler, chain by chain, in the order players meet them.
 
 **Add this paragraph to EVERY sheet:**
 
-> ICON STYLE, VERY SIMPLE: each object is one big chunky shape you can name in one word, with a bold dark outline, 2–3 main colours and one soft highlight. No small parts, no sparkles, no stars or planets painted on it, no scenery and no ground or grass under it. The object fills 80% of its cell. It must be recognisable at 40 px, like a mobile-game inventory icon. Each step must look clearly bigger or richer than the step before.
+> Travel Town–style items: clean, friendly and easy to recognise at a glance, with soft glossy shading and a soft outline. Keep the details light: no clutter, no sparkles everywhere, and no ground or grass under the object. Each object fills about 80% of its cell, and each step looks clearly bigger or richer than the step before.
 
 Save as `sheet_<chain>` and drop it in `chatgpt art`. 89 sheets in total.
 
