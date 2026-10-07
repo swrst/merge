@@ -1,4 +1,4 @@
-# Gloop Galaxy
+# Galaxy Adventure
 
 A Travel Town–style merge game in space.
 
@@ -7,14 +7,14 @@ A Travel Town–style merge game in space.
 - **589 items in 97 chains, 90 producers**, a story with a cast of oddball aliens, events, side games, a Lab, a shop, and mocked ads and purchases ready to go live.
 - Built with TypeScript + PixiJS, wrapped with Capacitor for Android and iOS.
 
-**Play it right now:** open `GloopGalaxy.html` (made by `npm run build`). It is the whole game in one file.
+**Play it right now:** open `GalaxyAdventure.html` (made by `npm run build`). It is the whole game in one file.
 
 ```bash
 npm install
 npm run dev        # http://localhost:5173
 npm run content    # rebuild the catalogue from scripts/content/*.mjs
 npm test           # regression run (with dev running); also scripts/ux-check.mjs
-npm run build      # dist/ + GloopGalaxy.html
+npm run build      # dist/ + GalaxyAdventure.html
 build-apk.bat      # Windows: the tester APK
 ```
 

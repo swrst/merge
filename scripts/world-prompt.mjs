@@ -38,7 +38,7 @@ To do: ${list.reduce((a, [, c]) => a + c.items.length, 0)} items in ${list.lengt
 
 ## Setup message (send once)
 
-We're continuing the art for my mobile merge game "Gloop Galaxy" (Travel Town style). This batch is the world **${world.name}**: ${world.intro || ''}
+We're continuing the art for my mobile merge game "Galaxy Adventure" (Travel Town style). This batch is the world **${world.name}**: ${world.intro || ''}
 Keep EXACTLY the style of the attached references (our Meadow and Moon items and producers): one chunky, rounded, toy-like object per cell, soft glossy painterly semi-3D, bright saturated colours, warm key light from the upper left with one soft white highlight, shaded side a deeper richer version of the base colour (never grey/black), thin darker warm-brown edge line, small soft contact shadow, three-quarter view from ~30° above.
 ${palette} Friendly and inviting, never scary.
 

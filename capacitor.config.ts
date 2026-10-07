@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'dev.artursolak.mergerocket',
-  appName: 'Gloop Galaxy',
+  appName: 'Galaxy Adventure',
   webDir: 'dist',
   android: {
     backgroundColor: '#7fd2fb',

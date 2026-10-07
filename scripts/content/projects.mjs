@@ -1,6 +1,6 @@
 /* Restoration projects — the main thread of every world.
  *
- * Travel Town has you rebuild a place task by task; Gloop Galaxy has you wake
+ * Travel Town has you rebuild a place task by task; Galaxy Adventure has you wake
  * a world the same way. Each project asks for a few specific things (and a
  * little money), and finishing it pays well, moves the story on and makes the
  * camp a little more alive. They come in order: the next one opens when the

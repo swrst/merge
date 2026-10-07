@@ -1,4 +1,4 @@
-# Gloop Galaxy — roadmap
+# Galaxy Adventure — roadmap
 
 ## 1. UI direction
 

@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """Shrink painted sprites to what the game actually shows.
 
-Every file under src/sprites/ is inlined into the single-file GloopGalaxy.html,
+Every file under src/sprites/ is inlined into the single-file GalaxyAdventure.html,
 so a 250 kB item times 500 items is a 125 MB page. The board draws an item at
 ~60 px (168 px texture), so 256 px is plenty:
 
-  items/ producers/   -> 256x256 PNG, 256-colour palette with alpha (~20 kB)
+  items/ producers/   -> 192x192 WebP with alpha (~10 kB); a new .png dropped
+                         in is re-framed, converted and the .png removed
+  chars/               -> 256x256 WebP with alpha
   scenes/             -> WebP, quality 80, 1086x1448 (~150 kB)
   ui/                 -> palette PNG at its current size
 
@@ -31,6 +33,7 @@ def palette_png(im):
 
 
 FILL = {'items': 0.86, 'producers': 0.92, 'chars': 0.94}
+WEBP_SIDE = {'items': 192, 'producers': 192, 'chars': 256}
 
 
 def recentre(im, sub, force=False):
@@ -72,6 +75,30 @@ def main():
             size = os.path.getsize(p)
             before += size
             im = Image.open(p)
+            if sub in WEBP_SIDE:
+                side = WEBP_SIDE[sub]
+                im = im.convert('RGBA')
+                if ext == '.webp' and im.width <= side:
+                    after += size
+                    continue
+                if sub != 'chars':
+                    fixed = recentre(im, sub, force=im.width != im.height)
+                    if fixed is not None:
+                        im = fixed
+                if im.width != im.height:
+                    sq = Image.new('RGBA', (max(im.size),) * 2, (0, 0, 0, 0))
+                    sq.paste(im, ((sq.width - im.width) // 2, sq.height - im.height))
+                    im = sq
+                im = im.resize((side, side), Image.LANCZOS)
+                b = io.BytesIO()
+                im.save(b, 'WEBP', quality=80, method=6, alpha_quality=85)
+                dst = os.path.splitext(p)[0] + '.webp'
+                with open(dst, 'wb') as fh:
+                    fh.write(b.getvalue())
+                if dst != p:
+                    os.remove(p)
+                after += len(b.getvalue())
+                continue
             if sub == 'ui' and ext == '.webp':
                 after += size                      # photographic backdrops stay WebP
                 continue

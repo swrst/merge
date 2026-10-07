@@ -1,5 +1,14 @@
 # Changelog
 
+- **v37**
+  - Renamed to **Galaxy Adventure**. The v36 logo, icon and splash were removed; the old icons are back, and the loading screen shows plain text until the painted brand art arrives.
+  - The HUD level badge now sits on the avatar's corner, and the XP label and bar are centred beside it.
+  - The music is now slow ambient space: two ~50 s loops per world with drifting chords, sparse star-bells and a soft pulse. There is no lead melody, the volume is lower, and the music is 32 kHz.
+  - The app is lighter:
+    - Items, producers and characters are WebP (items went from 11 MB to 6.7 MB).
+    - The audio went from 7.4 MB to 4.1 MB.
+    - Unused UI sprites, art/library and old prompt files were removed.
+  - A single current prompt file, art/guides/ART-PROMPTS.md: simpler art style, Galaxy Adventure brand, and a level-frame piece.
 - **v36**
   - **New name: Gloop Galaxy.** The app name, page title, version line, feedback mail and APK file (`GloopGalaxy-test.apk`) all use it. The app id and save keys stay the same, so existing installs and saves carry over.
   - **New loading screen, logo and app icon**, made from the game's art: Captain Bob and Gloop in front of the home planet, a space-style loading bar, and Gloop in his flask as the launcher icon. These are stand-ins until the painted logo, icon and splash from v37 arrive.

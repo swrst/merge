@@ -1,4 +1,4 @@
-# Gloop Galaxy — handbook
+# Galaxy Adventure — handbook
 
 A kid-friendly merge game in the Travel Town mould, with a spine of its own.
 
@@ -20,7 +20,7 @@ ships to Android and iOS.
 ## 1. Starting the game
 
 ### Fastest: no install
-Double-click **`GloopGalaxy.html`**. It's the whole game inlined into one file — no server,
+Double-click **`GalaxyAdventure.html`**. It's the whole game inlined into one file — no server,
 no Node, works offline. Regenerate it any time with `npm run build`.
 
 ### Developing
@@ -41,7 +41,7 @@ Vite also prints a `Network:` address — open that on your phone (same Wi-Fi) t
 | command | what it does |
 | --- | --- |
 | `npm run dev` | dev server with hot reload |
-| `npm run build` | production build into `dist/` **and** the single-file `GloopGalaxy.html` |
+| `npm run build` | production build into `dist/` **and** the single-file `GalaxyAdventure.html` |
 | `npm run check` | TypeScript check (no emit) |
 | `npm test` | headless regression run against `npm run dev` (needs Playwright) |
 | `npm run android` | build + sync + open Android Studio |
@@ -698,7 +698,7 @@ src/style.css           everything outside the board
 MOBILE.md               getting the game onto an Android phone or an iPhone
 src/audio.ts            the WebAudio mixer: buses, crossfades, ducking
 src/audio/*.ogg         the generated sound pack (see scripts/make-sound.py)
-scripts/standalone.mjs  inlines the single-bundle build into GloopGalaxy.html
+scripts/standalone.mjs  inlines the single-bundle build into GalaxyAdventure.html
 scripts/playtest.mjs    the headless regression run (npm test)
 resources/              1024 icon + 2732 splash, source for the launcher art
 android/                generated native project

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Gloop Galaxy's whole sound pack: dreamy space music, sci-fi effects and
+"""Galaxy Adventure's whole sound pack: dreamy space music, sci-fi effects and
 alien voices.
 
     python3 scripts/make-sound.py            everything
@@ -11,17 +11,11 @@ Needs numpy, scipy and ffmpeg. Everything is synthesised (no samples, nothing
 to license). Output: src/audio/*.ogg.
 
 The music
-  Every world has four 8-bar phrases (music_<world>_1..4) in one key and tempo
-  plus an ambience bed (amb_<world>). It is space music, but calm: a glassy
-  synth lead with a slow vibrato, FM star-bells and a kalimba that sparkle
-  over it, a breathing "choir" pad built from vowel formants, a warm analog
-  pad whose filter opens and closes, a round sub bass, a ping-pong echo and a
-  very long hall. Slow tempos, no drums. The ambience is a deep drone with
-  twinkles and far-off radio beeps.
-
-  The melodies are composed, not random noodling: a two-bar motif, the motif
-  again over the next chords, a contrasting answer, and a cadence that lands
-  on the home note.
+  Ambient space music, deliberately unobtrusive: every world has two slow
+  ~50 s loops (music_<world>_1..2) and a drone bed (amb_<world>). No lead
+  melody to get stuck in your head — drifting analog chords (12 s each), a
+  soft sub, sparse FM star-bells with long echoes, a whisper-quiet pulsing
+  arpeggio that swells in and out, and one cosmic noise swell per loop.
 
 The effects
   One sci-fi family: bubbly bloops, glassy FM pings, soft laser sweeps and
@@ -250,7 +244,7 @@ def to_ogg(name, left, right=None, q='3'):
     with wave.open(raw, 'wb') as w:
         w.setnchannels(data.shape[1]); w.setsampwidth(2); w.setframerate(SR); w.writeframes(pcm.tobytes())
     dst = os.path.join(OUT, name + '.ogg')
-    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', raw, '-c:a', 'libvorbis', '-q:a', q, dst], check=True)
+    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', raw, '-ar', '32000', '-c:a', 'libvorbis', '-q:a', q, dst], check=True)
     os.remove(raw)
     return os.path.getsize(dst)
 
@@ -340,50 +334,53 @@ WORLDS = {
 
 
 def phrase(w, k):
+    """One slow ambient space loop (~48 s). No lead melody — just drifting
+    chords, a soft sub, sparse star-bells with long echoes, a very quiet
+    pulsing arpeggio that fades in and out, and one cosmic swell."""
     cfg = WORLDS[w]
     rng = np.random.default_rng(sum(ord(c) * 31 ** i for i, c in enumerate(w)) % 100000 * 10 + k)
     np.random.seed(int(rng.integers(1e9)))
-    scale, root, prog = cfg['scale'], cfg['root'], cfg['progs'][k]
-    eighth = 60 / cfg['bpm'] / 2
-    bars = 8
-    total = bars * 8 * eighth + 4.0
+    scale, root = cfg['scale'], cfg['root']
+    prog = cfg['progs'][k][::2]                     # 4 chords, 12 s each
+    chord_s = 12.0
+    total = chord_s * len(prog) + 6.0
     buf = [np.zeros(int(SR * total)), np.zeros(int(SR * total))]
-    mel = compose(scale, prog, rng)
-    ld = INSTR[cfg['lead']]
-    loct = 0 if cfg['lead'] in ('bell', 'bubble') else -12
-    for (s, d, sd) in mel:
-        f = hz(root + loct + sd_to_semi(scale, sd))
-        v = 0.5 + 0.15 * rng.random()
-        place(buf, s * eighth, ld(f, d * eighth * 0.95, v), 0.5 if cfg['lead'] == 'lead' else 0.42, -0.08)
-    # star sparkles: the sparkle instrument echoes some melody notes two octaves up
-    sp = INSTR[cfg['sparkle']]
-    for (s, d, sd) in mel:
-        if (32 <= s < 56 and rng.random() < 0.8) or rng.random() < 0.18:
-            f = hz(root + loct + 24 + sd_to_semi(scale, sd))
-            place(buf, s * eighth + 0.02, sp(f, 0.3, 0.3), 0.16, 0.45 * (1 if rng.random() < 0.5 else -1))
     for b, ch in enumerate(prog):
         deg = DEG[ch]
-        tones = [root - 12 + sd_to_semi(scale, x) for x in chord_tones(scale, deg, seventh=(b % 4 == 3))]
-        start = b * 8 * eighth
-        place(buf, start, analog_pad([hz(x) for x in tones], 8 * eighth, 0.2, cfg['bright']), 0.55, -0.15)
-        if b % 2 == 0:
-            place(buf, start, choir([hz(x + 12) for x in tones[:3]], 16 * eighth, 0.2, cfg['choir']), 0.45, 0.2)
-        place(buf, start, bass(hz(tones[0] - 12), 4 * eighth, 0.5), 0.55, 0.0)
-        place(buf, start + 4 * eighth, bass(hz(tones[0] - 12 + (7 if tones[0] - 5 < 0 else -5)), 4 * eighth, 0.32), 0.5, 0.0)
-        # slow twinkling arpeggio, very soft, alternating sides
-        arp = [tones[0] + 12, tones[1] + 12, tones[2] + 12, tones[1] + 24]
-        for i in range(4):
-            if b == bars - 1 and i > 1:
-                break
-            place(buf, start + i * 2 * eighth, kalimba(hz(arp[i]), eighth * 1.5, 0.25), 0.22, 0.5 if i % 2 else -0.5)
-    L, R = pingpong(buf[0], buf[1], eighth * 1.5)
-    L = hall(L, 3.6, mix=0.4, seed=1)[0]
-    R = hall(R, 3.6, mix=0.4, seed=2)[1]
+        tones = [root - 12 + sd_to_semi(scale, x) for x in chord_tones(scale, deg)]
+        voicing = [tones[0] - 12, tones[2] - 12, tones[1], tones[2] + 0]
+        start = b * chord_s
+        place(buf, start, analog_pad([hz(x) for x in voicing], chord_s + 0.5, 0.2, cfg['bright'] * 0.6), 0.7, -0.2 if b % 2 else 0.2)
+        place(buf, start, bass(hz(tones[0] - 12), chord_s - 1.0, 0.45), 0.4, 0.0)
+        # the arpeggio: soft triangle-ish pluck, 8ths at a slow pulse, only in the middle chords
+        if 0 < b < len(prog) - 1:
+            step = 60 / 84 / 2
+            pat = [tones[0] + 12, tones[1] + 12, tones[2] + 12, tones[1] + 24, tones[2] + 12, tones[1] + 12]
+            n = int(chord_s / step)
+            for i in range(n):
+                env = np.sin(np.pi * i / n) ** 2
+                place(buf, start + i * step, kalimba(hz(pat[i % len(pat)]), step, 0.18 * env), 0.18, 0.6 if i % 2 else -0.6)
+    # sparse star-bells: a pentatonic note every few seconds
+    t0 = 1.5
+    while t0 < total - 5:
+        f = hz(root + 12 + pent(int(rng.integers(3, 11))))
+        place(buf, t0, fmbell(f, 0.2, 0.22, ratio=3.5, index=1.4, tau=1.6), 0.3, float(rng.uniform(-0.7, 0.7)))
+        t0 += float(rng.uniform(2.5, 5.5))
+    # one cosmic swell
+    at = float(rng.uniform(10, total - 14))
+    sw = 6.0; t = T(sw)
+    swell = onepole_lp(onepole_hp(np.random.randn(len(t)), 300), 1800) * np.sin(np.pi * t / sw) ** 2 * 0.05
+    place(buf, at, swell, 1.0, 0.0)
+    L, R = pingpong(buf[0], buf[1], 60 / 84 * 0.75, fb=0.45, mix=0.3, damp=2200)
+    L = hall(L, 4.0, mix=0.45, seed=1, damp=2400)[0]
+    R = hall(R, 4.0, mix=0.45, seed=2, damp=2400)[1]
+    L, R = onepole_lp(L, 5000), onepole_lp(R, 5000)
     m = max(np.max(np.abs(L)), np.max(np.abs(R)), 1e-9)
-    L, R = L / m * 0.8, R / m * 0.8
-    fade = int(SR * 3.0)
+    L, R = L / m * 0.75, R / m * 0.75
+    fade = int(SR * 4.0)
     L[-fade:] *= np.linspace(1, 0, fade); R[-fade:] *= np.linspace(1, 0, fade)
-    L[:300] *= np.linspace(0, 1, 300); R[:300] *= np.linspace(0, 1, 300)
+    fi = int(SR * 2.0)
+    L[:fi] *= np.linspace(0, 1, fi); R[:fi] *= np.linspace(0, 1, fi)
     return L, R
 
 
@@ -395,8 +392,7 @@ def ambience(w):
     dur = 28.0
     n = int(SR * dur); t = np.arange(n) / SR
     tones = [cfg['root'] - 24 + sd_to_semi(cfg['scale'], x) for x in (0, 4, 7)]
-    x = choir([hz(v + 12) for v in tones], dur, 0.22, cfg['choir'])[:n]
-    x += analog_pad([hz(v) for v in tones], dur, 0.12, 500)[:n]
+    x = analog_pad([hz(v) for v in tones], dur, 0.2, 450)[:n]
     x += 0.10 * np.sin(2 * np.pi * hz(tones[0] - 12) * t) * (0.6 + 0.4 * np.sin(2 * np.pi * t / 7.0))
     air = onepole_lp(onepole_hp(np.random.randn(n), 400), 2200) * 0.01
     x += air * (0.5 + 0.5 * np.sin(2 * np.pi * t / 9.0) ** 2)
@@ -659,11 +655,14 @@ def main():
         print('voices done')
     if what in ('all', 'music'):
         for w in WORLDS:
-            for k in range(4):
+            for f in os.listdir(OUT):
+                if f.startswith(f'music_{w}_'):
+                    os.remove(os.path.join(OUT, f))
+            for k in range(2):
                 L, R = phrase(w, k)
-                total += to_ogg(f'music_{w}_{k + 1}', L, R, q='1')
+                total += to_ogg(f'music_{w}_{k + 1}', L, R, q='0')
             L, R = ambience(w)
-            total += to_ogg(f'amb_{w}', L, R, q='1')
+            total += to_ogg(f'amb_{w}', L, R, q='0')
             print('music', w)
     print(f'{total / 1024:.0f} kB')
 

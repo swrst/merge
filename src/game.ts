@@ -1,4 +1,4 @@
-/* GLOOP GALAXY - core game loop. Earth -> rebuild a rocket -> new worlds. */
+/* GALAXY ADVENTURE - core game loop. Earth -> rebuild a rocket -> new worlds. */
 import { ART } from './art';
 // the painted backdrops the camp and the lab stand on
 import SCENE_ANCHORS from './sprites/scenes/anchors.json';
@@ -1621,7 +1621,7 @@ export async function startGame() {
         'errors: ' + (errLog().slice(-5).join(' | ') || 'none')].join('\n');
       analytics.track('feedback', { mood });
       if (SERVICES.app.supportEmail) {
-        location.href = `mailto:${SERVICES.app.supportEmail}?subject=${encodeURIComponent('Gloop Galaxy feedback ' + mood)}&body=${encodeURIComponent(body)}`;
+        location.href = `mailto:${SERVICES.app.supportEmail}?subject=${encodeURIComponent('Galaxy Adventure feedback ' + mood)}&body=${encodeURIComponent(body)}`;
       } else {
         try { await navigator.clipboard.writeText(body); toast('Report copied — paste it in a message to the developer. Thank you!'); }
         catch { toast('Could not copy — take a screenshot instead. Thank you!'); }
@@ -3212,7 +3212,7 @@ export async function startGame() {
   }
 
   /* ============================================================ THE STORY
-     Gloop Galaxy has a spine: the Bloom — the living network that linked every
+     Galaxy Adventure has a spine: the Bloom — the living network that linked every
      world — collapsed, and your rocket is the last Seed Vault. Beats fire off
      world levels and one-off flags, and each one is a single modal. */
   function checkStory(flag?: string) {
@@ -5573,7 +5573,7 @@ export async function startGame() {
         </div>
         <button class="big soft" id="fbBtn">✉️ Send feedback</button>
         <button class="optDanger" id="resetBtn">Start a new game</button>
-        <div class="verLine" id="verLine">Gloop Galaxy ${SERVICES.app.build}</div>
+        <div class="verLine" id="verLine">Galaxy Adventure ${SERVICES.app.build}</div>
         ${testerOn ? testerPanel() : ''}
         ${import.meta.env.DEV ? devPanel() : ''}`;
       modal('pip', 'Settings', draw(), 'Close');

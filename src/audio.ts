@@ -9,7 +9,7 @@
    and the game plays on in silence. */
 
 /** music sits well under the effects: it is a bed, not a soundtrack */
-const MUSIC_VOL = 0.34;
+const MUSIC_VOL = 0.24;
 /** the ambience bed sits under the music, and alone in the quiet stretches */
 const AMB_VOL = 0.5;
 

@@ -29,5 +29,5 @@ if (/<script[^>]*src=/.test(html) || /<link[^>]*stylesheet/.test(html)) {
   console.error('standalone: something did not inline — check dist-standalone/assets');
   process.exit(1);
 }
-writeFileSync('GloopGalaxy.html', html);
-console.log('standalone -> GloopGalaxy.html', (html.length / 1024).toFixed(0) + ' kB');
+writeFileSync('GalaxyAdventure.html', html);
+console.log('standalone -> GalaxyAdventure.html', (html.length / 1024).toFixed(0) + ' kB');

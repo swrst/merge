@@ -1343,7 +1343,7 @@ html.ui-dock_btn .rail.dock .railBtn.on:before{content:"";position:absolute;left
 
 /* ============================================================ v15 art + features */
 /* boot screen: the splash with the logo, gone as soon as the board is ready */
-.bootScr{position:absolute;inset:0;z-index:500;background:#1d1146 var(--ui-splash) center bottom/cover no-repeat;display:flex;flex-direction:column;align-items:center;transition:opacity .5s}
+.bootScr{position:absolute;inset:0;z-index:500;background:#1d1146 var(--ui-splash) center/cover no-repeat;display:flex;flex-direction:column;align-items:center;transition:opacity .5s}
 .bootScr.gone{opacity:0;pointer-events:none}
 .bootLogo{width:84%;height:30%;margin-top:7%;background:var(--ui-logo) center/contain no-repeat;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35));animation:bob 2.4s ease-in-out infinite}
 .bootBar{margin-top:auto;margin-bottom:7%;width:56%;height:14px;border-radius:99px;background:rgba(20,8,50,.7);border:3px solid #c9f0ff;box-shadow:0 0 14px rgba(140,230,255,.6);overflow:hidden;position:relative;z-index:2}
@@ -2085,3 +2085,15 @@ html.ui-badge_dot .app .tab .dot:empty,html.ui-badge_dot .app .sideW .dot:empty,
 .stillArt{display:flex;justify-content:center;margin:-6px 0 4px}
 .stillArt img,.stillArt .fig{width:120px;height:auto;max-height:150px;object-fit:contain;filter:drop-shadow(0 6px 8px rgba(30,0,60,.35));animation:bob 2.4s ease-in-out infinite}
 .labStations .hubBtn.still .ti .uiIc,.labStations .hubBtn.still .ti img{width:34px;height:34px}
+/* HUD level box: avatar, a small level badge tucked on its corner, XP centred beside it */
+.app .hud .lvlBox{position:relative;gap:5px;padding:3px 9px 3px 3px}
+html.has-player .app .avatar{margin:-5px 0 -5px -2px;width:36px;height:36px}
+html.has-player .app .lvlBox .orb,html.ui-level_badge.has-player .app .lvlBox .orb{position:absolute;left:23px;top:15px;margin:0;width:24px;height:24px;font-size:11px;z-index:3}
+.app .lvlBox .xpwrap{width:52px;display:flex;flex-direction:column;justify-content:center;margin-left:4px}
+.app .lvlBox .xplabel{text-align:left;font-size:8.5px}
+.app .lvlBox .xpbar{width:100%;margin-top:3px}
+.app .hud .chip b,.app .hud .chip span{white-space:nowrap}
+/* boot title: plain text until the painted logo arrives */
+.bootLogo{background:none;height:auto;display:flex;flex-direction:column;align-items:center;line-height:.95}
+.bootLogo b{font-weight:700;font-size:42px;color:#fff;letter-spacing:.01em;-webkit-text-stroke:2px #3a1a6e;paint-order:stroke fill;text-shadow:0 4px 0 #3a1a6e,0 8px 16px rgba(20,0,50,.5)}
+.bootLogo b+b{font-size:36px;color:#ffd75e}
