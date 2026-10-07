@@ -1,4 +1,4 @@
-/* Build used only for MergeRocket.html: one bundle, no code splitting, so the
+/* Build used only for GloopGalaxy.html: one bundle, no code splitting, so the
    whole game can be inlined into a single double-clickable file. */
 import { defineConfig } from 'vite';
 

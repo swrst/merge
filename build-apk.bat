@@ -1,7 +1,7 @@
 @echo off
 setlocal EnableDelayedExpansion
 rem Builds the tester APK on Windows. Needs Node and Android Studio installed.
-rem Result: MergeRocket-test.apk next to this file.
+rem Result: GloopGalaxy-test.apk next to this file.
 
 rem Gradle 8 cannot run on Java 25 ("class file major version 69").
 rem Find a Java 17-21: IntelliJ/Android Studio downloads first, then Android Studio's own.
@@ -29,9 +29,9 @@ rem stop any Gradle daemon that was started on the wrong Java
 call gradlew.bat --stop >nul 2>&1
 call gradlew.bat assembleDebug || (cd .. & goto :err)
 cd ..
-copy /Y android\app\build\outputs\apk\debug\app-debug.apk MergeRocket-test.apk >nul
+copy /Y android\app\build\outputs\apk\debug\app-debug.apk GloopGalaxy-test.apk >nul
 echo.
-echo Done: MergeRocket-test.apk
+echo Done: GloopGalaxy-test.apk
 echo Send it to testers (Drive, WhatsApp, email). They open it and allow "install unknown apps".
 goto :eof
 :err

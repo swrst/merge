@@ -1,4 +1,4 @@
-# Putting Merge Rocket on a phone
+# Putting Gloop Galaxy on a phone
 
 The game is a web app wrapped with Capacitor, so the phone builds are the same
 code you already run with `npm run dev`. Nothing here publishes to a store —

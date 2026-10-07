@@ -1,4 +1,4 @@
-# Merge Rocket — roadmap
+# Gloop Galaxy — roadmap
 
 ## 1. UI direction
 

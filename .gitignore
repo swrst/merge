@@ -3,7 +3,7 @@ dist/
 dist-standalone/
 
 # build byproducts
-MergeRocket.html
+GloopGalaxy.html
 artifact-body.html
 
 # native build output
@@ -29,3 +29,4 @@ Thumbs.db
 # iOS build output
 ios/App/Pods/
 ios/App/App.xcworkspace/xcuserdata/
+MergeRocket.html

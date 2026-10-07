@@ -1,5 +1,19 @@
 # Changelog
 
+- **v36**
+  - **New name: Gloop Galaxy.** The app name, page title, version line, feedback mail and APK file (`GloopGalaxy-test.apk`) all use it. The app id and save keys stay the same, so existing installs and saves carry over.
+  - **New loading screen, logo and app icon**, made from the game's art: Captain Bob and Gloop in front of the home planet, a space-style loading bar, and Gloop in his flask as the launcher icon. These are stand-ins until the painted logo, icon and splash from v37 arrive.
+  - **Captain Bob is the player avatar. Gloop is the mascot.**
+  - **Gloop Potions**, a new 7-step chain made at **Gloop's Goo Still**, a new Lab station. Every 40 minutes it gives two blobs of goo. Gems or an ad speed it up, and a dot shows when it is ready.
+  - **The rest of the Meadow is now alien.** New art and names for 13 chains (90 items) and 22 producers:
+    - Whisperwood, Starstone Quarry, Moonwater, Starwheat, Nebula Cotton, Skybirds, Moonclay, Glowbugs, Cosmic Crops, Moon Pond, Cosmic Tunes, Space Weather, Star Lenses
+    - The story and tutorial text were updated to the new names.
+  - **The sound is redone with a space feel:**
+    - Dreamy space music: a glassy lead, FM star-bells, kalimba sparkles, an alien choir pad, a ping-pong echo and a long hall.
+    - Deep-space ambience.
+    - Sci-fi effects: bloops, pings, soft laser sweeps and shimmer.
+  - **Characters speak an alien language.** There are seven voice types (squeak, chirp, mid, deep, robot, gloop, dreamy). Every character has their own voice, and lines ending in a question rise in pitch. The tutorial guide talks too.
+  - Art prompts v37: logo, icon, loading screen, store banner, space UI kit, event, rocket-part and egg makeovers, and the last earthy producers.
 - **v35**
   - New art in the game:
     - **8 Meadow chains with a space makeover** (56 items):

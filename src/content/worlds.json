@@ -298,7 +298,7 @@
           ],
           [
             "pip",
-            "Tap the Big Tree for twigs. Two twigs make a branch. Two branches clear the path!"
+            "Tap the Whisperwood Tree for twigs. Two twigs make a branch. Two branches clear the path!"
           ]
         ],
         "text": "The path is clear — and there was a rock pile under the brambles."
@@ -330,7 +330,7 @@
             "Two rocks and a log for a border, dear."
           ]
         ],
-        "text": "A tidy border. Behind it, a berry bush is fruiting again."
+        "text": "A tidy border. Behind it, a glowberry bush is glowing again."
       },
       {
         "id": "e3",
@@ -454,7 +454,7 @@
             "Two lumber piles and a pie for the carpenter, please."
           ]
         ],
-        "text": "The fence stands. The Big Tree gave its last wood for it and rests now. The hay meadow is growing tall."
+        "text": "The fence stands. The Whisperwood Tree gave its last wood for it and rests now. The starwheat is growing tall."
       },
       {
         "id": "e7",
@@ -560,7 +560,7 @@
             "Honey cake! Real honeycomb, quickly, before the bees leave."
           ]
         ],
-        "text": "Honey cakes for all. The berry bush is picked clean. In the woods, a mossy log is sprouting mushrooms."
+        "text": "Honey cakes for all. The glowberry bush is picked clean. In the woods, an eyeshroom log is blinking awake."
       },
       {
         "id": "e10",
@@ -593,7 +593,7 @@
             "On my world, tea is a colour. Fascinating."
           ]
         ],
-        "text": "Tea for everyone. A cotton patch fluffs up for a little while — Sirra has ideas."
+        "text": "Tea for everyone. A nebula cotton bush fluffs up for a little while — Sirra has ideas."
       },
       {
         "id": "e11",
@@ -738,7 +738,7 @@
             "Or two carrots, a scarecrow, and a spinning top for the Blinkies?"
           ]
         ],
-        "text": "The meadow gave its last hay to the scarecrow. Dr. Zonk drags out a tinker bench: \"For lenses.\""
+        "text": "The starwheat gave its last hay to the Scare-Bot. Dr. Zonk drags out a lens workbench: \"For star lenses.\""
       },
       {
         "id": "e15",
@@ -845,10 +845,10 @@
           ],
           [
             "gigi",
-            "A loaf, veggies and a lotus for the potters. There is clay by the river."
+            "A loaf, veggies and a lotus for the potters. There is moonclay by the river."
           ]
         ],
-        "text": "The clay pit is open. The veggie patch is resting. Sirra ordered twelve vases."
+        "text": "The moonclay pit is open. The cosmic crop patch is resting. Sirra ordered twelve vases."
       },
       {
         "id": "e18",
@@ -890,7 +890,7 @@
       },
       {
         "id": "e19",
-        "name": "The Lily Pond",
+        "name": "The Moon Pond",
         "who": "timmy",
         "needs": [
           [

@@ -1,6 +1,6 @@
 {
   "tree": {
-    "name": "Big Tree",
+    "name": "Whisperwood Tree",
     "art": "tree",
     "drops": [
       "twig",
@@ -12,7 +12,7 @@
     "cost": 1
   },
   "rocks": {
-    "name": "Rock Pile",
+    "name": "Starstone Pile",
     "art": "rocks",
     "drops": [
       "pebble",
@@ -24,7 +24,7 @@
     "cost": 1
   },
   "bush": {
-    "name": "Berry Bush",
+    "name": "Glowberry Bush",
     "art": "bush",
     "drops": [
       "berry",
@@ -36,7 +36,7 @@
     "every": 360000
   },
   "well": {
-    "name": "Old Well",
+    "name": "Moonwater Well",
     "art": "well",
     "drops": [
       "dew",
@@ -48,7 +48,7 @@
     "cost": 1
   },
   "meadow": {
-    "name": "Hay Meadow",
+    "name": "Starwheat Field",
     "art": "meadow",
     "drops": [
       "grass",
@@ -60,7 +60,7 @@
     "cost": 1
   },
   "flowerbed": {
-    "name": "Flower Bed",
+    "name": "Tentacle Bloom Bed",
     "art": "flowerbed",
     "drops": [
       "bulbseed",
@@ -76,7 +76,7 @@
     "cost": 1
   },
   "hive": {
-    "name": "Wild Hive",
+    "name": "Buzzbot Hive",
     "art": "hive",
     "drops": [
       "nectar",
@@ -93,7 +93,7 @@
     "every": 360000
   },
   "mosslog": {
-    "name": "Mossy Log",
+    "name": "Eyeshroom Log",
     "art": "mosslog",
     "drops": [
       "caplet",
@@ -109,7 +109,7 @@
     "cost": 1
   },
   "cottonpatch": {
-    "name": "Cotton Patch",
+    "name": "Nebula Cotton Bush",
     "art": "cottonpatch",
     "drops": [
       "fibre",
@@ -126,7 +126,7 @@
     "cost": 1
   },
   "nestbox": {
-    "name": "Nest Box",
+    "name": "Skybird Nest Box",
     "art": "nestbox",
     "drops": [
       "down",
@@ -142,7 +142,7 @@
     "cost": 1
   },
   "claypit": {
-    "name": "Clay Pit",
+    "name": "Moonclay Pit",
     "art": "claypit",
     "drops": [
       "mud",
@@ -175,7 +175,7 @@
     "cost": 1
   },
   "vegpatch": {
-    "name": "Veggie Patch",
+    "name": "Cosmic Crop Patch",
     "art": "vegpatch",
     "drops": [
       "vegseed",
@@ -192,7 +192,7 @@
     "cost": 1
   },
   "tinkerbench": {
-    "name": "Tinker Bench",
+    "name": "Lens Workbench",
     "art": "tinkerbench",
     "drops": [
       "lenschip",
@@ -226,7 +226,7 @@
     "every": 360000
   },
   "raincloud": {
-    "name": "Rain Cloud",
+    "name": "Weather Cloud",
     "art": "raincloud",
     "drops": [
       "raindrop",
@@ -243,7 +243,7 @@
     "every": 180000
   },
   "windmill": {
-    "name": "Windmill",
+    "name": "Star Windmill",
     "art": "windmill",
     "drops": [
       "flour",
@@ -260,7 +260,7 @@
     "cost": 1
   },
   "teabush": {
-    "name": "Tea Bush",
+    "name": "Nebula Tea Bush",
     "art": "teabush",
     "drops": [
       "tealeaf",
@@ -277,7 +277,7 @@
     "every": 360000
   },
   "lilypond": {
-    "name": "Lily Pond",
+    "name": "Moon Pond",
     "art": "lilypond",
     "drops": [
       "ponddrop",
@@ -294,7 +294,7 @@
     "cost": 1
   },
   "toychest": {
-    "name": "Toy Chest",
+    "name": "Space Toy Chest",
     "art": "toychest",
     "drops": [
       "block",
@@ -311,7 +311,7 @@
     "every": 360000
   },
   "picnichamper": {
-    "name": "Picnic Hamper",
+    "name": "Picnic Pod",
     "art": "picnichamper",
     "drops": [
       "crumb",
@@ -328,7 +328,7 @@
     "cost": 1
   },
   "eggnest": {
-    "name": "Egg Nest",
+    "name": "Pet Egg Nest",
     "art": "eggnest",
     "drops": [
       "petegg",
@@ -345,7 +345,7 @@
     "every": 360000
   },
   "buskbot": {
-    "name": "Busking Robot",
+    "name": "Busker Bot",
     "art": "buskbot",
     "drops": [
       "notepebble",
