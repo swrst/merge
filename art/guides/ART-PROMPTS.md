@@ -125,6 +125,34 @@ Smooth dark-violet "space glass" with a thin gold rim and a faint cyan inner glo
 
 ---
 
+## Redo: SIMPLE item icons (the board must read at a glance)
+
+The items are too detailed: at board size (about 60 px) nobody can tell what they are. Redo the Meadow chains, starting with the ones a new player sees first.
+
+Add this to EVERY sheet prompt:
+
+> ICON STYLE, VERY SIMPLE: each object is one big chunky shape you can name in one word, with a bold dark outline, 2–3 main colours and one soft highlight. No small parts, no tiny sparkles, no stars or planets painted on it, no scenery and no ground under it. The object fills 80% of its cell. It must be recognisable at 40 px, like a mobile game inventory icon.
+
+Each step of a chain must look clearly bigger or richer than the one before (more of the same thing, a bigger version, or the same thing with one new addition), never a different picture.
+
+**18. sheet_simple_wood** (grid 4×2): a purple twig · a branch with 3 blue leaves · a short purple log · 3 planks tied together · a wooden crate · an open toolbox · a round purple tree · a wooden rocket
+
+**19. sheet_simple_stone** (grid 4×2, last cell EMPTY): a grey pebble · a lumpy rock · a geode cut open with teal crystal · a cut purple gem · a stone idol with 3 eyes · an obelisk · a stone arch
+
+**20. sheet_simple_berry** (grid 4×2, last cell EMPTY): one glowing pink berry · 3 berries on a sprig · a jar of pink jam · a pink pie · a 2-tier pink cake · a picnic basket of pies · a tiny pink jam house
+
+**21. sheet_simple_water** (grid 4×2, last cell EMPTY): a teal water drop · a round puddle · a water jug · a barrel · a round fountain · a short arch bridge with water · a water tower
+
+**22. sheet_simple_grass** (grid 3×2): a tuft of blue grass · a bundle of hay · a round hay bale · a straw hat with 2 antennae · a robot scarecrow · a cart full of hay
+
+**23. sheet_simple_flower** (grid 4×2, last cell EMPTY): a seed · a sprout with 2 leaves · a closed pink bud · an open pink tentacle flower · a bouquet · a flower crown · a flower arch
+
+**24. sheet_simple_honey** (grid 4×2, last cell EMPTY): a honey drop · a round honey bead · a piece of honeycomb · a honey pot · a round beehive · a golden jelly orb · a honey tower
+
+**25. sheet_simple_mushroom** (grid 3×2, last cell EMPTY): a tiny mushroom button · a red mushroom with one eye · 3 mushrooms together · a ring of mushrooms · a mossy heart
+
+---
+
 ## Next wave
 - Tidal Shallows makeover: alien fish, a space dock instead of rope, anchor and wheel, crystal salt, a moon turtle, a sunken saucer instead of the galleon.
 - Ember Hollow makeover: star-coal, fire pods, meteor iron.
