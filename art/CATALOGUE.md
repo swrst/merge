@@ -45,7 +45,7 @@ Glow Fluff → Prism Plume → Crystal Nest → Star Egg → Skybird → Aviary 
 **Moonclay** · 6 steps · Lv 6 · from the Moonclay Pit  
 Lilac Mud → Three-Finger Lump → Planet Pot → Orbit Urn → Rocket Kiln → Nebula Vase
 
-**Glowbugs** · 5 steps · Lv 7 · from the Grub Mound  
+**Glowbugs** · 5 steps · Lv 7 · from the Glowbug Burrow  
 Glow Grub → Glow Chrysalis → Planet Moth → Bug Lantern → Glowbug Heart
 
 **Cosmic Crops** · 7 steps · Lv 8 · from the Cosmic Crop Patch  
@@ -79,7 +79,7 @@ Spotted Egg → Peeking Egg → Blobling → Blobbo → Blob Bed → Blob House 
 Crystal Note → Rocket Whistle → Star Ukulele → Planet Drum → UFO Jukebox → One-Alien Band → Dome Bandstand → Ringed Stage
 
 **Rocket Parts** · 8 steps · Lv 10 · from the Scrap Hull  
-Hex Bolt → Gear → Rocket Fin → Nose Cone → Booster → Fuel Tin → Engine Block → Mini Rocket
+Glow Bolt → Star Gear → Rocket Fin → Porthole Cone → Booster → Fuel Cell → Triple Engine → Mini Rocket
 
 **Space Weather** · 8 steps · Lv 10 · from the Weather Cloud  
 Swirl Drop → Sleepy Cloud → Zap Cloud → Aurora Cloud → Rocket Vane → Dish Station → Cloud Machine → Two-Sun Dial
@@ -285,11 +285,11 @@ Kite Tail → Kite → Box Kite → Dragon Kite
 **Falling Stars** · 5 steps  
 Star Bit → Star Bunch → Jar of Stars → Comet Lamp → Star Throne
 
-**Festival Lanterns** · 6 steps  
-Paper Lantern → Lantern String → Flower Lantern → Lantern Arch → Lantern Boat → Sky Lantern Festival
+**Comet Lanterns** · 6 steps  
+Comet Lantern → Star Lantern String → Bloom Lantern → Crystal Lantern Arch → Lantern Saucer → Lantern Isle
 
-**Candy Carnival** · 6 steps  
-Candy Drop → Lollipop → Candy Jar → Cupcake Tower → Candy Carousel → Candy Castle
+**Space Candy** · 6 steps  
+Planet Gumdrop → Galaxy Lollipop → Star Candy Jar → Alien Cupcakes → Saucer Carousel → Rocket Candy Castle
 
 **Gloop Potions** · 7 steps  
 Goo Bubble → Goo Vial → Gloop Bottle → Twin Flasks → Potion Rack → Goo Cauldron → Potion Tower

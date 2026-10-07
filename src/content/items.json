@@ -1676,7 +1676,7 @@
     }
   },
   "hexbolt": {
-    "name": "Hex Bolt",
+    "name": "Glow Bolt",
     "chain": "parts",
     "tier": 1,
     "sell": 2,
@@ -1686,7 +1686,7 @@
     }
   },
   "gear": {
-    "name": "Gear",
+    "name": "Star Gear",
     "chain": "parts",
     "tier": 2,
     "sell": 5,
@@ -1708,7 +1708,7 @@
     }
   },
   "nosecone": {
-    "name": "Nose Cone",
+    "name": "Porthole Cone",
     "chain": "parts",
     "tier": 4,
     "sell": 32,
@@ -1730,7 +1730,7 @@
     }
   },
   "fueltin": {
-    "name": "Fuel Tin",
+    "name": "Fuel Cell",
     "chain": "parts",
     "tier": 6,
     "sell": 185,
@@ -1741,7 +1741,7 @@
     }
   },
   "engineblock": {
-    "name": "Engine Block",
+    "name": "Triple Engine",
     "chain": "parts",
     "tier": 7,
     "sell": 430,
@@ -1922,7 +1922,7 @@
     }
   },
   "paperlantern": {
-    "name": "Paper Lantern",
+    "name": "Comet Lantern",
     "chain": "ev_lantern",
     "tier": 1,
     "sell": 2,
@@ -1932,7 +1932,7 @@
     }
   },
   "lanternstring": {
-    "name": "Lantern String",
+    "name": "Star Lantern String",
     "chain": "ev_lantern",
     "tier": 2,
     "sell": 5,
@@ -1943,7 +1943,7 @@
     }
   },
   "flowerlantern": {
-    "name": "Flower Lantern",
+    "name": "Bloom Lantern",
     "chain": "ev_lantern",
     "tier": 3,
     "sell": 13,
@@ -1957,7 +1957,7 @@
     }
   },
   "lanternarch": {
-    "name": "Lantern Arch",
+    "name": "Crystal Lantern Arch",
     "chain": "ev_lantern",
     "tier": 4,
     "sell": 32,
@@ -1971,7 +1971,7 @@
     }
   },
   "lanternboat": {
-    "name": "Lantern Boat",
+    "name": "Lantern Saucer",
     "chain": "ev_lantern",
     "tier": 5,
     "sell": 78,
@@ -1985,7 +1985,7 @@
     }
   },
   "skyfestival": {
-    "name": "Sky Lantern Festival",
+    "name": "Lantern Isle",
     "chain": "ev_lantern",
     "tier": 6,
     "sell": 185,
@@ -1999,7 +1999,7 @@
     }
   },
   "candydrop": {
-    "name": "Candy Drop",
+    "name": "Planet Gumdrop",
     "chain": "ev_candy",
     "tier": 1,
     "sell": 2,
@@ -2009,7 +2009,7 @@
     }
   },
   "lollipop": {
-    "name": "Lollipop",
+    "name": "Galaxy Lollipop",
     "chain": "ev_candy",
     "tier": 2,
     "sell": 5,
@@ -2020,7 +2020,7 @@
     }
   },
   "candyjar": {
-    "name": "Candy Jar",
+    "name": "Star Candy Jar",
     "chain": "ev_candy",
     "tier": 3,
     "sell": 13,
@@ -2031,7 +2031,7 @@
     }
   },
   "cupcakes": {
-    "name": "Cupcake Tower",
+    "name": "Alien Cupcakes",
     "chain": "ev_candy",
     "tier": 4,
     "sell": 32,
@@ -2042,7 +2042,7 @@
     }
   },
   "carousel": {
-    "name": "Candy Carousel",
+    "name": "Saucer Carousel",
     "chain": "ev_candy",
     "tier": 5,
     "sell": 78,
@@ -2056,7 +2056,7 @@
     }
   },
   "candycastle": {
-    "name": "Candy Castle",
+    "name": "Rocket Candy Castle",
     "chain": "ev_candy",
     "tier": 6,
     "sell": 185,

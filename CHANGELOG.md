@@ -1,5 +1,17 @@
 # Changelog
 
+- **v38**
+  - Painted brand art for Galaxy Adventure: logo on the loading screen, a new loading screen, app icon (Android, iOS, web), and a Play Store feature graphic and icon in resources/store.
+  - Space UI kit:
+    - dark space-glass popup frame, teal ribbon, lilac order card, console dock bar and HUD chips with white text;
+    - a painted level frame: avatar in the ring, level number in the badge, XP inside the track;
+    - round settings, shop, close, sound and music buttons;
+    - mint-moss board tiles for the Meadow.
+  - The last earthy pieces are replaced:
+    - Comet Lanterns and Space Candy events;
+    - Rocket Parts;
+    - visitor and pet eggs;
+    - six producers: Glowbug Burrow, Scrap Hull, Lantern Stall, Candy Cart, Crash Site and Falling Star.
 - **v37**
   - Renamed to **Galaxy Adventure**. The v36 logo, icon and splash were removed; the old icons are back, and the loading screen shows plain text until the painted brand art arrives.
   - The HUD level badge now sits on the avatar's corner, and the XP label and bar are centred beside it.

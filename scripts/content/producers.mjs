@@ -32,7 +32,7 @@ export const PRODUCERS = [
   ['earth', 5, 'cottonpatch|Nebula Cotton Bush|cloud:cream/moss|nrg:1|fibre fibre fibre thread|a low cotton bush with fluffy white bolls'],
   ['earth', 5, 'nestbox|Skybird Nest Box|house:bark/moss|nrg:1|down down plume|a wooden bird box on a post with a round hole'],
   ['earth', 6, 'claypit|Moonclay Pit|pot:clay/clay|nrg:1|mud mud mud claylump|a wet terracotta clay pit with a spade stuck in it'],
-  ['earth', 7, 'grubmound|Grub Mound|cocoon:cream/moss|nrg:1|grub grub chrysalis|a grassy mound with little burrow holes'],
+  ['earth', 7, 'grubmound|Glowbug Burrow|cocoon:cream/moss|nrg:1|grub grub chrysalis|a grassy mound with little burrow holes'],
   ['earth', 8, 'vegpatch|Cosmic Crop Patch|sprout:leaf/clay|nrg:1|vegseed vegseed vegseed seedling|a small tilled veggie patch with carrot tops and a watering can'],
   ['earth', 9, 'tinkerbench|Lens Workbench|anvil:copper/wood|nrg:1|lenschip lenschip lenschip lens|a wooden workbench with a vice, lens grinder and a brass lamp'],
   ['earth', 10, 'crashsite|Crash Site|planet:steel/clay|bat:10/60|oddegg oddegg blinky|a small silver saucer nose-down in the dirt, dome cracked, little lights still blinking'],

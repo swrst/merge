@@ -463,7 +463,7 @@
     ]
   },
   "ev_lantern": {
-    "name": "Festival Lanterns",
+    "name": "Comet Lanterns",
     "world": "any",
     "unlock": 1,
     "items": [
@@ -476,7 +476,7 @@
     ]
   },
   "ev_candy": {
-    "name": "Candy Carnival",
+    "name": "Space Candy",
     "world": "any",
     "unlock": 1,
     "items": [

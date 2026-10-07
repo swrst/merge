@@ -1343,7 +1343,7 @@ html.ui-dock_btn .rail.dock .railBtn.on:before{content:"";position:absolute;left
 
 /* ============================================================ v15 art + features */
 /* boot screen: the splash with the logo, gone as soon as the board is ready */
-.bootScr{position:absolute;inset:0;z-index:500;background:#1d1146 var(--ui-splash) center/cover no-repeat;display:flex;flex-direction:column;align-items:center;transition:opacity .5s}
+.bootScr{position:absolute;inset:0;z-index:500;background:#2a1260 var(--ui-splash) center/cover no-repeat;display:flex;flex-direction:column;align-items:center;transition:opacity .5s}
 .bootScr.gone{opacity:0;pointer-events:none}
 .bootLogo{width:84%;height:30%;margin-top:7%;background:var(--ui-logo) center/contain no-repeat;filter:drop-shadow(0 6px 10px rgba(0,0,0,.35));animation:bob 2.4s ease-in-out infinite}
 .bootBar{margin-top:auto;margin-bottom:7%;width:56%;height:14px;border-radius:99px;background:rgba(20,8,50,.7);border:3px solid #c9f0ff;box-shadow:0 0 14px rgba(140,230,255,.6);overflow:hidden;position:relative;z-index:2}
@@ -2093,7 +2093,23 @@ html.has-player .app .lvlBox .orb,html.ui-level_badge.has-player .app .lvlBox .o
 .app .lvlBox .xplabel{text-align:left;font-size:8.5px}
 .app .lvlBox .xpbar{width:100%;margin-top:3px}
 .app .hud .chip b,.app .hud .chip span{white-space:nowrap}
-/* boot title: plain text until the painted logo arrives */
-.bootLogo{background:none;height:auto;display:flex;flex-direction:column;align-items:center;line-height:.95}
-.bootLogo b{font-weight:700;font-size:42px;color:#fff;letter-spacing:.01em;-webkit-text-stroke:2px #3a1a6e;paint-order:stroke fill;text-shadow:0 4px 0 #3a1a6e,0 8px 16px rgba(20,0,50,.5)}
-.bootLogo b+b{font-size:36px;color:#ffd75e}
+/* v38 painted level frame: portrait ring, level badge on its corner, XP track beside it */
+html.ui-level_frame .app .hud .lvlBox{position:relative;width:126px;height:50px;flex:none;padding:0;gap:0;background:var(--ui-level_frame) center/100% 100% no-repeat;border:0;box-shadow:none;border-radius:0}
+html.ui-level_frame.has-player .app .avatar,html.ui-level_frame .app .avatar{position:absolute;left:9px;top:6px;width:35px;height:35px;margin:0;border:0;box-shadow:none;background:transparent;border-radius:50%;overflow:hidden}
+html.ui-level_frame .app .lvlBox .orb,html.ui-level_frame.has-player .app .lvlBox .orb,html.ui-level_frame.ui-level_badge.has-player .app .lvlBox .orb{position:absolute;left:36px;top:30px;width:18px;height:18px;margin:0;background:none;border:0;box-shadow:none;font-size:10.5px;color:#fff;text-shadow:0 1px 0 #2a0e6b,0 0 3px #2a0e6b;z-index:3}
+html.ui-level_frame .app .lvlBox .xpwrap{position:absolute;left:55px;top:20px;width:66px;height:12px;margin:0;display:block}
+html.ui-level_frame .app .lvlBox .xpbar{position:absolute;inset:0;height:auto;margin:0;background:none;box-shadow:none;border-radius:99px}
+html.ui-level_frame .app .lvlBox .xpbar i{background:linear-gradient(90deg,#7dff9a,#3fe0c0);opacity:.9}
+html.ui-level_frame .app .lvlBox .xplabel{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;color:#fff;font-size:8px;letter-spacing:.02em;text-shadow:0 1px 0 #2a0e6b;white-space:nowrap}
+/* dark space-glass chips: light text */
+html.ui-chip_bg .app .hud .chip{color:#fff;text-shadow:0 1px 0 rgba(30,8,80,.9)}
+html.ui-chip_bg .app .hud .chip *{color:inherit}
+html.ui-level_frame .app .lvlBox .xplabel{gap:3px}
+html.ui-chip_bg .app .hud .chip{padding:2px 7px 2px 2px;font-size:12.5px;gap:2px}
+html.ui-chip_bg .app .hud .chip b,html.ui-chip_bg .app .hud .chip span:not(.dot){color:#fff!important}
+html.ui-ic_shop .app .hudShop{background:none;border:0;box-shadow:none}
+/* text that sits straight on the dark space-glass frame */
+html.ui-popup_frame .sSecT,html.ui-popup_frame .noteLine,html.ui-popup_frame .popBody>p,html.ui-popup_frame .popBody>.hint,html.ui-popup_frame .popBody>.muted{color:#f1e6ff;text-shadow:0 1px 0 rgba(20,0,60,.6)}
+
+html.ui-ribbon .screen:not(.scene) .scTitle,html.ui-ribbon .popRibbon{padding:5px 36px 15px;font-size:15px;max-width:92%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}
+html.ui-popup_frame .upHead,html.ui-popup_frame .bgPay,html.ui-popup_frame .bgPay b,html.ui-popup_frame .popBody .sub{color:#f1e6ff;text-shadow:0 1px 0 rgba(20,0,60,.6)}
