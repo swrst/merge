@@ -1145,7 +1145,7 @@ await set(() => {
   s.world = 'earth'; s.proj.earth = 5; s.talked = { e6: 1 }; s.coins = 99999; s.store = {};
   for (let i = 0; i < b.length; i++) b[i] = null;
   b[0] = { p: 'tree', lv: 1 }; b[1] = { p: 'rocks', lv: 1 }; b[2] = { p: 'bush', lv: 1, ch: 5, at: Date.now() }; b[3] = { p: 'well', lv: 1 };
-  b[10] = { id: 'lumber' }; b[11] = { id: 'lumber' }; b[12] = { id: 'pie' };
+  b[10] = { id: 'lumber' }; b[11] = { id: 'lumber' }; b[12] = { id: 'pie' }; b[13] = { id: 'twig' }; b[14] = { id: 'branch' };
   s.cSince = { earth: 9 };
   window.__board.sync(b);
 });
@@ -1159,6 +1159,7 @@ await page.evaluate(() => window.__game.v9.buildProject()); await page.waitForTi
 await closeModal();
 const after6 = await S();
 must(!after6.boards.earth.some(c => c && c.p === 'tree'), 'building chapter 6 retires the Big Tree');
+must(!after6.boards.earth.some(c => c && (c.id === 'twig' || c.id === 'branch')), 'and its leftover twigs and branches are sold off');
 must(after6.proj.earth === 6, 'and the chapter is built');
 must(after6.boards.earth.some(c => c && c.p === 'rocks' && c.lv === 3), 'the maxed producers stay');
 

@@ -1,5 +1,13 @@
 # Changelog
 
+- **v34**
+  - The bottom-right button is the **Galaxy**: your planet glowing on a starry badge.
+  - Star Scrap and Star Cores fly into a **pouch chip** beside the board that counts them; no more "Star Pouch (18)" messages. Tap it for Constellations.
+  - Side chips (event, spin, pouch, pet, storage) are a tidy grid of small round buttons with number badges.
+  - The Galaxy route continues to an **Uncharted world** (coming soon) past Aurora Reach.
+  - Tapping the **Star Freighter** opens the same sheet as a customer: what it needs, where each item comes from, what it pays.
+  - When a producer retires, its **leftover items are sold off** automatically (unless a later chapter or something else still uses them). Old saves get the same clean-up once.
+  - Achievements and first visits to each world are mirrored to **Google Play Games / Game Center** once the store ids are filled in (`src/services/config.ts`).
 - **v33**
   - The Galaxy, the camp and the Lab fill the whole screen, under the coin/gem/energy bar.
   - New video-offer button: a play badge, what you get, and how many are left today.

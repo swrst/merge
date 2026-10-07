@@ -41,6 +41,19 @@ export const SERVICES = {
   games: {
     mode: 'mock' as Mode,
     leaderboards: { level: '', events: '' },     // ← leaderboard ids from Play Console / App Store Connect
+    /* store achievements: the in-game id (<achievement>_<star>, e.g. merge_1) → the id
+       Play Console / App Store Connect gives it. Empty = only unlocked in the game.
+       The same names are used on both stores, so one table fills both. */
+    achievements: {
+      merge_1: '', merge_2: '', merge_3: '', merge_4: '',
+      deliver_1: '', deliver_2: '', deliver_3: '', deliver_4: '',
+      seen_1: '', seen_2: '', seen_3: '', seen_4: '',
+      chest_1: '', chest_2: '', chest_3: '',
+      story_1: '', story_2: '', story_3: '',
+      friend_1: '', friend_2: '', friend_3: '', friend_4: '',
+      level_1: '', level_2: '', level_3: '', level_4: '',
+      world_luna: '', world_cindra: '', world_nerith: '', world_vela: '',
+    } as Record<string, string>,
   },
 
   /** store-side extras: the in-app review sheet and update prompts */

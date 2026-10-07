@@ -521,6 +521,7 @@ export async function startGame() {
     $('#tabMap').classList.toggle('locked', false);
     $('#tabShop').classList.toggle('locked', !shopOpen());
     $('#tabLab').classList.toggle('hide', !labOpen());
+    { const gi = $('#galIc'); if (gi && gi.dataset.w !== S.world) { gi.dataset.w = S.world; gi.innerHTML = ART.uiIcon('planet_' + S.world, ART.planet(W().planet)); } }
     { const h = document.querySelector('.hud') as HTMLElement; if (h) app.style.setProperty('--hudH', h.offsetHeight + 'px'); }
     renderStrip();
     claimWatch();
@@ -840,7 +841,7 @@ export async function startGame() {
       }).join('')}</div>
        <div class="oPay"><span>${ART.icon('coin')}${sh.coins}</span><span>${ART.icon('wand')}</span></div>
        ${ready ? `<button class="btnDeliver on oTick" title="Load">${ART.uiIcon('ic_tick', '✔')}</button>` : '<button class="btnDeliver hidden"></button>'}`;
-    card.onclick = () => deliverShip();
+    card.onclick = () => (S.ship && S.ship.needs.every((nd: any) => countItem(nd.id) >= nd.qty)) ? deliverShip() : contractSheet('ship');
     (card.querySelector('.btnDeliver') as HTMLElement).onclick = (ev: Event) => { ev.stopPropagation(); deliverShip(); };
     return card;
   }
@@ -899,7 +900,9 @@ export async function startGame() {
      it comes from. Every step of the chain is shown with how many you hold, and
      the source is one tap away — closing the sheet points at it on the board. */
   function contractSheet(oid: string) {
-    const o = S.orders.find(x => x.id === oid); if (!o) return;
+    // the Star Freighter opens the same sheet as any customer
+    const o: any = oid === 'ship' && S.ship ? { id: 'ship', char: 'grubs', needs: S.ship.needs, coins: S.ship.coins, xp: S.ship.xp, say: 'Fill our hold before we lift off! One of us is in a hurry.' }
+      : S.orders.find(x => x.id === oid); if (!o) return;
     tutFire('chain');
     const inv = inventory(), ch = CHARS[o.char];
     const needRow = (nd: { id: string; qty: number }) => {
@@ -2767,9 +2770,33 @@ export async function startGame() {
     const alive = (o: any) => o.needs.every((nd: any) => { const ch = ITEMS[nd.id].chain; return CHAINS[ch].world === 'any' || B().some((c: any) => c && c.p && PRODS[c.p].drops.some((d: string) => ITEMS[d].chain === ch)); });
     S.orders = S.orders.filter(alive);
     if (S.orders.length < CONFIG.orders.minSlots) fillOrders();
+    const swept = sweepOrphans(keys);
+    coins += swept.coins;
     S.coins += coins; bumpChip('#chipCoins');
-    setTimeout(() => toast(`👋 ${names.join(' and ')} retired — thanks for everything! +${coins} 🪙`), 2400);
+    setTimeout(() => toast(`👋 ${names.join(' and ')} retired${swept.n ? ` and ${swept.n} leftover${swept.n > 1 ? 's' : ''} sold` : ''} — +${coins} 🪙`), 2400);
     paintBoard(); renderOrders(); renderHUD(); save();
+  }
+  /** once a producer has retired, its items are no use to anyone: they leave the
+   *  board (and the bag) and are paid out, unless something still produces
+   *  that chain or a later chapter still asks for it */
+  function sweepOrphans(gone: string[], w = S.world, useOrders = true): { n: number; coins: number } {
+    const b = S.boards[w]; if (!b) return { n: 0, coins: 0 };
+    const feeds = (k: string) => new Set<string>((PRODS[k] ? PRODS[k].drops : []).map((d: string) => ITEMS[d].chain));
+    const dead = new Set<string>(); gone.forEach(k => feeds(k).forEach(c => dead.add(c)));
+    const alive = new Set<string>();
+    b.forEach((c: any) => { if (c && c.p && !gone.includes(c.p)) feeds(c.p).forEach(x => alive.add(x)); });
+    (S.store[w] || []).forEach((st: any) => { if (!gone.includes(st.p)) feeds(st.p).forEach(x => alive.add(x)); });
+    projList(w).slice(projDone(w)).forEach((p: any) => p.needs.forEach(([id]: [string, number]) => alive.add(ITEMS[id].chain)));
+    if (useOrders && w === S.world) S.orders.forEach(o => o.needs.forEach(nd => alive.add(ITEMS[nd.id].chain)));
+    const orphan = (id: string) => { const it = ITEMS[id]; return !!it && dead.has(it.chain) && !alive.has(it.chain) && CHAINS[it.chain].world !== 'any'; };
+    let n = 0, coins = 0;
+    for (let i = 0; i < b.length; i++) {
+      const c = b[i]; if (!c || !c.id || !orphan(c.id)) continue;
+      coins += sellOf(c.id); n++; b[i] = null;
+      if (w === S.world) sparkle(i, 8, '#ffe9a8');
+    }
+    if (w === S.world && Array.isArray(S.bag)) { const keep = S.bag.filter((id: string) => !orphan(id)); n += S.bag.length - keep.length; S.bag.forEach((id: string) => { if (orphan(id)) coins += sellOf(id); }); S.bag = keep; }
+    return { n, coins };
   }
   /** a guest producer from the story: free taps for a while, then it moves on */
   function spawnGuest(t: any, who: string) {
@@ -3151,6 +3178,7 @@ export async function startGame() {
       S.perkAt = 0;
       growProducers();
       prog('travel', 1);
+      { const sid = (SERVICES.games as any).achievements['world_' + w]; games.unlock(sid || 'world_' + w); }
       board.setTheme(w);
       audio.playMusic(worldMusic(w));
       paintBoard(); renderHUD(); renderOrders(); setView('board');
@@ -3934,6 +3962,8 @@ export async function startGame() {
       const a = ACH.find(x => x.id === b.dataset.ach)!; const t = achTier(a);
       if (t >= a.at.length || a.v() < a.at[t]) return;
       S.ach = S.ach || {}; S.ach[a.id] = t + 1;
+      // mirror it to Google Play Games / Game Center when the store ids are filled in
+      { const sid = (SERVICES.games as any).achievements[a.id + '_' + (t + 1)]; games.unlock(sid || a.id + '_' + (t + 1)); }
       const rw = achReward(t); save(); achPop(); renderHUD();
       if (view === 'rocket') renderRocket();
       rewardCard('glimmer', '🏆 ' + a.name, '<b>Captain Glimmer:</b> "MAGNIFICENT! A triumph — mostly mine, but yours too."', rw, () => { if (popOpen()) achPop(); if (view === 'rocket') renderRocket(); renderHUD(); });
@@ -4271,6 +4301,7 @@ export async function startGame() {
     const e = evNow(), bits: string[] = [];
     if (e) bits.push(`<button class="qChip ev" data-q="event">${ART.uiIcon('tok_' + e.theme.id, e.theme.icon)}<b>${S.ev.key === e.key ? S.ev.pts : 0}</b><i>${dhm(e.ends - Date.now())}</i></button>`);
     if (S.lvl >= SP().unlockLevel && spinsLeft()) bits.push(`<button class="qChip spin" data-q="spin">${ART.uiIcon('ic_spin', '🎡')}<b>${spinsLeft()}</b></button>`);
+    if (S.seen.scrap || pouch('scrap') || pouch('starcore')) bits.push(`<button class="qChip pouch" data-q="pouch">${ART.item('starcore')}<b>${pouch('starcore')}</b><i>${pouch('scrap')} scrap</i></button>`);
     if (stored().length) bits.push(`<button class="qChip store" data-q="store">${ART.uiIcon('ic_box', '📦')}<b>${stored().length}</b></button>`);
     if (petOn()) bits.push(`<button class="qChip pup${pupLeft() ? '' : ' ready'}" data-q="pup">${pupArt()}<i>${pupLeft() ? mmss(pupLeft()) : 'gift!'}</i></button>`);
     if (S.acc) bits.push(`<button class="qChip acc" data-q="acc">${ART.uiIcon('ic_lab', '⚗️')}<i>${accLeft() ? mmss(accLeft()) : 'done!'}</i></button>`);
@@ -4288,7 +4319,7 @@ export async function startGame() {
     host.dataset.h = html; host.innerHTML = html;
     host.querySelectorAll('[data-q]').forEach((b: any) => b.onclick = () => {
       const k = b.dataset.q;
-      if (k === 'event') eventPop(); else if (k === 'spin') spinPop(); else if (k === 'pup') pupPop(); else if (k === 'store') storagePop(); else { setView('lab'); labAccPop(); }
+      if (k === 'event') eventPop(); else if (k === 'spin') spinPop(); else if (k === 'pup') pupPop(); else if (k === 'store') storagePop(); else if (k === 'pouch') starsPanel(); else { setView('lab'); labAccPop(); }
     });
   }
 
@@ -4696,7 +4727,8 @@ export async function startGame() {
   const GAL_STEP = 210, GAL_TOP = 90;
   function galaxyHTML() {
     const fuelOk = S.fuel >= CONFIG.rocket.fuelToLaunch;
-    const n = WORLD_ORDER.length, H = GAL_TOP + (n - 1) * GAL_STEP + 150;
+    // one more stop than there are worlds: the path runs on to a planet nobody has charted yet
+    const n = WORLD_ORDER.length + 1, H = GAL_TOP + (n - 1) * GAL_STEP + 150;
     const pt = (i: number) => ({ x: i % 2 ? 70 : 30, y: GAL_TOP + (n - 1 - i) * GAL_STEP + 55 });
     let path = '', lit = '';
     for (let i = 1; i < n; i++) {
@@ -4727,7 +4759,13 @@ export async function startGame() {
           ${reached && worldAwake(k) ? '<span class="galBloom">🌱</span>' : ''}</button>
         <div class="gpCard"><b>${ww.name}</b><i>${GAL[k] ? GAL[k].tag : ''}</i>${prog}${btn}</div>
       </div>`;
-    }).join('');
+    }).join('') + (() => {
+      const p = pt(n - 1), side = p.x < 50 ? 'r' : 'l';
+      return `<div class="gp gp-next locked side-${side}" style="left:${p.x}%;top:${p.y}px;--glow:#8b7bd8">
+        <button class="gpPlanet" data-soon="1"><span class="gpRing"></span>
+          <span class="galArt mystery">${ART.uiIcon('planet_vela', ART.planet('aurora'))}</span><b class="galQ">?</b></button>
+        <div class="gpCard"><b>Uncharted world</b><i>Somewhere past Aurora Reach</i><span class="gpNeed">🔭 Coming soon</span></div></div>`;
+    })();
     return `<div class="gal2"><div class="galSky"></div>
       <div class="galTop"><button class="galBack" data-pop="camp">↩ Camp</button><b>${ART.uiIcon('ic_galaxy', '🌌')} Galaxy</b><span class="galFuel">⛽ ${S.fuel}/${CONFIG.rocket.fuelToLaunch}</span></div>
       <div class="galScroll" id="galScroll"><div class="galPath" style="height:${H}px">
@@ -4747,6 +4785,7 @@ export async function startGame() {
       if (sc && me) sc.scrollTop = Math.max(0, me.offsetTop - sc.clientHeight / 2);
     }
     host.querySelectorAll('[data-world]').forEach((b: any) => b.onclick = () => galaxyTap(b.dataset.world));
+    host.querySelectorAll('[data-soon]').forEach((b: any) => b.onclick = () => { sfx.no(); toast('🔭 Dr. Zonk is still charting this one. Coming soon!'); });
     host.querySelectorAll('[data-ent]').forEach((b: any) => b.onclick = () => campTap(b.dataset.ent));
     host.querySelectorAll('[data-hub]').forEach((b: any) => b.onclick = () => { sfx.tap(); const k = b.dataset.hub; if (k === 'fun') { funPop(); } else { setView(k); fromMap = true; } });
     host.querySelectorAll('[data-pop]').forEach((b: any) => b.onclick = () => {
@@ -5340,9 +5379,11 @@ export async function startGame() {
     const id = c.id; b[i] = null;
     S.wal = S.wal || {}; S.wal[id] = (S.wal[id] || 0) + 1;
     paintCell(i); board.consume(i, id);
-    flyTo(cellXY(i), $('#tabShop') || $('#btnQuests'), ART.item(id), 1, { size: 40 });
+    renderQuick();
+    // it flies into the little pouch chip by the board; the chip counts it, no message needed
+    flyTo(cellXY(i), document.querySelector('.qChip.pouch') || $('#tabMap'), ART.item(id), 1, { size: 40 });
     sparkle(i, 10, '#ffe9a8'); sfx.coin();
-    toast(`✨ +1 <b>${ITEMS[id].name}</b> → Star Pouch (${S.wal[id]})`);
+    setTimeout(() => { const pc = document.querySelector('.qChip.pouch') as HTMLElement | null; if (pc) { pc.classList.remove('bump'); void pc.offsetWidth; pc.classList.add('bump'); } }, 650);
     save();
   }
   function sweepSpecials() {
@@ -5433,6 +5474,7 @@ export async function startGame() {
       const gone = projList(w).slice(0, projDone(w)).flatMap((p: any) => p.retire || []);
       if (!gone.length || !S.boards[w]) return;
       S.boards[w].forEach((c: any, i: number) => { if (c && c.p && !c.tmp && gone.includes(c.p)) S.boards[w][i] = null; });
+      const sw = sweepOrphans(gone, w, false); if (sw.n) { S.coins += sw.coins; setTimeout(() => toast(`🧹 Cleared ${sw.n} leftover${sw.n > 1 ? 's' : ''} nobody needs any more — +${sw.coins} 🪙`), 3000); }
       if (S.store && S.store[w]) S.store[w] = S.store[w].filter((x: any) => !gone.includes(x.p));
     });
     S.orders = S.orders.filter((o: any) => o.vis || o.needs.every((nd: any) => { const ch = ITEMS[nd.id].chain; return CHAINS[ch].world === 'any' || B().some((c: any) => c && c.p && PRODS[c.p].drops.some((d: string) => ITEMS[d].chain === ch)); }));
