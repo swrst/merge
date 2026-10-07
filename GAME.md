@@ -98,7 +98,7 @@ unchanged. Apple Developer Program is $99/yr.
 - **Stash** anything into the 🎒 bag to get it off the board, and take it back whenever.
 - **Boosters** sit above the board: a Merge Wand that clears every pair at once, a Tidy Bomb
   that sells the small leftovers, and a Rainbow Gem that merges with *anything*.
-- A **cargo ship** docks now and then with a timed manifest and a big payout.
+- A **Star Freighter** docks now and then with a timed manifest and a big payout.
 - Stuck? **💡 Hint** highlights a mergeable pair (and fires by itself if you idle).
   If the board ever fills with nothing to merge, Bloop turns up and clears it for you —
   the game cannot be soft-locked.
@@ -366,12 +366,12 @@ The row holds between two and five cards depending on how busy the world is, and
 drift in on a timer rather than replacing a delivery instantly — so the board is never quite
 the same three faces. Arrows appear at the edges when there are more than fit.
 
-### Combos, dailies and the cargo ship
+### Combos, dailies and the Star Freighter
 - **Combo streaks**: merges inside 3.5 s of each other chain up, and from the third one on
   each merge pays bonus coins with a rising ping and a `COMBO ×N` label.
 - **Daily rewards**: a seven-day calendar, escalating from coins to boosters, shown on the
   first launch of each day. Miss a day and it restarts at day one.
-- **Cargo ship**: every so often a ship docks with a three-item manifest and a real
+- **Star Freighter**: every so often a ship docks with a three-item manifest and a real
   countdown. Fill it before it sails for several times the usual payout plus a booster.
 
 ### Worlds
@@ -387,7 +387,7 @@ music and Heart. They open in order and each trip costs fuel.
 | **Aurora Reach** (Vela) | 9 — clouds, aurora weaving, stars, wind, sky orchard, chimes, prisms, sky nests, drift yards | Cloud Bank + Aurora Weave | aurora |
 
 A world keeps its own board **and its own level**, and travelling resets the shop shelf, the
-cargo ship and the contract board, so nothing from the last planet leaks into the next one.
+Star Freighter and the contract board, so nothing from the last planet leaks into the next one.
 The Guide only lists what you can make where you are standing — and shows the chains still
 sleeping here as silhouettes with the level they come back at. The bag is what carries goods
 between worlds.
@@ -576,7 +576,7 @@ src/content/missions.json     the mission list
 src/content/research.json     lab recipes: two inputs -> one relic, price, riddle
 src/content/shop.json         shelf settings, upgrades and crates
 src/content/config.json       tuning: board size, energy, both XP curves, meteors, unlocks,
-                              combo streaks, the daily calendar, the cargo ship, the side games
+                              combo streaks, the daily calendar, the Star Freighter, the side games
 src/content/index.ts          types + lookups + the validator
 ```
 
@@ -667,7 +667,7 @@ with fewer than two chains or no producer**. If both are quiet, the content is c
 | `lab.build` | what the Research Lab costs to put up |
 | `streak.*` | combo window, when bonuses start, and what a step pays |
 | `daily.rewards` | the seven-day login calendar |
-| `ship.*` | when the cargo ship first docks, how often, how long it waits |
+| `ship.*` | when the Star Freighter first docks, how often, how long it waits |
 | `upgrades.bagPerStep` | slots added per Storage Bag level |
 | `rocket.fuelToLaunch` | fuel needed per trip |
 | `orders.partRewardChance` | how often an order gifts a rocket piece while the rocket is unfinished |
@@ -734,7 +734,7 @@ the XP curve, producers and merging, buying supplies and upgrades (and checking 
 and the extra order card actually changed), the wreck spreading pieces across every
 unfinished part chain, 60 rolled orders to confirm the part-gift rate, a dud experiment that
 costs the fee but keeps its samples, a real discovery that consumes both, the bag, the
-boosters, the cargo ship, the soft-lock rescue, launches to all four other worlds —
+boosters, the Star Freighter, the soft-lock rescue, launches to all four other worlds —
 
 and then the v6/v7 systems: that a fresh world really does start with two chains and a
 cramped board, that **no contract ever asks for something that has not woken up yet**, that a

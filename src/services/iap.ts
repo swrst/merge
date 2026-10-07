@@ -22,6 +22,9 @@ export const PRODUCTS: Product[] = [
   { id: 'gems_l', name: 'Chest of Gems', price: '€9.99', gems: 1000 },
   { id: 'gems_xl', name: 'Vault of Gems', price: '€19.99', gems: 2200, tag: 'Best value' },
   { id: 'energy_pack', name: 'Energy Crate', price: '€2.99', energy: 300, coins: 500 },
+  { id: 'coins_s', name: 'Bag of Coins', price: '€0.99', coins: 1500 },
+  { id: 'coins_m', name: 'Sack of Coins', price: '€4.99', coins: 9000, tag: 'Popular' },
+  { id: 'coins_l', name: 'Coin Vault', price: '€9.99', coins: 20000, tag: 'Best value' },
   { id: 'adfree', name: 'Ad-Free Pass', price: '€3.99', once: true, adfree: true, gems: 50, tag: 'Rewards without videos' },
 ];
 

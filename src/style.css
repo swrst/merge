@@ -1980,3 +1980,60 @@ body.wide .app{box-shadow:0 0 60px rgba(0,0,0,.55)}
 .bgTick{position:absolute;right:-6px;top:-6px;width:22px;height:22px;border-radius:50%;background:#4fb63a;color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;border:2px solid #fff}
 .bgPay{text-align:center;font-size:12px;color:#7a5a2c}
 .bgPay .ic,.bgPay .art{width:16px;height:16px;vertical-align:-3px}
+
+/* v33 — the video offer: a clear, friendly pill */
+.adB{display:flex;align-items:center;gap:10px;width:100%;max-width:300px;margin:10px auto 0;padding:7px 8px 7px 7px;border-radius:999px;
+  background:linear-gradient(180deg,#8f7bff,#5b3fd8);border:3px solid #fff;box-shadow:0 4px 0 #3e2a9e,0 8px 16px rgba(60,30,160,.35);color:#fff;text-align:left}
+.adB:active{transform:translateY(2px);box-shadow:0 2px 0 #3e2a9e}
+.adB:disabled{filter:grayscale(.8);opacity:.55}
+.adPlay{flex:none;width:38px;height:38px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 -3px 0 rgba(90,60,200,.25)}
+.adPlay i{width:0;height:0;border-left:13px solid #6a4ce8;border-top:8px solid transparent;border-bottom:8px solid transparent;margin-left:4px}
+.adTx{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.15}
+.adTx b{font-size:14px;font-weight:800;text-shadow:0 1px 0 rgba(30,10,90,.4)}
+.adTx i{font-style:normal;font-size:10px;opacity:.85}
+.adLeft{flex:none;min-width:38px;height:38px;border-radius:14px;background:rgba(255,255,255,.18);display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:900;font-size:15px;line-height:1}
+.adLeft em{font-style:normal;font-size:8.5px;font-weight:700;opacity:.85}
+/* scene pages (galaxy, camp, lab) run under the HUD: the whole screen is that place */
+.app .screen.scene{top:0}
+.app .screen.scene .scHead{top:var(--hudH,52px)}
+.app .galTop{top:var(--hudH,52px)}
+.app .galScroll{top:calc(var(--hudH,52px) + 56px)}
+.app .screen.scene .campRail{top:calc(var(--hudH,52px) + 58px)}
+.app .screen.lab .sceneBtns{top:calc(var(--hudH,52px) + 50px)}
+.app .screen.scene .sceneName,.app .screen.scene .starMapBtn{margin-top:var(--hudH,52px)}
+/* the wheel is drawn from its own segments so every prize sits in the middle of its slice */
+html.ui-wheel .app .wheel,.app .wheel{border:8px solid #ffc93d!important;box-shadow:0 0 0 4px #fff,0 0 0 7px #e8a21a,0 10px 20px rgba(0,0,0,.28),inset 0 0 0 3px rgba(255,255,255,.7)!important}
+.app .wSeg{height:50%}
+.app .wSeg:before{content:"";position:absolute;left:0;top:0;width:2px;height:100%;background:rgba(255,255,255,.85);transform:rotate(22.5deg);transform-origin:0 100%}
+.app .wSeg span{left:-28px;width:56px;top:20px;gap:1px}
+.app .wSeg span svg,.app .wSeg span img,.app .wSeg span .art,.app .wSeg span .ic,.app .wSeg span .uiIc{width:32px;height:32px}
+html.ui-wheel .app .wheel,.app .wheel{background:var(--wheelbg)!important}
+/* games list: even margins, badges inside the card, title clear of the close button */
+.app .funGrid{width:100%;margin:4px auto 0;gap:8px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.app .funCard{min-height:104px;justify-content:center;min-width:0}
+.app .funCard b,.app .funCard i{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.app .funCard.hot:after{top:5px;right:5px}
+.app .popRibbon{left:50%!important;transform:translateX(-50%)!important;max-width:calc(100% - 70px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* level-up: the title sits on the banner's band, the line under it below the banner */
+html.ui-levelup_banner .app .luCard{width:340px;height:178px;min-width:0;padding:0;display:block}
+html.ui-levelup_banner .app .luT{position:absolute;left:18%;right:18%;top:52%;transform:translateY(-50%);text-align:center;font-size:25px;line-height:1;margin:0;color:#fff;
+  text-shadow:0 2px 0 #b86a00,0 0 6px rgba(160,90,0,.5)}
+html.ui-levelup_banner .app .luS{position:absolute;left:50%;top:100%;transform:translateX(-50%);white-space:nowrap;margin-top:4px;background:rgba(255,253,246,.95);
+  border-radius:99px;padding:4px 14px;box-shadow:0 3px 8px rgba(0,0,0,.2);font-size:13px}
+.coinStack{position:relative;display:inline-flex;align-items:flex-end}
+.coinStack .ic{width:34px;height:34px;margin-left:-14px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.2))}
+.coinStack .ic:first-child{margin-left:0}
+/* claimable things in Goals shine */
+.app .achCard.ready{background:linear-gradient(180deg,#fff3c2,#ffd86b);box-shadow:0 0 0 3px #ffb02e,0 0 18px rgba(255,170,40,.85);animation:wantPulse 1.2s ease-in-out infinite}
+.app .achCard.ready .achIc{animation:heartBeat 1s ease-in-out infinite}
+.claimPill{margin-left:auto;flex:none;padding:7px 12px;border-radius:99px;background:linear-gradient(180deg,#8ce46a,#4cb83a);color:#fff;font-weight:900;font-size:12px;box-shadow:0 3px 0 #2f8a24}
+.app .dChest.ready{width:52px;height:52px;z-index:2}
+.app .dChest.ready:before{content:"";position:absolute;inset:-8px;border-radius:50%;background:radial-gradient(circle,rgba(255,220,90,.95),rgba(255,200,60,0) 70%);animation:wantPulse 1s ease-in-out infinite;z-index:-1}
+.app .dChest.ready i{color:#fff;background:#ff7a1a;border-radius:99px;padding:1px 6px;bottom:-16px;font-size:9.5px}
+.app .dChest.ready i:before{content:"OPEN · "}
+.app .card.daily:has(.dChest.ready){box-shadow:0 0 0 3px #ffb02e,0 0 14px rgba(255,170,40,.6)}
+.app .order.ship{background:none;border:0;box-shadow:none;width:auto}
+.app .order.ship .oFig{position:relative}
+.app .order.ship .ufo{position:absolute;right:-8px;top:2px;font-size:22px;animation:bob 2s ease-in-out infinite}
+.app .order.ship .shipTime{font-size:10px;font-weight:900;color:#fff;background:#6a4ce8;border-radius:99px;padding:0 6px;margin:-6px 0 1px;z-index:2}
+.app .order.ship .oNeeds{box-shadow:0 0 0 2px #b9a0ff,0 3px 8px rgba(0,0,0,.15)}
