@@ -2108,8 +2108,9 @@ html.ui-level_frame .app .lvlBox .xplabel{gap:3px}
 html.ui-chip_bg .app .hud .chip{padding:2px 7px 2px 2px;font-size:12.5px;gap:2px}
 html.ui-chip_bg .app .hud .chip b,html.ui-chip_bg .app .hud .chip span:not(.dot){color:#fff!important}
 html.ui-ic_shop .app .hudShop{background:none;border:0;box-shadow:none}
-/* text that sits straight on the dark space-glass frame */
-html.ui-popup_frame .sSecT,html.ui-popup_frame .noteLine,html.ui-popup_frame .popBody>p,html.ui-popup_frame .popBody>.hint,html.ui-popup_frame .popBody>.muted{color:#f1e6ff;text-shadow:0 1px 0 rgba(20,0,60,.6)}
 
 html.ui-ribbon .screen:not(.scene) .scTitle,html.ui-ribbon .popRibbon{padding:5px 36px 15px;font-size:15px;max-width:92%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}
-html.ui-popup_frame .upHead,html.ui-popup_frame .bgPay,html.ui-popup_frame .bgPay b,html.ui-popup_frame .popBody .sub{color:#f1e6ff;text-shadow:0 1px 0 rgba(20,0,60,.6)}
+/* v38b: the dark glass is only the frame; content sits on a light inner panel so every text stays readable */
+html.ui-popup_frame .screen:not(.scene) .scBody,html.ui-popup_frame .popBody{background:#f7f2ff;border-radius:18px;box-shadow:inset 0 2px 6px rgba(60,20,140,.18)}
+html.ui-popup_frame .popBody{padding:10px 8px;margin:4px 2px 2px}
+html.ui-popup_frame .screen:not(.scene) .scBody{padding:8px 6px;margin:2px}
