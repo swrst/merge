@@ -13,7 +13,7 @@ export const REDO = {
   honey: ['Star Nectar', ['a nectar drop', 'a nectar bubble', 'a glowing hex cell', 'a nectar pot', 'a buzzbot hive pod', 'a royal nectar orb', 'a nectar palace']],
   cloth: ['Space Suits', ['a spool of star thread', 'a suit patch', 'a space glove', 'a space helmet', 'moon boots', 'a jetpack backpack', 'a full spacesuit']],
   feather: ['Jet Gear', ['a fuel puff', 'a small thruster', 'a jet boot', 'a jetpack', 'a hoverboard', 'a jet bike']],
-  clay: ['Moon Goo', ['a blob of lilac goo', 'a goo lump', 'a goo pot', 'an orbit urn', 'a rocket kiln', 'a nebula vase']],
+  clay: ['Moon Goo', ['a blob of orange goo', 'a goo lump', 'a goo pot', 'an orbit urn', 'a rocket kiln', 'a nebula vase']],
   veggie: ['Hydroponics', ['a seed capsule', 'a sprout in a test tube', 'a grow tube', 'a hydro tray', 'a grow rack', 'a greenhouse dome', 'a hydro tower']],
   bakery: ['Moon Cheese', ['a cheese crumb', 'a cheese cube', 'a cheese wedge', 'a crater cheese wheel', 'a cheese stack', 'a cheese cart', 'a whole cheese moon']],
   tea: ['Zero-G Drinks', ['a fizz drop', 'a drink pouch with a straw', 'a soda can', 'a fizz bottle', 'a drink dispenser', 'a soda fountain']],
@@ -38,7 +38,7 @@ export const REDO = {
   // ---------------------------------------------------------------- creatures (Bob / Bloop style)
   mush: ['Eyeshrooms', ['a tiny one-eyed mushroom critter', 'a two-eyed mushroom critter', 'three mushroom critters together', 'a ring of mushroom critters', 'a big glowing mushroom critter']],
   garden: ['Glowbugs', ['a glowing grub alien', 'a glowing cocoon', 'a winged glowbug alien', 'a jar full of glowbugs', 'a glowbug queen']],
-  lunamoth: ['Crater Wings', ['a lilac egg', 'a silk cocoon', 'a fluffy winged moon critter', 'a bigger winged moon critter', 'a glowing winged moon queen']],
+  lunamoth: ['Crater Wings', ['a pale blue egg', 'a silk cocoon', 'a fluffy winged moon critter', 'a bigger winged moon critter', 'a glowing winged moon queen']],
   moonpup: ['Moon Critters', ['a wobbly egg', 'a tiny blob critter', 'a round three-eyed moon pup', 'a hopping moon critter', 'a six-legged crater critter', 'a star critter', 'a big friendly moon guardian']],
   phoenix: ['Flame Wings', ['a glowing ember feather', 'an ember egg', 'a little flame critter', 'a winged flame critter', 'a big fiery guardian']],
   salamander: ['Fire Critters', ['a warm egg', 'a tiny flame blob', 'a fire critter', 'a lava critter', 'a small magma dragon-alien', 'a big ember dragon-alien']],
