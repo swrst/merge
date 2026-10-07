@@ -521,7 +521,7 @@ export async function startGame() {
     $('#tabMap').classList.toggle('locked', false);
     $('#tabShop').classList.toggle('locked', !shopOpen());
     $('#tabLab').classList.toggle('hide', !labOpen());
-    { const gi = $('#galIc'); if (gi && gi.dataset.w !== S.world) { gi.dataset.w = S.world; gi.innerHTML = ART.uiIcon('planet_' + S.world, ART.planet(W().planet)); } }
+    { const gi = $('#galIc'); if (gi && gi.dataset.w !== S.world) { gi.dataset.w = S.world; gi.innerHTML = ART.uiIcon('ic_galaxy_btn', ART.uiIcon('planet_' + S.world, ART.planet(W().planet))); } }
     { const h = document.querySelector('.hud') as HTMLElement; if (h) app.style.setProperty('--hudH', h.offsetHeight + 'px'); }
     renderStrip();
     claimWatch();
@@ -833,7 +833,7 @@ export async function startGame() {
     const card = el('div', 'order ship' + (ready ? ' ready' : ''));
     // an alien Star Freighter, flown by the Grub Brothers: same look as a customer, plus a countdown
     card.innerHTML =
-      `<div class="oFig">${ART.standing('grubs') || ART.figure('grubs')}<span class="ufo">🛸</span></div>
+      `<div class="oFig">${ART.spriteUi('ufo_freighter') ? `<img class="fig stand ufoFig" src="${ART.spriteUi('ufo_freighter')}" alt="">` : (ART.standing('grubs') || ART.figure('grubs')) + '<span class="ufo">🛸</span>'}</div>
        <div class="shipTime" id="shipTime">${Math.floor(left / 60000)}:${String(Math.floor(left / 1000) % 60).padStart(2, '0')}</div>
        <div class="oNeeds">${sh.needs.map((nd: any) => {
         const have = Math.min(countItem(nd.id), nd.qty);
@@ -2456,7 +2456,7 @@ export async function startGame() {
     void per; void cost;
     // a producer refills by waiting, or now for gems or a video — never coins or energy
     modal(W().folks[0] || 'bloop', p.name + ' is empty',
-      `Full again in about <b>${full}</b> (it fills while the game is shut, too).`
+      `<div class="rcArt">${ART.uiIcon('ic_recharge', '')}</div>Full again in about <b>${full}</b> (it fills while the game is shut, too).`
       + `<button class="big gold" id="rechargeGem">Fill it up · 💎 3</button>` + adBtn('recharge', 'Fill it up', 'rechargeAd'),
       'I can wait');
     setTimeout(() => {
@@ -3756,7 +3756,7 @@ export async function startGame() {
   }
   /** a watch-a-video offer: play badge, what you get, how many are left today */
   const adBtn = (k: string, label: string, id: string) => `<button class="adB" id="${id}"${adLeft(k) ? '' : ' disabled'}>
-    <span class="adPlay"><i></i></span><span class="adTx"><b>${label.replace(/^Watch(?: a video)?:\s*/i, '')}</b><i>${S.adfree ? 'instant — no video' : 'watch a short video'}</i></span>
+    <span class="adPlay">${ART.spriteUi('ic_play') ? ART.uiIcon('ic_play', '') : '<i></i>'}</span><span class="adTx"><b>${label.replace(/^Watch(?: a video)?:\s*/i, '')}</b><i>${S.adfree ? 'instant — no video' : 'watch a short video'}</i></span>
     ${S.adfree ? '' : `<span class="adLeft">${adLeft(k)}<em>left</em></span>`}</button>`;
 
   /* ------------------------------------------------------------- purchases */
@@ -3786,7 +3786,7 @@ export async function startGame() {
   /* coins for gems, or for money */
   const COIN_GEMS = [{ gems: 20, coins: 600 }, { gems: 50, coins: 1700 }, { gems: 120, coins: 4500 }];
   function coinShop() {
-    const art = (n: number) => `<span class="coinStack">${ART.icon('coin')}${n > 1 ? ART.icon('coin') : ''}${n > 2 ? ART.icon('coin') : ''}</span>`;
+    const art = (n: number) => ART.spriteUi('coin_s') ? ART.uiIcon(['coin_s', 'coin_m', 'coin_l'][n - 1], '') : `<span class="coinStack">${ART.icon('coin')}${n > 1 ? ART.icon('coin') : ''}${n > 2 ? ART.icon('coin') : ''}</span>`;
     return `<div class="sSec" id="sh-coins"><div class="sSecT">🪙 Coins</div><div class="shopGrid">`
       + COIN_GEMS.map((c, k) => `<div class="sCard"><div class="sCArt">${art(k + 1)}</div><div class="sCName">${c.coins.toLocaleString()} coins</div><div class="sCDesc">for gems</div>
           <button class="buyBtn gem" data-coingem="${k}" ${S.gems < c.gems ? 'disabled' : ''}>💎 ${c.gems}</button></div>`).join('')
@@ -4301,7 +4301,7 @@ export async function startGame() {
     const e = evNow(), bits: string[] = [];
     if (e) bits.push(`<button class="qChip ev" data-q="event">${ART.uiIcon('tok_' + e.theme.id, e.theme.icon)}<b>${S.ev.key === e.key ? S.ev.pts : 0}</b><i>${dhm(e.ends - Date.now())}</i></button>`);
     if (S.lvl >= SP().unlockLevel && spinsLeft()) bits.push(`<button class="qChip spin" data-q="spin">${ART.uiIcon('ic_spin', '🎡')}<b>${spinsLeft()}</b></button>`);
-    if (S.seen.scrap || pouch('scrap') || pouch('starcore')) bits.push(`<button class="qChip pouch" data-q="pouch">${ART.item('starcore')}<b>${pouch('starcore')}</b><i>${pouch('scrap')} scrap</i></button>`);
+    if (S.seen.scrap || pouch('scrap') || pouch('starcore')) bits.push(`<button class="qChip pouch" data-q="pouch">${ART.uiIcon('ic_pouch', ART.item('starcore'))}<b>${pouch('starcore')}</b><i>${pouch('scrap')} scrap</i></button>`);
     if (stored().length) bits.push(`<button class="qChip store" data-q="store">${ART.uiIcon('ic_box', '📦')}<b>${stored().length}</b></button>`);
     if (petOn()) bits.push(`<button class="qChip pup${pupLeft() ? '' : ' ready'}" data-q="pup">${pupArt()}<i>${pupLeft() ? mmss(pupLeft()) : 'gift!'}</i></button>`);
     if (S.acc) bits.push(`<button class="qChip acc" data-q="acc">${ART.uiIcon('ic_lab', '⚗️')}<i>${accLeft() ? mmss(accLeft()) : 'done!'}</i></button>`);
@@ -4708,7 +4708,7 @@ export async function startGame() {
       <button class="starMapBtn" data-pop="galaxy"><span>${ART.uiIcon('ic_galaxy', '🌌')}</span><b>Galaxy</b></button>
       <div class="campRail">
         ${hubBtn('book', 'ic_album', '📖', 'Album')}
-        ${hubBtn('fun', 'ic_event', '🎪', 'Games')}
+        ${hubBtn('fun', 'ic_tent', '🎪', 'Games')}
         ${labOpen() ? hubBtn('lab', 'ic_lab', '🔬', 'Lab') : ''}
       </div>
       ${ents}
@@ -4755,7 +4755,7 @@ export async function startGame() {
       return `<div class="gp gp-${k} ${state} side-${side}" style="left:${p.x}%;top:${p.y}px;--glow:${GAL[k] ? GAL[k].glow : '#fff'}">
         <button class="gpPlanet" data-world="${k}"><span class="gpRing"></span>
           <span class="galArt">${ART.uiIcon('planet_' + k, ART.planet(ww.planet))}</span>
-          ${here ? '<span class="gpRocket">🚀</span>' : ''}${state === 'locked' ? '<span class="gpLock">🔒</span>' : ''}
+          ${here ? `<span class="gpRocket">${ART.uiIcon('rocket_pad', '🚀')}</span>` : ''}${state === 'locked' ? '<span class="gpLock">🔒</span>' : ''}
           ${reached && worldAwake(k) ? '<span class="galBloom">🌱</span>' : ''}</button>
         <div class="gpCard"><b>${ww.name}</b><i>${GAL[k] ? GAL[k].tag : ''}</i>${prog}${btn}</div>
       </div>`;
@@ -4763,7 +4763,7 @@ export async function startGame() {
       const p = pt(n - 1), side = p.x < 50 ? 'r' : 'l';
       return `<div class="gp gp-next locked side-${side}" style="left:${p.x}%;top:${p.y}px;--glow:#8b7bd8">
         <button class="gpPlanet" data-soon="1"><span class="gpRing"></span>
-          <span class="galArt mystery">${ART.uiIcon('planet_vela', ART.planet('aurora'))}</span><b class="galQ">?</b></button>
+          ${ART.spriteUi('planet_unknown') ? `<span class="galArt">${ART.uiIcon('planet_unknown', '')}</span>` : `<span class="galArt mystery">${ART.uiIcon('planet_vela', ART.planet('aurora'))}</span><b class="galQ">?</b>`}</button>
         <div class="gpCard"><b>Uncharted world</b><i>Somewhere past Aurora Reach</i><span class="gpNeed">🔭 Coming soon</span></div></div>`;
     })();
     return `<div class="gal2"><div class="galSky"></div>
@@ -5419,7 +5419,7 @@ export async function startGame() {
   const EMO: Record<string, string> = {
     '🪙': 'icon_coin', '💎': 'icon_gem', '⚡': 'icon_energy', '🧪': 'icon_flask', '🔒': 'sec_lock', '⏳': 'cl_timer',
     '📜': 'ic_scroll', '🎁': 'ic_gift', '🏆': 'ic_trophy', '📦': 'ic_box', '🎡': 'ic_spin', '🔬': 'ic_microscope', '🛒': 'ic_cart',
-    '🎪': 'ic_tent', '📖': 'ic_album2', '🗺️': 'ic_map2', '🗺': 'ic_map2', '🔑': 'ic_key', '🔔': 'cl_bell', '🌌': 'ic_galaxy', '💡': 'ic_hint',
+    '🎪': 'ic_tent', '📖': 'ic_album2', '🗺️': 'ic_map2', '🗺': 'ic_map2', '🔑': 'ic_key', '🔔': 'cl_bell', '🌌': 'ic_galaxy', '💡': 'ic_hint', '⬆': 'ic_up', '🧺': 'ic_pouch',
   };
   const EMO_RE = new RegExp(Object.keys(EMO).filter(k => ART.spriteUi(EMO[k])).sort((a, b) => b.length - a.length).join('|'), 'g');
   function paintEmoji(root: Node) {
@@ -5589,6 +5589,8 @@ export async function startGame() {
     $('#miniClose').onclick = closeMini;
     $('#btnQuests').onclick = () => { tutFire('quests'); const pj = curProject(); if (pj && projReady(pj)) buildProject(); else { sfx.tap(); chapterSheet(); } };
     $('#btnStore').onclick = () => { sfx.tap(); storeTap(); };
+    { const gi = $('#goalsIc'); if (gi) gi.innerHTML = ART.uiIcon('ic_goals', '📜'); }
+    { const si = document.querySelector('#btnStore .ti') as HTMLElement | null; if (si && ART.spriteUi('ic_box')) si.innerHTML = ART.uiIcon('ic_box', '📦'); }
     $('#chapLine').onclick = () => ($('#btnQuests') as HTMLElement).click();
     applyBloomSkin();
 

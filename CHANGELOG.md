@@ -1,5 +1,23 @@
 # Changelog
 
+- **v35**
+  - New art in the game:
+    - **8 Meadow chains with a space makeover** (56 items):
+      - Glowberry Kitchen
+      - Nebula Tea
+      - Comet Bakery
+      - Buzzbot Honey
+      - Eyeshroom Woods
+      - Tentacle Blooms
+      - Space Toys
+      - Moon Picnic
+    - New names and alien contract lines for those chains.
+    - New **Space Junk** chain (7 items: Bent Bolt → Junk Rocket). It comes out of meteor craters and recycles well in the Lab.
+    - Chests are cargo pods (Supply Pod, Treasure Pod). The Wildcard is a cosmic prism.
+    - New energy, coin and gem icons, and a painted level badge.
+    - New buttons (green, blue, gold, purple, red, grey), close/plus/gear/info/play round buttons, badges (dot, NEW, check, crown, lock) and the painted star tag on ready items.
+    - New icons for Album, Games, Lab, Goals, Pouch, Hint, Upgrade and Recharge.
+    - Star Freighter UFO, Uncharted planet, Star Pouch, coin piles in the shop, Bingo / Wheel / Carnival game icons, the Galaxy button, and the rocket marker on the galaxy.
 - **v34**
   - The bottom-right button is the **Galaxy**: your planet glowing on a starry badge.
   - Star Scrap and Star Cores fly into a **pouch chip** beside the board that counts them; no more "Star Pouch (18)" messages. Tap it for Constellations.

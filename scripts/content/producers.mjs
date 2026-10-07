@@ -127,7 +127,7 @@ export const PRODUCERS = [
 
   /* ------------------------------------------------------ everywhere / ship */
   ['*', 0, 'wreck|Rocket Wreck|scrapwreck|bat:16/8|bolt spring wire glass bolt spring wire glass boltpack coil circuit tankglass|a crashed little rocket on its side, panels loose, smoke wisp'],
-  ['*', 0, 'crater|Meteor Crater|crater|once:7|fuelore scrap fuelore fuelore scrap fuelore starcore|a smoking meteor crater with a glowing rock in its centre'],
+  ['*', 0, 'crater|Meteor Crater|crater|once:7|fuelore scrap junkbolt fuelore scrap fuelore junkbolt starcore|a smoking meteor crater with a glowing rock in its centre'],
 ];
 
 /* Where a world's producers get planted, in the order they unlock. Each entry

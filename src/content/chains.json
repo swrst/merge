@@ -39,7 +39,7 @@
     ]
   },
   "berry": {
-    "name": "Berry Kitchen",
+    "name": "Glowberry Kitchen",
     "world": "earth",
     "unlock": 2,
     "items": [
@@ -52,9 +52,9 @@
       "jamfactory"
     ],
     "asks": [
-      "Sunday baking!",
-      "Snacks for the picnic.",
-      "The birds are hungry."
+      "Glow-baking day!",
+      "Snacks that light up in the dark.",
+      "My antennae crave berries."
     ]
   },
   "water": {
@@ -95,7 +95,7 @@
     ]
   },
   "flower": {
-    "name": "Flower Beds",
+    "name": "Tentacle Blooms",
     "world": "earth",
     "unlock": 3,
     "items": [
@@ -108,13 +108,13 @@
       "flowerarch"
     ],
     "asks": [
-      "For my window box.",
-      "A gift for the new neighbour.",
-      "The bees need these."
+      "For my window pod.",
+      "They wave back! Adorable.",
+      "The buzzbots need these."
     ]
   },
   "honey": {
-    "name": "Honeyworks",
+    "name": "Buzzbot Honey",
     "world": "earth",
     "unlock": 4,
     "items": [
@@ -128,12 +128,12 @@
     ],
     "asks": [
       "Honey cake time!",
-      "For my sore throat.",
-      "Sweetening the jam."
+      "Buzzbot-approved, please.",
+      "Sweetening the glow jam."
     ]
   },
   "mush": {
-    "name": "Forest Floor",
+    "name": "Eyeshroom Woods",
     "world": "earth",
     "unlock": 4,
     "items": [
@@ -144,9 +144,9 @@
       "mossheart"
     ],
     "asks": [
-      "Mushroom soup tonight.",
+      "Eyeshroom soup tonight. It stares back.",
       "For the forest tea.",
-      "Grandma knows a recipe."
+      "Nana knows a recipe."
     ]
   },
   "cloth": {
@@ -277,7 +277,7 @@
     ]
   },
   "bakery": {
-    "name": "Village Bakery",
+    "name": "Comet Bakery",
     "world": "earth",
     "unlock": 10,
     "items": [
@@ -291,12 +291,12 @@
     ],
     "asks": [
       "Breakfast for the village!",
-      "The oven is hungry.",
-      "Bread for the picnic."
+      "The rocket oven is hungry.",
+      "Crater rolls, still warm."
     ]
   },
   "tea": {
-    "name": "Tea Garden",
+    "name": "Nebula Tea",
     "world": "earth",
     "unlock": 10,
     "items": [
@@ -308,9 +308,9 @@
       "teaparty"
     ],
     "asks": [
-      "Tea time at four.",
-      "Guests are coming!",
-      "A calming cup, please."
+      "Tea at four. Earth time. Whatever that is.",
+      "Guests from orbit!",
+      "A calming nebula cup, please."
     ]
   },
   "pond": {
@@ -333,7 +333,7 @@
     ]
   },
   "toys": {
-    "name": "Toy Box",
+    "name": "Space Toys",
     "world": "earth",
     "unlock": 10,
     "items": [
@@ -347,11 +347,11 @@
     "asks": [
       "The Blinkies are bored!",
       "A present for Ember.",
-      "Toy day tomorrow!"
+      "Toy launch day tomorrow!"
     ]
   },
   "picnic": {
-    "name": "Picnic Day",
+    "name": "Moon Picnic",
     "world": "earth",
     "unlock": 10,
     "items": [
@@ -365,9 +365,9 @@
       "picnicpavilion"
     ],
     "asks": [
-      "Picnic on the hill!",
-      "Lunch for the workers.",
-      "A snack for the road."
+      "Picnic under two moons!",
+      "Lunch for the rocket crew.",
+      "A snack for the orbit."
     ]
   },
   "pets": {
@@ -1575,6 +1575,20 @@
     "asks": [
       "Kite day tomorrow!",
       "The wind is perfect."
+    ]
+  },
+  "junk": {
+    "name": "Space Junk",
+    "world": "any",
+    "unlock": 1,
+    "items": [
+      "junkbolt",
+      "junkcan",
+      "junkball",
+      "junkdrone",
+      "junksculpt",
+      "junkbot",
+      "junkrocket"
     ]
   },
   "star": {
