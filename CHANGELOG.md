@@ -1,5 +1,26 @@
 # Changelog
 
+- **v33**
+  - The Galaxy, the camp and the Lab fill the whole screen, under the coin/gem/energy bar.
+  - New video-offer button: a play badge, what you get, and how many are left today.
+  - Producers refill only by waiting, for gems, or with a video. No more coins or energy. Bubbles the same: gems or a video.
+  - Lucky Wheel is drawn from its own slices, so every prize sits in the middle of its slice. Wand, bomb and rainbow show as icons.
+  - Games list: even margins, badges inside the cards.
+  - Level-up text sits on the banner's band; the rewards line sits under it.
+  - Shop:
+    - renamed the Star Bazaar
+    - new **Coins** tab with coins for gems (600 / 1,700 / 4,500) and coin packs for money (€0.99 / €4.99 / €9.99)
+  - Camp: producers stand centred on their plinths. They are positioned by measured size, not CSS transforms.
+  - Goals:
+    - claimable achievements and daily chests jump to the top
+    - achievements glow gold with a CLAIM pill
+    - ready chests pulse with an "OPEN" tag
+  - The cargo ship is now an alien **Star Freighter** flown by the Grub Brothers (🛸), in the same style as the customers.
+  - Producers stay longer: each Meadow producer lives at least 4 chapters before it retires.
+    - The Tea Bush and Flower Bed go after chapter 12.
+    - The Bird Box goes after 15, the Toy Chest after 16, and the Clay Pit and Windmill after 21.
+    - The Egg Nest and Busker Bot stay.
+    - Later chapters ask for their items so they keep a job.
 - **v32**
   - New music: calm and melodic.
     - Four tunes per world on soft electric piano, harp or music box, over a piano, pad and bass in a soft hall.

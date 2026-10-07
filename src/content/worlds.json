@@ -578,9 +578,6 @@
         ],
         "coins": 1040,
         "xp": 180,
-        "retire": [
-          "teabush"
-        ],
         "temp": {
           "p": "cottonpatch",
           "taps": 24,
@@ -610,6 +607,10 @@
           [
             "hat",
             1
+          ],
+          [
+            "teacup",
+            1
           ]
         ],
         "coins": 1200,
@@ -622,7 +623,7 @@
           ],
           [
             "gigi",
-            "A bolt of cloth and a straw hat. I do the rest. I always do the rest."
+            "A bolt of cloth, a straw hat, and tea for the tailor. I do the rest. I always do the rest."
           ]
         ],
         "text": "Warm coats for all. The birds are back in Ember's old bird box."
@@ -646,7 +647,7 @@
         "unlock": "toychest",
         "retire": [
           "flowerbed",
-          "nestbox"
+          "teabush"
         ],
         "temp": {
           "p": "crashsite",
@@ -667,7 +668,7 @@
             "THESE birds do."
           ]
         ],
-        "text": "The birds sing all evening. Then something small crashes behind the hill — blinking!"
+        "text": "The birds sing all evening. The flower bed and the tea bush have given all they had. Then something small crashes behind the hill — blinking!"
       },
       {
         "id": "e13",
@@ -681,15 +682,16 @@
           [
             "toyrobot",
             1
+          ],
+          [
+            "nest",
+            1
           ]
         ],
         "coins": 1520,
         "xp": 240,
         "unlock": "vegpatch",
         "gift": "chest",
-        "retire": [
-          "toychest"
-        ],
         "talk": [
           [
             "bloop",
@@ -697,7 +699,7 @@
           ],
           [
             "timmy",
-            "Help one grow up, and give it a toy robot. Can we keep it?!"
+            "Help one grow up, give it a toy robot and a nest to sleep in. Can we keep it?!"
           ]
         ],
         "text": "The little visitors are safe and very hungry. Zib dug a veggie patch."
@@ -714,6 +716,10 @@
           [
             "scarecrow",
             1
+          ],
+          [
+            "spintop",
+            1
           ]
         ],
         "coins": 1680,
@@ -729,7 +735,7 @@
           ],
           [
             "pip",
-            "Or two carrots and a scarecrow?"
+            "Or two carrots, a scarecrow, and a spinning top for the Blinkies?"
           ]
         ],
         "text": "The meadow gave its last hay to the scarecrow. Dr. Zonk drags out a tinker bench: \"For lenses.\""
@@ -746,12 +752,19 @@
           [
             "vegbundle",
             1
+          ],
+          [
+            "speckegg",
+            1
           ]
         ],
         "coins": 1920,
         "xp": 300,
         "unlock": "lilypond",
         "gift": "chest",
+        "retire": [
+          "nestbox"
+        ],
         "talk": [
           [
             "timmy",
@@ -759,7 +772,7 @@
           ],
           [
             "grandma",
-            "A spyglass, and veggies. Nobody stargazes on an empty stomach."
+            "A spyglass, veggies, and an egg for the birds to mind. Nobody stargazes on an empty stomach."
           ]
         ],
         "text": "The Moon has tiny lights. \"Friends,\" whispers Dr. Zonk. And in the woods: his ship. In pieces. Time to build a rocket!"
@@ -774,18 +787,21 @@
             1
           ],
           [
-            "vegbundle",
-            1
-          ],
-          [
             "lilypad",
             2
+          ],
+          [
+            "spintop",
+            1
           ]
         ],
         "coins": 2080,
         "xp": 320,
         "gift": "chest",
         "unlock": "windmill",
+        "retire": [
+          "toychest"
+        ],
         "talk": [
           [
             "mumbo",
@@ -793,7 +809,7 @@
           ],
           [
             "mumbo",
-            "Carrots, veggies and lily pads to wrap the dough. Trust me."
+            "Carrots, lily pads to wrap the dough, and a spinning top to keep the Blinkies out of it."
           ]
         ],
         "text": "The bakery is open, and a windmill turns on the hill. Flour for everyone!"
@@ -894,9 +910,6 @@
         "xp": 380,
         "gift": "chest",
         "unlock": "eggnest",
-        "retire": [
-          "claypit"
-        ],
         "talk": [
           [
             "timmy",
@@ -919,8 +932,8 @@
             1
           ],
           [
-            "loaf",
-            1
+            "claypot",
+            2
           ]
         ],
         "coins": 3040,
@@ -958,7 +971,7 @@
             1
           ],
           [
-            "blobpup",
+            "urn",
             1
           ]
         ],
@@ -968,13 +981,12 @@
         "unlock": "rockethull",
         "retire": [
           "windmill",
-          "eggnest",
-          "buskbot"
+          "claypit"
         ],
         "talk": [
           [
             "pip",
-            "A parade before the launch! A drum, a bread basket and a blob pup to lead it."
+            "A parade before the launch! A drum, a bread basket and an urn of flowers."
           ]
         ],
         "text": "Best parade ever. \"Nearly there,\" says Dr. Zonk, patting a fin. The fin falls off."
@@ -997,6 +1009,10 @@
           [
             "lotus",
             2
+          ],
+          [
+            "blobpup",
+            1
           ]
         ],
         "coins": 2240,
@@ -1006,7 +1022,7 @@
         "talk": [
           [
             "bloop",
-            "A nose cone, a telescope, and pond water to cool the engines."
+            "A nose cone, a telescope, pond water to cool the engines — and a blob pup. It insists on coming."
           ],
           [
             "bloop",

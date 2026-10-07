@@ -531,49 +531,49 @@
           "coins": 40
         },
         "w": 22,
-        "c": "#ffffff"
+        "c": "#9fe0ff"
       },
       {
         "r": {
           "energy": 10
         },
         "w": 16,
-        "c": "#9fe0ff"
+        "c": "#ffc2dc"
       },
       {
         "r": {
           "item": "chest"
         },
         "w": 10,
-        "c": "#ffffff"
+        "c": "#c8f5a8"
       },
       {
         "r": {
           "coins": 120
         },
         "w": 12,
-        "c": "#ffd0e4"
+        "c": "#ffd29a"
       },
       {
         "r": {
           "boost": "wand"
         },
         "w": 7,
-        "c": "#ffffff"
+        "c": "#d9c8ff"
       },
       {
         "r": {
           "energy": 25
         },
         "w": 6,
-        "c": "#b9f59b"
+        "c": "#a8f0e0"
       },
       {
         "r": {
           "gems": 5
         },
         "w": 4,
-        "c": "#ffffff"
+        "c": "#ffb3a8"
       }
     ]
   },

@@ -543,9 +543,9 @@ export async function startGame() {
     add('ach', 'Rocket', ar, ART.uiIcon('ic_trophy', '🏆'), ar > 1 ? `${ar} achievements to claim` : 'Achievement ready to claim', () => setView('rocket'));
     add('task', 'Rocket', td, ART.uiIcon('cl_tasks', '✅'), 'Daily task done — reward waiting', () => setView('rocket'));
     add('disc', 'Book', (S.disc || []).length, ART.uiIcon('badge_new', '🆕'), 'New discovery in your Album', () => setView('book'));
-    add('shop', 'Shop', shopOpen() && giftReady() ? 1 : 0, ART.uiIcon('cl_gift', '🎁'), 'Free gift in the Trading Post', () => setView('shop'));
+    add('shop', 'Shop', shopOpen() && giftReady() ? 1 : 0, ART.uiIcon('cl_gift', '🎁'), 'Free gift in the Star Bazaar', () => setView('shop'));
     // a restocked shelf is news, not a present: a badge, never a "free gift" banner
-    add('shopnew', 'Shop', shopOpen() && !giftReady() && S.shop.at > (S.shop.seenAt || 0) ? 1 : 0, ART.uiIcon('ic_cart', '🛒'), 'New stock in the Trading Post', () => setView('shop'), true);
+    add('shopnew', 'Shop', shopOpen() && !giftReady() && S.shop.at > (S.shop.seenAt || 0) ? 1 : 0, ART.uiIcon('ic_cart', '🛒'), 'New stock in the Star Bazaar', () => setView('shop'), true);
     add('labOffer', 'Shop', labOffered() && !S.lab.built ? 1 : 0, ART.uiIcon('ic_microscope', '🔬'), 'The Lab can be built', () => setView('shop'));
     const e = evNow();
     add('event', 'Fun', e && S.ev.join !== (e as any).key ? 1 : 0, ART.uiIcon('ic_event', '🎪'), 'An event has started!', () => setView('fun'));
@@ -830,16 +830,17 @@ export async function startGame() {
     const ready = sh.needs.every((nd: any) => countItem(nd.id) >= nd.qty);
     const left = Math.max(0, sh.endsAt - Date.now());
     const card = el('div', 'order ship' + (ready ? ' ready' : ''));
+    // an alien Star Freighter, flown by the Grub Brothers: same look as a customer, plus a countdown
     card.innerHTML =
-      `<div class="shipTop">${ART.icon('ship')}
-         <div style="flex:1"><div class="shipName">Cargo Ship</div>
-           <div class="shipTime" id="shipTime">${Math.floor(left / 60000)}:${String(Math.floor(left / 1000) % 60).padStart(2, '0')}</div></div>
-         <div class="oRew">${ART.icon('coin')}${sh.coins}</div></div>
+      `<div class="oFig">${ART.standing('grubs') || ART.figure('grubs')}<span class="ufo">🛸</span></div>
+       <div class="shipTime" id="shipTime">${Math.floor(left / 60000)}:${String(Math.floor(left / 1000) % 60).padStart(2, '0')}</div>
        <div class="oNeeds">${sh.needs.map((nd: any) => {
         const have = Math.min(countItem(nd.id), nd.qty);
         return `<div class="oNeed${have >= nd.qty ? ' done' : ''}">${ART.item(nd.id)}<b>${have}/${nd.qty}</b></div>`;
       }).join('')}</div>
-       <button class="btnDeliver${ready ? ' on' : ''}">${ready ? 'LOAD IT!' : 'FILL THE HOLD'}</button>`;
+       <div class="oPay"><span>${ART.icon('coin')}${sh.coins}</span><span>${ART.icon('wand')}</span></div>
+       ${ready ? `<button class="btnDeliver on oTick" title="Load">${ART.uiIcon('ic_tick', '✔')}</button>` : '<button class="btnDeliver hidden"></button>'}`;
+    card.onclick = () => deliverShip();
     (card.querySelector('.btnDeliver') as HTMLElement).onclick = (ev: Event) => { ev.stopPropagation(); deliverShip(); };
     return card;
   }
@@ -1435,7 +1436,7 @@ export async function startGame() {
     if (v !== 'board') { hideInfo(); sel = null; board.setSelected(null); }   // the item bar belongs to the board
     if (v === 'fun') { if (view !== 'board') setView('board'); funPop(); return; }
     if (popOpen()) closePop();
-    if (v === 'shop' && !shopOpen()) { sfx.no(); toast('The Trading Post opens at Level ' + CONFIG.unlocks.shopAtLevel + '!'); return; }
+    if (v === 'shop' && !shopOpen()) { sfx.no(); toast('The Star Bazaar opens at Level ' + CONFIG.unlocks.shopAtLevel + '!'); return; }
     if (v === 'lab' && !labOpen()) { sfx.no(); toast('The Lab opens in Meadow chapter 5 — keep restoring!'); return; }
     view = v;
     if (v !== 'board') { const rb = document.getElementById('ribbon'); if (rb && rb.className === 'show') rb.className = 'hide'; }
@@ -1657,7 +1658,7 @@ export async function startGame() {
     const coin = ART.icon('coin');
     const card = (art: string, name: string, desc: string, btn: string, cls = '') =>
       `<div class="sCard ${cls}"><div class="sCArt">${art}</div><div class="sCName">${name}</div><div class="sCDesc">${desc}</div>${btn}</div>`;
-    const tabs = [['deals', '🎁 Deals'], ['gems', '💎 Gems'], ['chests', '📦 Chests'], ['boost', '✨ Boosters'], ['up', '⭐ Upgrades']];
+    const tabs = [['deals', '🎁 Deals'], ['gems', '💎 Gems'], ['coins', '🪙 Coins'], ['chests', '📦 Chests'], ['boost', '✨ Boosters'], ['up', '⭐ Upgrades']];
     const rocketBits = (labOffered() && !S.lab.built) || allParts() || building() || S.seen.scrap;
     if (rocketBits) tabs.push(['rocket', '🚀 Rocket']);
     let html = `<div class="shopTabs">${tabs.map(([k, t]) => `<button class="sTab${shopTab === k ? ' on' : ''}" data-jump="${k}">${t}</button>`).join('')}</div>`;
@@ -1679,6 +1680,7 @@ export async function startGame() {
       + `</div><div class="noteLine">🔄 New shelf in about ${mins} min · the gift resets every day</div></div>`;
 
     html += `<div id="sh-gems">${gemsShop()}</div>`;
+    html += coinShop();
     html += `<div class="sSec" id="sh-chests"><div class="sSecT">${ART.uiIcon('sec_chests', '📦')} Chests</div><div class="shopGrid">`
       + ['chest', 'bigchest'].map(id => card(ART.item(id), ITEMS[id].name,
         `${CFG.chest[id].items} things from this world${CFG.chest[id].coins ? ' + ' + CFG.chest[id].coins + ' coins' : ''}`,
@@ -1738,6 +1740,7 @@ export async function startGame() {
     host.querySelectorAll('[data-gift]').forEach((b: any) => b.onclick = claimGift);
     host.querySelectorAll('[data-giftad]').forEach((b: any) => b.onclick = () => watchAd('gift', () => { S.giftAd2 = today(); giveItem('chest'); sfx.boost(); toast('🎁 Another Supply Chest!'); renderShop(); paintBoard(); save(); }));
     host.querySelectorAll('[data-iap]').forEach((b: any) => b.onclick = () => buyProduct(b.dataset.iap));
+    host.querySelectorAll('[data-coingem]').forEach((b: any) => b.onclick = () => buyCoinsGems(+b.dataset.coingem));
     const rs = document.getElementById('iapRestore');
     if (rs) rs.onclick = async () => {
       const ids = await iap.restore();
@@ -1966,10 +1969,13 @@ export async function startGame() {
   function renderRocket() {
     const host = $('#rocketBody'); if (!host) return;
     const ar = achReady();
-    host.innerHTML = projectCard()
-      + `<button class="card achCard${ar ? ' ready' : ''}" id="openAch"><span class="achIc">${ART.uiIcon('ic_trophy', '🏆')}</span>
-          <span><b>Achievements</b><i>${ar ? ar + ' ready to claim!' : 'Long-term goals with big rewards'}</i></span><span class="qGo">›</span></button>`
-      + dailyCard()
+    const achHTML = `<button class="card achCard${ar ? ' ready' : ''}" id="openAch"><span class="achIc">${ART.uiIcon('ic_trophy', '🏆')}</span>
+          <span><b>Achievements</b><i>${ar ? ar + ' ready to claim!' : 'Long-term goals with big rewards'}</i></span>${ar ? '<span class="claimPill">CLAIM</span>' : '<span class="qGo">›</span>'}</button>`;
+    const dt = dailyOk(), chestReady = CFG.daily2.marks.some((m: number, k: number) => !dt.got[k] && dt.pts >= m);
+    // whatever can be claimed comes first, so it is the first thing you see
+    host.innerHTML = (ar ? achHTML : '') + (chestReady ? dailyCard() : '') + projectCard()
+      + (ar ? '' : achHTML)
+      + (chestReady ? '' : dailyCard())
       + `<div class="card"><div class="cardTitle">${ART.uiIcon('sec_quest', '🎯')} Getting started</div>
         <div class="noteLine" style="margin-top:0">The first steps with Zib and Dr. Zonk: ${MISSIONS.length - questsLeft()}/${MISSIONS.length} done.</div>
         <button class="big soft" id="openQuests">Open the quest list</button></div>`
@@ -2295,7 +2301,7 @@ export async function startGame() {
       xp: Math.round(needs.reduce((a: number, nd: any) => a + ITEMS[nd.id].tier * nd.qty, 0) * CONFIG.ship.xpMult),
     };
     sfx.whoosh();
-    toast('⛴️ A <b>cargo ship</b> docked! Fill the manifest before it leaves.');
+    toast('🛸 An alien <b>Star Freighter</b> landed! Fill its hold before it lifts off.');
     renderOrders();
   }
   function shipTick(now: number) {
@@ -2303,7 +2309,7 @@ export async function startGame() {
     if (S.ship) {
       if (now > S.ship.endsAt) {
         S.ship = null; S.shipAt = now + CONFIG.ship.everyMs;
-        toast('⛴️ The cargo ship sailed without you.');
+        toast('🛸 The Star Freighter lifted off without you.');
         renderOrders(); save();
         return;
       }
@@ -2323,7 +2329,7 @@ export async function startGame() {
     const short = sh.needs.filter((nd: any) => countItem(nd.id) < nd.qty);
     if (short.length) {
       sfx.no();
-      toast('The manifest still needs ' + short.map((nd: any) => `${nd.qty}× <b>${ITEMS[nd.id].name}</b>`).join(', '));
+      toast('The freighter still needs ' + short.map((nd: any) => `${nd.qty}× <b>${ITEMS[nd.id].name}</b>`).join(', '));
       return;
     }
     const b = B();
@@ -2332,7 +2338,7 @@ export async function startGame() {
     giveBoost(rnd(['wand', 'bomb', 'rainbow']));
     S.ship = null; S.shipAt = Date.now() + CONFIG.ship.everyMs;
     sfx.big(); haptic('heavy'); confetti(); audio.duck(2, 0.2);
-    toast('⛴️ Manifest complete! <b>+' + sh.coins + '</b> coins and a booster!');
+    toast('🛸 Hold full! The Grub Brothers pay <b>+' + sh.coins + '</b> coins and a booster!');
     addXp(sh.xp);
     prog('ship', 1);
     paintBoard(); renderOrders(); renderHUD(); renderTools(); save();
@@ -2444,11 +2450,11 @@ export async function startGame() {
     const per = Math.max(1, Math.round(cap / 4));         // a quarter tank
     const cost = 12;
     const full = mmss(everyOf(p) * cap);
+    void per; void cost;
+    // a producer refills by waiting, or now for gems or a video — never coins or energy
     modal(W().folks[0] || 'bloop', p.name + ' is empty',
-      `It refills on its own — a full battery takes about <b>${full}</b>, and it keeps filling while the game is shut.`
-      + `<div class="rechargeBox">In a hurry? Spend <b>${cost} ⚡</b> for <b>${per}</b> charges right now.</div>`
-      + `<button class="big blue" id="rechargeBtn"${S.energy >= cost ? '' : ' disabled'}>Recharge (${cost} ⚡)</button>`
-      + `<button class="big gold" id="rechargeGem">Fill it up · 💎 3</button>` + adBtn('recharge', 'Watch: fill it up', 'rechargeAd'),
+      `Full again in about <b>${full}</b> (it fills while the game is shut, too).`
+      + `<button class="big gold" id="rechargeGem">Fill it up · 💎 3</button>` + adBtn('recharge', 'Fill it up', 'rechargeAd'),
       'I can wait');
     setTimeout(() => {
       const b2 = $('#rechargeBtn');
@@ -2997,7 +3003,7 @@ export async function startGame() {
     B()[spot] = { bub: id, until: Date.now() + CFG.bubble.lastsMs, pr: bubblePrice(id) };
     setTimeout(() => {
       paintBoard(); floatText(spot, '🫧 Bubble!', '#bff0ff');
-      if (!S.story.bubble) { S.story.bubble = 1; toast('🫧 A <b>bubble</b>: a bonus copy you can <b>buy</b> before it pops. Tap it!'); }
+      if (!S.story.bubble) { S.story.bubble = 1; toast('🫧 A <b>bubble</b>! Tap it to keep the copy before it pops.'); }
     }, 450);
   }
   function tapBubble(i: number) {
@@ -3005,8 +3011,7 @@ export async function startGame() {
     const id = c.bub, price = bubblePrice(id), secs = Math.max(1, Math.round((c.until - Date.now()) / 1000));
     modal(W().folks[0] || 'bloop', '🫧 A bubble!', `A copy of <b>${ITEMS[id].name}</b> floated up from that merge.
       <div class="bubArt">${ART.item(id)}</div><div class="noteLine">Pops in ${secs}s.</div>
-      <button class="big gold" id="btnBubble">${ART.icon('coin')} Keep it for ${price}</button>
-      <button class="big blue" id="btnBubbleGem">💎 ${Math.max(2, ITEMS[id].tier)} to keep it</button>${adBtn('bubble', 'Watch: keep it free', 'btnBubbleAd')}`, 'Let it pop');
+      <button class="big gold" id="btnBubbleGem">Keep it · 💎 ${Math.max(2, ITEMS[id].tier)}</button>${adBtn('bubble', 'Keep it free', 'btnBubbleAd')}`, 'Let it pop');
     const keep = () => { const cc = B()[i]; if (!cc || cc.bub !== id) return; B()[i] = { id }; gotItem(id); sfx.merge(ITEMS[id].tier); sparkle(i, 14, '#bff0ff'); tally('bubble'); paintBoard(); renderHUD(); renderOrders(); save(); };
     setTimeout(() => {
       const bg = $('#btnBubbleGem'); if (bg) bg.onclick = () => { if (spendGems(Math.max(2, ITEMS[id].tier), 'bubble')) { closeModal(); keep(); } };
@@ -3320,7 +3325,7 @@ export async function startGame() {
     if (r.gems) return ART.icon('gem');
     if (r.coins) return ART.icon('coin');
     if (r.energy) return ART.icon('energy');
-    if (r.boost) return `<span class="rwEmoji">${r.boost === 'wand' ? '🪄' : r.boost === 'bomb' ? '💣' : '🌈'}</span>`;
+    if (r.boost) return ART.icon(r.boost === 'wand' ? 'wand' : r.boost === 'bomb' ? 'bomb' : 'rainbow');
     if (r.spin) return '<span class="rwEmoji">🎡</span>';
     if (r.sci) return '<span class="rwEmoji">🧪</span>';
     return '';
@@ -3525,7 +3530,7 @@ export async function startGame() {
         <div class="accBox">${a ? `<div class="accArt">${ART.item(a.id)}<span class="accArrow">➜</span>${ART.item(nextOf(a.id) as string)}</div>
             <div class="catBar"><i style="width:${Math.round((1 - left / a.dur) * 100)}%"></i></div>
             ${left > 0 ? `<div class="accTime" id="accTime">${mmss(left)}</div>
-              <button class="big gold" id="accRush">Finish now · 💎 ${Math.max(1, Math.ceil(left / 60000 / CFG.gems.rushMinPerGem))}</button>${adBtn('skipTimer', `Watch: −${CFG.ads.skipMin} min`, 'accAd')}`
+              <button class="big gold" id="accRush">Finish now · 💎 ${Math.max(1, Math.ceil(left / 60000 / CFG.gems.rushMinPerGem))}</button>${adBtn('skipTimer', `−${CFG.ads.skipMin} min`, 'accAd')}`
               : `<button class="big" id="accGet">Collect ${ITEMS[nextOf(a.id) as string].name}!</button>`}`
           : `<div class="accEmpty">⚗️</div><button class="big blue" id="accLoad">Load an item</button>`}</div>`;
     if (quiet) $('#popBody').innerHTML = html; else pop('⚗️ Accelerator', html, 'labacc');
@@ -3609,7 +3614,7 @@ export async function startGame() {
     const seg = SP().segments, n = seg.length, a = 360 / n;
     const grad = seg.map((s: any, k: number) => `${s.c} ${k * a}deg ${(k + 1) * a}deg`).join(',');
     return `<div class="wheelWrap"><div class="wheelPin">${ART.uiIcon('wheel_pin', '▼')}</div>
-      <div class="wheel" id="wheel" style="background:conic-gradient(${grad})">
+      <div class="wheel" id="wheel" style="--wheelbg:conic-gradient(${grad})">
         ${seg.map((s: any, k: number) => `<div class="wSeg" style="transform:rotate(${k * a + a / 2}deg)"><span>${rewardIcon(s.r)}<b>${s.r.energy || s.r.coins || ''}</b></span></div>`).join('')}
       </div><div class="wHub">${ART.uiIcon('wheel_hub', '🎡')}</div></div>`;
   }
@@ -3618,7 +3623,7 @@ export async function startGame() {
     pop('🎡 Lucky Wheel', `<div class="hostRow"><span class="hostFace">${ART.char('oops')}</span><i>${['I foresaw this spin! Mostly.', 'The ball is cracked but the vibes are clear.', 'Spin, darling. Destiny is waiting. Or lunch.'][Math.floor(Math.random() * 3)]}</i></div>${wheelHTML()}
       <div class="noteLine" id="spinNote">${freeSpin() ? 'One <b>free spin</b> every day.' : 'Free spin used today.'} You have <b>${spinsLeft()}</b> spin${spinsLeft() === 1 ? '' : 's'}.</div>
       <button class="big gold" id="spinGo"${spinsLeft() ? '' : ' disabled'}>${spinsLeft() ? 'SPIN!' : 'Come back tomorrow'}</button>
-      ${spinsLeft() ? '' : adBtn('spin', 'Watch: one more spin', 'spinAd')}
+      ${spinsLeft() ? '' : adBtn('spin', 'One more spin', 'spinAd')}
       <div class="noteLine">Extra spins come from events and the daily chest.</div>`, 'spin');
     const sa = $('#spinAd'); if (sa) sa.onclick = () => watchAd('spin', () => { S.spin.tok++; save(); spinPop(); });
     const go = $('#spinGo'); if (go) go.onclick = doSpin;
@@ -3721,7 +3726,10 @@ export async function startGame() {
     S.adc.n[k] = Math.max(0, (S.adc.n[k] || 0) - 1); save();
     toast(r === 'nofill' ? 'No video available right now — try again in a bit.' : 'The video was closed early — no reward this time.');
   }
-  const adBtn = (k: string, label: string, id: string) => `<button class="big adBtn" id="${id}"${adLeft(k) ? '' : ' disabled'}>${ART.uiIcon('ic_ad', '📺')} ${label}${S.adfree ? '' : ` <i>${adLeft(k)} left today</i>`}</button>`;
+  /** a watch-a-video offer: play badge, what you get, how many are left today */
+  const adBtn = (k: string, label: string, id: string) => `<button class="adB" id="${id}"${adLeft(k) ? '' : ' disabled'}>
+    <span class="adPlay"><i></i></span><span class="adTx"><b>${label.replace(/^Watch(?: a video)?:\s*/i, '')}</b><i>${S.adfree ? 'instant — no video' : 'watch a short video'}</i></span>
+    ${S.adfree ? '' : `<span class="adLeft">${adLeft(k)}<em>left</em></span>`}</button>`;
 
   /* ------------------------------------------------------------- purchases */
   function gemsShop() {
@@ -3738,7 +3746,7 @@ export async function startGame() {
         <button class="buyBtn${owned ? '' : ' cash'}" data-iap="${p.id}"${owned ? ' disabled' : ''}>${owned ? 'Owned' : p.price}</button></div>`;
     };
     return `<div class="sSec"><div class="sSecT">💎 Gems & packs ${iap.live ? '' : '<i class="testTag">test mode</i>'}</div>
-      <div class="shopGrid">${PRODUCTS.map(card).join('')}</div></div>
+      <div class="shopGrid">${PRODUCTS.filter(p => !p.id.startsWith('coins_')).map(card).join('')}</div></div>
       <button class="restoreBtn" id="iapRestore">Restore purchases</button>
       <div class="sSec"><div class="sSecT">✨ Spend gems</div><div class="shopGrid">
         <div class="sCard"><div class="sCArt">${ART.item('bigchest')}</div><div class="sCName">Galaxy Chest</div><div class="sCDesc">A Treasure Chest + 2 boosters</div>
@@ -3746,6 +3754,24 @@ export async function startGame() {
         <div class="sCard"><div class="sCArt">${ART.icon('energy')}</div><div class="sCName">Energy Refill</div><div class="sCDesc">+${CFG.gems.refill.energy} energy now</div>
           <button class="buyBtn gem" id="gemRefill">💎 ${CFG.gems.refill.gems}</button></div>
       </div></div>`;
+  }
+  /* coins for gems, or for money */
+  const COIN_GEMS = [{ gems: 20, coins: 600 }, { gems: 50, coins: 1700 }, { gems: 120, coins: 4500 }];
+  function coinShop() {
+    const art = (n: number) => `<span class="coinStack">${ART.icon('coin')}${n > 1 ? ART.icon('coin') : ''}${n > 2 ? ART.icon('coin') : ''}</span>`;
+    return `<div class="sSec" id="sh-coins"><div class="sSecT">🪙 Coins</div><div class="shopGrid">`
+      + COIN_GEMS.map((c, k) => `<div class="sCard"><div class="sCArt">${art(k + 1)}</div><div class="sCName">${c.coins.toLocaleString()} coins</div><div class="sCDesc">for gems</div>
+          <button class="buyBtn gem" data-coingem="${k}" ${S.gems < c.gems ? 'disabled' : ''}>💎 ${c.gems}</button></div>`).join('')
+      + PRODUCTS.filter(p => p.id.startsWith('coins_')).map((p, k) => `<div class="sCard gemCard${p.tag ? ' hot' : ''}">${p.tag ? `<span class="gTag">${p.tag}</span>` : ''}
+          <div class="sCArt">${art(k + 1)}</div><div class="sCName">${p.name}</div><div class="sCDesc">${(p.coins || 0).toLocaleString()} coins</div>
+          <button class="buyBtn cash" data-iap="${p.id}">${p.price}</button></div>`).join('')
+      + `</div></div>`;
+  }
+  function buyCoinsGems(k: number) {
+    const c = COIN_GEMS[k]; if (!c) return;
+    if (!spendGems(c.gems, 'coins')) return;
+    S.coins += c.coins; bumpChip('#chipCoins'); sfx.coin(); confetti();
+    toast(`🪙 +${c.coins.toLocaleString()} coins!`); renderShop(); renderHUD(); save();
   }
   async function buyProduct(id: string) {
     const p: any = PRODUCTS.find(x => x.id === id); if (!p || (p.once && S.bought[id])) return;
@@ -3872,7 +3898,7 @@ export async function startGame() {
     const tot = d.reduce((a, id) => { const p = discPay(id); a.c += p.coins; a.x += p.xp; a.e += p.energy; return a; }, { c: 0, x: 0, e: 0 });
     return `<div class="card disc"><div class="cardTitle">${ART.uiIcon('badge_new', '🆕')} New discoveries <span class="pCount">${d.length}</span></div>
       <div class="discRow">${d.slice(-8).map(id => `<span class="discIt">${ART.item(id)}</span>`).join('')}${d.length > 8 ? `<i>+${d.length - 8}</i>` : ''}</div>
-      <button class="big" id="claimDisc">Collect ${tot.x} XP${tot.e ? ' · ' + tot.e + ' ⚡' : ''}</button>${adBtn('disc', 'Watch: collect ×2', 'claimDiscAd')}</div>`;
+      <button class="big" id="claimDisc">Collect ${tot.x} XP${tot.e ? ' · ' + tot.e + ' ⚡' : ''}</button>${adBtn('disc', 'Collect ×2', 'claimDiscAd')}</div>`;
   }
   function claimDisc(mult = 1) {
     const d: string[] = S.disc || []; if (!d.length) return;
@@ -4049,7 +4075,7 @@ export async function startGame() {
         <button class="buyBtn" id="enBuy"${S.coins < refillPrice() ? ' disabled' : ''}>${refillPrice()} 🪙</button></div>
       <div class="enRow"><span class="enIc">${ART.icon('gem')}</span><div><b>Big refill</b><i>+${CFG.gems.refill.energy} energy</i></div>
         <button class="buyBtn gem" id="enGem">💎 ${CFG.gems.refill.gems}</button></div>
-      ${adBtn('energy', `Watch a video: +${CFG.ads.energy} ⚡`, 'enAd')}
+      ${adBtn('energy', `+${CFG.ads.energy} ⚡ energy`, 'enAd')}
       <div class="noteLine">More energy: daily tasks, the 🎡 wheel, events, and 🔬 Lab research.</div>`, 'energy');
     const eg = $('#enGem'); if (eg) eg.onclick = () => { gemRefill(); energyPop(); };
     const ea = $('#enAd'); if (ea) ea.onclick = () => watchAd('energy', () => { S.energy += CFG.ads.energy; bumpChip('#chipEnergy'); sfx.boost(); renderHUD(); save(); energyPop(); });
@@ -4764,8 +4790,18 @@ export async function startGame() {
     if (img) { img.style.backgroundSize = `${dw}px ${dh}px`; img.style.backgroundPosition = `${ox}px ${oy}px`; }
     wrap.classList.toggle('fitw', oy > 0); wrap.style.setProperty('--fadeTop', Math.max(0, oy - 10) + 'px');
     host.querySelectorAll('[data-fx]').forEach((e: any) => {
-      e.style.left = (ox + +e.dataset.fx * dw) + 'px';
-      e.style.top = (oy + +e.dataset.fy * dh) + 'px';
+      // positioned by its own measured size, not a CSS translate: the art stands
+      // centred on the plinth whatever the WebView does with zoom and percentages
+      const x = ox + +e.dataset.fx * dw, y = oy + +e.dataset.fy * dh;
+      if (e.classList.contains('spot')) {
+        const art = e.querySelector('.spotArt') as HTMLElement;
+        const w = e.offsetWidth || 104, h = art ? art.offsetHeight : 72;
+        e.style.transform = 'none';
+        e.style.left = (x - w / 2) + 'px';
+        e.style.top = (y - h + Math.round(dh * 0.018)) + 'px';
+      } else {
+        e.style.left = x + 'px'; e.style.top = y + 'px';
+      }
     });
   }
   window.addEventListener('resize', () => {

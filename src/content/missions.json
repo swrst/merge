@@ -100,8 +100,8 @@
   {
     "id": "ship",
     "need": 1,
-    "text": "Load a cargo ship",
-    "hint": "A cargo ship docks now and then — fill its manifest before it leaves!",
+    "text": "Fill an alien Star Freighter",
+    "hint": "A Star Freighter lands now and then — fill its hold before it lifts off!",
     "coins": 250
   },
   {

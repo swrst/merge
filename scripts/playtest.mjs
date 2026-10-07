@@ -459,7 +459,7 @@ await drag(20, 21);
 await page.waitForFunction(() => window.__game.cells()[21]?.id === 'gem', null, { timeout: 4000 }).catch(() => {});
 must(await page.evaluate(() => window.__game.cells()[21]?.id) === 'gem', 'rainbow + geode makes a Gemstone');
 
-head('Cargo ship');
+head('Star Freighter');
 await set(() => {
   const s = window.__game.state(), b = s.boards.earth;
   for (let i = 0; i < b.length; i++) if (b[i]) b[i] = null;
@@ -478,7 +478,7 @@ await set(() => {
 });
 await page.waitForTimeout(500);
 before = (await S()).coins;
-await tapUI('.order.ship .btnDeliver'); await page.waitForTimeout(900);
+await page.evaluate(() => document.querySelector('.order.ship').click()); await page.waitForTimeout(900);
 after = await S();
 must(after.coins > before && !after.ship, `loading the manifest paid out (${before} -> ${after.coins})`);
 must(Object.values(after.boost).some(n => n > 0), 'and threw in a booster');
@@ -624,9 +624,9 @@ await tapCell(tcells.chest); await page.waitForTimeout(900);
 let items = await page.evaluate(() => window.__game.cells().filter(c => c && c.id).length);
 must(items >= 3 && !(await S()).boards.vela.some(c => c && c.id === 'chest'), `tapping a chest spills ${items} things onto the board`);
 await tapCell(tcells.bub); await page.waitForTimeout(600);
-await page.locator('#btnBubble').click({ force: true }); await page.waitForTimeout(600);
+await page.evaluate(() => { window.__game.state().gems = 50; }); await page.locator('#btnBubbleGem').click({ force: true }); await page.waitForTimeout(600);
 s = await S();
-must(s.boards.vela[tcells.bub] && s.boards.vela[tcells.bub].id === 'cloudpuff', 'buying a bubble turns it into the real thing');
+must(s.boards.vela[tcells.bub] && s.boards.vela[tcells.bub].id === 'cloudpuff', 'keeping a bubble for gems turns it into the real thing');
 await closeModal();
 
 head('Visitors bring a temporary producer');
