@@ -1,5 +1,27 @@
 # Changelog
 
+- **v32**
+  - New music: calm and melodic.
+    - Four tunes per world on soft electric piano, harp or music box, over a piano, pad and bass in a soft hall.
+    - Slow (58–70 bpm), no drums, shorter silences between tunes.
+  - New sound effects: one soft family of marimba, glass and bell tones.
+  - Things ready to give no longer use producer-green:
+    - their tile turns **gold**
+    - the item does a little **"pick me" wiggle** every couple of seconds
+    - a **star tag** sits on its corner
+    - ready contracts and the ready chapter glow gold too
+  - Contracts show **how many** of each thing they want (0/2) and **what they pay** (coins, gift, energy).
+  - The **chapter is always spelled out** in the bottom bar when nothing is selected: every item with its count, coins, contracts, upgrades still needed. Tap it for the card.
+  - **Achievements and daily tasks** to claim make the Goals button glow and bounce.
+  - New **Clean-up Bingo** (Games, level 4+):
+    - a weekly 3×3 card of things to hand in from your board
+    - each line pays 60 🪙 + 10 ⚡; a full card pays a chest + 5 💎
+  - The item line shows the item's level and what two of them make (with its picture).
+  - A producer waiting in storage can be upgraded straight from the chapter card.
+  - Pacing:
+    - contracts pay about 2.5× more coins (chapters and upgrades are paid from them)
+    - contract asks climb a tier every 5 levels
+    - energy refills every 75 s
 - **v31**
   - Travel Town layout:
     - top: level, energy, coins, gems, shop, settings (always visible, on every page)

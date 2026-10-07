@@ -61,6 +61,16 @@ Ordered by player value per effort.
 9. **Side games to keep:** Alien Pairs, Crater Dig, Market.
 10. **Side games to add:** Rocket Race (time-attack merges) and Delivery Run (fill 5 contracts in 10 minutes for a chest).
 
+### v32 research: what the big merge games run (Merge Mansion, Travel Town)
+1. **Clean-up Bingo.** A 4×4 card of items to hand in from the main board. Each finished row, column or diagonal pays, and a full card pays big. It reuses the existing chains, makes old items useful, and gives the board a reason to keep things.
+2. **Event board.** A small separate board for a few days with its own producer and chain (we already have event chains). Its rewards feed the main game.
+3. **Sticker album sets.** Chests and events drop stickers. Completing a page (9 stickers) gives a permanent bonus. Duplicates can be traded for stars.
+4. **Weekly scoop.** Daily tasks also fill a weekly bar with a big chest at the end.
+5. **Leaderboard groups.** Make the Comet Carnival a 20-player group with promotion between leagues.
+6. **Mystery arc.** A 3-week story event on one planet, unlocking a decoration for the camp.
+7. **Friend energy.** Send and receive 5 ⚡ a day with a share code, before real friends exist.
+8. **Pet expeditions and Postcards** (see v30 below).
+
 ### v30 shortlist (fits the space story, small art cost)
 1. **Meteor Shower weekend.** A meteor every couple of minutes for 48 h. Craters drop event tokens as well as scrap, and there is a "catch the falling star" tap mini-game on the board.
 2. **Pet expeditions.** Send the alien pet to a world you already woke, for 1–4 h. It comes back with a rare item, a relic or Star Cores. It gives the pet a job after evolving.

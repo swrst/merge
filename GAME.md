@@ -49,7 +49,7 @@ Vite also prints a `Network:` address — open that on your phone (same Wi-Fi) t
 | `npm run icons` | regenerate launcher icons and splash from `resources/` |
 | `npm run apk` | build a debug APK you can sideload (see **MOBILE.md**) |
 | `npm run ios` | build and open the Xcode project (macOS only) |
-| `python3 scripts/make-audio.py` | regenerate the whole sound pack (needs numpy + ffmpeg) |
+| `python3 scripts/make-sound.py` | regenerate the whole sound pack (needs numpy + ffmpeg) |
 
 ### On an Android phone
 Needs Android Studio (it brings the SDK and Gradle).
@@ -419,29 +419,19 @@ you back on the board.
   walk back into it.
 
 ### Sound
-Everything is synthesised by `scripts/make-audio.py` — no samples, nothing to license.
-The palette is warm and wooden: a **marimba** (fundamental plus the 4th and 10th
-partials a real bar has, with a beater knock on the front) and a **kalimba** (almost a
-pure tone with a slightly sharp second partial) do most of the work, over **detuned-saw
-pads** through a gentle filter. A tap is a quiet low tok; a merge is two marimba notes a
-fourth apart, climbing a pentatonic step for every tier you reach.
+Everything is synthesised by `scripts/make-sound.py` (no samples, nothing to license). Run `python3 scripts/make-sound.py [sfx|music]`; it takes about a minute.
 
-**Music never loops the same 30 seconds any more** (`scripts/make-music.py`):
+**Music (v32), calm and melodic.**
+- Each world has four 8-bar phrases (`music_<w>_1..4`) in one key at 58–70 bpm, plus a hushed ambience bed (`amb_<w>`).
+- Instruments: a soft electric piano, harp or music box carries the tune. A second instrument doubles the answer an octave up. Under them sit a broken-chord piano, a warm pad and a round bass, all in a long stereo hall. No drums.
+- How a tune is built: a two-bar motif, the motif again over the next chords, a contrasting answer, then a cadence home. Strong beats land on chord tones, weak beats step between them.
+- The MusicDirector in `src/audio.ts` plays two or three phrases, rests 6–16 s, then picks one that isn't the last.
 
-- Each world has **four phrases** (`music_<w>_1..4`). They share a key and tempo but have different chords, a different melody from a small seeded composer (pentatonic, motif / answer / motif / cadence, with plenty of rests) and a different lead: marimba, kalimba, flute or glass.
-- Each world also has an **ambience loop** (`amb_<w>`): birds and wind on the Meadow, a hum and sparkle on the Moon, crackle on Cindra, a swell on Nerith.
-- The MusicDirector in `src/audio.ts` plays one or two phrases, then lets the ambience carry alone for 25–60 s, then picks a phrase that isn't the last one.
-- Music sits lower than before (0.26).
-
-**UI and voice sounds** (v24):
-
-- `open` / `close` for popups and dialogs, `tab` for screens.
-- `ready` (a ding-dong) when something becomes claimable.
-- `collect` for rewards, `unlock` when a producer is planted.
-- `boing` for silly lines.
-- Six gibberish syllables (`blip1..6`) that every character "speaks" in story scenes, pitched per character so each has their own voice.
-
-Rebuild single effects with `python3 scripts/make-audio.py open close ...`; rebuild the music with `python3 scripts/make-music.py` (about 8 minutes per world).
+**Effects.** One soft family: marimba, glass and bell tones on C major pentatonic.
+- Merges climb the scale with the tier.
+- Coins are a two-note glass chime.
+- Errors are a low wooden "bonk", never a buzzer.
+- Characters "speak" in soft vowel blips (`blip1..6`), pitched per character.
 
 ### Something to claim
 `claims()` in `game.ts` lists everything that waits for the player:
@@ -545,7 +535,7 @@ The first Star Scrap, Star Core, Relic, Bloom Essence, Wildcard, Fuel and rocket
 - The camp and the lab are **painted scenes**, not forms: one illustration each, the
   interactive things standing on it.
 - **Sound is a real audio pack**, not blips: 40 effects, four phrases plus an ambience bed per world, all synthesised
-  by `scripts/make-audio.py` (no sampled material, nothing to license) and encoded to ~510 kB
+  by `scripts/make-sound.py` (no sampled material, nothing to license) and encoded to ~510 kB
   of Ogg Vorbis. Merges are pitched by tier, repeats get slight pitch drift, music crossfades
   between worlds and ducks under the big moments. Effects and music toggle separately in ⚙️.
 - Level-up banner with confetti, floating labels, screen shake, toasts, and a `−N 🪙` that
@@ -707,7 +697,7 @@ src/ads.ts              ad seam — no-ops until a network is wired in
 src/style.css           everything outside the board
 MOBILE.md               getting the game onto an Android phone or an iPhone
 src/audio.ts            the WebAudio mixer: buses, crossfades, ducking
-src/audio/*.ogg         the generated sound pack (see scripts/make-audio.py)
+src/audio/*.ogg         the generated sound pack (see scripts/make-sound.py)
 scripts/standalone.mjs  inlines the single-bundle build into MergeRocket.html
 scripts/playtest.mjs    the headless regression run (npm test)
 resources/              1024 icon + 2732 splash, source for the launcher art

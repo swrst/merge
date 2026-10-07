@@ -1930,3 +1930,53 @@ body.wide .app{box-shadow:0 0 60px rgba(0,0,0,.55)}
 .app .screen.scene .scHead{padding-top:8px}
 .app .galTop{background:linear-gradient(180deg,rgba(10,8,40,.95) 60%,rgba(10,8,40,0));padding-bottom:14px;padding-right:56px}
 .app .galScroll{top:56px}
+
+/* v32 — ready things are gold, not producer-green */
+.app .order.ready .oNeeds{box-shadow:0 0 0 3px #ffb02e,0 0 14px rgba(255,170,40,.85);background:#fff6d6;animation:wantPulse 1s ease-in-out infinite}
+@keyframes wantPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.app .order .oNeed.done{background:#ffefb8}
+.app .order .oNeed.done:after{background:#ff9f1c;box-shadow:0 1px 0 #c66f00}
+.app .order .oNeed b{position:static;display:block;text-align:center;font-size:9.5px;background:none;padding:0;margin-top:-2px;color:#7a5a2c}
+.app .order .oNeed{height:auto;flex-direction:column;padding:1px 0 0}
+.app .order .oNeed.done b{color:#b86a00}
+.oPay{display:flex;gap:3px;align-items:center;justify-content:center;margin-top:2px;font-size:10.5px;font-weight:800;color:#6b4a20}
+.oPay span{display:flex;align-items:center;gap:1px;background:rgba(255,253,246,.92);border-radius:99px;padding:0 5px 0 2px;box-shadow:0 1px 0 rgba(150,105,50,.3)}
+.oPay .ic{width:14px;height:14px}
+.oPay .gift{padding:0 2px}
+.oPay .gift .art{width:16px;height:16px}
+.app .order .oTick{top:28px;width:34px;height:34px;filter:hue-rotate(-70deg) saturate(1.4)}
+.app .topRow{min-height:150px}
+
+/* the chapter, spelled out at the bottom whenever nothing is selected */
+.chapLine{flex:1 1 auto;min-width:0;height:54px;display:flex;align-items:center;gap:4px;padding:0 8px;border-radius:16px;overflow:hidden;
+  background:#fffdf6;border:3px solid #fff;box-shadow:0 3px 0 rgba(150,105,50,.25)}
+.bottomBar:has(.infoBar.on) .chapLine{display:none}
+.app .bottomBar .infoBar:not(.on){display:none}
+.clT{font-size:11px;font-weight:800;color:#8a5f26;white-space:nowrap;margin-right:2px}
+.clN{flex:none;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:30px;height:44px;border-radius:10px;background:#fff1d6;padding:1px 2px}
+.clN .art,.clN .ic,.clN .uiIc{width:24px;height:24px}
+.clN em{font-style:normal;font-size:9.5px;font-weight:800;color:#8a6a3c;line-height:1}
+.clN.ok{background:#dff7cf}.clN.ok em{color:#2f7a1c}
+.clN.up{background:#ffe1d6;color:#c24a1a;font-weight:900;font-size:16px}
+.chapLine.ready{background:linear-gradient(180deg,#fff3c2,#ffd86b);box-shadow:0 0 0 3px #ffb02e,0 0 14px rgba(255,170,40,.8);animation:wantPulse 1.2s ease-in-out infinite}
+.chapLine.ready .clT{color:#b05a00;font-size:13px}
+
+/* achievements and daily tasks to claim: the Goals button can't be missed */
+.sideW.claim{background:linear-gradient(180deg,#fff3c2,#ffd86b);box-shadow:0 0 0 3px #ffb02e,0 0 16px rgba(255,170,40,.85);animation:readyBob 1s ease-in-out infinite}
+.sideW.claim i:after{content:" !";color:#d2410c}
+.chapW.ready{background:linear-gradient(180deg,#fff3c2,#ffd86b);box-shadow:0 0 0 3px #ffb02e,0 0 16px rgba(255,170,40,.85)}
+.chapW.ready .cwT{color:#b05a00}
+.app .bottomBar .infoBar #infoTxt b{display:block;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.app .bottomBar .infoBar #infoTxt b small{font-size:9.5px;color:#9a7a4e}
+.app .bottomBar .infoBar #infoTxt i{display:flex;align-items:center;gap:2px;font-style:normal;font-size:10px;color:#8a6a3c;white-space:nowrap}
+.nxArt{display:inline-flex;width:22px;height:22px}
+.nxArt .art{width:22px;height:22px}
+.bgGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px auto;max-width:260px}
+.bgCell{position:relative;aspect-ratio:1;border-radius:16px;background:#fff8e6;border:3px solid #f0dcb4;display:flex;align-items:center;justify-content:center;padding:6px}
+.bgCell .art{width:100%;height:100%}
+.bgCell.have{border-color:#ffb02e;background:#fff3c2;box-shadow:0 0 12px rgba(255,170,40,.7);animation:wantPulse 1s ease-in-out infinite}
+.bgCell.done{background:#dff7cf;border-color:#8ce46a}
+.bgCell.done .art{opacity:.45}
+.bgTick{position:absolute;right:-6px;top:-6px;width:22px;height:22px;border-radius:50%;background:#4fb63a;color:#fff;font-weight:900;display:flex;align-items:center;justify-content:center;border:2px solid #fff}
+.bgPay{text-align:center;font-size:12px;color:#7a5a2c}
+.bgPay .ic,.bgPay .art{width:16px;height:16px;vertical-align:-3px}

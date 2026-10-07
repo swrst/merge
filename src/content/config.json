@@ -13,7 +13,7 @@
   "energy": {
     "base": 40,
     "perLevel": 2,
-    "regenMs": 90000,
+    "regenMs": 75000,
     "snack": {
       "amount": 15,
       "cooldownMs": 14400000

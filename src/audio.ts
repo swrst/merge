@@ -2,14 +2,14 @@
 
    Everything is one-shot buffers plus two music beds on their own gain nodes, so
    effects and music can be muted independently. Files are produced by
-   `python3 scripts/make-audio.py`; see that script for how each sound is made.
+   `python3 scripts/make-sound.py`; see that script for how each sound is made.
 
    The engine never throws at a call site: if the context cannot start (autoplay
    policy, decode failure, a browser without WebAudio) every method is a no-op
    and the game plays on in silence. */
 
 /** music sits well under the effects: it is a bed, not a soundtrack */
-const MUSIC_VOL = 0.26;
+const MUSIC_VOL = 0.34;
 /** the ambience bed sits under the music, and alone in the quiet stretches */
 const AMB_VOL = 0.5;
 
@@ -155,8 +155,8 @@ class Audio {
       this.current = { name: pick, src, gain: g };
       // after this phrase: another one, or a quiet stretch with just the ambience
       this.runLeft--;
-      const rest = this.runLeft > 0 ? 0 : 25000 + Math.random() * 35000;
-      if (this.runLeft <= 0) this.runLeft = 1 + (Math.random() < 0.6 ? 1 : 0);
+      const rest = this.runLeft > 0 ? 0 : 6000 + Math.random() * 10000;
+      if (this.runLeft <= 0) this.runLeft = 2 + (Math.random() < 0.5 ? 1 : 0);
       clearTimeout(this.phraseTimer);
       this.phraseTimer = setTimeout(() => this.nextPhrase(w, phrases), buf.duration * 1000 - 600 + rest);
     });

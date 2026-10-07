@@ -1162,6 +1162,17 @@ must(!after6.boards.earth.some(c => c && c.p === 'tree'), 'building chapter 6 re
 must(after6.proj.earth === 6, 'and the chapter is built');
 must(after6.boards.earth.some(c => c && c.p === 'rocks' && c.lv === 3), 'the maxed producers stay');
 
+head('Clean-up Bingo');
+await set(() => { const g = window.__game, s = g.state(); s.lvl = Math.max(5, s.lvl); s.bingo = null; const bg = g.v9.bingo();
+  const b = s.boards[s.world]; let n = 0; for (let i = 0; i < b.length && n < 3; i++) if (!b[i]) { b[i] = { id: bg.cells[n] }; n++; } window.__board.sync(b); });
+const c0 = (await S()).coins;
+await page.evaluate(() => window.__game.v9.bingoPop()); await page.waitForTimeout(300);
+for (let k = 0; k < 3; k++) { await page.evaluate((k) => document.querySelector(`[data-bg="${k}"]`).click(), k); await page.waitForTimeout(250); }
+const bgS = await S();
+must(bgS.bingo.done.slice(0, 3).every(Boolean), 'handing in three things marks the top row');
+must(bgS.coins >= c0 + 60, `and a full row pays (${bgS.coins - c0} coins)`);
+await page.evaluate(() => window.__game.v9.closePop());
+
 head('Console');
 must(errors.length === 0, errors.length ? `console errors:\n${errors.join('\n')}` : 'no console errors');
 
