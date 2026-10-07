@@ -1,6 +1,6 @@
 {
   "twig": {
-    "name": "Curly Twig",
+    "name": "Meteor Chip",
     "chain": "wood",
     "tier": 1,
     "sell": 2,
@@ -10,7 +10,7 @@
     }
   },
   "branch": {
-    "name": "Glowleaf Branch",
+    "name": "Hot Meteor",
     "chain": "wood",
     "tier": 2,
     "sell": 5,
@@ -21,7 +21,7 @@
     }
   },
   "log": {
-    "name": "Star-Ring Log",
+    "name": "Metal Ingot",
     "chain": "wood",
     "tier": 3,
     "sell": 13,
@@ -31,7 +31,7 @@
     }
   },
   "lumber": {
-    "name": "Vine Planks",
+    "name": "Metal Plates",
     "chain": "wood",
     "tier": 4,
     "sell": 32,
@@ -42,7 +42,7 @@
     }
   },
   "cart": {
-    "name": "Planet Crate",
+    "name": "Cargo Crate",
     "chain": "wood",
     "tier": 5,
     "sell": 78,
@@ -53,7 +53,7 @@
     }
   },
   "workshop": {
-    "name": "Ray-Gun Toolchest",
+    "name": "Tool Chest",
     "chain": "wood",
     "tier": 6,
     "sell": 185,
@@ -64,7 +64,7 @@
     }
   },
   "treehouse": {
-    "name": "Pod-House Tree",
+    "name": "Hover Sled",
     "chain": "wood",
     "tier": 7,
     "sell": 430,
@@ -75,7 +75,7 @@
     }
   },
   "woodrocket": {
-    "name": "Timber Rocket",
+    "name": "Little Shuttle",
     "chain": "wood",
     "tier": 8,
     "sell": 980,
@@ -163,7 +163,7 @@
     }
   },
   "berry": {
-    "name": "Glowberry",
+    "name": "Star Cookie",
     "chain": "berry",
     "tier": 1,
     "sell": 2,
@@ -173,7 +173,7 @@
     }
   },
   "berries": {
-    "name": "Glowberry Bunch",
+    "name": "Snack Cube",
     "chain": "berry",
     "tier": 2,
     "sell": 5,
@@ -184,7 +184,7 @@
     }
   },
   "jam": {
-    "name": "Glow Jam",
+    "name": "Food Tube",
     "chain": "berry",
     "tier": 3,
     "sell": 13,
@@ -195,7 +195,7 @@
     }
   },
   "pie": {
-    "name": "Glowberry Pie",
+    "name": "Ration Tray",
     "chain": "berry",
     "tier": 4,
     "sell": 32,
@@ -206,7 +206,7 @@
     }
   },
   "cake": {
-    "name": "Moon Cake",
+    "name": "Jelly Dome",
     "chain": "berry",
     "tier": 5,
     "sell": 78,
@@ -217,7 +217,7 @@
     }
   },
   "feast": {
-    "name": "Starlit Feast",
+    "name": "Snack Pod",
     "chain": "berry",
     "tier": 6,
     "sell": 185,
@@ -228,7 +228,7 @@
     }
   },
   "jamfactory": {
-    "name": "Jam Rocket Factory",
+    "name": "Rocket Diner",
     "chain": "berry",
     "tier": 7,
     "sell": 430,
@@ -242,7 +242,7 @@
     }
   },
   "dew": {
-    "name": "Glow Drop",
+    "name": "Water Drop",
     "chain": "water",
     "tier": 1,
     "sell": 2,
@@ -252,7 +252,7 @@
     }
   },
   "puddle": {
-    "name": "Two-Moon Puddle",
+    "name": "Crater Puddle",
     "chain": "water",
     "tier": 2,
     "sell": 5,
@@ -262,7 +262,7 @@
     }
   },
   "jug": {
-    "name": "Fizz Jug",
+    "name": "Water Canister",
     "chain": "water",
     "tier": 3,
     "sell": 13,
@@ -273,7 +273,7 @@
     }
   },
   "barrel": {
-    "name": "Porthole Barrel",
+    "name": "Water Tank",
     "chain": "water",
     "tier": 4,
     "sell": 32,
@@ -295,7 +295,7 @@
     }
   },
   "aqueduct": {
-    "name": "Sky Aqueduct",
+    "name": "Hydro Tower",
     "chain": "water",
     "tier": 6,
     "sell": 185,
@@ -306,7 +306,7 @@
     }
   },
   "watertower": {
-    "name": "Saucer Tower",
+    "name": "Ice Comet",
     "chain": "water",
     "tier": 7,
     "sell": 430,
@@ -320,7 +320,7 @@
     }
   },
   "grass": {
-    "name": "Star Grass",
+    "name": "Solar Chip",
     "chain": "grass",
     "tier": 1,
     "sell": 2,
@@ -330,7 +330,7 @@
     }
   },
   "hay": {
-    "name": "Silver Hay",
+    "name": "Solar Cell",
     "chain": "grass",
     "tier": 2,
     "sell": 5,
@@ -340,7 +340,7 @@
     }
   },
   "bale": {
-    "name": "Glow Bale",
+    "name": "Solar Panel",
     "chain": "grass",
     "tier": 3,
     "sell": 13,
@@ -351,7 +351,7 @@
     }
   },
   "hat": {
-    "name": "Antenna Hat",
+    "name": "Panel Array",
     "chain": "grass",
     "tier": 4,
     "sell": 32,
@@ -362,7 +362,7 @@
     }
   },
   "scarecrow": {
-    "name": "Scare-Bot",
+    "name": "Power Station",
     "chain": "grass",
     "tier": 5,
     "sell": 78,
@@ -373,7 +373,7 @@
     }
   },
   "harvest": {
-    "name": "Hover Harvest",
+    "name": "Solar Satellite",
     "chain": "grass",
     "tier": 6,
     "sell": 185,
@@ -384,7 +384,7 @@
     }
   },
   "bulbseed": {
-    "name": "Bloomseed",
+    "name": "Spark",
     "chain": "flower",
     "tier": 1,
     "sell": 2,
@@ -394,7 +394,7 @@
     }
   },
   "sprig": {
-    "name": "Curly Sprig",
+    "name": "Glow Bulb",
     "chain": "flower",
     "tier": 2,
     "sell": 5,
@@ -404,7 +404,7 @@
     }
   },
   "bloombud": {
-    "name": "Moonbud",
+    "name": "Space Lamp",
     "chain": "flower",
     "tier": 3,
     "sell": 13,
@@ -414,7 +414,7 @@
     }
   },
   "bouquet": {
-    "name": "Alien Bouquet",
+    "name": "Star Lantern",
     "chain": "flower",
     "tier": 4,
     "sell": 32,
@@ -425,7 +425,7 @@
     }
   },
   "garland": {
-    "name": "Star Garland",
+    "name": "Light String",
     "chain": "flower",
     "tier": 5,
     "sell": 78,
@@ -436,7 +436,7 @@
     }
   },
   "flowercrown": {
-    "name": "Bloom Crown",
+    "name": "Orbit Lamp",
     "chain": "flower",
     "tier": 6,
     "sell": 185,
@@ -447,7 +447,7 @@
     }
   },
   "flowerarch": {
-    "name": "Bloom Arch",
+    "name": "Light Tower",
     "chain": "flower",
     "tier": 7,
     "sell": 430,
@@ -461,7 +461,7 @@
     }
   },
   "nectar": {
-    "name": "Star Nectar",
+    "name": "Nectar Drop",
     "chain": "honey",
     "tier": 1,
     "sell": 2,
@@ -471,7 +471,7 @@
     }
   },
   "honeydrop": {
-    "name": "Honey Drop",
+    "name": "Nectar Bubble",
     "chain": "honey",
     "tier": 2,
     "sell": 5,
@@ -481,7 +481,7 @@
     }
   },
   "honeycomb": {
-    "name": "Glowcomb",
+    "name": "Hex Cell",
     "chain": "honey",
     "tier": 3,
     "sell": 13,
@@ -491,7 +491,7 @@
     }
   },
   "honeypot": {
-    "name": "Buzzbot Honey Pot",
+    "name": "Nectar Pot",
     "chain": "honey",
     "tier": 4,
     "sell": 32,
@@ -502,7 +502,7 @@
     }
   },
   "beehive": {
-    "name": "Buzzbot Hive",
+    "name": "Buzzbot Pod",
     "chain": "honey",
     "tier": 5,
     "sell": 78,
@@ -513,7 +513,7 @@
     }
   },
   "royaljelly": {
-    "name": "Royal Jelly",
+    "name": "Royal Nectar",
     "chain": "honey",
     "tier": 6,
     "sell": 185,
@@ -527,7 +527,7 @@
     }
   },
   "honeypalace": {
-    "name": "Honey Palace",
+    "name": "Nectar Palace",
     "chain": "honey",
     "tier": 7,
     "sell": 430,
@@ -541,7 +541,7 @@
     }
   },
   "caplet": {
-    "name": "Glowcap",
+    "name": "Shroomling",
     "chain": "mush",
     "tier": 1,
     "sell": 2,
@@ -551,7 +551,7 @@
     }
   },
   "toadstool": {
-    "name": "Eyestool",
+    "name": "Eyeshroom",
     "chain": "mush",
     "tier": 2,
     "sell": 5,
@@ -562,7 +562,7 @@
     }
   },
   "mushring": {
-    "name": "Glow Ring",
+    "name": "Shroom Bunch",
     "chain": "mush",
     "tier": 3,
     "sell": 13,
@@ -573,7 +573,7 @@
     }
   },
   "fairyring": {
-    "name": "Spore Circle",
+    "name": "Shroom Ring",
     "chain": "mush",
     "tier": 4,
     "sell": 32,
@@ -584,7 +584,7 @@
     }
   },
   "mossheart": {
-    "name": "Moss Heart",
+    "name": "Big Eyeshroom",
     "chain": "mush",
     "tier": 5,
     "sell": 78,
@@ -595,7 +595,7 @@
     }
   },
   "fibre": {
-    "name": "Cotton Puff",
+    "name": "Star Thread",
     "chain": "cloth",
     "tier": 1,
     "sell": 2,
@@ -605,7 +605,7 @@
     }
   },
   "thread": {
-    "name": "Shimmer Spool",
+    "name": "Suit Patch",
     "chain": "cloth",
     "tier": 2,
     "sell": 5,
@@ -615,7 +615,7 @@
     }
   },
   "yarn": {
-    "name": "Galaxy Yarn",
+    "name": "Space Glove",
     "chain": "cloth",
     "tier": 3,
     "sell": 13,
@@ -626,7 +626,7 @@
     }
   },
   "clothbolt": {
-    "name": "Star Cloth",
+    "name": "Space Helmet",
     "chain": "cloth",
     "tier": 4,
     "sell": 32,
@@ -636,7 +636,7 @@
     }
   },
   "quilt": {
-    "name": "Planet Quilt",
+    "name": "Moon Boots",
     "chain": "cloth",
     "tier": 5,
     "sell": 78,
@@ -647,7 +647,7 @@
     }
   },
   "tapestry": {
-    "name": "Galaxy Tapestry",
+    "name": "Jetpack",
     "chain": "cloth",
     "tier": 6,
     "sell": 185,
@@ -658,7 +658,7 @@
     }
   },
   "spacesuit": {
-    "name": "Tiny Spacesuit",
+    "name": "Spacesuit",
     "chain": "cloth",
     "tier": 7,
     "sell": 430,
@@ -672,7 +672,7 @@
     }
   },
   "down": {
-    "name": "Glow Fluff",
+    "name": "Fuel Puff",
     "chain": "feather",
     "tier": 1,
     "sell": 2,
@@ -682,7 +682,7 @@
     }
   },
   "plume": {
-    "name": "Prism Plume",
+    "name": "Thruster",
     "chain": "feather",
     "tier": 2,
     "sell": 5,
@@ -693,7 +693,7 @@
     }
   },
   "nest": {
-    "name": "Crystal Nest",
+    "name": "Jet Boot",
     "chain": "feather",
     "tier": 3,
     "sell": 13,
@@ -704,7 +704,7 @@
     }
   },
   "speckegg": {
-    "name": "Star Egg",
+    "name": "Twin Jetpack",
     "chain": "feather",
     "tier": 4,
     "sell": 32,
@@ -715,7 +715,7 @@
     }
   },
   "songbird": {
-    "name": "Skybird",
+    "name": "Hoverboard",
     "chain": "feather",
     "tier": 5,
     "sell": 78,
@@ -726,7 +726,7 @@
     }
   },
   "aviary": {
-    "name": "Aviary Dome",
+    "name": "Jet Bike",
     "chain": "feather",
     "tier": 6,
     "sell": 185,
@@ -737,7 +737,7 @@
     }
   },
   "mud": {
-    "name": "Lilac Mud",
+    "name": "Goo Splat",
     "chain": "clay",
     "tier": 1,
     "sell": 2,
@@ -747,7 +747,7 @@
     }
   },
   "claylump": {
-    "name": "Three-Finger Lump",
+    "name": "Goo Lump",
     "chain": "clay",
     "tier": 2,
     "sell": 5,
@@ -757,7 +757,7 @@
     }
   },
   "claypot": {
-    "name": "Planet Pot",
+    "name": "Goo Pot",
     "chain": "clay",
     "tier": 3,
     "sell": 13,
@@ -811,7 +811,7 @@
     }
   },
   "chrysalis": {
-    "name": "Glow Chrysalis",
+    "name": "Glow Cocoon",
     "chain": "garden",
     "tier": 2,
     "sell": 5,
@@ -822,7 +822,7 @@
     }
   },
   "flutter": {
-    "name": "Planet Moth",
+    "name": "Glowbug",
     "chain": "garden",
     "tier": 3,
     "sell": 13,
@@ -833,7 +833,7 @@
     }
   },
   "swarm": {
-    "name": "Bug Lantern",
+    "name": "Bug Jar",
     "chain": "garden",
     "tier": 4,
     "sell": 32,
@@ -847,7 +847,7 @@
     }
   },
   "meadowheart": {
-    "name": "Glowbug Heart",
+    "name": "Glowbug Queen",
     "chain": "garden",
     "tier": 5,
     "sell": 78,
@@ -861,7 +861,7 @@
     }
   },
   "vegseed": {
-    "name": "Planet Seeds",
+    "name": "Seed Capsule",
     "chain": "veggie",
     "tier": 1,
     "sell": 2,
@@ -871,7 +871,7 @@
     }
   },
   "seedling": {
-    "name": "Antenna Sprout",
+    "name": "Sprout Tube",
     "chain": "veggie",
     "tier": 2,
     "sell": 5,
@@ -881,7 +881,7 @@
     }
   },
   "carrot": {
-    "name": "Star Carrot",
+    "name": "Grow Tube",
     "chain": "veggie",
     "tier": 3,
     "sell": 13,
@@ -892,7 +892,7 @@
     }
   },
   "vegbundle": {
-    "name": "Alien Veg",
+    "name": "Hydro Tray",
     "chain": "veggie",
     "tier": 4,
     "sell": 32,
@@ -903,7 +903,7 @@
     }
   },
   "vegcrate": {
-    "name": "Veg Crate",
+    "name": "Grow Rack",
     "chain": "veggie",
     "tier": 5,
     "sell": 78,
@@ -914,7 +914,7 @@
     }
   },
   "vegstall": {
-    "name": "Saucer Stall",
+    "name": "Greenhouse Dome",
     "chain": "veggie",
     "tier": 6,
     "sell": 185,
@@ -925,7 +925,7 @@
     }
   },
   "giantpumpkin": {
-    "name": "Ringed Pumpkin",
+    "name": "Hydro Tower",
     "chain": "veggie",
     "tier": 7,
     "sell": 430,
@@ -1097,7 +1097,7 @@
     }
   },
   "flour": {
-    "name": "Stardust Flour",
+    "name": "Cheese Crumb",
     "chain": "bakery",
     "tier": 1,
     "sell": 2,
@@ -1107,7 +1107,7 @@
     }
   },
   "dough": {
-    "name": "Wobble Dough",
+    "name": "Cheese Cube",
     "chain": "bakery",
     "tier": 2,
     "sell": 5,
@@ -1117,7 +1117,7 @@
     }
   },
   "roll": {
-    "name": "Crater Roll",
+    "name": "Cheese Wedge",
     "chain": "bakery",
     "tier": 3,
     "sell": 13,
@@ -1128,7 +1128,7 @@
     }
   },
   "loaf": {
-    "name": "Comet Loaf",
+    "name": "Cheese Wheel",
     "chain": "bakery",
     "tier": 4,
     "sell": 32,
@@ -1139,7 +1139,7 @@
     }
   },
   "breadbasket": {
-    "name": "Planet Bread Basket",
+    "name": "Cheese Stack",
     "chain": "bakery",
     "tier": 5,
     "sell": 78,
@@ -1150,7 +1150,7 @@
     }
   },
   "buntower": {
-    "name": "Ringed Bun Tower",
+    "name": "Cheese Cart",
     "chain": "bakery",
     "tier": 6,
     "sell": 185,
@@ -1161,7 +1161,7 @@
     }
   },
   "bakeryoven": {
-    "name": "Rocket Oven",
+    "name": "Cheese Moon",
     "chain": "bakery",
     "tier": 7,
     "sell": 430,
@@ -1175,7 +1175,7 @@
     }
   },
   "tealeaf": {
-    "name": "Nebula Leaf",
+    "name": "Fizz Drop",
     "chain": "tea",
     "tier": 1,
     "sell": 2,
@@ -1185,7 +1185,7 @@
     }
   },
   "teabundle": {
-    "name": "Leaf Bundle",
+    "name": "Drink Pouch",
     "chain": "tea",
     "tier": 2,
     "sell": 5,
@@ -1196,7 +1196,7 @@
     }
   },
   "teacup": {
-    "name": "Saucer Cup",
+    "name": "Soda Can",
     "chain": "tea",
     "tier": 3,
     "sell": 13,
@@ -1207,7 +1207,7 @@
     }
   },
   "teapot": {
-    "name": "Rocket Teapot",
+    "name": "Fizz Bottle",
     "chain": "tea",
     "tier": 4,
     "sell": 32,
@@ -1218,7 +1218,7 @@
     }
   },
   "teaset": {
-    "name": "Orbit Tea Set",
+    "name": "Drink Dispenser",
     "chain": "tea",
     "tier": 5,
     "sell": 78,
@@ -1229,7 +1229,7 @@
     }
   },
   "teaparty": {
-    "name": "Zero-G Tea Party",
+    "name": "Soda Fountain",
     "chain": "tea",
     "tier": 6,
     "sell": 185,
@@ -1243,7 +1243,7 @@
     }
   },
   "ponddrop": {
-    "name": "Star Drop",
+    "name": "Slime Drop",
     "chain": "pond",
     "tier": 1,
     "sell": 2,
@@ -1253,7 +1253,7 @@
     }
   },
   "lilypad": {
-    "name": "Star Lily",
+    "name": "Slime Puddle",
     "chain": "pond",
     "tier": 2,
     "sell": 5,
@@ -1263,7 +1263,7 @@
     }
   },
   "lotus": {
-    "name": "Glow Lotus",
+    "name": "Slime Jar",
     "chain": "pond",
     "tier": 3,
     "sell": 13,
@@ -1274,7 +1274,7 @@
     }
   },
   "pondfrog": {
-    "name": "Three-Eyed Frog",
+    "name": "Slime Frog",
     "chain": "pond",
     "tier": 4,
     "sell": 32,
@@ -1285,7 +1285,7 @@
     }
   },
   "koipair": {
-    "name": "Wing Koi",
+    "name": "Slime Fountain",
     "chain": "pond",
     "tier": 5,
     "sell": 78,
@@ -1296,7 +1296,7 @@
     }
   },
   "koipond": {
-    "name": "Light Pond",
+    "name": "Slime Pool",
     "chain": "pond",
     "tier": 6,
     "sell": 185,
@@ -1307,7 +1307,7 @@
     }
   },
   "moonbridge": {
-    "name": "Moon Bridge",
+    "name": "Slime Volcano",
     "chain": "pond",
     "tier": 7,
     "sell": 430,
@@ -1390,7 +1390,7 @@
     }
   },
   "crumb": {
-    "name": "Star Crumb",
+    "name": "Small Box",
     "chain": "picnic",
     "tier": 1,
     "sell": 2,
@@ -1400,7 +1400,7 @@
     }
   },
   "sandwich": {
-    "name": "Moon Sandwich",
+    "name": "Parcel",
     "chain": "picnic",
     "tier": 2,
     "sell": 5,
@@ -1411,7 +1411,7 @@
     }
   },
   "picnicbasket": {
-    "name": "Planet Picnic Basket",
+    "name": "Cargo Crate",
     "chain": "picnic",
     "tier": 3,
     "sell": 13,
@@ -1422,7 +1422,7 @@
     }
   },
   "picnicblanket": {
-    "name": "Galaxy Blanket",
+    "name": "Crate Stack",
     "chain": "picnic",
     "tier": 4,
     "sell": 32,
@@ -1433,7 +1433,7 @@
     }
   },
   "lemonadeset": {
-    "name": "Fizzade Set",
+    "name": "Container",
     "chain": "picnic",
     "tier": 5,
     "sell": 78,
@@ -1444,7 +1444,7 @@
     }
   },
   "picnicparasol": {
-    "name": "Dish Parasol",
+    "name": "Cargo Drone",
     "chain": "picnic",
     "tier": 6,
     "sell": 185,
@@ -1455,7 +1455,7 @@
     }
   },
   "gardenparty": {
-    "name": "Lantern Party",
+    "name": "Cargo Ship",
     "chain": "picnic",
     "tier": 7,
     "sell": 430,
@@ -1469,7 +1469,7 @@
     }
   },
   "picnicpavilion": {
-    "name": "Picnic Dome",
+    "name": "Space Freighter",
     "chain": "picnic",
     "tier": 8,
     "sell": 980,
@@ -2177,7 +2177,7 @@
     }
   },
   "bulb": {
-    "name": "Glow Bulb",
+    "name": "Glow Pod",
     "chain": "glow",
     "tier": 2,
     "sell": 5,
@@ -2187,7 +2187,7 @@
     }
   },
   "glowflower": {
-    "name": "Glow Flower",
+    "name": "Pod Cluster",
     "chain": "glow",
     "tier": 3,
     "sell": 13,
@@ -2198,7 +2198,7 @@
     }
   },
   "starbloom": {
-    "name": "Star Bloom",
+    "name": "Pod Lamp",
     "chain": "glow",
     "tier": 4,
     "sell": 32,
@@ -2209,7 +2209,7 @@
     }
   },
   "glowtree": {
-    "name": "Glow Tree",
+    "name": "Pod Tower",
     "chain": "glow",
     "tier": 5,
     "sell": 78,
@@ -2223,7 +2223,7 @@
     }
   },
   "glowgrove": {
-    "name": "Glow Grove",
+    "name": "Pod City",
     "chain": "glow",
     "tier": 6,
     "sell": 185,
@@ -2662,7 +2662,7 @@
     }
   },
   "mothegg": {
-    "name": "Moth Egg",
+    "name": "Moon Egg",
     "chain": "lunamoth",
     "tier": 1,
     "sell": 2,
@@ -2673,7 +2673,7 @@
     }
   },
   "mothcocoon": {
-    "name": "Silk Cocoon",
+    "name": "Sleepy Cocoon",
     "chain": "lunamoth",
     "tier": 2,
     "sell": 5,
@@ -2684,7 +2684,7 @@
     }
   },
   "lunamothi": {
-    "name": "Luna Moth",
+    "name": "Fluffwing",
     "chain": "lunamoth",
     "tier": 3,
     "sell": 13,
@@ -2695,7 +2695,7 @@
     }
   },
   "moonmoth": {
-    "name": "Moon Moth",
+    "name": "Big Fluffwing",
     "chain": "lunamoth",
     "tier": 4,
     "sell": 32,
@@ -2709,7 +2709,7 @@
     }
   },
   "craterheart": {
-    "name": "Crater Heart",
+    "name": "Fluffwing Queen",
     "chain": "lunamoth",
     "tier": 5,
     "sell": 78,
@@ -2755,7 +2755,7 @@
     }
   },
   "hoppup": {
-    "name": "Hop Pup",
+    "name": "Hopper",
     "chain": "moonpup",
     "tier": 4,
     "sell": 32,
@@ -2766,7 +2766,7 @@
     }
   },
   "craterhound": {
-    "name": "Crater Hound",
+    "name": "Crater Crab",
     "chain": "moonpup",
     "tier": 5,
     "sell": 78,
@@ -2777,7 +2777,7 @@
     }
   },
   "starhound": {
-    "name": "Star Hound",
+    "name": "Star Critter",
     "chain": "moonpup",
     "tier": 6,
     "sell": 185,
@@ -3156,7 +3156,7 @@
     }
   },
   "moonseed": {
-    "name": "Moon Seed",
+    "name": "Algae Drop",
     "chain": "moonmelon",
     "tier": 1,
     "sell": 2,
@@ -3166,7 +3166,7 @@
     }
   },
   "moonsprout": {
-    "name": "Moon Sprout",
+    "name": "Algae Jar",
     "chain": "moonmelon",
     "tier": 2,
     "sell": 5,
@@ -3177,7 +3177,7 @@
     }
   },
   "moonmelon": {
-    "name": "Moon Melon",
+    "name": "Algae Tank",
     "chain": "moonmelon",
     "tier": 3,
     "sell": 13,
@@ -3188,7 +3188,7 @@
     }
   },
   "meloncrate": {
-    "name": "Melon Crate",
+    "name": "Algae Crate",
     "chain": "moonmelon",
     "tier": 4,
     "sell": 32,
@@ -3199,7 +3199,7 @@
     }
   },
   "moondome": {
-    "name": "Farm Dome",
+    "name": "Algae Dome",
     "chain": "moonmelon",
     "tier": 5,
     "sell": 78,
@@ -3213,7 +3213,7 @@
     }
   },
   "moonfarm": {
-    "name": "Crater Farmstead",
+    "name": "Algae Farm",
     "chain": "moonmelon",
     "tier": 6,
     "sell": 185,
@@ -3371,7 +3371,7 @@
     }
   },
   "shroomtree": {
-    "name": "Shroom Tree",
+    "name": "Shroom Tower",
     "chain": "shroom",
     "tier": 5,
     "sell": 78,
@@ -3639,7 +3639,7 @@
     }
   },
   "coallump": {
-    "name": "Coal Lump",
+    "name": "Star Coal",
     "chain": "forge",
     "tier": 1,
     "sell": 2,
@@ -3660,7 +3660,7 @@
     }
   },
   "forgefire": {
-    "name": "Forge Fire",
+    "name": "Forge Flame",
     "chain": "forge",
     "tier": 3,
     "sell": 13,
@@ -3711,7 +3711,7 @@
     }
   },
   "pepperpod": {
-    "name": "Pepper Pod",
+    "name": "Fire Drop",
     "chain": "spice",
     "tier": 1,
     "sell": 2,
@@ -3721,7 +3721,7 @@
     }
   },
   "spicepouch": {
-    "name": "Spice Pouch",
+    "name": "Gel Pouch",
     "chain": "spice",
     "tier": 2,
     "sell": 5,
@@ -3732,7 +3732,7 @@
     }
   },
   "spicejar": {
-    "name": "Spice Jar",
+    "name": "Gel Jar",
     "chain": "spice",
     "tier": 3,
     "sell": 13,
@@ -3743,7 +3743,7 @@
     }
   },
   "spicecrate": {
-    "name": "Spice Crate",
+    "name": "Gel Crate",
     "chain": "spice",
     "tier": 4,
     "sell": 32,
@@ -3754,7 +3754,7 @@
     }
   },
   "spicefeast": {
-    "name": "Ember Feast",
+    "name": "Gel Barrel",
     "chain": "spice",
     "tier": 5,
     "sell": 78,
@@ -3765,7 +3765,7 @@
     }
   },
   "spicebazaar": {
-    "name": "Spice Bazaar",
+    "name": "Gel Refinery",
     "chain": "spice",
     "tier": 6,
     "sell": 185,
@@ -3875,7 +3875,7 @@
     }
   },
   "ashfeather": {
-    "name": "Ash Feather",
+    "name": "Ember Feather",
     "chain": "phoenix",
     "tier": 1,
     "sell": 2,
@@ -3897,7 +3897,7 @@
     }
   },
   "firebird": {
-    "name": "Firebird",
+    "name": "Flamelet",
     "chain": "phoenix",
     "tier": 3,
     "sell": 13,
@@ -3911,7 +3911,7 @@
     }
   },
   "phoenix": {
-    "name": "Phoenix",
+    "name": "Flame Flyer",
     "chain": "phoenix",
     "tier": 4,
     "sell": 32,
@@ -3925,7 +3925,7 @@
     }
   },
   "hollowheart": {
-    "name": "Hollow Heart",
+    "name": "Firebird",
     "chain": "phoenix",
     "tier": 5,
     "sell": 78,
@@ -3949,7 +3949,7 @@
     }
   },
   "newt": {
-    "name": "Flicker Newt",
+    "name": "Flame Blob",
     "chain": "salamander",
     "tier": 2,
     "sell": 5,
@@ -3960,7 +3960,7 @@
     }
   },
   "salamander": {
-    "name": "Salamander",
+    "name": "Fire Critter",
     "chain": "salamander",
     "tier": 3,
     "sell": 13,
@@ -3971,7 +3971,7 @@
     }
   },
   "lavalizard": {
-    "name": "Lava Lizard",
+    "name": "Lava Critter",
     "chain": "salamander",
     "tier": 4,
     "sell": 32,
@@ -3982,7 +3982,7 @@
     }
   },
   "magmadrake": {
-    "name": "Magma Drake",
+    "name": "Magma Dragonlet",
     "chain": "salamander",
     "tier": 5,
     "sell": 78,
@@ -3996,7 +3996,7 @@
     }
   },
   "emberwyrm": {
-    "name": "Ember Wyrm",
+    "name": "Ember Dragon",
     "chain": "salamander",
     "tier": 6,
     "sell": 185,

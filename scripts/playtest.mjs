@@ -982,7 +982,7 @@ head('The guided intro');
   must(await t2.locator('#modal.open').count() === 0, 'and nothing else pops over it');
   const say2 = await t2.textContent('#tSay');
   await t2.waitForTimeout(1500);   // let the dimmers settle on a software renderer
-  must(/Whisperwood Tree/.test(say2), 'the first step is something to do: tap the tree');
+  must(/Meteor Crater/.test(say2), 'the first step is something to do: tap the tree');
   // the hole has to be over the Big Tree, and everything else has to be dimmed
   const spot = await t2.evaluate(() => {
     const g = window.__game, i = g.cells().findIndex(c => c && c.p === 'tree');

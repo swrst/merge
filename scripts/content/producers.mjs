@@ -21,19 +21,19 @@
 
 export const PRODUCERS = [
   /* ---------------------------------------------------------- Sunny Meadow */
-  ['earth', 1, 'tree|Whisperwood Tree|tree|nrg:1|twig twig twig branch|a big friendly round-crowned tree with a thick trunk, a few twigs at its roots'],
+  ['earth', 1, 'tree|Meteor Crater|impact|nrg:1|twig twig twig branch|a big friendly round-crowned tree with a thick trunk, a few twigs at its roots'],
   ['earth', 2, 'rocks|Starstone Pile|rocks|nrg:1|pebble pebble pebble rock|a heap of rounded grey boulders with a pickaxe leaning on it'],
-  ['earth', 2, 'bush|Glowberry Bush|bush|bat:10/60|berry berry berries|a round leafy bush dotted with red berries'],
+  ['earth', 2, 'bush|Snack Cart|candycart|bat:10/60|berry berry berries|a round leafy bush dotted with red berries'],
   ['earth', 2, 'well|Moonwater Well|well|nrg:1|dew dew dew puddle|a round stone well with a little wooden roof and a bucket'],
-  ['earth', 3, 'meadow|Starwheat Field|meadow|nrg:1|grass grass grass hay|a small patch of tall golden meadow grass with a hay fork stuck in it'],
-  ['earth', 3, 'flowerbed|Tentacle Bloom Bed|flower:rose/moss|nrg:1|bulbseed bulbseed sprig|a raised wooden flower bed full of pink and yellow flowers'],
+  ['earth', 3, 'meadow|Solar Farm|solarfarm|nrg:1|grass grass grass hay|a small patch of tall golden meadow grass with a hay fork stuck in it'],
+  ['earth', 3, 'flowerbed|Light Stall|lanternstall|nrg:1|bulbseed bulbseed sprig|a raised wooden flower bed full of pink and yellow flowers'],
   ['earth', 4, 'hive|Buzzbot Hive|honey:honey/bark|bat:10/60|nectar nectar honeydrop|a wild honeycomb hive hanging from a stump, bees buzzing round it'],
   ['earth', 4, 'mosslog|Eyeshroom Log|log:moss/moss|nrg:1|caplet caplet toadstool|a fallen mossy log with little mushrooms growing on it'],
-  ['earth', 5, 'cottonpatch|Nebula Cotton Bush|cloud:cream/moss|nrg:1|fibre fibre fibre thread|a low cotton bush with fluffy white bolls'],
-  ['earth', 5, 'nestbox|Skybird Nest Box|house:bark/moss|nrg:1|down down plume|a wooden bird box on a post with a round hole'],
-  ['earth', 6, 'claypit|Moonclay Pit|pot:clay/clay|nrg:1|mud mud mud claylump|a wet terracotta clay pit with a spade stuck in it'],
+  ['earth', 5, 'cottonpatch|Suit Loom|silkloom|nrg:1|fibre fibre fibre thread|a low cotton bush with fluffy white bolls'],
+  ['earth', 5, 'nestbox|Jet Wreck|scrapwreck|nrg:1|down down plume|a wooden bird box on a post with a round hole'],
+  ['earth', 6, 'claypit|Goo Pit|pot:clay/clay|nrg:1|mud mud mud claylump|a wet terracotta clay pit with a spade stuck in it'],
   ['earth', 7, 'grubmound|Glowbug Burrow|cocoon:cream/moss|nrg:1|grub grub chrysalis|a grassy mound with little burrow holes'],
-  ['earth', 8, 'vegpatch|Cosmic Crop Patch|sprout:leaf/clay|nrg:1|vegseed vegseed vegseed seedling|a small tilled veggie patch with carrot tops and a watering can'],
+  ['earth', 8, 'vegpatch|Hydro Bed|sprout:leaf/clay|nrg:1|vegseed vegseed vegseed seedling|a small tilled veggie patch with carrot tops and a watering can'],
   ['earth', 9, 'tinkerbench|Lens Workbench|anvil:copper/wood|nrg:1|lenschip lenschip lenschip lens|a wooden workbench with a vice, lens grinder and a brass lamp'],
   ['earth', 10, 'crashsite|Crash Site|planet:steel/clay|bat:10/60|oddegg oddegg blinky|a small silver saucer nose-down in the dirt, dome cracked, little lights still blinking'],
 
@@ -41,12 +41,12 @@ export const PRODUCERS = [
   ['earth', 99, 'raincloud|Weather Cloud|cloud:water/cloud|bat:10/30|raindrop raindrop puffcloud|a fat grey-blue rain cloud drizzling onto a little puddle'],
 
   /* v16: story unlocks for the later Meadow chapters */
-  ['earth', 99, 'windmill|Star Windmill|tower:wood/grass|nrg:1|flour flour flour dough|a small stone windmill with turning cloth sails'],
-  ['earth', 99, 'teabush|Nebula Tea Bush|bush:leaf/moss|bat:10/60|tealeaf tealeaf teabundle|a neat round tea bush with fresh green tips'],
-  ['earth', 99, 'lilypond|Moon Pond|wave:water/moss|nrg:1|ponddrop ponddrop ponddrop lilypad|a small round pond with lily pads and a reed'],
+  ['earth', 99, 'windmill|Cheese Mill|tower:wood/grass|nrg:1|flour flour flour dough|a small stone windmill with turning cloth sails'],
+  ['earth', 99, 'teabush|Fizz Vent|gasvent|bat:10/60|tealeaf tealeaf teabundle|a neat round tea bush with fresh green tips'],
+  ['earth', 99, 'lilypond|Slime Pond|wave:water/moss|nrg:1|ponddrop ponddrop ponddrop lilypad|a small round pond with lily pads and a reed'],
   ['earth', 99, 'toychest|Space Toy Chest|chest:cherry/moss|bat:10/60|block block spintop|a painted toy chest, lid open, toys peeking out'],
   /* v25 */
-  ['earth', 99, 'picnichamper|Picnic Pod|basket:straw/moss|nrg:1|crumb crumb crumb sandwich|a picnic hamper on little legs with a checked cloth'],
+  ['earth', 99, 'picnichamper|Cargo Pod|basket:straw/moss|nrg:1|crumb crumb crumb sandwich|a picnic hamper on little legs with a checked cloth'],
   ['earth', 99, 'eggnest|Pet Egg Nest|egg:lilac/moss|bat:10/60|petegg petegg hatchegg|a grassy nest of lilac spotted eggs'],
   ['earth', 99, 'buskbot|Busker Bot|totem:steel/moss|nrg:1|notepebble notepebble notepebble whistle|a little robot playing guitar next to a speaker'],
   ['earth', 99, 'rockethull|Scrap Hull|tower:steel/moss|nrg:1|hexbolt hexbolt hexbolt gear|an old rocket hull lying in the grass, full of parts'],
@@ -72,7 +72,7 @@ export const PRODUCERS = [
   ['luna', 9, 'gasvent|Helium Vent|bubble:glow/slate|nrg:1|gaswisp gaswisp gaswisp gasbubble|a steel-capped vent in the moon rock bubbling glowing gas'],
   ['luna', 10, 'impact|Impact Crater|rock:iron/slate|nrg:1|spacegrit spacegrit spacegrit meteorite|a fresh little impact crater with a dark meteorite in its middle'],
   ['luna', 11, 'relaymast|Relay Mast|compass:silver/slate|nrg:1|antwire antwire antwire antenna|a short radio mast with a small dish and a blinking red light'],
-  ['luna', 12, 'melonvine|Melon Vine|fruit:mint/slate|bat:10/60|moonseed moonseed moonsprout|a curly lilac vine in a round planter with small melons'],
+  ['luna', 12, 'melonvine|Algae Pods|fruit:mint/slate|bat:10/60|moonseed moonseed moonsprout|a curly lilac vine in a round planter with small melons'],
 
   /* ---------------------------------------------------------- Ember Hollow */
   ['cindra', 1, 'lavavent|Lava Vent|lavavent|nrg:1|ember ember ember cinder|a squat volcanic vent glowing orange, embers floating up'],
@@ -81,7 +81,7 @@ export const PRODUCERS = [
   ['cindra', 2, 'obsidslab|Obsidian Slab|boulder:obsidian/obsidian|nrg:1|obchip obchip obchip obshard|a glossy black-purple obsidian boulder'],
   ['cindra', 3, 'sandpit|Hot Sand Pit|pebble:sand/obsidian|nrg:1|sandpinch sandpinch moltenglass|a shallow pit of glowing orange sand'],
   ['cindra', 4, 'coalpit|Coal Pit|ore:coal/obsidian|nrg:1|coallump coallump coallump coalbrick|a pile of coal in a rock hollow with a mine cart'],
-  ['cindra', 4, 'spicevine|Spice Vine|berrycluster:rust/obsidian|bat:10/60|pepperpod pepperpod spicepouch|a thorny vine hung with red peppers'],
+  ['cindra', 4, 'spicevine|Fire Gel Spring|sulfurspring|bat:10/60|pepperpod pepperpod spicepouch|a thorny vine hung with red peppers'],
   ['cindra', 5, 'copperseam|Copper Seam|ore:copper/obsidian|nrg:1|copperore copperore copperore coppernug|a rock with shiny copper veins'],
   ['cindra', 6, 'ashnest|Ash Nest|feather:smoke/obsidian|nrg:1|ashfeather ashfeather emberegg|a nest of ash-grey feathers on a warm rock'],
   ['cindra', 7, 'warmnest|Warm Nest|egg:ember/obsidian|bat:10/60|warmegg warmegg newt|a nest of warm stones around a small lava pool, orange eggs inside'],

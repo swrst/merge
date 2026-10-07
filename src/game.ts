@@ -5101,7 +5101,7 @@ export async function startGame() {
   /* Short and hands-on: every step but the last is something you DO. The
      rest of the game is introduced by coach() hints as each part opens. */
   const TUT: TutStep[] = [
-    { id: 'tap', who: 'pip', say: "Hi! Tap the <b>Whisperwood Tree</b>.", at: () => cellWith(c => c.p === 'tree'), on: 'spawn' },
+    { id: 'tap', who: 'pip', say: "Hi! Tap the <b>Meteor Crater</b>.", at: () => cellWith(c => c.p === 'tree'), on: 'spawn' },
     { id: 'tap2', who: 'pip', say: "Once more!", at: () => cellWith(c => c.p === 'tree'), on: 'spawn' },
     { id: 'merge', who: 'pip', say: "<b>Drag</b> one twig onto the other.", at: () => cellsWith(c => c.id === 'twig'), on: 'merge' },
     { id: 'energy', who: 'pip', say: "Taps cost <b>⚡ energy</b>. It refills by itself.", at: () => '#chipEnergy' },

@@ -1,7 +1,7 @@
 {
   "tree": {
-    "name": "Whisperwood Tree",
-    "art": "tree",
+    "name": "Meteor Crater",
+    "art": "impact",
     "drops": [
       "twig",
       "twig",
@@ -24,8 +24,8 @@
     "cost": 1
   },
   "bush": {
-    "name": "Glowberry Bush",
-    "art": "bush",
+    "name": "Snack Cart",
+    "art": "candycart",
     "drops": [
       "berry",
       "berry",
@@ -48,8 +48,8 @@
     "cost": 1
   },
   "meadow": {
-    "name": "Starwheat Field",
-    "art": "meadow",
+    "name": "Solar Farm",
+    "art": "solarfarm",
     "drops": [
       "grass",
       "grass",
@@ -60,18 +60,13 @@
     "cost": 1
   },
   "flowerbed": {
-    "name": "Tentacle Bloom Bed",
-    "art": "flowerbed",
+    "name": "Light Stall",
+    "art": "lanternstall",
     "drops": [
       "bulbseed",
       "bulbseed",
       "sprig"
     ],
-    "spec": {
-      "shape": "flower",
-      "mat": "rose",
-      "ground": "moss"
-    },
     "mode": "energy",
     "cost": 1
   },
@@ -109,40 +104,30 @@
     "cost": 1
   },
   "cottonpatch": {
-    "name": "Nebula Cotton Bush",
-    "art": "cottonpatch",
+    "name": "Suit Loom",
+    "art": "silkloom",
     "drops": [
       "fibre",
       "fibre",
       "fibre",
       "thread"
     ],
-    "spec": {
-      "shape": "cloud",
-      "mat": "cream",
-      "ground": "moss"
-    },
     "mode": "energy",
     "cost": 1
   },
   "nestbox": {
-    "name": "Skybird Nest Box",
-    "art": "nestbox",
+    "name": "Jet Wreck",
+    "art": "scrapwreck",
     "drops": [
       "down",
       "down",
       "plume"
     ],
-    "spec": {
-      "shape": "house",
-      "mat": "bark",
-      "ground": "moss"
-    },
     "mode": "energy",
     "cost": 1
   },
   "claypit": {
-    "name": "Moonclay Pit",
+    "name": "Goo Pit",
     "art": "claypit",
     "drops": [
       "mud",
@@ -175,7 +160,7 @@
     "cost": 1
   },
   "vegpatch": {
-    "name": "Cosmic Crop Patch",
+    "name": "Hydro Bed",
     "art": "vegpatch",
     "drops": [
       "vegseed",
@@ -243,7 +228,7 @@
     "every": 180000
   },
   "windmill": {
-    "name": "Star Windmill",
+    "name": "Cheese Mill",
     "art": "windmill",
     "drops": [
       "flour",
@@ -260,24 +245,19 @@
     "cost": 1
   },
   "teabush": {
-    "name": "Nebula Tea Bush",
-    "art": "teabush",
+    "name": "Fizz Vent",
+    "art": "gasvent",
     "drops": [
       "tealeaf",
       "tealeaf",
       "teabundle"
     ],
-    "spec": {
-      "shape": "bush",
-      "mat": "leaf",
-      "ground": "moss"
-    },
     "mode": "battery",
     "cap": 10,
     "every": 360000
   },
   "lilypond": {
-    "name": "Moon Pond",
+    "name": "Slime Pond",
     "art": "lilypond",
     "drops": [
       "ponddrop",
@@ -311,7 +291,7 @@
     "every": 360000
   },
   "picnichamper": {
-    "name": "Picnic Pod",
+    "name": "Cargo Pod",
     "art": "picnichamper",
     "drops": [
       "crumb",
@@ -672,7 +652,7 @@
     "cost": 1
   },
   "melonvine": {
-    "name": "Melon Vine",
+    "name": "Algae Pods",
     "art": "melonvine",
     "drops": [
       "moonseed",
@@ -780,18 +760,13 @@
     "cost": 1
   },
   "spicevine": {
-    "name": "Spice Vine",
-    "art": "spicevine",
+    "name": "Fire Gel Spring",
+    "art": "sulfurspring",
     "drops": [
       "pepperpod",
       "pepperpod",
       "spicepouch"
     ],
-    "spec": {
-      "shape": "berrycluster",
-      "mat": "rust",
-      "ground": "obsidian"
-    },
     "mode": "battery",
     "cap": 10,
     "every": 360000

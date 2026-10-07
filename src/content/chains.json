@@ -1,6 +1,6 @@
 {
   "wood": {
-    "name": "Whisperwood",
+    "name": "Meteor Metal",
     "world": "earth",
     "unlock": 1,
     "items": [
@@ -14,9 +14,9 @@
       "woodrocket"
     ],
     "asks": [
-      "The porch needs mending.",
-      "Firewood for tonight!",
-      "Building a bird table."
+      "The hangar needs mending.",
+      "Metal for my ship!",
+      "Building a landing pad."
     ]
   },
   "stone": {
@@ -39,7 +39,7 @@
     ]
   },
   "berry": {
-    "name": "Glowberry Kitchen",
+    "name": "Space Snacks",
     "world": "earth",
     "unlock": 2,
     "items": [
@@ -52,9 +52,9 @@
       "jamfactory"
     ],
     "asks": [
-      "Glow-baking day!",
-      "Snacks that light up in the dark.",
-      "My antennae crave berries."
+      "Snack time!",
+      "Lunch for the crew.",
+      "My antennae crave snacks."
     ]
   },
   "water": {
@@ -71,13 +71,13 @@
       "watertower"
     ],
     "asks": [
-      "The garden is thirsty.",
+      "The base is thirsty.",
       "Bath day for Mayor Marin!",
-      "Tea for everyone."
+      "Refill the tanks!"
     ]
   },
   "grass": {
-    "name": "Starwheat",
+    "name": "Solar Power",
     "world": "earth",
     "unlock": 3,
     "items": [
@@ -89,13 +89,13 @@
       "harvest"
     ],
     "asks": [
-      "Bedding for the barn.",
-      "The goats are hungry.",
-      "Thatching the roof."
+      "The lights went out.",
+      "Power for the dome.",
+      "Charging my rover."
     ]
   },
   "flower": {
-    "name": "Tentacle Blooms",
+    "name": "Nebula Lights",
     "world": "earth",
     "unlock": 3,
     "items": [
@@ -108,13 +108,13 @@
       "flowerarch"
     ],
     "asks": [
-      "For my window pod.",
-      "They wave back! Adorable.",
-      "The buzzbots need these."
+      "It is too dark out here.",
+      "Lights for the party!",
+      "For my window pod."
     ]
   },
   "honey": {
-    "name": "Buzzbot Honey",
+    "name": "Star Nectar",
     "world": "earth",
     "unlock": 4,
     "items": [
@@ -127,13 +127,13 @@
       "honeypalace"
     ],
     "asks": [
-      "Honey cake time!",
+      "Nectar time!",
       "Buzzbot-approved, please.",
-      "Sweetening the glow jam."
+      "Sweet fuel, please."
     ]
   },
   "mush": {
-    "name": "Eyeshroom Woods",
+    "name": "Eyeshrooms",
     "world": "earth",
     "unlock": 4,
     "items": [
@@ -144,13 +144,13 @@
       "mossheart"
     ],
     "asks": [
-      "Eyeshroom soup tonight. It stares back.",
-      "For the forest tea.",
-      "Nana knows a recipe."
+      "Eyeshroom friends for my garden.",
+      "They stare back. I like it.",
+      "Nana knows these."
     ]
   },
   "cloth": {
-    "name": "Nebula Cotton",
+    "name": "Space Suits",
     "world": "earth",
     "unlock": 5,
     "items": [
@@ -163,13 +163,13 @@
       "spacesuit"
     ],
     "asks": [
-      "Patching my coat.",
-      "Curtains for the cottage.",
-      "A scarf for winter."
+      "My suit has a hole.",
+      "Spacewalk tomorrow!",
+      "Gear for the crew."
     ]
   },
   "feather": {
-    "name": "Skybirds",
+    "name": "Jet Gear",
     "world": "earth",
     "unlock": 5,
     "items": [
@@ -181,13 +181,13 @@
       "aviary"
     ],
     "asks": [
-      "A nest for the chicks.",
-      "For my new hat!",
-      "Stuffing a pillow."
+      "I want to fly!",
+      "Race day on the rim!",
+      "My jetpack broke."
     ]
   },
   "clay": {
-    "name": "Moonclay",
+    "name": "Moon Goo",
     "world": "earth",
     "unlock": 6,
     "items": [
@@ -199,8 +199,8 @@
       "porcelain"
     ],
     "asks": [
-      "Pots for the seedlings.",
-      "A new tea set.",
+      "Pots for the goo.",
+      "A new vase, please.",
       "The kiln is warm!"
     ]
   },
@@ -216,12 +216,12 @@
       "meadowheart"
     ],
     "asks": [
-      "Butterflies for the garden.",
-      "The meadow needs life."
+      "Glowbugs for the garden.",
+      "The night needs light."
     ]
   },
   "veggie": {
-    "name": "Cosmic Crops",
+    "name": "Hydroponics",
     "world": "earth",
     "unlock": 8,
     "items": [
@@ -234,9 +234,9 @@
       "giantpumpkin"
     ],
     "asks": [
-      "Stew for the whole village.",
+      "Greens for the station.",
       "Market day tomorrow!",
-      "For my rabbit."
+      "Seeds for the dome."
     ]
   },
   "stargaze": {
@@ -277,7 +277,7 @@
     ]
   },
   "bakery": {
-    "name": "Comet Bakery",
+    "name": "Moon Cheese",
     "world": "earth",
     "unlock": 10,
     "items": [
@@ -290,13 +290,13 @@
       "bakeryoven"
     ],
     "asks": [
-      "Breakfast for the village!",
-      "The rocket oven is hungry.",
-      "Crater rolls, still warm."
+      "Cheese for breakfast!",
+      "The cheese mill is hungry.",
+      "Moon cheese, still warm."
     ]
   },
   "tea": {
-    "name": "Nebula Tea",
+    "name": "Zero-G Drinks",
     "world": "earth",
     "unlock": 10,
     "items": [
@@ -308,13 +308,13 @@
       "teaparty"
     ],
     "asks": [
-      "Tea at four. Earth time. Whatever that is.",
+      "Fizz at four. Earth time. Whatever that is.",
       "Guests from orbit!",
-      "A calming nebula cup, please."
+      "Something bubbly, please."
     ]
   },
   "pond": {
-    "name": "Moon Pond",
+    "name": "Slime Pool",
     "world": "earth",
     "unlock": 10,
     "items": [
@@ -327,9 +327,9 @@
       "moonbridge"
     ],
     "asks": [
-      "The pond looks empty.",
-      "For the koi garden.",
-      "The frogs want friends."
+      "The pool looks empty.",
+      "Slime for my bath.",
+      "The slime frogs want friends."
     ]
   },
   "toys": {
@@ -351,7 +351,7 @@
     ]
   },
   "picnic": {
-    "name": "Moon Picnic",
+    "name": "Cargo",
     "world": "earth",
     "unlock": 10,
     "items": [
@@ -365,9 +365,9 @@
       "picnicpavilion"
     ],
     "asks": [
-      "Picnic under two moons!",
-      "Lunch for the rocket crew.",
-      "A snack for the orbit."
+      "Delivery to orbit!",
+      "Cargo for the crew.",
+      "Pack it up, we fly!"
     ]
   },
   "pets": {
@@ -405,7 +405,7 @@
       "concertshell"
     ],
     "asks": [
-      "The barn dance is tonight!",
+      "The dance is tonight!",
       "A song for the launch.",
       "Music for the parade."
     ]
@@ -446,8 +446,8 @@
     ],
     "asks": [
       "Will it rain tomorrow?",
-      "Rain for the veggies.",
-      "Rainbows for the kids."
+      "Rain for the hydro beds.",
+      "Clouds for the kids."
     ]
   },
   "ev_star": {
@@ -509,7 +509,7 @@
     ]
   },
   "glow": {
-    "name": "Glow Garden",
+    "name": "Glow Pods",
     "world": "luna",
     "unlock": 1,
     "items": [
@@ -523,7 +523,7 @@
     "asks": [
       "Our lamps are fading.",
       "Light for the night shift.",
-      "Glow for the garden."
+      "Pods for the garden."
     ]
   },
   "dust": {
@@ -748,7 +748,7 @@
     ]
   },
   "moonmelon": {
-    "name": "Crater Farm",
+    "name": "Algae Farm",
     "world": "luna",
     "unlock": 12,
     "items": [
@@ -761,8 +761,8 @@
     ],
     "asks": [
       "Lunch for the crew.",
-      "Melon party tonight!",
-      "Seeds for the next dome."
+      "Algae shake tonight!",
+      "Feed for the next dome."
     ]
   },
   "magma": {
@@ -786,7 +786,7 @@
     ]
   },
   "shroom": {
-    "name": "Ash Garden",
+    "name": "Ash Shrooms",
     "world": "cindra",
     "unlock": 1,
     "items": [
@@ -861,7 +861,7 @@
     ]
   },
   "forge": {
-    "name": "The Smithy",
+    "name": "Star Forge",
     "world": "cindra",
     "unlock": 4,
     "items": [
@@ -873,13 +873,13 @@
       "foundry"
     ],
     "asks": [
-      "The bellows need coal.",
-      "Fire for the smithy.",
-      "Big order at the forge."
+      "The forge went cold.",
+      "Star coal, please.",
+      "Smelting day!"
     ]
   },
   "spice": {
-    "name": "Spice Kiln",
+    "name": "Fire Gel",
     "world": "cindra",
     "unlock": 4,
     "items": [
@@ -891,9 +891,9 @@
       "spicebazaar"
     ],
     "asks": [
-      "Hot stew, extra hot!",
-      "Spice for the traders.",
-      "Warming the travellers."
+      "Fuel for the furnace.",
+      "Hot gel, please!",
+      "Warming the hollow."
     ]
   },
   "copper": {
@@ -917,7 +917,7 @@
     ]
   },
   "phoenix": {
-    "name": "Ashfall Wings",
+    "name": "Flame Wings",
     "world": "cindra",
     "unlock": 6,
     "items": [
