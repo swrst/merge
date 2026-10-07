@@ -1,6 +1,22 @@
 # Merge Rocket: art wave v36: everything extraterrestrial
 
-Same SETUP message as before (attach STYLE-REFERENCE.png). One numbered prompt per message.
+Attach the NEW **STYLE-REFERENCE.png** (rebuilt from the current in-game art: alien items, producers, painted UI, the alien cast).
+
+## SETUP (send once, attach STYLE-REFERENCE.png)
+
+We're making art for my mobile merge game "Merge Rocket" (Travel Town style, alien/space theme). Keep EXACTLY the style of the attached reference:
+- chunky, rounded, toy-like objects; soft glossy painterly semi-3D; bright saturated colours
+- warm key light from the upper left with one soft white highlight; shaded side a richer version of the base colour, never grey or black
+- thin darker warm-brown outline, small soft contact shadow; three-quarter view from about 30° above
+- EVERYTHING is extraterrestrial: glowing alien plants, star/planet motifs, crystals, rockets, saucers, antennae, extra eyes. Nothing should look like a plain Earth object.
+- palette leans purple, teal, magenta, lime and gold, with soft inner glows
+- characters are funny, weird-looking ADULT cartoon aliens, never babies, never scary, never dogs or Earth animals
+
+Every image: ONE object (or one sheet when I say grid), centred, on plain pure-white or transparent background, square 1024×1024, no text, no frame, must still read as a 48 px icon. Sheets: equal cells, objects not touching.
+
+Answer each of my next messages with exactly one image.
+
+One numbered prompt per message.
 
 Extra rule for this wave: the cute little green alien from the Lab icon (big friendly eyes, two antennae with round tips, peeking out of a potion flask) is our **mascot, Gloop**. Hide Gloop in some crown pieces (a window, a porthole, a jar) as a little easter egg.
 
