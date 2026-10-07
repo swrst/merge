@@ -1,6 +1,6 @@
 /* Restoration projects — the main thread of every world.
  *
- * Travel Town has you rebuild a place task by task; Merge Rocket has you wake
+ * Travel Town has you rebuild a place task by task; Gloop Galaxy has you wake
  * a world the same way. Each project asks for a few specific things (and a
  * little money), and finishing it pays well, moves the story on and makes the
  * camp a little more alive. They come in order: the next one opens when the
@@ -26,12 +26,12 @@ export const PROJECTS = {
   earth: [
     { id: 'e1', name: 'Clear the Path', who: 'pip', needs: [['branch', 2]], coins: 0, xp: 15, unlock: 'rocks',
       talk: [['pip', 'A visitor! Nobody has come up this path in years.'],
-        ['pip', 'Tap the Big Tree for twigs. Two twigs make a branch. Two branches clear the path!']],
+        ['pip', 'Tap the Whisperwood Tree for twigs. Two twigs make a branch. Two branches clear the path!']],
       text: 'The path is clear — and there was a rock pile under the brambles.' },
     { id: 'e2', name: 'A Stone Border', who: 'grandma', needs: [['rock', 2], ['log', 1]], coins: 80, xp: 25, unlock: 'bush',
       talk: [['grandma', 'The weeds walk into my garden like they own it. Rude.'],
         ['grandma', 'Two rocks and a log for a border, dear.']],
-      text: 'A tidy border. Behind it, a berry bush is fruiting again.' },
+      text: 'A tidy border. Behind it, a glowberry bush is glowing again.' },
     { id: 'e3', name: 'Nana Luma\'s Jam', who: 'grandma', needs: [['jam', 1], ['berries', 2]], coins: 120, xp: 40, unlock: 'well',
       talk: [['grandma', 'Berries! One jar of jam, two bunches for the pie tin.'],
         ['biscuit', 'The pie tin is hereby confiscated. Mayoral privilege.']],
@@ -47,7 +47,7 @@ export const PROJECTS = {
     { id: 'e6', name: 'Mend the Fences', who: 'biscuit', needs: [['lumber', 2], ['pie', 1]], coins: 400, xp: 100, unlock: 'meadow', gift: 'chest', retire: ['tree'],
       talk: [['biscuit', 'Citizens! The fence is broken. Also a goat ate my hat.'],
         ['grandma', 'Two lumber piles and a pie for the carpenter, please.']],
-      text: 'The fence stands. The Big Tree gave its last wood for it and rests now. The hay meadow is growing tall.' },
+      text: 'The fence stands. The Whisperwood Tree gave its last wood for it and rests now. The starwheat is growing tall.' },
     { id: 'e7', name: 'Harvest Supper', who: 'grandma', needs: [['bale', 1], ['pie', 1], ['barrel', 1]], coins: 560, xp: 120, unlock: 'flowerbed', retire: ['well'],
       talk: [['grandma', 'A harvest supper! Hay bales for seats, a pie, a barrel of water.'],
         ['bloop', 'What is pie. I would like to learn about pie.']],
@@ -60,12 +60,12 @@ export const PROJECTS = {
     { id: 'e9', name: 'Honey Cakes', who: 'gigi', needs: [['honeycomb', 1], ['cake', 1]], coins: 880, xp: 160, retire: ['bush'],
       temp: { p: 'mosslog', taps: 16, mins: 30 },
       talk: [['gigi', 'Honey cake! Real honeycomb, quickly, before the bees leave.']],
-      text: 'Honey cakes for all. The berry bush is picked clean. In the woods, a mossy log is sprouting mushrooms.' },
+      text: 'Honey cakes for all. The glowberry bush is picked clean. In the woods, an eyeshroom log is blinking awake.' },
     { id: 'e10', name: 'Forest Tea', who: 'grandma', needs: [['mushring', 1], ['teacup', 1]], coins: 1040, xp: 180,
       temp: { p: 'cottonpatch', taps: 24, mins: 40 },
       talk: [['grandma', 'My mother\'s forest tea: a ring of mushrooms and a cup of fresh leaves.'],
         ['bloop', 'On my world, tea is a colour. Fascinating.']],
-      text: 'Tea for everyone. A cotton patch fluffs up for a little while — Sirra has ideas.' },
+      text: 'Tea for everyone. A nebula cotton bush fluffs up for a little while — Sirra has ideas.' },
     { id: 'e11', name: 'Patchwork Coats', who: 'gigi', needs: [['clothbolt', 1], ['hat', 1], ['teacup', 1]], coins: 1200, xp: 200, unlock: 'nestbox',
       talk: [['gigi', 'Everyone is dressed like a scarecrow. No offence to the scarecrow.'],
         ['gigi', 'A bolt of cloth, a straw hat, and tea for the tailor. I do the rest. I always do the rest.']],
@@ -82,7 +82,7 @@ export const PROJECTS = {
     { id: 'e14', name: 'A Garden for Guests', who: 'biscuit', needs: [['carrot', 2], ['scarecrow', 1], ['spintop', 1]], coins: 1680, xp: 260, unlock: 'tinkerbench', retire: ['meadow'],
       talk: [['biscuit', 'The crows threaten civic order. I drafted a strongly worded letter.'],
         ['pip', 'Or two carrots, a scarecrow, and a spinning top for the Blinkies?']],
-      text: 'The meadow gave its last hay to the scarecrow. Dr. Zonk drags out a tinker bench: "For lenses."' },
+      text: 'The starwheat gave its last hay to the Scare-Bot. Dr. Zonk drags out a lens workbench: "For star lenses."' },
     { id: 'e15', name: 'Stargazing Night', who: 'timmy', needs: [['spyglass', 1], ['vegbundle', 1], ['speckegg', 1]], coins: 1920, xp: 300, unlock: 'lilypond', gift: 'chest', retire: ['nestbox'],
       talk: [['timmy', 'Dr. Zonk says his home is up THERE. Behind the Moon!'],
         ['grandma', 'A spyglass, veggies, and an egg for the birds to mind. Nobody stargazes on an empty stomach.']],
@@ -93,14 +93,14 @@ export const PROJECTS = {
       text: 'The bakery is open, and a windmill turns on the hill. Flour for everyone!' },
     { id: 'e17', name: 'Pottery Day', who: 'gigi', needs: [['loaf', 1], ['vegbundle', 1], ['lotus', 1]], coins: 2320, xp: 340, unlock: 'claypit', retire: ['vegpatch'],
       talk: [['gigi', 'Bread but no bowls. Uncivilised, darling.'],
-        ['gigi', 'A loaf, veggies and a lotus for the potters. There is clay by the river.']],
-      text: 'The clay pit is open. The veggie patch is resting. Sirra ordered twelve vases.' },
+        ['gigi', 'A loaf, veggies and a lotus for the potters. There is moonclay by the river.']],
+      text: 'The moonclay pit is open. The cosmic crop patch is resting. Sirra ordered twelve vases.' },
     { id: 'e18', name: 'Tea in the Garden', who: 'pim', needs: [['claypot', 2], ['roll', 2], ['lotus', 1]], coins: 2560, xp: 360, gift: 'chest',
       temp: { p: 'picnichamper', taps: 14, mins: 30 },
       talk: [['pim', 'Duchess Splatt. I have come a very long way for a proper cup of tea.'],
         ['grandma', 'Finally, someone with manners.']],
       text: 'Tea under the parasol. The Duchess leaves her picnic hamper behind. On purpose.' },
-    { id: 'e19', name: 'The Lily Pond', who: 'timmy', needs: [['lotus', 1], ['urn', 1], ['picnicbasket', 1]], coins: 2800, xp: 380, gift: 'chest', unlock: 'eggnest',
+    { id: 'e19', name: 'The Moon Pond', who: 'timmy', needs: [['lotus', 1], ['urn', 1], ['picnicbasket', 1]], coins: 2800, xp: 380, gift: 'chest', unlock: 'eggnest',
       talk: [['timmy', 'A party for the frogs! Frogs with THREE EYES deserve nice things.']],
       text: 'The three-eyed frogs hold a tea party. Under the blanket: wobbling lilac eggs.' },
     { id: 'e20', name: 'Toys for the Blinkies', who: 'bloop', needs: [['pondfrog', 1], ['blobpup', 1], ['claypot', 2]], coins: 3040, xp: 400, gift: 'chest', unlock: 'buskbot',

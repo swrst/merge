@@ -2,8 +2,8 @@
   {
     "id": "spawn",
     "need": 3,
-    "text": "Shake the Big Tree 3 times",
-    "hint": "Tap the <b>Big Tree</b> to shake out twigs!",
+    "text": "Shake the Whisperwood Tree 3 times",
+    "hint": "Tap the <b>Whisperwood Tree</b> to shake out twigs!",
     "coins": 25
   },
   {

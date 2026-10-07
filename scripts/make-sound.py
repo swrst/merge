@@ -1,29 +1,39 @@
 #!/usr/bin/env python3
-"""Merge Rocket's whole sound pack: calm melodic music and soft effects.
+"""Gloop Galaxy's whole sound pack: dreamy space music, sci-fi effects and
+alien voices.
 
     python3 scripts/make-sound.py            everything
-    python3 scripts/make-sound.py sfx        effects only
+    python3 scripts/make-sound.py sfx        effects + voices only
     python3 scripts/make-sound.py music      music only
+    python3 scripts/make-sound.py voice      voices only
 
 Needs numpy, scipy and ffmpeg. Everything is synthesised (no samples, nothing
 to license). Output: src/audio/*.ogg.
 
 The music
   Every world has four 8-bar phrases (music_<world>_1..4) in one key and tempo
-  plus an ambience bed (amb_<world>). Instruments: a soft electric piano for
-  the melody, a music box that doubles it now and then, a broken-chord piano
-  accompaniment, a warm pad and a round bass, all in a long, soft hall. Slow
-  tempos (58–72 bpm), diatonic progressions, no drums.
+  plus an ambience bed (amb_<world>). It is space music, but calm: a glassy
+  synth lead with a slow vibrato, FM star-bells and a kalimba that sparkle
+  over it, a breathing "choir" pad built from vowel formants, a warm analog
+  pad whose filter opens and closes, a round sub bass, a ping-pong echo and a
+  very long hall. Slow tempos, no drums. The ambience is a deep drone with
+  twinkles and far-off radio beeps.
 
   The melodies are composed, not random noodling: a two-bar motif, the motif
   again over the next chords, a contrasting answer, and a cadence that lands
-  on the home note. Strong beats sit on chord tones, weak beats step between
-  them, and the tune keeps to a singable range.
+  on the home note.
 
 The effects
-  One family: soft marimba, glass and bell tones tuned to C major pentatonic,
-  short and quiet, so a hundred taps never grate. Merges climb the scale with
-  the tier; errors are a soft low "bonk", never a buzzer.
+  One sci-fi family: bubbly bloops, glassy FM pings, soft laser sweeps and
+  shimmer, all tuned to C major pentatonic so nothing clashes with the music.
+  Merges rise with the tier; errors are a soft descending "wah-wah".
+
+The voices
+  Characters babble in an alien language. Each syllable is a real little
+  vowel (formant synthesis on a glottal pulse) with a consonant in front, and
+  there are seven voice types (squeak, chirp, mid, deep, robot, gloop,
+  dreamy), eight syllables each: voice_<type>_<n>. The game strings a few
+  together per line, pitched per character.
 """
 import os
 import subprocess
@@ -65,74 +75,132 @@ def adsr(n, a, r, sus_level=1.0):
 
 
 # ------------------------------------------------------------- instruments
+def sine(f, t):
+    return np.sin(2 * np.pi * f * t)
+
+
+def lead(f, dur, vel=0.6):
+    """glassy space lead: sine + soft triangle partials, delayed vibrato, slow attack"""
+    n = int(SR * (dur + 0.9)); t = np.arange(n) / SR
+    vib = 1 + 0.006 * np.sin(2 * np.pi * 5.2 * t) * np.clip((t - 0.18) / 0.3, 0, 1)
+    ph = 2 * np.pi * f * np.cumsum(vib) / SR
+    x = np.sin(ph) + 0.22 * np.sin(3 * ph) / 3 + 0.08 * np.sin(5 * ph) / 5 + 0.12 * np.sin(2 * ph)
+    env = np.minimum(1, t / 0.05)
+    s = int(SR * dur)
+    env[s:] *= np.exp(-(t[s:] - dur) / 0.25)
+    env *= 0.8 + 0.2 * np.exp(-t / 0.4)
+    return onepole_lp(x * env, 3800) * vel
+
+
+def fmbell(f, dur, vel=0.5, ratio=3.5, index=2.2, tau=1.4):
+    """FM star-bell: bright strike, long glassy tail"""
+    n = int(SR * (dur + tau * 1.6)); t = np.arange(n) / SR
+    mod = index * np.exp(-t / (tau * 0.25)) * np.sin(2 * np.pi * f * ratio * t)
+    x = np.sin(2 * np.pi * f * t + mod) * np.exp(-t / tau)
+    x += 0.25 * np.sin(2 * np.pi * f * 2.01 * t) * np.exp(-t / (tau * 0.5))
+    return x * np.minimum(1, t / 0.002) * vel
+
+
+def kalimba(f, dur, vel=0.6):
+    n = int(SR * (dur + 1.2)); t = np.arange(n) / SR
+    x = (np.sin(2 * np.pi * f * t) * np.exp(-t / 0.7)
+         + 0.35 * np.sin(2 * np.pi * f * 5.43 * t) * np.exp(-t / 0.06)
+         + 0.12 * np.sin(2 * np.pi * f * 2.0 * t) * np.exp(-t / 0.3))
+    return x * np.minimum(1, t / 0.0015) * vel
+
+
 def epiano(f, dur, vel=0.7, tail=1.2):
-    """Soft electric piano: warm partials that die from the top down, a faint tine."""
+    """soft electric piano for the broken chords"""
     n = int(SR * (dur + tail)); t = np.arange(n) / SR
     x = np.zeros(n)
-    for k, a in enumerate([1.0, 0.42, 0.2, 0.09, 0.05, 0.025], start=1):
+    for k, a in enumerate([1.0, 0.42, 0.2, 0.09, 0.05], start=1):
         tau = 1.9 / (1 + 0.75 * (k - 1)) * (0.6 + 0.5 * vel)
         x += a * np.sin(2 * np.pi * f * k * (1 + 0.0004 * k * k) * t) * np.exp(-t / tau)
-    x += 0.10 * vel * np.sin(2 * np.pi * f * 7.02 * t) * np.exp(-t / 0.05)
     att = np.minimum(1, t / 0.006)
-    rel = np.ones(n); ri = int(SR * min(tail, 0.6)); s = int(SR * dur)
+    rel = np.ones(n); s = int(SR * dur)
     if s < n:
         rel[s:] = np.exp(-(t[s:] - dur) / 0.35)
     return x * att * rel * vel
 
 
-def musicbox(f, dur, vel=0.6):
-    n = int(SR * (dur + 1.6)); t = np.arange(n) / SR
-    x = (np.sin(2 * np.pi * f * t) * np.exp(-t / 1.1)
-         + 0.28 * np.sin(2 * np.pi * f * 3.0 * t) * np.exp(-t / 0.35)
-         + 0.12 * np.sin(2 * np.pi * f * 5.4 * t) * np.exp(-t / 0.12))
-    return x * np.minimum(1, t / 0.002) * vel
+VOWELS = {'a': (750, 1200, 2500), 'o': (450, 800, 2400), 'u': (330, 700, 2300),
+          'e': (480, 1900, 2600), 'i': (300, 2300, 3000), 'ae': (650, 1700, 2500)}
 
 
-def pluckharp(f, dur, vel=0.6):
-    n = int(SR * (dur + 1.4)); t = np.arange(n) / SR
+def formant_amp(fk, F, bw=(90, 120, 160)):
+    return sum(np.exp(-0.5 * ((fk - Fi) / b) ** 2) * g for Fi, b, g in zip(F, bw, (1.0, 0.6, 0.25)))
+
+
+def choir(freqs, dur, vel=0.16, vowel='o'):
+    """breathing alien choir: harmonics shaped by vowel formants, slow ensemble drift"""
+    n = int(SR * (dur + 2.0)); t = np.arange(n) / SR
     x = np.zeros(n)
-    for k, a in enumerate([1.0, 0.5, 0.25, 0.12, 0.06], start=1):
-        x += a * np.sin(2 * np.pi * f * k * t) * np.exp(-t / (1.3 / k ** 0.8))
-    return onepole_lp(x * np.minimum(1, t / 0.003), 3500) * vel
+    F = VOWELS[vowel]
+    for f in freqs:
+        for d in (-0.004, 0.0, 0.0045):
+            g = f * (1 + d)
+            ph0 = np.random.uniform(0, 2 * np.pi)
+            drift = 1 + 0.002 * np.sin(2 * np.pi * (0.2 + abs(d) * 30) * t + ph0)
+            ph = 2 * np.pi * g * np.cumsum(drift) / SR
+            for k in range(1, 14):
+                fk = g * k
+                if fk > 4000:
+                    break
+                a = formant_amp(fk, F) / k ** 0.3 + 0.02
+                x += a * np.sin(k * ph)
+    x /= max(1, len(freqs) * 6)
+    env = np.minimum(1, t / 1.4)
+    s = int(SR * dur)
+    env[s:] *= np.exp(-(t[s:] - dur) / 0.9)
+    return x * env * (0.8 + 0.2 * np.sin(2 * np.pi * 0.09 * t)) * vel
 
 
-def pad(freqs, dur, vel=0.18, bright=1400):
+def analog_pad(freqs, dur, vel=0.14, bright=1400):
+    """warm detuned saw pad; its filter opens and closes across the chord"""
     n = int(SR * (dur + 1.8)); t = np.arange(n) / SR
+    cut = bright * (0.55 + 0.45 * np.sin(np.pi * np.clip(t / (dur + 0.5), 0, 1)))
     x = np.zeros(n)
     for f in freqs:
-        for d in (-0.0035, 0.0, 0.0041):
-            ph = np.random.uniform(0, 2 * np.pi)
-            g = f * (1 + d)
-            x += np.sin(2 * np.pi * g * t + ph) + 0.25 * np.sin(4 * np.pi * g * t + ph) + 0.08 * np.sin(6 * np.pi * g * t)
+        for d in (-0.006, 0.0, 0.0061):
+            g = f * (1 + d); ph = np.random.uniform(0, 2 * np.pi)
+            for k in range(1, 16):
+                fk = g * k
+                if fk > 5000:
+                    break
+                x += (1 / k) * np.exp(-fk / cut) * np.sin(2 * np.pi * fk * t + ph * k)
     x /= max(1, len(freqs) * 3)
-    env = np.minimum(1, t / 1.1)
+    env = np.minimum(1, t / 0.9)
     s = int(SR * dur)
     env[s:] *= np.exp(-(t[s:] - dur) / 0.7)
-    x = onepole_lp(x * env, bright)
-    # slow swell keeps it breathing
-    return x * (0.85 + 0.15 * np.sin(2 * np.pi * 0.11 * t)) * vel
+    return x * env * vel
 
 
 def bass(f, dur, vel=0.5):
     n = int(SR * (dur + 0.6)); t = np.arange(n) / SR
-    x = np.sin(2 * np.pi * f * t) + 0.22 * np.sin(4 * np.pi * f * t) * np.exp(-t / 0.4)
-    env = np.minimum(1, t / 0.03) * np.exp(-t / (dur * 1.4 + 0.4))
+    x = np.sin(2 * np.pi * f * t) + 0.18 * np.sin(4 * np.pi * f * t) * np.exp(-t / 0.4)
+    env = np.minimum(1, t / 0.04) * np.exp(-t / (dur * 1.4 + 0.4))
     return x * env * vel
 
 
-def flute(f, dur, vel=0.4):
-    n = int(SR * (dur + 0.5)); t = np.arange(n) / SR
-    vib = 1 + 0.004 * np.sin(2 * np.pi * 5.0 * t) * np.minimum(1, t / 0.4)
-    ph = 2 * np.pi * f * np.cumsum(vib) / SR
-    x = np.sin(ph) + 0.18 * np.sin(2 * ph) + 0.06 * np.sin(3 * ph)
-    x += 0.04 * onepole_lp(np.random.randn(n), 2000)
-    env = np.minimum(1, t / 0.09)
-    s = int(SR * dur)
-    env[s:] *= np.exp(-(t[s:] - dur) / 0.12)
-    return x * env * vel
+def pluck(f, dur, vel=0.6):
+    """dark crystal pluck (Cindra)"""
+    n = int(SR * (dur + 1.2)); t = np.arange(n) / SR
+    x = np.zeros(n)
+    for k, a in enumerate([1.0, 0.5, 0.3, 0.15, 0.08], start=1):
+        x += a * np.sin(2 * np.pi * f * k * t) * np.exp(-t / (1.0 / k ** 0.7))
+    return onepole_lp(x * np.minimum(1, t / 0.003), 2600) * vel
 
 
-INSTR = {'epiano': epiano, 'musicbox': musicbox, 'harp': pluckharp, 'flute': flute}
+def bubble_bell(f, dur, vel=0.5):
+    """watery FM with a little pitch dip (Nerith)"""
+    n = int(SR * (dur + 1.2)); t = np.arange(n) / SR
+    bend = 1 - 0.03 * np.exp(-t / 0.05)
+    ph = 2 * np.pi * f * np.cumsum(bend) / SR
+    x = np.sin(ph + 1.4 * np.exp(-t / 0.15) * np.sin(2 * ph)) * np.exp(-t / 0.9)
+    return x * np.minimum(1, t / 0.002) * vel
+
+
+INSTR = {'lead': lead, 'bell': fmbell, 'kalimba': kalimba, 'pluck': pluck, 'bubble': bubble_bell, 'epiano': epiano}
 
 
 def hall(x, seconds=2.8, mix=0.32, seed=0, damp=3200):
@@ -142,11 +210,27 @@ def hall(x, seconds=2.8, mix=0.32, seed=0, damp=3200):
     for ch in range(2):
         ir = rng.standard_normal(n) * np.exp(-t / (seconds / 4.5))
         ir = onepole_lp(ir, damp)
-        ir[: int(SR * 0.012)] = 0                        # a little pre-delay
+        ir[: int(SR * 0.015)] = 0
         ir /= np.sqrt(np.sum(ir ** 2))
         wet = fftconvolve(x, ir)[: len(x)]
         out.append((1 - mix) * x + mix * wet * 1.6)
     return out[0], out[1]
+
+
+def pingpong(L, R, delay, fb=0.38, mix=0.28, damp=2600):
+    """stereo echo bouncing left-right: the 'space' in space music"""
+    d = int(SR * delay); n = len(L)
+    wl, wr = np.zeros(n), np.zeros(n)
+    src = onepole_lp((L + R) * 0.5, damp)
+    g = 1.0
+    for k in range(1, 7):
+        g *= fb
+        off = d * k
+        if off >= n:
+            break
+        tgt = wl if k % 2 else wr
+        tgt[off:] += src[:n - off] * g
+    return L + wl * mix * 2, R + wr * mix * 2
 
 
 def place(buf, start, sig, gain=1.0, pan=0.0):
@@ -161,7 +245,7 @@ def place(buf, start, sig, gain=1.0, pan=0.0):
 
 def to_ogg(name, left, right=None, q='3'):
     raw = os.path.join('/tmp', name + '.wav')
-    data = np.stack([left, right if right is not None else left], 1) if right is not None else left.reshape(-1, 1)
+    data = np.stack([left, right], 1) if right is not None else left.reshape(-1, 1)
     pcm = (np.clip(data, -1, 1) * 32767).astype('<i2')
     with wave.open(raw, 'wb') as w:
         w.setnchannels(data.shape[1]); w.setsampwidth(2); w.setframerate(SR); w.writeframes(pcm.tobytes())
@@ -236,20 +320,20 @@ def compose(scale, prog, rng, lo=7, hi=18):
 
 
 WORLDS = {
-    #          root (from C4), bpm, scale, lead, colour instrument, progressions (8 bars each)
-    'earth': dict(root=0, bpm=70, scale=MAJ, lead='epiano', colour='flute', bright=1600,
+    #  root (from C4), bpm, scale, lead + sparkle instruments, pad style, choir vowel, progressions
+    'earth': dict(root=0, bpm=66, scale=MAJ, lead='lead', sparkle='kalimba', choir='o', bright=1500,
                   progs=[['I', 'vi', 'IV', 'V', 'I', 'vi', 'IV', 'I'], ['IV', 'I', 'V', 'vi', 'IV', 'I', 'V', 'I'],
                          ['I', 'iii', 'vi', 'IV', 'ii', 'V', 'IV', 'I'], ['vi', 'IV', 'I', 'V', 'vi', 'IV', 'V', 'I']]),
-    'luna': dict(root=-3, bpm=60, scale=MAJ, lead='musicbox', colour='epiano', bright=1200,
+    'luna': dict(root=-3, bpm=58, scale=MAJ, lead='bell', sparkle='bell', choir='u', bright=1100,
                  progs=[['I', 'IV', 'vi', 'IV', 'I', 'iii', 'IV', 'I'], ['vi', 'IV', 'I', 'V', 'vi', 'IV', 'V', 'I'],
                         ['IV', 'I', 'IV', 'iii', 'ii', 'vi', 'V', 'I'], ['I', 'V', 'vi', 'iii', 'IV', 'I', 'V', 'I']]),
-    'cindra': dict(root=2, bpm=66, scale=MIN, lead='harp', colour='flute', bright=1300,
+    'cindra': dict(root=2, bpm=62, scale=MIN, lead='pluck', sparkle='bell', choir='a', bright=1100,
                    progs=[['i', 'VI', 'III', 'VII', 'i', 'VI', 'VII', 'i'], ['i', 'iv', 'VII', 'III', 'VI', 'iv', 'v', 'i'],
                           ['VI', 'VII', 'i', 'i', 'VI', 'VII', 'v', 'i'], ['i', 'III', 'VII', 'iv', 'i', 'VI', 'VII', 'i']]),
-    'nerith': dict(root=4, bpm=62, scale=MAJ, lead='harp', colour='musicbox', bright=1500,
+    'nerith': dict(root=4, bpm=60, scale=MAJ, lead='bubble', sparkle='kalimba', choir='u', bright=1300,
                    progs=[['I', 'V', 'vi', 'IV', 'I', 'V', 'IV', 'I'], ['IV', 'vi', 'I', 'V', 'IV', 'vi', 'V', 'I'],
                           ['vi', 'iii', 'IV', 'I', 'ii', 'IV', 'V', 'I'], ['I', 'IV', 'I', 'V', 'vi', 'IV', 'V', 'I']]),
-    'vela': dict(root=-2, bpm=58, scale=MAJ, lead='musicbox', colour='flute', bright=1800,
+    'vela': dict(root=-2, bpm=56, scale=MAJ, lead='lead', sparkle='bell', choir='a', bright=1700,
                  progs=[['I', 'iii', 'IV', 'I', 'vi', 'IV', 'V', 'I'], ['IV', 'V', 'iii', 'vi', 'ii', 'V', 'IV', 'I'],
                         ['I', 'vi', 'iii', 'IV', 'I', 'vi', 'V', 'I'], ['vi', 'V', 'IV', 'I', 'ii', 'IV', 'V', 'I']]),
 }
@@ -262,61 +346,74 @@ def phrase(w, k):
     scale, root, prog = cfg['scale'], cfg['root'], cfg['progs'][k]
     eighth = 60 / cfg['bpm'] / 2
     bars = 8
-    total = bars * 8 * eighth + 3.5
+    total = bars * 8 * eighth + 4.0
     buf = [np.zeros(int(SR * total)), np.zeros(int(SR * total))]
     mel = compose(scale, prog, rng)
-    lead = INSTR[cfg['lead']]
-    loct = 0 if cfg['lead'] == 'musicbox' else -12     # warm instruments sit an octave lower
+    ld = INSTR[cfg['lead']]
+    loct = 0 if cfg['lead'] in ('bell', 'bubble') else -12
     for (s, d, sd) in mel:
         f = hz(root + loct + sd_to_semi(scale, sd))
-        v = 0.55 + 0.15 * rng.random()
-        place(buf, s * eighth, lead(f, d * eighth * 0.95, v), 0.55, -0.05)
-    # the colour instrument doubles the answer an octave up, softly
-    col = INSTR[cfg['colour']]
+        v = 0.5 + 0.15 * rng.random()
+        place(buf, s * eighth, ld(f, d * eighth * 0.95, v), 0.5 if cfg['lead'] == 'lead' else 0.42, -0.08)
+    # star sparkles: the sparkle instrument echoes some melody notes two octaves up
+    sp = INSTR[cfg['sparkle']]
     for (s, d, sd) in mel:
-        if 32 <= s < 56:
-            f = hz(root + loct + 12 + sd_to_semi(scale, sd))
-            place(buf, s * eighth, col(f, d * eighth * 0.95, 0.35), 0.28 if cfg['colour'] != 'flute' else 0.2, 0.3)
+        if (32 <= s < 56 and rng.random() < 0.8) or rng.random() < 0.18:
+            f = hz(root + loct + 24 + sd_to_semi(scale, sd))
+            place(buf, s * eighth + 0.02, sp(f, 0.3, 0.3), 0.16, 0.45 * (1 if rng.random() < 0.5 else -1))
     for b, ch in enumerate(prog):
         deg = DEG[ch]
         tones = [root - 12 + sd_to_semi(scale, x) for x in chord_tones(scale, deg, seventh=(b % 4 == 3))]
         start = b * 8 * eighth
-        # pad
-        place(buf, start, pad([hz(x) for x in tones], 8 * eighth, 0.22, cfg['bright']), 0.6, 0.0)
-        # bass: root on 1, fifth on 3 (soft)
+        place(buf, start, analog_pad([hz(x) for x in tones], 8 * eighth, 0.2, cfg['bright']), 0.55, -0.15)
+        if b % 2 == 0:
+            place(buf, start, choir([hz(x + 12) for x in tones[:3]], 16 * eighth, 0.2, cfg['choir']), 0.45, 0.2)
         place(buf, start, bass(hz(tones[0] - 12), 4 * eighth, 0.5), 0.55, 0.0)
-        place(buf, start + 4 * eighth, bass(hz(tones[2] - 24 if tones[2] - 24 > tones[0] - 19 else tones[0] - 12), 4 * eighth, 0.35), 0.5, 0.0)
-        # broken chord: up and down in eighths, very soft, panned a touch left
-        arp = [tones[0], tones[1], tones[2], tones[1] + 12 if len(tones) < 4 else tones[3], tones[2], tones[1], tones[2], tones[1]]
-        for i, n in enumerate(arp):
-            if b == bars - 1 and i > 3:
+        place(buf, start + 4 * eighth, bass(hz(tones[0] - 12 + (7 if tones[0] - 5 < 0 else -5)), 4 * eighth, 0.32), 0.5, 0.0)
+        # slow twinkling arpeggio, very soft, alternating sides
+        arp = [tones[0] + 12, tones[1] + 12, tones[2] + 12, tones[1] + 24]
+        for i in range(4):
+            if b == bars - 1 and i > 1:
                 break
-            place(buf, start + i * eighth, epiano(hz(n), eighth * 1.6, 0.28 + 0.06 * (i % 4 == 0)), 0.32, -0.35)
-    L = hall(buf[0], mix=0.34, seed=1)[0]
-    R = hall(buf[1], mix=0.34, seed=2)[1]
+            place(buf, start + i * 2 * eighth, kalimba(hz(arp[i]), eighth * 1.5, 0.25), 0.22, 0.5 if i % 2 else -0.5)
+    L, R = pingpong(buf[0], buf[1], eighth * 1.5)
+    L = hall(L, 3.6, mix=0.4, seed=1)[0]
+    R = hall(R, 3.6, mix=0.4, seed=2)[1]
     m = max(np.max(np.abs(L)), np.max(np.abs(R)), 1e-9)
     L, R = L / m * 0.8, R / m * 0.8
-    fade = int(SR * 2.5)
+    fade = int(SR * 3.0)
     L[-fade:] *= np.linspace(1, 0, fade); R[-fade:] *= np.linspace(1, 0, fade)
     L[:300] *= np.linspace(0, 1, 300); R[:300] *= np.linspace(0, 1, 300)
     return L, R
 
 
 def ambience(w):
-    """a hushed bed for the quiet stretches: the home chord far away, a little air"""
+    """deep space drone for the quiet stretches: a far choir, a breathing sub,
+    star twinkles and the odd far-off radio beep"""
     cfg = WORLDS[w]
-    dur = 24.0
+    rng = np.random.default_rng(len(w) * 7)
+    dur = 28.0
     n = int(SR * dur); t = np.arange(n) / SR
-    tones = [cfg['root'] - 24 + sd_to_semi(cfg['scale'], x) for x in (0, 4, 7, 9)]
-    x = pad([hz(v) for v in tones], dur, 0.25, 700)[:n]
-    air = onepole_lp(onepole_hp(np.random.randn(n), 300), 1800) * 0.012
-    air *= 0.6 + 0.4 * np.sin(2 * np.pi * t / 8.0) ** 2
-    x = x + air
-    # seamless loop: crossfade the end into the start
+    tones = [cfg['root'] - 24 + sd_to_semi(cfg['scale'], x) for x in (0, 4, 7)]
+    x = choir([hz(v + 12) for v in tones], dur, 0.22, cfg['choir'])[:n]
+    x += analog_pad([hz(v) for v in tones], dur, 0.12, 500)[:n]
+    x += 0.10 * np.sin(2 * np.pi * hz(tones[0] - 12) * t) * (0.6 + 0.4 * np.sin(2 * np.pi * t / 7.0))
+    air = onepole_lp(onepole_hp(np.random.randn(n), 400), 2200) * 0.01
+    x += air * (0.5 + 0.5 * np.sin(2 * np.pi * t / 9.0) ** 2)
+    for k in range(14):
+        at = rng.uniform(0.5, dur - 3)
+        f = hz(cfg['root'] + 12 + pent(int(rng.integers(5, 14))))
+        i = int(at * SR); sig = fmbell(f, 0.2, 0.18, ratio=4.0, index=1.5, tau=1.1)
+        kk = min(n - i, len(sig)); x[i:i + kk] += sig[:kk]
+    for k in range(3):
+        at = rng.uniform(2, dur - 3); i = int(at * SR)
+        for j in range(3):
+            tt = T(0.06); b = np.sin(2 * np.pi * (1800 + 200 * j) * tt) * np.sin(np.linspace(0, np.pi, len(tt))) * 0.02
+            o = i + int(j * 0.11 * SR); x[o:o + len(b)] += b
     cf = int(SR * 3)
     x[:cf] = x[:cf] * np.linspace(0, 1, cf) + x[-cf:] * np.linspace(1, 0, cf)
     x = x[:-cf]
-    L, R = hall(x, 2.2, 0.4, 3, 2400)
+    L, R = hall(x, 3.4, 0.5, 3, 2600)
     m = max(np.max(np.abs(L)), 1e-9)
     return L / m * 0.35, R / m * 0.35
 
@@ -330,23 +427,42 @@ def pent(i):
     return PENT[d] + 12 * o
 
 
-def marim(f, dur=0.35, vel=0.7):
+C = lambda i: hz(pent(i))       # C major pentatonic, i = steps from C4
+
+
+def bloop(f0, f1, dur=0.14, vel=0.7, shape=0.04):
+    """a bubbly sine that slides from f0 to f1"""
     t = T(dur)
-    x = (np.sin(2 * np.pi * f * t) * np.exp(-t / 0.12) + 0.35 * np.sin(2 * np.pi * f * 4 * t) * np.exp(-t / 0.025)
-         + 0.1 * np.sin(2 * np.pi * f * 10 * t) * np.exp(-t / 0.008))
-    return x * np.minimum(1, t / 0.002) * vel
+    f = f1 + (f0 - f1) * np.exp(-t / shape)
+    x = np.sin(2 * np.pi * np.cumsum(f) / SR) + 0.15 * np.sin(4 * np.pi * np.cumsum(f) / SR)
+    return x * np.minimum(1, t / 0.003) * np.exp(-t / (dur * 0.45)) * vel
 
 
-def glass(f, dur=0.6, vel=0.5):
+def ping(f, dur=0.6, vel=0.5):
+    x = fmbell(f, 0.05, vel, ratio=3.0, index=1.2, tau=dur * 0.45)[: int(SR * dur)]
+    k = min(len(x), int(SR * 0.08))
+    x[-k:] *= np.linspace(1, 0, k)
+    return x
+
+
+def sweep(f0, f1, dur, vel=0.4, noise=0.0):
+    """soft laser/whoosh: a sine glide with optional airy noise"""
     t = T(dur)
-    x = np.sin(2 * np.pi * f * t) * np.exp(-t / 0.3) + 0.3 * np.sin(2 * np.pi * f * 2.76 * t) * np.exp(-t / 0.12)
-    return x * np.minimum(1, t / 0.003) * vel
+    f = f0 * (f1 / f0) ** (t / dur)
+    x = np.sin(2 * np.pi * np.cumsum(f) / SR)
+    if noise:
+        x += noise * onepole_lp(onepole_hp(np.random.randn(len(t)), 400), 3000)
+    return x * np.sin(np.linspace(0, np.pi, len(t))) ** 0.8 * vel
 
 
-def bell(f, dur=1.0, vel=0.5):
+def shimmer(base, n=5, step=0.045, vel=0.45, up=True):
+    return seq([(i * step, ping(C(base + (i if up else -i)), 0.7, vel), 0.6) for i in range(n)], n * step + 0.8)
+
+
+def softnoise(dur, lo, hi, tau):
     t = T(dur)
-    mod = np.sin(2 * np.pi * f * 1.4 * t) * 1.2 * np.exp(-t / 0.2)
-    return np.sin(2 * np.pi * f * t + mod) * np.exp(-t / (dur / 3)) * np.minimum(1, t / 0.002) * vel
+    x = onepole_lp(onepole_hp(np.random.randn(len(t)), lo), hi)
+    return x * np.exp(-t / tau) * np.minimum(1, t / 0.004)
 
 
 def seq(parts, dur):
@@ -358,15 +474,17 @@ def seq(parts, dur):
     return x
 
 
-def softnoise(dur, lo, hi, tau):
-    t = T(dur)
-    x = onepole_lp(onepole_hp(np.random.randn(len(t)), lo), hi)
-    return x * np.exp(-t / tau) * np.minimum(1, t / 0.004)
-
-
-def room(x, mix=0.18):
-    L, _ = hall(x, 0.9, mix, 5, 4500)
+def room(x, mix=0.2):
+    L, _ = hall(x, 1.2, mix, 5, 4500)
     return L
+
+
+def space(x, mix=0.3):
+    """effects that should feel big get a short echo too"""
+    d = int(SR * 0.13); y = x.copy()
+    for k in range(1, 4):
+        y[d * k:] += x[:len(x) - d * k] * 0.35 ** k
+    return room(y, mix)
 
 
 def norm(x, peak):
@@ -377,67 +495,151 @@ def norm(x, peak):
     return x
 
 
-C = lambda i: hz(pent(i))       # C major pentatonic, i = steps from C4
-
-
 def sfx_all():
     np.random.seed(11)
     S = {}
-    S['tap'] = norm(marim(hz(-5), 0.12, 0.8), 0.32)
-    S['click'] = norm(marim(hz(2), 0.08, 0.7), 0.3)
-    S['hover'] = norm(glass(C(7), 0.12, 0.4), 0.18)
-    S['pop'] = norm(room(seq([(0, marim(C(5), 0.25), 1), (0, glass(C(10), 0.2), 0.3)], 0.3)), 0.45)
-    S['pop_hi'] = norm(room(seq([(0, marim(C(7), 0.25), 1), (0, glass(C(12), 0.2), 0.3)], 0.3)), 0.45)
+    S['tap'] = norm(bloop(hz(7), hz(0), 0.09, 0.8, 0.02), 0.3)
+    S['click'] = norm(bloop(hz(12), hz(7), 0.07, 0.8, 0.015), 0.28)
+    S['hover'] = norm(ping(C(9), 0.15, 0.4), 0.16)
+    S['pop'] = norm(room(seq([(0, bloop(C(3), C(7), 0.16, 0.9, 0.03), 1), (0.02, ping(C(10), 0.25), 0.25)], 0.3)), 0.45)
+    S['pop_hi'] = norm(room(seq([(0, bloop(C(5), C(9), 0.16, 0.9, 0.03), 1), (0.02, ping(C(12), 0.25), 0.25)], 0.3)), 0.45)
     for k in range(1, 9):
         base = 3 + k                                  # climbs the pentatonic with the tier
-        x = seq([(0, marim(C(base), 0.5), 0.8), (0.06, glass(C(base + 2), 0.7, 0.5), 0.6),
-                 (0.12, glass(C(base + 4), 0.9, 0.4), 0.5 if k > 3 else 0.0)], 1.0)
-        S[f'merge{k}'] = norm(room(x, 0.25), 0.5)
-    S['merge_crown'] = norm(room(seq([(i * 0.09, bell(C(7 + i), 1.4, 0.6), 0.7) for i in range(5)], 2.0), 0.3), 0.6)
-    S['coin'] = norm(room(seq([(0, glass(C(10), 0.4), 0.7), (0.07, glass(C(12), 0.5), 0.7)], 0.6)), 0.42)
-    S['sell'] = norm(room(seq([(0, glass(C(9), 0.35), 0.6), (0.06, glass(C(7), 0.4), 0.5)], 0.5)), 0.38)
-    S['collect'] = norm(room(seq([(i * 0.07, glass(C(8 + i), 0.6), 0.6) for i in range(4)], 1.0)), 0.48)
-    S['ready'] = norm(room(seq([(0, bell(C(9), 1.2, 0.5), 0.6), (0.12, bell(C(11), 1.2, 0.5), 0.5)], 1.4)), 0.4)
-    S['levelup'] = norm(room(seq([(i * 0.12, bell(C(5 + 2 * i), 1.4, 0.6), 0.6) for i in range(5)]
-                                 + [(0, epiano(hz(-12), 1.0, 0.4), 0.4), (0, epiano(hz(-5), 1.0, 0.3), 0.3)], 2.4), 0.35), 0.6)
-    S['discover'] = norm(room(seq([(i * 0.1, bell(C(8 + i), 1.5, 0.5), 0.5) for i in range(4)], 2.0), 0.35), 0.5)
-    S['unlock'] = norm(room(seq([(0, bell(C(7), 1.2), 0.6), (0.14, bell(C(9), 1.2), 0.6), (0.28, bell(C(12), 1.6), 0.6)], 2.0), 0.3), 0.52)
-    S['build'] = norm(room(seq([(0, marim(C(0), 0.4), 0.8), (0.12, marim(C(2), 0.4), 0.7), (0.24, marim(C(4), 0.4), 0.7),
-                                (0.4, bell(C(7), 1.4), 0.6), (0.4, bell(C(9), 1.4), 0.4)], 2.0), 0.3), 0.58)
-    S['install'] = norm(room(seq([(0, marim(C(2), 0.3), 0.7), (0.1, bell(C(7), 1.2), 0.6)], 1.4)), 0.5)
-    S['boost'] = norm(room(seq([(i * 0.05, glass(C(6 + i), 0.4), 0.5) for i in range(6)], 0.9)), 0.45)
-    S['fuel'] = norm(room(seq([(0, softnoise(0.5, 200, 1500, 0.15), 0.5), (0, glass(C(5), 0.5), 0.5)], 0.6)), 0.4)
-    S['bag'] = norm(room(seq([(0, marim(C(2), 0.25), 1), (0, softnoise(0.15, 800, 3000, 0.04), 0.5)], 0.3)), 0.35)
-    S['lift'] = norm(glass(C(6), 0.15, 0.5), 0.22)
-    S['land'] = norm(marim(C(3), 0.18, 0.7), 0.3)
-    S['swap'] = norm(seq([(0, marim(C(4), 0.15), 0.6), (0.05, marim(C(5), 0.15), 0.6)], 0.25), 0.3)
-    S['open'] = norm(room(seq([(0, glass(C(5), 0.3), 0.5), (0.05, glass(C(7), 0.3), 0.5)], 0.45)), 0.3)
-    S['close'] = norm(room(seq([(0, glass(C(7), 0.25), 0.5), (0.05, glass(C(5), 0.25), 0.5)], 0.4)), 0.26)
-    S['tab'] = norm(marim(C(4), 0.15, 0.7), 0.28)
-    S['nope'] = norm(seq([(0, marim(hz(-17), 0.25, 0.9), 0.8), (0.09, marim(hz(-19), 0.3, 0.9), 0.7)], 0.45), 0.32)
+        x = seq([(0, bloop(C(base - 3), C(base), 0.2, 0.8, 0.03), 0.7),
+                 (0.05, ping(C(base + 2), 0.8, 0.5), 0.6),
+                 (0.10, ping(C(base + 4), 0.9, 0.4), 0.5 if k > 2 else 0.0),
+                 (0.0, sweep(C(base) * 0.5, C(base + 5), 0.35, 0.2), 0.4 if k > 4 else 0.0)], 1.1)
+        S[f'merge{k}'] = norm(room(x, 0.28), 0.5)
+    S['merge_crown'] = norm(space(seq([(i * 0.08, ping(C(7 + i), 1.4, 0.6), 0.7) for i in range(6)]
+                                      + [(0, sweep(200, 1600, 0.6, 0.25, 0.3), 0.6)], 2.2), 0.35), 0.6)
+    S['coin'] = norm(room(seq([(0, ping(C(11), 0.4), 0.7), (0.06, ping(C(13), 0.5), 0.7)], 0.6)), 0.42)
+    S['sell'] = norm(room(seq([(0, ping(C(10), 0.35), 0.6), (0.06, ping(C(8), 0.4), 0.5)], 0.5)), 0.38)
+    S['collect'] = norm(space(shimmer(8, 4, 0.06, 0.5), 0.25), 0.48)
+    S['ready'] = norm(space(seq([(0, ping(C(9), 1.0, 0.5), 0.6), (0.12, ping(C(11), 1.0, 0.5), 0.5)], 1.4), 0.3), 0.4)
+    S['levelup'] = norm(space(seq([(i * 0.11, ping(C(5 + 2 * i), 1.3, 0.6), 0.6) for i in range(5)]
+                                  + [(0, sweep(150, 1200, 0.9, 0.25, 0.2), 0.5), (0.3, choir([hz(0), hz(4), hz(7)], 1.0, 0.5, 'a'), 0.5)], 2.6), 0.35), 0.6)
+    S['discover'] = norm(space(seq([(i * 0.09, ping(C(8 + i), 1.4, 0.5), 0.5) for i in range(4)]
+                                   + [(0, sweep(500, 2400, 0.5, 0.15, 0.2), 0.4)], 2.0), 0.35), 0.5)
+    S['unlock'] = norm(space(seq([(0, ping(C(7), 1.2), 0.6), (0.14, ping(C(9), 1.2), 0.6), (0.28, ping(C(12), 1.6), 0.6),
+                                  (0.0, sweep(300, 900, 0.4, 0.2), 0.4)], 2.0), 0.3), 0.52)
+    S['build'] = norm(space(seq([(0, bloop(C(0), C(2), 0.3), 0.8), (0.12, bloop(C(2), C(4), 0.3), 0.7), (0.24, bloop(C(4), C(7), 0.3), 0.7),
+                                 (0.4, ping(C(7), 1.4), 0.6), (0.4, ping(C(9), 1.4), 0.4)], 2.0), 0.3), 0.58)
+    S['install'] = norm(room(seq([(0, bloop(C(2), C(4), 0.25), 0.7), (0.1, ping(C(7), 1.2), 0.6), (0, softnoise(0.2, 1500, 6000, 0.05), 0.15)], 1.4)), 0.5)
+    S['boost'] = norm(room(seq([(0, sweep(300, 2000, 0.4, 0.4), 0.6)] + [(i * 0.05, ping(C(6 + i), 0.4), 0.4) for i in range(6)], 0.9)), 0.45)
+    S['fuel'] = norm(room(seq([(0, softnoise(0.5, 200, 1500, 0.15), 0.5), (0, bloop(C(2), C(5), 0.4, 0.6, 0.1), 0.6)], 0.6)), 0.4)
+    S['bag'] = norm(room(seq([(0, bloop(C(4), C(1), 0.18), 1), (0, softnoise(0.12, 800, 3000, 0.03), 0.4)], 0.3)), 0.35)
+    S['lift'] = norm(bloop(C(5), C(8), 0.12, 0.6, 0.03), 0.22)
+    S['land'] = norm(bloop(C(6), C(3), 0.14, 0.7, 0.03), 0.28)
+    S['swap'] = norm(seq([(0, bloop(C(4), C(6), 0.1), 0.6), (0.05, bloop(C(6), C(4), 0.1), 0.6)], 0.2), 0.28)
+    S['open'] = norm(room(seq([(0, sweep(400, 900, 0.18, 0.4), 0.6), (0.06, ping(C(9), 0.3), 0.4)], 0.45)), 0.3)
+    S['close'] = norm(room(seq([(0, sweep(900, 400, 0.18, 0.4), 0.6)], 0.4)), 0.24)
+    S['tab'] = norm(bloop(C(6), C(4), 0.1, 0.7, 0.02), 0.26)
+    t = T(0.5)
+    wah = np.sin(2 * np.pi * np.cumsum(hz(-10) * (1 - 0.25 * t / 0.5) * (1 + 0.04 * np.sin(2 * np.pi * 7 * t))) / SR)
+    S['nope'] = norm(onepole_lp(wah + 0.15 * np.sin(2 * np.pi * np.cumsum(hz(-22) * np.ones(len(t))) / SR), 900) * np.exp(-t / 0.22) * np.minimum(1, t / 0.01), 0.32)
     S['error'] = S['nope']
-    S['dig'] = norm(room(seq([(0, softnoise(0.3, 120, 900, 0.07), 1), (0, marim(hz(-14), 0.25), 0.6)], 0.35)), 0.4)
-    S['whoosh'] = norm(softnoise(0.6, 300, 2500, 0.2) * np.sin(np.linspace(0, np.pi, int(SR * 0.6))), 0.3)
-    t = T(1.6)
-    S['meteor'] = norm(room(softnoise(1.6, 80, 1200, 0.5) * np.sin(np.linspace(0, np.pi, len(t))) ** 0.5
-                            + 0.8 * np.sin(2 * np.pi * 55 * t) * np.exp(-np.maximum(0, t - 0.9) / 0.25) * (t > 0.9)), 0.55)
-    t = T(2.6)
-    S['launch'] = norm(room(softnoise(2.6, 60, 1400, 1.2) * np.minimum(1, t / 0.8)
-                            + seq([(0.6 + i * 0.15, bell(C(5 + 2 * i), 1.2), 0.4) for i in range(5)], 2.6), 0.3), 0.6)
+    S['dig'] = norm(room(seq([(0, softnoise(0.3, 120, 900, 0.07), 1), (0, bloop(hz(-12), hz(-17), 0.2), 0.6)], 0.35)), 0.4)
+    S['whoosh'] = norm(sweep(300, 1200, 0.5, 0.2, 1.4), 0.3)
+    t = T(1.8)
+    S['meteor'] = norm(space(softnoise(1.8, 80, 1400, 0.6) * np.sin(np.linspace(0, np.pi, len(t))) ** 0.5
+                             + np.concatenate([sweep(1600, 120, 1.0, 0.25), np.zeros(len(t) - int(SR * 1.0))])
+                             + 0.8 * np.sin(2 * np.pi * 50 * t) * np.exp(-np.maximum(0, t - 1.0) / 0.25) * (t > 1.0), 0.25), 0.55)
+    t = T(2.8)
+    S['launch'] = norm(space(softnoise(2.8, 50, 1400, 1.3) * np.minimum(1, t / 0.8)
+                             + np.concatenate([np.zeros(int(SR * 0.4)), sweep(80, 900, 2.0, 0.3), np.zeros(len(t) - int(SR * 2.4))])
+                             + seq([(0.8 + i * 0.14, ping(C(5 + 2 * i), 1.2), 0.4) for i in range(5)], 2.8), 0.3), 0.6)
     for i in range(5):
-        S[f'streak{i + 1}'] = norm(room(seq([(0, glass(C(7 + 2 * i), 0.5), 0.7), (0.05, glass(C(9 + 2 * i), 0.6), 0.5)], 0.7)), 0.42)
-    tb = T(0.35)
-    S['boing'] = norm(np.sin(2 * np.pi * np.cumsum(hz(-5) * (1 + 0.5 * np.exp(-tb / 0.05) * np.sin(2 * np.pi * 9 * tb))) / SR)
-                      * np.exp(-tb / 0.12), 0.32)
-    # voices: soft vowel-ish blips (formant-filtered, gentle)
-    vow = [(700, 1100), (400, 1700), (300, 2300), (500, 900), (600, 1500), (350, 800)]
-    for k, (f1, f2) in enumerate(vow):
-        tt = T(0.11)
-        f0 = hz(-2 + (k % 3) * 2)
-        src = np.sign(np.sin(2 * np.pi * f0 * tt)) * 0.3 + np.sin(2 * np.pi * f0 * tt)
-        x = onepole_lp(src, f2) * 0.6 + onepole_lp(src, f1) * 0.4
-        x *= np.sin(np.linspace(0, np.pi, len(tt))) ** 0.7
-        S[f'blip{k + 1}'] = norm(x, 0.3)
+        S[f'streak{i + 1}'] = norm(room(seq([(0, ping(C(7 + 2 * i), 0.5), 0.7), (0.05, ping(C(9 + 2 * i), 0.6), 0.5),
+                                             (0, bloop(C(4 + 2 * i), C(7 + 2 * i), 0.15), 0.4)], 0.7)), 0.42)
+    tb = T(0.4)
+    S['boing'] = norm(np.sin(2 * np.pi * np.cumsum(hz(-5) * (1 + 0.6 * np.exp(-tb / 0.08) * np.sin(2 * np.pi * 11 * tb))) / SR)
+                      * np.exp(-tb / 0.14), 0.32)
+    S['goo'] = norm(room(seq([(i * 0.07, bloop(C(2 + i) * 0.7, C(5 + i), 0.12, 0.8, 0.02), 0.7) for i in range(4)], 0.6)), 0.4)
+    return S
+
+
+# ------------------------------------------------------------------- voices
+VOICE_TYPES = {
+    #           f0 (Hz), formant scale, glide, vibrato rate/depth, extra
+    'squeak': dict(f0=420, fs=1.35, glide=0.18, vib=(9, 0.03), dur=(0.07, 0.11)),
+    'chirp':  dict(f0=330, fs=1.2, glide=0.25, vib=(6, 0.02), dur=(0.08, 0.13), trill=True),
+    'mid':    dict(f0=200, fs=1.0, glide=0.12, vib=(5, 0.015), dur=(0.10, 0.15)),
+    'deep':   dict(f0=95, fs=0.78, glide=0.08, vib=(4, 0.01), dur=(0.13, 0.19)),
+    'robot':  dict(f0=150, fs=1.0, glide=0.0, vib=(0, 0), dur=(0.09, 0.13), robot=True),
+    'gloop':  dict(f0=260, fs=1.1, glide=0.2, vib=(17, 0.06), dur=(0.10, 0.15), bubbly=True),
+    'dreamy': dict(f0=240, fs=1.08, glide=0.1, vib=(5.5, 0.02), dur=(0.12, 0.17), airy=True),
+}
+CONS = ['', 'b', 'k', 'z', 'm', 'sh', 'l', 'g', 'p', 'n', 'v', 'r']
+VSEQ = ['a', 'o', 'u', 'e', 'i', 'ae']
+
+
+def voiced(f0curve, F, fs):
+    """glottal-pulse vowel: harmonics of the pitch curve weighted by the formants"""
+    n = len(f0curve)
+    ph = 2 * np.pi * np.cumsum(f0curve) / SR
+    x = np.zeros(n)
+    fm = float(np.mean(f0curve))
+    Fs = [f * fs for f in F]
+    for k in range(1, 40):
+        if fm * k > 5000:
+            break
+        a = formant_amp(fm * k, Fs, (80 * fs, 110 * fs, 150 * fs)) / k ** 0.15 + 0.004
+        x += a * np.sin(k * ph)
+    return x
+
+
+def syllable(vt, rng):
+    p = VOICE_TYPES[vt]
+    c = CONS[int(rng.integers(len(CONS)))]
+    v = VSEQ[int(rng.integers(len(VSEQ)))]
+    dur = rng.uniform(*p['dur'])
+    t = T(dur)
+    f0 = p['f0'] * (1 + rng.uniform(-0.08, 0.08))
+    g = p['glide'] * rng.choice([-1, 1])
+    curve = f0 * (1 + g * (t / dur - 0.3))
+    if p['vib'][0]:
+        curve *= 1 + p['vib'][1] * np.sin(2 * np.pi * p['vib'][0] * t)
+    if p.get('trill'):
+        curve *= 1 + 0.06 * (np.sin(2 * np.pi * 28 * t) > 0)
+    if p.get('robot'):
+        curve = np.round(curve / 25) * 25                       # stepped pitch
+    x = voiced(curve, VOWELS[v], p['fs'])
+    env = np.sin(np.linspace(0, np.pi, len(t))) ** 0.6
+    x *= env
+    # consonant onset
+    on = np.zeros(0)
+    if c in ('sh', 'z', 'v'):
+        on = softnoise(0.05, 2500 if c == 'sh' else 1800, 7000, 0.03) * (0.5 if c == 'sh' else 0.3)
+        if c in ('z', 'v'):
+            on = on + 0.3 * voiced(np.full(len(on), f0), VOWELS['u'], p['fs']) * np.linspace(0.3, 1, len(on))
+    elif c in ('k', 'p', 'g', 'b'):
+        on = softnoise(0.018, 800 if c in ('b', 'g') else 1500, 5000, 0.006) * 0.8
+    elif c in ('m', 'n', 'l', 'r'):
+        on = onepole_lp(voiced(np.full(int(SR * 0.04), f0 * (0.97)), VOWELS['u'], p['fs']), 700 if c in ('m', 'n') else 1500) * np.linspace(0.2, 1, int(SR * 0.04))
+        if c == 'r':
+            on *= 1 + 0.5 * np.sin(2 * np.pi * 30 * T(0.04))
+    x = np.concatenate([on, x])
+    if p.get('robot'):
+        tt = np.arange(len(x)) / SR
+        x = x * (0.6 + 0.4 * np.sin(2 * np.pi * 60 * tt))
+        x = np.tanh(x * 2.0) * 0.6
+    if p.get('bubbly'):
+        tt = np.arange(len(x)) / SR
+        x = x + 0.25 * np.sin(2 * np.pi * np.cumsum(500 + 300 * np.exp(-tt / 0.03)) / SR) * np.exp(-tt / 0.04)
+    if p.get('airy'):
+        tt = np.arange(len(x)) / SR
+        x = x + 0.35 * np.sin(2 * np.pi * f0 * 2 * tt) * np.sin(np.linspace(0, np.pi, len(tt))) + 0.03 * onepole_hp(np.random.randn(len(tt)), 3000)
+    x = onepole_hp(x, 90)
+    x = np.concatenate([x, np.zeros(int(SR * 0.08))])
+    return norm(room(x, 0.12 if not p.get('airy') else 0.3), 0.32)
+
+
+def voices():
+    S = {}
+    for vt in VOICE_TYPES:
+        rng = np.random.default_rng(sum(map(ord, vt)))
+        for k in range(8):
+            S[f'voice_{vt}_{k + 1}'] = syllable(vt, rng)
     return S
 
 
@@ -448,6 +650,13 @@ def main():
         for name, x in sfx_all().items():
             total += to_ogg(name, x, q='2')
         print('effects done')
+    if what in ('all', 'sfx', 'voice'):
+        for f in os.listdir(OUT):
+            if f.startswith('blip'):
+                os.remove(os.path.join(OUT, f))
+        for name, x in voices().items():
+            total += to_ogg(name, x, q='1')
+        print('voices done')
     if what in ('all', 'music'):
         for w in WORLDS:
             for k in range(4):

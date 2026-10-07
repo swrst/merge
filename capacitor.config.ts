@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'dev.artursolak.mergerocket',
-  appName: 'Merge Rocket',
+  appName: 'Gloop Galaxy',
   webDir: 'dist',
   android: {
     backgroundColor: '#7fd2fb',

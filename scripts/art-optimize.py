@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Shrink painted sprites to what the game actually shows.
 
-Every file under src/sprites/ is inlined into the single-file MergeRocket.html,
+Every file under src/sprites/ is inlined into the single-file GloopGalaxy.html,
 so a 250 kB item times 500 items is a 125 MB page. The board draws an item at
 ~60 px (168 px texture), so 256 px is plenty:
 

@@ -13,7 +13,7 @@
  * manifest to keep, no content rebuild. Drop the file in and reload.
  *
  * They live under src/ rather than public/ on purpose: the build inlines them
- * into the single-file MergeRocket.html, which a public/ file would not be.
+ * into the single-file GloopGalaxy.html, which a public/ file would not be.
  *
  * Square, transparent background, object filling most of the frame, 256x256 is
  * plenty for a tile. ART.md has the full brief and the whole filename list.

@@ -982,7 +982,7 @@ head('The guided intro');
   must(await t2.locator('#modal.open').count() === 0, 'and nothing else pops over it');
   const say2 = await t2.textContent('#tSay');
   await t2.waitForTimeout(1500);   // let the dimmers settle on a software renderer
-  must(/Big Tree/.test(say2), 'the first step is something to do: tap the tree');
+  must(/Whisperwood Tree/.test(say2), 'the first step is something to do: tap the tree');
   // the hole has to be over the Big Tree, and everything else has to be dimmed
   const spot = await t2.evaluate(() => {
     const g = window.__game, i = g.cells().findIndex(c => c && c.p === 'tree');
@@ -1173,6 +1173,17 @@ const bgS = await S();
 must(bgS.bingo.done.slice(0, 3).every(Boolean), 'handing in three things marks the top row');
 must(bgS.coins >= c0 + 60, `and a full row pays (${bgS.coins - c0} coins)`);
 await page.evaluate(() => window.__game.v9.closePop());
+
+head("Gloop's Goo Still");
+await set(() => { const g = window.__game, s = g.state(); s.lab.built = 1; s.still = 0; const b = s.boards[s.world]; for (let i = 0; i < 6; i++) b[b.length - 1 - i] = null; window.__board.sync(b); });
+const goo0 = (await S()).boards[(await S()).world].filter(c => c && /^goo/.test(c.id)).length;
+await page.evaluate(() => window.__game.v9.stillCollect());
+const gooS = await S();
+const goo1 = gooS.boards[gooS.world].filter(c => c && /^goo/.test(c.id)).length;
+must(goo1 === goo0 + 2, `a ready still bottles two goo blobs (${goo1 - goo0})`);
+must(gooS.still > Date.now() + 30 * 60000, 'and starts brewing again for about 40 minutes');
+await page.evaluate(() => window.__game.v9.stillCollect());
+must((await S()).boards[gooS.world].filter(c => c && /^goo/.test(c.id)).length === goo1, 'and cannot be collected again for free');
 
 head('Console');
 must(errors.length === 0, errors.length ? `console errors:\n${errors.join('\n')}` : 'no console errors');
