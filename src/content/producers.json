@@ -1461,10 +1461,11 @@
     "drops": [
       "fuelore",
       "scrap",
-      "fuelore",
+      "junkbolt",
       "fuelore",
       "scrap",
       "fuelore",
+      "junkbolt",
       "starcore"
     ],
     "mode": "once",

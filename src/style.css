@@ -2059,3 +2059,23 @@ html.ui-levelup_banner .app .luS{position:absolute;left:50%;top:100%;transform:t
 .app .side .qChip b{position:absolute;right:-4px;bottom:-4px;min-width:15px;height:15px;border-radius:99px;background:#fff;color:#6b4a20;font-size:9px;line-height:15px;text-align:center;padding:0 2px;box-shadow:0 1px 2px rgba(0,0,0,.3)}
 .app .side .qChip.pouch b{background:#ffe9a8;color:#3b2c8a}
 .app .side .qChip.pup .pupImg{width:26px;height:26px;margin:0}
+
+/* v35 — painted UI pieces */
+html.ui-level_badge .app .orb{background:var(--ui-level_badge) center/contain no-repeat;box-shadow:none;width:38px;height:38px;font-size:14px;text-shadow:0 1.5px 0 #1d2a6e,0 0 4px #1d2a6e}
+.app .order.ship .ufoFig{height:78px;width:auto;max-width:96px}
+.adPlay .uiIc{width:38px;height:38px}
+.app .adB .adPlay{background:none;box-shadow:none}
+.rcArt{display:flex;justify-content:center;margin:2px 0 6px}.rcArt .uiIc{width:72px;height:72px}
+html.ui-badge_dot .app .dot:not(:empty){background:var(--ui-badge_dot) center/cover no-repeat}
+html.ui-badge_dot .app .tab .dot:empty,html.ui-badge_dot .app .sideW .dot:empty,html.ui-badge_dot .app .bbBtn .dot:empty,html.ui-badge_dot .app .hubBtn .dot:empty{background:var(--ui-badge_dot) center/contain no-repeat;border:0;box-shadow:none}
+.app .hubBtn{background:none;border:0;box-shadow:none;width:64px;height:auto}
+.app .hubBtn .ti .uiIc{width:56px;height:56px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.35))}
+.app .hubBtn i{background:rgba(255,253,246,.95);border-radius:99px;padding:1px 7px;margin-top:-6px;box-shadow:0 2px 0 rgba(150,105,50,.3)}
+.app .sideW#tabRocket .ti .uiIc{width:30px;height:30px}
+.gpRocket .uiIc{width:44px;height:44px}
+.app .galBtn .ti .uiIc{width:44px;height:44px;filter:drop-shadow(0 0 6px rgba(160,200,255,.6))}
+.app .galBtn{background:none;border:0;box-shadow:none}
+.app .galBtn:before{display:none}
+.app .galBtn .galLbl{background:#2a1f6a;border-radius:99px;padding:0 6px;margin-top:-6px;border:1.5px solid #c9b8ff}
+.app .side .qChip.pouch .uiIc{width:24px;height:24px}
+.sCArt .uiIc{width:76px;height:76px}

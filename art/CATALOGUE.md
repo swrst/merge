@@ -81,7 +81,7 @@ Music Note → Whistle → Ukulele → Drum → Jukebox → One-Alien Band → B
 **Rocket Parts** · 8 steps · Lv 10 · from the Scrap Hull  
 Hex Bolt → Gear → Rocket Fin → Nose Cone → Booster → Fuel Tin → Engine Block → Mini Rocket
 
-**Weather Watch** · 8 steps · Lv 10 · from the Weather Balloon  
+**Weather Watch** · 8 steps · Lv 10 · from the Rain Cloud  
 Raindrop → Puff Cloud → Rain Cloud → Rainbow Cloud → Weather Vane → Weather Station → Cloud Machine → Rainbow Sundial
 
 ## Crater Camp — *Luna*

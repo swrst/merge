@@ -166,7 +166,7 @@ class PixiBoard {
     add('coin', ART.iconSvg('coin'), ART.spriteUi('icon_coin') || undefined);
     // shared tiles, plus each world's own set when it has been painted (tile_light_luna …)
     const tiles = ['tile_light', 'tile_dark', 'tile_locked'];
-    [...tiles, 'bubble_film', 'meteor', ...Object.keys(THEME).flatMap(w => tiles.map(t => t + '_' + w))].forEach(k => {
+    [...tiles, 'bubble_film', 'meteor', 'ic_star_tag', ...Object.keys(THEME).flatMap(w => tiles.map(t => t + '_' + w))].forEach(k => {
       const url = ART.spriteUi(k); if (url) add('ui:' + k, '', url);
     });
     await Promise.all(jobs);
@@ -791,11 +791,17 @@ class PixiBoard {
       const r = Math.max(7, this.cell * 0.15);
       if (!tg) {
         tg = new Container();
-        const g = new Graphics();
-        g.circle(0, 0, r).fill({ color: 0xff7a1a }).stroke({ color: 0xffffff, width: 2.5 });
-        const tx = new Text({ text: '★', style: { fontSize: r * 1.3, fill: 0xffffff, fontWeight: '700' } });
-        tx.anchor.set(0.5, 0.55);
-        tg.addChild(g, tx);
+        const pt = this.tex['ui:ic_star_tag'];
+        if (pt) {
+          // the painted star tag
+          const sp = new Sprite(pt); sp.anchor.set(0.5); sp.width = sp.height = r * 2.4; tg.addChild(sp);
+        } else {
+          const g = new Graphics();
+          g.circle(0, 0, r).fill({ color: 0xff7a1a }).stroke({ color: 0xffffff, width: 2.5 });
+          const tx = new Text({ text: '★', style: { fontSize: r * 1.3, fill: 0xffffff, fontWeight: '700' } });
+          tx.anchor.set(0.5, 0.55);
+          tg.addChild(g, tx);
+        }
         this.lFx.addChild(tg);
         this.wantTags[k] = tg;
       }
