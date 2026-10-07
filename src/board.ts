@@ -367,8 +367,8 @@ class PixiBoard {
     if (c.b) {
       // a painted overgrown tile already carries its weeds
       s.art = this.sprite('w:' + this.theme, i, 0.78);
-      if (this.tex['ui:tile_locked_' + this.theme] || this.tex['ui:tile_locked']) s.art.alpha = 0;
-      const t = new Text({ text: 'lv' + c.b, style: { fontFamily: 'Fredoka, sans-serif', fontSize: this.cell * 0.22, fontWeight: '700', fill: 0xffffff } });
+      s.art.alpha = 0; s.art.visible = false;   // every world has a painted locked tile now: no extra weeds on top
+      const t = new Text({ text: 'lv' + c.b, style: { fontFamily: 'Fredoka, sans-serif', fontSize: this.cell * 0.22, fontWeight: '700', fill: 0xffffff, stroke: { color: 0x4b2a86, width: Math.max(2, this.cell * 0.05) } } });
       t.anchor.set(0.5);
       const p = this.center(i);
       t.position.set(p.x + this.cell * 0.28, p.y + this.cell * 0.3);
