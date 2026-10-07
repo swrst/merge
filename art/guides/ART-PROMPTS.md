@@ -8,7 +8,7 @@ Done and in the game: brand (logo, icon, splash, store graphic), space UI kit, t
 
 ## SETUP (send once, attach STYLE-REFERENCE.png)
 
-We're making art for my mobile merge game "Galaxy Adventure" (Travel Town style, set on alien planets). Use the attached reference for the style: the same soft, glossy, friendly look and colours, but keep objects clean and simple like the items in Travel Town. One clear, recognisable object, a soft outline, gentle shading and one highlight. Not too many small details. Colourful and varied: multicolour is fine, but not everything the same colour and not all one colour. Everything is space / extraterrestrial: no Earth trees, plants, berries, fruit or Earth animals. Characters and pets look like the bottom row of the reference (Bob, Bloop, Gloop and the blob pets).
+We're making art for my mobile merge game "Galaxy Adventure" (Travel Town style, set on alien planets). Use the attached reference for the style: the same soft, glossy, friendly look and colours, but keep objects clean and simple like the items in Travel Town. One clear, recognisable object, a soft outline, gentle shading and one highlight. Not too many small details.
 
 Every image: one object (or one sheet when I say grid), centred, on a plain white or transparent background, square 1024×1024, no text, no frame. On sheets the cells are equal and the objects don't touch.
 
