@@ -979,10 +979,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function rollOrder() {
     // only ask for things the player can actually make right now: a chain counts
     // if one of its producers is sitting on the board
-    const live: Record<string, boolean> = {};
+    const live: Record<string, boolean> = {}, plvOf: Record<string, number> = {};
     B().forEach(c => {
       if (!c || !c.p) return;
-      PRODS[c.p].drops.forEach((d: string) => { live[ITEMS[d].chain] = true; });
+      PRODS[c.p].drops.forEach((d: string) => { const ch = ITEMS[d].chain; live[ch] = true; if (!c.tmp) plvOf[ch] = Math.max(plvOf[ch] || 0, plv(c)); });
     });
     const awake = liveChains();
     const open = awake.filter(c => live[c]).length ? awake.filter(c => live[c]) : awake;
@@ -994,7 +994,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // asks for real work: tier 3+ and often two or three different things
     const early = S.lvl < 3;
     // one step up every four levels: a tier-7 ask at level 8 was an hour of waiting
-    const reach = (ck: string) => clamp((early ? 2 : 3) + Math.floor((wl - 1) / 5), 2,
+    // a producer you have upgraded all the way earns harder (better-paid) asks from its chains
+    const reach = (ck: string) => clamp((early ? 2 : 3) + Math.floor((wl - 1) / 5) + ((plvOf[ck] || 0) >= PMAX ? 1 : 0), 2,
       Math.max(2, CHAINS[ck].items.length - 1));
     const itemFrom = (ck: string, cap?: number) => {
       const top = Math.min(reach(ck), cap ?? 99), lo = early ? 1 : Math.max(2, top - 1);
@@ -1238,7 +1239,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     }
     // The wreck is not a slot machine: it hands out pieces for the part you are
     // furthest from finishing, so the rocket always creeps forward.
-    let id = (c.p === 'wreck' && !allParts() ? partPiece() : null) || rnd(dropsOf(p, plv(c)));
+    let id = (c.p === 'wreck' && !allParts() ? partPiece() : null) || rollDrop(p, plv(c));
     // no rocket yet, so no fuel either — an early crater is all star scrap
     if (c.p === 'crater' && !rocketTime() && id === 'fuelore') id = Math.random() < 0.12 ? 'starcore' : 'scrap';
     // Power ×2: double energy, the drop comes one step up the chain
@@ -2422,25 +2423,31 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   /** charges at this level; the Lantern constellation makes every battery bigger */
   const capOf = (p: any, lv: number) =>
     Math.round(((p.cap || 12) + (lv - 1) * 5) * (starPerk('lantern') ? 1.2 : 1));
-  /** an upgraded producer keeps its old drops and adds the next tier of every
-   *  chain it feeds — the reason to spend coins on it is rarer stuff, not more */
+  /* An upgraded producer mostly drops what it always did. Now and then a drop
+     comes one step up its chain (two at the top level, rarely), and never past
+     tier 4 or the last two steps of a chain: upgrading means a fuller battery
+     and a little luck, not a board full of finished things. */
+  const upCapTier = (ch: string, top: number) => Math.max(top, Math.min(4, CHAINS[ch].items.length - 2));
+  function rollDrop(p: any, lv: number): string {
+    const base = rnd(p.drops) as string;
+    if (lv <= 1) return base;
+    const it = ITEMS[base]; if (!it || it.part) return base;
+    const r = Math.random();
+    const up = lv >= 3 ? (r < 0.04 ? 2 : r < 0.18 ? 1 : 0) : (r < 0.1 ? 1 : 0);
+    if (!up) return base;
+    const ids = CHAINS[it.chain].items, t = Math.min(it.tier + up, upCapTier(it.chain, it.tier));
+    return ids[t - 1] || base;
+  }
+  /** everything a producer can hand out at this level (for the info panels) */
   function dropsOf(p: any, lv: number): string[] {
-    if (lv <= 1) return p.drops;
     const out = p.drops.slice();
-    // start from the best thing it already drops, so every level really does
-    // hand you something you have not had out of it before
+    if (lv <= 1) return out;
     const top: Record<string, number> = {};
-    p.drops.forEach((d: string) => {
-      const it = ITEMS[d]; if (!it) return;
-      top[it.chain] = Math.max(top[it.chain] || 0, it.tier);
+    p.drops.forEach((d: string) => { const it = ITEMS[d]; if (it && !it.part) top[it.chain] = Math.max(top[it.chain] || 0, it.tier); });
+    Object.keys(top).forEach(ch => {
+      const ids = CHAINS[ch].items, cap = upCapTier(ch, top[ch]);
+      for (let t = top[ch] + 1; t <= Math.min(top[ch] + lv - 1, cap); t++) if (ids[t - 1] && out.indexOf(ids[t - 1]) < 0) out.push(ids[t - 1]);
     });
-    for (let step = 1; step < lv; step++) {
-      Object.keys(top).forEach(ch => {
-        const ids = CHAINS[ch].items;
-        const id = ids[Math.min(top[ch] - 1 + step, ids.length - 1)];
-        if (id) out.push(id);
-      });
-    }
     return out;
   }
   /** upgrades get dearer the later a producer arrives in the story */

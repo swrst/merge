@@ -6583,6 +6583,582 @@
       ]
     }
   },
+  "stampchip": {
+    "name": "Stamp Chip",
+    "chain": "mail",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "leaf",
+      "mat": "cream",
+      "accent": "sapphire"
+    }
+  },
+  "lettercap": {
+    "name": "Letter Capsule",
+    "chain": "mail",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "bottle",
+      "mat": "glass",
+      "accent": "gold"
+    }
+  },
+  "parcelpod": {
+    "name": "Parcel Pod",
+    "chain": "mail",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "crate",
+      "mat": "cream",
+      "accent": "sapphire"
+    }
+  },
+  "mailsack": {
+    "name": "Mail Sack",
+    "chain": "mail",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "crate",
+      "mat": "cream",
+      "accent": "ruby"
+    }
+  },
+  "mailrover": {
+    "name": "Mail Rover",
+    "chain": "mail",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "cog",
+      "mat": "cream",
+      "accent": "sapphire"
+    }
+  },
+  "postdome": {
+    "name": "Post Dome",
+    "chain": "mail",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "cream",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "boltbug": {
+    "name": "Bolt Bug",
+    "chain": "bots",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "cog",
+      "mat": "steel"
+    }
+  },
+  "cupbot": {
+    "name": "Cup Bot",
+    "chain": "bots",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "cog",
+      "mat": "cream",
+      "accent": "topaz"
+    }
+  },
+  "sweepbot": {
+    "name": "Sweeper Bot",
+    "chain": "bots",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "cog",
+      "mat": "topaz",
+      "accent": "steel"
+    }
+  },
+  "drillbot": {
+    "name": "Digger Bot",
+    "chain": "bots",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "cog",
+      "mat": "topaz",
+      "accent": "steel"
+    }
+  },
+  "walkerbot": {
+    "name": "Walker Bot",
+    "chain": "bots",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "cog",
+      "mat": "topaz",
+      "accent": "steel"
+    }
+  },
+  "buddymech": {
+    "name": "Buddy Mech",
+    "chain": "bots",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "cog",
+      "mat": "cream",
+      "accent": "topaz",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "botshop": {
+    "name": "Bot Workshop",
+    "chain": "bots",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "house",
+      "mat": "cream",
+      "accent": "topaz",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "fwspark": {
+    "name": "Fire Spark",
+    "chain": "fireworks",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "star",
+      "mat": "gold"
+    }
+  },
+  "sparkler": {
+    "name": "Sparkler",
+    "chain": "fireworks",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "twig",
+      "mat": "gold"
+    }
+  },
+  "fwrocket": {
+    "name": "Firework",
+    "chain": "fireworks",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "bottle",
+      "mat": "ruby",
+      "accent": "gold"
+    }
+  },
+  "fwbox": {
+    "name": "Firework Box",
+    "chain": "fireworks",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "crate",
+      "mat": "plum",
+      "accent": "ruby"
+    }
+  },
+  "fwcannon": {
+    "name": "Firework Cannon",
+    "chain": "fireworks",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "cog",
+      "mat": "ruby",
+      "accent": "gold"
+    }
+  },
+  "fwtower": {
+    "name": "Sky Show Tower",
+    "chain": "fireworks",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "gold",
+      "accent": "ruby",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "snailegg": {
+    "name": "Snail Egg",
+    "chain": "snail",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "egg",
+      "mat": "ember"
+    }
+  },
+  "snailet": {
+    "name": "Snailet",
+    "chain": "snail",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "fish",
+      "mat": "ember",
+      "accent": "lilac"
+    }
+  },
+  "volcsnail": {
+    "name": "Volcano Snail",
+    "chain": "snail",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "fish",
+      "mat": "ember",
+      "accent": "lilac"
+    }
+  },
+  "smokesnail": {
+    "name": "Smoky Snail",
+    "chain": "snail",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "fish",
+      "mat": "ember",
+      "accent": "obsidian"
+    }
+  },
+  "lampsnail": {
+    "name": "Lamp Snail",
+    "chain": "snail",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "fish",
+      "mat": "ember",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "castlesnail": {
+    "name": "Castle Snail",
+    "chain": "snail",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "ember",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "jellyegg": {
+    "name": "Jelly Egg",
+    "chain": "jelly",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "egg",
+      "mat": "aurora"
+    }
+  },
+  "jellyling": {
+    "name": "Jellyling",
+    "chain": "jelly",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "fish",
+      "mat": "aurora"
+    }
+  },
+  "floatjelly": {
+    "name": "Float Jelly",
+    "chain": "jelly",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "fish",
+      "mat": "aurora"
+    }
+  },
+  "crownjelly": {
+    "name": "Crown Jelly",
+    "chain": "jelly",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "fish",
+      "mat": "aurora",
+      "accent": "gold"
+    }
+  },
+  "jellymum": {
+    "name": "Jelly Mum",
+    "chain": "jelly",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "fish",
+      "mat": "aurora",
+      "accent": "gold"
+    }
+  },
+  "jellyqueen": {
+    "name": "Jelly Queen",
+    "chain": "jelly",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "crown",
+      "mat": "aurora",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "racebubble": {
+    "name": "Race Bubble",
+    "chain": "racers",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "ice",
+      "mat": "glass"
+    }
+  },
+  "bubblescoot": {
+    "name": "Bubble Scooter",
+    "chain": "racers",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "cog",
+      "mat": "glass",
+      "accent": "plum"
+    }
+  },
+  "finboat": {
+    "name": "Fin Boat",
+    "chain": "racers",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "fish",
+      "mat": "glass",
+      "accent": "sapphire"
+    }
+  },
+  "racesub": {
+    "name": "Racing Sub",
+    "chain": "racers",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "fish",
+      "mat": "cream",
+      "accent": "ruby"
+    }
+  },
+  "champsub": {
+    "name": "Champion Sub",
+    "chain": "racers",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "fish",
+      "mat": "cream",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "racedome": {
+    "name": "Race Dome",
+    "chain": "racers",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "glass",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "starsweet": {
+    "name": "Star Sweet",
+    "chain": "sweets",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "star",
+      "mat": "topaz"
+    }
+  },
+  "cometlolly": {
+    "name": "Comet Lolly",
+    "chain": "sweets",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "twig",
+      "mat": "aurora"
+    }
+  },
+  "sweetjar": {
+    "name": "Planet Sweets",
+    "chain": "sweets",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "bottle",
+      "mat": "glass",
+      "accent": "aurora"
+    }
+  },
+  "moonwafers": {
+    "name": "Moon Wafers",
+    "chain": "sweets",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "plank",
+      "mat": "cream",
+      "accent": "plum"
+    }
+  },
+  "planetcake": {
+    "name": "Planet Cake",
+    "chain": "sweets",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "cake",
+      "mat": "plum",
+      "accent": "gold"
+    }
+  },
+  "sweetufo": {
+    "name": "Sweet Saucer",
+    "chain": "sweets",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "cream",
+      "accent": "ruby",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "rivetplate": {
+    "name": "Rivet Plate",
+    "chain": "station",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "plank",
+      "mat": "steel"
+    }
+  },
+  "hatchwin": {
+    "name": "Hatch Window",
+    "chain": "station",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "ring",
+      "mat": "steel",
+      "accent": "sapphire"
+    }
+  },
+  "dockring": {
+    "name": "Docking Ring",
+    "chain": "station",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "ring",
+      "mat": "cream",
+      "accent": "gold"
+    }
+  },
+  "roommod": {
+    "name": "Room Module",
+    "chain": "station",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "house",
+      "mat": "cream",
+      "accent": "sapphire"
+    }
+  },
+  "twinmod": {
+    "name": "Twin Modules",
+    "chain": "station",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "house",
+      "mat": "cream",
+      "accent": "sapphire"
+    }
+  },
+  "solarstation": {
+    "name": "Solar Station",
+    "chain": "station",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "cream",
+      "accent": "sapphire",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "ringstation": {
+    "name": "Ring Station",
+    "chain": "station",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "ring",
+      "mat": "cream",
+      "accent": "gold",
+      "deco": [
+        "glow",
+        "motes"
+      ]
+    }
+  },
   "goobubble": {
     "name": "Goo Bubble",
     "chain": "potion",

@@ -169,6 +169,8 @@
       "accent": "cream"
     },
     "likes": [
+      "mail",
+      "bots",
       "silver",
       "dust",
       "rover",
@@ -214,6 +216,7 @@
       "accent": "sapphire"
     },
     "likes": [
+      "bots",
       "stone",
       "wood",
       "clay",
@@ -264,6 +267,7 @@
       "accent": "gold"
     },
     "likes": [
+      "fireworks",
       "wood",
       "clay",
       "bakery",
@@ -289,6 +293,8 @@
       "accent": "gold"
     },
     "likes": [
+      "snail",
+      "fireworks",
       "shroom",
       "spice",
       "phoenix",
@@ -312,6 +318,7 @@
       "accent": "mint"
     },
     "likes": [
+      "racers",
       "fishc",
       "harbour",
       "salt",
@@ -333,6 +340,7 @@
       "accent": "jade"
     },
     "likes": [
+      "jelly",
       "water",
       "pond",
       "veggie",
@@ -403,6 +411,7 @@
       "accent": "star"
     },
     "likes": [
+      "station",
       "aurorac",
       "prismv",
       "starc",
@@ -424,6 +433,7 @@
       "accent": "gold"
     },
     "likes": [
+      "sweets",
       "skynest",
       "skyfruit",
       "chime",
@@ -444,6 +454,7 @@
       "accent": "gold"
     },
     "likes": [
+      "mail",
       "picnic",
       "bakery",
       "parts",
@@ -496,6 +507,7 @@
       "accent": "honey"
     },
     "likes": [
+      "sweets",
       "veggie",
       "berry",
       "mush",
@@ -522,6 +534,8 @@
       "accent": "cherry"
     },
     "likes": [
+      "fireworks",
+      "racers",
       "moon",
       "dust",
       "glow",

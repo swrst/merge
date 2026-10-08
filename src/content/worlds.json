@@ -292,8 +292,7 @@
         "xp": 15,
         "unlock": [
           "rocks",
-          "bush",
-          "well"
+          "bush"
         ],
         "talk": [
           [
@@ -305,7 +304,7 @@
             "Tap the Meteor Heap for meteor chips. Two chips make a hot meteor. Two hot meteors clear the path!"
           ]
         ],
-        "text": "The path is clear! Behind the rubble: a heap of space rocks, a beeping snack cart and an old moonwater well."
+        "text": "The path is clear! Behind the rubble: a heap of space rocks and a beeping snack cart."
       },
       {
         "id": "e2",
@@ -321,6 +320,9 @@
             1
           ]
         ],
+        "unlock": [
+          "well"
+        ],
         "coins": 80,
         "xp": 25,
         "talk": [
@@ -333,7 +335,7 @@
             "Two rocks and a metal ingot for a border, dear."
           ]
         ],
-        "text": "A tidy border. Nana is very pleased."
+        "text": "A tidy border. Nana is very pleased. Behind it, an old moonwater well starts to drip again."
       },
       {
         "id": "e3",
@@ -443,8 +445,7 @@
         "xp": 100,
         "unlock": [
           "meadow",
-          "flowerbed",
-          "teabush"
+          "flowerbed"
         ],
         "gift": "chest",
         "retire": [
@@ -460,7 +461,7 @@
             "Two stacks of metal plates and a ration tray for the builder, please."
           ]
         ],
-        "text": "The fence stands. The Meteor Heap gave its last metal and cools down now. A solar farm hums on the hill, a light stall opens and a fizz vent starts to bubble."
+        "text": "The fence stands. The Meteor Heap gave its last metal and cools down now. A solar farm hums on the hill and a light stall opens."
       },
       {
         "id": "e7",
@@ -511,6 +512,9 @@
             1
           ]
         ],
+        "unlock": [
+          "teabush"
+        ],
         "coins": 720,
         "xp": 140,
         "gift": "chest",
@@ -532,7 +536,7 @@
             "A star lantern for the stall and a gem for the sign."
           ]
         ],
-        "text": "The market glows! The space rocks are all used up, and buzzbots moved in for a while."
+        "text": "The market glows! The space rocks are all used up, buzzbots moved in for a while, and a fizz vent starts to bubble."
       },
       {
         "id": "e9",
@@ -621,9 +625,7 @@
         "xp": 200,
         "unlock": [
           "nestbox",
-          "toychest",
-          "vegpatch",
-          "tinkerbench"
+          "toychest"
         ],
         "talk": [
           [
@@ -635,7 +637,7 @@
             "A space helmet, a solar panel array and a soda for the tailor. I do the rest. I always do the rest."
           ]
         ],
-        "text": "Suits for all. Then a delivery: a jet wreck, a toy chest, a hydro bed and a lens workbench. Busy days ahead!"
+        "text": "Suits for all. Then a delivery: a jet wreck and a toy chest. Busy days ahead!"
       },
       {
         "id": "e12",
@@ -650,6 +652,10 @@
             "garland",
             1
           ]
+        ],
+        "unlock": [
+          "vegpatch",
+          "tinkerbench"
         ],
         "coins": 1360,
         "xp": 220,
@@ -676,7 +682,7 @@
             "THIS jetpack does."
           ]
         ],
-        "text": "Timmy flew all evening. The light stall and the fizz vent have given all they had. Then something small crashes behind the hill, blinking!"
+        "text": "Timmy flew all evening. The light stall and the fizz vent have given all they had; a hydro bed and a lens workbench take their place. Then something small crashes behind the hill, blinking!"
       },
       {
         "id": "e13",
@@ -729,6 +735,9 @@
             1
           ]
         ],
+        "unlock": [
+          "lilypond"
+        ],
         "coins": 1680,
         "xp": 260,
         "retire": [
@@ -744,7 +753,7 @@
             "Or two grow tubes, a power station and a spinning top for the Blinkies?"
           ]
         ],
-        "text": "The solar farm powers the last station and goes quiet."
+        "text": "The solar farm powers the last station and goes quiet. Down by the water, a slime pond fills up."
       },
       {
         "id": "e15",
@@ -767,7 +776,6 @@
         "coins": 1920,
         "xp": 300,
         "unlock": [
-          "lilypond",
           "windmill",
           "claypit"
         ],
@@ -785,7 +793,7 @@
             "A spyglass, a hydro tray and a twin jetpack. Nobody stargazes on an empty stomach."
           ]
         ],
-        "text": "The Moon has tiny lights. \"Friends,\" whispers Dr. Zonk. And in the woods: his ship. In pieces. Time to build a rocket! Down by the water: a slime pond, a cheese mill and a goo pit."
+        "text": "The Moon has tiny lights. \"Friends,\" whispers Dr. Zonk. And in the woods: his ship. In pieces. Time to build a rocket! Next to the slime pond: a cheese mill and a goo pit."
       },
       {
         "id": "e16",
@@ -919,8 +927,7 @@
         "gift": "chest",
         "unlock": [
           "eggnest",
-          "buskbot",
-          "rockethull"
+          "buskbot"
         ],
         "talk": [
           [
@@ -928,7 +935,7 @@
             "A party at the slime pond! Slime deserves nice things."
           ]
         ],
-        "text": "The slime frogs hold a party. Behind the crates: wobbling pet eggs, a busker bot and an old scrap hull."
+        "text": "The slime frogs hold a party. Behind the crates: wobbling pet eggs and a busker bot."
       },
       {
         "id": "e20",
@@ -948,6 +955,9 @@
             2
           ]
         ],
+        "unlock": [
+          "rockethull"
+        ],
         "coins": 3040,
         "xp": 400,
         "gift": "chest",
@@ -966,7 +976,7 @@
             "They chewed my OFFICIAL sash."
           ]
         ],
-        "text": "The Blinkies have a pet now. The busker bot plays one chord, over and over."
+        "text": "The Blinkies have a pet now. The busker bot plays one chord, over and over. And under the crates: an old scrap hull, full of rocket bits."
       },
       {
         "id": "e21",
@@ -1062,7 +1072,9 @@
       "helium",
       "meteorite",
       "dish",
-      "moonmelon"
+      "moonmelon",
+      "mail",
+      "bots"
     ],
     "start": [
       {
@@ -1254,6 +1266,9 @@
         ],
         "coins": 240,
         "xp": 30,
+        "unlock": [
+          "dustflat"
+        ],
         "talk": [
           [
             "luma",
@@ -1261,14 +1276,14 @@
           ],
           [
             "luma",
-            "Two moon shards and a glow bulb and I can make a little ring of light. Vibes first, then everything else."
+            "Two moon shards and a glow pod and I can make a little ring of light. Vibes first, then everything else."
           ],
           [
             "zib",
             "Kix stowed away in the cargo hold. Kix regrets nothing. Kix is cold."
           ]
         ],
-        "text": "A little ring of glow around the tents. The dark is smaller already."
+        "text": "A little ring of glow around the tents. Behind them, a flat of moon dust is ready to dig."
       },
       {
         "id": "l2",
@@ -1280,7 +1295,7 @@
             2
           ],
           [
-            "iceshard",
+            "mcore",
             1
           ]
         ],
@@ -1293,11 +1308,7 @@
           ],
           [
             "rokk",
-            "THE DUST STORMS KNOCK OVER THE TENTS. TWO REGOLITH BRICKS AND ONE ICE SHARD FOR MORTAR. PLEASE."
-          ],
-          [
-            "zib",
-            "Kix could sell him a wall. Kix will not. Kix is being nice. Note it."
+            "THE DUST STORMS KNOCK OVER THE TENTS. TWO REGOLITH BRICKS AND ONE MOON CORE FOR THE KEYSTONE. PLEASE."
           ]
         ],
         "text": "WALL: STANDING. WIND: BLOCKED. ROKK: PROUD."
@@ -1308,7 +1319,7 @@
         "who": "nix",
         "needs": [
           [
-            "prismcore",
+            "mstar",
             1
           ],
           [
@@ -1318,18 +1329,22 @@
         ],
         "coins": 520,
         "xp": 60,
+        "unlock": [
+          "icevein",
+          "wickpod"
+        ],
         "gift": "chest",
         "talk": [
           [
             "nix",
-            "Ah. Tourists. Mind the crystals, they are older than your planet and twice as interesting."
+            "Ah. Tourists. Mind the moon stars, they are older than your planet and twice as interesting."
           ],
           [
             "nix",
-            "A prism core and a glow flower. I am building a garden. A tasteful one. You would not understand."
+            "A moon star and a pod cluster. I am building a garden. A tasteful one. You would not understand."
           ]
         ],
-        "text": "Nix has arranged the crystals by colour, then by size, then by mood."
+        "text": "Nix has a garden. Rokk found an ice vein and an old wick pod behind it."
       },
       {
         "id": "l4",
@@ -1341,7 +1356,7 @@
             1
           ],
           [
-            "silveringot",
+            "iceshard",
             1
           ]
         ],
@@ -1354,7 +1369,7 @@
           ],
           [
             "rokk",
-            "A MOON LANTERN AND A SILVER INGOT FOR THE HANDLE. FOR NO REASON. NOT FEAR."
+            "A MOON LANTERN AND AN ICE SHARD TO FOCUS IT. FOR NO REASON. NOT FEAR."
           ]
         ],
         "text": "Rokk walks the far side at night now. Humming. Rokk does not hum. Rokk is humming."
@@ -1365,11 +1380,11 @@
         "who": "luma",
         "needs": [
           [
-            "cometcore",
+            "icecore",
             1
           ],
           [
-            "icecore",
+            "starbloom",
             1
           ]
         ],
@@ -1383,7 +1398,7 @@
           ],
           [
             "luma",
-            "Catch me its core and a ball of clear ice. Comets carry seeds, you know. Old ones."
+            "Catch a ball of its clear ice, and bring a pod lamp so we can see it. Comets carry seeds, you know. Old ones."
           ],
           [
             "bloop",
@@ -1396,14 +1411,13 @@
         "id": "l6",
         "name": "Moon Launch Pad",
         "who": "zib",
-        "launch": true,
         "needs": [
           [
             "moonbrick",
             1
           ],
           [
-            "mstar",
+            "moonorb",
             1
           ],
           [
@@ -1411,8 +1425,22 @@
             1
           ]
         ],
+        "temp": {
+          "p": "pupnest",
+          "taps": 20,
+          "mins": 30
+        },
         "coins": 1280,
         "xp": 140,
+        "launch": true,
+        "unlock": [
+          "crystalspire",
+          "silverseam"
+        ],
+        "retire": [
+          "geyser",
+          "glowpod"
+        ],
         "gift": "chest",
         "talk": [
           [
@@ -1421,14 +1449,14 @@
           ],
           [
             "zib",
-            "Moon brick, moon star, one beacon so the pilot does not miss. Kix missed once. Long story."
+            "Moon brick, a moon orb for the guidance light, one beacon so the pilot does not miss. Kix missed once. Long story."
           ],
           [
             "bloop",
-            "There is a fire planet in range. Ember Hollow. Bring a towel. And a fire extinguisher."
+            "There is a fire planet in range. Ember Hollow. Bring a fire extinguisher."
           ]
         ],
-        "text": "Beep! Pad ready! Kix tested it. Kix only exploded a little. Ember Hollow is in range now!"
+        "text": "Pad ready! The old geyser and the glow pods are spent, but a crystal spire and a silver seam just broke through. Ember Hollow is in range now! And something small is bouncing out of a crater: a moon pup nest!"
       },
       {
         "id": "l7",
@@ -1440,7 +1468,7 @@
             1
           ],
           [
-            "lunamothi",
+            "prismlet",
             1
           ]
         ],
@@ -1453,7 +1481,7 @@
           ],
           [
             "nix",
-            "Give them a burrow somewhere far from my garden. A pup and a moth to keep them company."
+            "Give them a burrow far from my garden. A pup to show the others the way, and a prism shard to chew instead of mine."
           ]
         ],
         "text": "The pups have a burrow with a view. They bounce off the walls. Literally."
@@ -1464,11 +1492,11 @@
         "who": "zib",
         "needs": [
           [
-            "toyrover",
+            "moonwall",
             1
           ],
           [
-            "silvercup",
+            "silveringot",
             1
           ]
         ],
@@ -1478,7 +1506,7 @@
         "talk": [
           [
             "zib",
-            "Kix found an old rover. Kix needs a garage. And a silver cup. For the grand opening."
+            "Kix found an old rover. Kix needs a garage. A moon wall and a silver ingot for the door."
           ],
           [
             "rokk",
@@ -1489,7 +1517,7 @@
             "There will be a SMALL grand opening."
           ]
         ],
-        "text": "Six wheels, one drill, zero brakes. Kix loves it."
+        "text": "A garage with a silver door. The rover is still in pieces. Kix calls that \"potential\"."
       },
       {
         "id": "l9",
@@ -1497,43 +1525,51 @@
         "who": "rokk",
         "needs": [
           [
-            "gascan",
+            "glacier",
             1
           ],
           [
-            "glacier",
+            "prismcore",
             1
           ]
         ],
         "coins": 2160,
         "xp": 250,
+        "unlock": [
+          "comettrail",
+          "scrapyard"
+        ],
+        "retire": [
+          "dustflat",
+          "icevein"
+        ],
         "talk": [
           [
             "rokk",
-            "THE HEATERS RUN ON HELIUM. THE HELIUM RUNS OUT. EVERYONE IS COLD. MOSTLY ME. I AM METAL."
+            "THE HEATERS NEED COOLANT AND A FOCUS. EVERYONE IS COLD. MOSTLY ME. I AM METAL."
           ],
           [
             "rokk",
-            "ONE GAS CANISTER AND ONE GLACIER BLOCK FOR THE COOLANT. THE IRONY IS NOT LOST ON ME."
+            "ONE GLACIER BLOCK AND ONE PRISM CORE. THE IRONY IS NOT LOST ON ME."
           ]
         ],
-        "text": "WARM. The whole crew slept through the night for the first time."
+        "text": "WARM. The dust flat and the ice vein are mined out. A comet trail lands nearby, and the scrapyard wakes up full of little bots."
       },
       {
         "id": "l10",
         "name": "Call Home",
-        "who": "zib",
+        "who": "luma",
         "needs": [
           [
-            "radar",
+            "lighthouse",
             1
           ],
           [
-            "pallasite",
+            "cometcore",
             1
           ],
           [
-            "glowtree",
+            "cupbot",
             1
           ]
         ],
@@ -1547,7 +1583,7 @@
           ],
           [
             "luma",
-            "A radar dish, a pallasite for the tuner, and a glow tree for the vibes. Mostly the vibes."
+            "A lighthouse for the signal, a comet core for the tuner, and a little cup bot to turn the dish. Mostly for the vibes."
           ],
           [
             "nix",
@@ -1562,14 +1598,19 @@
         "who": "oops",
         "needs": [
           [
-            "moonorb",
+            "prismheart",
             1
           ],
           [
-            "prismheart",
+            "cometstone",
             1
           ]
         ],
+        "temp": {
+          "p": "melonvine",
+          "taps": 20,
+          "mins": 30
+        },
         "coins": 3200,
         "xp": 380,
         "talk": [
@@ -1579,14 +1620,14 @@
           ],
           [
             "oops",
-            "A moon orb for a new ball and a prism heart to make it shine. Then I can see the future in ONE piece."
+            "A prism heart for a new ball and a comet stone to make it shine. Then I can see the future in ONE piece."
           ],
           [
             "nix",
             "She is a fraud. A charming fraud. I want my fortune read."
           ]
         ],
-        "text": "Madame Oops reads fortunes by the craters now. She is right about a third of the time. Nix says that is a record."
+        "text": "Madame Oops reads fortunes by the craters now. She is right about a third of the time. Nix says that is a record. An algae vine pokes out of the soil, just for a while."
       },
       {
         "id": "l12",
@@ -1594,16 +1635,24 @@
         "who": "luma",
         "needs": [
           [
-            "moondome",
+            "moonmelon",
             1
           ],
           [
-            "fusioncell",
+            "silvercup",
             1
           ]
         ],
         "coins": 3600,
         "xp": 410,
+        "unlock": [
+          "gasvent",
+          "relaymast"
+        ],
+        "retire": [
+          "wickpod",
+          "crystalspire"
+        ],
         "gift": "chest",
         "talk": [
           [
@@ -1612,14 +1661,14 @@
           ],
           [
             "luma",
-            "An algae dome to grow lunch in, and a fusion cell to keep it warm. Green food, good vibes."
+            "An algae tank to start the dome, and a silver chalice for the first harvest. Green food, good vibes."
           ],
           [
             "rokk",
             "I DO NOT EAT. I WILL SUPERVISE THE EATING."
           ]
         ],
-        "text": "The dome glows green all night. There is algae soup for everyone. Rokk supervised every spoonful."
+        "text": "Algae soup for everyone. The wick pods and the crystal spire have given all they had, and a helium vent and a relay mast take their place."
       },
       {
         "id": "l13",
@@ -1635,10 +1684,15 @@
             1
           ],
           [
-            "starhound",
+            "parcelpod",
             1
           ]
         ],
+        "temp": {
+          "p": "impact",
+          "taps": 24,
+          "mins": 30
+        },
         "coins": 4000,
         "xp": 440,
         "talk": [
@@ -1648,14 +1702,14 @@
           ],
           [
             "glimmer",
-            "A silver crown for the star (me), a comet heart for the finale, and a star critter for the audience to love. They will. They always do."
+            "A silver crown for the star (me), a comet heart for the finale, and a parcel pod full of invitations. They will come. They always do."
           ],
           [
             "zib",
             "Kix sells the tickets. Kix has already sold the tickets."
           ]
         ],
-        "text": "Standing ovation. The star critter took three bows. Glimmer took eleven."
+        "text": "Standing ovation. Glimmer took eleven bows. A fresh impact crater smokes at the edge of camp."
       },
       {
         "id": "l14",
@@ -1663,15 +1717,15 @@
         "who": "nix",
         "needs": [
           [
-            "meteorgeode",
+            "pallasite",
             1
           ],
           [
-            "moonstatue",
+            "drillbot",
             1
           ],
           [
-            "craterheart",
+            "gascan",
             1
           ]
         ],
@@ -1685,7 +1739,7 @@
           ],
           [
             "nix",
-            "A museum. A star geode, the old moon idol and the Fluffwing Queen's crown. Labels in my handwriting."
+            "A museum. A pallasite for the main hall, a digger bot to find more, and a gas canister for the lights. Labels in my handwriting."
           ]
         ],
         "text": "The museum opened at dawn. The labels are very long. Everybody reads them anyway."
@@ -1696,15 +1750,15 @@
         "who": "rokk",
         "needs": [
           [
-            "deeparray",
+            "radar",
             1
           ],
           [
-            "icecastle",
+            "gastank",
             1
           ],
           [
-            "moonbase",
+            "walkerbot",
             1
           ]
         ],
@@ -1718,7 +1772,7 @@
           ],
           [
             "rokk",
-            "A DEEP SPACE ARRAY, AN ICE CASTLE TO KEEP IT COLD AND A MOON OUTPOST TO RUN IT. I WILL LISTEN. I AM GOOD AT LISTENING."
+            "A RADAR DISH, A HELIUM TANK TO POWER IT AND A WALKER BOT TO KEEP IT POINTED. I WILL LISTEN. I AM GOOD AT LISTENING."
           ],
           [
             "bloop",
@@ -1748,7 +1802,9 @@
       "sulfur",
       "steam",
       "emberfruit",
-      "rubyc"
+      "rubyc",
+      "fireworks",
+      "snail"
     ],
     "start": [
       {
@@ -1939,6 +1995,9 @@
         ],
         "coins": 320,
         "xp": 35,
+        "unlock": [
+          "ironseam"
+        ],
         "talk": [
           [
             "vulk",
@@ -1946,10 +2005,10 @@
           ],
           [
             "vulk",
-            "Two cinders and an ash mushroom. The forge eats, then it works. Like me."
+            "Two cinders and an ash shroom. The forge eats, then it works. Like me."
           ]
         ],
-        "text": "The forge breathes. Vulk pretends it was nothing. It was not nothing."
+        "text": "The forge breathes. Vulk pretends it was nothing. Behind it, an old iron seam glints."
       },
       {
         "id": "c2",
@@ -1961,8 +2020,8 @@
             1
           ],
           [
-            "obshard",
-            2
+            "lavablob",
+            1
           ]
         ],
         "coins": 480,
@@ -1974,39 +2033,48 @@
           ],
           [
             "vulk",
-            "An iron ingot and two obsidian shards. Sharp things. Good things."
+            "An iron ingot and a lava blob to temper it. Hot things. Good things."
           ]
         ],
         "text": "Hammers, tongs and one very large spoon. Vulk will not explain the spoon."
       },
       {
         "id": "c3",
-        "name": "The Glass Stall",
+        "name": "The Market Stall",
         "who": "ember",
         "needs": [
           [
-            "glassbead",
-            2
-          ],
-          [
             "bigshroom",
             1
+          ],
+          [
+            "ironnug",
+            2
           ]
         ],
+        "temp": {
+          "p": "spicevine",
+          "taps": 20,
+          "mins": 30
+        },
         "coins": 680,
         "xp": 70,
+        "unlock": [
+          "obsidslab",
+          "coalpit"
+        ],
         "gift": "chest",
         "talk": [
           [
             "ember",
-            "A REAL VISITOR! Do you want a glass bead? I make glass beads! I make TOO MANY glass beads!"
+            "A REAL VISITOR! Do you want a mushroom? I grow mushrooms! I grow TOO MANY mushrooms!"
           ],
           [
             "ember",
-            "Two beads and a big mushroom for the stall roof. Travellers will come. They will! Probably!"
+            "A great shroom for the stall roof and two iron nuggets for the frame. Travellers will come. They will! Probably!"
           ]
         ],
-        "text": "Fizz sells beads to travellers who have not arrived yet. She says they will."
+        "text": "Fizz sells mushrooms to travellers who have not arrived yet. Vulk dug out an obsidian slab and a star coal pit. A fire gel spring bubbles up for a little while."
       },
       {
         "id": "c4",
@@ -2035,7 +2103,7 @@
           ],
           [
             "ember",
-            "A jar of spice and a forge fire. STEW. The spiciest stew in the system."
+            "A jar of fire gel and a forge flame. STEW. The spiciest stew in the system."
           ]
         ],
         "text": "Very, very spicy. Nobody complained. Nobody could speak."
@@ -2046,7 +2114,7 @@
         "who": "vulk",
         "needs": [
           [
-            "copperbell",
+            "obblade",
             1
           ],
           [
@@ -2060,11 +2128,11 @@
         "talk": [
           [
             "vulk",
-            "The vents roar at night. The old bell used to calm them. Do not ask how. I do not know."
+            "The vents roar at night. The old bell used to calm them. It cracked."
           ],
           [
             "vulk",
-            "A copper bell and a fire opal for the clapper. Then we sleep."
+            "An obsidian blade for a new clapper and a fire opal to make it ring true. Then we sleep."
           ]
         ],
         "text": "The bell rings at sunset. The vents seem to quieten when it does."
@@ -2073,7 +2141,6 @@
         "id": "c6",
         "name": "Heat-Proof Launch Pad",
         "who": "bloop",
-        "launch": true,
         "needs": [
           [
             "ironanvil",
@@ -2088,8 +2155,22 @@
             1
           ]
         ],
+        "temp": {
+          "p": "ashnest",
+          "taps": 18,
+          "mins": 30
+        },
         "coins": 1520,
         "xp": 160,
+        "launch": true,
+        "unlock": [
+          "sandpit",
+          "copperseam"
+        ],
+        "retire": [
+          "lavavent",
+          "shroomlog"
+        ],
         "gift": "chest",
         "talk": [
           [
@@ -2098,26 +2179,26 @@
           ],
           [
             "vulk",
-            "Iron anvil for the base. Obsidian mirror to throw the heat back. Bellows to cool the engines."
+            "Iron anvil for the base. Dark mirror to throw the heat back. Bellows to cool the engines."
           ],
           [
             "ember",
             "And a little flag! I will make the flag!"
           ]
         ],
-        "text": "It will not melt. Probably. Blorp. Tidal Shallows is next — pack a towel."
+        "text": "It will not melt. Probably. The lava vent and the shroom log are spent, so Vulk opened a hot sand pit and a copper seam. Tidal Shallows is in range! And firebirds are circling an old ash nest."
       },
       {
         "id": "c7",
-        "name": "Nests for the Salamanders",
+        "name": "Nests for the Firebirds",
         "who": "ember",
         "needs": [
           [
-            "salamander",
+            "emberegg",
             1
           ],
           [
-            "emberegg",
+            "glassbead",
             1
           ]
         ],
@@ -2126,7 +2207,7 @@
         "talk": [
           [
             "ember",
-            "The salamanders keep sleeping in Vulk's boots."
+            "The firebirds keep sleeping in Vulk's boots."
           ],
           [
             "vulk",
@@ -2134,22 +2215,22 @@
           ],
           [
             "ember",
-            "One salamander and an ember egg — they need a nest of their own!"
+            "An ember egg and a glass bead to keep it warm — they need a nest of their own!"
           ]
         ],
-        "text": "Tiny flames curled in warm stone. They follow Fizz everywhere now."
+        "text": "Tiny flames curled in warm glass. They follow Fizz everywhere now."
       },
       {
         "id": "c8",
-        "name": "The Basalt Hall",
+        "name": "The Quiet Hall",
         "who": "vulk",
         "needs": [
           [
-            "columnstack",
+            "coppercog",
             1
           ],
           [
-            "coppercog",
+            "glassvase",
             1
           ]
         ],
@@ -2159,42 +2240,55 @@
         "talk": [
           [
             "vulk",
-            "Too many people now. Meetings. Opinions. I need a hall with thick walls."
+            "Too many people now. Meetings. Opinions. I need a hall with a door that closes."
           ],
           [
             "vulk",
-            "A column stack and a copper cog for the door. A door that closes."
+            "A great cog for the door and a glass vase, so Fizz stops putting flowers in my helmet."
           ]
         ],
-        "text": "A hall of stone columns, cool inside, warm outside. Meetings happen there now."
+        "text": "A hall with a heavy door. Meetings happen there now. Vulk sits by the door."
       },
       {
         "id": "c9",
-        "name": "Steam Power",
+        "name": "Pipes for the Hollow",
         "who": "rokk",
         "needs": [
           [
-            "boiler",
+            "copperbell",
             1
           ],
           [
-            "sulfurcrystal",
-            2
+            "greatforge",
+            1
           ]
         ],
+        "temp": {
+          "p": "charstump",
+          "taps": 22,
+          "mins": 30
+        },
         "coins": 2560,
         "xp": 290,
+        "unlock": [
+          "sulfurspring",
+          "warmnest"
+        ],
+        "retire": [
+          "ironseam",
+          "obsidslab"
+        ],
         "talk": [
           [
             "rokk",
-            "GREETINGS AGAIN. I FOLLOWED THE STEAM. STEAM IS POWER. POWER IS ORDER."
+            "GREETINGS AGAIN. I FOLLOWED THE HEAT. HEAT IS POWER. POWER IS ORDER."
           ],
           [
             "rokk",
-            "ONE BOILER AND TWO SULFUR CRYSTALS. THE SMELL IS UNFORTUNATE. THE PROGRESS IS NOT."
+            "A COPPER BELL FOR THE ALARM AND A GREAT FORGE TO HEAT THE PIPES. THE SMELL IS UNFORTUNATE. THE PROGRESS IS NOT."
           ]
         ],
-        "text": "PRESSURE: NOMINAL. HOLLOW: POWERED. ROKK: ALSO NOMINAL."
+        "text": "PRESSURE: NOMINAL. The iron and obsidian are mined out. A sulfur spring starts to fizz, and lava snails crawl out of a warm nest. A charred stump starts to glow like a lava lamp."
       },
       {
         "id": "c10",
@@ -2206,11 +2300,11 @@
             1
           ],
           [
-            "greatforge",
+            "glasslily",
             1
           ],
           [
-            "rubyshard",
+            "sulfurcrystal",
             1
           ]
         ],
@@ -2220,15 +2314,15 @@
         "talk": [
           [
             "ember",
-            "Last one! Lava lamps all over the hollow! Light that is warm when you touch it!"
+            "Lava lamps all over the hollow! Light that is warm when you touch it!"
           ],
           [
             "vulk",
-            "A big lava lamp, the great forge and a ruby shard to mark the spot. Then Cindra is ours again."
+            "A big lava lamp, a glass lily and a sulfur crystal to mark the spot."
           ],
           [
             "bloop",
-            "And then the oceans, friend. Tidal Shallows. You will need that towel after all."
+            "And then the oceans, friend. Tidal Shallows. You will need a towel."
           ]
         ],
         "text": "The hollow glows from end to end. Cindra is reborn."
@@ -2239,11 +2333,11 @@
         "who": "grubs",
         "needs": [
           [
-            "spicecrate",
+            "fwbox",
             1
           ],
           [
-            "glasslily",
+            "glassvase",
             1
           ]
         ],
@@ -2256,14 +2350,14 @@
           ],
           [
             "grubs",
-            "A crate of fire gel to sell and a glass lily for the counter. Classy. Best stall on the planet. Only stall on the planet."
+            "A box of fireworks to sell and a glass vase for the counter. Classy. Best stall on the planet. Only stall on the planet."
           ],
           [
             "vulk",
             "If they sell my spoon I will be angry."
           ]
         ],
-        "text": "The stall sells everything twice: once by each brother. Fizz bought a bead from them. Her own bead."
+        "text": "The stall sells everything twice: once by each brother."
       },
       {
         "id": "c12",
@@ -2275,12 +2369,20 @@
             1
           ],
           [
-            "phoenix",
+            "volcsnail",
             1
           ]
         ],
         "coins": 4000,
         "xp": 450,
+        "unlock": [
+          "steamvent",
+          "basaltcliff"
+        ],
+        "retire": [
+          "coalpit",
+          "sandpit"
+        ],
         "gift": "chest",
         "talk": [
           [
@@ -2289,10 +2391,10 @@
           ],
           [
             "ember",
-            "A magma dragonlet to keep the little ones in line and a flame flyer to teach them to fly. Carefully! Mostly carefully!"
+            "A magma dragonlet to keep the little ones in line and a volcano snail to slow them down. Carefully! Mostly carefully!"
           ]
         ],
-        "text": "Tiny dragons asleep in warm sand. One of them sneezed and lit the stew. Everyone agreed it was better."
+        "text": "Tiny dragons asleep in warm sand. The coal pit and the sand pit are spent, and a steam vent and a basalt cliff rise up."
       },
       {
         "id": "c13",
@@ -2332,7 +2434,7 @@
         "who": "glimmer",
         "needs": [
           [
-            "suncore",
+            "fwcannon",
             1
           ],
           [
@@ -2354,7 +2456,7 @@
           ],
           [
             "glimmer",
-            "A sun core for the big bang, a brimstone heart for the smell, and a basalt gate to make my entrance. I always make an entrance."
+            "A firework cannon for the big bang, a brimstone heart for the smell, and a basalt gate to make my entrance. I always make an entrance."
           ],
           [
             "vulk",
@@ -2365,19 +2467,19 @@
       },
       {
         "id": "c15",
-        "name": "The Obsidian Citadel",
+        "name": "The Basalt Citadel",
         "who": "vulk",
         "needs": [
           [
-            "obthrone",
+            "causeway",
             1
           ],
           [
-            "ironbot",
+            "automaton",
             1
           ],
           [
-            "rubyscepter",
+            "lampsnail",
             1
           ]
         ],
@@ -2391,7 +2493,7 @@
           ],
           [
             "vulk",
-            "An obsidian throne, an iron bot to guard the gate and a ruby sceptre. Not for me. For whoever rules after. I am too grumpy to rule."
+            "Giant's steps for the gate, a copper clock for the tower and a lamp snail to light the way. Not for me. I am too grumpy to rule."
           ],
           [
             "ember",
@@ -2402,7 +2504,7 @@
             "HRM."
           ]
         ],
-        "text": "The citadel shines black and red over the hollow. The throne is empty. Vulk sits on the step next to it."
+        "text": "The citadel shines black and red over the hollow. Vulk sits on the step next to the empty throne."
       }
     ]
   },
@@ -2425,7 +2527,9 @@
       "harbour",
       "seaglass",
       "urchin",
-      "manta"
+      "manta",
+      "jelly",
+      "racers"
     ],
     "start": [
       {
@@ -2616,17 +2720,20 @@
         ],
         "coins": 400,
         "xp": 40,
+        "unlock": [
+          "coralhead"
+        ],
         "talk": [
           [
             "kelpa",
-            "Oh! Hello! Welcome to the Shallows! Mind the seaweed. And the other seaweed. It is all seaweed, sorry."
+            "Oh! Hello! Welcome to the Shallows! Mind the bubbles. And the other bubbles. It is all bubbles, sorry."
           ],
           [
             "kelpa",
-            "Two seashells and a bubble cluster and I can clear a path to the water. Then we can paddle!"
+            "Two sea shells and a bubble cluster and I can clear a path to the water. Then we can paddle!"
           ]
         ],
-        "text": "Sand you can actually walk on. Kelpa made a sandcastle. Then another. Then eleven."
+        "text": "Sand you can actually walk on. A coral head is growing back by the rocks."
       },
       {
         "id": "n2",
@@ -2638,7 +2745,7 @@
             2
           ],
           [
-            "seedpearl",
+            "kelpcoil",
             1
           ]
         ],
@@ -2651,7 +2758,7 @@
           ],
           [
             "kelpa",
-            "Two coral sprigs to plant, and a seed pearl to keep them company. Corals get lonely."
+            "Two coral sprigs to plant, and a bubble jar to keep them company. Corals get lonely."
           ]
         ],
         "text": "Little corals in neat rows. The first swimmers arrived an hour later."
@@ -2662,16 +2769,20 @@
         "who": "marin",
         "needs": [
           [
-            "silverfish",
-            2
+            "bigshell",
+            1
           ],
           [
-            "seafoam",
+            "coralfan",
             1
           ]
         ],
         "coins": 840,
         "xp": 75,
+        "unlock": [
+          "oysterbed",
+          "tidepool"
+        ],
         "gift": "chest",
         "talk": [
           [
@@ -2680,22 +2791,22 @@
           ],
           [
             "marin",
-            "No swimmers, no market. No market, no gossip. Two three-eye swimmers and some sea foam to keep them happy. Hop to it."
+            "No market, no gossip. A great shell for the counter and a coral fan for shade. Hop to it."
           ]
         ],
-        "text": "The market bubbles with gossip. Exactly right."
+        "text": "The market bubbles with gossip. Brine found an oyster bed and a tide pool under the pier."
       },
       {
         "id": "n4",
-        "name": "Crystal Stores",
+        "name": "The Store Room",
         "who": "marin",
         "needs": [
           [
-            "saltbrick",
+            "pearl",
             1
           ],
           [
-            "kelpcoil",
+            "seafoam",
             1
           ]
         ],
@@ -2712,7 +2823,7 @@
           ],
           [
             "marin",
-            "A crystal brick and a bubble jar for the store room. Please."
+            "A pearl for the lock and some sea foam to pack it all in. Please."
           ]
         ],
         "text": "Enough stores for the whole winter. Brine counted twice."
@@ -2723,11 +2834,11 @@
         "who": "marin",
         "needs": [
           [
-            "driftboat",
+            "nautilus",
             1
           ],
           [
-            "pearl",
+            "tidewave",
             1
           ]
         ],
@@ -2741,7 +2852,7 @@
           ],
           [
             "marin",
-            "A porthole to patch her with and a pearl for luck. Pilots are superstitious. I am VERY superstitious."
+            "A nautilus to patch her hull and a tide swell to lift her. Pilots are superstitious. I am VERY superstitious."
           ]
         ],
         "text": "The old saucer floats again. Pearl swears it is the same one her grandmother flew."
@@ -2750,23 +2861,36 @@
         "id": "n6",
         "name": "The Floating Launch Pad",
         "who": "bloop",
-        "launch": true,
         "needs": [
           [
-            "nautilus",
+            "shellhorn",
             1
           ],
           [
-            "coralfan",
+            "coralcrown",
             1
           ],
           [
-            "jellybell",
+            "kelpbale",
             1
           ]
         ],
+        "temp": {
+          "p": "nestbeach",
+          "taps": 16,
+          "mins": 30
+        },
         "coins": 1680,
         "xp": 170,
+        "launch": true,
+        "unlock": [
+          "fishtrap",
+          "saltpan"
+        ],
+        "retire": [
+          "shellbed",
+          "kelpbed"
+        ],
         "gift": "chest",
         "talk": [
           [
@@ -2779,10 +2903,10 @@
           ],
           [
             "bloop",
-            "A nautilus shell for the hull, a coral fan to steady it, a jelly bell for the lights."
+            "A shell horn for the hull, a coral crown to steady it, a bubble helmet for the pilot."
           ]
         ],
-        "text": "It bobs a bit. The rocket does not mind. Aurora Reach — the last world — is in range."
+        "text": "It bobs a bit. The shell bed and the bubble bed are spent; a critter trap and a crystal pan take over. Aurora Reach is in range! Up the beach, a nesting beach is full of wobbling eggs."
       },
       {
         "id": "n7",
@@ -2794,7 +2918,7 @@
             1
           ],
           [
-            "tentapal",
+            "silverfish",
             1
           ]
         ],
@@ -2807,22 +2931,22 @@
           ],
           [
             "kelpa",
-            "A shellkin to show the others the way, and a tentacle pal to wave the sky critters off. Gently!"
+            "A shellkin to show the others the way, and a three-eye swimmer to guide them to the water. Gently!"
           ]
         ],
         "text": "Every shellkin made it to the water. Kelpa counted every single one, out loud."
       },
       {
         "id": "n8",
-        "name": "The Sub Dock",
+        "name": "The Crystal Pier",
         "who": "marin",
         "needs": [
           [
-            "anchor",
+            "saltpillar",
             1
           ],
           [
-            "saltpillar",
+            "pearlstrand",
             1
           ]
         ],
@@ -2836,27 +2960,35 @@
           ],
           [
             "marin",
-            "A proper dock needs a tractor hook and a crystal pillar for a lighthouse. Do it right or do not do it."
+            "A proper pier needs a crystal pillar and a pearl strand for the lamps. Do it right or do not do it."
           ]
         ],
         "text": "Subs come and go. Some of them from worlds you woke."
       },
       {
         "id": "n9",
-        "name": "Sea-Glass Lamps",
+        "name": "Mood Lighting",
         "who": "sirra",
         "needs": [
           [
-            "glasslamp",
+            "tidalorb",
             1
           ],
           [
-            "pearlstrand",
-            1
+            "saltcake",
+            2
           ]
         ],
         "coins": 2800,
         "xp": 310,
+        "unlock": [
+          "wrecksite",
+          "lightvent"
+        ],
+        "retire": [
+          "coralhead",
+          "oysterbed"
+        ],
         "talk": [
           [
             "sirra",
@@ -2864,10 +2996,10 @@
           ],
           [
             "sirra",
-            "Sea-glass lamps and a strand of pearls to hang them on. Mood lighting. Everybody deserves mood lighting."
+            "A tidal orb that glows and two crystal cubes to hang it from. Everybody deserves mood lighting."
           ]
         ],
-        "text": "The shallows glow green at night. The humming is louder now."
+        "text": "The shallows glow at night. The coral and the oysters rest; a saucer wreck and a light vent full of jellies wake up."
       },
       {
         "id": "n10",
@@ -2879,11 +3011,11 @@
             1
           ],
           [
-            "coralpalace",
+            "salttemple",
             1
           ],
           [
-            "starurchin",
+            "jellyling",
             1
           ]
         ],
@@ -2901,7 +3033,7 @@
           ],
           [
             "sirra",
-            "Then let us wake it. A sunken idol, a coral palace and a star urchin — the old songs say that opens the gates."
+            "A sunken robot, a crystal temple and a jellyling to swim through the gate — the old songs say that opens it."
           ]
         ],
         "text": "The domes break the surface, glittering. Nerith breathes again."
@@ -2912,12 +3044,12 @@
         "who": "blorb",
         "needs": [
           [
-            "divebell",
+            "driftboat",
             1
           ],
           [
-            "glassfloat",
-            2
+            "floatjelly",
+            1
           ]
         ],
         "coins": 4000,
@@ -2929,7 +3061,7 @@
           ],
           [
             "blorb",
-            "I need a diving pod to deliver it and two glass floats to find my way back up. Six legs do not swim. I checked."
+            "A porthole pod to deliver it and a float jelly to carry me back up. Six legs do not swim. I checked."
           ]
         ],
         "text": "Postie Blorb now delivers under water. Parcels arrive a bit damp. Nobody minds."
@@ -2944,12 +3076,20 @@
             1
           ],
           [
-            "glowocto",
+            "deeplantern",
             1
           ]
         ],
         "coins": 4400,
         "xp": 490,
+        "unlock": [
+          "dock",
+          "glassbeach"
+        ],
+        "retire": [
+          "tidepool",
+          "fishtrap"
+        ],
         "gift": "chest",
         "talk": [
           [
@@ -2962,10 +3102,10 @@
           ],
           [
             "kelpa",
-            "An aquarium and a glow octo so he has a night light. He gets scared. Like me."
+            "An aquarium and a lantern critter so he has a night light. He gets scared. Like me."
           ]
         ],
-        "text": "Gerald has two hundred friends now. Kelpa visits every morning. Gerald pretends not to notice."
+        "text": "Gerald has two hundred friends now. The tide pool and the critter trap rest, and a sub dock and a glass beach open up."
       },
       {
         "id": "n13",
@@ -2973,14 +3113,19 @@
         "who": "oops",
         "needs": [
           [
-            "tidalheart",
+            "abyssorb",
             1
           ],
           [
-            "pearlorb",
+            "glassfloat",
             1
           ]
         ],
+        "temp": {
+          "p": "mantadeep",
+          "taps": 22,
+          "mins": 30
+        },
         "coins": 4800,
         "xp": 520,
         "talk": [
@@ -2990,14 +3135,14 @@
           ],
           [
             "oops",
-            "A tidal heart and a pearl orb. Pearls see everything. Hearts feel everything. I mostly guess."
+            "An abyss orb and a glass float. Orbs see everything. Floats see... up. I mostly guess."
           ],
           [
             "sirra",
             "Darling, she guessed my birthday. I am impressed and a little scared."
           ]
         ],
-        "text": "The tides now arrive exactly when Oops says. Nobody knows if she predicts them or tells them."
+        "text": "The tides now arrive exactly when Oops says. Nobody knows if she predicts them or tells them. Out in the deep, the gliders are gathering."
       },
       {
         "id": "n14",
@@ -3009,11 +3154,7 @@
             1
           ],
           [
-            "shellhorn",
-            1
-          ],
-          [
-            "seaturtle",
+            "racesub",
             1
           ]
         ],
@@ -3023,14 +3164,14 @@
         "talk": [
           [
             "sirra",
-            "Darling, the gliders are faster than anything with an engine. Let us race them!"
+            "Darling, the gliders are faster than anything with an engine. Let us prove it!"
           ],
           [
             "sirra",
-            "A star glider to lead the race, a shell horn to start it and a shell critter to judge. Slowly. Fairly."
+            "A star glider to lead the race and a racing sub to chase it."
           ]
         ],
-        "text": "The star glider won. The shell critter announced the result two hours later. Everybody waited."
+        "text": "The star glider won by a fin. The sub driver demands a rematch."
       },
       {
         "id": "n15",
@@ -3042,11 +3183,11 @@
             1
           ],
           [
-            "submarine",
+            "champsub",
             1
           ],
           [
-            "coralcity",
+            "jellymum",
             1
           ]
         ],
@@ -3060,7 +3201,7 @@
           ],
           [
             "marin",
-            "A crystal lighthouse, a submarine to guide them in and a coral city for them to visit. Forty years I waited for this."
+            "A crystal lighthouse, a champion sub to guide ships in and a jelly mum to keep the bay calm. Forty years I waited for this."
           ]
         ],
         "text": "The lighthouse sweeps the bay. Brine has stopped being grumpy. Thirty-nine years was enough."
@@ -3086,7 +3227,9 @@
       "nebula",
       "starflower",
       "planets",
-      "kite"
+      "kite",
+      "sweets",
+      "station"
     ],
     "start": [
       {
@@ -3277,6 +3420,9 @@
         ],
         "coins": 480,
         "xp": 45,
+        "unlock": [
+          "starcradle"
+        ],
         "talk": [
           [
             "zephyr",
@@ -3287,7 +3433,7 @@
             "A big cloud puff and some aurora silk to stitch it down, and you will have something to stand on."
           ]
         ],
-        "text": "A cloud you can stand on. Zephyr has been jumping on it for an hour."
+        "text": "A cloud you can stand on. Nearby, a star cradle starts to twinkle."
       },
       {
         "id": "v2",
@@ -3319,6 +3465,39 @@
       },
       {
         "id": "v3",
+        "name": "Cloud Pillows",
+        "who": "wren",
+        "needs": [
+          [
+            "thundercloud",
+            1
+          ],
+          [
+            "starspark",
+            2
+          ]
+        ],
+        "coins": 1000,
+        "xp": 85,
+        "unlock": [
+          "windvanep",
+          "skytree"
+        ],
+        "gift": "chest",
+        "talk": [
+          [
+            "wren",
+            "Chirrup! New faces! Did you hear about Zephyr? Fell off a cloud. TWICE. Anyway."
+          ],
+          [
+            "wren",
+            "Cloud pillows float off unless you pin them. A thunderhead and two star sparks, please!"
+          ]
+        ],
+        "text": "Pillows on every cloud. A wind vane spins up, and a jelly cloud drifts in to stay."
+      },
+      {
+        "id": "v4",
         "name": "Cloud Jelly",
         "who": "wren",
         "needs": [
@@ -3331,48 +3510,24 @@
             1
           ]
         ],
-        "coins": 1000,
-        "xp": 85,
-        "gift": "chest",
-        "talk": [
-          [
-            "wren",
-            "Chirrup! New faces! Did you hear about Zephyr? Fell off a cloud. TWICE. Anyway."
-          ],
-          [
-            "wren",
-            "Cloud jelly floats off unless you hold it down. A jelly jar and a wind coil to keep it put."
-          ]
-        ],
-        "text": "Wobbly jelly on every cloud. The cloud critters found it before anyone."
-      },
-      {
-        "id": "v4",
-        "name": "Tune the Chimes",
-        "who": "wren",
-        "needs": [
-          [
-            "chimeset",
-            1
-          ],
-          [
-            "prismlens",
-            1
-          ]
-        ],
+        "temp": {
+          "p": "skynestp",
+          "taps": 16,
+          "mins": 30
+        },
         "coins": 1280,
         "xp": 110,
         "talk": [
           [
             "wren",
-            "The chimes stopped ringing when the Bloom left. Nobody has gossiped properly since. Tragic."
+            "Cloud jelly! It floats off unless you hold it down."
           ],
           [
             "wren",
-            "A set of chimes and a prism lens to tune them. Chirrup!"
+            "A jelly jar and a wind coil to keep it put. Chirrup!"
           ]
         ],
-        "text": "The chimes play a tune nobody taught them. Halo says it is the Vault singing back."
+        "text": "Wobbly jelly on every cloud. The cloud critters found it before anyone. A sky nest drifts past, full of fluff."
       },
       {
         "id": "v5",
@@ -3398,31 +3553,44 @@
           ],
           [
             "wren",
-            "A sky plume to line the nests and a star cluster to keep them warm at night."
+            "A cloud nest to line and a star cluster to keep them warm at night."
           ]
         ],
         "text": "Nests on every cloud. The sky birds are home."
       },
       {
         "id": "v6",
-        "name": "The Drift Yards",
+        "name": "Sails for the Islands",
         "who": "zephyr",
         "needs": [
-          [
-            "driftballoon",
-            1
-          ],
           [
             "windvane",
             1
           ],
           [
-            "thundercloud",
+            "auroracloak",
+            1
+          ],
+          [
+            "skybasket",
             1
           ]
         ],
+        "temp": {
+          "p": "starden",
+          "taps": 16,
+          "mins": 30
+        },
         "coins": 1920,
         "xp": 180,
+        "unlock": [
+          "chimepost",
+          "prismstand"
+        ],
+        "retire": [
+          "cloudbank",
+          "auroraloom"
+        ],
         "gift": "chest",
         "talk": [
           [
@@ -3431,10 +3599,10 @@
           ],
           [
             "zephyr",
-            "A drift balloon, a wind vane to steer by, and a thundercloud for... honestly I just like thunderclouds."
+            "A wind vane to steer by, an aurora cloak for a sail, and a jelly cake for the trip. Mostly the cake."
           ]
         ],
-        "text": "Balloons between the islands. Everyone can visit everyone now."
+        "text": "Sails between the islands. The cloud bank and the aurora loom rest now; a chime post and a prism stand catch the wind. Something twinkles in a little star den."
       },
       {
         "id": "v7",
@@ -3446,7 +3614,7 @@
             1
           ],
           [
-            "auroracloak",
+            "chimebell",
             1
           ]
         ],
@@ -3459,22 +3627,22 @@
           ],
           [
             "halo",
-            "A star sprite to lead them and an aurora cloak to keep them warm. Then they will have a home."
+            "A star sprite to lead them and a chime bell to sing them to sleep."
           ]
         ],
         "text": "The little star-kits have a den of their own. They glow brighter when you visit."
       },
       {
         "id": "v8",
-        "name": "The Orbital Station",
-        "who": "zib",
+        "name": "Tune the Chimes",
+        "who": "wren",
         "needs": [
           [
-            "commsat",
+            "chimetower",
             1
           ],
           [
-            "nebjar",
+            "prismlens",
             1
           ]
         ],
@@ -3483,84 +3651,85 @@
         "gift": "chest",
         "talk": [
           [
-            "zib",
-            "Kix has found a business opportunity. Satellites! Every world talking to every world. Kix sells the phones."
+            "wren",
+            "The chimes stopped ringing when the Bloom left. Nobody has gossiped properly since. Tragic."
           ],
           [
-            "bloop",
-            "Kix. That is just a network."
-          ],
-          [
-            "zib",
-            "A comm satellite and a nebula jar for power. Kix will handle the rest. Kix always handles the rest."
+            "wren",
+            "A chime tower and a prism lens to tune it. Chirrup!"
           ]
         ],
-        "text": "Every camp on every world can talk to every other. Kix has not stopped beeping."
+        "text": "The chimes play a tune nobody taught them. Halo says it is the Vault singing back."
       },
       {
         "id": "v9",
-        "name": "The Celestial Garden",
+        "name": "The Prism Array",
         "who": "halo",
         "needs": [
-          [
-            "starpot",
-            1
-          ],
-          [
-            "ringplanet",
-            1
-          ]
-        ],
-        "coins": 3040,
-        "xp": 320,
-        "talk": [
-          [
-            "halo",
-            "The last garden. The Bloom grew here first, they say. We will grow it again."
-          ],
-          [
-            "halo",
-            "A pot of starflowers and a ringed planet to light them. Slowly. Gently."
-          ]
-        ],
-        "text": "Flowers that glow, planets that spin, a garden in the sky."
-      },
-      {
-        "id": "v10",
-        "name": "The Bloom Returns",
-        "who": "bloop",
-        "needs": [
-          [
-            "skytreehouse",
-            1
-          ],
           [
             "prismarray",
             1
           ],
           [
-            "boxkite",
+            "starforge",
             1
           ]
         ],
+        "coins": 3040,
+        "xp": 320,
+        "unlock": [
+          "silkloom",
+          "solarfarm"
+        ],
+        "retire": [
+          "starcradle",
+          "windvanep"
+        ],
+        "talk": [
+          [
+            "halo",
+            "The light is coming back. We should catch it before it slips away again."
+          ],
+          [
+            "halo",
+            "A prism array to catch it and a star forge to feed it."
+          ]
+        ],
+        "text": "Light pours across the Reach. The star cradle and the wind vane rest; a silk loom and a solar array take their turn."
+      },
+      {
+        "id": "v10",
+        "name": "The Drift Yards",
+        "who": "zephyr",
+        "needs": [
+          [
+            "driftballoon",
+            1
+          ],
+          [
+            "moonwafers",
+            1
+          ]
+        ],
+        "temp": {
+          "p": "kitepost",
+          "taps": 16,
+          "mins": 30
+        },
         "coins": 3800,
         "xp": 420,
         "gift": "chest",
         "talk": [
           [
-            "bloop",
-            "This is it. The very last piece of the Vault. Everything we carried, from the Meadow to here."
+            "zephyr",
+            "Balloons! Big ones! Between EVERY island!"
           ],
           [
-            "halo",
-            "A jelly isle, a prism array and a drone to lift it into the light."
-          ],
-          [
-            "bloop",
-            "Blorp. I think I might cry. Do not tell Rokk."
+            "zephyr",
+            "A drift balloon and a stack of moon wafers for the passengers. Wheee!"
           ]
         ],
-        "text": "Five worlds, all lit. The Vault is empty and the galaxy is full. That was the whole idea."
+        "text": "Balloons between the islands. Everyone can visit everyone now. A drone pad lands on the next cloud over."
       },
       {
         "id": "v11",
@@ -3572,7 +3741,7 @@
             1
           ],
           [
-            "dragonkite",
+            "boxkite",
             1
           ]
         ],
@@ -3585,18 +3754,59 @@
           ],
           [
             "blorb",
-            "A balloon airship to carry the mail and a cargo drone for the tricky clouds. Then I can finally be on time. Once."
+            "A balloon airship to carry the mail and a drone for the tricky clouds. Then I can finally be on time. Once."
           ]
         ],
         "text": "Sky mail flies every morning. Postie Blorb has been on time twice. A record."
       },
       {
         "id": "v12",
+        "name": "The Orbital Station",
+        "who": "zib",
+        "needs": [
+          [
+            "commsat",
+            1
+          ],
+          [
+            "roommod",
+            1
+          ]
+        ],
+        "coins": 5000,
+        "xp": 540,
+        "unlock": [
+          "nebulapool",
+          "gravwell"
+        ],
+        "retire": [
+          "skytree",
+          "chimepost"
+        ],
+        "gift": "chest",
+        "talk": [
+          [
+            "zib",
+            "Kix has found a business opportunity. Satellites! Every world talking to every world. Kix sells the phones."
+          ],
+          [
+            "bloop",
+            "Kix. That is just a network."
+          ],
+          [
+            "zib",
+            "A comm satellite and a room module for the staff. Kix will handle the rest."
+          ]
+        ],
+        "text": "Every camp on every world can talk to every other. A nebula pool and a gravity well open up beneath the station."
+      },
+      {
+        "id": "v13",
         "name": "The Grand Orrery",
         "who": "halo",
         "needs": [
           [
-            "orrery",
+            "ringplanet",
             1
           ],
           [
@@ -3604,9 +3814,8 @@
             1
           ]
         ],
-        "coins": 5000,
-        "xp": 540,
-        "gift": "chest",
+        "coins": 5500,
+        "xp": 580,
         "talk": [
           [
             "halo",
@@ -3614,46 +3823,10 @@
           ],
           [
             "halo",
-            "An orrery and a nebula lamp to light it. Then we can watch them from here."
+            "A ringed planet for the centre and a nebula lamp to light it."
           ]
         ],
-        "text": "Five little worlds turn in the lamp light. Halo watches the Meadow the longest."
-      },
-      {
-        "id": "v13",
-        "name": "The Star-Kit Parade",
-        "who": "glimmer",
-        "needs": [
-          [
-            "cometfox",
-            1
-          ],
-          [
-            "skybell",
-            1
-          ],
-          [
-            "stargarden",
-            1
-          ]
-        ],
-        "coins": 5500,
-        "xp": 580,
-        "talk": [
-          [
-            "glimmer",
-            "MAGNIFICENT! A sky full of star-kits and nobody has thought of a parade?!"
-          ],
-          [
-            "glimmer",
-            "A comet critter to lead it, a sky bell to ring it in and an orb garden to finish at. I will walk at the front. Obviously."
-          ],
-          [
-            "wren",
-            "Chirrup! I already told everyone! Twice!"
-          ]
-        ],
-        "text": "The parade went around every island. The star-kits glowed brighter than Glimmer. He let them, this once."
+        "text": "Little worlds turn in the lamp light. Halo watches the Meadow the longest."
       },
       {
         "id": "v14",
@@ -3665,7 +3838,7 @@
             1
           ],
           [
-            "stormeye",
+            "nebglobe",
             1
           ]
         ],
@@ -3679,26 +3852,26 @@
           ],
           [
             "zephyr",
-            "A rainbow bridge, and a storm eye to keep the wind calm while we cross it. Whee!"
+            "A rainbow bridge, and a nebula globe to light it at night. Whee!"
           ]
         ],
         "text": "A bridge of every colour from one end of the Reach to the other. Zephyr has crossed it forty times."
       },
       {
         "id": "v15",
-        "name": "The Gate to Everywhere",
+        "name": "The Bloom Returns",
         "who": "bloop",
         "needs": [
           [
-            "stargate",
+            "orbstation",
             1
           ],
           [
-            "supernova",
+            "twinplanets",
             1
           ],
           [
-            "bottledgalaxy",
+            "solarstation",
             1
           ]
         ],
@@ -3708,18 +3881,18 @@
         "talk": [
           [
             "bloop",
-            "Rokk heard a hum from past the edge of the map. So did Halo. So did I."
+            "This is it. The very last piece of the Vault. Everything we carried, from the Meadow to here."
+          ],
+          [
+            "halo",
+            "An orbital station to hold the light, twin planets to balance it, and a solar station to power it."
           ],
           [
             "bloop",
-            "A star gate, a supernova to power it and a bottled galaxy to show it the way. Then we go and say hello."
-          ],
-          [
-            "zib",
-            "Kix is packing. Kix has always been packing."
+            "Blorp. Rokk heard a hum from past the edge of the map. So did I. Something out there is waving."
           ]
         ],
-        "text": "The gate opens on a sky nobody has seen. Somewhere out there, something waves back. To be continued..."
+        "text": "Five worlds, all lit. The Vault is empty and the galaxy is full. And past the edge of the map, something waves back... To be continued."
       }
     ]
   }

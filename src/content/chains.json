@@ -1592,6 +1592,152 @@
       "Express delivery, please."
     ]
   },
+  "mail": {
+    "name": "Moon Mail",
+    "world": "luna",
+    "unlock": 9,
+    "items": [
+      "stampchip",
+      "lettercap",
+      "parcelpod",
+      "mailsack",
+      "mailrover",
+      "postdome"
+    ],
+    "asks": [
+      "Post for the far craters!",
+      "A parcel for my mum.",
+      "Sign here. Any leg."
+    ]
+  },
+  "bots": {
+    "name": "Helper Bots",
+    "world": "luna",
+    "unlock": 8,
+    "items": [
+      "boltbug",
+      "cupbot",
+      "sweepbot",
+      "drillbot",
+      "walkerbot",
+      "buddymech",
+      "botshop"
+    ],
+    "asks": [
+      "A helper for the garage.",
+      "Bots do the dusting now.",
+      "My bot needs a friend."
+    ]
+  },
+  "fireworks": {
+    "name": "Fireworks",
+    "world": "cindra",
+    "unlock": 9,
+    "items": [
+      "fwspark",
+      "sparkler",
+      "fwrocket",
+      "fwbox",
+      "fwcannon",
+      "fwtower"
+    ],
+    "asks": [
+      "Fireworks for the show!",
+      "Light up the hollow!",
+      "Bigger bang, please."
+    ]
+  },
+  "snail": {
+    "name": "Lava Snails",
+    "world": "cindra",
+    "unlock": 7,
+    "items": [
+      "snailegg",
+      "snailet",
+      "volcsnail",
+      "smokesnail",
+      "lampsnail",
+      "castlesnail"
+    ],
+    "asks": [
+      "This snail is lost.",
+      "A slow friend for the forge.",
+      "Shell polish day!"
+    ]
+  },
+  "jelly": {
+    "name": "Jelly Critters",
+    "world": "nerith",
+    "unlock": 6,
+    "items": [
+      "jellyegg",
+      "jellyling",
+      "floatjelly",
+      "crownjelly",
+      "jellymum",
+      "jellyqueen"
+    ],
+    "asks": [
+      "A jelly for the reef!",
+      "Wobbly friends wanted.",
+      "The jellies want a party."
+    ]
+  },
+  "racers": {
+    "name": "Bubble Racers",
+    "world": "nerith",
+    "unlock": 9,
+    "items": [
+      "racebubble",
+      "bubblescoot",
+      "finboat",
+      "racesub",
+      "champsub",
+      "racedome"
+    ],
+    "asks": [
+      "Race day tomorrow!",
+      "My sub needs a tune-up.",
+      "Fastest bubble wins!"
+    ]
+  },
+  "sweets": {
+    "name": "Star Sweets",
+    "world": "vela",
+    "unlock": 5,
+    "items": [
+      "starsweet",
+      "cometlolly",
+      "sweetjar",
+      "moonwafers",
+      "planetcake",
+      "sweetufo"
+    ],
+    "asks": [
+      "Sweets for the parade!",
+      "A treat for the star-kits.",
+      "Sugar for the long flight."
+    ]
+  },
+  "station": {
+    "name": "Space Station",
+    "world": "vela",
+    "unlock": 8,
+    "items": [
+      "rivetplate",
+      "hatchwin",
+      "dockring",
+      "roommod",
+      "twinmod",
+      "solarstation",
+      "ringstation"
+    ],
+    "asks": [
+      "Parts for the station.",
+      "A new room up there!",
+      "Docking soon, hurry!"
+    ]
+  },
   "potion": {
     "name": "Gloop Potions",
     "world": "any",

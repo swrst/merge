@@ -464,7 +464,7 @@
     "name": "Rover Scrapyard",
     "group": "producer (Crater Camp)",
     "batch": "producers",
-    "prompt": "Rover Scrapyard — a heap of old rover parts, wheels and a bent antenna, standing on its own small round mound of blue-grey slate. A source the player taps for Screw, Rover Wheel. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Crater Camp palette — lilac, pale silver, slate blue, glowing cyan. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "prompt": "Rover Scrapyard — a heap of old rover parts, wheels and a bent antenna, standing on its own small round mound of blue-grey slate. A source the player taps for Screw, Bolt Bug, Rover Wheel. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Crater Camp palette — lilac, pale silver, slate blue, glowing cyan. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
@@ -491,7 +491,7 @@
     "name": "Relay Mast",
     "group": "producer (Crater Camp)",
     "batch": "producers",
-    "prompt": "Relay Mast — a short radio mast with a small dish and a blinking red light, standing on its own small round mound of blue-grey slate. A source the player taps for Antenna Wire, Antenna. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Crater Camp palette — lilac, pale silver, slate blue, glowing cyan. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "prompt": "Relay Mast — a short radio mast with a small dish and a blinking red light, standing on its own small round mound of blue-grey slate. A source the player taps for Antenna Wire, Stamp Chip, Antenna. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Crater Camp palette — lilac, pale silver, slate blue, glowing cyan. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
@@ -572,7 +572,7 @@
     "name": "Warm Nest",
     "group": "producer (Ember Hollow)",
     "batch": "producers",
-    "prompt": "Warm Nest — a nest of warm stones around a small lava pool, orange eggs inside, standing on its own small round mound of near-black purple obsidian. A source the player taps for Warm Egg, Flame Blob. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Ember Hollow palette — ember orange, magma red, obsidian purple-black, ash grey. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "prompt": "Warm Nest — a nest of warm stones around a small lava pool, orange eggs inside, standing on its own small round mound of near-black purple obsidian. A source the player taps for Warm Egg, Snail Egg, Flame Blob. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Ember Hollow palette — ember orange, magma red, obsidian purple-black, ash grey. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
@@ -590,7 +590,7 @@
     "name": "Sulfur Spring",
     "group": "producer (Ember Hollow)",
     "batch": "producers",
-    "prompt": "Sulfur Spring — a bubbling pool crusted with bright yellow sulfur, standing on its own small round mound of near-black purple obsidian. A source the player taps for Sulfur Dust, Sulfur Crystal. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Ember Hollow palette — ember orange, magma red, obsidian purple-black, ash grey. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "prompt": "Sulfur Spring — a bubbling pool crusted with bright yellow sulfur, standing on its own small round mound of near-black purple obsidian. A source the player taps for Sulfur Dust, Fire Spark, Sulfur Crystal. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Ember Hollow palette — ember orange, magma red, obsidian purple-black, ash grey. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
@@ -680,7 +680,7 @@
     "name": "Light Vent",
     "group": "producer (Tidal Shallows)",
     "batch": "producers",
-    "prompt": "Light Vent — a deep-water vent glowing with plankton, standing on its own small round mound of deep ocean blue. A source the player taps for Glow Mote, Jelly Blob. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "prompt": "Light Vent — a deep-water vent glowing with plankton, standing on its own small round mound of deep ocean blue. A source the player taps for Glow Mote, Jelly Egg, Jelly Blob. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
@@ -707,7 +707,7 @@
     "name": "Sub Dock",
     "group": "producer (Tidal Shallows)",
     "batch": "producers",
-    "prompt": "Sub Dock — a short wooden jetty with coiled rope and a lantern post, standing on its own small round mound of warm sand. A source the player taps for Cable Coil, Float Ring. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "prompt": "Sub Dock — a short wooden jetty with coiled rope and a lantern post, standing on its own small round mound of warm sand. A source the player taps for Cable Coil, Race Bubble, Float Ring. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
@@ -761,7 +761,7 @@
     "name": "Jelly Cloud",
     "group": "producer (Aurora Reach)",
     "batch": "producers",
-    "prompt": "Jelly Cloud — a small tree growing out of a cloud, heavy with golden fruit, standing on its own small round mound of soft blue-white cloud. A source the player taps for Jelly Wisp, Jelly Blob. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "prompt": "Jelly Cloud — a small tree growing out of a cloud, heavy with golden fruit, standing on its own small round mound of soft blue-white cloud. A source the player taps for Jelly Wisp, Star Sweet, Jelly Blob. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
@@ -815,7 +815,7 @@
     "name": "Solar Array",
     "group": "producer (Aurora Reach)",
     "batch": "producers",
-    "prompt": "Solar Array — a small tilted rack of blue solar panels on a cloud, standing on its own small round mound of soft blue-white cloud. A source the player taps for Solar Cell, Solar Panel. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "prompt": "Solar Array — a small tilted rack of blue solar panels on a cloud, standing on its own small round mound of soft blue-white cloud. A source the player taps for Solar Cell, Rivet Plate, Solar Panel. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
@@ -2979,6 +2979,69 @@
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
+    "path": "src/sprites/items/boltbug.png",
+    "kind": "item",
+    "name": "Bolt Bug",
+    "group": "Helper Bots (Crater Camp)",
+    "batch": "chain-bots",
+    "prompt": "Bolt Bug — a loose bolt with tiny legs. Step 1 of 7 in the \"Helper Bots\" merge chain, so it must read as the smallest, plainest thing in its chain — tiny, humble, no decoration. Crater Camp palette — lilac, pale silver, slate blue, glowing cyan. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/cupbot.png",
+    "kind": "item",
+    "name": "Cup Bot",
+    "group": "Helper Bots (Crater Camp)",
+    "batch": "chain-bots",
+    "prompt": "Cup Bot — a round helper bot the size of a cup. Step 2 of 7 in the \"Helper Bots\" merge chain, so it must read as a step up: a little bigger, a little tidier, still found rather than made. One step up from the Bolt Bug, and its outline must be clearly different from it. Crater Camp palette — lilac, pale silver, slate blue, glowing cyan. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/sweepbot.png",
+    "kind": "item",
+    "name": "Sweeper Bot",
+    "group": "Helper Bots (Crater Camp)",
+    "batch": "chain-bots",
+    "prompt": "Sweeper Bot — a sweeper bot with a brush. Step 3 of 7 in the \"Helper Bots\" merge chain, so it must read as clearly made, not found: neat shape, one small metal or painted detail. One step up from the Cup Bot, and its outline must be clearly different from it. Crater Camp palette — lilac, pale silver, slate blue, glowing cyan. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/drillbot.png",
+    "kind": "item",
+    "name": "Digger Bot",
+    "group": "Helper Bots (Crater Camp)",
+    "batch": "chain-bots",
+    "prompt": "Digger Bot — a digger bot with a drill. Step 4 of 7 in the \"Helper Bots\" merge chain, so it must read as handsome: richer colour, a trim or a band, a faint sheen. One step up from the Sweeper Bot, and its outline must be clearly different from it. Crater Camp palette — lilac, pale silver, slate blue, glowing cyan. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/walkerbot.png",
+    "kind": "item",
+    "name": "Walker Bot",
+    "group": "Helper Bots (Crater Camp)",
+    "batch": "chain-bots",
+    "prompt": "Walker Bot — a two-legged walker bot. Step 5 of 7 in the \"Helper Bots\" merge chain, so it must read as precious: fine detailing, gold or gem accents, a soft glow around it. One step up from the Digger Bot, and its outline must be clearly different from it. Crater Camp palette — lilac, pale silver, slate blue, glowing cyan. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/buddymech.png",
+    "kind": "item",
+    "name": "Buddy Mech",
+    "group": "Helper Bots (Crater Camp)",
+    "batch": "chain-bots",
+    "prompt": "Buddy Mech — a big friendly mech. Step 6 of 7 in the \"Helper Bots\" merge chain, so it must read as a showpiece: ornate, glowing, a few floating motes of light. One step up from the Walker Bot, and its outline must be clearly different from it. Crater Camp palette — lilac, pale silver, slate blue, glowing cyan. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/botshop.png",
+    "kind": "item",
+    "name": "Bot Workshop",
+    "group": "Helper Bots (Crater Camp)",
+    "batch": "chain-bots",
+    "prompt": "Bot Workshop — a robot workshop dome. Step 7 of 7 in the \"Helper Bots\" merge chain, so it must read as the crown of the chain: a small monument, radiant, unmistakably the best. One step up from the Buddy Mech, and its outline must be clearly different from it. Crater Camp palette — lilac, pale silver, slate blue, glowing cyan. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
     "path": "src/sprites/items/gaswisp.png",
     "kind": "item",
     "name": "Gas Wisp",
@@ -3039,6 +3102,60 @@
     "group": "Helium Wells (Crater Camp)",
     "batch": "chain-helium",
     "prompt": "Fusion Reactor — a tall silver reactor with a glowing plasma ring at its centre. Step 7 of 7 in the \"Helium Wells\" merge chain, so it must read as the crown of the chain: a small monument, radiant, unmistakably the best. One step up from the Fusion Cell, and its outline must be clearly different from it. Crater Camp palette — lilac, pale silver, slate blue, glowing cyan. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/stampchip.png",
+    "kind": "item",
+    "name": "Stamp Chip",
+    "group": "Moon Mail (Crater Camp)",
+    "batch": "chain-mail",
+    "prompt": "Stamp Chip — a tiny space stamp. Step 1 of 6 in the \"Moon Mail\" merge chain, so it must read as the smallest, plainest thing in its chain — tiny, humble, no decoration. Crater Camp palette — lilac, pale silver, slate blue, glowing cyan. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/lettercap.png",
+    "kind": "item",
+    "name": "Letter Capsule",
+    "group": "Moon Mail (Crater Camp)",
+    "batch": "chain-mail",
+    "prompt": "Letter Capsule — a rolled letter in a capsule. Step 2 of 6 in the \"Moon Mail\" merge chain, so it must read as a step up: a little bigger, a little tidier, still found rather than made. One step up from the Stamp Chip, and its outline must be clearly different from it. Crater Camp palette — lilac, pale silver, slate blue, glowing cyan. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/parcelpod.png",
+    "kind": "item",
+    "name": "Parcel Pod",
+    "group": "Moon Mail (Crater Camp)",
+    "batch": "chain-mail",
+    "prompt": "Parcel Pod — a small parcel pod. Step 3 of 6 in the \"Moon Mail\" merge chain, so it must read as clearly made, not found: neat shape, one small metal or painted detail. One step up from the Letter Capsule, and its outline must be clearly different from it. Crater Camp palette — lilac, pale silver, slate blue, glowing cyan. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/mailsack.png",
+    "kind": "item",
+    "name": "Mail Sack",
+    "group": "Moon Mail (Crater Camp)",
+    "batch": "chain-mail",
+    "prompt": "Mail Sack — a stuffed mail sack with an antenna. Step 4 of 6 in the \"Moon Mail\" merge chain, so it must read as precious: fine detailing, gold or gem accents, a soft glow around it. One step up from the Parcel Pod, and its outline must be clearly different from it. Crater Camp palette — lilac, pale silver, slate blue, glowing cyan. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/mailrover.png",
+    "kind": "item",
+    "name": "Mail Rover",
+    "group": "Moon Mail (Crater Camp)",
+    "batch": "chain-mail",
+    "prompt": "Mail Rover — a little mail rover. Step 5 of 6 in the \"Moon Mail\" merge chain, so it must read as a showpiece: ornate, glowing, a few floating motes of light. One step up from the Mail Sack, and its outline must be clearly different from it. Crater Camp palette — lilac, pale silver, slate blue, glowing cyan. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/postdome.png",
+    "kind": "item",
+    "name": "Post Dome",
+    "group": "Moon Mail (Crater Camp)",
+    "batch": "chain-mail",
+    "prompt": "Post Dome — a round post office dome. Step 6 of 6 in the \"Moon Mail\" merge chain, so it must read as the crown of the chain: a small monument, radiant, unmistakably the best. One step up from the Mail Rover, and its outline must be clearly different from it. Crater Camp palette — lilac, pale silver, slate blue, glowing cyan. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
@@ -3816,6 +3933,60 @@
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
+    "path": "src/sprites/items/snailegg.png",
+    "kind": "item",
+    "name": "Snail Egg",
+    "group": "Lava Snails (Ember Hollow)",
+    "batch": "chain-snail",
+    "prompt": "Snail Egg — a warm round snail egg. Step 1 of 6 in the \"Lava Snails\" merge chain, so it must read as the smallest, plainest thing in its chain — tiny, humble, no decoration. Ember Hollow palette — ember orange, magma red, obsidian purple-black, ash grey. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/snailet.png",
+    "kind": "item",
+    "name": "Snailet",
+    "group": "Lava Snails (Ember Hollow)",
+    "batch": "chain-snail",
+    "prompt": "Snailet — a tiny snail with a glowing shell. Step 2 of 6 in the \"Lava Snails\" merge chain, so it must read as a step up: a little bigger, a little tidier, still found rather than made. One step up from the Snail Egg, and its outline must be clearly different from it. Ember Hollow palette — ember orange, magma red, obsidian purple-black, ash grey. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/volcsnail.png",
+    "kind": "item",
+    "name": "Volcano Snail",
+    "group": "Lava Snails (Ember Hollow)",
+    "batch": "chain-snail",
+    "prompt": "Volcano Snail — a happy snail with a little volcano shell. Step 3 of 6 in the \"Lava Snails\" merge chain, so it must read as clearly made, not found: neat shape, one small metal or painted detail. One step up from the Snailet, and its outline must be clearly different from it. Ember Hollow palette — ember orange, magma red, obsidian purple-black, ash grey. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/smokesnail.png",
+    "kind": "item",
+    "name": "Smoky Snail",
+    "group": "Lava Snails (Ember Hollow)",
+    "batch": "chain-snail",
+    "prompt": "Smoky Snail — a big snail with a smoking shell. Step 4 of 6 in the \"Lava Snails\" merge chain, so it must read as precious: fine detailing, gold or gem accents, a soft glow around it. One step up from the Volcano Snail, and its outline must be clearly different from it. Ember Hollow palette — ember orange, magma red, obsidian purple-black, ash grey. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/lampsnail.png",
+    "kind": "item",
+    "name": "Lamp Snail",
+    "group": "Lava Snails (Ember Hollow)",
+    "batch": "chain-snail",
+    "prompt": "Lamp Snail — a snail carrying a lava lamp shell. Step 5 of 6 in the \"Lava Snails\" merge chain, so it must read as a showpiece: ornate, glowing, a few floating motes of light. One step up from the Smoky Snail, and its outline must be clearly different from it. Ember Hollow palette — ember orange, magma red, obsidian purple-black, ash grey. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/castlesnail.png",
+    "kind": "item",
+    "name": "Castle Snail",
+    "group": "Lava Snails (Ember Hollow)",
+    "batch": "chain-snail",
+    "prompt": "Castle Snail — a giant snail with a castle on its shell. Step 6 of 6 in the \"Lava Snails\" merge chain, so it must read as the crown of the chain: a small monument, radiant, unmistakably the best. One step up from the Lamp Snail, and its outline must be clearly different from it. Ember Hollow palette — ember orange, magma red, obsidian purple-black, ash grey. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
     "path": "src/sprites/items/basaltchip.png",
     "kind": "item",
     "name": "Basalt Chip",
@@ -3912,6 +4083,60 @@
     "group": "Sulfur Springs (Ember Hollow)",
     "batch": "chain-sulfur",
     "prompt": "Brimstone Heart — a glowing yellow brimstone gem with fire inside. Step 4 of 4 in the \"Sulfur Springs\" merge chain, so it must read as the crown of the chain: a small monument, radiant, unmistakably the best. One step up from the Sulfur Cluster, and its outline must be clearly different from it. Ember Hollow palette — ember orange, magma red, obsidian purple-black, ash grey. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/fwspark.png",
+    "kind": "item",
+    "name": "Fire Spark",
+    "group": "Fireworks (Ember Hollow)",
+    "batch": "chain-fireworks",
+    "prompt": "Fire Spark — a single spark. Step 1 of 6 in the \"Fireworks\" merge chain, so it must read as the smallest, plainest thing in its chain — tiny, humble, no decoration. Ember Hollow palette — ember orange, magma red, obsidian purple-black, ash grey. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/sparkler.png",
+    "kind": "item",
+    "name": "Sparkler",
+    "group": "Fireworks (Ember Hollow)",
+    "batch": "chain-fireworks",
+    "prompt": "Sparkler — a sparkler. Step 2 of 6 in the \"Fireworks\" merge chain, so it must read as a step up: a little bigger, a little tidier, still found rather than made. One step up from the Fire Spark, and its outline must be clearly different from it. Ember Hollow palette — ember orange, magma red, obsidian purple-black, ash grey. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/fwrocket.png",
+    "kind": "item",
+    "name": "Firework",
+    "group": "Fireworks (Ember Hollow)",
+    "batch": "chain-fireworks",
+    "prompt": "Firework — a small firework rocket. Step 3 of 6 in the \"Fireworks\" merge chain, so it must read as clearly made, not found: neat shape, one small metal or painted detail. One step up from the Sparkler, and its outline must be clearly different from it. Ember Hollow palette — ember orange, magma red, obsidian purple-black, ash grey. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/fwbox.png",
+    "kind": "item",
+    "name": "Firework Box",
+    "group": "Fireworks (Ember Hollow)",
+    "batch": "chain-fireworks",
+    "prompt": "Firework Box — a box of firework rockets. Step 4 of 6 in the \"Fireworks\" merge chain, so it must read as precious: fine detailing, gold or gem accents, a soft glow around it. One step up from the Firework, and its outline must be clearly different from it. Ember Hollow palette — ember orange, magma red, obsidian purple-black, ash grey. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/fwcannon.png",
+    "kind": "item",
+    "name": "Firework Cannon",
+    "group": "Fireworks (Ember Hollow)",
+    "batch": "chain-fireworks",
+    "prompt": "Firework Cannon — a firework launcher. Step 5 of 6 in the \"Fireworks\" merge chain, so it must read as a showpiece: ornate, glowing, a few floating motes of light. One step up from the Firework Box, and its outline must be clearly different from it. Ember Hollow palette — ember orange, magma red, obsidian purple-black, ash grey. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/fwtower.png",
+    "kind": "item",
+    "name": "Sky Show Tower",
+    "group": "Fireworks (Ember Hollow)",
+    "batch": "chain-fireworks",
+    "prompt": "Sky Show Tower — a firework tower bursting into a big star. Step 6 of 6 in the \"Fireworks\" merge chain, so it must read as the crown of the chain: a small monument, radiant, unmistakably the best. One step up from the Firework Cannon, and its outline must be clearly different from it. Ember Hollow palette — ember orange, magma red, obsidian purple-black, ash grey. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
@@ -4608,6 +4833,60 @@
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
+    "path": "src/sprites/items/jellyegg.png",
+    "kind": "item",
+    "name": "Jelly Egg",
+    "group": "Jelly Critters (Tidal Shallows)",
+    "batch": "chain-jelly",
+    "prompt": "Jelly Egg — a jelly egg. Step 1 of 6 in the \"Jelly Critters\" merge chain, so it must read as the smallest, plainest thing in its chain — tiny, humble, no decoration. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/jellyling.png",
+    "kind": "item",
+    "name": "Jellyling",
+    "group": "Jelly Critters (Tidal Shallows)",
+    "batch": "chain-jelly",
+    "prompt": "Jellyling — a tiny jellyling with two eyes. Step 2 of 6 in the \"Jelly Critters\" merge chain, so it must read as a step up: a little bigger, a little tidier, still found rather than made. One step up from the Jelly Egg, and its outline must be clearly different from it. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/floatjelly.png",
+    "kind": "item",
+    "name": "Float Jelly",
+    "group": "Jelly Critters (Tidal Shallows)",
+    "batch": "chain-jelly",
+    "prompt": "Float Jelly — a floating jelly with little arms. Step 3 of 6 in the \"Jelly Critters\" merge chain, so it must read as clearly made, not found: neat shape, one small metal or painted detail. One step up from the Jellyling, and its outline must be clearly different from it. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/crownjelly.png",
+    "kind": "item",
+    "name": "Crown Jelly",
+    "group": "Jelly Critters (Tidal Shallows)",
+    "batch": "chain-jelly",
+    "prompt": "Crown Jelly — a jelly with a bubble crown. Step 4 of 6 in the \"Jelly Critters\" merge chain, so it must read as precious: fine detailing, gold or gem accents, a soft glow around it. One step up from the Float Jelly, and its outline must be clearly different from it. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/jellymum.png",
+    "kind": "item",
+    "name": "Jelly Mum",
+    "group": "Jelly Critters (Tidal Shallows)",
+    "batch": "chain-jelly",
+    "prompt": "Jelly Mum — a big jelly carrying smaller jellies. Step 5 of 6 in the \"Jelly Critters\" merge chain, so it must read as a showpiece: ornate, glowing, a few floating motes of light. One step up from the Crown Jelly, and its outline must be clearly different from it. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/jellyqueen.png",
+    "kind": "item",
+    "name": "Jelly Queen",
+    "group": "Jelly Critters (Tidal Shallows)",
+    "batch": "chain-jelly",
+    "prompt": "Jelly Queen — a giant jelly queen. Step 6 of 6 in the \"Jelly Critters\" merge chain, so it must read as the crown of the chain: a small monument, radiant, unmistakably the best. One step up from the Jelly Mum, and its outline must be clearly different from it. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
     "path": "src/sprites/items/bubbleegg.png",
     "kind": "item",
     "name": "Bubble Egg",
@@ -4767,6 +5046,60 @@
     "group": "Sub Dock (Tidal Shallows)",
     "batch": "chain-harbour",
     "prompt": "Submarine — a round yellow submarine with portholes and a periscope. Step 7 of 7 in the \"Sub Dock\" merge chain, so it must read as the crown of the chain: a small monument, radiant, unmistakably the best. One step up from the Diving Pod, and its outline must be clearly different from it. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/racebubble.png",
+    "kind": "item",
+    "name": "Race Bubble",
+    "group": "Bubble Racers (Tidal Shallows)",
+    "batch": "chain-racers",
+    "prompt": "Race Bubble — a racing bubble. Step 1 of 6 in the \"Bubble Racers\" merge chain, so it must read as the smallest, plainest thing in its chain — tiny, humble, no decoration. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/bubblescoot.png",
+    "kind": "item",
+    "name": "Bubble Scooter",
+    "group": "Bubble Racers (Tidal Shallows)",
+    "batch": "chain-racers",
+    "prompt": "Bubble Scooter — a bubble scooter. Step 2 of 6 in the \"Bubble Racers\" merge chain, so it must read as a step up: a little bigger, a little tidier, still found rather than made. One step up from the Race Bubble, and its outline must be clearly different from it. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/finboat.png",
+    "kind": "item",
+    "name": "Fin Boat",
+    "group": "Bubble Racers (Tidal Shallows)",
+    "batch": "chain-racers",
+    "prompt": "Fin Boat — a bubble boat with a fin. Step 3 of 6 in the \"Bubble Racers\" merge chain, so it must read as clearly made, not found: neat shape, one small metal or painted detail. One step up from the Bubble Scooter, and its outline must be clearly different from it. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/racesub.png",
+    "kind": "item",
+    "name": "Racing Sub",
+    "group": "Bubble Racers (Tidal Shallows)",
+    "batch": "chain-racers",
+    "prompt": "Racing Sub — a racing sub. Step 4 of 6 in the \"Bubble Racers\" merge chain, so it must read as precious: fine detailing, gold or gem accents, a soft glow around it. One step up from the Fin Boat, and its outline must be clearly different from it. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/champsub.png",
+    "kind": "item",
+    "name": "Champion Sub",
+    "group": "Bubble Racers (Tidal Shallows)",
+    "batch": "chain-racers",
+    "prompt": "Champion Sub — a racing sub with a trophy flag. Step 5 of 6 in the \"Bubble Racers\" merge chain, so it must read as a showpiece: ornate, glowing, a few floating motes of light. One step up from the Racing Sub, and its outline must be clearly different from it. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/racedome.png",
+    "kind": "item",
+    "name": "Race Dome",
+    "group": "Bubble Racers (Tidal Shallows)",
+    "batch": "chain-racers",
+    "prompt": "Race Dome — a bubble race stadium. Step 6 of 6 in the \"Bubble Racers\" merge chain, so it must read as the crown of the chain: a small monument, radiant, unmistakably the best. One step up from the Champion Sub, and its outline must be clearly different from it. Tidal Shallows palette — turquoise, coral pink, pearl white, wet sand. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
@@ -5355,6 +5688,60 @@
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
+    "path": "src/sprites/items/starsweet.png",
+    "kind": "item",
+    "name": "Star Sweet",
+    "group": "Star Sweets (Aurora Reach)",
+    "batch": "chain-sweets",
+    "prompt": "Star Sweet — a star-shaped sweet. Step 1 of 6 in the \"Star Sweets\" merge chain, so it must read as the smallest, plainest thing in its chain — tiny, humble, no decoration. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/cometlolly.png",
+    "kind": "item",
+    "name": "Comet Lolly",
+    "group": "Star Sweets (Aurora Reach)",
+    "batch": "chain-sweets",
+    "prompt": "Comet Lolly — a comet lolly. Step 2 of 6 in the \"Star Sweets\" merge chain, so it must read as a step up: a little bigger, a little tidier, still found rather than made. One step up from the Star Sweet, and its outline must be clearly different from it. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/sweetjar.png",
+    "kind": "item",
+    "name": "Planet Sweets",
+    "group": "Star Sweets (Aurora Reach)",
+    "batch": "chain-sweets",
+    "prompt": "Planet Sweets — a jar of planet sweets. Step 3 of 6 in the \"Star Sweets\" merge chain, so it must read as clearly made, not found: neat shape, one small metal or painted detail. One step up from the Comet Lolly, and its outline must be clearly different from it. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/moonwafers.png",
+    "kind": "item",
+    "name": "Moon Wafers",
+    "group": "Star Sweets (Aurora Reach)",
+    "batch": "chain-sweets",
+    "prompt": "Moon Wafers — a stack of moon wafers. Step 4 of 6 in the \"Star Sweets\" merge chain, so it must read as precious: fine detailing, gold or gem accents, a soft glow around it. One step up from the Planet Sweets, and its outline must be clearly different from it. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/planetcake.png",
+    "kind": "item",
+    "name": "Planet Cake",
+    "group": "Star Sweets (Aurora Reach)",
+    "batch": "chain-sweets",
+    "prompt": "Planet Cake — a cake shaped like a ringed planet. Step 5 of 6 in the \"Star Sweets\" merge chain, so it must read as a showpiece: ornate, glowing, a few floating motes of light. One step up from the Moon Wafers, and its outline must be clearly different from it. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/sweetufo.png",
+    "kind": "item",
+    "name": "Sweet Saucer",
+    "group": "Star Sweets (Aurora Reach)",
+    "batch": "chain-sweets",
+    "prompt": "Sweet Saucer — a sweet shop shaped like a flying saucer. Step 6 of 6 in the \"Star Sweets\" merge chain, so it must read as the crown of the chain: a small monument, radiant, unmistakably the best. One step up from the Planet Cake, and its outline must be clearly different from it. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
     "path": "src/sprites/items/silkscrap.png",
     "kind": "item",
     "name": "Silk Scrap",
@@ -5532,6 +5919,69 @@
     "group": "Satellite Works (Aurora Reach)",
     "batch": "chain-satellite",
     "prompt": "Star Gate — a huge silver ring gate with swirling light inside. Step 7 of 7 in the \"Satellite Works\" merge chain, so it must read as the crown of the chain: a small monument, radiant, unmistakably the best. One step up from the Orbital Station, and its outline must be clearly different from it. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/rivetplate.png",
+    "kind": "item",
+    "name": "Rivet Plate",
+    "group": "Space Station (Aurora Reach)",
+    "batch": "chain-station",
+    "prompt": "Rivet Plate — a small rivet plate. Step 1 of 7 in the \"Space Station\" merge chain, so it must read as the smallest, plainest thing in its chain — tiny, humble, no decoration. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/hatchwin.png",
+    "kind": "item",
+    "name": "Hatch Window",
+    "group": "Space Station (Aurora Reach)",
+    "batch": "chain-station",
+    "prompt": "Hatch Window — a round window hatch. Step 2 of 7 in the \"Space Station\" merge chain, so it must read as a step up: a little bigger, a little tidier, still found rather than made. One step up from the Rivet Plate, and its outline must be clearly different from it. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/dockring.png",
+    "kind": "item",
+    "name": "Docking Ring",
+    "group": "Space Station (Aurora Reach)",
+    "batch": "chain-station",
+    "prompt": "Docking Ring — a docking ring. Step 3 of 7 in the \"Space Station\" merge chain, so it must read as clearly made, not found: neat shape, one small metal or painted detail. One step up from the Hatch Window, and its outline must be clearly different from it. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/roommod.png",
+    "kind": "item",
+    "name": "Room Module",
+    "group": "Space Station (Aurora Reach)",
+    "batch": "chain-station",
+    "prompt": "Room Module — a station room module. Step 4 of 7 in the \"Space Station\" merge chain, so it must read as handsome: richer colour, a trim or a band, a faint sheen. One step up from the Docking Ring, and its outline must be clearly different from it. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/twinmod.png",
+    "kind": "item",
+    "name": "Twin Modules",
+    "group": "Space Station (Aurora Reach)",
+    "batch": "chain-station",
+    "prompt": "Twin Modules — two modules joined together. Step 5 of 7 in the \"Space Station\" merge chain, so it must read as precious: fine detailing, gold or gem accents, a soft glow around it. One step up from the Room Module, and its outline must be clearly different from it. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/solarstation.png",
+    "kind": "item",
+    "name": "Solar Station",
+    "group": "Space Station (Aurora Reach)",
+    "batch": "chain-station",
+    "prompt": "Solar Station — a station with solar wings. Step 6 of 7 in the \"Space Station\" merge chain, so it must read as a showpiece: ornate, glowing, a few floating motes of light. One step up from the Twin Modules, and its outline must be clearly different from it. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
+  },
+  {
+    "path": "src/sprites/items/ringstation.png",
+    "kind": "item",
+    "name": "Ring Station",
+    "group": "Space Station (Aurora Reach)",
+    "batch": "chain-station",
+    "prompt": "Ring Station — a big ring-shaped space station. Step 7 of 7 in the \"Space Station\" merge chain, so it must read as the crown of the chain: a small monument, radiant, unmistakably the best. One step up from the Solar Station, and its outline must be clearly different from it. Aurora Reach palette — violet, aurora teal, starlight gold, cloud white. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {

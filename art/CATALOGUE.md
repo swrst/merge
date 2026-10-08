@@ -1,6 +1,6 @@
 # The merge catalogue
 
-603 items across 99 chains (543 of them in the five worlds, the rest shared and rocket parts), 90 producers, 5 worlds.
+653 items across 107 chains (593 of them in the five worlds, the rest shared and rocket parts), 90 producers, 5 worlds.
 
 Each chain is a ladder: two of a thing make the next thing up. Chains run from 4 to 8
 steps. The last item in a chain is its finale — finishing one for the first time pays
@@ -86,7 +86,7 @@ Swirl Drop → Sleepy Cloud → Zap Cloud → Aurora Cloud → Rocket Vane → D
 
 ## Crater Camp — *Luna*
 
-15 chains, 98 items.
+17 chains, 111 items.
 
 **Moon Rocks** · 8 steps · Lv 1 · from the Moon Geyser  
 Moon Rock → Moon Shard → Moon Core → Moon Star → Moon Orb → Moon Idol → Moon Outpost → Lunar Palace
@@ -133,9 +133,15 @@ Antenna Wire → Antenna → Mini Dish → Radar Dish → Signal Tower → Deep 
 **Algae Farm** · 6 steps · Lv 12 · from the Algae Pods  
 Algae Drop → Algae Jar → Algae Tank → Algae Crate → Algae Dome → Algae Farm
 
+**Moon Mail** · 6 steps · Lv 9 · from the Relay Mast  
+Stamp Chip → Letter Capsule → Parcel Pod → Mail Sack → Mail Rover → Post Dome
+
+**Helper Bots** · 7 steps · Lv 8 · from the Rover Scrapyard  
+Bolt Bug → Cup Bot → Sweeper Bot → Digger Bot → Walker Bot → Buddy Mech → Bot Workshop
+
 ## Ember Hollow — *Cindra*
 
-15 chains, 97 items.
+17 chains, 109 items.
 
 **Magma Works** · 8 steps · Lv 1 · from the Lava Vent  
 Ember → Cinder → Lava Blob → Fire Opal → Sun Core → Sun Forge → Little Volcano → Sun Engine
@@ -182,9 +188,15 @@ Lava Drop → Lava Bulb → Lava Lamp → Big Lava Lamp → Lamp Stand → Lava 
 **Ruby Caves** · 7 steps · Lv 12 · from the Ruby Vein  
 Red Chip → Ruby Shard → Cut Ruby → Ruby Ring → Ruby Sceptre → Ruby Crown → Ruby Idol
 
+**Fireworks** · 6 steps · Lv 9 · from the Sulfur Spring  
+Fire Spark → Sparkler → Firework → Firework Box → Firework Cannon → Sky Show Tower
+
+**Lava Snails** · 6 steps · Lv 7 · from the Warm Nest  
+Snail Egg → Snailet → Volcano Snail → Smoky Snail → Lamp Snail → Castle Snail
+
 ## Tidal Shallows — *Nerith*
 
-15 chains, 90 items.
+17 chains, 102 items.
 
 **Shell Bed** · 7 steps · Lv 1 · from the Shell Bed  
 Shell Chip → Sea Shell → Great Shell → Nautilus → Shell Horn → Shell Throne → Shell Palace
@@ -231,9 +243,15 @@ Spike → Spikeball → Star Spike → Spike Crown
 **Gliders** · 5 steps · Lv 12 · from the Manta Deep  
 Glider Egg → Baby Glider → Glider → Star Glider → Sky Glider
 
+**Jelly Critters** · 6 steps · Lv 6 · from the Light Vent  
+Jelly Egg → Jellyling → Float Jelly → Crown Jelly → Jelly Mum → Jelly Queen
+
+**Bubble Racers** · 6 steps · Lv 9 · from the Sub Dock  
+Race Bubble → Bubble Scooter → Fin Boat → Racing Sub → Champion Sub → Race Dome
+
 ## Aurora Reach — *Vela*
 
-15 chains, 94 items.
+17 chains, 107 items.
 
 **Cloud Bank** · 7 steps · Lv 1 · from the Cloud Bank  
 Wisp → Cloudlet → Cloud Puff → Thunderhead → Cloud Castle → Cloud City → Sky Kingdom
@@ -279,6 +297,12 @@ Planet Dust → Planetoid → Mini Planet → Ringed Planet → Twin Planets →
 
 **Drones** · 4 steps · Lv 12 · from the Drone Pad  
 Rotor → Mini Drone → Drone → Cargo Drone
+
+**Star Sweets** · 6 steps · Lv 5 · from the Jelly Cloud  
+Star Sweet → Comet Lolly → Planet Sweets → Moon Wafers → Planet Cake → Sweet Saucer
+
+**Space Station** · 7 steps · Lv 8 · from the Solar Array  
+Rivet Plate → Hatch Window → Docking Ring → Room Module → Twin Modules → Solar Station → Ring Station
 
 ## Shared and rocket
 
