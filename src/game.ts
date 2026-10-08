@@ -16,7 +16,9 @@ export async function startGame() {
   const $ = (s: string): any => document.querySelector(s);
   const el = (t: string, c?: string) => { const e = document.createElement(t); if (c) e.className = c; return e; };
   const rnd = (a: any[]) => a[Math.floor(Math.random() * a.length)];
-  const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
+  /** 1234 → 1.2K, 25000 → 25K: short numbers for small labels */
+const kN = (n: number) => n >= 10000 ? Math.round(n / 1000) + 'K' : n >= 1000 ? (Math.floor(n / 100) / 10).toFixed(1).replace(/\.0$/, '') + 'K' : String(Math.round(n));
+const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   const COLS = CONFIG.board.cols, ROWS = CONFIG.board.rows, N = COLS * ROWS;
 
   /* Content lives in src/content/*.json — see content/index.ts */
@@ -524,7 +526,7 @@ export async function startGame() {
     $('#lvl').textContent = S.lvl;
     const av = $('#avatar');
     if (av && !av.dataset.on && document.documentElement.classList.contains('has-player')) { av.innerHTML = ART.char('player'); av.dataset.on = '1'; }
-    $('#xpTxt').textContent = S.xp + '/' + xpNeed(S.lvl);
+    $('#xpTxt').textContent = kN(S.xp) + '/' + kN(xpNeed(S.lvl));
     $('#xpFill').style.width = clamp(S.xp / xpNeed(S.lvl) * 100, 0, 100) + '%';
     const app = $('#app');
     WORLD_ORDER.forEach(w => app.classList.toggle(w, S.world === w));
@@ -1322,7 +1324,7 @@ export async function startGame() {
     if (refund) S.coins += refund;
     paintBoard(); confetti(); sfx.big();
     modal('bloop', 'THE ROCKET IS WHOLE!',
-      `Blorp! She flies again — and the old wreck is picked clean, so it is gone${refund ? ` (I sold the leftovers: <b>+${refund} coins</b>)` : ''}. Now we need <b>FUEL</b>, and fuel ore only falls from the sky. Watch for <b>meteors</b>: each one leaves a crater you can dig. Three Rocket Fuel and we go visit my moon!`,
+      `Blorp! She flies again — and the old wreck is picked clean, so it is gone${refund ? ` (I sold the leftovers: <b>+${refund} coins</b>)` : ''}. Now we need <b>FUEL</b>, and fuel ore only falls from the sky. Watch for <b>meteors</b>: each one leaves a crater you can dig. ${CONFIG.rocket.fuelToLaunch} Rocket Fuel and we go visit my moon! It is rare stuff, so keep every drop.`,
       'Bring on the meteors!');
     renderRocket(); renderHUD(); save();
   }
@@ -1684,8 +1686,8 @@ export async function startGame() {
         `<button class="buyBtn green" data-gift="1" ${giftReady() ? '' : 'disabled'}>${giftReady() ? 'FREE' : 'Tomorrow'}</button>`, giftReady() ? 'hot' : '')
       + (S.giftAd === today() && S.giftAd2 !== today() ? card(ART.item('chest'), 'Double the gift', 'Watch a video for another chest',
         `<button class="buyBtn green" data-giftad="1">📺 Watch</button>`, 'hot') : '')
-      + card(ART.icon('energy'), 'Energy refill', `+${CFG.shop2.energyRefill.amount} ⚡ right now`,
-        `<button class="buyBtn" data-refill="1" ${S.coins < refillPrice() ? 'disabled' : ''}>${coin}${refillPrice()}</button>`)
+      + card(ART.icon('energy'), 'Energy refill', `+${CFG.gems.refill.energy} ⚡ right now`,
+        `<button class="buyBtn gem" data-refill="1" ${S.gems < CFG.gems.refill.gems ? 'disabled' : ''}>${ART.icon('gem')}${CFG.gems.refill.gems}</button>`)
       + `</div><div class="noteLine">🔄 The free gift resets every day</div></div>`;
 
     html += `<div id="sh-gems">${gemsShop()}</div>`;
@@ -1762,7 +1764,7 @@ export async function startGame() {
     { const gc = $('#gemChest'); if (gc) gc.onclick = () => { if (spendGems(CFG.gems.galaxyChest, 'chest')) { giveItem('bigchest'); giveBoost('wand'); giveBoost('bomb'); sfx.discover(); toast('🌌 Galaxy Chest: a Treasure Chest and 2 boosters!'); paintBoard(); renderShop(); save(); } }; }
     { const gr = $('#gemRefill'); if (gr) gr.onclick = () => { gemRefill(); renderShop(); }; }
     if (shopTab === 'gems') setTimeout(() => { const sec = $('#sh-gems'); if (sec) host.scrollTo({ top: sec.offsetTop - 50 }); }, 50);
-    host.querySelectorAll('[data-refill]').forEach((b: any) => b.onclick = buyRefill);
+    host.querySelectorAll('[data-refill]').forEach((b: any) => b.onclick = () => { gemRefill(); renderShop(); });
     host.querySelectorAll('[data-chestbuy]').forEach((b: any) => b.onclick = () => buyChest(b.dataset.chestbuy));
     host.querySelectorAll('[data-buy]').forEach((b: any) => b.onclick = () => buySupply(+b.dataset.buy));
     host.querySelectorAll('[data-crate]').forEach((b: any) => b.onclick = () => buyCrate(b.dataset.crate));
@@ -4148,21 +4150,14 @@ export async function startGame() {
   function energyPop() {
     const per = regenMs(), full = S.energy >= maxEnergy();
     const next = full ? 0 : Math.max(0, per - (Date.now() - (S.eAt || Date.now())));
-    const snackLeft = Math.max(0, (S.snackAt || 0) + CONFIG.energy.snack.cooldownMs - Date.now());
     pop('⚡ Energy', `<div class="enBig">${ART.icon('energy')}<b>${S.energy}</b><i>/ ${maxEnergy()}</i></div>
       <div class="noteLine" style="margin-top:2px">${full ? 'Full! Go merge something.' : `+1 every ${Math.round(per / 60000 * 10) / 10} min · next in <b>${mmss(next)}</b>`}</div>
-      <div class="enRow"><span class="enIc">${ART.uiIcon('ic_cookie', '🍪')}</span><div><b>Snack break</b><i>+${snackAmt()} energy, every 4 hours</i></div>
-        <button class="buyBtn" id="enSnack"${snackLeft || full ? ' disabled' : ''}>${snackLeft ? mmss(snackLeft) : 'Free'}</button></div>
-      <div class="enRow"><span class="enIc">${ART.icon('energy')}</span><div><b>Refill pack</b><i>+${CFG.shop2.energyRefill.amount} energy right now</i></div>
-        <button class="buyBtn" id="enBuy"${S.coins < refillPrice() ? ' disabled' : ''}>${refillPrice()} 🪙</button></div>
       <div class="enRow"><span class="enIc">${ART.icon('gem')}</span><div><b>Big refill</b><i>+${CFG.gems.refill.energy} energy</i></div>
         <button class="buyBtn gem" id="enGem">💎 ${CFG.gems.refill.gems}</button></div>
       ${adBtn('energy', `+${CFG.ads.energy} ⚡ energy`, 'enAd')}
       <div class="noteLine">More energy: daily tasks, the 🎡 wheel, events, and 🔬 Lab research.</div>`, 'energy');
     const eg = $('#enGem'); if (eg) eg.onclick = () => { gemRefill(); energyPop(); };
     const ea = $('#enAd'); if (ea) ea.onclick = () => watchAd('energy', () => { S.energy += CFG.ads.energy; bumpChip('#chipEnergy'); sfx.boost(); renderHUD(); save(); energyPop(); });
-    const sn = $('#enSnack'); if (sn) sn.onclick = () => { ($('#btnSnack') as HTMLButtonElement).click(); setTimeout(energyPop, 100); };
-    const by = $('#enBuy'); if (by) by.onclick = () => { buyRefill(); energyPop(); };
   }
 
   /* --------------------------------------------------------- Power ×2
@@ -4403,7 +4398,12 @@ export async function startGame() {
     if (S.lvl >= SP().unlockLevel && spinsLeft()) bits.push(`<button class="qChip spin" data-q="spin">${ART.uiIcon('ic_spin', '🎡')}<b>${spinsLeft()}</b></button>`);
     if (S.seen.scrap || pouch('scrap') || pouch('starcore')) bits.push(`<button class="qChip pouch" data-q="pouch">${ART.uiIcon('ic_pouch', ART.item('starcore'))}<b>${pouch('starcore')}</b><i>${pouch('scrap')} scrap</i></button>`);
     if (stored().length) bits.push(`<button class="qChip store" data-q="store">${ART.uiIcon('ic_box', '📦')}<b>${stored().length}</b></button>`);
-    if (petOn()) bits.push(`<button class="qChip pup${pupLeft() ? '' : ' ready'}" data-q="pup">${pupArt()}<i>${pupLeft() ? mmss(pupLeft()) : 'gift!'}</i></button>`);
+    if (petOn()) {
+      // the pet says how it is at a glance: a gift waiting, hungry, or full
+      const ps = !pupLeft() ? 'gift' : petMood() === 'hungry' ? 'hungry' : petFood() >= PET_FULL ? 'full' : '';
+      const pb = { gift: '🎁', hungry: '🍖', full: '💗' }[ps] || '';
+      bits.push(`<button class="qChip pup${ps ? ' ' + ps : ''}${ps === 'gift' ? ' ready' : ''}" data-q="pup">${pupArt()}${pb ? `<b>${pb}</b>` : ''}<i>${pupLeft() ? mmss(pupLeft()) : 'gift!'}</i></button>`);
+    }
     if (S.acc) bits.push(`<button class="qChip acc" data-q="acc">${ART.uiIcon('ic_lab', '⚗️')}<i>${accLeft() ? mmss(accLeft()) : 'done!'}</i></button>`);
     const html = bits.join('');
     if (host.dataset.h === html) return;
@@ -4506,7 +4506,7 @@ export async function startGame() {
         : r < 0.2 ? { kind: 'coins', coins: 60 + Math.floor(Math.random() * 140) }
           : r < 0.26 ? { kind: 'item', id: 'scrap' }
             : r < 0.29 ? { kind: 'item', id: 'bloomspark' }
-              : r < 0.34 ? { kind: 'item', id: 'fuelore' }
+              : r < 0.305 ? { kind: 'item', id: 'fuelore' }
                 : { kind: 'item', id: miniItem(3) });
     }
     miniState = { cells, left: digs, bank: [] as any[], done: false };
@@ -4600,9 +4600,10 @@ export async function startGame() {
   function endBrew() {
     const st = miniState, hits = st.hits;
     const rewards: any[] = [];
-    for (let i = 0; i < hits; i++) rewards.push({ id: 'fuelore' });
-    if (hits >= 3) rewards.push({ coins: 150 });
-    if (hits === st.rounds) rewards.push({ id: 'fuelcan' });
+    // fuel is meant to be rare: a good brew gives one ore, a perfect one two
+    rewards.push({ coins: 40 + hits * 40 });
+    if (hits >= 3) rewards.push({ id: 'fuelore' });
+    if (hits === st.rounds) rewards.push({ id: 'fuelore' });
     $('#brewPips').innerHTML = Array.from({ length: st.rounds }, (_, i) =>
       `<i class="${st.marks[i] ? 'hit' : 'miss'}"></i>`).join('');
     const p = payout(rewards);
@@ -4836,12 +4837,12 @@ export async function startGame() {
     const hole = (k: string) => `<div class="spotPaint ${k}"></div>`;
     let ents = !rocketTime() ? '' : P ? spot('rocket', PAD.rocket, hole('rk'),
       S.met ? 'Rocket' : 'Launch pad',
-      S.met ? (allParts() ? 'Ready · ⛽' + S.fuel + '/3' : built + '/4 parts') : 'nothing here yet',
+      S.met ? (allParts() ? 'Ready · ⛽' + S.fuel + '/' + CONFIG.rocket.fuelToLaunch : built + '/4 parts') : 'nothing here yet',
       'ship painted' + (S.met && allParts() && S.fuel >= CONFIG.rocket.fuelToLaunch ? ' ready' : '')) : spot('rocket', PAD.rocket,
       S.met ? (ART.spriteUi('rocket_0') ? `<img class="campImg" src="${ART.spriteUi('rocket_' + (built >= 4 ? 3 : built >= 3 ? 2 : built >= 1 ? 1 : 0))}">`
         : built ? (ART.spriteUi('rocket_0') ? `<img class="rkImg" src="${ART.spriteUi('rocket_' + (built >= 4 ? 3 : built >= 3 ? 2 : built >= 1 ? 1 : 0))}">` : ART.rocket(S.parts)) : '<div class="spotGhost">🚀</div>') : '<div class="spotGhost">🚀</div>',
       S.met ? 'Rocket' : '???',
-      S.met ? (allParts() ? 'Ready · ⛽' + S.fuel + '/3' : built + '/4 parts') : 'nothing here yet',
+      S.met ? (allParts() ? 'Ready · ⛽' + S.fuel + '/' + CONFIG.rocket.fuelToLaunch : built + '/4 parts') : 'nothing here yet',
       'ship' + (S.met && allParts() && S.fuel >= CONFIG.rocket.fuelToLaunch ? ' ready' : ''));
     if (labOpen() && P) ents += spot('lab', PAD.lab, hole('lb'), "Dr. Zonk's Lab", S.acc && !accLeft() ? '⚗️ ready!' : '🧪 ' + S.sci, 'lab painted' + (S.acc && !accLeft() ? ' ready' : ''));
     else if (labOpen()) ents += spot('lab', PAD.lab, ART.spriteUi('camp_lab') ? `<img class="campImg" src="${ART.spriteUi('camp_lab')}">` : ART.icon('flask'), "Dr. Zonk's Lab", S.acc && !accLeft() ? '⚗️ ready!' : '🧪 ' + S.sci, 'lab' + (S.acc && !accLeft() ? ' ready' : ''));
@@ -4869,7 +4870,7 @@ export async function startGame() {
       <button class="starMapBtn" data-pop="galaxy"><span>${ART.uiIcon('ic_galaxy', '🌌')}</span><b>Galaxy</b></button>
       <div class="campRail">
         ${hubBtn('book', 'ic_album', '📖', 'Album')}
-        ${hubBtn('fun', 'ic_tent', '🎪', 'Games')}
+        ${hubBtn('fun', 'ic_fun', '🎪', 'Games')}
         ${labOpen() ? hubBtn('lab', 'ic_lab', '🔬', 'Lab') : ''}
       </div>
       ${ents}
@@ -4928,7 +4929,7 @@ export async function startGame() {
         <div class="gpCard"><b>Uncharted world</b><i>Somewhere past Aurora Reach</i><span class="gpNeed">🔭 Coming soon</span></div></div>`;
     })();
     return `<div class="gal2"><div class="galSky"></div>
-      <div class="galTop"><button class="galBack" data-pop="camp">↩ Camp</button><b>${ART.uiIcon('ic_galaxy', '🌌')} Galaxy</b><span class="galFuel">⛽ ${S.fuel}/${CONFIG.rocket.fuelToLaunch}</span></div>
+      <div class="galTop"><button class="galBack" data-pop="camp">↩ Camp</button><b>Galaxy</b><span class="galFuel">⛽ ${S.fuel}/${CONFIG.rocket.fuelToLaunch}</span></div>
       ${S.seen.starcore || S.seen.scrap ? `<button class="galStars" data-pop="stars"><span>✨</span><b>Star Chart</b><i>${CONSTS.filter(c => S.stars && S.stars[c.id]).length}/${CONSTS.length}</i></button>` : ''}
       <div class="galScroll" id="galScroll"><div class="galPath" style="height:${H}px">
         <svg class="galSvg" viewBox="0 0 100 ${H}" preserveAspectRatio="none" style="height:${H}px">
@@ -5094,7 +5095,7 @@ export async function startGame() {
       `<div class="rkWrap">${stageImg}</div>
        <div class="rkParts">${parts.map(row).join('')}</div>
        <div class="fuelRow"><div style="font-size:12px;font-weight:700">Fuel</div>
-         <div class="fuelDots">${[0, 1, 2].map(k => `<div class="fuelDot${S.fuel > k ? ' on' : ''}">${ART.icon('fuel')}</div>`).join('')}</div>
+         <div class="fuelDots">${Array.from({ length: CONFIG.rocket.fuelToLaunch }, (_, k) => k).map(k => `<div class="fuelDot${S.fuel > k ? ' on' : ''}">${ART.icon('fuel')}</div>`).join('')}</div>
          <div style="font-size:11px;color:#9a7a4e;font-weight:600">${S.fuel}/3</div></div>
        <div class="noteLine">${allParts()
         ? 'She flies. Open the galaxy and pick somewhere to go.'

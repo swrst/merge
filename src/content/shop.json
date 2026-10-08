@@ -38,15 +38,6 @@
       "basePrice": 900,
       "step": 1100,
       "max": 2
-    },
-    {
-      "id": "snack",
-      "name": "Big Cookie",
-      "desc": "Snack break gives +10 more energy",
-      "icon": "snack",
-      "basePrice": 350,
-      "step": 320,
-      "max": 3
     }
   ],
   "crates": [

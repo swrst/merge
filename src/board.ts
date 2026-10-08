@@ -486,7 +486,7 @@ class PixiBoard {
     if (s.spin) s.spin.position.set(p.x, p.y);
     // highlights are cheap and redrawn every tick, so throw the stale ones away
     ['ring', 'readyRing'].forEach(k => {
-      if (s[k]) { gsap.killTweensOf(s[k]); s[k].destroy(); s[k] = k === 'readyRing' ? null : undefined; }
+      if (s[k]) { gsap.killTweensOf(s[k]); gsap.killTweensOf(s[k].scale); s[k].destroy(); s[k] = k === 'readyRing' ? null : undefined; }
     });
     if (s.badge) { gsap.killTweensOf(s.badge); s.badge.destroy({ children: true }); s.badge = undefined; }
     // the battery bar is drawn against the old cell size — throw it away and let
@@ -834,15 +834,17 @@ class PixiBoard {
     const s = this.slots[i];
     const has = !!(s as any).readyRing;
     if (on && !has && s.art) {
-      const p = this.center(i), g = new Graphics();
-      g.roundRect(-this.cell / 2 - 2, -this.cell / 2 - 2, this.cell + 4, this.cell + 4, this.cell * 0.26)
-        .stroke({ color: 0x6ee04a, width: 4 });
-      g.position.set(p.x, p.y);
+      // a little twinkling star in the corner, not a border round the tile
+      const p = this.center(i), g = new Graphics(), r = this.cell * 0.13, q = r * 0.32;
+      g.poly([0, -r, q, -q, r, 0, q, q, 0, r, -q, q, -r, 0, -q, -q]).fill({ color: 0xffe066 }).stroke({ color: 0xffffff, width: 2 });
+      g.circle(0, 0, r * 0.28).fill({ color: 0xffffff });
+      g.position.set(p.x + this.cell * 0.33, p.y - this.cell * 0.33);
       this.lFx.addChild(g);
       (s as any).readyRing = g;
-      gsap.to(g, { alpha: 0.35, duration: 0.7, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+      gsap.to(g.scale, { x: 1.35, y: 1.35, duration: 0.6, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+      gsap.to(g, { rotation: Math.PI / 2, duration: 2.4, repeat: -1, ease: 'none' });
     } else if (!on && has) {
-      const g = (s as any).readyRing; gsap.killTweensOf(g); g.destroy(); (s as any).readyRing = null;
+      const g = (s as any).readyRing; gsap.killTweensOf(g); gsap.killTweensOf(g.scale); g.destroy(); (s as any).readyRing = null;
     }
   }
   /** charge battery under a producer: a bar you can watch empty, and the count */

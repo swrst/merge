@@ -1434,14 +1434,14 @@
     "name": "Meteor Crater",
     "art": "crater",
     "drops": [
-      "fuelore",
       "scrap",
       "junkbolt",
       "fuelore",
       "scrap",
-      "fuelore",
       "junkbolt",
-      "starcore"
+      "scrap",
+      "starcore",
+      "junkbolt"
     ],
     "mode": "once",
     "uses": 7

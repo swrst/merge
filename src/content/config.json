@@ -43,7 +43,7 @@
     "chance": 1
   },
   "rocket": {
-    "fuelToLaunch": 3
+    "fuelToLaunch": 5
   },
   "hint": {
     "idleMs": 17000

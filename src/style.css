@@ -2239,3 +2239,151 @@ html.ui-gal_rocket .gpRocket:before{content:none}
 html.ui-gal_rocket .gpRocket .uiIc{position:absolute;left:52px;top:-22px;width:40px;height:40px}
 #evo .evoTxt{text-shadow:0 2px 8px rgba(10,0,40,.95),0 0 3px rgba(10,0,40,.9)}
 .spot.painted.lab .spotTag{top:auto;bottom:100%;margin:0 0 2px}
+/* galaxy: one uniform painted sky, no dark header band, readable white text */
+.app .galTop,.galTop{background:none!important}
+.app .galScroll{-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 30px);mask-image:linear-gradient(180deg,transparent 0,#000 30px)}
+.galTop b{font-size:20px;letter-spacing:.02em;text-shadow:0 2px 0 #2a1460,0 0 10px rgba(30,10,90,.9)}
+.galFuel{background:rgba(20,10,60,.55);border-color:rgba(255,255,255,.7)}
+.gal2 .galFoot{background:none!important;color:#fff;font-size:12px;text-shadow:0 1px 0 #1d0b4f,0 0 6px rgba(20,8,70,1),0 0 12px rgba(20,8,70,.9)}
+.gal2 .galFoot b{color:#fff}
+/* pet chip: bigger, with a status badge */
+.app .side .qChip.pup{width:40px;height:40px;border-radius:14px}
+.app .side .qChip.pup .pupImg{width:36px;height:36px}
+.app .side .qChip.pup b{right:-6px;bottom:auto;top:-7px;min-width:20px;height:20px;line-height:20px;font-size:12px;background:#fff;box-shadow:0 2px 4px rgba(0,0,0,.35)}
+.app .side .qChip.pup.hungry{background:linear-gradient(180deg,#ffe3e3,#ffb3b3);box-shadow:0 0 0 2px #fff,0 0 10px rgba(255,80,80,.8);animation:readyBob 1.3s ease-in-out infinite}
+.app .side .qChip.pup.hungry b{background:#ff5a5a;animation:chipPop 1.3s ease infinite}
+.app .side .qChip.pup.full{background:linear-gradient(180deg,#e8fff0,#b9f5cf)}
+.app .side .qChip.pup.full b{background:#ffe3f1}
+.app .side .qChip.pup.gift b{background:#ffd86b}
+/* notification dots: small and neat everywhere */
+html .app .dot{width:auto!important;min-width:12px!important;height:12px!important;padding:0!important;border-radius:99px!important;
+  background:radial-gradient(circle at 35% 30%,#ff8a80,#ff3b3b 60%,#d81f2a)!important;border:1.5px solid #fff!important;
+  box-shadow:0 1px 3px rgba(80,0,10,.45)!important;top:-3px!important;right:-3px!important;font-size:0!important;line-height:12px!important}
+html .app .dot:not(:empty){min-width:16px!important;height:16px!important;line-height:13px!important;font:800 9.5px/13px Fredoka,system-ui,sans-serif!important;color:#fff!important;padding:0 3px!important;box-sizing:border-box}
+/* the shop button reads as big as the gear */
+.app .hudShop{width:46px;height:46px}
+.app .hudShop .uiIc{width:44px;height:44px}
+#btnSnack{display:none!important}
+
+/* =====================================================================
+   SPACE STATION UI (v44)
+   Light, friendly spaceship panels: white glass with a glowing cyan rim,
+   faint stars, porthole portraits; buttons are glossy "energy capsules".
+   ===================================================================== */
+:root{
+  --sp-rim:#33c3ea; --sp-rim-d:#1593c4; --sp-ink:#1b2c55; --sp-ink2:#3f5a86;
+  --sp-glass:linear-gradient(180deg,#ffffff 0%,#f1f9ff 60%,#e3f2ff 100%);
+  --sp-stars:radial-gradient(circle at 12% 18%,rgba(90,190,255,.35) 0 1.2px,transparent 2px),
+    radial-gradient(circle at 78% 30%,rgba(140,120,255,.3) 0 1px,transparent 2px),
+    radial-gradient(circle at 40% 72%,rgba(90,200,255,.3) 0 1px,transparent 2px),
+    radial-gradient(circle at 88% 84%,rgba(255,190,90,.35) 0 1.2px,transparent 2px);
+}
+@keyframes holoIn{0%{opacity:0;transform:scale(.9,.06);filter:brightness(2.2) saturate(1.6)}
+  45%{opacity:1;transform:scale(1.04,1.04);filter:brightness(1.4)}70%{transform:scale(.98,.99)}100%{opacity:1;transform:none;filter:none}}
+@keyframes scanMove{0%{background-position:0 -120px}100%{background-position:0 240px}}
+@keyframes rimPulse{0%,100%{box-shadow:0 0 0 3px var(--sp-rim),0 0 14px rgba(70,200,255,.45),0 12px 26px rgba(10,30,80,.3)}
+  50%{box-shadow:0 0 0 3px #6fe0ff,0 0 24px rgba(90,215,255,.8),0 12px 26px rgba(10,30,80,.3)}}
+
+/* ---- dialogs (#modal): the same window as the popups */
+html body .app .mBoxW{background:var(--sp-stars),var(--sp-glass)!important;background-size:120px 120px,140px 140px,90px 90px,160px 160px,100% 100%!important;
+  border:3px solid #fff!important;border-image:none!important;border-radius:26px!important;color:var(--sp-ink);
+  box-shadow:0 0 0 3px var(--sp-rim),0 0 18px rgba(70,200,255,.5),0 14px 30px rgba(10,30,80,.35)!important;padding:16px 16px 18px!important}
+html body .app .modal.open .mBoxW{animation:holoIn .5s cubic-bezier(.2,1,.4,1) both}
+html body .app .mBoxW::before{content:"";position:absolute;top:-9px;left:50%;width:74px;height:10px;margin-left:-37px;border-radius:8px 8px 3px 3px;
+  background:linear-gradient(90deg,#9ff3ff,#33c3ea 30%,#ffe36b 50%,#33c3ea 70%,#9ff3ff);box-shadow:0 0 10px rgba(80,220,255,.9);border:2px solid #fff;z-index:1}
+html body .app .mTitle{color:var(--sp-ink)!important;text-shadow:none!important}
+html body .app .mBody{color:var(--sp-ink2)}
+/* the speaker sits in a porthole, not a white blob */
+html body .app .mBoxW .face{width:82px;height:82px;margin:-50px auto 4px;border-radius:50%;overflow:hidden;position:relative;z-index:2;
+  background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.9) 0 1px,transparent 2px),radial-gradient(circle at 70% 65%,rgba(255,255,255,.8) 0 1px,transparent 2px),
+    radial-gradient(circle at 50% 40%,#5aa8ff,#1d3c9a 70%,#16245c)!important;background-size:30px 30px,40px 40px,100% 100%!important;
+  border:4px solid #fff!important;box-shadow:0 0 0 3px var(--sp-rim),0 0 14px rgba(70,200,255,.7),0 6px 12px rgba(0,0,0,.25)!important}
+html body .app .mBoxW .face>*{transform:translateY(6%) scale(1.05)}
+
+/* ---- popups (#pop) keep the painted window, plus the same entrance */
+html body .app .pop.open .popBox{animation:holoIn .45s cubic-bezier(.2,1,.4,1) both}
+
+/* ---- close buttons: round red porthole buttons */
+html body .app .mX{background:radial-gradient(circle at 35% 30%,#ff9a8f,#ff4b4b 55%,#d3202e)!important;border:3px solid #fff!important;
+  color:#fff!important;box-shadow:0 0 0 2px #b51a26,0 3px 6px rgba(0,0,0,.3)!important}
+
+/* ---- buttons: energy capsules */
+html body .app .big,html body .app .big.blue,html body .app .big.gold,html body .app .big.soft,html body .app .buyBtn,html body .app .adB{
+  position:relative;overflow:hidden;border:2px solid #fff!important;border-image:none!important;font-family:Fredoka,system-ui,sans-serif}
+html body .app .big::after,html body .app .buyBtn::after,html body .app .adB::after{content:"";position:absolute;left:8%;right:8%;top:2px;height:42%;border-radius:999px;
+  background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,0));pointer-events:none}
+/* primary: bright cyan-blue */
+html body .app .big:not(.blue):not(.gold):not(.soft):not(.adBtn):not(:disabled):not(.off),
+html body .app .buyBtn:not(:disabled):not(.gem):not(.maxed),html body .app .buyBtn.green:not(:disabled),html body .app .buyBtn.cash:not(:disabled){
+  background:linear-gradient(180deg,#7ff3ff 0%,#2cc7f2 45%,#0f8ee0 100%)!important;color:#fff!important;text-shadow:0 1px 0 #0a5a9c,0 0 6px rgba(10,80,160,.5)!important;
+  box-shadow:0 0 0 2px #0b77c2,0 4px 0 #0a5f9e,0 6px 14px rgba(20,140,230,.4)!important}
+/* spend gems / premium: gold */
+html body .app .big.gold:not(:disabled),html body .app .buyBtn.gem:not(:disabled){
+  background:linear-gradient(180deg,#fff2a6 0%,#ffd23f 50%,#f4a91a 100%)!important;color:#5c3500!important;text-shadow:0 1px 0 rgba(255,255,255,.6)!important;
+  box-shadow:0 0 0 2px #d18a0c,0 4px 0 #b06f06,0 6px 14px rgba(230,160,20,.35)!important}
+/* secondary: white glass with a cyan rim */
+html body .app .big.blue:not(:disabled),html body .app .big.soft,html body .app .big.alt:not(:disabled),html body .app .buyBtn.maxed{
+  background:linear-gradient(180deg,#ffffff,#e4f4ff)!important;color:#145a92!important;text-shadow:none!important;
+  box-shadow:0 0 0 2px var(--sp-rim),0 4px 0 #8fcbe6,0 6px 12px rgba(20,120,200,.2)!important}
+/* disabled: cool grey */
+html body .app .big:disabled,html body .app .big.off,html body .app .buyBtn:disabled{
+  background:linear-gradient(180deg,#f1f5f9,#d3dde7)!important;color:#7d8fa3!important;text-shadow:none!important;
+  box-shadow:0 0 0 2px #b8c6d4,0 3px 0 #a9b8c7!important}
+html body .app .big:active:not(:disabled),html body .app .buyBtn:active:not(:disabled){transform:translateY(3px);filter:brightness(1.08)}
+html body .app .buyBtn{border-radius:999px!important;color:#fff}
+html body .app .buyBtn .cost,html body .app .buyBtn .cost.ok{color:inherit;text-shadow:inherit}
+/* watch-a-video: a hologram capsule */
+html body .app .adB{background:linear-gradient(100deg,#5ee7ff 0%,#59b4ff 35%,#9a8cff 70%,#ff8fd6 100%)!important;color:#fff!important;
+  box-shadow:0 0 0 2px #3f86d8,0 4px 0 #2f63b0,0 0 16px rgba(120,170,255,.55)!important;border-radius:999px!important}
+html body .app .adB b{color:#fff!important;text-shadow:0 1px 0 #20408a!important}
+html body .app .adB i{color:#eef6ff!important}
+html body .app .adB .adPlay{width:36px;height:36px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 35% 30%,#ffffff,#d9f4ff)!important;box-shadow:0 0 0 2px #fff,0 0 10px rgba(255,255,255,.8)!important}
+html body .app .adB .adPlay::before{content:"";border-left:13px solid #2c7fe0;border-top:8px solid transparent;border-bottom:8px solid transparent;margin-left:4px}
+html body .app .adB .adPlay>*{display:none}
+html body .app .adB .adLeft{background:rgba(255,255,255,.25)!important;color:#fff!important;border:2px solid rgba(255,255,255,.7);border-radius:14px}
+html body .app .adB .adLeft em{color:#fff!important}
+html body .app .big.adBtn{background:linear-gradient(100deg,#5ee7ff 0%,#59b4ff 35%,#9a8cff 70%,#ff8fd6 100%)!important;
+  box-shadow:0 0 0 2px #3f86d8,0 4px 0 #2f63b0,0 0 16px rgba(120,170,255,.55)!important;color:#fff}
+
+/* ---- story dialogue (#talk): a comms screen */
+html body .app .tkBox{background:var(--sp-stars),var(--sp-glass)!important;background-size:120px 120px,140px 140px,90px 90px,160px 160px,100% 100%!important;
+  border:3px solid #fff!important;border-image:none!important;border-radius:24px!important;padding:24px 18px 14px!important;
+  box-shadow:0 0 0 3px var(--sp-rim),0 0 18px rgba(70,200,255,.5),0 12px 28px rgba(10,30,80,.35)!important;overflow:visible}
+html body .app .tkBox::before{content:"";position:absolute;inset:0;border-radius:21px;pointer-events:none;opacity:.35;
+  background:repeating-linear-gradient(180deg,rgba(80,200,255,.0) 0 3px,rgba(80,200,255,.12) 3px 4px)}
+html body .app .tkText{color:var(--sp-ink)!important}
+html body .app .tkMore{color:var(--sp-rim-d)!important}
+html body .app .tkName{background:linear-gradient(180deg,#5fe4ff,#1aa6e0)!important;color:#fff!important;border:2px solid #fff;border-radius:999px!important;
+  padding:4px 18px!important;text-shadow:0 1px 0 #0b5c96;box-shadow:0 0 0 2px var(--sp-rim-d),0 0 12px rgba(80,210,255,.7)!important;top:-17px!important}
+html body .app .talk.right .tkName{background:linear-gradient(180deg,#ffe58a,#f4b21f)!important;color:#5c3500!important;text-shadow:0 1px 0 rgba(255,255,255,.6);box-shadow:0 0 0 2px #c98a0c,0 0 12px rgba(255,200,60,.7)!important}
+html body .app .talk.open .tkBox{animation:holoIn .4s cubic-bezier(.2,1,.4,1) both}
+
+/* ---- tips (coach + tutorial): small holo panels that beam in */
+html body .app .coachBub,html body .app .tBubble{background:var(--sp-stars),var(--sp-glass)!important;background-size:120px 120px,140px 140px,90px 90px,160px 160px,100% 100%!important;
+  border:3px solid #fff!important;border-radius:20px!important;color:var(--sp-ink)!important;overflow:visible;
+  animation:holoIn .45s cubic-bezier(.2,1,.4,1) both,rimPulse 2.4s ease-in-out .5s infinite!important}
+html body .app .coachBub::after,html body .app .tBubble::after{content:"";position:absolute;inset:0;border-radius:17px;pointer-events:none;
+  background:linear-gradient(180deg,transparent 0,rgba(110,220,255,.28) 50%,transparent 100%) 0 0/100% 60px no-repeat;animation:scanMove 2.6s linear infinite}
+html body .app .coachBub b,html body .app .tBubble b{color:#0f86c8!important}
+html body .app .coachFace,html body .app .tBubble .face{border-radius:50%;
+  background:radial-gradient(circle at 50% 40%,#5aa8ff,#1d3c9a 70%,#16245c)!important;border:3px solid #fff!important;box-shadow:0 0 0 2px var(--sp-rim),0 0 10px rgba(70,200,255,.7)!important}
+html body .app .tNext{background:linear-gradient(180deg,#7ff3ff,#2cc7f2 45%,#0f8ee0)!important;color:#fff!important;border:2px solid #fff!important;border-radius:999px!important;box-shadow:0 0 0 2px #0b77c2,0 3px 0 #0a5f9e!important}
+html body .app .tSkip{color:var(--sp-ink2)!important}
+
+/* ---- toasts: a little holo strip */
+html body .app .toast{background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(225,243,255,.96))!important;color:var(--sp-ink)!important;border:2px solid #fff!important;
+  box-shadow:0 0 0 2px var(--sp-rim),0 0 14px rgba(70,200,255,.5),0 6px 14px rgba(10,30,80,.25)!important;border-radius:999px!important}
+
+/* ---- shop cards: space-glass tiles */
+html body .app .sCard{background:var(--sp-glass)!important;border:2px solid #fff!important;box-shadow:0 0 0 2px #bfe6f5,0 4px 10px rgba(20,90,160,.12)!important}
+html body .app .sCard.hot{background:linear-gradient(180deg,#fffbe8,#fff0bf)!important;box-shadow:0 0 0 2px #ffd25a,0 0 12px rgba(255,200,60,.45)!important}
+html body .app .sCard b{color:var(--sp-ink)}
+/* camp hub: the painted round icons are the buttons, no extra disc around them */
+html body .app .campRail .hubBtn .ti{width:58px;height:58px;background:none!important;border:0!important;box-shadow:none!important;overflow:visible}
+html body .app .campRail .hubBtn .ti .uiIc{width:58px!important;height:58px!important;filter:drop-shadow(0 0 8px rgba(110,200,255,.6)) drop-shadow(0 3px 4px rgba(0,0,0,.35))}
+html body .app .campRail .hubBtn i{background:rgba(255,255,255,.95);color:var(--sp-ink);border:0;box-shadow:0 0 0 2px var(--sp-rim)}
+html.ui-btn_close body .app .mX{background:var(--ui-btn_close) center/contain no-repeat!important;border:0!important;box-shadow:0 3px 6px rgba(0,0,0,.25)!important;color:transparent!important}
+html body .app .tBubble .face,html body .app .coachFace{overflow:hidden;display:flex;align-items:flex-end;justify-content:center}
+html body .app .tBubble .face>*,html body .app .coachFace>*{width:100%!important;height:100%!important;margin:0!important;position:static!important;transform:translateY(8%) scale(1.1)}
+html body .app .tSkip{background:linear-gradient(180deg,#ffffff,#e4f4ff)!important;border-radius:999px!important;box-shadow:0 0 0 2px var(--sp-rim)!important}
