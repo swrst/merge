@@ -2132,7 +2132,7 @@ html.ui-ribbon .screen:not(.scene) .scTitle,html.ui-ribbon .popRibbon{padding:5p
 .app .order .oFig .stand.bust{height:72px!important}
 .app .topRow{min-height:156px}
 /* ============================================================ v41 Star Chart */
-.galStars{position:absolute;top:58px;right:10px;z-index:6;display:flex;align-items:center;gap:5px;padding:6px 12px 6px 8px;border-radius:99px;
+.galStars{position:absolute;top:104px;right:12px;z-index:6;display:flex;align-items:center;gap:5px;padding:6px 12px 6px 8px;border-radius:99px;
   background:linear-gradient(180deg,#3b2a8a,#1d1452);border:2px solid #ffd76e;box-shadow:0 0 14px rgba(255,215,110,.55);color:#fff;font-family:inherit;font-size:12px;animation:skGlow 2.4s ease-in-out infinite}
 .galStars span{font-size:18px}.galStars i{font-style:normal;color:#ffe9a8;font-weight:800}
 @keyframes skGlow{0%,100%{box-shadow:0 0 10px rgba(255,215,110,.45)}50%{box-shadow:0 0 20px rgba(255,215,110,.9)}}
