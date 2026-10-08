@@ -85,7 +85,8 @@
       "name": "Rainbow Gem",
       "desc": "A wildcard tile that merges with anything",
       "icon": "rainbow",
-      "price": 420
+      "price": 420,
+      "gems": 20
     }
   ]
 }

@@ -221,6 +221,14 @@
       "icon": "crate",
       "item": "starcore",
       "qty": 2
+    },
+    {
+      "id": "rainbowfuel",
+      "name": "Rainbow Gem",
+      "desc": "Refine rocket fuel into a wildcard",
+      "icon": "rainbow",
+      "item": "rocketfuel",
+      "qty": 1
     }
   ],
   "tasks": {
@@ -400,6 +408,10 @@
     "chestPrice": {
       "chest": 140,
       "bigchest": 520
+    },
+    "chestGems": {
+      "chest": 12,
+      "bigchest": 35
     }
   },
   "event": {

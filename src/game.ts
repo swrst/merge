@@ -1577,9 +1577,10 @@ export async function startGame() {
     paintBoard(); renderShop(); renderHUD(); renderOrders(); save();
   }
   function buyBooster(id: string) {
-    const bo = SHOP.boosters.filter(x => x.id === id)[0]; if (!bo) return;
-    if (S.coins < bo.price) { sfx.no(); toast('Not enough coins — that costs ' + bo.price + '.'); return; }
-    spend(bo.price); giveBoost(id);
+    const bo: any = SHOP.boosters.filter(x => x.id === id)[0]; if (!bo) return;
+    if (bo.gems) { if (!spendGems(bo.gems, 'boost')) return; }
+    else { if (S.coins < bo.price) { sfx.no(); toast('Not enough coins — that costs ' + bo.price + '.'); return; } spend(bo.price); }
+    giveBoost(id);
     sfx.coin(); haptic('light');
     toast('🎁 <b>' + bo.name + '</b> ready above the board!');
     renderShop(); renderHUD(); renderTools(); save();
@@ -1658,10 +1659,10 @@ export async function startGame() {
     renderShop(); renderHUD(); save();
   }
   function buyChest(id: string) {
-    const price = CFG.shop2.chestPrice[id];
-    if (S.coins < price) { sfx.no(); toast('Not enough coins — that costs ' + price + '.'); return; }
+    const price = CFG.shop2.chestGems[id];
     if (!freeCells().length) { sfx.no(); toast('No room on the board! Merge something first.'); return; }
-    spend(price); giveItem(id);
+    if (!spendGems(price, 'chest')) return;
+    giveItem(id);
     sfx.coin(); toast(`📦 A <b>${ITEMS[id].name}</b> is on your board — tap it to open!`);
     renderShop(); renderHUD(); save();
   }
@@ -1669,13 +1670,11 @@ export async function startGame() {
   function renderShop() {
     const host = $('#shopBody'); if (!host) return;
     $('#shopCoins').textContent = S.coins;
-    const stock = shopStock();
-    const mins = Math.max(1, Math.ceil((SHOP.supplyRestockMs - (Date.now() - S.shop.at)) / 60000));
     const coin = ART.icon('coin');
     const card = (art: string, name: string, desc: string, btn: string, cls = '') =>
       `<div class="sCard ${cls}"><div class="sCArt">${art}</div><div class="sCName">${name}</div><div class="sCDesc">${desc}</div>${btn}</div>`;
     const tabs = [['deals', '🎁 Deals'], ['gems', '💎 Gems'], ['coins', '🪙 Coins'], ['chests', '📦 Chests'], ['boost', '✨ Boosters'], ['up', '⭐ Upgrades']];
-    const rocketBits = (labOffered() && !S.lab.built) || allParts() || building() || S.seen.scrap;
+    const rocketBits = (labOffered() && !S.lab.built) || S.seen.scrap;
     if (rocketBits) tabs.push(['rocket', '🚀 Rocket']);
     let html = `<div class="shopTabs">${tabs.map(([k, t]) => `<button class="sTab${shopTab === k ? ' on' : ''}" data-jump="${k}">${t}</button>`).join('')}</div>`;
 
@@ -1687,25 +1686,20 @@ export async function startGame() {
         `<button class="buyBtn green" data-giftad="1">📺 Watch</button>`, 'hot') : '')
       + card(ART.icon('energy'), 'Energy refill', `+${CFG.shop2.energyRefill.amount} ⚡ right now`,
         `<button class="buyBtn" data-refill="1" ${S.coins < refillPrice() ? 'disabled' : ''}>${coin}${refillPrice()}</button>`)
-      + stock.map((st: any, k: number) => {
-        const price = supplyPrice(st.id), out = st.left <= 0, poor = S.coins < price;
-        return card(ART.item(st.id) + (st.left > 0 ? `<span class="stock">x${st.left}</span>` : ''), ITEMS[st.id].name,
-          out ? 'Sold out' : 'Straight to your board',
-          `<button class="buyBtn" data-buy="${k}" ${out || poor ? 'disabled' : ''}>${out ? 'SOLD' : coin + price}</button>`);
-      }).join('')
-      + `</div><div class="noteLine">🔄 New shelf in about ${mins} min · the gift resets every day</div></div>`;
+      + `</div><div class="noteLine">🔄 The free gift resets every day</div></div>`;
 
     html += `<div id="sh-gems">${gemsShop()}</div>`;
     html += coinShop();
     html += `<div class="sSec" id="sh-chests"><div class="sSecT">${ART.uiIcon('sec_chests', '📦')} Chests</div><div class="shopGrid">`
       + ['chest', 'bigchest'].map(id => card(ART.item(id), ITEMS[id].name,
         `${CFG.chest[id].items} things from this world${CFG.chest[id].coins ? ' + ' + CFG.chest[id].coins + ' coins' : ''}`,
-        `<button class="buyBtn" data-chestbuy="${id}" ${S.coins < CFG.shop2.chestPrice[id] ? 'disabled' : ''}>${coin}${CFG.shop2.chestPrice[id]}</button>`)).join('')
+        `<button class="buyBtn gem" data-chestbuy="${id}" ${S.gems < CFG.shop2.chestGems[id] ? 'disabled' : ''}>${ART.icon('gem')}${CFG.shop2.chestGems[id]}</button>`)).join('')
       + `</div><div class="noteLine">Two Supply Chests merge into a Treasure Chest.</div></div>`;
 
     html += `<div class="sSec" id="sh-boost"><div class="sSecT">${ART.uiIcon('sec_boost', '✨')} Boosters</div><div class="shopGrid">`
       + SHOP.boosters.map(bo => card(ART.icon(bo.icon) + (boostN(bo.id) ? `<span class="stock">x${boostN(bo.id)}</span>` : ''), bo.name, bo.desc,
-        `<button class="buyBtn" data-boost="${bo.id}" ${S.coins < bo.price ? 'disabled' : ''}>${coin}${bo.price}</button>`)).join('')
+        bo.gems ? `<button class="buyBtn gem" data-boost="${bo.id}" ${S.gems < bo.gems ? 'disabled' : ''}>${ART.icon('gem')}${bo.gems}</button>`
+          : `<button class="buyBtn" data-boost="${bo.id}" ${S.coins < bo.price ? 'disabled' : ''}>${coin}${bo.price}</button>`)).join('')
       + `</div><div class="noteLine">Boosters wait in the row above the board.</div></div>`;
 
     html += `<div class="sSec" id="sh-up"><div class="sSecT">${ART.uiIcon('sec_up', '⭐')} Permanent upgrades</div>
@@ -1728,10 +1722,10 @@ export async function startGame() {
               <span class="${S.coins >= bd.coins ? 'ok' : ''}">${coin}${bd.coins}</span></div></div>
           <button class="buyBtn green" id="btnBuildLab">BUILD</button></div>`;
       }
-      if (allParts()) r += DEPOT.map((d, k) => `<div class="shopRow"><div class="sArt">${ART.item(d.id)}</div>
+      if (false) r += DEPOT.map((d, k) => `<div class="shopRow"><div class="sArt">${ART.item(d.id)}</div>
           <div class="sInfo"><div class="sName">${ITEMS[d.id].name}</div><div class="sDesc">${d.note}</div></div>
           <button class="buyBtn green" data-depot="${k}" ${S.coins < depotPrice(d) ? 'disabled' : ''}>${coin}${depotPrice(d)}</button></div>`).join('');
-      if (building()) r += SHOP.crates.map(c => `<div class="shopRow"><div class="sArt">${ART.icon(c.icon)}</div>
+      if (false) r += SHOP.crates.map(c => `<div class="shopRow"><div class="sArt">${ART.icon(c.icon)}</div>
           <div class="sInfo"><div class="sName">${c.name}</div><div class="sDesc">${c.desc}</div></div>
           <button class="buyBtn green" data-crate="${c.id}" ${S.coins < c.price ? 'disabled' : ''}>${coin}${c.price}</button></div>`).join('');
       if (S.seen.scrap) r += `<div class="pouchRow">Star Pouch: ${ART.item('scrap')}<b>${pouch('scrap')}</b> Scrap · ${ART.item('starcore')}<b>${pouch('starcore')}</b> Cores</div>`;
@@ -2647,6 +2641,8 @@ export async function startGame() {
     } else if (id === 'reroll') {
       S.orders = []; fillOrders(true);
       toast('📜 A fresh set of contracts!');
+    } else if (id === 'rainbowfuel') {
+      giveBoost('rainbow'); toast('🌈 A <b>Rainbow Gem</b> is ready above the board!');
     } else if (id === 'call') {
       if (!S.met) { toast('Nothing to call down yet.'); return; }
       meteorTimer = 0; S.perkAt = Date.now();
@@ -2682,7 +2678,7 @@ export async function startGame() {
      from chapter 6 on, a chapter that brings a producer asks for every one on
      the board (and in storage) at max level — except those it retires. */
   function upNeeds(p: any): { k: string; lv: number }[] {
-    if (!p || !p.unlock || !scripted()) return [];
+    if (!p || !scripted()) return [];   // every chapter from 6 on, not only the ones that hand out a producer
     const k = projList().indexOf(p); if (k < 5) return [];
     const out: { k: string; lv: number }[] = [], seen = new Set<string>();
     const look = (c: any) => {
@@ -3147,7 +3143,17 @@ export async function startGame() {
 
   /* =============================================================== TRAVEL */
   /** somewhere you have already been: flying back costs nothing */
-  const visited = (w: string) => w === 'earth' || !!S.unlocked[w];
+  /** a world counts as reached only once the world before it is restored —
+      saves from older versions could have every planet "unlocked" early,
+      and those planets showed "Fly back" before you had earned them */
+  const visited = (w: string): boolean => {
+    if (w === 'earth') return true;
+    if (!S.unlocked[w]) return false;
+    if (w === S.world) return true;
+    const prev = WORLD_ORDER[WORLD_ORDER.indexOf(w) - 1];
+    return !!prev && visited(prev) && prevOpen(prev);
+  };
+  const prevOpen = (prev: string) => projList(prev).some((p: any) => p.unlock) ? worldDone(prev) : launchDone(prev);
   /** a new world opens on the map once the previous one's launch project is built */
   /** a world only opens once every item and producer in it is painted — no stand-in art, ever */
   const paintedCache: Record<string, boolean> = {};
@@ -3161,7 +3167,7 @@ export async function startGame() {
     const prev = WORLD_ORDER[i - 1];
     if (i <= 0 || !visited(prev)) return false;
     // a story world opens the next only when it is fully restored
-    return projList(prev).some((p: any) => p.unlock) ? worldDone(prev) : launchDone(prev);
+    return prevOpen(prev);
   };
   function travelTo(w: string) {
     const free = visited(w);
@@ -4077,7 +4083,6 @@ export async function startGame() {
       ${card('brew', '⚗️', 'Fuel Brewing', cd('brew'), rocketTime() ? '' : (S.met ? '🔒 When the ship turns up' : '🔒 After the meteor'))}
       ${card('market', '🛍️', 'Alien Market', cd('market'), S.met ? '' : '🔒 After the meteor')}
       ${card('bingo', '🧩', 'Clean-up Bingo', bingoSub(), lockLv(4), bingoReady() > 0)}
-      ${card('stars', '✨', 'Constellations', Object.keys(S.stars || {}).length + ' traced · Star Cores', S.seen.starcore || S.seen.scrap ? '' : '🔒 After the meteor')}
     </div>`, 'fun');
     document.querySelectorAll<HTMLElement>('[data-fun]').forEach(b => b.onclick = () => {
       if (b.classList.contains('locked')) { sfx.no(); toast('Not yet — ' + b.querySelector('i')!.textContent); return; }
@@ -4085,7 +4090,7 @@ export async function startGame() {
       if (k === 'event') { eventPop(); return; }
       if (k === 'spin') { spinPop(); return; }
       closePop();
-      if (k === 'stars') { closePop(); starsPanel(); return; }
+      if (k === 'stars') { closePop(); starChart(); return; }
       if (k === 'bingo') { bingoPop(); return; }
       if (k === 'pairs') playPairs(); else if (k === 'dig') playDig(); else if (k === 'brew') playBrew(); else playMarket();
     });
@@ -4200,7 +4205,11 @@ export async function startGame() {
   const PET_NEXT: Record<string, string> = { star: 'nova', crater: 'titan', comet: 'king' };
   const PET_EVOLVE = { pup: 5, branch: 10, final: 20 };
   const PET_MAXLV = 25;
-  const petXpNeed = (lv: number) => 20 + lv * 15;
+  const petXpNeed = (lv: number) => 40 + lv * 30;
+  /** XP per meal: small, so a pet grows over days, not seconds */
+  const petFeedXp = (t: number) => 2 + t * 2;
+  /** it only eats when it has room: a meal fills it up, it gets hungry again over hours */
+  const PET_FULL = 75, PET_MEAL = 30;
   const pet = () => S.pup as any;
   function petMigrate() {
     const p = pet(); if (!p) return;
@@ -4232,13 +4241,21 @@ export async function startGame() {
   const PET_LV = 10;
   function pupTick() {
     if (!petPainted()) return;
-    if (pet()) { petMigrate(); return; }
+    if (pet()) {
+      petMigrate();
+      if (!S.petIntro && S.tut && view === 'board' && !popOpen() && !$('#modal').classList.contains('open') && !$('#talk').classList.contains('open')) { S.petIntro = 1; save(); petIntro(); }
+      return;
+    }
     // it comes from the Moon: the first time you are there (and settled in)
     if (S.lvl < PET_LV || S.world === 'earth' || !S.tut || view !== 'board' || popOpen() || $('#modal').classList.contains('open') || $('#talk').classList.contains('open')) return;
-    S.pup = { at: Date.now() - 38 * 60000, n: 0, pet: 0, form: 'baby', lv: 1, xp: 0, food: Date.now() }; save();
+    S.pup = { at: Date.now() - 38 * 60000, n: 0, pet: 0, form: 'baby', lv: 1, xp: 0, food: Date.now() }; S.petIntro = 1; save();
+    petIntro();
+  }
+  function petIntro() {
     talkScene([['bloop', 'Something crawled out of a crater and into my lab coat. It is squishy. It has too many eyes. It will not leave.'],
       ['zib', 'A Gloopling! Kix knows these. They fetch things. They eat things. They CHANGE, friend.'],
-      ['bloop', 'Feed it your spare items and collect what it brings. If it is happy, it will evolve. Into what, nobody knows.']], () => { renderQuick(); setTimeout(pupPop, 600); });
+      ['bloop', 'Tap it on the left of the board. It brings you a gift every half hour or so.'],
+      ['bloop', 'Feed it a few spare items when it is hungry. Full bellies are happy bellies. Happy ones grow, and one day they evolve. Into what, nobody knows.']], () => { renderQuick(); setTimeout(pupPop, 600); });
   }
   function petGainXp(n: number) {
     const p = pet(); if (!p || p.lv >= PET_MAXLV) return;
@@ -4279,9 +4296,10 @@ export async function startGame() {
   }
   function petFeed(id: string) {
     const b = B(), at = b.findIndex((c: any) => c && c.id === id); if (at < 0) return;
-    const t = ITEMS[id].tier, xp = 4 * t * t;
+    if (petFood() >= PET_FULL) { sfx.no(); toast(`😋 ${petForm().name} is full! Feed it again in about ${Math.ceil((petFood() - PET_FULL + 1) * 8 / 100 * 60)} min.`); return; }
+    const t = ITEMS[id].tier, xp = petFeedXp(t);
     board.consume(at, id); b[at] = null;
-    pet().food = Date.now() - (100 - Math.min(100, petFood() + 20 * t)) * 8 * 36000;
+    pet().food = Date.now() - (100 - Math.min(100, petFood() + PET_MEAL)) * 8 * 36000;
     sfx.pop(); setTimeout(() => sfx.voice('pup', 2), 120); haptic('light');
     const st = $('#pupStage'); if (st) { st.classList.remove('eating'); void (st as HTMLElement).offsetWidth; st.classList.add('eating'); }
     petGainXp(xp); paintBoard(); renderOrders(); save();
@@ -4307,8 +4325,8 @@ export async function startGame() {
         <span>Food</span><div class="catBar food"><i style="width:${food}%"></i></div></div>
       <div class="noteLine">${f.perk} ${evoAt ? `<br><b>Evolves at level ${evoAt}.</b>` : '<br>Final form!'}</div>
       <div class="noteLine">Next gift in <b>${mmss(pupLeft())}</b>${mood === 'happy' ? ' (fed: faster)' : mood === 'hungry' ? ' — <b>hungry, so slower</b>' : ''}.</div>
-      <div class="petFeed"><b>Feed it a spare item</b> <i>(bigger items, more XP)</i>
-        <div class="petFoods">${feed.length ? feed.map(([id, n]) => `<button class="petFood" data-feed="${id}">${ART.item(id)}<em>×${n}</em><small>+${4 * ITEMS[id].tier * ITEMS[id].tier} XP</small></button>`).join('') : '<div class="evOff">Nothing spare on the board right now.</div>'}</div></div>
+      <div class="petFeed"><b>${food >= PET_FULL ? 'Full! Feed it again later' : 'Feed it a spare item'}</b> <i>(${food >= PET_FULL ? 'it gets hungry over a few hours' : 'a few bites, then it is full'})</i>
+        <div class="petFoods">${feed.length ? feed.map(([id, n]) => `<button class="petFood" data-feed="${id}">${ART.item(id)}<em>×${n}</em><small>+${petFeedXp(ITEMS[id].tier)} XP</small></button>`).join('') : '<div class="evOff">Nothing spare on the board right now.</div>'}</div></div>
       <button class="big soft" id="pupPet">Pet ${f.name}</button></div>`, 'fun');
     document.querySelectorAll<HTMLElement>('[data-feed]').forEach(b => b.onclick = () => petFeed(b.dataset.feed!));
     ($('#pupPet') as HTMLElement).onclick = () => {
@@ -4363,7 +4381,7 @@ export async function startGame() {
     host.dataset.h = html; host.innerHTML = html;
     host.querySelectorAll('[data-q]').forEach((b: any) => b.onclick = () => {
       const k = b.dataset.q;
-      if (k === 'event') eventPop(); else if (k === 'spin') spinPop(); else if (k === 'pup') pupPop(); else if (k === 'store') storagePop(); else if (k === 'pouch') starsPanel(); else { setView('lab'); labAccPop(); }
+      if (k === 'event') eventPop(); else if (k === 'spin') spinPop(); else if (k === 'pup') pupPop(); else if (k === 'store') storagePop(); else if (k === 'pouch') starChart(); else { setView('lab'); labAccPop(); }
     });
   }
 
@@ -4616,74 +4634,128 @@ export async function startGame() {
   /* ----------------------------------------------------- 4. Constellations
      The permanent one, and the sink the Star Cores needed. Trace a shape by
      tapping its stars in order; light it and keep the bonus for good. */
-  const CONSTS = [
-    { id: 'plough', name: 'The Plough', cost: 2, perk: '+10% coins from every sale and contract', pts: [[18, 70], [34, 58], [50, 52], [66, 46], [74, 30], [58, 22], [44, 30]] },
-    { id: 'lantern', name: 'The Lantern', cost: 3, perk: 'Every producer holds 20% more charges', pts: [[30, 26], [70, 26], [78, 52], [50, 76], [22, 52]] },
-    { id: 'seed', name: 'The Seed', cost: 4, perk: 'Producers recharge 20% faster', pts: [[50, 18], [72, 36], [64, 66], [36, 66], [28, 36], [50, 44]] },
-    { id: 'vault', name: 'The Vault', cost: 6, perk: 'Every Bloom Essence you feed a Heart counts double', pts: [[24, 34], [50, 22], [76, 34], [76, 64], [50, 78], [24, 64], [50, 50]] },
+  /* Ten of them, two per world, each one dearer than the last: the sky fills
+     in over the whole game, not in an afternoon. A constellation can only be
+     traced once you have reached its world. Positions are on a 100 x 100 box. */
+  const CONSTS: any[] = [
+    { id: 'plough', name: 'The Rocket', world: 'earth', cost: 3, perk: '+10% coins from every sale and contract', pts: [[50, 12], [62, 34], [62, 70], [74, 86], [50, 78], [26, 86], [38, 70], [38, 34], [50, 12]] },
+    { id: 'lantern', name: 'The Lantern', world: 'earth', cost: 5, perk: 'Every producer holds 20% more charges', pts: [[50, 14], [72, 30], [76, 62], [50, 84], [24, 62], [28, 30], [50, 14]] },
+    { id: 'seed', name: 'The Moon Pup', world: 'luna', cost: 7, perk: 'Producers recharge 20% faster', pts: [[22, 40], [38, 24], [52, 40], [70, 34], [82, 52], [66, 72], [40, 74], [22, 40]] },
+    { id: 'vault', name: 'The Vault', world: 'luna', cost: 9, perk: 'Every Bloom Essence you feed a Heart counts double', pts: [[24, 30], [50, 16], [76, 30], [76, 66], [50, 84], [24, 66], [24, 30]] },
+    { id: 'forge', name: 'The Anvil', world: 'cindra', cost: 12, reward: { gems: 25, item: 'bigchest' }, perk: 'A Treasure Chest and 25 gems', pts: [[18, 36], [82, 36], [70, 52], [60, 52], [64, 80], [36, 80], [40, 52], [30, 52], [18, 36]] },
+    { id: 'phoenix', name: 'The Firebird', world: 'cindra', cost: 14, reward: { gems: 30, energy: 60 }, perk: '30 gems and 60 energy', pts: [[50, 20], [34, 44], [12, 36], [30, 62], [50, 84], [70, 62], [88, 36], [66, 44], [50, 20]] },
+    { id: 'squid', name: 'The Kraken', world: 'nerith', cost: 16, reward: { gems: 35, item: 'bigchest' }, perk: 'A Treasure Chest and 35 gems', pts: [[50, 14], [70, 34], [64, 56], [80, 84], [58, 66], [50, 88], [42, 66], [20, 84], [36, 56], [30, 34], [50, 14]] },
+    { id: 'shell', name: 'The Shell', world: 'nerith', cost: 18, reward: { gems: 40, energy: 80 }, perk: '40 gems and 80 energy', pts: [[50, 82], [20, 40], [34, 24], [50, 18], [66, 24], [80, 40], [50, 82]] },
+    { id: 'crown', name: 'The Crown', world: 'vela', cost: 22, reward: { gems: 60, item: 'bigchest' }, perk: 'A Treasure Chest and 60 gems', pts: [[16, 74], [16, 30], [34, 52], [50, 20], [66, 52], [84, 30], [84, 74], [16, 74]] },
+    { id: 'galaxy', name: 'The Galaxy', world: 'vela', cost: 30, reward: { gems: 100, item: 'bigchest', energy: 100 }, perk: '100 gems, 100 energy and a Treasure Chest', pts: [[50, 50], [62, 42], [64, 58], [48, 68], [32, 54], [38, 32], [60, 24], [80, 40], [80, 66], [56, 84], [24, 76]] },
   ];
   const lit = (id: string) => !!(typeof S !== 'undefined' && S && S.stars && S.stars[id]);
   const starPerk = (id: string) => lit(id);
-  function playStars(id: string) {
-    const co = CONSTS.find(c => c.id === id); if (!co) return;
-    if (lit(id)) { toast('⭐ ' + co.name + ' is already lit — ' + co.perk + '.'); return; }
-    const have = countItem('starcore');
-    if (have < co.cost) { sfx.no(); toast('Needs <b>' + co.cost + ' Star Cores</b> — your pouch has ' + have + '. Fuse Star Scrap or dig craters for more.'); return; }
-    miniState = { co, next: 0 };
-    openMini('✨ ' + co.name, 'Tap the stars <b>in order</b>, starting from the brightest. One slip and the line breaks.');
-    drawStars();
-  }
-  function drawStars() {
-    const st = miniState, co = st.co;
-    const line = co.pts.slice(0, st.next).map((p: number[], i: number) =>
-      i ? `L${p[0]} ${p[1]}` : `M${p[0]} ${p[1]}`).join(' ');
-    const ghost = co.pts.map((p: number[], i: number) => (i ? 'L' : 'M') + p[0] + ' ' + p[1]).join(' ');
-    // a star, not a dot — and the order is printed, because a guessing game with
-    // a full reset on every wrong tap is a chore, while tracing one is a pleasure
-    const star = (x: number, y: number, r: number) => {
-      let d = '';
-      for (let k = 0; k < 10; k++) {
-        const ang = (Math.PI / 5) * k - Math.PI / 2, rr = k % 2 ? r * 0.42 : r;
-        d += (k ? 'L' : 'M') + (x + Math.cos(ang) * rr).toFixed(2) + ' ' + (y + Math.sin(ang) * rr).toFixed(2);
-      }
-      return d + 'Z';
+  /* The Star Chart: a painted night sky, scrolled like the galaxy map. Each
+     constellation sits in its own patch of sky; tap one to fly in, then trace
+     it star by star while the line draws itself. Lit ones glow for good. */
+  const SKY_H = 1650, SKY_SPOT = (i: number) => ({ x: i % 2 ? 66 : 34, y: 110 + i * 150 });
+  let skyTrace: any = null;
+  function starChart(focus?: string) {
+    let el = document.getElementById('skyChart');
+    if (!el) { el = document.createElement('div'); el.id = 'skyChart'; $('#app').appendChild(el); }
+    const bg = ART.spriteUi('sky_chart') || ART.spriteUi('galaxy_bg');
+    const dust = Array.from({ length: 70 }, () => `<i class="skTw" style="left:${(Math.random() * 100).toFixed(1)}%;top:${(Math.random() * SKY_H).toFixed(0)}px;animation-delay:${(-Math.random() * 4).toFixed(2)}s;--s:${(0.5 + Math.random() * 1.6).toFixed(2)}"></i>`).join('');
+    const svgOf = (c: any, cls: string) => {
+      const d = c.pts.map((p: number[], i: number) => (i ? 'L' : 'M') + p[0] + ' ' + p[1]).join(' ');
+      return `<svg viewBox="0 0 100 100" class="skC ${cls}"><path class="skLine" d="${d}" pathLength="100"/>${c.pts.map((p: number[]) => `<circle class="skDot" cx="${p[0]}" cy="${p[1]}" r="2.2"/>`).join('')}</svg>`;
     };
-    const dust = st.dust || (st.dust = Array.from({ length: 34 }, () => [
-      +(Math.random() * 100).toFixed(1), +(Math.random() * 100).toFixed(1), +(0.4 + Math.random() * 0.8).toFixed(2)]));
-    $('#miniBody').innerHTML = `<div class="skyBox">
-      <svg viewBox="0 0 100 100" class="sky">
-        ${dust.map((d: number[]) => `<circle cx="${d[0]}" cy="${d[1]}" r="${d[2]}" fill="#fff" opacity=".35"/>`).join('')}
-        <path d="${ghost}" fill="none" stroke="#7d84b8" stroke-width="0.8" stroke-dasharray="2 2.6" opacity=".7"/>
-        <path d="${line}" fill="none" stroke="#ffe9a8" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-        ${co.pts.map((p: number[], i: number) => {
-      const on = i < st.next, nextUp = i === st.next;
-      return `<g class="skyPt"><path class="skyStar${on ? ' on' : ''}${nextUp ? ' first' : ''}"
-            d="${star(p[0], p[1], nextUp ? 5.2 : 4.2)}"/>
-          <text class="skyNum${on ? ' on' : ''}" x="${p[0]}" y="${p[1] - 6.4}" text-anchor="middle">${i + 1}</text>
-          <circle cx="${p[0]}" cy="${p[1]}" r="7" fill="transparent" data-s="${i}"/></g>`;
-    }).join('')}
-      </svg></div>`;
-    $('#miniFoot').innerHTML = `<div class="miniStat">${st.next}/${co.pts.length} · costs <b>${co.cost} ⭐ Star Cores</b><br>${co.perk}</div>`;
-    $('#miniBody').querySelectorAll('[data-s]').forEach((c: any) => c.onclick = () => starTap(+c.dataset.s));
+    const nodes = CONSTS.map((c, i) => {
+      const pos = SKY_SPOT(i), on = lit(c.id), open = visited(c.world), afford = countItem('starcore') >= c.cost;
+      const state = on ? 'lit' : open ? 'open' : 'locked';
+      return `<button class="skNode ${state}" data-sk="${c.id}" style="left:${pos.x}%;top:${pos.y}px">
+        ${svgOf(c, state)}
+        <span class="skName"><b>${c.name}</b><i>${on ? '✦ ' + c.perk : open ? `${c.cost} ⭐ · ${c.perk}` : '🔒 ' + WORLDS[c.world].name}</i>${open && !on && afford ? '<em class="skGo">Trace!</em>' : ''}</span></button>`;
+    }).join('');
+    el.innerHTML = `<div class="skBg" style="background-image:url(${bg})"></div>
+      <div class="skTop"><button class="galBack" id="skBack">↩ Galaxy</button><b>✨ Star Chart</b>
+        <span class="skPouch">${ART.item('starcore')}<b>${pouch('starcore')}</b></span></div>
+      <div class="skScroll" id="skScroll"><div class="skField" style="height:${SKY_H}px">${dust}${nodes}</div></div>
+      <div class="skFoot"><span>${CONSTS.filter(c => lit(c.id)).length}/${CONSTS.length} lit</span>
+        <button class="buyBtn green" id="skFuse" ${pouch('scrap') < 3 ? 'disabled' : ''}>Fuse 3 ${ART.item('scrap')} → 1 ${ART.item('starcore')}</button></div>
+      <div class="skTrace" id="skTrace"></div>`;
+    el.className = 'open'; audio.duck(1, 0.5);
+    ($('#skBack') as HTMLElement).onclick = () => { sfx.close(); el!.className = ''; };
+    ($('#skFuse') as HTMLElement).onclick = () => {
+      if (pouch('scrap') < 3) return;
+      S.wal.scrap -= 3; S.wal.starcore = pouch('starcore') + 1; S.seen.starcore = 1;
+      sfx.discover(); haptic('medium'); save(); starChart();
+    };
+    el.querySelectorAll<HTMLElement>('[data-sk]').forEach(b => b.onclick = () => skyOpen(b.dataset.sk!));
+    const sc = $('#skScroll') as HTMLElement, first = CONSTS.findIndex(c => !lit(c.id) && visited(c.world));
+    const at = focus ? CONSTS.findIndex(c => c.id === focus) : first;
+    if (sc) sc.scrollTop = Math.max(0, SKY_SPOT(Math.max(0, at)).y - sc.clientHeight / 2 + 60);
   }
-  function starTap(i: number) {
-    const st = miniState; if (!st) return;
-    if (i !== st.next) { sfx.no(); shake(); st.next = 0; drawStars(); return; }
-    st.next++; sfx.popHi();
-    if (st.next >= st.co.pts.length) {
-      // pay only on success — a failed trace costs nothing but pride
-      for (let k = 0; k < st.co.cost; k++) consumeOne('starcore');
-      S.stars[st.co.id] = 1;
-      prog('star', 1);
-      paintBoard(); sfx.big(); confetti(); haptic('medium');
-      drawStars();
-      $('#miniSub').innerHTML = '<b>Lit.</b> ' + st.co.perk + ' — for good.';
-      $('#miniFoot').innerHTML = '<button class="big" id="skyDone">Wonderful</button>';
-      $('#skyDone').onclick = closeMini;
-      save();
-      return;
+  function skyOpen(id: string) {
+    const c = CONSTS.find(x => x.id === id); if (!c) return;
+    if (lit(id)) { sfx.tap(); toast(`✦ <b>${c.name}</b> is lit: ${c.perk}.`); return; }
+    if (!visited(c.world)) { sfx.no(); toast(`🔒 You can see <b>${c.name}</b> from <b>${WORLDS[c.world].name}</b>. Fly there first.`); return; }
+    const have = countItem('starcore');
+    if (have < c.cost) { sfx.no(); toast(`Needs <b>${c.cost} Star Cores</b>, you have ${have}. Dig meteor craters and fuse Star Scrap.`); return; }
+    skyTrace = { c, next: 0 };
+    const t = $('#skTrace') as HTMLElement;
+    const d = c.pts.map((p: number[], i: number) => (i ? 'L' : 'M') + p[0] + ' ' + p[1]).join(' ');
+    t.innerHTML = `<div class="sktHead"><b>${c.name}</b><i>Tap the stars in order. ${c.cost} ⭐ when it lights up.</i></div>
+      <svg viewBox="-6 -6 112 112" class="skBig"><path class="skGhost" d="${d}"/><path class="skDraw" id="skDraw" d=""/>
+        ${c.pts.map((p: number[], i: number) => `<g class="skSt" data-i="${i}"><circle class="skHalo" cx="${p[0]}" cy="${p[1]}" r="6"/><circle class="skCore" cx="${p[0]}" cy="${p[1]}" r="2.6"/><text x="${p[0]}" y="${p[1] - 5}" class="skNum">${i + 1}</text><circle cx="${p[0]}" cy="${p[1]}" r="8" fill="transparent" data-tap="${i}"/></g>`).join('')}</svg>
+      <button class="big soft" id="skCancel">Not now</button>`;
+    t.className = 'skTrace on'; sfx.whoosh();
+    skyMark();
+    t.querySelectorAll<SVGElement>('[data-tap]').forEach(n => n.addEventListener('click', () => skyTap(+(n as any).dataset.tap)));
+    ($('#skCancel') as HTMLElement).onclick = () => { t.className = 'skTrace'; skyTrace = null; };
+  }
+  function skyMark() {
+    const st = skyTrace; if (!st) return;
+    document.querySelectorAll('#skTrace .skSt').forEach((g: any) => {
+      const i = +g.dataset.i; g.classList.toggle('on', i < st.next); g.classList.toggle('next', i === st.next);
+    });
+  }
+  function skyTap(i: number) {
+    const st = skyTrace; if (!st) return;
+    // the shape may close on its first star: that star is also the last one
+    const want = st.next;
+    const same = (a: number[], b: number[]) => a[0] === b[0] && a[1] === b[1];
+    if (i !== want && !(want === st.c.pts.length - 1 && same(st.c.pts[i], st.c.pts[want]))) {
+      sfx.no(); haptic('light'); const t = $('#skTrace'); t.classList.remove('shake'); void (t as HTMLElement).offsetWidth; t.classList.add('shake'); return;
     }
-    drawStars();
+    st.next++; sfx.voice('nix', 1); sfx.popHi();
+    const pts = st.c.pts.slice(0, st.next);
+    const path = document.getElementById('skDraw');
+    if (path && pts.length > 1) {
+      // the new segment draws itself
+      const full = pts.map((p: number[], k: number) => (k ? 'L' : 'M') + p[0] + ' ' + p[1]).join(' ');
+      path.setAttribute('d', full);
+      const len = (path as any).getTotalLength ? (path as any).getTotalLength() : 100;
+      const a = st.c.pts[st.next - 2], b = st.c.pts[st.next - 1], seg = Math.hypot(b[0] - a[0], b[1] - a[1]);
+      path.style.transition = 'none'; path.style.strokeDasharray = `${len}`; path.style.strokeDashoffset = `${seg}`;
+      void (path as any).getBoundingClientRect();
+      path.style.transition = 'stroke-dashoffset .35s ease-out'; path.style.strokeDashoffset = '0';
+    }
+    skyMark();
+    if (st.next < st.c.pts.length) return;
+    // lit: pay, glow, a shooting star, and the blessing
+    const c = st.c;
+    for (let k = 0; k < c.cost; k++) consumeOne('starcore');
+    S.stars[c.id] = 1; prog('star', 1);
+    const t = $('#skTrace') as HTMLElement; t.classList.add('lit');
+    sfx.discover(); audio.duck(2.5, 0.2); haptic('heavy');
+    const shoot = document.createElement('i'); shoot.className = 'skShoot'; t.appendChild(shoot);
+    save();
+    setTimeout(() => {
+      t.className = 'skTrace'; skyTrace = null;
+      paintBoard(); renderHUD();
+      const r: Reward = c.reward || {};
+      if (c.reward && r.item && freeCells().length) giveItem(r.item);
+      if (r.gems) S.gems += r.gems;
+      if (r.energy) S.energy += r.energy;
+      rewardCard(ART.item('starcore'), `${c.name} is lit!`, c.reward ? 'The sky hands you a gift.' : `${c.perk}. For good, in every world.`, c.reward ? r : { energy: 10 }, () => starChart(c.id));
+      save();
+    }, 1700);
   }
 
   /* ============================================================ WORLD SCREEN
@@ -4793,7 +4865,7 @@ export async function startGame() {
       const btn = here ? '<span class="gpHere">📍 You are here</span>'
         : !painted(k) ? '<span class="gpNeed">🎨 Coming soon</span>'
         : !reached ? `<span class="gpNeed">🔒 ${prev && visited(prev) ? `Restore ${WORLDS[prev].name} · ${projDone(prev)}/${projList(prev).length}` : 'Far away'}</span>`
-          : seen ? `<button class="gpGo" data-world="${k}">Fly back ✈️</button>`
+          : seen ? `<button class="gpGo" data-world="${k}">${S.unlocked[k] && projDone(k) ? 'Fly back ✈️' : 'Fly there ✈️'}</button>`
             : can ? `<button class="gpGo launch" data-world="${k}">LAUNCH 🚀</button>`
               : `<span class="gpNeed">${allParts() ? `Needs ⛽ ${S.fuel}/${CONFIG.rocket.fuelToLaunch} fuel` : 'Finish the rocket first'}</span>`;
       return `<div class="gp gp-${k} ${state} side-${side}" style="left:${p.x}%;top:${p.y}px;--glow:${GAL[k] ? GAL[k].glow : '#fff'}">
@@ -4812,6 +4884,7 @@ export async function startGame() {
     })();
     return `<div class="gal2"><div class="galSky"></div>
       <div class="galTop"><button class="galBack" data-pop="camp">↩ Camp</button><b>${ART.uiIcon('ic_galaxy', '🌌')} Galaxy</b><span class="galFuel">⛽ ${S.fuel}/${CONFIG.rocket.fuelToLaunch}</span></div>
+      ${S.seen.starcore || S.seen.scrap ? `<button class="galStars" data-pop="stars"><span>✨</span><b>Star Chart</b><i>${CONSTS.filter(c => S.stars && S.stars[c.id]).length}/${CONSTS.length}</i></button>` : ''}
       <div class="galScroll" id="galScroll"><div class="galPath" style="height:${H}px">
         <svg class="galSvg" viewBox="0 0 100 ${H}" preserveAspectRatio="none" style="height:${H}px">
           <path d="${path}" class="galRoute"/><path d="${lit}" class="galRoute lit"/></svg>
@@ -4837,7 +4910,7 @@ export async function startGame() {
       sfx.tap();
       if (k === 'store') { storagePop(); return; }
       if (k === 'games') gamesPanel();
-      else if (k === 'stars') starsPanel();
+      else if (k === 'stars') starChart();
       else { worldTab = k === 'camp' ? 'camp' : 'galaxy'; renderWorldScreen(); }
     });
   }
@@ -4904,24 +4977,7 @@ export async function startGame() {
       if (k === 'dig') playDig(); else if (k === 'brew') playBrew(); else playMarket();
     }), 30);
   }
-  function starsPanel() {
-    modal('nix', 'Constellations',
-      `<div class="noteLine" style="margin-top:0">This is what Star Cores are for. Trace one and its blessing is permanent, in every world.</div>
-       <div class="pouchRow">${ART.item('starcore')}<b>${pouch('starcore')}</b> Star Cores · ${ART.item('scrap')}<b>${pouch('scrap')}</b> Scrap
-         <button class="buyBtn green" id="btnFuse" ${pouch('scrap') < 2 ? 'disabled' : ''}>Fuse 2 Scrap → 1 Core</button></div>
-       ${CONSTS.map(c => `<button class="constRow${lit(c.id) ? ' lit' : ''}" data-c="${c.id}">
-        <span class="constIc">${lit(c.id) ? '✦' : '✧'}</span>
-        <span class="constTxt"><b>${c.name}</b><i>${c.perk}</i></span>
-        <span class="constCost">${lit(c.id) ? 'Lit' : c.cost + ' ⭐'}</span></button>`).join('')}`, 'Close');
-    setTimeout(() => {
-      document.querySelectorAll('[data-c]').forEach((b: any) => b.onclick = () => { closeModal(); playStars(b.dataset.c); });
-      const f = $('#btnFuse'); if (f) f.onclick = () => {
-        if (pouch('scrap') < 2) return;
-        S.wal.scrap -= 2; S.wal.starcore = pouch('starcore') + 1; S.seen.starcore = 1;
-        sfx.discover(); haptic('medium'); save(); closeModal(); starsPanel();
-      };
-    }, 30);
-  }
+  function starsPanel() { starChart(); }
 
   function galaxyTap(k: string) {
     if (k === S.world) { worldTab = 'camp'; sfx.tap(); renderWorldScreen(); return; }
@@ -4942,6 +4998,8 @@ export async function startGame() {
     }
     travelTo(k);
   }
+
+
 
   /** tapping something in the camp opens the panel for that thing */
   function campTap(kind: string) {
@@ -5646,7 +5704,7 @@ export async function startGame() {
       grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed, ecost,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
       fly: (w: string) => galaxyTap(w), view: (v: string) => setView(v),
-      curProject: () => curProject(), v9: { paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, rocketPanel, starsPanel, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
+      curProject: () => curProject(), v9: { paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
     };
     setInterval(tick, 500);
     setInterval(() => { if (!document.hidden) S.playMs = (S.playMs || 0) + 5000; }, 5000);

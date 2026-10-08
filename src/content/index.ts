@@ -103,7 +103,7 @@ export interface UpgradeDef {
 }
 export interface CrateDef { id: string; name: string; desc: string; icon: string; price: number }
 /** a one-shot helper bought with coins and fired from the board */
-export interface BoosterDef { id: string; name: string; desc: string; icon: string; price: number }
+export interface BoosterDef { id: string; name: string; desc: string; icon: string; price: number; gems?: number }
 export interface ShopDef {
   supplyStock: number;
   supplyRestockMs: number;

@@ -42,3 +42,23 @@ Sheet 2: producers. One image: a grid of 4×4, one object per cell, each on its 
 15. Drone Pad: a landing pad with a drone
 16. Glow Orb Bed: a bed of glowing orbs
 ```
+
+## Spaceship UI
+
+**3. sheet_hud_buttons**
+
+```
+Sheet 3: round game buttons for the top bar. One image: a grid of 3×2, one round glossy button per cell, left to right:
+1. Shop: a little flying-saucer market stall with an awning
+2. Settings: a gear with a small ringed planet in the middle
+3. Galaxy: a planet with a rocket orbiting it
+4. Goals: a mission scroll with a star badge
+5. Storage: a cargo pod with a hatch
+6. Games: a small arcade spaceship
+```
+
+**4. star_chart_sky**
+
+```
+Sheet 4: one tall background painting (portrait, 1024×1792), no objects, no text: a deep, calm night sky full of soft nebula clouds in many colours and scattered stars, darker towards the top and bottom so glowing lines on top of it stay readable.
+```
