@@ -2,8 +2,8 @@
   {
     "id": "spawn",
     "need": 3,
-    "text": "Tap the Meteor Crater 3 times",
-    "hint": "Tap the <b>Meteor Crater</b> for meteor chips!",
+    "text": "Tap the Meteor Heap 3 times",
+    "hint": "Tap the <b>Meteor Heap</b> for meteor chips!",
     "coins": 25
   },
   {

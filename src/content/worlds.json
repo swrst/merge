@@ -290,7 +290,11 @@
         ],
         "coins": 0,
         "xp": 15,
-        "unlock": "rocks",
+        "unlock": [
+          "rocks",
+          "bush",
+          "well"
+        ],
         "talk": [
           [
             "pip",
@@ -298,10 +302,10 @@
           ],
           [
             "pip",
-            "Tap the Meteor Crater for meteor chips. Two chips make a hot meteor. Two hot meteors clear the path!"
+            "Tap the Meteor Heap for meteor chips. Two chips make a hot meteor. Two hot meteors clear the path!"
           ]
         ],
-        "text": "The path is clear, and there was a heap of space rocks under the rubble."
+        "text": "The path is clear! Behind the rubble: a heap of space rocks, a beeping snack cart and an old moonwater well."
       },
       {
         "id": "e2",
@@ -319,7 +323,6 @@
         ],
         "coins": 80,
         "xp": 25,
-        "unlock": "bush",
         "talk": [
           [
             "grandma",
@@ -330,7 +333,7 @@
             "Two rocks and a metal ingot for a border, dear."
           ]
         ],
-        "text": "A tidy border. Behind it, a snack cart rolls up, beeping."
+        "text": "A tidy border. Nana is very pleased."
       },
       {
         "id": "e3",
@@ -348,7 +351,6 @@
         ],
         "coins": 120,
         "xp": 40,
-        "unlock": "well",
         "talk": [
           [
             "grandma",
@@ -359,7 +361,7 @@
             "The snacks are hereby confiscated. Mayoral privilege."
           ]
         ],
-        "text": "First proper meal in years! Washing up, Nana remembered the old moonwater well."
+        "text": "First proper meal in years! Nana even washed the jars."
       },
       {
         "id": "e4",
@@ -439,7 +441,11 @@
         ],
         "coins": 400,
         "xp": 100,
-        "unlock": "meadow",
+        "unlock": [
+          "meadow",
+          "flowerbed",
+          "teabush"
+        ],
         "gift": "chest",
         "retire": [
           "tree"
@@ -454,7 +460,7 @@
             "Two stacks of metal plates and a ration tray for the builder, please."
           ]
         ],
-        "text": "The fence stands. The Meteor Crater gave its last metal and cools down now. A solar farm hums on the hill."
+        "text": "The fence stands. The Meteor Heap gave its last metal and cools down now. A solar farm hums on the hill, a light stall opens and a fizz vent starts to bubble."
       },
       {
         "id": "e7",
@@ -476,7 +482,6 @@
         ],
         "coins": 560,
         "xp": 120,
-        "unlock": "flowerbed",
         "retire": [
           "well"
         ],
@@ -490,7 +495,7 @@
             "What is supper. I would like to learn about supper."
           ]
         ],
-        "text": "Dr. Zonk had three trays. The old well has done its job, and Sirra brought a light stall."
+        "text": "Dr. Zonk had three trays. The old well has done its job."
       },
       {
         "id": "e8",
@@ -508,7 +513,6 @@
         ],
         "coins": 720,
         "xp": 140,
-        "unlock": "teabush",
         "gift": "chest",
         "retire": [
           "rocks"
@@ -528,7 +532,7 @@
             "A star lantern for the stall and a gem for the sign."
           ]
         ],
-        "text": "The market glows! The space rocks are all used up, a fizz vent bubbles up, and buzzbots moved in for a while."
+        "text": "The market glows! The space rocks are all used up, and buzzbots moved in for a while."
       },
       {
         "id": "e9",
@@ -615,7 +619,12 @@
         ],
         "coins": 1200,
         "xp": 200,
-        "unlock": "nestbox",
+        "unlock": [
+          "nestbox",
+          "toychest",
+          "vegpatch",
+          "tinkerbench"
+        ],
         "talk": [
           [
             "gigi",
@@ -626,7 +635,7 @@
             "A space helmet, a solar panel array and a soda for the tailor. I do the rest. I always do the rest."
           ]
         ],
-        "text": "Suits for all. Someone dragged an old jet wreck into the square."
+        "text": "Suits for all. Then a delivery: a jet wreck, a toy chest, a hydro bed and a lens workbench. Busy days ahead!"
       },
       {
         "id": "e12",
@@ -644,7 +653,6 @@
         ],
         "coins": 1360,
         "xp": 220,
-        "unlock": "toychest",
         "retire": [
           "flowerbed",
           "teabush"
@@ -690,7 +698,6 @@
         ],
         "coins": 1520,
         "xp": 240,
-        "unlock": "vegpatch",
         "gift": "chest",
         "talk": [
           [
@@ -702,7 +709,7 @@
             "Help one grow up: give it a toy robot and a jet boot. Can we keep it?!"
           ]
         ],
-        "text": "The little visitors are safe and very hungry. Zib set up a hydro bed."
+        "text": "The little visitors are safe and very hungry."
       },
       {
         "id": "e14",
@@ -724,7 +731,6 @@
         ],
         "coins": 1680,
         "xp": 260,
-        "unlock": "tinkerbench",
         "retire": [
           "meadow"
         ],
@@ -738,7 +744,7 @@
             "Or two grow tubes, a power station and a spinning top for the Blinkies?"
           ]
         ],
-        "text": "The solar farm powers the last station. Dr. Zonk drags out a lens workbench: \"For star lenses.\""
+        "text": "The solar farm powers the last station and goes quiet."
       },
       {
         "id": "e15",
@@ -760,7 +766,11 @@
         ],
         "coins": 1920,
         "xp": 300,
-        "unlock": "lilypond",
+        "unlock": [
+          "lilypond",
+          "windmill",
+          "claypit"
+        ],
         "gift": "chest",
         "retire": [
           "nestbox"
@@ -775,7 +785,7 @@
             "A spyglass, a hydro tray and a twin jetpack. Nobody stargazes on an empty stomach."
           ]
         ],
-        "text": "The Moon has tiny lights. \"Friends,\" whispers Dr. Zonk. And in the woods: his ship. In pieces. Time to build a rocket!"
+        "text": "The Moon has tiny lights. \"Friends,\" whispers Dr. Zonk. And in the woods: his ship. In pieces. Time to build a rocket! Down by the water: a slime pond, a cheese mill and a goo pit."
       },
       {
         "id": "e16",
@@ -798,7 +808,6 @@
         "coins": 2080,
         "xp": 320,
         "gift": "chest",
-        "unlock": "windmill",
         "retire": [
           "toychest"
         ],
@@ -812,7 +821,7 @@
             "A grow tube, two slime puddles to age the cheese, and a spinning top to keep the Blinkies out of it."
           ]
         ],
-        "text": "The cheese shop is open, and a cheese mill turns on the hill. Moon cheese for everyone!"
+        "text": "The cheese shop is open. Moon cheese for everyone!"
       },
       {
         "id": "e17",
@@ -834,7 +843,6 @@
         ],
         "coins": 2320,
         "xp": 340,
-        "unlock": "claypit",
         "retire": [
           "vegpatch"
         ],
@@ -848,7 +856,7 @@
             "A cheese wheel, a hydro tray and a slime jar for the potters. There is moon goo by the river."
           ]
         ],
-        "text": "The goo pit is open. The hydro bed is resting. Sirra ordered twelve vases."
+        "text": "The hydro bed is resting. Sirra ordered twelve vases."
       },
       {
         "id": "e18",
@@ -909,14 +917,18 @@
         "coins": 2800,
         "xp": 380,
         "gift": "chest",
-        "unlock": "eggnest",
+        "unlock": [
+          "eggnest",
+          "buskbot",
+          "rockethull"
+        ],
         "talk": [
           [
             "timmy",
             "A party at the slime pond! Slime deserves nice things."
           ]
         ],
-        "text": "The slime frogs hold a party. Behind the crates: wobbling pet eggs."
+        "text": "The slime frogs hold a party. Behind the crates: wobbling pet eggs, a busker bot and an old scrap hull."
       },
       {
         "id": "e20",
@@ -939,7 +951,6 @@
         "coins": 3040,
         "xp": 400,
         "gift": "chest",
-        "unlock": "buskbot",
         "temp": {
           "p": "raincloud",
           "taps": 10,
@@ -955,7 +966,7 @@
             "They chewed my OFFICIAL sash."
           ]
         ],
-        "text": "The Blinkies have a pet now. A busker bot wanders in, plays one chord, and refuses to leave."
+        "text": "The Blinkies have a pet now. The busker bot plays one chord, over and over."
       },
       {
         "id": "e21",
@@ -978,7 +989,6 @@
         "coins": 3280,
         "xp": 420,
         "gift": "chest",
-        "unlock": "rockethull",
         "retire": [
           "windmill",
           "claypit"

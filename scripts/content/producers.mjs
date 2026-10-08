@@ -21,7 +21,7 @@
 
 export const PRODUCERS = [
   /* ---------------------------------------------------------- Sunny Meadow */
-  ['earth', 1, 'tree|Meteor Crater|impact|nrg:1|twig twig twig branch|a big friendly round-crowned tree with a thick trunk, a few twigs at its roots'],
+  ['earth', 1, 'tree|Meteor Heap|impact|nrg:1|twig twig twig branch|a big friendly round-crowned tree with a thick trunk, a few twigs at its roots'],
   ['earth', 2, 'rocks|Starstone Pile|rocks|nrg:1|pebble pebble pebble rock|a heap of rounded grey boulders with a pickaxe leaning on it'],
   ['earth', 2, 'bush|Snack Cart|candycart|bat:10/60|berry berry berries|a round leafy bush dotted with red berries'],
   ['earth', 2, 'well|Moonwater Well|well|nrg:1|dew dew dew puddle|a round stone well with a little wooden roof and a bucket'],

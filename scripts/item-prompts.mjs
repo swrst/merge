@@ -22,7 +22,7 @@ const list = Object.entries(Array.isArray(chains) ? Object.fromEntries(chains.ma
   .sort((a, b) => WORLDS.indexOf(a[1].world) - WORLDS.indexOf(b[1].world) || a[1].unlock - b[1].unlock);
 let out = `# Galaxy Adventure: catalogue sheets
 
-Send the SETUP from ART-PROMPTS.md first. Then one block per message (ChatGPT makes one image per message). ${list.length} sheets.
+Send the SETUP from ART-PROMPTS.md first, with STYLE-REFERENCE.png. Then one block per message (ChatGPT makes one image per message).
 
 `;
 let n = 0, cur = '';
@@ -36,7 +36,23 @@ for (const [k, c] of list) {
   const lines = ids.map((id, i) => `${i + 1}. ${redo ? redo[1][i] : simple(notes[id]) || items[id]?.name}`).join('\n');
   out += `**${n}. sheet_${k}**\n\n\`\`\`\n${head}${CREATURES.has(k) ? ' (alien critters)' : ''}\n${lines}\n\`\`\`\n\n`;
 }
-out += `\n## Producers (the ones still drawn as trees, bushes or plants)\n\n**${++n}. sheet_producers_new**\n\n\`\`\`\nSheet ${n}: producers. One image: a grid of 4×4, one object per cell, each on its own small round mound, left to right:\n1. Meteor Crater: a crater with a glowing meteor in it\n2. Snack Cart: a hovering snack vending cart\n3. Light Post: a glowing space lamp post\n4. Suit Loom: a machine sewing spacesuits\n5. Jet Workshop: a small hangar with a jetpack on a stand\n6. Fizz Vent: a bubbling soda vent with a tap\n7. Fire Gel Spring: a glowing orange gel pool\n8. Lava Lamp Spring: a pool with giant lava lamps growing out of it\n9. Bubble Bed: a bubbling vent on the sea floor\n10. Critter Trap: a glass dome trap with little swimmers inside\n11. Crystal Pan: a pan of glowing sea crystals\n12. Saucer Wreck: a crashed saucer half in the sand\n13. Sub Dock: a small metal dock with a submarine\n14. Jelly Cloud: a cloud dripping wobbly jelly\n15. Drone Pad: a landing pad with a drone\n16. Glow Orb Bed: a bed of glowing orbs\n\`\`\`\n`;
-out += `\n## Spaceship UI\n\n**${++n}. sheet_hud_buttons**\n\n\`\`\`\nSheet ${n}: round game buttons for the top bar. One image: a grid of 3×2, one round glossy button per cell, left to right:\n1. Shop: a little flying-saucer market stall with an awning\n2. Settings: a gear with a small ringed planet in the middle\n3. Galaxy: a planet with a rocket orbiting it\n4. Goals: a mission scroll with a star badge\n5. Storage: a cargo pod with a hatch\n6. Games: a small arcade spaceship\n\`\`\`\n\n**${++n}. star_chart_sky**\n\n\`\`\`\nSheet ${n}: one tall background painting (portrait, 1024×1792), no objects, no text: a deep, calm night sky full of soft nebula clouds in many colours and scattered stars, darker towards the top and bottom so glowing lines on top of it stay readable.\n\`\`\`\n`;
+/* producers: every one, redrawn to match the new items, 16 to a sheet */
+const PRODS = JSON.parse(readFileSync('src/content/producers.json', 'utf8'));
+const plist = (Array.isArray(PRODS) ? PRODS : Object.entries(PRODS).map(([id, v]) => ({ id, ...v })))
+  .filter(p => !['wreck', 'crater'].includes(p.id));
+const wOf = p => { const d = (p.drops || [])[0]; const it = items[d]; const ch = it && chains[it.chain]; return ch ? ch.world : 'any'; };
+const pw = {}; plist.forEach(p => (pw[wOf(p)] = pw[wOf(p)] || []).push(p));
+out += `\n## Producers (every producer redrawn to match the new items)\n\n`;
+let pk = 0;
+for (const w of WORLDS) {
+  const ps = pw[w] || [];
+  for (let i = 0; i < ps.length; i += 16) {
+    const part = ps.slice(i, i + 16), cols = 4, rows = Math.ceil(part.length / cols), empty = cols * rows - part.length;
+    pk++;
+    out += `**P-${pk}. sheet_producers_${w}${ps.length > 16 ? '_' + (i / 16 + 1) : ''}**\n\n\`\`\`\nProducers for ${WNAME[w]}. One image: a grid of ${cols}×${rows}${empty ? ` with the last ${empty > 1 ? empty + ' cells' : 'cell'} empty` : ''}, one object per cell, each standing on its own small plain round mound, left to right:\n`
+      + part.map((p, k) => `${k + 1}. ${p.name}: the place or machine that makes ${items[p.drops[0]] ? items[p.drops[0]].name.toLowerCase().replace(/(x|s|sh|ch)$/, '$1e') + 's' : 'things'}`).join('\n') + '\n```\n\n';
+  }
+}
+out += readFileSync('art/guides/prompts-extra.md', 'utf8');
 writeFileSync('art/guides/ART-PROMPTS-ITEMS.md', out);
 console.log('ART-PROMPTS-ITEMS.md:', n, 'sheets');

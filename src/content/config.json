@@ -38,8 +38,8 @@
   },
   "meteor": {
     "firstAtLevel": 3,
-    "everyMinMs": 210000,
-    "everyRandomMs": 150000,
+    "everyMinMs": 480000,
+    "everyRandomMs": 360000,
     "chance": 1
   },
   "rocket": {

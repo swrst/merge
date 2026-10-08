@@ -146,7 +146,7 @@ Object.entries(PROJECTS).forEach(([w, list]) => list.forEach(pr => pr.needs.forE
   if (!items[id]) errs.push(`project "${pr.id}" in ${w} needs unknown item "${id}"`);
   else if (!['any', 'ship', w].includes(chains[items[id].chain].world)) errs.push(`project "${pr.id}" needs "${id}" from another world`);
   if (pr.gift && pr.gift !== 'chest' && !items[pr.gift]) errs.push(`project "${pr.id}" gives unknown "${pr.gift}"`);
-  if (pr.unlock && !producers[pr.unlock]) errs.push(`project "${pr.id}" unlocks unknown producer "${pr.unlock}"`);
+  [].concat(pr.unlock || []).forEach(u => { if (!producers[u]) errs.push(`project "${pr.id}" unlocks unknown producer "${u}"`); });
   if (pr.temp && !producers[pr.temp.p]) errs.push(`project "${pr.id}" brings unknown producer "${pr.temp.p}"`);
 })));
 /* A story world hands out its producers chapter by chapter, so every chapter
@@ -163,7 +163,7 @@ Object.entries(PROJECTS).forEach(([w, list]) => {
     [...have, ...(guest ? [guest] : []), ...(meteor ? ['wreck', 'crater'] : [])].forEach(pk => chainsOf(pk).forEach(c => can.add(c)));
     pr.needs.forEach(([id]) => { const c = items[id] && items[id].chain; if (c && !can.has(c) && chains[c].world !== 'ship') errs.push(`story ${w}/${pr.id} needs "${id}" but nothing makes ${c} yet`); });
     (pr.talk || []).forEach(([who]) => { if (!CHARACTERS[who]) errs.push(`story ${pr.id} talk uses unknown "${who}"`); });
-    if (pr.unlock) have.add(pr.unlock);
+    [].concat(pr.unlock || []).forEach(u => have.add(u));
     guest = pr.temp ? pr.temp.p : null;
     if (pr.event === 'meteor') meteor = true;
   });

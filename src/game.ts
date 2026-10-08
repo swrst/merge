@@ -2442,10 +2442,12 @@ export async function startGame() {
     return out;
   }
   /** upgrades get dearer the later a producer arrives in the story */
+  /** a chapter can hand out several producers at once (a new "wave") */
+  const unlocksOf = (pj: any): string[] => pj && pj.unlock ? [].concat(pj.unlock) : [];
   function upBase(p: any) {
     if (p.upCost) return p.upCost;
     for (const w of WORLD_ORDER) {
-      const k = projList(w).findIndex((pj: any) => pj.unlock === p.id);
+      const k = projList(w).findIndex((pj: any) => unlocksOf(pj).includes(p.id));
       if (k >= 0) return 60 + 20 * (k + 1);
     }
     return 120;
@@ -2716,6 +2718,7 @@ export async function startGame() {
       <div class="npDrops">${drops.map(d => `<span>${ART.item(d)}</span>`).join('<i>·</i>')}</div>
       <button class="big" id="npGo">Place it!</button></div>`;
     el.className = 'open'; sfx.unlock(); haptic('medium');
+    setTimeout(() => { const a = document.getElementById('npArt'); if (a) burst(a, 22); }, 350);
     ($('#npGo') as HTMLElement).onclick = () => {
       const art = $('#npArt') as HTMLElement, from = art.getBoundingClientRect(), to = cellXY(r.i);
       const fly = art.cloneNode(true) as HTMLElement; fly.className = 'npFly';
@@ -2840,7 +2843,7 @@ export async function startGame() {
     tally('project');
     const nextW = WORLD_ORDER[WORLD_ORDER.indexOf(S.world) + 1];
     if (p.retire) retireProducers(p.retire);
-    if (p.unlock) setTimeout(() => plantProducer(p.unlock), 900);
+    unlocksOf(p).forEach((u, n) => setTimeout(() => plantProducer(u), 900 + n * 300));
     if (p.temp) setTimeout(() => spawnGuest(p.temp, p.who), 900);
     if (p.event === 'meteor' && !S.met) setTimeout(meteorStory, 3200);
     if (S.world === 'earth' && projDone() >= ROCKET_AFTER && !S.wreck && !allParts()) setTimeout(wreckStory, 3600);
@@ -2848,7 +2851,7 @@ export async function startGame() {
     if (p.lab && !S.lab.built) { S.lab.built = 1; S.sci += 10; prog('lab', 1); }
     evPts(CFG.event.points.chapter);
     const next = curProject();
-    const what = p.unlock ? `<div class="noteLine">🌱 New: <b>${PRODS[p.unlock].name}</b> — it stays on your board.</div>`
+    const what = p.unlock ? `<div class="noteLine">🌱 New: <b>${unlocksOf(p).map((u: string) => PRODS[u].name).join(', ')}</b>. ${unlocksOf(p).length > 1 ? 'They stay' : 'It stays'} for the next few chapters.</div>`
       : p.temp ? `<div class="noteLine">⏳ A <b>${PRODS[p.temp.p].name}</b> is visiting: ${p.temp.taps} free taps for ${p.temp.mins} minutes.</div>` : '';
     const labLine = p.lab ? `<div class="noteLine">🔬 <b>The Lab is open!</b> Find it in the bottom bar. +10 🧪 to start you off.</div>` : '';
     setView('board');
@@ -2903,7 +2906,7 @@ export async function startGame() {
   /** what finishing a chapter gives you: the anticipation is half the fun */
   function chapterPrize(p: any) {
     const bits: string[] = [];
-    if (p.unlock) bits.push(`<span class="prz">${ART.producer(PRODS[p.unlock].art)}<b>${PRODS[p.unlock].name}</b></span>`);
+    unlocksOf(p).forEach((u: string) => bits.push(`<span class="prz">${ART.producer(PRODS[u].art)}<b>${PRODS[u].name}</b></span>`));
     if (p.temp) bits.push(`<span class="prz">${ART.producer(PRODS[p.temp.p].art)}<b>${PRODS[p.temp.p].name} visits</b></span>`);
     if (p.lab) bits.push(`<span class="prz">${ART.icon('flask')}<b>Dr. Zonk's Lab</b></span>`);
     if (p.gift) { const gi = p.gift === 'chest' ? (p.launch ? 'bigchest' : 'chest') : p.gift; bits.push(`<span class="prz">${ART.item(gi)}<b>${ITEMS[gi].name}</b></span>`); }
@@ -4249,7 +4252,36 @@ export async function startGame() {
     // it comes from the Moon: the first time you are there (and settled in)
     if (S.lvl < PET_LV || S.world === 'earth' || !S.tut || view !== 'board' || popOpen() || $('#modal').classList.contains('open') || $('#talk').classList.contains('open')) return;
     S.pup = { at: Date.now() - 38 * 60000, n: 0, pet: 0, form: 'baby', lv: 1, xp: 0, food: Date.now() }; S.petIntro = 1; save();
-    petIntro();
+    petHatch(petIntro);
+  }
+  /** a ring of sparks and stars flying out of an element: for big moments */
+  function burst(host: HTMLElement, n = 26) {
+    const cols = ['#ffe48a', '#ff8ad8', '#8af0ff', '#b6ff5c', '#ffffff', '#ffb02e'];
+    for (let k = 0; k < n; k++) {
+      const p = document.createElement('i'); p.className = 'bstP' + (k % 3 ? '' : ' star');
+      const a = (Math.PI * 2 * k) / n + Math.random() * 0.3, d = 90 + Math.random() * 110;
+      p.style.cssText = `--dx:${(Math.cos(a) * d).toFixed(0)}px;--dy:${(Math.sin(a) * d).toFixed(0)}px;--c:${cols[k % cols.length]};animation-delay:${(Math.random() * 0.15).toFixed(2)}s`;
+      host.appendChild(p); setTimeout(() => p.remove(), 1500);
+    }
+    const ring = document.createElement('i'); ring.className = 'bstRing'; host.appendChild(ring); setTimeout(() => ring.remove(), 1000);
+  }
+  /* The hatch: an egg drops in, wobbles, cracks with a flash and the pet pops out. */
+  function petHatch(done: () => void) {
+    let el = document.getElementById('evo');
+    if (!el) { el = document.createElement('div'); el.id = 'evo'; $('#app').appendChild(el); }
+    const egg = ART.spriteItem('petegg') ? `<img src="${ART.spriteItem('petegg')}" alt="">` : ART.item('petegg');
+    el.innerHTML = `<div class="rwcRays"></div><div class="evoTxt">Something is <b>wobbling</b>…</div>
+      <div class="evoStage hatch"><span class="evoEgg">${egg}</span><span class="evoB">${pupArt(PET_FORMS.baby)}</span></div><button class="big" id="evoGo" style="visibility:hidden">Hello, little one!</button>`;
+    el.className = 'open hatching'; sfx.whoosh(); haptic('light');
+    setTimeout(() => { sfx.boing(); haptic('medium'); }, 900);
+    setTimeout(() => { sfx.boing(); haptic('medium'); }, 1500);
+    setTimeout(() => {
+      el!.classList.add('done'); sfx.discover(); sfx.voice('pup', 3); haptic('heavy'); confetti();
+      burst(el!.querySelector('.evoStage') as HTMLElement, 30);
+      ($('.evoTxt') as HTMLElement).innerHTML = `A <b>${PET_FORMS.baby.name}</b> hatched!<br><small>It is yours now. Feed it and it will grow.</small>`;
+      ($('#evoGo') as HTMLElement).style.visibility = '';
+    }, 2300);
+    ($('#evoGo') as HTMLElement).onclick = () => { el!.className = ''; done(); };
   }
   function petIntro() {
     talkScene([['bloop', 'Something crawled out of a crater and into my lab coat. It is squishy. It has too many eyes. It will not leave.'],
@@ -4352,7 +4384,8 @@ export async function startGame() {
     el.innerHTML = `<div class="rwcRays"></div><div class="evoTxt">What? <b>${from.name}</b> is evolving!</div>
       <div class="evoStage"><span class="evoA">${pupArt(from)}</span><span class="evoB">${pupArt(nf)}</span></div><button class="big" id="evoGo" style="visibility:hidden">Hooray!</button>`;
     el.className = 'open'; sfx.discover(); audio.duck(4, 0.15); haptic('heavy');
-    setTimeout(() => { el!.classList.add('done'); sfx.unlock(); confetti(); ($('.evoTxt') as HTMLElement).innerHTML = `It became a <b>${nf.name}</b>!<br><small>${nf.perk}</small>`; ($('#evoGo') as HTMLElement).style.visibility = ''; }, 3200);
+    [700, 1500, 2200, 2700].forEach(t => setTimeout(() => { sfx.popHi(); haptic('light'); }, t));
+    setTimeout(() => { el!.classList.add('done'); sfx.unlock(); confetti(); burst(el!.querySelector('.evoStage') as HTMLElement, 34); ($('.evoTxt') as HTMLElement).innerHTML = `It became a <b>${nf.name}</b>!<br><small>${nf.perk}</small>`; ($('#evoGo') as HTMLElement).style.visibility = ''; }, 3200);
     pet().form = to; save();
     ($('#evoGo') as HTMLElement).onclick = () => { el!.className = ''; renderQuick(); renderHUD(); };
   }
@@ -5159,7 +5192,7 @@ export async function startGame() {
   /* Short and hands-on: every step but the last is something you DO. The
      rest of the game is introduced by coach() hints as each part opens. */
   const TUT: TutStep[] = [
-    { id: 'tap', who: 'pip', say: "Hi! Tap the <b>Meteor Crater</b>.", at: () => cellWith(c => c.p === 'tree'), on: 'spawn' },
+    { id: 'tap', who: 'pip', say: "Hi! Tap the <b>Meteor Heap</b>.", at: () => cellWith(c => c.p === 'tree'), on: 'spawn' },
     { id: 'tap2', who: 'pip', say: "Once more!", at: () => cellWith(c => c.p === 'tree'), on: 'spawn' },
     { id: 'merge', who: 'pip', say: "<b>Drag</b> one twig onto the other.", at: () => cellsWith(c => c.id === 'twig'), on: 'merge' },
     { id: 'energy', who: 'pip', say: "Taps cost <b>⚡ energy</b>. It refills by itself.", at: () => '#chipEnergy' },
@@ -5469,9 +5502,11 @@ export async function startGame() {
     // random meteors
     // a meteor the player could not receive (wrong screen, no room, crater still
     // open) is retried shortly instead of burning a whole rare cycle
+    // kept in the save, so reopening the app does not drop a fresh meteor every time
+    if (!meteorTimer) meteorTimer = Math.max(S.metAt || 0, now + 180000);
     if (S.met && now > meteorTimer) {
       const fell = Math.random() < CONFIG.meteor.chance ? randomMeteor() : true;
-      meteorTimer = fell
+      meteorTimer = S.metAt = fell
         ? now + (CONFIG.meteor.everyMinMs + Math.random() * CONFIG.meteor.everyRandomMs) * meteorScale()
         : now + 20000;
     }
@@ -5572,6 +5607,12 @@ export async function startGame() {
       }));
     }
     if (!S.orders || !S.orders.length) { S.orders = []; fillOrders(); }
+    // the waves moved: anything a finished chapter hands out (and nothing retired) must be there
+    if (S.boards[S.world] && scripted()) {
+      const done = projList().slice(0, projDone());
+      const gone = new Set(done.flatMap((p: any) => p.retire || []));
+      done.flatMap(unlocksOf).filter((u: string) => !gone.has(u)).forEach((u: string) => setTimeout(() => plantProducer(u), 1500));
+    }
     // producers the story has already retired leave older saves too
     WORLD_ORDER.forEach(w => {
       const gone = projList(w).slice(0, projDone(w)).flatMap((p: any) => p.retire || []);
@@ -5597,7 +5638,7 @@ export async function startGame() {
     audio.playMusic(worldMusic(S.world));
     await buildBoard();
     paintBoard(); renderHUD(); renderOrders(); renderRocket();
-    meteorTimer = Date.now() + 40000;
+    meteorTimer = 0;
     { const bs = $('#bootScr'); if (bs) { bs.classList.add('gone'); setTimeout(() => bs.remove(), 600); } }
     if (S.tut) setTimeout(() => { if (!$('#modal').classList.contains('open') && !tutOn()) chapterIntro(); }, 2200);
 
@@ -5704,7 +5745,7 @@ export async function startGame() {
       grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed, ecost,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
       fly: (w: string) => galaxyTap(w), view: (v: string) => setView(v),
-      curProject: () => curProject(), v9: { paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
+      curProject: () => curProject(), v9: { paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
     };
     setInterval(tick, 500);
     setInterval(() => { if (!document.hidden) S.playMs = (S.playMs || 0) + 5000; }, 5000);
