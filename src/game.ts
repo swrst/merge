@@ -4195,10 +4195,10 @@ export async function startGame() {
   type PetForm = { id: string; name: string; stage: number; art: string; tint?: string; perk: string; mins: number };
   const PET_FORMS: Record<string, PetForm> = {
     baby: { id: 'baby', name: 'Gloopling', stage: 1, art: 'pet_baby', perk: 'Fetches a little something now and then.', mins: 40 },
-    pup: { id: 'pup', name: 'Gloop', stage: 2, art: 'pet_pup', perk: 'Fetches faster and better.', mins: 34 },
-    star: { id: 'star', name: 'Starjelly', stage: 3, art: 'pet_star', perk: 'Brings <b>energy</b>. Your energy refills <b>10% faster</b>.', mins: 28 },
-    crater: { id: 'crater', name: 'Rockmuncher', stage: 3, art: 'pet_crater', perk: 'Digs up <b>items</b>, sometimes a chest.', mins: 28 },
-    comet: { id: 'comet', name: 'Fizzwhip', stage: 3, art: 'pet_comet', perk: 'Brings <b>coins and gems</b>. Contracts pay <b>10% more</b>.', mins: 28 },
+    pup: { id: 'pup', name: 'Glooper', stage: 2, art: 'pet_pup', perk: 'Fetches faster and better.', mins: 34 },
+    star: { id: 'star', name: 'Star Pup', stage: 3, art: 'pet_star', perk: 'Brings <b>energy</b>. Your energy refills <b>10% faster</b>.', mins: 28 },
+    crater: { id: 'crater', name: 'Crater Pup', stage: 3, art: 'pet_crater', perk: 'Digs up <b>items</b>, sometimes a chest.', mins: 28 },
+    comet: { id: 'comet', name: 'Comet Pup', stage: 3, art: 'pet_comet', perk: 'Brings <b>coins and gems</b>. Contracts pay <b>10% more</b>.', mins: 28 },
     nova: { id: 'nova', name: 'Nova Wobbler', stage: 4, art: 'pet_nova', perk: 'Lots of <b>energy</b>. Energy refills <b>20% faster</b>.', mins: 22 },
     titan: { id: 'titan', name: 'Boulderbelly', stage: 4, art: 'pet_titan', perk: 'Higher-tier <b>items</b> and chests.', mins: 22 },
     king: { id: 'king', name: 'Comet Emperor', stage: 4, art: 'pet_king', perk: '<b>Coins and gems</b>. Contracts pay <b>20% more</b>.', mins: 22 },
@@ -4269,12 +4269,17 @@ export async function startGame() {
   function petHatch(done: () => void) {
     let el = document.getElementById('evo');
     if (!el) { el = document.createElement('div'); el.id = 'evo'; $('#app').appendChild(el); }
-    const egg = ART.spriteItem('petegg') ? `<img src="${ART.spriteItem('petegg')}" alt="">` : ART.item('petegg');
+    const egg = ART.spriteChar('pet_egg') ? `<img src="${ART.spriteChar('pet_egg')}" alt="">`
+      : ART.spriteItem('petegg') ? `<img src="${ART.spriteItem('petegg')}" alt="">` : ART.item('petegg');
     el.innerHTML = `<div class="rwcRays"></div><div class="evoTxt">Something is <b>wobbling</b>…</div>
       <div class="evoStage hatch"><span class="evoEgg">${egg}</span><span class="evoB">${pupArt(PET_FORMS.baby)}</span></div><button class="big" id="evoGo" style="visibility:hidden">Hello, little one!</button>`;
     el.className = 'open hatching'; sfx.whoosh(); haptic('light');
     setTimeout(() => { sfx.boing(); haptic('medium'); }, 900);
-    setTimeout(() => { sfx.boing(); haptic('medium'); }, 1500);
+    setTimeout(() => {
+      sfx.boing(); haptic('medium');
+      const cr = ART.spriteChar('pet_egg_crack'), im = el!.querySelector('.evoEgg img') as HTMLImageElement;
+      if (cr && im) im.src = cr;
+    }, 1500);
     setTimeout(() => {
       el!.classList.add('done'); sfx.discover(); sfx.voice('pup', 3); haptic('heavy'); confetti();
       burst(el!.querySelector('.evoStage') as HTMLElement, 30);
@@ -4284,7 +4289,7 @@ export async function startGame() {
     ($('#evoGo') as HTMLElement).onclick = () => { el!.className = ''; done(); };
   }
   function petIntro() {
-    talkScene([['bloop', 'Something crawled out of a crater and into my lab coat. It is squishy. It has too many eyes. It will not leave.'],
+    talkScene([['bloop', 'Something crawled out of a crater and into my lab coat. It is squishy. It has one enormous eye. It will not stop staring at me.'],
       ['zib', 'A Gloopling! Kix knows these. They fetch things. They eat things. They CHANGE, friend.'],
       ['bloop', 'Tap it on the left of the board. It brings you a gift every half hour or so.'],
       ['bloop', 'Feed it a few spare items when it is hungry. Full bellies are happy bellies. Happy ones grow, and one day they evolve. Into what, nobody knows.']], () => { renderQuick(); setTimeout(pupPop, 600); });
@@ -4827,14 +4832,21 @@ export async function startGame() {
     for (let i = 0; i < N; i++) if (b[i] && b[i].p && PRODS[b[i].p].mode !== 'once' && !b[i].tmp && !b[i].ev) prods.push({ i, k: b[i].p });
 
     const built = Object.keys(S.parts).filter(k => S.parts[k]).length;
-    let ents = !rocketTime() ? '' : spot('rocket', PAD.rocket,
+    const P = !!A.painted;   // the painting already has the rocket, lab and heart: tap targets only
+    const hole = (k: string) => `<div class="spotPaint ${k}"></div>`;
+    let ents = !rocketTime() ? '' : P ? spot('rocket', PAD.rocket, hole('rk'),
+      S.met ? 'Rocket' : 'Launch pad',
+      S.met ? (allParts() ? 'Ready · ⛽' + S.fuel + '/3' : built + '/4 parts') : 'nothing here yet',
+      'ship painted' + (S.met && allParts() && S.fuel >= CONFIG.rocket.fuelToLaunch ? ' ready' : '')) : spot('rocket', PAD.rocket,
       S.met ? (ART.spriteUi('rocket_0') ? `<img class="campImg" src="${ART.spriteUi('rocket_' + (built >= 4 ? 3 : built >= 3 ? 2 : built >= 1 ? 1 : 0))}">`
         : built ? (ART.spriteUi('rocket_0') ? `<img class="rkImg" src="${ART.spriteUi('rocket_' + (built >= 4 ? 3 : built >= 3 ? 2 : built >= 1 ? 1 : 0))}">` : ART.rocket(S.parts)) : '<div class="spotGhost">🚀</div>') : '<div class="spotGhost">🚀</div>',
       S.met ? 'Rocket' : '???',
       S.met ? (allParts() ? 'Ready · ⛽' + S.fuel + '/3' : built + '/4 parts') : 'nothing here yet',
       'ship' + (S.met && allParts() && S.fuel >= CONFIG.rocket.fuelToLaunch ? ' ready' : ''));
-    if (labOpen()) ents += spot('lab', PAD.lab, ART.spriteUi('camp_lab') ? `<img class="campImg" src="${ART.spriteUi('camp_lab')}">` : ART.icon('flask'), "Dr. Zonk's Lab", S.acc && !accLeft() ? '⚗️ ready!' : '🧪 ' + S.sci, 'lab' + (S.acc && !accLeft() ? ' ready' : ''));
-    ents += spot('heart', PAD.heart, ART.spriteUi('camp_heart_on') ? `<img class="campImg" src="${ART.spriteUi(worldAwake() ? 'camp_heart_on' : 'camp_heart_off')}">` : ART.item(worldAwake() ? 'bloomheart' : 'bloomcore'),
+    if (labOpen() && P) ents += spot('lab', PAD.lab, hole('lb'), "Dr. Zonk's Lab", S.acc && !accLeft() ? '⚗️ ready!' : '🧪 ' + S.sci, 'lab painted' + (S.acc && !accLeft() ? ' ready' : ''));
+    else if (labOpen()) ents += spot('lab', PAD.lab, ART.spriteUi('camp_lab') ? `<img class="campImg" src="${ART.spriteUi('camp_lab')}">` : ART.icon('flask'), "Dr. Zonk's Lab", S.acc && !accLeft() ? '⚗️ ready!' : '🧪 ' + S.sci, 'lab' + (S.acc && !accLeft() ? ' ready' : ''));
+    if (P) ents += spot('heart', PAD.heart, hole('ht'), w.heart, worldAwake() ? 'Awake' : fed() + '/' + bloomGoal() + ' Bloom', 'heart painted' + (worldAwake() ? ' awake' : ' asleep'));
+    else ents += spot('heart', PAD.heart, ART.spriteUi('camp_heart_on') ? `<img class="campImg" src="${ART.spriteUi(worldAwake() ? 'camp_heart_on' : 'camp_heart_off')}">` : ART.item(worldAwake() ? 'bloomheart' : 'bloomcore'),
       w.heart, worldAwake() ? 'Awake' : fed() + '/' + bloomGoal() + ' Bloom', 'heart');
 
     prods.slice(0, PROD_PADS.length).forEach((pr, n) => {
@@ -4851,7 +4863,7 @@ export async function startGame() {
         'Empty plot', 'opens at lv ' + nextAt(), 'empty');
     }
 
-    return `<div class="sceneWrap camp">
+    return `<div class="sceneWrap camp${P ? ' painted' : ''}">
       <div class="sceneBlur"></div><div class="sceneImg"></div><div class="sceneVig"></div>
       <div class="sceneName">${w.name}<i>lv ${wlv()}</i></div>
       <button class="starMapBtn" data-pop="galaxy"><span>${ART.uiIcon('ic_galaxy', '🌌')}</span><b>Galaxy</b></button>
@@ -4904,7 +4916,7 @@ export async function startGame() {
       return `<div class="gp gp-${k} ${state} side-${side}" style="left:${p.x}%;top:${p.y}px;--glow:${GAL[k] ? GAL[k].glow : '#fff'}">
         <button class="gpPlanet" data-world="${k}"><span class="gpRing"></span>
           <span class="galArt">${ART.uiIcon('planet_' + k, ART.planet(ww.planet))}</span>
-          ${here ? `<span class="gpRocket">${ART.uiIcon('rocket_pad', '🚀')}</span>` : ''}${state === 'locked' ? '<span class="gpLock">🔒</span>' : ''}
+          ${here ? `<span class="gpRocket">${ART.uiIcon('gal_rocket', ART.uiIcon('rocket_pad', '🚀'))}</span>` : ''}${state === 'locked' ? `<span class="gpLock">${ART.uiIcon('gal_lock', '🔒')}</span>` : ''}
           ${reached && worldAwake(k) ? '<span class="galBloom">🌱</span>' : ''}</button>
         <div class="gpCard"><b>${ww.name}</b><i>${GAL[k] ? GAL[k].tag : ''}</i>${prog}${btn}</div>
       </div>`;
@@ -4972,7 +4984,9 @@ export async function startGame() {
       return;
     }
     // keep the plinths' band (x 7%–93%) on screen; crop only bare edges
-    const sc = Math.max(H / ih, W2 / iw) * iw > W2 / 0.86 ? W2 / (0.86 * iw) : Math.max(W2 / iw, H / ih);
+    // a painted camp has buildings out to the edges: show its full width
+    const full = wrap.classList.contains('camp') && !!(sceneAnchors(S.world) as any).painted;
+    const sc = full ? W2 / iw : Math.max(H / ih, W2 / iw) * iw > W2 / 0.86 ? W2 / (0.86 * iw) : Math.max(W2 / iw, H / ih);
     const dw = iw * sc, dh = ih * sc;
     const ox = (W2 - dw) / 2, oy = dh < H ? H - dh : Math.max(H - dh, (H - dh) / 2);
     const img = wrap.querySelector('.sceneImg') as HTMLElement;
@@ -4986,7 +5000,7 @@ export async function startGame() {
         const art = e.querySelector('.spotArt') as HTMLElement;
         const w = e.offsetWidth || 104, h = art ? art.offsetHeight : 72;
         e.style.transform = 'none';
-        e.style.left = (x - w / 2) + 'px';
+        e.style.left = clamp(x - w / 2, 2, W2 - w - 2) + 'px';
         e.style.top = (y - h + Math.round(dh * 0.018)) + 'px';
       } else {
         e.style.left = x + 'px'; e.style.top = y + 'px';
@@ -5745,7 +5759,7 @@ export async function startGame() {
       grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed, ecost,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
       fly: (w: string) => galaxyTap(w), view: (v: string) => setView(v),
-      curProject: () => curProject(), v9: { paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
+      curProject: () => curProject(), v9: { paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
     };
     setInterval(tick, 500);
     setInterval(() => { if (!document.hidden) S.playMs = (S.playMs || 0) + 5000; }, 5000);

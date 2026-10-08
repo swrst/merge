@@ -15,7 +15,7 @@ export const SERVICES = {
     privacyUrl: '',                     // ← your privacy policy page (required by both stores)
     supportEmail: '',                   // ← where "Send feedback" goes; empty = feedback is copied to the clipboard
     /** shown in Settings and stamped on every feedback report */
-    build: '0.42 test',
+    build: '0.43 test',
     /** test builds: tap the version line 5× in Settings for the tester tools */
     testerTools: true,
   },

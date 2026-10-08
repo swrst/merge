@@ -29,7 +29,7 @@ export const WORLDS = [
   {
     key: 'cindra', name: 'Ember Hollow', subtitle: 'Cindra', planet: 'cinder',
     tapCost: 2, perk: 'eruption',
-    folks: ['vulk', 'ember', 'rokk', 'zib'],
+    folks: ['vulk', 'ember', 'rokk', 'zib', 'grubs', 'glimmer'],
     heart: 'Hollow Heart',
     bloom: [
       { need: 4, title: 'Ash to Soil', text: 'Where the ash cooled, something soft is growing through it.' },
@@ -41,7 +41,7 @@ export const WORLDS = [
   {
     key: 'nerith', name: 'Tidal Shallows', subtitle: 'Nerith', planet: 'nerith',
     tapCost: 2, perk: 'tide',
-    folks: ['marin', 'kelpa', 'sirra', 'bloop'],
+    folks: ['marin', 'kelpa', 'sirra', 'bloop', 'blorb', 'oops'],
     heart: 'Shallow Heart',
     bloom: [
       { need: 4, title: 'The Water Clears', text: 'Silt settles. For the first time in centuries you can see the reef floor.' },
@@ -53,7 +53,7 @@ export const WORLDS = [
   {
     key: 'vela', name: 'Aurora Reach', subtitle: 'Vela', planet: 'vela',
     tapCost: 2, perk: 'aurora',
-    folks: ['zephyr', 'halo', 'wren', 'luma'],
+    folks: ['zephyr', 'halo', 'wren', 'luma', 'blorb', 'glimmer'],
     heart: 'Reach Heart',
     bloom: [
       { need: 5, title: 'First Light', text: 'A thread of aurora, thin as a hair, stitched across the dark.' },

@@ -127,6 +127,7 @@ button{font-family:inherit;cursor:pointer;border:none}
   border:3px solid #fff;box-shadow:0 4px 0 rgba(150,105,50,.26),0 6px 12px rgba(0,0,0,.14);position:relative}
 .order.ready{box-shadow:0 4px 0 rgba(60,140,40,.4),0 0 0 3px #8ce46a,0 8px 18px rgba(80,190,60,.4);animation:readyBob 1.1s ease-in-out infinite}
 @keyframes readyBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes tagBob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-4px)}}
 .order.newin{animation:slideIn .4s cubic-bezier(.3,1.5,.6,1)}
 @keyframes slideIn{from{transform:scale(.7) translateY(10px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
 .oTop{display:flex;gap:6px;align-items:flex-end}
@@ -817,7 +818,7 @@ button{font-family:inherit;cursor:pointer;border:none}
   align-items:center;line-height:1.1;box-shadow:0 3px 7px rgba(0,0,0,.3);pointer-events:none;white-space:nowrap}
 .spotTag b{font-size:9.5px;font-weight:800;color:#4d3a22;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:96px}
 .spotTag i{font-style:normal;font-size:8.5px;font-weight:800;color:#8a6a3c;white-space:nowrap}
-.spot.ready .spotTag{background:linear-gradient(180deg,#fff0bd,#ffcb3d);animation:readyBob 1.2s ease-in-out infinite}
+.spot.ready .spotTag{background:linear-gradient(180deg,#fff0bd,#ffcb3d);animation:tagBob 1.2s ease-in-out infinite}
 .spot.ready .spotTag i{color:#7a4f06}
 .spotBadge{position:absolute;top:-6px;right:10px;background:linear-gradient(180deg,#8fe86d,#4fb63a);
   color:#fff;font-size:10px;font-weight:800;border-radius:99px;padding:1px 7px;border:2px solid #fff;
@@ -2102,11 +2103,11 @@ html.ui-level_frame .app .lvlBox .xpbar{position:absolute;inset:0;height:auto;ma
 html.ui-level_frame .app .lvlBox .xpbar i{background:linear-gradient(90deg,#7dff9a,#3fe0c0);opacity:.9}
 html.ui-level_frame .app .lvlBox .xplabel{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;color:#fff;font-size:8px;letter-spacing:.02em;text-shadow:0 1px 0 #2a0e6b;white-space:nowrap}
 /* dark space-glass chips: light text */
-html.ui-chip_bg .app .hud .chip{color:#fff;text-shadow:0 1px 0 rgba(30,8,80,.9)}
+html.ui-chip_bg .app .hud .chip{color:#24324f;text-shadow:none}
 html.ui-chip_bg .app .hud .chip *{color:inherit}
 html.ui-level_frame .app .lvlBox .xplabel{gap:3px}
 html.ui-chip_bg .app .hud .chip{padding:2px 7px 2px 2px;font-size:12.5px;gap:2px}
-html.ui-chip_bg .app .hud .chip b,html.ui-chip_bg .app .hud .chip span:not(.dot){color:#fff!important}
+html.ui-chip_bg .app .hud .chip b,html.ui-chip_bg .app .hud .chip span:not(.dot){color:#24324f!important}
 html.ui-ic_shop .app .hudShop{background:none;border:0;box-shadow:none}
 
 html.ui-ribbon .screen:not(.scene) .scTitle,html.ui-ribbon .popRibbon{padding:5px 36px 15px;font-size:15px;max-width:92%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}
@@ -2215,3 +2216,26 @@ html.ui-ribbon .screen:not(.scene) .scTitle,html.ui-ribbon .popRibbon{padding:5p
 @keyframes evoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 #evo.open:not(.done) .rwcRays{animation-duration:6s}
 #evo.done .rwcRays{opacity:.7}
+/* painted camps: the rocket, lab and heart are in the picture; the spot is just the tap area + label */
+.spot.painted .spotArt{filter:none!important;animation:none!important}
+.spot.painted.ship .spotArt{width:150px;height:170px}
+.spot.painted.lab .spotArt{width:104px;height:116px}
+.spot.painted.heart .spotArt{width:72px;height:80px}
+.spotPaint{width:100%;height:100%;border-radius:40%}
+.spot.painted:active .spotPaint{background:radial-gradient(closest-side,rgba(255,255,255,.35),transparent)}
+.spot.painted.ready .spotPaint{background:radial-gradient(closest-side,rgba(255,226,120,.45),transparent);animation:readyBob 1.2s ease-in-out infinite}
+.spot.heart.asleep .spotPaint{position:relative}
+.spot.heart.asleep .spotPaint::after{content:'💤';position:absolute;right:-6px;top:4px;font-size:18px;animation:readyBob 2s ease-in-out infinite}
+.sceneWrap.camp.painted .spot:not(.painted) .spotArt{width:60px;height:60px}
+.sceneWrap.camp.painted .spotTag{padding:1px 6px}
+.sceneWrap.camp.painted .spotTag b{font-size:9px;max-width:76px}
+.sceneWrap.camp.painted .spotTag i{font-size:8px}
+.spot.painted.heart .spotTag{top:auto;bottom:100%;margin:0 0 2px}
+/* painted backdrops for the pet room and the evolution scene */
+html.ui-evo_bg #evo{background:#140c34 var(--ui-evo_bg) center/cover no-repeat}
+html.ui-pet_room .pupStage{background:var(--ui-pet_room) center 62%/cover no-repeat;border-radius:18px;height:200px;padding-bottom:14px;box-shadow:inset 0 0 0 3px rgba(255,255,255,.7)}
+.gpLock .uiIc,.gpLock img{width:46px;height:46px;object-fit:contain}
+html.ui-gal_rocket .gpRocket:before{content:none}
+html.ui-gal_rocket .gpRocket .uiIc{position:absolute;left:52px;top:-22px;width:40px;height:40px}
+#evo .evoTxt{text-shadow:0 2px 8px rgba(10,0,40,.95),0 0 3px rgba(10,0,40,.9)}
+.spot.painted.lab .spotTag{top:auto;bottom:100%;margin:0 0 2px}

@@ -449,7 +449,13 @@
       "parts",
       "weather",
       "wood",
-      "cloth"
+      "cloth",
+      "harbour",
+      "sunkn",
+      "seaglass",
+      "balloonc",
+      "kite",
+      "satellite"
     ]
   },
   "oops": {
@@ -469,7 +475,12 @@
       "crystal",
       "glow",
       "ice",
-      "dust"
+      "dust",
+      "tide",
+      "pearlc",
+      "lumin",
+      "nebula",
+      "comet"
     ]
   },
   "grubs": {
@@ -490,7 +501,12 @@
       "mush",
       "pets",
       "garden",
-      "honey"
+      "honey",
+      "spice",
+      "shroom",
+      "glassw",
+      "emberfruit",
+      "skyfruit"
     ]
   },
   "glimmer": {
@@ -510,7 +526,14 @@
       "dust",
       "glow",
       "crystal",
-      "ice"
+      "ice",
+      "magma",
+      "rubyc",
+      "copper",
+      "starling",
+      "chime",
+      "silver",
+      "starc"
     ]
   }
 }

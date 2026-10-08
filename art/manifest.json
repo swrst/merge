@@ -54,12 +54,12 @@
     "negative": "characters, people, text, letters, UI, buttons, watermark, photo, photorealistic, dark, muddy colours, objects in the sockets"
   },
   {
-    "path": "src/sprites/producers/impact.png",
+    "path": "src/sprites/producers/tree.png",
     "kind": "producer",
-    "name": "Meteor Crater",
+    "name": "Meteor Heap",
     "group": "producer (Sunny Meadow)",
     "batch": "starters",
-    "prompt": "Meteor Crater — a big friendly round-crowned tree with a thick trunk, a few twigs at its roots, standing on its own small round mound of earth. A source the player taps for Meteor Chip, Hot Meteor. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
+    "prompt": "Meteor Heap — a big friendly round-crowned tree with a thick trunk, a few twigs at its roots, standing on its own small round mound of earth. A source the player taps for Meteor Chip, Hot Meteor. Slightly taller than wide, planted and heavy, clearly scenery rather than loot; the mound is part of the sprite and the only ground shown. Sunny Meadow palette — grass green, honey amber, warm tan, sky blue. Mobile merge-game item in the style of Travel Town: one chunky, rounded, toy-like object, soft glossy semi-3D painted rendering, bright saturated friendly colours, gentle warm key light from the upper left with one soft white highlight on the top surface, shaded side a deeper richer version of the base colour (never grey or black), a thin darker warm-brown edge line, a small soft contact shadow directly beneath. Three-quarter view from about 30 degrees above, as if sitting on a table. Isolated on a plain transparent background, centred, filling about 80% of the frame, simple bold silhouette that still reads as a 60-pixel icon. No text, no letters, no numbers, no frame, no card, no scenery, no watermark. 512x512",
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
@@ -153,7 +153,7 @@
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
-    "path": "src/sprites/producers/candycart.png",
+    "path": "src/sprites/producers/bush.png",
     "kind": "producer",
     "name": "Snack Cart",
     "group": "producer (Sunny Meadow)",
@@ -171,7 +171,7 @@
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
-    "path": "src/sprites/producers/solarfarm.png",
+    "path": "src/sprites/producers/meadow.png",
     "kind": "producer",
     "name": "Solar Farm",
     "group": "producer (Sunny Meadow)",
@@ -180,7 +180,7 @@
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
-    "path": "src/sprites/producers/lanternstall.png",
+    "path": "src/sprites/producers/flowerbed.png",
     "kind": "producer",
     "name": "Light Stall",
     "group": "producer (Sunny Meadow)",
@@ -207,7 +207,7 @@
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
-    "path": "src/sprites/producers/silkloom.png",
+    "path": "src/sprites/producers/cottonpatch.png",
     "kind": "producer",
     "name": "Suit Loom",
     "group": "producer (Sunny Meadow)",
@@ -216,7 +216,7 @@
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
-    "path": "src/sprites/producers/scrapwreck.png",
+    "path": "src/sprites/producers/nestbox.png",
     "kind": "producer",
     "name": "Jet Wreck",
     "group": "producer (Sunny Meadow)",
@@ -288,7 +288,7 @@
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
-    "path": "src/sprites/producers/gasvent.png",
+    "path": "src/sprites/producers/teabush.png",
     "kind": "producer",
     "name": "Fizz Vent",
     "group": "producer (Sunny Meadow)",
@@ -540,7 +540,7 @@
     "negative": "text, letters, numbers, watermark, signature, logo, background scenery, ground plane, frame, border, card, multiple objects, cropped, photo, photorealistic, realistic texture, grain, noise, blurry, dark, gloomy, muddy colours, neon, flat vector clip art, black outline"
   },
   {
-    "path": "src/sprites/producers/sulfurspring.png",
+    "path": "src/sprites/producers/spicevine.png",
     "kind": "producer",
     "name": "Fire Gel Spring",
     "group": "producer (Ember Hollow)",

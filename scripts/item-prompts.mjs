@@ -11,7 +11,7 @@ const WORLDS = ['earth', 'luna', 'cindra', 'nerith', 'vela', 'any'];
 const WNAME = { earth: 'Sunny Meadow', luna: 'Crater Camp', cindra: 'Ember Hollow', nerith: 'Tidal Shallows', vela: 'Aurora Reach', any: 'Everywhere (events, lab, junk)' };
 const SKIP = new Set(['scrap', 'relic', 'bloom', 'chest', 'rainbow']);
 /* sheets already redrawn and in the game */
-const DONE = new Set(["wood", "stone", "berry", "water", "grass", "flower", "honey", "mush", "cloth", "feather", "clay", "garden", "veggie", "stargaze", "visitor", "bakery", "tea", "pond", "toys", "picnic", "pets", "music", "parts", "weather", "moon", "glow", "dust", "ice", "crystal", "lantern", "silver", "comet", "lunamoth", "moonpup", "rover", "helium", "meteorite", "dish", "moonmelon", "magma", "shroom", "iron", "obsid", "glassw", "forge", "spice", "copper", "phoenix", "salamander", "rubyc", "sulfur", "emberfruit", "shellc", "steam", "fishc", "pearlc", "coralc", "tide", "kelp", "salt", "sunkn", "lumin", "squid", "turtle", "harbour", "seaglass", "urchin", "manta", "cloudc", "aurorac", "starc", "wind", "skyfruit", "chime", "prismv", "skynest", "balloonc", "starling", "satellite", "nebula", "starflower", "planets", "kite", "ev_star", "ev_lantern", "ev_candy", "potion", "junk"]);
+const DONE = new Set(["basalt", "wood", "stone", "berry", "water", "grass", "flower", "honey", "mush", "cloth", "feather", "clay", "garden", "veggie", "stargaze", "visitor", "bakery", "tea", "pond", "toys", "picnic", "pets", "music", "parts", "weather", "moon", "glow", "dust", "ice", "crystal", "lantern", "silver", "comet", "lunamoth", "moonpup", "rover", "helium", "meteorite", "dish", "moonmelon", "magma", "shroom", "iron", "obsid", "glassw", "forge", "spice", "copper", "phoenix", "salamander", "rubyc", "sulfur", "emberfruit", "shellc", "steam", "fishc", "pearlc", "coralc", "tide", "kelp", "salt", "sunkn", "lumin", "squid", "turtle", "harbour", "seaglass", "urchin", "manta", "cloudc", "aurorac", "starc", "wind", "skyfruit", "chime", "prismv", "skynest", "balloonc", "starling", "satellite", "nebula", "starflower", "planets", "kite", "ev_star", "ev_lantern", "ev_candy", "potion", "junk"]);
 const simple = d => {
   let w = (d || '').replace(/\s*\([^)]*\)/g, '').split(/,| with | on a | in a | under | over | that | which | full of | covered in | topped | stamped | tied | overflowing /)[0].trim().split(' ');
   while (w.length > 2 && /(ed|ing)$/.test(w[w.length - 1])) w.pop();
@@ -42,9 +42,11 @@ const plist = (Array.isArray(PRODS) ? PRODS : Object.entries(PRODS).map(([id, v]
   .filter(p => !['wreck', 'crater'].includes(p.id));
 const wOf = p => { const d = (p.drops || [])[0]; const it = items[d]; const ch = it && chains[it.chain]; return ch ? ch.world : 'any'; };
 const pw = {}; plist.forEach(p => (pw[wOf(p)] = pw[wOf(p)] || []).push(p));
-out += `\n## Producers (every producer redrawn to match the new items)\n\n`;
+/* every producer was redrawn in v43; flip this to print the producer sheets again */
+const PRODS_DONE = true;
+if (!PRODS_DONE) out += `\n## Producers (every producer redrawn to match the new items)\n\n`;
 let pk = 0;
-for (const w of WORLDS) {
+for (const w of PRODS_DONE ? [] : WORLDS) {
   const ps = pw[w] || [];
   for (let i = 0; i < ps.length; i += 16) {
     const part = ps.slice(i, i + 16), cols = 4, rows = Math.ceil(part.length / cols), empty = cols * rows - part.length;

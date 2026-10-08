@@ -505,7 +505,8 @@
     "asks": [
       "Moonstone for the dome.",
       "Samples for the lab.",
-      "The craters need filling."
+      "The craters need filling.",
+      "Madame Oops wants a new ball."
     ]
   },
   "glow": {
@@ -632,7 +633,8 @@
     "asks": [
       "Comets carry old seeds.",
       "For the star map.",
-      "Catching a falling wish."
+      "Catching a falling wish.",
+      "For the grand finale!"
     ]
   },
   "lunamoth": {
@@ -782,7 +784,8 @@
     "asks": [
       "The forge went cold.",
       "Heat for the hollow.",
-      "A spark to start with."
+      "A spark to start with.",
+      "Fireworks need a spark!"
     ]
   },
   "shroom": {
@@ -857,7 +860,8 @@
     "asks": [
       "Bottles for the market.",
       "Windows for the hut.",
-      "A vase for Fizz."
+      "A vase for Fizz.",
+      "For the stall counter."
     ]
   },
   "forge": {
@@ -893,7 +897,8 @@
     "asks": [
       "Fuel for the furnace.",
       "Hot gel, please!",
-      "Warming the hollow."
+      "Warming the hollow.",
+      "Two crates. No, three. (Two.)"
     ]
   },
   "copper": {
@@ -913,7 +918,8 @@
     "asks": [
       "Pipes for the steamworks.",
       "Wire for the bells.",
-      "Copper shines best."
+      "Copper shines best.",
+      "The clock tower is ticking slow."
     ]
   },
   "phoenix": {
@@ -1037,7 +1043,8 @@
     "asks": [
       "A gift for the queen.",
       "Rubies for the crown.",
-      "Something that glows."
+      "Something that glows.",
+      "A jewel fit for a star (me)."
     ]
   },
   "shellc": {
@@ -1131,7 +1138,8 @@
     "asks": [
       "A pet for my tank.",
       "The swimmers want friends.",
-      "Look how it wiggles!"
+      "Look how it wiggles!",
+      "Gerald needs a friend."
     ]
   },
   "tide": {
@@ -1148,7 +1156,8 @@
     "asks": [
       "Reading the tides.",
       "The pools are drying.",
-      "Sea foam for the bath."
+      "Sea foam for the bath.",
+      "The tides told me to ask."
     ]
   },
   "salt": {
@@ -1254,7 +1263,8 @@
     "asks": [
       "The dock needs a buoy.",
       "Fixing the sub.",
-      "Diving tomorrow!"
+      "Diving tomorrow!",
+      "Parcel for the deep end!"
     ]
   },
   "seaglass": {
@@ -1465,7 +1475,8 @@
     "asks": [
       "Patching the balloon.",
       "A ride to the next island.",
-      "Silk for the sails."
+      "Silk for the sails.",
+      "Mail goes up today."
     ]
   },
   "starling": {
@@ -1485,7 +1496,8 @@
     "asks": [
       "This star-kit is lost.",
       "A friend who glows!",
-      "The sprites want to play."
+      "The sprites want to play.",
+      "For the parade!"
     ]
   },
   "satellite": {
@@ -1522,7 +1534,8 @@
     "asks": [
       "Bottling a nebula!",
       "Colour for the dark sky.",
-      "For the stargazers."
+      "For the stargazers.",
+      "I see your future in this jar."
     ]
   },
   "starflower": {
@@ -1559,7 +1572,8 @@
     "asks": [
       "A little world for my shelf.",
       "For the orrery.",
-      "Every sky needs planets."
+      "Every sky needs planets.",
+      "For the grand orrery."
     ]
   },
   "kite": {
@@ -1574,7 +1588,8 @@
     ],
     "asks": [
       "Delivery by drone!",
-      "The drone needs a rotor."
+      "The drone needs a rotor.",
+      "Express delivery, please."
     ]
   },
   "potion": {

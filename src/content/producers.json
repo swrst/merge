@@ -1,7 +1,7 @@
 {
   "tree": {
     "name": "Meteor Heap",
-    "art": "impact",
+    "art": "tree",
     "drops": [
       "twig",
       "twig",
@@ -25,7 +25,7 @@
   },
   "bush": {
     "name": "Snack Cart",
-    "art": "candycart",
+    "art": "bush",
     "drops": [
       "berry",
       "berry",
@@ -49,7 +49,7 @@
   },
   "meadow": {
     "name": "Solar Farm",
-    "art": "solarfarm",
+    "art": "meadow",
     "drops": [
       "grass",
       "grass",
@@ -61,7 +61,7 @@
   },
   "flowerbed": {
     "name": "Light Stall",
-    "art": "lanternstall",
+    "art": "flowerbed",
     "drops": [
       "bulbseed",
       "bulbseed",
@@ -105,7 +105,7 @@
   },
   "cottonpatch": {
     "name": "Suit Loom",
-    "art": "silkloom",
+    "art": "cottonpatch",
     "drops": [
       "fibre",
       "fibre",
@@ -117,7 +117,7 @@
   },
   "nestbox": {
     "name": "Jet Wreck",
-    "art": "scrapwreck",
+    "art": "nestbox",
     "drops": [
       "down",
       "down",
@@ -246,7 +246,7 @@
   },
   "teabush": {
     "name": "Fizz Vent",
-    "art": "gasvent",
+    "art": "teabush",
     "drops": [
       "tealeaf",
       "tealeaf",
@@ -761,7 +761,7 @@
   },
   "spicevine": {
     "name": "Fire Gel Spring",
-    "art": "sulfurspring",
+    "art": "spicevine",
     "drops": [
       "pepperpod",
       "pepperpod",
