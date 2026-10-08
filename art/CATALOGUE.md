@@ -176,8 +176,8 @@ Sulfur Dust → Sulfur Crystal → Sulfur Cluster → Brimstone Heart
 **Steamworks** · 7 steps · Lv 10 · from the Steam Vent  
 Steam Puff → Steam Pipe → Pressure Valve → Boiler → Steam Engine → Geothermal Plant → Steam Titan
 
-**Ember Orchard** · 6 steps · Lv 11 · from the Charred Stump  
-Char Seed → Ember Sprout → Fire Fruit → Fire Fruit Basket → Ember Tree → Ember Grove
+**Lava Lamps** · 6 steps · Lv 11 · from the Lava Vent Stump  
+Lava Drop → Lava Bulb → Lava Lamp → Big Lava Lamp → Lamp Stand → Lava Light Tower
 
 **Ruby Caves** · 7 steps · Lv 12 · from the Ruby Vein  
 Red Chip → Ruby Shard → Cut Ruby → Ruby Ring → Ruby Sceptre → Ruby Crown → Ruby Idol
@@ -189,8 +189,8 @@ Red Chip → Ruby Shard → Cut Ruby → Ruby Ring → Ruby Sceptre → Ruby Cro
 **Shell Bed** · 7 steps · Lv 1 · from the Shell Bed  
 Shell Chip → Sea Shell → Great Shell → Nautilus → Shell Horn → Shell Throne → Shell Palace
 
-**Kelp Forest** · 7 steps · Lv 1 · from the Kelp Bed  
-Kelp Leaf → Kelp Frond → Kelp Coil → Kelp Bale → Kelp Grove → Tide Grove → Kelp Cathedral
+**Bubble Tech** · 7 steps · Lv 1 · from the Bubble Bed  
+Bubble → Bubble Cluster → Bubble Jar → Bubble Helmet → Bubble Pod → Bubble Dome → Bubble City
 
 **Pearl Diving** · 7 steps · Lv 2 · from the Oyster Bed  
 Grain of Grit → Seed Pearl → Pearl → Pearl Strand → Pearl Crown → Pearl Orb → Pearl Palace
@@ -198,38 +198,38 @@ Grain of Grit → Seed Pearl → Pearl → Pearl Strand → Pearl Crown → Pear
 **Coral Reef** · 7 steps · Lv 2 · from the Coral Head  
 Coral Bud → Coral Sprig → Coral Fan → Coral Crown → Coral Palace → Coral City → Reef Crown
 
-**Fish Market** · 6 steps · Lv 3 · from the Fish Trap  
-Minnow → Silverfin → Big Catch → Full Net → Tide Feast → Harbour Market
+**Swimmer Critters** · 6 steps · Lv 3 · from the Critter Trap  
+Bubbler → Three-Eye Swimmer → Big Swimmer → Critter Tank → Aquarium → Aqua Dome
 
 **Tide Pools** · 5 steps · Lv 3 · from the Tide Pool  
 Sea Bubble → Sea Foam → Tide Swell → Tidal Orb → Tidal Heart
 
-**Salt Pans** · 6 steps · Lv 4 · from the Salt Pan  
-Salt Grain → Salt Cake → Salt Brick → Salt Pillar → Salt Temple → Salt Lighthouse
+**Sea Crystals** · 6 steps · Lv 4 · from the Crystal Pan  
+Crystal Grain → Crystal Cube → Crystal Brick → Crystal Pillar → Crystal Temple → Crystal Lighthouse
 
-**Sunken Finds** · 7 steps · Lv 5 · from the Wreck Site  
-Driftwood Bit → Driftwood → Beached Skiff → Sunken Chest → Drowned Idol → Sunken Galleon → Drowned City
+**Sunken Saucer** · 7 steps · Lv 5 · from the Saucer Wreck  
+Scrap Bit → Hull Piece → Porthole → Sunken Pod → Sunken Robot → Sunken Saucer → Sunken Station
 
 **Deep Lights** · 5 steps · Lv 6 · from the Light Vent  
-Plankton Mote → Jelly Bell → Deep Lantern → Abyss Orb → Shallow Heart
+Glow Mote → Jelly Blob → Lantern Critter → Abyss Orb → Deep Heart
 
 **Reef Critters** · 7 steps · Lv 7 · from the Squid Reef  
 Bubble Egg → Squidlet → Tentacle Pal → Reef Squid → Glow Octo → Kraken Pal → Tide Kraken
 
-**Turtle Cove** · 4 steps · Lv 8 · from the Nesting Beach  
-Turtle Egg → Hatchling → Sea Turtle → Island Turtle
+**Shell Critters** · 4 steps · Lv 8 · from the Nesting Beach  
+Shell Egg → Shellkin → Shell Critter → Island Shell
 
-**Harbour** · 7 steps · Lv 9 · from the Old Dock  
-Rope Knot → Net Float → Buoy → Anchor → Ship's Wheel → Diving Bell → Submarine
+**Sub Dock** · 7 steps · Lv 9 · from the Sub Dock  
+Cable Coil → Float Ring → Beacon Buoy → Tractor Hook → Helm Console → Diving Pod → Submarine
 
 **Sea Glass** · 6 steps · Lv 10 · from the Glass Beach  
 Glass Pebble → Sea Glass → Glass Float → Sea Glass Lamp → Sea Glass Chimes → Glass Reef Dome
 
-**Urchin Garden** · 4 steps · Lv 11 · from the Urchin Rock  
-Urchin Spine → Urchin → Star Urchin → Starfish Crown
+**Spike Critters** · 4 steps · Lv 11 · from the Urchin Rock  
+Spike → Spikeball → Star Spike → Spike Crown
 
-**Manta Glide** · 5 steps · Lv 12 · from the Manta Deep  
-Manta Egg → Baby Manta → Manta Ray → Star Manta → Sky Manta
+**Gliders** · 5 steps · Lv 12 · from the Manta Deep  
+Glider Egg → Baby Glider → Glider → Star Glider → Sky Glider
 
 ## Aurora Reach — *Vela*
 
@@ -247,8 +247,8 @@ Stardust → Star Spark → Starlet → Star Cluster → Star Forge → Constell
 **Wind Currents** · 6 steps · Lv 2 · from the Wind Vane  
 Breeze → Gust → Wind Coil → Wind Vane → Sky Windmill → Storm Eye
 
-**Sky Orchard** · 6 steps · Lv 3 · from the Sky Orchard  
-Sky Seed → Sky Bud → Sky Fruit → Sky Basket → Cloud Feast → Orchard Isle
+**Cloud Jelly** · 6 steps · Lv 3 · from the Jelly Cloud  
+Jelly Wisp → Jelly Blob → Jelly Jar → Jelly Cake → Jelly Feast → Jelly Isle
 
 **Chime Tower** · 6 steps · Lv 3 · from the Chime Post  
 Chime Shard → Chime Bell → Chime Ring → Chime Tower → Sky Bell → Chime Cathedral
@@ -256,14 +256,14 @@ Chime Shard → Chime Bell → Chime Ring → Chime Tower → Sky Bell → Chime
 **Prism Array** · 6 steps · Lv 4 · from the Prism Stand  
 Light Mote → Light Beam → Prism Lens → Prism Array → Sun Prism → Rainbow Bridge
 
-**Sky Nest** · 6 steps · Lv 5 · from the Sky Nest  
-Sky Down → Sky Feather → Sky Plume → Sky Nest → Dawn Egg → Sky Roc
+**Cloud Critters** · 6 steps · Lv 5 · from the Sky Nest  
+Cloud Puff → Sky Plume → Cloud Nest → Sky Egg → Cloud Flyer → Cloud Glider
 
 **Drift Yards** · 5 steps · Lv 6 · from the Silk Loom  
-Silk Scrap → Silk Envelope → Drift Balloon → Sky Ship → Reach Heart
+Silk Scrap → Balloon Envelope → Drift Balloon → Balloon Airship → Sky Heart
 
 **Star Critters** · 8 steps · Lv 7 · from the Star Den  
-Starlit Egg → Glimmer → Star Sprite → Nebula Kitten → Comet Fox → Aurora Fox → Celestial Fox → Constellation Beast
+Starlit Egg → Glimmer → Star Sprite → Nebula Kitten → Comet Critter → Aurora Critter → Celestial Critter → Constellation Beast
 
 **Satellite Works** · 7 steps · Lv 8 · from the Solar Array  
 Solar Cell → Solar Panel → Mini Satellite → Comm Satellite → Station Module → Orbital Station → Star Gate
@@ -271,14 +271,14 @@ Solar Cell → Solar Panel → Mini Satellite → Comm Satellite → Station Mod
 **Nebula Jars** · 6 steps · Lv 9 · from the Nebula Pool  
 Nebula Wisp → Nebula Puff → Nebula Jar → Nebula Globe → Nebula Lamp → Bottled Galaxy
 
-**Starflower Beds** · 6 steps · Lv 10 · from the Star Bed  
-Starseed → Star Sprout → Starflower → Starflower Pot → Celestial Garden → Starflower Meadow
+**Glow Orbs** · 6 steps · Lv 10 · from the Star Bed  
+Orb Seed → Small Orb → Orb Pair → Orb Pot → Orb Garden → Orb Field
 
 **Tiny Planets** · 8 steps · Lv 11 · from the Gravity Well  
 Planet Dust → Planetoid → Mini Planet → Ringed Planet → Twin Planets → Orrery → Galaxy Swirl → Pocket Universe
 
-**Sky Kites** · 4 steps · Lv 12 · from the Kite Post  
-Kite Tail → Kite → Box Kite → Dragon Kite
+**Drones** · 4 steps · Lv 12 · from the Drone Pad  
+Rotor → Mini Drone → Drone → Cargo Drone
 
 ## Shared and rocket
 

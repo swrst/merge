@@ -2015,7 +2015,7 @@
       },
       {
         "id": "c10",
-        "name": "The Ember Orchard",
+        "name": "The Lava Lights",
         "who": "ember",
         "needs": [
           [
@@ -2037,18 +2037,18 @@
         "talk": [
           [
             "ember",
-            "Last one! A garden that grows in fire! Fruit that is warm when you pick it!"
+            "Last one! Lava lamps all over the hollow! Light that is warm when you touch it!"
           ],
           [
             "vulk",
-            "A fruit basket, the great forge and a ruby shard to mark the spot. Then Cindra is ours again."
+            "A big lava lamp, the great forge and a ruby shard to mark the spot. Then Cindra is ours again."
           ],
           [
             "bloop",
             "And then the oceans, friend. Tidal Shallows. You will need that towel after all."
           ]
         ],
-        "text": "Fire and garden at the same time, without either winning. Cindra is reborn."
+        "text": "The hollow glows from end to end. Cindra is reborn."
       }
     ]
   },
@@ -2267,7 +2267,7 @@
           ],
           [
             "kelpa",
-            "Two seashells and a kelp frond and I can clear a path to the water. Then we can paddle!"
+            "Two seashells and a bubble cluster and I can clear a path to the water. Then we can paddle!"
           ]
         ],
         "text": "Sand you can actually walk on. Kelpa made a sandcastle. Then another. Then eleven."
@@ -2298,11 +2298,11 @@
             "Two coral sprigs to plant, and a seed pearl to keep them company. Corals get lonely."
           ]
         ],
-        "text": "Little corals in neat rows. The first fish arrived an hour later."
+        "text": "Little corals in neat rows. The first swimmers arrived an hour later."
       },
       {
         "id": "n3",
-        "name": "The Fish Market",
+        "name": "The Critter Market",
         "who": "marin",
         "needs": [
           [
@@ -2324,14 +2324,14 @@
           ],
           [
             "marin",
-            "No fish, no market. No market, no gossip. Two silverfish and some sea foam to keep them fresh. Hop to it."
+            "No swimmers, no market. No market, no gossip. Two three-eye swimmers and some sea foam to keep them happy. Hop to it."
           ]
         ],
-        "text": "The market smells of salt and gossip. Exactly right."
+        "text": "The market bubbles with gossip. Exactly right."
       },
       {
         "id": "n4",
-        "name": "Salt the Catch",
+        "name": "Crystal Stores",
         "who": "marin",
         "needs": [
           [
@@ -2348,7 +2348,7 @@
         "talk": [
           [
             "marin",
-            "Fish go off. Everybody knows that. Except Kelpa, who keeps one in a jar \"as a friend\"."
+            "Supplies go off down here. Everybody knows that. Except Kelpa, who keeps a swimmer in a jar \"as a friend\"."
           ],
           [
             "kelpa",
@@ -2356,7 +2356,7 @@
           ],
           [
             "marin",
-            "A salt brick and a coil of kelp for the drying racks. Please."
+            "A crystal brick and a bubble jar for the store room. Please."
           ]
         ],
         "text": "Enough stores for the whole winter. Brine counted twice."
@@ -2381,14 +2381,14 @@
         "talk": [
           [
             "marin",
-            "There is an old skiff at the bottom of the bay. My first boat. I sank it. Long story. Short storm."
+            "There is an old saucer at the bottom of the bay. My first ship. I sank it. Long story. Short storm."
           ],
           [
             "marin",
-            "A driftwood boat to patch her with and a pearl for luck. Sailors are superstitious. I am VERY superstitious."
+            "A porthole to patch her with and a pearl for luck. Pilots are superstitious. I am VERY superstitious."
           ]
         ],
-        "text": "The old skiff floats again. Pearl swears it is the same boat her grandmother sailed."
+        "text": "The old saucer floats again. Pearl swears it is the same one her grandmother flew."
       },
       {
         "id": "n6",
@@ -2430,7 +2430,7 @@
       },
       {
         "id": "n7",
-        "name": "Guard the Hatchlings",
+        "name": "Guard the Shellkins",
         "who": "kelpa",
         "needs": [
           [
@@ -2447,18 +2447,18 @@
         "talk": [
           [
             "kelpa",
-            "The turtles are hatching! All at once! There are SO MANY of them!"
+            "The shellkins are hatching! All at once! There are SO MANY of them!"
           ],
           [
             "kelpa",
-            "A hatchling to show the others the way, and a tentapal to wave the gulls off. Gently!"
+            "A shellkin to show the others the way, and a tentacle pal to wave the sky critters off. Gently!"
           ]
         ],
-        "text": "Every hatchling made it to the water. Kelpa counted every single one, out loud."
+        "text": "Every shellkin made it to the water. Kelpa counted every single one, out loud."
       },
       {
         "id": "n8",
-        "name": "The Harbour",
+        "name": "The Sub Dock",
         "who": "marin",
         "needs": [
           [
@@ -2476,14 +2476,14 @@
         "talk": [
           [
             "marin",
-            "Boats are coming in from the other worlds now. Rocket boats. Whatever those are."
+            "Subs are coming in from the other worlds now. Rocket subs. Whatever those are."
           ],
           [
             "marin",
-            "A proper harbour needs an anchor and a salt pillar for a lighthouse. Do it right or do not do it."
+            "A proper dock needs a tractor hook and a crystal pillar for a lighthouse. Do it right or do not do it."
           ]
         ],
-        "text": "Boats come and go. Some of them from worlds you woke."
+        "text": "Subs come and go. Some of them from worlds you woke."
       },
       {
         "id": "n9",
@@ -2802,7 +2802,7 @@
       },
       {
         "id": "v3",
-        "name": "The Sky Orchard",
+        "name": "Cloud Jelly",
         "who": "wren",
         "needs": [
           [
@@ -2824,10 +2824,10 @@
           ],
           [
             "wren",
-            "The orchard trees float off unless you anchor them. A sky fruit to plant and a wind coil to hold it down."
+            "Cloud jelly floats off unless you hold it down. A jelly jar and a wind coil to keep it put."
           ]
         ],
-        "text": "Golden fruit on floating branches. The birds found it before anyone."
+        "text": "Wobbly jelly on every cloud. The cloud critters found it before anyone."
       },
       {
         "id": "v4",
@@ -3036,7 +3036,7 @@
           ],
           [
             "halo",
-            "A sky treehouse, a prism array and a box kite to lift it into the light."
+            "A jelly isle, a prism array and a drone to lift it into the light."
           ],
           [
             "bloop",

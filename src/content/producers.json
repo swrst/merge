@@ -873,7 +873,7 @@
     "cost": 1
   },
   "charstump": {
-    "name": "Charred Stump",
+    "name": "Lava Vent Stump",
     "art": "charstump",
     "drops": [
       "charseed",
@@ -924,7 +924,7 @@
     "cost": 1
   },
   "kelpbed": {
-    "name": "Kelp Bed",
+    "name": "Bubble Bed",
     "art": "kelpbed",
     "drops": [
       "kelpleaf",
@@ -975,7 +975,7 @@
     "cost": 1
   },
   "fishtrap": {
-    "name": "Fish Trap",
+    "name": "Critter Trap",
     "art": "fishtrap",
     "drops": [
       "minnow",
@@ -1008,7 +1008,7 @@
     "cost": 1
   },
   "saltpan": {
-    "name": "Salt Pan",
+    "name": "Crystal Pan",
     "art": "saltpan",
     "drops": [
       "saltgrain",
@@ -1024,7 +1024,7 @@
     "cost": 1
   },
   "wrecksite": {
-    "name": "Wreck Site",
+    "name": "Saucer Wreck",
     "art": "wrecksite",
     "drops": [
       "driftbit",
@@ -1091,7 +1091,7 @@
     "cost": 1
   },
   "dock": {
-    "name": "Old Dock",
+    "name": "Sub Dock",
     "art": "dock",
     "drops": [
       "knot",
@@ -1226,7 +1226,7 @@
     "cost": 1
   },
   "skytree": {
-    "name": "Sky Orchard",
+    "name": "Jelly Cloud",
     "art": "skytree",
     "drops": [
       "skyseed",
@@ -1393,7 +1393,7 @@
     "cost": 1
   },
   "kitepost": {
-    "name": "Kite Post",
+    "name": "Drone Pad",
     "art": "kitepost",
     "drops": [
       "kitetail",

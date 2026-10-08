@@ -1004,7 +1004,7 @@
     ]
   },
   "emberfruit": {
-    "name": "Ember Orchard",
+    "name": "Lava Lamps",
     "world": "cindra",
     "unlock": 11,
     "items": [
@@ -1016,9 +1016,9 @@
       "embergrove"
     ],
     "asks": [
-      "Fire fruit for the feast.",
-      "A warm snack, please.",
-      "Seeds for the orchard."
+      "Light for the caves.",
+      "A lamp for my den.",
+      "It is too dark down here."
     ]
   },
   "rubyc": {
@@ -1060,7 +1060,7 @@
     ]
   },
   "kelp": {
-    "name": "Kelp Forest",
+    "name": "Bubble Tech",
     "world": "nerith",
     "unlock": 1,
     "items": [
@@ -1073,9 +1073,9 @@
       "kelpcathedral"
     ],
     "asks": [
-      "Kelp soup for supper.",
-      "Rope for the boats.",
-      "Mending the nets."
+      "Bubbles for the dome.",
+      "Air for the divers.",
+      "Fixing the bubble city."
     ]
   },
   "pearlc": {
@@ -1117,7 +1117,7 @@
     ]
   },
   "fishc": {
-    "name": "Fish Market",
+    "name": "Swimmer Critters",
     "world": "nerith",
     "unlock": 3,
     "items": [
@@ -1129,9 +1129,9 @@
       "fishhall"
     ],
     "asks": [
-      "Dinner for the village.",
-      "The market opens soon.",
-      "Feeding the gulls."
+      "A pet for my tank.",
+      "The swimmers want friends.",
+      "Look how it wiggles!"
     ]
   },
   "tide": {
@@ -1152,7 +1152,7 @@
     ]
   },
   "salt": {
-    "name": "Salt Pans",
+    "name": "Sea Crystals",
     "world": "nerith",
     "unlock": 4,
     "items": [
@@ -1164,13 +1164,13 @@
       "saltlight"
     ],
     "asks": [
-      "Salting the catch.",
-      "Salt for the traders.",
-      "Preserving for winter."
+      "Crystals for the traders.",
+      "Building the lighthouse.",
+      "Shiny for the temple."
     ]
   },
   "sunkn": {
-    "name": "Sunken Finds",
+    "name": "Sunken Saucer",
     "world": "nerith",
     "unlock": 5,
     "items": [
@@ -1184,7 +1184,7 @@
     ],
     "asks": [
       "Treasure from the wreck!",
-      "Wood for a new boat.",
+      "Parts from the old saucer.",
       "History from the deep."
     ]
   },
@@ -1220,11 +1220,11 @@
     "asks": [
       "This one followed me home.",
       "A friend for the reef.",
-      "Squid games tonight!"
+      "Tentacle hugs, please."
     ]
   },
   "turtle": {
-    "name": "Turtle Cove",
+    "name": "Shell Critters",
     "world": "nerith",
     "unlock": 8,
     "items": [
@@ -1234,12 +1234,12 @@
       "islandturtle"
     ],
     "asks": [
-      "The hatchlings need help.",
-      "Guiding them to the sea."
+      "The shellkins need help.",
+      "A home for the little ones."
     ]
   },
   "harbour": {
-    "name": "Harbour",
+    "name": "Sub Dock",
     "world": "nerith",
     "unlock": 9,
     "items": [
@@ -1252,9 +1252,9 @@
       "submarine"
     ],
     "asks": [
-      "The harbour needs a buoy.",
-      "Rigging the boat.",
-      "Setting sail tomorrow!"
+      "The dock needs a buoy.",
+      "Fixing the sub.",
+      "Diving tomorrow!"
     ]
   },
   "seaglass": {
@@ -1276,7 +1276,7 @@
     ]
   },
   "urchin": {
-    "name": "Urchin Garden",
+    "name": "Spike Critters",
     "world": "nerith",
     "unlock": 11,
     "items": [
@@ -1291,7 +1291,7 @@
     ]
   },
   "manta": {
-    "name": "Manta Glide",
+    "name": "Gliders",
     "world": "nerith",
     "unlock": 12,
     "items": [
@@ -1381,7 +1381,7 @@
     ]
   },
   "skyfruit": {
-    "name": "Sky Orchard",
+    "name": "Cloud Jelly",
     "world": "vela",
     "unlock": 3,
     "items": [
@@ -1394,8 +1394,8 @@
     ],
     "asks": [
       "Breakfast in the clouds.",
-      "Sky pie tonight!",
-      "Seeds for the orchard isle."
+      "Jelly for the party!",
+      "Something wobbly, please."
     ]
   },
   "chime": {
@@ -1435,7 +1435,7 @@
     ]
   },
   "skynest": {
-    "name": "Sky Nest",
+    "name": "Cloud Critters",
     "world": "vela",
     "unlock": 5,
     "items": [
@@ -1526,7 +1526,7 @@
     ]
   },
   "starflower": {
-    "name": "Starflower Beds",
+    "name": "Glow Orbs",
     "world": "vela",
     "unlock": 10,
     "items": [
@@ -1538,8 +1538,8 @@
       "starmeadow"
     ],
     "asks": [
-      "Planting the sky garden.",
-      "Flowers that glow at night."
+      "Orbs for the sky garden.",
+      "Lights that float at night."
     ]
   },
   "planets": {
@@ -1563,7 +1563,7 @@
     ]
   },
   "kite": {
-    "name": "Sky Kites",
+    "name": "Drones",
     "world": "vela",
     "unlock": 12,
     "items": [
@@ -1573,8 +1573,8 @@
       "dragonkite"
     ],
     "asks": [
-      "Kite day tomorrow!",
-      "The wind is perfect."
+      "Delivery by drone!",
+      "The drone needs a rotor."
     ]
   },
   "potion": {

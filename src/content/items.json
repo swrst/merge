@@ -4225,7 +4225,7 @@
     }
   },
   "charseed": {
-    "name": "Char Seed",
+    "name": "Lava Drop",
     "chain": "emberfruit",
     "tier": 1,
     "sell": 2,
@@ -4236,7 +4236,7 @@
     }
   },
   "embersprout": {
-    "name": "Ember Sprout",
+    "name": "Lava Bulb",
     "chain": "emberfruit",
     "tier": 2,
     "sell": 5,
@@ -4246,7 +4246,7 @@
     }
   },
   "firefruit": {
-    "name": "Fire Fruit",
+    "name": "Lava Lamp",
     "chain": "emberfruit",
     "tier": 3,
     "sell": 13,
@@ -4257,7 +4257,7 @@
     }
   },
   "fruitbasket": {
-    "name": "Fire Fruit Basket",
+    "name": "Big Lava Lamp",
     "chain": "emberfruit",
     "tier": 4,
     "sell": 32,
@@ -4268,7 +4268,7 @@
     }
   },
   "embertree": {
-    "name": "Ember Tree",
+    "name": "Lamp Stand",
     "chain": "emberfruit",
     "tier": 5,
     "sell": 78,
@@ -4282,7 +4282,7 @@
     }
   },
   "embergrove": {
-    "name": "Ember Grove",
+    "name": "Lava Light Tower",
     "chain": "emberfruit",
     "tier": 6,
     "sell": 185,
@@ -4460,7 +4460,7 @@
     }
   },
   "kelpleaf": {
-    "name": "Kelp Leaf",
+    "name": "Bubble",
     "chain": "kelp",
     "tier": 1,
     "sell": 2,
@@ -4470,7 +4470,7 @@
     }
   },
   "kelpfrond": {
-    "name": "Kelp Frond",
+    "name": "Bubble Cluster",
     "chain": "kelp",
     "tier": 2,
     "sell": 5,
@@ -4480,7 +4480,7 @@
     }
   },
   "kelpcoil": {
-    "name": "Kelp Coil",
+    "name": "Bubble Jar",
     "chain": "kelp",
     "tier": 3,
     "sell": 13,
@@ -4491,7 +4491,7 @@
     }
   },
   "kelpbale": {
-    "name": "Kelp Bale",
+    "name": "Bubble Helmet",
     "chain": "kelp",
     "tier": 4,
     "sell": 32,
@@ -4502,7 +4502,7 @@
     }
   },
   "kelpgrove": {
-    "name": "Kelp Grove",
+    "name": "Bubble Pod",
     "chain": "kelp",
     "tier": 5,
     "sell": 78,
@@ -4513,7 +4513,7 @@
     }
   },
   "kelpheart": {
-    "name": "Tide Grove",
+    "name": "Bubble Dome",
     "chain": "kelp",
     "tier": 6,
     "sell": 185,
@@ -4524,7 +4524,7 @@
     }
   },
   "kelpcathedral": {
-    "name": "Kelp Cathedral",
+    "name": "Bubble City",
     "chain": "kelp",
     "tier": 7,
     "sell": 430,
@@ -4704,7 +4704,7 @@
     }
   },
   "minnow": {
-    "name": "Minnow",
+    "name": "Bubbler",
     "chain": "fishc",
     "tier": 1,
     "sell": 2,
@@ -4714,7 +4714,7 @@
     }
   },
   "silverfish": {
-    "name": "Silverfin",
+    "name": "Three-Eye Swimmer",
     "chain": "fishc",
     "tier": 2,
     "sell": 5,
@@ -4725,7 +4725,7 @@
     }
   },
   "bigfish": {
-    "name": "Big Catch",
+    "name": "Big Swimmer",
     "chain": "fishc",
     "tier": 3,
     "sell": 13,
@@ -4736,7 +4736,7 @@
     }
   },
   "fishcatch": {
-    "name": "Full Net",
+    "name": "Critter Tank",
     "chain": "fishc",
     "tier": 4,
     "sell": 32,
@@ -4747,7 +4747,7 @@
     }
   },
   "fishfeast": {
-    "name": "Tide Feast",
+    "name": "Aquarium",
     "chain": "fishc",
     "tier": 5,
     "sell": 78,
@@ -4758,7 +4758,7 @@
     }
   },
   "fishhall": {
-    "name": "Harbour Market",
+    "name": "Aqua Dome",
     "chain": "fishc",
     "tier": 6,
     "sell": 185,
@@ -4832,7 +4832,7 @@
     }
   },
   "saltgrain": {
-    "name": "Salt Grain",
+    "name": "Crystal Grain",
     "chain": "salt",
     "tier": 1,
     "sell": 2,
@@ -4842,7 +4842,7 @@
     }
   },
   "saltcake": {
-    "name": "Salt Cake",
+    "name": "Crystal Cube",
     "chain": "salt",
     "tier": 2,
     "sell": 5,
@@ -4853,7 +4853,7 @@
     }
   },
   "saltbrick": {
-    "name": "Salt Brick",
+    "name": "Crystal Brick",
     "chain": "salt",
     "tier": 3,
     "sell": 13,
@@ -4864,7 +4864,7 @@
     }
   },
   "saltpillar": {
-    "name": "Salt Pillar",
+    "name": "Crystal Pillar",
     "chain": "salt",
     "tier": 4,
     "sell": 32,
@@ -4875,7 +4875,7 @@
     }
   },
   "salttemple": {
-    "name": "Salt Temple",
+    "name": "Crystal Temple",
     "chain": "salt",
     "tier": 5,
     "sell": 78,
@@ -4886,7 +4886,7 @@
     }
   },
   "saltlight": {
-    "name": "Salt Lighthouse",
+    "name": "Crystal Lighthouse",
     "chain": "salt",
     "tier": 6,
     "sell": 185,
@@ -4901,7 +4901,7 @@
     }
   },
   "driftbit": {
-    "name": "Driftwood Bit",
+    "name": "Scrap Bit",
     "chain": "sunkn",
     "tier": 1,
     "sell": 2,
@@ -4912,7 +4912,7 @@
     }
   },
   "driftwood": {
-    "name": "Driftwood",
+    "name": "Hull Piece",
     "chain": "sunkn",
     "tier": 2,
     "sell": 5,
@@ -4923,7 +4923,7 @@
     }
   },
   "driftboat": {
-    "name": "Beached Skiff",
+    "name": "Porthole",
     "chain": "sunkn",
     "tier": 3,
     "sell": 13,
@@ -4934,7 +4934,7 @@
     }
   },
   "sunkenchest": {
-    "name": "Sunken Chest",
+    "name": "Sunken Pod",
     "chain": "sunkn",
     "tier": 4,
     "sell": 32,
@@ -4948,7 +4948,7 @@
     }
   },
   "sunkenidol": {
-    "name": "Drowned Idol",
+    "name": "Sunken Robot",
     "chain": "sunkn",
     "tier": 5,
     "sell": 78,
@@ -4959,7 +4959,7 @@
     }
   },
   "galleon": {
-    "name": "Sunken Galleon",
+    "name": "Sunken Saucer",
     "chain": "sunkn",
     "tier": 6,
     "sell": 185,
@@ -4973,7 +4973,7 @@
     }
   },
   "sunkencity": {
-    "name": "Drowned City",
+    "name": "Sunken Station",
     "chain": "sunkn",
     "tier": 7,
     "sell": 430,
@@ -4988,7 +4988,7 @@
     }
   },
   "glowplankton": {
-    "name": "Plankton Mote",
+    "name": "Glow Mote",
     "chain": "lumin",
     "tier": 1,
     "sell": 2,
@@ -5001,7 +5001,7 @@
     }
   },
   "jellybell": {
-    "name": "Jelly Bell",
+    "name": "Jelly Blob",
     "chain": "lumin",
     "tier": 2,
     "sell": 5,
@@ -5015,7 +5015,7 @@
     }
   },
   "deeplantern": {
-    "name": "Deep Lantern",
+    "name": "Lantern Critter",
     "chain": "lumin",
     "tier": 3,
     "sell": 13,
@@ -5043,7 +5043,7 @@
     }
   },
   "shallowheart": {
-    "name": "Shallow Heart",
+    "name": "Deep Heart",
     "chain": "lumin",
     "tier": 5,
     "sell": 78,
@@ -5143,7 +5143,7 @@
     }
   },
   "turtleegg": {
-    "name": "Turtle Egg",
+    "name": "Shell Egg",
     "chain": "turtle",
     "tier": 1,
     "sell": 2,
@@ -5153,7 +5153,7 @@
     }
   },
   "hatchling": {
-    "name": "Hatchling",
+    "name": "Shellkin",
     "chain": "turtle",
     "tier": 2,
     "sell": 5,
@@ -5163,7 +5163,7 @@
     }
   },
   "seaturtle": {
-    "name": "Sea Turtle",
+    "name": "Shell Critter",
     "chain": "turtle",
     "tier": 3,
     "sell": 13,
@@ -5174,7 +5174,7 @@
     }
   },
   "islandturtle": {
-    "name": "Island Turtle",
+    "name": "Island Shell",
     "chain": "turtle",
     "tier": 4,
     "sell": 32,
@@ -5188,7 +5188,7 @@
     }
   },
   "knot": {
-    "name": "Rope Knot",
+    "name": "Cable Coil",
     "chain": "harbour",
     "tier": 1,
     "sell": 2,
@@ -5198,7 +5198,7 @@
     }
   },
   "float": {
-    "name": "Net Float",
+    "name": "Float Ring",
     "chain": "harbour",
     "tier": 2,
     "sell": 5,
@@ -5209,7 +5209,7 @@
     }
   },
   "buoy": {
-    "name": "Buoy",
+    "name": "Beacon Buoy",
     "chain": "harbour",
     "tier": 3,
     "sell": 13,
@@ -5220,7 +5220,7 @@
     }
   },
   "anchor": {
-    "name": "Anchor",
+    "name": "Tractor Hook",
     "chain": "harbour",
     "tier": 4,
     "sell": 32,
@@ -5231,7 +5231,7 @@
     }
   },
   "shipwheel": {
-    "name": "Ship's Wheel",
+    "name": "Helm Console",
     "chain": "harbour",
     "tier": 5,
     "sell": 78,
@@ -5242,7 +5242,7 @@
     }
   },
   "divebell": {
-    "name": "Diving Bell",
+    "name": "Diving Pod",
     "chain": "harbour",
     "tier": 6,
     "sell": 185,
@@ -5341,7 +5341,7 @@
     }
   },
   "urchinspine": {
-    "name": "Urchin Spine",
+    "name": "Spike",
     "chain": "urchin",
     "tier": 1,
     "sell": 2,
@@ -5351,7 +5351,7 @@
     }
   },
   "urchin": {
-    "name": "Urchin",
+    "name": "Spikeball",
     "chain": "urchin",
     "tier": 2,
     "sell": 5,
@@ -5361,7 +5361,7 @@
     }
   },
   "starurchin": {
-    "name": "Star Urchin",
+    "name": "Star Spike",
     "chain": "urchin",
     "tier": 3,
     "sell": 13,
@@ -5372,7 +5372,7 @@
     }
   },
   "starfishcrown": {
-    "name": "Starfish Crown",
+    "name": "Spike Crown",
     "chain": "urchin",
     "tier": 4,
     "sell": 32,
@@ -5386,7 +5386,7 @@
     }
   },
   "mantaegg": {
-    "name": "Manta Egg",
+    "name": "Glider Egg",
     "chain": "manta",
     "tier": 1,
     "sell": 2,
@@ -5396,7 +5396,7 @@
     }
   },
   "babymanta": {
-    "name": "Baby Manta",
+    "name": "Baby Glider",
     "chain": "manta",
     "tier": 2,
     "sell": 5,
@@ -5407,7 +5407,7 @@
     }
   },
   "manta": {
-    "name": "Manta Ray",
+    "name": "Glider",
     "chain": "manta",
     "tier": 3,
     "sell": 13,
@@ -5418,7 +5418,7 @@
     }
   },
   "starmanta": {
-    "name": "Star Manta",
+    "name": "Star Glider",
     "chain": "manta",
     "tier": 4,
     "sell": 32,
@@ -5432,7 +5432,7 @@
     }
   },
   "skymanta": {
-    "name": "Sky Manta",
+    "name": "Sky Glider",
     "chain": "manta",
     "tier": 5,
     "sell": 78,
@@ -5762,7 +5762,7 @@
     }
   },
   "skyseed": {
-    "name": "Sky Seed",
+    "name": "Jelly Wisp",
     "chain": "skyfruit",
     "tier": 1,
     "sell": 2,
@@ -5772,7 +5772,7 @@
     }
   },
   "skybud": {
-    "name": "Sky Bud",
+    "name": "Jelly Blob",
     "chain": "skyfruit",
     "tier": 2,
     "sell": 5,
@@ -5783,7 +5783,7 @@
     }
   },
   "skyfruit": {
-    "name": "Sky Fruit",
+    "name": "Jelly Jar",
     "chain": "skyfruit",
     "tier": 3,
     "sell": 13,
@@ -5794,7 +5794,7 @@
     }
   },
   "skybasket": {
-    "name": "Sky Basket",
+    "name": "Jelly Cake",
     "chain": "skyfruit",
     "tier": 4,
     "sell": 32,
@@ -5805,7 +5805,7 @@
     }
   },
   "skyfeast": {
-    "name": "Cloud Feast",
+    "name": "Jelly Feast",
     "chain": "skyfruit",
     "tier": 5,
     "sell": 78,
@@ -5816,7 +5816,7 @@
     }
   },
   "skytreehouse": {
-    "name": "Orchard Isle",
+    "name": "Jelly Isle",
     "chain": "skyfruit",
     "tier": 6,
     "sell": 185,
@@ -5977,7 +5977,7 @@
     }
   },
   "skydown": {
-    "name": "Sky Down",
+    "name": "Cloud Puff",
     "chain": "skynest",
     "tier": 1,
     "sell": 2,
@@ -5988,7 +5988,7 @@
     }
   },
   "skyfeather": {
-    "name": "Sky Feather",
+    "name": "Sky Plume",
     "chain": "skynest",
     "tier": 2,
     "sell": 5,
@@ -5999,7 +5999,7 @@
     }
   },
   "skyplume": {
-    "name": "Sky Plume",
+    "name": "Cloud Nest",
     "chain": "skynest",
     "tier": 3,
     "sell": 13,
@@ -6010,7 +6010,7 @@
     }
   },
   "skynestn": {
-    "name": "Sky Nest",
+    "name": "Sky Egg",
     "chain": "skynest",
     "tier": 4,
     "sell": 32,
@@ -6021,7 +6021,7 @@
     }
   },
   "skyegg": {
-    "name": "Dawn Egg",
+    "name": "Cloud Flyer",
     "chain": "skynest",
     "tier": 5,
     "sell": 78,
@@ -6035,7 +6035,7 @@
     }
   },
   "skyroc": {
-    "name": "Sky Roc",
+    "name": "Cloud Glider",
     "chain": "skynest",
     "tier": 6,
     "sell": 185,
@@ -6060,7 +6060,7 @@
     }
   },
   "silkbag": {
-    "name": "Silk Envelope",
+    "name": "Balloon Envelope",
     "chain": "balloonc",
     "tier": 2,
     "sell": 5,
@@ -6082,7 +6082,7 @@
     }
   },
   "skyship": {
-    "name": "Sky Ship",
+    "name": "Balloon Airship",
     "chain": "balloonc",
     "tier": 4,
     "sell": 32,
@@ -6096,7 +6096,7 @@
     }
   },
   "reachheart": {
-    "name": "Reach Heart",
+    "name": "Sky Heart",
     "chain": "balloonc",
     "tier": 5,
     "sell": 78,
@@ -6153,7 +6153,7 @@
     }
   },
   "cometfox": {
-    "name": "Comet Fox",
+    "name": "Comet Critter",
     "chain": "starling",
     "tier": 5,
     "sell": 78,
@@ -6167,7 +6167,7 @@
     }
   },
   "aurorafox": {
-    "name": "Aurora Fox",
+    "name": "Aurora Critter",
     "chain": "starling",
     "tier": 6,
     "sell": 185,
@@ -6181,7 +6181,7 @@
     }
   },
   "celestfox": {
-    "name": "Celestial Fox",
+    "name": "Celestial Critter",
     "chain": "starling",
     "tier": 7,
     "sell": 430,
@@ -6368,7 +6368,7 @@
     }
   },
   "starseed": {
-    "name": "Starseed",
+    "name": "Orb Seed",
     "chain": "starflower",
     "tier": 1,
     "sell": 2,
@@ -6378,7 +6378,7 @@
     }
   },
   "starsprout": {
-    "name": "Star Sprout",
+    "name": "Small Orb",
     "chain": "starflower",
     "tier": 2,
     "sell": 5,
@@ -6389,7 +6389,7 @@
     }
   },
   "starflower": {
-    "name": "Starflower",
+    "name": "Orb Pair",
     "chain": "starflower",
     "tier": 3,
     "sell": 13,
@@ -6400,7 +6400,7 @@
     }
   },
   "starpot": {
-    "name": "Starflower Pot",
+    "name": "Orb Pot",
     "chain": "starflower",
     "tier": 4,
     "sell": 32,
@@ -6411,7 +6411,7 @@
     }
   },
   "stargarden": {
-    "name": "Celestial Garden",
+    "name": "Orb Garden",
     "chain": "starflower",
     "tier": 5,
     "sell": 78,
@@ -6425,7 +6425,7 @@
     }
   },
   "starmeadow": {
-    "name": "Starflower Meadow",
+    "name": "Orb Field",
     "chain": "starflower",
     "tier": 6,
     "sell": 185,
@@ -6537,7 +6537,7 @@
     }
   },
   "kitetail": {
-    "name": "Kite Tail",
+    "name": "Rotor",
     "chain": "kite",
     "tier": 1,
     "sell": 2,
@@ -6547,7 +6547,7 @@
     }
   },
   "kitediamond": {
-    "name": "Kite",
+    "name": "Mini Drone",
     "chain": "kite",
     "tier": 2,
     "sell": 5,
@@ -6558,7 +6558,7 @@
     }
   },
   "boxkite": {
-    "name": "Box Kite",
+    "name": "Drone",
     "chain": "kite",
     "tier": 3,
     "sell": 13,
@@ -6569,7 +6569,7 @@
     }
   },
   "dragonkite": {
-    "name": "Dragon Kite",
+    "name": "Cargo Drone",
     "chain": "kite",
     "tier": 4,
     "sell": 32,
