@@ -693,7 +693,7 @@
     ]
   },
   "gems": {
-    "start": 25,
+    "start": 0,
     "perLevel": 3,
     "everyFiveLevels": 5,
     "perChapter": 2,

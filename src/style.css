@@ -2229,7 +2229,6 @@ html.ui-ribbon .screen:not(.scene) .scTitle,html.ui-ribbon .popRibbon{padding:5p
 .sceneWrap.camp.painted .spotTag{padding:1px 6px}
 .sceneWrap.camp.painted .spotTag b{font-size:9px;max-width:76px}
 .sceneWrap.camp.painted .spotTag i{font-size:8px}
-.spot.painted.heart .spotTag{top:auto;bottom:100%;margin:0 0 2px}
 /* painted backdrops for the pet room and the evolution scene */
 html.ui-evo_bg #evo{background:#140c34 var(--ui-evo_bg) center/cover no-repeat}
 html.ui-pet_room .pupStage{background:var(--ui-pet_room) center 62%/cover no-repeat;border-radius:18px;height:200px;padding-bottom:14px;box-shadow:inset 0 0 0 3px rgba(255,255,255,.7)}
@@ -2671,3 +2670,28 @@ html.ui-panel_board body .app .stage{margin:14px 20px 16px!important}
 html body .app .popBody,html body .app .mBody{padding-bottom:12px!important;padding-left:4px;padding-right:4px}
 html body .app .popBody .big:last-child,html body .app .mBoxW .big{margin-bottom:6px!important}
 .labRuin.art{width:25%!important;transform:translate(-44%,-86%)!important}
+.infoQ{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:#1aa6e0;color:#fff;font:800 11px/1 Fredoka,system-ui,sans-serif;vertical-align:1px;margin-left:3px;box-shadow:0 0 0 1.5px #fff}
+#infoTxt{cursor:pointer}
+.recList{display:flex;flex-direction:column;gap:4px;margin:6px 0}
+.recRow{display:flex;align-items:center;gap:4px}.recRow .art,.recRow svg,.recRow img{width:30px;height:30px}.recRow b{color:#1aa6e0}
+.gp.here .gpRing{box-shadow:0 0 0 3px #9ff3ff,0 0 24px 6px rgba(120,230,255,.7)!important;animation:herePulse 1.6s ease-in-out infinite}
+@keyframes herePulse{0%,100%{transform:scale(1);opacity:.8}50%{transform:scale(1.12);opacity:1}}
+.gpGo.here{background:linear-gradient(180deg,#a6f27f,#3caa2a)!important;color:#fff!important;font-size:11px!important;animation:readyBob 1.6s ease-in-out infinite}
+/* camp: heart label under the heart */
+.spot.painted.heart .spotTag{top:100%!important;bottom:auto!important;margin-top:-4px!important}
+/* lab stations on the painting */
+.labSt{position:absolute;transform:translate(-50%,-50%);z-index:3;display:flex;flex-direction:column;align-items:center;gap:0;border:0;background:none;padding:0;font-family:inherit}
+.labSt .lsIc{width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 0 0 3px rgba(255,255,255,.9),0 0 18px 4px rgba(90,220,255,.75);animation:labGlow 2.4s ease-in-out infinite}
+.labSt .lsIc .uiIc{width:58px;height:58px}
+.labSt b{margin-top:5px;background:rgba(255,255,255,.95);color:var(--sp-ink);font-size:11.5px;border-radius:99px;padding:1px 9px;box-shadow:0 0 0 2px var(--sp-rim)}
+.labSt i{font-style:normal;font-size:9.5px;font-weight:800;color:#fff;text-shadow:0 1px 3px rgba(0,0,40,.9)}
+.labSt.hot .lsIc{box-shadow:0 0 0 3px #ffe07a,0 0 22px 6px rgba(255,214,90,.85)}
+.labSt:active{transform:translate(-50%,-50%) scale(.94)}
+@keyframes labGlow{0%,100%{filter:brightness(1)}50%{filter:brightness(1.15)}}
+.labTop{position:absolute;left:50%;transform:translateX(-50%);top:calc(var(--hudH,52px) + 44px);z-index:3;width:max-content;max-width:94%}
+/* holographic station panels */
+html body .app .pop.holo .popBox{background:linear-gradient(180deg,rgba(225,248,255,.94),rgba(200,236,255,.92))!important;border-image:none!important;border:2px solid #9ff3ff!important;border-radius:22px!important;
+  box-shadow:0 0 0 2px rgba(80,210,255,.6),0 0 30px rgba(80,210,255,.55),inset 0 0 30px rgba(120,230,255,.35)!important;padding:14px 10px 8px!important;overflow:visible}
+html body .app .pop.holo .popBox::before{content:"";position:absolute;inset:0;border-radius:20px;pointer-events:none;opacity:.3;background:repeating-linear-gradient(180deg,transparent 0 3px,rgba(80,200,255,.25) 3px 4px)}
+html body .app .pop.holo .popBox{animation:holoIn .45s cubic-bezier(.2,1,.4,1) both}

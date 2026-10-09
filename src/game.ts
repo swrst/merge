@@ -315,6 +315,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     collect: () => { audio.play('collect'); audio.duck(1.2, 0.4); },
     boing: () => audio.playVary('boing', 0.1, 0.8),
     goo: () => audio.play('goo'),
+    unseal: () => { audio.play('unseal'); audio.duck(1, 0.5); },
+    chest: () => audio.play('chest'),
+    chapter: () => { audio.play('chapter'); audio.duck(3, 0.15); },
+    star: () => audio.playVary('star', 0.08, 0.8),
     /** alien chatter: real little syllables in one of seven alien voices
         (scripts/make-sound.py), pitched per character so everyone sounds like
         themselves — Pip squeaks, Rokk rumbles, Glimmer buzzes like a robot */
@@ -892,13 +896,26 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         <span class="chHave${have ? ' on' : ''}">×${have}</span></div>`
         + (n < ch.items.length - 1 ? '<div class="chArrow">+</div>' : '');
     }).join('');
-    const where = d.chain === 'relic' ? `Relics are not grown — invent them in the 🔬 <b>Research Lab</b>.`
+    const recs = RECIPES.filter(r => r.result === id);
+    const where = d.chain === 'relic' ? `Relics are not grown — make them in <b>Dr. Zonk's Lab</b> with an Experiment:`
+      + `<div class="recList">${recs.map(r => `<span class="recRow">${ART.item(r.inputs[0])}<b>+</b>${ART.item(r.inputs[1])}<b>→</b>${ART.item(r.result)}</span>`).join('')}</div>`
+      + (labOpen() ? '' : `<i>The Lab opens after Meadow chapter 5.</i>`)
       : d.chain === 'bloom' ? `Bloom Essence comes from finishing a merge chain for the first time.`
         : src ? `Start with <b>${ITEMS[ch.items[0]].name}</b> from the <b>${PRODS[src.k].name}</b>${src.on ? ' on your board' : ' — you do not have one here yet'}, then merge two of each into the next.`
           : `Merge two of the one before it. ${ITEMS[ch.items[0]].name} is the bottom of this chain.`;
+    // what it is for: who wants it right now, and what it can be spent on
+    const uses: string[] = [];
+    S.orders.forEach((o: any) => { if (o.needs.some((nd: any) => nd.id === id)) uses.push(`📜 <b>${CHARS[o.char] ? CHARS[o.char].name : 'A customer'}</b> wants one in a contract.`); });
+    const cp = curProject(); if (cp && cp.needs.some(([x]: [string, number]) => x === id)) uses.push(`🏗️ Needed for <b>${cp.name}</b> (this chapter).`);
+    if (d.chain === 'relic') uses.push('🏛️ Spend it in the <b>Relic Vault</b> (Missions) on perks that last forever.');
+    else if (d.chain === 'bloom') uses.push(`💗 Feed it to the <b>${W().heart}</b> in the camp to wake the world.`);
+    else if (d.chain === 'junk') uses.push('🧪 Worth triple Science in the Lab recycler; a Junk Rocket gives Fuel Ore.');
+    else if (d.fuel || d.chain === 'fuel') uses.push('🚀 Rocket Fuel flies you to new worlds.');
+    if (!uses.length) uses.push(`🪙 Sell it for ${sellOf(id)} coins${labOpen() ? ` or recycle it for ${sciOf(id)} 🧪` : ''} — or keep merging: higher steps are worth more.`);
     modal(S.met ? 'bloop' : 'pip', ITEMS[id].name,
       `<div class="chainWrap">${steps}</div>
-       <div class="noteLine" style="text-align:left">${where}</div>
+       <div class="noteLine" style="text-align:left"><b>Where from:</b> ${where}</div>
+       <div class="noteLine" style="text-align:left"><b>What for:</b> ${uses.join(' ')}</div>
        ${src && src.on ? `<button class="srcCard" id="showSrc">${ART.producer(PRODS[src.k].art)}
           <span class="srcTxt"><b>${PRODS[src.k].name}</b><i>${(B()[src.i].ch ?? 0)}/${capOf(PRODS[src.k], plv(B()[src.i]))} charges · on your board</i></span>
           <span class="srcGo">Find it</span></button>` : ''}`,
@@ -1223,6 +1240,12 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function useProducer(i: number) {
     const b = B(), c = b[i]; if (!c || !c.p) return;
     const p = PRODS[c.p];
+    // the first tap on a new producer says what it is; from the second tap it works
+    S.pinfo = S.pinfo || {};
+    if (!S.pinfo[c.p]) {
+      S.pinfo[c.p] = 1; save();
+      if (S.tut && !c.tmp && p.mode !== 'once' && c.p !== 'wreck') { sfx.tap(); producerPanel(i); return; }
+    }
     const spot = nearFree(i);
     if (spot < 0) {
       sfx.no(); board.bump(i);
@@ -1302,7 +1325,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const nx = nextOf(c.f) as string;
     b[from] = null; b[to] = { id: nx }; gotItem(nx);
     board.animMerge(from, to, nx);
-    sfx.discover(); haptic('medium'); sparkle(to, 22, '#9ff3ff'); floatText(to, '🔓 ' + ITEMS[nx].name, '#fff');
+    sfx.unseal(); haptic('medium'); sparkle(to, 22, '#9ff3ff'); floatText(to, '🔓 ' + ITEMS[nx].name, '#fff');
     stat('merge'); addXp(CONFIG.xp.perMerge + 3); prog('merge', 1); tally('merge'); tally('make:' + nx); tally('unseal');
     lastAct = Date.now(); renderOrders(); save();
   }
@@ -1715,7 +1738,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
     // deals: the daily gift, energy, and the rotating shelf
     html += `<div class="sSec" id="sh-deals"><div class="sSecT">${ART.uiIcon('sec_deals', '🎁')} Today's deals</div><div class="shopGrid">`
-      + card(ART.item('chest'), 'Daily gift', 'A Supply Chest and ' + CFG.shop2.freeGiftEnergy + ' ⚡',
+      + card(ART.item('chest'), 'Daily gift', `A Supply Chest and ${CFG.shop2.freeGiftEnergy} ${ART.icon('energy')}`,
         `<button class="buyBtn green" data-gift="1" ${giftReady() ? '' : 'disabled'}>${giftReady() ? 'FREE' : 'Tomorrow'}</button>`, giftReady() ? 'hot' : '')
       + (S.giftAd === today() && S.giftAd2 !== today() ? card(ART.item('chest'), 'Double the gift', 'Watch a video for another chest',
         `<button class="buyBtn green" data-giftad="1">📺 Watch</button>`, 'hot') : '')
@@ -1776,7 +1799,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       else html += r;
     }
 
-    host.innerHTML = html;
+    host.innerHTML = html.replace(/(?<=[>\s\d])⚡/g, ART.icon('energy')).replace(/(?<=[>\s\d])💎/g, ART.icon('gem')).replace(/(?<=[>\s\d])🪙/g, ART.icon('coin'));
     host.querySelectorAll('[data-jump]').forEach((b: any) => b.onclick = () => {
       shopTab = b.dataset.jump;
       host.querySelectorAll('.sTab').forEach((t: any) => t.classList.toggle('on', t === b));
@@ -2932,7 +2955,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       ${next ? `<div class="cfNext">Next up · <b>Chapter ${n + 1}: ${next.name}</b></div>` : `<div class="cfNext"><b>${W().name} is awake!</b></div>`}`;
     el.className = 'open'; sfx.whoosh(); audio.duck(3, 0.25);
     setTimeout(() => { sfx.popHi(); }, 500);
-    setTimeout(() => { sfx.big(); haptic('heavy'); burst(el!.querySelector('.cfStage') as HTMLElement, 36); }, 1100);
+    setTimeout(() => { sfx.chapter(); haptic('heavy'); burst(el!.querySelector('.cfStage') as HTMLElement, 36); }, 1100);
     setTimeout(() => sfx.discover(), 1700);
     let closed = false;
     const finish = () => { if (closed) return; closed = true; el!.className = ''; done(); };
@@ -3100,7 +3123,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       const id = rnd(pool); b[spot] = { id }; gotItem(id); board.animSpawn(spot, id, i); n++;
     }
     if (cfg.coins) { S.coins += cfg.coins; bumpChip('#chipCoins'); }
-    sfx.boost(); haptic('medium'); sparkle(i, 20, '#ffe9a8');
+    sfx.chest(); haptic('medium'); sparkle(i, 20, '#ffe9a8');
     toast(`📦 ${ITEMS[c.id].name} opened — ${n} things${cfg.coins ? ` and ${cfg.coins} coins` : ''}!`);
     tally('chest');
     renderHUD(); renderOrders(); save();
@@ -3702,46 +3725,73 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     toast(`♻️ Recycled ${n} spare${n > 1 ? 's' : ''}: <b>+${got} 🧪</b>`);
     paintBoard(); renderLab(); renderHUD(); renderOrders(); save();
   }
+  /* The Lab is a room: the painting fills the screen and its stations sit on
+     it (bench sockets, the book shelf, the lamp console). Tapping one opens a
+     holographic panel with just that station. */
+  function recyclerHTML() {
+    const inv = inventory();
+    const spares = Object.keys(inv).filter(id => inv[id] > 0 && isSpare(id) && B().some(c => c && c.id === id))
+      .sort((x, y) => ITEMS[x].tier - ITEMS[y].tier).slice(0, 15);
+    const lows = spares.filter(id => ITEMS[id].tier <= 2);
+    const lowSci = lows.reduce((t, id) => t + sciOf(id) * B().filter(c => c && c.id === id).length, 0);
+    return { lows, html: `<div class="labIntro">Spare things from your board become 🧪 <b>Science</b>. Tap one to recycle it.</div>
+      ${spares.length ? `<div class="lxSpares">${spares.map(id => `<button class="lxSp" data-rec="${id}">${ART.item(id)}<b>×${B().filter(c => c && c.id === id).length}</b><em>+${sciOf(id)}🧪</em></button>`).join('')}</div>
+        ${lows.length ? `<button class="big lxAll" id="lxAll">Recycle all small spares · +${lowSci} 🧪</button>` : ''}`
+        : '<div class="lxNone">No spares right now — everything on your board is wanted by a contract or the chapter.</div>'}` };
+  }
+  function experimentsHTML() {
+    const inv = inventory(), ex = labExperiments();
+    const cell = (id: string, ok: boolean) => `<span class="lxIt${ok ? ' ok' : ''}" data-what="${id}">${ART.item(id)}${ok ? '<i>✓</i>' : ''}</span>`;
+    return `<div class="labIntro">Two things in, something rare out. <b>${ex.made}/${ex.total}</b> discovered.</div>
+      ${ex.list.length ? ex.list.map(r => {
+        const same = r.inputs[0] === r.inputs[1];
+        const okA = (inv[r.inputs[0]] || 0) >= 1, okB = (inv[r.inputs[1]] || 0) >= (same ? 2 : 1);
+        const ready = okA && okB, c = brewSci(r);
+        return `<div class="lxEx${S.lab.disc[r.id] ? ' known' : ''}">${cell(r.inputs[0], okA)}<span class="lxOp">+</span>${cell(r.inputs[1], okB)}<span class="lxOp">➜</span>
+          <span class="lxIt res">${S.lab.disc[r.id] ? ART.item(r.result) : `<span class="lxQ">?</span>`}</span>
+          <button class="buyBtn${ready && S.sci >= c ? '' : ' off'}" data-brew="${r.id}">🧪${c}</button></div>`;
+      }).join('') : '<div class="lxNone">Experiments open up as you explore this world.</div>'}
+      <div class="lxHint">Have both things on your board (✓), then brew. Tap a thing to see where it comes from.</div>`;
+  }
+  function labStation(k: string) {
+    sfx.tap();
+    if (k === 'grow') { labAccPop(); return; }
+    if (k === 'res') { labResPop(); return; }
+    if (k === 'goo') { stillPop(); return; }
+    const draw = () => {
+      const body = $('#popBody');
+      if (k === 'rec') {
+        const r = recyclerHTML(); body.innerHTML = r.html;
+        body.querySelectorAll('[data-rec]').forEach((e: any) => e.onclick = () => { recycleMany([e.dataset.rec]); draw(); });
+        const all = $('#lxAll'); if (all) all.onclick = () => { recycleMany(r.lows.flatMap(id => B().filter(c => c && c.id === id).map(() => id))); draw(); };
+      } else {
+        body.innerHTML = experimentsHTML();
+        body.querySelectorAll('[data-brew]').forEach((e: any) => e.onclick = () => { brewRecipe(e.dataset.brew); draw(); });
+        body.querySelectorAll('[data-what]').forEach((e: any) => e.onclick = () => { sfx.tap(); const id = e.dataset.what; toast(`<b>${ITEMS[id].name}</b> — ${sourceHint(id)}`); });
+      }
+      $('#popTitle').innerHTML = k === 'rec' ? '♻️ Recycler' : '⚗️ Experiments';
+    };
+    pop(k === 'rec' ? '♻️ Recycler' : '⚗️ Experiments', '', 'holo');
+    draw();
+  }
   function renderLab() {
     const host = $('#labBody'); if (!host) return;
     $('#labCoins').textContent = S.sci;
-    const inv = inventory();
-    const spares = Object.keys(inv).filter(id => inv[id] > 0 && isSpare(id) && B().some(c => c && c.id === id))
-      .sort((x, y) => ITEMS[x].tier - ITEMS[y].tier).slice(0, 10);
-    const lows = spares.filter(id => ITEMS[id].tier <= 2);
-    const lowSci = lows.reduce((t, id) => t + sciOf(id) * B().filter(c => c && c.id === id).length, 0);
-    const ex = labExperiments();
     const a = S.acc, left = accLeft();
     const resReady = L2().research.filter((r: any) => res(r.id) < r.max && S.sci >= researchCost(r)).length;
-    const cell = (id: string, ok: boolean) => `<span class="lxIt${ok ? ' ok' : ''}" data-what="${id}">${ART.item(id)}${ok ? '<i>✓</i>' : ''}</span>`;
-    host.innerHTML = `<div class="labBg"></div><div class="labV2">
-      <div class="lxLoop">${ART.uiIcon('ic_recycle', '♻️')}<span>Recycle spares</span><i>➜</i>${ART.uiIcon('ic_science', '🧪')}<span>Science</span><i>➜</i>${ART.uiIcon('ic_experiment', '⚗️')}<span>Experiments &amp; upgrades</span></div>
-      <div class="lxCard"><div class="lxT">${ART.uiIcon('ic_recycle', '♻️')} Recycler <small>tap a spare to turn it into Science</small></div>
-        ${spares.length ? `<div class="lxSpares">${spares.map(id => `<button class="lxSp" data-rec="${id}">${ART.item(id)}<b>×${B().filter(c => c && c.id === id).length}</b><em>+${sciOf(id)}🧪</em></button>`).join('')}</div>
-          ${lows.length ? `<button class="big blue lxAll" id="lxAll">Recycle all small spares · +${lowSci} 🧪</button>` : ''}`
-          : '<div class="lxNone">No spares right now — everything on your board is wanted by a contract or the chapter.</div>'}</div>
-      <div class="lxCard"><div class="lxT">${ART.uiIcon('ic_experiment', '⚗️')} Experiments <small>${ex.made}/${ex.total} discovered</small></div>
-        ${ex.list.length ? ex.list.map(r => {
-          const same = r.inputs[0] === r.inputs[1];
-          const okA = (inv[r.inputs[0]] || 0) >= 1, okB = (inv[r.inputs[1]] || 0) >= (same ? 2 : 1);
-          const ready = okA && okB, c = brewSci(r);
-          return `<div class="lxEx${S.lab.disc[r.id] ? ' known' : ''}">${cell(r.inputs[0], okA)}<span class="lxOp">+</span>${cell(r.inputs[1], okB)}<span class="lxOp">➜</span>
-            <span class="lxIt res">${S.lab.disc[r.id] ? ART.item(r.result) : `<span class="lxQ">?</span>`}</span>
-            <button class="buyBtn${ready && S.sci >= c ? '' : ' off'}" data-brew="${r.id}">🧪${c}</button></div>`;
-        }).join('') : '<div class="lxNone">Experiments open up as you explore this world.</div>'}
-        <div class="lxHint">Put the two things on your board, then press brew. A ✓ means you have it.</div></div>
-      <div class="lxRow">
-        <button class="lxMini" id="lxGrow"><span>${ART.uiIcon('ic_grow', '⏫')}</span><b>Grow</b><i>${a ? (left ? mmss(left) : 'Ready!') : 'one item, one step up'}</i>${a && !left ? '<em class="dot"></em>' : ''}</button>
-        <button class="lxMini" id="lxRes"><span>${ART.uiIcon('ic_upgrades', '🔬')}</span><b>Upgrades</b><i>${resReady ? resReady + ' ready to buy' : 'permanent perks'}</i>${resReady ? '<em class="dot"></em>' : ''}</button>
-        ${petOn() ? `<button class="lxMini" id="lxGoo"><span>${ART.uiIcon('ic_goostill', '🧪')}</span><b>Goo Still</b><i>${stillLeft() ? mmss(stillLeft()) : 'free goo!'}</i>${!stillLeft() ? '<em class="dot"></em>' : ''}</button>` : ''}
-      </div></div>`;
-    host.querySelectorAll('[data-rec]').forEach((e: any) => e.onclick = () => recycleMany([e.dataset.rec]));
-    const all = $('#lxAll'); if (all) all.onclick = () => recycleMany(lows.flatMap(id => B().filter(c => c && c.id === id).map(() => id)));
-    host.querySelectorAll('[data-brew]').forEach((e: any) => e.onclick = () => brewRecipe(e.dataset.brew));
-    host.querySelectorAll('[data-what]').forEach((e: any) => e.onclick = () => { sfx.tap(); const id = e.dataset.what; toast(`<b>${ITEMS[id].name}</b> — ${sourceHint(id)}`); });
-    ($('#lxGrow') as HTMLElement).onclick = () => { sfx.tap(); labAccPop(); };
-    ($('#lxRes') as HTMLElement).onclick = () => { sfx.tap(); labResPop(); };
-    const lg = $('#lxGoo'); if (lg) lg.onclick = () => { sfx.tap(); stillPop(); };
+    const spareN = Object.keys(inventory()).filter(id => isSpare(id) && B().some(c => c && c.id === id)).length;
+    const st = (k: string, fx: number, fy: number, ic: string, emo: string, t: string, sub: string, hot: boolean) =>
+      `<button class="labSt${hot ? ' hot' : ''}" data-st="${k}" data-fx="${fx}" data-fy="${fy}"><span class="lsIc">${ART.uiIcon(ic, emo)}</span><b>${t}</b><i>${sub}</i></button>`;
+    host.innerHTML = `<div class="sceneWrap lab"><div class="sceneBlur"></div><div class="sceneImg"></div><div class="sceneVig"></div>
+      <div class="lxLoop labTop">${ART.uiIcon('ic_recycle', '♻️')}<span>Recycle</span><i>➜</i>${ART.uiIcon('ic_science', '🧪')}<span>Science</span><i>➜</i>${ART.uiIcon('ic_experiment', '⚗️')}<span>Experiments &amp; upgrades</span></div>
+      ${st('rec', 0.2, 0.47, 'ic_recycle', '♻️', 'Recycler', spareN ? spareN + ' spares' : 'no spares', spareN > 0)}
+      ${st('exp', 0.43, 0.47, 'ic_experiment', '⚗️', 'Experiments', 'two in, one out', false)}
+      ${st('grow', 0.67, 0.47, 'ic_grow', '⏫', 'Grow', a ? (left ? mmss(left) : 'Ready!') : 'one step up', !!(a && !left))}
+      ${st('res', 0.28, 0.24, 'ic_upgrades', '🔬', 'Upgrades', resReady ? resReady + ' ready' : 'forever perks', resReady > 0)}
+      ${petOn() ? st('goo', 0.86, 0.40, 'ic_goostill', '🧪', 'Goo Still', stillLeft() ? mmss(stillLeft()) : 'free goo!', !stillLeft()) : ''}
+    </div>`;
+    placeSpots('#labBody');
+    host.querySelectorAll('[data-st]').forEach((e: any) => e.onclick = () => labStation(e.dataset.st));
     if (popOpen() && $('#pop').classList.contains('labres')) labResPop(true);
     if (popOpen() && $('#pop').classList.contains('labacc')) labAccPop(true);
     if (popOpen() && $('#pop').classList.contains('labstill')) stillPop(true);
@@ -3749,8 +3799,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       S.labIntro = 1; save();
       setTimeout(() => talkScene([
         ['bloop', 'Blorp! My lab. It runs on one thing: 🧪 Science.'],
-        ['bloop', 'You get Science by recycling spare things from your board — tap them in the Recycler.'],
-        ['bloop', 'Spend it on Experiments (two things in, a treasure out), on Grow (one item, one step up) or on Upgrades that last forever.']], () => { }), 400);
+        ['bloop', 'Spare things from your board go in the Recycler — that makes Science.'],
+        ['bloop', 'Spend it at the bench on Experiments (two things in, a treasure out), on Grow (one item, one step up), or on the shelf for Upgrades that last forever.']], () => { }), 400);
     }
   }
   function labResPop(quiet = false) {
@@ -4906,7 +4956,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       <svg viewBox="-8 -8 116 116" class="skBig">${segs}${c.pts.map((p: number[], i: number) => `<circle class="skStar" cx="${p[0]}" cy="${p[1]}" r="3.4" style="animation-delay:${i * 0.22}s"/>`).join('')}</svg>
       <i>${c.perk}</i></div><i class="skShoot"></i>`;
     t.className = 'skShow on'; sfx.whoosh(); audio.duck(3, 0.2);
-    c.pts.forEach((_: any, i: number) => setTimeout(() => sfx.popHi(), i * 220));
+    c.pts.forEach((_: any, i: number) => setTimeout(() => sfx.star(), i * 220));
     setTimeout(() => { sfx.discover(); haptic('heavy'); confetti(); }, c.pts.length * 220 + 300);
     setTimeout(() => {
       t.className = 'skShow';
@@ -5037,7 +5087,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       const list = projList(k), done = projDone(k);
       const prog = seen && list.length ? `<div class="gpBar"><i style="width:${Math.round(done / list.length * 100)}%"></i></div>
         <em>📜 ${done}/${list.length} chapters${worldDone(k) ? ' · restored ✨' : ''}</em>` : '';
-      const btn = here ? '<span class="gpHere">📍 You are here</span>'
+      const btn = here ? '<button class="gpGo here" data-pop="camp">📍 You are here · Enter camp</button>'
         : !painted(k) ? '<span class="gpNeed">🎨 Coming soon</span>'
         : !reached ? `<span class="gpNeed">🔒 ${prev && visited(prev) ? `Restore ${WORLDS[prev].name} · ${projDone(prev)}/${projList(prev).length}` : 'Far away'}</span>`
           : seen ? `<button class="gpGo" data-world="${k}">${S.unlocked[k] && projDone(k) ? 'Fly back ✈️' : 'Fly there ✈️'}</button>`
@@ -5116,7 +5166,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // keep the plinths' band (x 7%–93%) on screen; crop only bare edges
     // a painted camp has buildings out to the edges: show its full width
     const full = wrap.classList.contains('camp') && !!(sceneAnchors(S.world) as any).painted;
-    const sc = full ? W2 / iw : Math.max(H / ih, W2 / iw) * iw > W2 / 0.86 ? W2 / (0.86 * iw) : Math.max(W2 / iw, H / ih);
+    // a painted camp fills the screen as far as it can while every plinth (x 13%–87%) stays on it
+    const sc = full ? Math.min(Math.max(W2 / iw, H / ih), W2 / (0.86 * iw)) : Math.max(H / ih, W2 / iw) * iw > W2 / 0.86 ? W2 / (0.86 * iw) : Math.max(W2 / iw, H / ih);
     const dw = iw * sc, dh = ih * sc;
     const ox = (W2 - dw) / 2, oy = dh < H ? H - dh : Math.max(H - dh, (H - dh) / 2);
     const img = wrap.querySelector('.sceneImg') as HTMLElement;
@@ -5274,8 +5325,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
        <div class="pipsRow">${Array.from({ length: PMAX }, (_, i) => `<i class="pip${i < lv ? ' on' : ''}"></i>`).join('')}
          <span>Level ${lv}${lv >= PMAX ? ' · max' : ''}</span></div>
        ${p.mode === 'energy'
-        ? `<div class="chargeLine"><b>${ecost(p, lv)} ⚡</b> a tap<i>taps for ever — energy is the only brake</i></div>`
+        ? `<div class="chargeLine"><b>${ecost(p, lv)} ${ART.icon('energy')}</b> a tap<i>uses energy, never runs out</i></div>`
         : `<div class="chargeLine"><b>${c.ch ?? cap}/${cap}</b> charges<i>${c.ch >= cap ? 'full · free taps' : 'free taps · a full battery takes ' + mmss(evOf(p, c) * cap)}</i></div>`}
+       <div class="noteLine" style="margin:4px 0 2px">Tap it on the board and it makes:</div>
        <div class="dropRow">${uniq.map(d => `<span class="dropChip">${ART.item(d)}<b>${ITEMS[d].name}</b></span>`).join('')}</div>
        ${lv >= PMAX
         ? `<div class="noteLine">Fully grown. It will keep going for a while yet, then go to seed and let something else take root.</div>`
@@ -5284,7 +5336,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           : '<b>+5</b> charges'}${added.length
           ? ` and it starts dropping <b>${added.map(d => ITEMS[d].name).join('</b>, <b>')}</b>`
           : ' and better odds on the rarer drops'}.</div>
-           <button class="big gold" id="upProd"${S.coins >= price ? '' : ' disabled'}>Grow it — ${price} 🪙</button>`}`
+           <button class="big gold" id="upProd"${S.coins >= price ? '' : ' disabled'}>Upgrade · ${price} ${ART.icon('coin')}</button>`}`
       + (counted(c) ? `<button class="big blue" id="storeProd">📦 Move to storage</button>` : ''),
       'Close');
     setTimeout(() => {
@@ -5593,7 +5645,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const c = B()[i]; if (!c || !c.id) return;
     const d = ITEMS[c.id], nx = nextOf(c.id);
     $('#infoBar').classList.add('on');
-    $('#infoTxt').innerHTML = `<b>${d.name} <small>lv ${d.tier}</small></b><i>${nx ? `merge 2 → <span class="nxArt">${ART.item(nx)}</span>` : 'top of its chain!'}</i>`;
+    $('#infoTxt').innerHTML = `<b>${d.name} <small>lv ${d.tier}</small> <span class="infoQ">i</span></b><i>${nx ? `merge 2 → <span class="nxArt">${ART.item(nx)}</span>` : 'top of its chain!'}</i>`;
+    ($('#infoTxt') as HTMLElement).onclick = () => { sfx.tap(); chainPanel(c.id); };
     $('#btnSell').innerHTML = `Sell ${sellOf(c.id)} ${ART.icon('coin')}`;
     $('#btnSell').onclick = () => { sellItem(i); $('#infoBar').classList.remove('on'); };
     const st = $('#btnStash');

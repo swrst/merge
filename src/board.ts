@@ -46,7 +46,7 @@ type Slot = {
   barFrac?: number;
   timer?: Text;
   ring?: Graphics;
-  idle?: gsap.core.Tween;
+  idle?: gsap.core.Tween | gsap.core.Timeline;
   /** a merge landing that has not happened yet — killed if the slot is cleared first,
    *  otherwise it would repaint a tile the game has already emptied (rocket parts, fuel) */
   pending?: gsap.core.Tween | { kill(): void };
@@ -448,7 +448,15 @@ class PixiBoard {
     } else if (c.id) {
       s.art = this.sprite('i:' + c.id, i, 0.92);
       this.addAura(i);
-      this.idleBob(i);
+      if (c.id === 'chest' || c.id === 'bigchest') {
+        // a chest asks to be opened: it hops and wiggles every couple of seconds
+        const a = s.art, y0 = a.y;
+        s.idle = gsap.timeline({ repeat: -1, repeatDelay: 1.6 })
+          .to(a, { y: y0 - this.cell * 0.08, duration: 0.18, ease: 'power2.out' })
+          .to(a, { rotation: -0.14, duration: 0.08 }).to(a, { rotation: 0.14, duration: 0.1 })
+          .to(a, { rotation: -0.08, duration: 0.08 }).to(a, { rotation: 0, duration: 0.08 })
+          .to(a, { y: y0, duration: 0.22, ease: 'bounce.out' });
+      } else this.idleBob(i);
     }
     this.drawTile(i);
   }

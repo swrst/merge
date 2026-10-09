@@ -334,52 +334,46 @@ WORLDS = {
 
 
 def phrase(w, k):
-    """One slow ambient space loop (~48 s). No lead melody — just drifting
-    chords, a soft sub, sparse star-bells with long echoes, a very quiet
-    pulsing arpeggio that fades in and out, and one cosmic swell."""
+    """One quiet, melodic space piece (~60 s). A warm, slow pad under a gentle
+    melody on a soft glassy piano, answered now and then by a far-off star
+    bell; a soft sub and a long echo-y hall. Slow (one chord every 7 s), quiet
+    and in a major-pentatonic-friendly mode so it never grates. Each loop
+    plays the melody once, then lets the pad breathe for a bar."""
     cfg = WORLDS[w]
-    rng = np.random.default_rng(sum(ord(c) * 31 ** i for i, c in enumerate(w)) % 100000 * 10 + k)
+    rng = np.random.default_rng(sum(ord(c) * 31 ** i for i, c in enumerate(w)) % 100000 * 10 + k + 7)
     np.random.seed(int(rng.integers(1e9)))
     scale, root = cfg['scale'], cfg['root']
-    prog = cfg['progs'][k][::2]                     # 4 chords, 12 s each
-    chord_s = 12.0
-    total = chord_s * len(prog) + 6.0
+    prog = cfg['progs'][(k * 2 + 1) % len(cfg['progs'])]   # 8 chords
+    bar = 7.0; eighth = bar / 8
+    total = bar * (len(prog) + 1) + 6.0
     buf = [np.zeros(int(SR * total)), np.zeros(int(SR * total))]
-    for b, ch in enumerate(prog):
+    for b, ch in enumerate(prog + [prog[-1]]):
         deg = DEG[ch]
         tones = [root - 12 + sd_to_semi(scale, x) for x in chord_tones(scale, deg)]
-        voicing = [tones[0] - 12, tones[2] - 12, tones[1], tones[2] + 0]
-        start = b * chord_s
-        place(buf, start, analog_pad([hz(x) for x in voicing], chord_s + 0.5, 0.2, cfg['bright'] * 0.6), 0.7, -0.2 if b % 2 else 0.2)
-        place(buf, start, bass(hz(tones[0] - 12), chord_s - 1.0, 0.45), 0.4, 0.0)
-        # the arpeggio: soft triangle-ish pluck, 8ths at a slow pulse, only in the middle chords
-        if 0 < b < len(prog) - 1:
-            step = 60 / 84 / 2
-            pat = [tones[0] + 12, tones[1] + 12, tones[2] + 12, tones[1] + 24, tones[2] + 12, tones[1] + 12]
-            n = int(chord_s / step)
-            for i in range(n):
-                env = np.sin(np.pi * i / n) ** 2
-                place(buf, start + i * step, kalimba(hz(pat[i % len(pat)]), step, 0.18 * env), 0.18, 0.6 if i % 2 else -0.6)
-    # sparse star-bells: a pentatonic note every few seconds
-    t0 = 1.5
-    while t0 < total - 5:
-        f = hz(root + 12 + pent(int(rng.integers(3, 11))))
-        place(buf, t0, fmbell(f, 0.2, 0.22, ratio=3.5, index=1.4, tau=1.6), 0.3, float(rng.uniform(-0.7, 0.7)))
-        t0 += float(rng.uniform(2.5, 5.5))
-    # one cosmic swell
-    at = float(rng.uniform(10, total - 14))
-    sw = 6.0; t = T(sw)
-    swell = onepole_lp(onepole_hp(np.random.randn(len(t)), 300), 1800) * np.sin(np.pi * t / sw) ** 2 * 0.05
-    place(buf, at, swell, 1.0, 0.0)
-    L, R = pingpong(buf[0], buf[1], 60 / 84 * 0.75, fb=0.45, mix=0.3, damp=2200)
-    L = hall(L, 4.0, mix=0.45, seed=1, damp=2400)[0]
-    R = hall(R, 4.0, mix=0.45, seed=2, damp=2400)[1]
-    L, R = onepole_lp(L, 5000), onepole_lp(R, 5000)
+        voicing = [tones[0] - 12, tones[0], tones[2], tones[1] + 12]
+        place(buf, b * bar, analog_pad([hz(x) for x in voicing], bar + 1.5, 0.16, cfg['bright'] * 0.45), 0.55, -0.25 if b % 2 else 0.25)
+        place(buf, b * bar, bass(hz(tones[0] - 12), bar - 0.5, 0.35), 0.3, 0.0)
+    # the melody: a real tune, played softly on glassy piano + a bell an octave up for colour
+    mel = compose(scale, prog, rng, lo=7, hi=16)
+    for (st, d, sd) in mel:
+        f = hz(root + 12 + sd_to_semi(scale, sd - 7))
+        t0 = st * eighth
+        place(buf, t0, epiano(f, d * eighth, 0.42, tail=2.4), 0.36, float(np.sin(st * 0.7)) * 0.35)
+        if d >= 3 and rng.random() < 0.45:
+            place(buf, t0 + 0.02, fmbell(f * 2, 0.2, 0.16, ratio=3.5, index=1.1, tau=1.8), 0.16, float(rng.uniform(-0.6, 0.6)))
+    # a few far stars between phrases
+    for _ in range(5):
+        at = float(rng.uniform(2, total - 8))
+        place(buf, at, fmbell(hz(root + 24 + pent(int(rng.integers(0, 8)))), 0.2, 0.12, ratio=4.0, index=1.2, tau=2.2), 0.12, float(rng.uniform(-0.8, 0.8)))
+    L, R = pingpong(buf[0], buf[1], eighth * 1.5, fb=0.35, mix=0.22, damp=2000)
+    L = hall(L, 5.0, mix=0.5, seed=1, damp=2200)[0]
+    R = hall(R, 5.0, mix=0.5, seed=2, damp=2200)[1]
+    L, R = onepole_lp(L, 4200), onepole_lp(R, 4200)
     m = max(np.max(np.abs(L)), np.max(np.abs(R)), 1e-9)
-    L, R = L / m * 0.75, R / m * 0.75
-    fade = int(SR * 4.0)
+    L, R = L / m * 0.7, R / m * 0.7
+    fade = int(SR * 5.0)
     L[-fade:] *= np.linspace(1, 0, fade); R[-fade:] *= np.linspace(1, 0, fade)
-    fi = int(SR * 2.0)
+    fi = int(SR * 3.0)
     L[:fi] *= np.linspace(0, 1, fi); R[:fi] *= np.linspace(0, 1, fi)
     return L, R
 
@@ -551,6 +545,18 @@ def sfx_all():
     S['boing'] = norm(np.sin(2 * np.pi * np.cumsum(hz(-5) * (1 + 0.6 * np.exp(-tb / 0.08) * np.sin(2 * np.pi * 11 * tb))) / SR)
                       * np.exp(-tb / 0.14), 0.32)
     S['goo'] = norm(room(seq([(i * 0.07, bloop(C(2 + i) * 0.7, C(5 + i), 0.12, 0.8, 0.02), 0.7) for i in range(4)], 0.6)), 0.4)
+    # v51: a hatch hissing open (sealed tiles)
+    S['unseal'] = norm(space(seq([(0, softnoise(0.35, 1500, 7000, 0.12), 0.5), (0.05, sweep(400, 1400, 0.3, 0.3), 0.5),
+                                  (0.22, ping(C(9), 0.9), 0.6), (0.3, ping(C(12), 1.0), 0.5)], 1.4), 0.3), 0.5)
+    # a chest lid creak and a sparkle burst
+    S['chest'] = norm(space(seq([(0, bloop(C(-3), C(2), 0.22, 0.8, 0.05), 0.8), (0.12, softnoise(0.15, 600, 2500, 0.05), 0.3)]
+                                + [(0.2 + i * 0.05, ping(C(9 + i), 0.6), 0.45) for i in range(5)], 1.4), 0.3), 0.5)
+    # chapter complete: a little warm space fanfare
+    S['chapter'] = norm(space(seq([(0, choir([hz(0), hz(4), hz(7)], 2.4, 0.4, 'a'), 0.5)]
+                                  + [(0.15 * i, ping(C(5 + 2 * i), 1.6, 0.6), 0.55) for i in range(5)]
+                                  + [(0.9, ping(C(14), 2.0, 0.6), 0.6), (0, sweep(120, 900, 1.0, 0.2), 0.3)], 3.2), 0.4), 0.6)
+    # a star lighting up (star chart)
+    S['star'] = norm(space(seq([(0, ping(C(12), 1.6, 0.6), 0.6), (0.04, ping(C(16), 1.4, 0.5), 0.35)], 1.8), 0.45), 0.4)
     return S
 
 

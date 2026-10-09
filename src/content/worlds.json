@@ -710,7 +710,7 @@
           "nestbox"
         ],
         "retire": [
-          "well"
+          "bush"
         ],
         "talk": [
           [
@@ -726,7 +726,7 @@
             "On my world, soda is a colour. Fascinating."
           ]
         ],
-        "text": "Fizz for everyone. The old well has done its job. Behind the shed: a jet wreck full of spare gear."
+        "text": "Fizz for everyone. The snack cart has given its last cookie. Behind the shed: a jet wreck full of spare gear."
       },
       {
         "id": "e13",
@@ -793,7 +793,7 @@
           "toychest"
         ],
         "retire": [
-          "bush"
+          "well"
         ],
         "talk": [
           [
@@ -805,7 +805,7 @@
             "A space helmet, a twin jetpack and a pair of clean socks. I do the rest. I always do the rest."
           ]
         ],
-        "text": "Suits for all. The snack cart is empty, and a toy chest turns up on the doorstep. Nobody ordered it."
+        "text": "Suits for all. The old well has done its job, and a toy chest turns up on the doorstep. Nobody ordered it."
       },
       {
         "id": "e15",
@@ -821,8 +821,8 @@
             1
           ],
           [
-            "bobbles",
-            3
+            "triplecone",
+            1
           ]
         ],
         "coins": 1040,
@@ -835,7 +835,7 @@
           ],
           [
             "biscuit",
-            "Some saucer tops, a hoverboard and antenna bobbles for the toy shelf. For the voters of tomorrow."
+            "Some saucer tops, a hoverboard and a triple cone for whoever builds the shelf. For the voters of tomorrow."
           ]
         ],
         "text": "The square is full of spinning tops. Mayor Marin pretends to dislike it."
@@ -892,8 +892,8 @@
             1
           ],
           [
-            "hourglass",
-            3
+            "hoverskates",
+            2
           ]
         ],
         "coins": 1200,
@@ -910,7 +910,7 @@
           ],
           [
             "timmy",
-            "And a toy rocket! For... the harvest. And a star hourglass to time it."
+            "And a toy rocket! For... the harvest. And hover skates to get between the tubes."
           ]
         ],
         "text": "The first grow tubes are full. Then something small crashes behind the hill, blinking!"
@@ -1119,8 +1119,8 @@
             1
           ],
           [
-            "maproll",
-            3
+            "hourglass",
+            2
           ]
         ],
         "coins": 1800,
@@ -1132,7 +1132,7 @@
           ],
           [
             "mumbo",
-            "Some cheese cubes to start, a slime frog to guard them, and a map roll so the customers can find the shop."
+            "Some cheese cubes to start, a slime frog to guard them, and star hourglasses to time the ageing."
           ]
         ],
         "text": "The cheese shop is open. Moon cheese for everyone!"

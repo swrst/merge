@@ -41,7 +41,8 @@
     "drops": [
       "dew",
       "dew",
-      "dew",
+      "lostsock",
+      "lostsock",
       "puddle"
     ],
     "mode": "energy",
@@ -65,8 +66,7 @@
     "drops": [
       "bulbseed",
       "bulbseed",
-      "comb3",
-      "comb3",
+      "bulbseed",
       "sprig"
     ],
     "mode": "energy",
@@ -111,8 +111,8 @@
     "drops": [
       "fibre",
       "fibre",
-      "lostsock",
-      "lostsock",
+      "comb3",
+      "comb3",
       "thread"
     ],
     "mode": "energy",
@@ -124,8 +124,8 @@
     "drops": [
       "down",
       "down",
-      "clockgear",
-      "clockgear",
+      "mapscrap",
+      "mapscrap",
       "plume"
     ],
     "mode": "energy",
@@ -188,8 +188,8 @@
     "drops": [
       "lenschip",
       "lenschip",
-      "mapscrap",
-      "mapscrap",
+      "clockgear",
+      "clockgear",
       "lens"
     ],
     "spec": {
