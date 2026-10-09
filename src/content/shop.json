@@ -59,8 +59,8 @@
   "boosters": [
     {
       "id": "wand",
-      "name": "Merge Wand",
-      "desc": "Instantly merges every matching pair on the board",
+      "name": "Star Magnet",
+      "desc": "Pulls every matching pair together and merges them",
       "icon": "wand",
       "price": 260
     },

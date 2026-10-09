@@ -2737,3 +2737,25 @@ html.ui-panel_board body .app #board::before{border-radius:14px;background:rgba(
 /* any icon nobody sized sits inline at text size, never at its painted size */
 :where(img.ic){width:1.3em;height:1.3em;object-fit:contain;vertical-align:-.28em}
 :where(img.uiIc){max-width:100%;object-fit:contain}
+
+/* v56: the contract milestone lives with the quick chips */
+html body .app #oMile{display:none!important}
+.qChip.mile i{font-size:8px}
+
+/* v56: the wheel is a spinning space station dial — nebula slices, a ring of blinking lights */
+.app .wheelWrap.space .wheel{border:9px solid #241a63!important;
+  box-shadow:0 0 0 3px #7fd8f7,0 0 0 6px #ffffff,0 0 24px rgba(127,216,247,.75),0 10px 20px rgba(0,0,0,.35),inset 0 0 20px rgba(0,0,0,.45)!important}
+.app .wheelWrap.space .wheel::after{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;
+  background:radial-gradient(1.5px 1.5px at 22% 30%,#fff,transparent),radial-gradient(1px 1px at 68% 22%,#fff,transparent),radial-gradient(1.5px 1.5px at 40% 74%,#fff,transparent),
+  radial-gradient(1px 1px at 80% 62%,#fff,transparent),radial-gradient(1px 1px at 30% 52%,#cfe9ff,transparent),radial-gradient(1.5px 1.5px at 58% 44%,#fff,transparent),
+  radial-gradient(circle at 50% 50%,transparent 55%,rgba(127,216,247,.18) 80%,transparent 100%)}
+.app .wheelWrap.space::before{content:"";position:absolute;inset:0;border-radius:50%;z-index:2;pointer-events:none;
+  background:repeating-conic-gradient(from 11deg,#fff38a 0 2.6deg,transparent 2.6deg 22.5deg);
+  -webkit-mask:radial-gradient(circle,transparent calc(50% - 8px),#000 calc(50% - 7px),#000 calc(50% - 2px),transparent calc(50% - 1px));
+  mask:radial-gradient(circle,transparent calc(50% - 8px),#000 calc(50% - 7px),#000 calc(50% - 2px),transparent calc(50% - 1px));
+  filter:drop-shadow(0 0 3px #ffe066);animation:wLights 1.2s steps(2) infinite}
+@keyframes wLights{50%{transform:rotate(11.25deg)}}
+.app .wheelWrap.space .wSeg:before{background:linear-gradient(180deg,rgba(127,216,247,.9),rgba(127,216,247,.2))}
+.app .wheelWrap.space .wSeg span b{color:#fff;text-shadow:0 1px 0 #1b1250,0 0 6px rgba(127,216,247,.8)}
+.app .wheelWrap.space .wSeg span .ic,.app .wheelWrap.space .wSeg span img,.app .wheelWrap.space .wSeg span svg{filter:drop-shadow(0 0 4px rgba(255,255,255,.55))}
+.app .wheelWrap.space .wHub{box-shadow:0 0 0 3px #fff,0 0 0 6px #7fd8f7,0 0 16px rgba(127,216,247,.9)}

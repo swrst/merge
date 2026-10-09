@@ -382,12 +382,12 @@ class PixiBoard {
     if (c.f) {
       // a sealed tile: the item sits inside, dimmed, waiting for its twin
       s.art = this.sprite('i:' + c.f, i, 0.6);
-      s.art.alpha = 0.9; (s.art as any).tint = 0xaab4d8;   // dark and dull until it is opened
+      s.art.alpha = 1; (s.art as any).tint = 0xd4dcf4;   // a little dull until it is opened, but easy to read
       const p = this.center(i), g = new Graphics(), r = this.cell * 0.15;
       if (this.tex['ui:seal_bubble']) {
         // painted glass bubble over the tile (it carries its own little padlock)
         const b = new Sprite(this.tex['ui:seal_bubble']); b.anchor.set(0.5); b.width = b.height = this.cell * 1.0;
-        b.position.set(p.x, p.y); this.lItem.addChild(b); (s as any).seal = b; s.timer = undefined;
+        b.alpha = 0.5; b.position.set(p.x, p.y); this.lItem.addChild(b); (s as any).seal = b; s.timer = undefined;
         return;
       }
       g.circle(0, 0, r).fill({ color: 0x2a3f8f }).stroke({ color: 0xffffff, width: 2 });
@@ -412,12 +412,12 @@ class PixiBoard {
          item sits small and pale inside a bright soap film drawn ON TOP of it,
          the tile goes blue, and a gold price tag hangs off the bottom. */
       const p = this.center(i), R = this.cell * 0.46;
-      s.art = this.sprite('i:' + c.bub, i, 0.66);
+      s.art = this.sprite('i:' + c.bub, i, 0.76);
       s.art.alpha = 1;
       const film = new Container();
       const g = new Graphics();
       if (this.tex['ui:bubble_film']) {
-        const fs = new Sprite(this.tex['ui:bubble_film']); fs.anchor.set(0.5); fs.width = fs.height = R * 2.15; fs.alpha = 0.85; film.addChild(fs);
+        const fs = new Sprite(this.tex['ui:bubble_film']); fs.anchor.set(0.5); fs.width = fs.height = R * 2.15; fs.alpha = 0.5; film.addChild(fs);
       } else {
       g.circle(0, 0, R).fill({ color: 0x9fdcff, alpha: 0.3 });
       g.circle(0, 0, R).stroke({ color: 0x58b8f0, alpha: 1, width: 3.5 });
@@ -901,7 +901,7 @@ class PixiBoard {
       g.position.set(p.x, p.y); this.lFx.addChild(g); s.unseal = g;
       gsap.to(g, { alpha: 0.35, duration: 0.55, repeat: -1, yoyo: true, ease: 'sine.inOut' });
       s.art.tint = 0xffffff; s.art.alpha = 1;
-      if (s.seal && this.tex['ui:seal_crack']) s.seal.texture = this.tex['ui:seal_crack'];
+      if (s.seal && this.tex['ui:seal_crack']) { s.seal.texture = this.tex['ui:seal_crack']; s.seal.alpha = 0.6; }
       if (s.idle) s.idle.kill();
       const sc = this.spriteScale(i);
       s.idle = gsap.to(s.art.scale, { x: sc * 1.12, y: sc * 1.12, duration: 0.45, repeat: -1, yoyo: true, ease: 'sine.inOut' });
@@ -909,8 +909,8 @@ class PixiBoard {
       const p = this.center(i); s.unseal.position.set(p.x, p.y);
     } else if (!on && s.unseal) {
       gsap.killTweensOf(s.unseal); s.unseal.destroy(); s.unseal = null;
-      s.art.tint = 0xaab4d8; s.art.alpha = 0.9;
-      if (s.seal && this.tex['ui:seal_bubble']) s.seal.texture = this.tex['ui:seal_bubble'];
+      s.art.tint = 0xd4dcf4; s.art.alpha = 1;
+      if (s.seal && this.tex['ui:seal_bubble']) { s.seal.texture = this.tex['ui:seal_bubble']; s.seal.alpha = 0.5; }
       if (s.idle) s.idle.kill(); const sc = this.spriteScale(i); s.art.scale.set(sc, sc); this.idleBob(i);
     }
   }

@@ -2246,7 +2246,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       merged++;
     }
     if (!merged) { sfx.no(); toast('Nothing to merge right now!'); return false; }
-    toast('✨ The wand merged <b>' + merged + '</b> pair' + (merged > 1 ? 's' : '') + '!');
+    toast('🧲 The magnet pulled together <b>' + merged + '</b> pair' + (merged > 1 ? 's' : '') + '!');
     return true;
   }
   /** sell every tier-1 leftover nobody has ordered */
@@ -3190,6 +3190,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const e = $('#oMile'); if (!e) return;
     const n = (S.om && S.om.n) || 0, g = mileGoal();
     e.innerHTML = `${ART.item('chest')}<i style="width:${Math.round(n / g * 100)}%"></i><b>${n}/${g}</b>`;
+    renderQuick();
   }
 
   /* --------------------------------------------------------------- visitors
@@ -3912,15 +3913,17 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   let spinning = false;
   function wheelHTML() {
     const seg = SP().segments, n = seg.length, a = 360 / n;
-    const grad = seg.map((s: any, k: number) => `${s.c} ${k * a}deg ${(k + 1) * a}deg`).join(',');
-    return `<div class="wheelWrap"><div class="wheelPin">${ART.uiIcon('wheel_pin', '▼')}</div>
+    // deep-space slices, nebula colours alternating, instead of pastel candy
+    const SPACE = ['#3a1f8f', '#1c3f9e', '#6a24a8', '#173b7a', '#4b2ab0', '#1f5aa8', '#7a2a9c', '#25307f'];
+    const grad = seg.map((_s: any, k: number) => `${SPACE[k % SPACE.length]} ${k * a}deg ${(k + 1) * a}deg`).join(',');
+    return `<div class="wheelWrap space"><div class="wheelPin">${ART.uiIcon('wheel_pin', '▼')}</div>
       <div class="wheel" id="wheel" style="--wheelbg:conic-gradient(${grad})">
         ${seg.map((s: any, k: number) => `<div class="wSeg" style="transform:rotate(${k * a + a / 2}deg)"><span>${rewardIcon(s.r)}<b>${s.r.energy || s.r.coins || ''}</b></span></div>`).join('')}
       </div><div class="wHub">${ART.uiIcon('wheel_hub', '🎡')}</div></div>`;
   }
   function spinPop() {
-    if (S.lvl < SP().unlockLevel) { sfx.no(); toast(`The Lucky Wheel opens at level ${SP().unlockLevel}.`); return; }
-    pop('🎡 Lucky Wheel', `<div class="hostRow"><span class="hostFace">${ART.char('oops')}</span><i>${['I foresaw this spin! Mostly.', 'The ball is cracked but the vibes are clear.', 'Spin, darling. Destiny is waiting. Or lunch.'][Math.floor(Math.random() * 3)]}</i></div>${wheelHTML()}
+    if (S.lvl < SP().unlockLevel) { sfx.no(); toast(`The Cosmic Wheel opens at level ${SP().unlockLevel}.`); return; }
+    pop('🛸 Cosmic Wheel', `<div class="hostRow"><span class="hostFace">${ART.char('oops')}</span><i>${['I foresaw this spin! Mostly.', 'The ball is cracked but the vibes are clear.', 'Spin, darling. Destiny is waiting. Or lunch.'][Math.floor(Math.random() * 3)]}</i></div>${wheelHTML()}
       <div class="noteLine" id="spinNote">${freeSpin() ? 'One <b>free spin</b> every day.' : 'Free spin used today.'} You have <b>${spinsLeft()}</b> spin${spinsLeft() === 1 ? '' : 's'}.</div>
       <button class="big gold" id="spinGo"${spinsLeft() ? '' : ' disabled'}>${spinsLeft() ? 'SPIN!' : 'Come back tomorrow'}</button>
       ${spinsLeft() ? '' : adBtn('spin', 'One more spin', 'spinAd')}
@@ -4611,6 +4614,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function renderQuick() {
     const host = $('#quick'); if (!host) return;
     const e = evNow(), bits: string[] = [];
+    // contracts until the next chest: a chip with the others, not a tag stuck on the board frame
+    if (S.tut) { const mn = (S.om && S.om.n) || 0; bits.push(`<button class="qChip mile" data-q="mile">${ART.item('chest')}<b>${mn}/${mileGoal()}</b><i>to chest</i></button>`); }
     if (e) bits.push(`<button class="qChip ev" data-q="event">${ART.uiIcon('tok_' + e.theme.id, e.theme.icon)}<b>${S.ev.key === e.key ? S.ev.pts : 0}</b><i>${dhm(e.ends - Date.now())}</i></button>`);
     if (S.lvl >= SP().unlockLevel && spinsLeft()) bits.push(`<button class="qChip spin" data-q="spin">${ART.uiIcon('ic_spin', '🎡')}<b>${spinsLeft()}</b></button>`);
     if (S.seen.scrap || pouch('scrap') || pouch('starcore')) bits.push(`<button class="qChip pouch" data-q="pouch">${ART.uiIcon('ic_pouch', ART.item('starcore'))}<b>${pouch('starcore')}</b><i>${pouch('scrap')} scrap</i></button>`);
@@ -4636,7 +4641,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     host.dataset.h = html; host.innerHTML = html;
     host.querySelectorAll('[data-q]').forEach((b: any) => b.onclick = () => {
       const k = b.dataset.q;
-      if (k === 'event') eventPop(); else if (k === 'spin') spinPop(); else if (k === 'pup') pupPop(); else if (k === 'store') storagePop(); else if (k === 'pouch') starChart(); else { setView('lab'); labAccPop(); }
+      if (k === 'mile') { sfx.tap(); toast(`📦 Deliver <b>${mileGoal() - ((S.om && S.om.n) || 0)}</b> more contract${mileGoal() - ((S.om && S.om.n) || 0) === 1 ? '' : 's'} for a free chest and +${CFG.milestone.energy} ⚡`); } else if (k === 'event') eventPop(); else if (k === 'spin') spinPop(); else if (k === 'pup') pupPop(); else if (k === 'store') storagePop(); else if (k === 'pouch') starChart(); else { setView('lab'); labAccPop(); }
     });
   }
 

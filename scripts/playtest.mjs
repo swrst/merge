@@ -416,7 +416,7 @@ must(await page.locator('#pop.open [data-boost-use]').count() === 3, 'boosters o
 await page.evaluate(() => document.querySelector('[data-boost-use="wand"]').click()); await page.waitForTimeout(900);
 after = await S();
 const nowItems = await page.evaluate(() => window.__game.cells().filter(c => c && c.id).length);
-must(nowItems < before, `the wand merged the board down (${before} -> ${nowItems} items)`);
+must(nowItems < before, `the magnet merged the board down (${before} -> ${nowItems} items)`);
 must(after.boost.wand === 0, 'and used itself up');
 
 await set(() => {
