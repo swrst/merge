@@ -28,7 +28,11 @@ await page.goto(URL);
 await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 60000 });
 await page.waitForTimeout(1500);
 if (await page.locator('#tSkip').isVisible().catch(() => false)) await page.click('#tSkip');
-await page.evaluate(() => { window.__game.state().tipsOff = 1; window.__game.v9.jitOff(); });
+await page.evaluate(() => { window.__game.state().tipsOff = 1; window.__game.v9.jitOff();
+  // trace where coins come from (by caller line)
+  const S = window.__game.state(); let v = S.coins; window.__coinSrc = {};
+  Object.defineProperty(S, 'coins', { configurable: true, enumerable: true, get: () => v, set: (n) => { const d = n - v; if (d > 0) { const ln = (new Error().stack || '').split('\n')[2] || '?'; const k = ln.replace(/.*\/src\//, '').replace(/\?[^:]*/, '').trim(); window.__coinSrc[k] = (window.__coinSrc[k] || 0) + d; } v = n; } });
+});
 
 /* one decision per call, made inside the page so it sees exactly what the game sees */
 const step = () => page.evaluate(() => {
@@ -90,7 +94,7 @@ const step = () => page.evaluate(() => {
     const ok = i => {
       const c = b[i], p = g.prods[c.p];
       if (p.mode === 'energy') return S.energy >= g.ecost(p, g.plv(c));
-      if (p.mode === 'battery') return (c.ch || 0) > 0;
+      if (p.mode === 'battery') return (c.ch || 0) > 0 && S.energy >= 1;
       return true;
     };
     // what is still missing, weighted: a chain nobody has started counts most
@@ -116,7 +120,8 @@ let chap = 0, actions = 0, warp = 0, waits = 0, sells = 0, lastChapAt = { action
 const t0 = Date.now();
 const snap = async () => page.evaluate(() => { const S = window.__game.state(); return { coins: S.coins, energy: S.energy, lvl: S.lvl, proj: S.proj[S.world] || 0, free: window.__game.cells().filter(c => !c).length, orders: S.orders.length, gems: S.gems }; });
 let stall = 0;
-while (Date.now() - t0 < 25 * 60 * 1000) {
+while (Date.now() - t0 < (+process.env.BOTMIN || 25) * 60 * 1000) {
+  if (actions % 150 === 149) log.push('coin sources ' + JSON.stringify(await page.evaluate(() => window.__coinSrc).catch(() => ({}))));
   const a = await step(); actions++;
   if (a === 'wait' || a === 'fullstuck') {
     // nothing to do: a real player waits. Jump time forward one minute.

@@ -705,7 +705,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      early (chapter 4) but his ship only turns up after Stargazing Night, when
      everyone has seen where home is — so rocket pieces stay out of the game
      until then. A save that already started building keeps going. */
-  const ROCKET_AFTER = 19;
+  const ROCKET_AFTER = 31;
   const rocketTime = () => !!S.met && (S.world !== 'earth' || ((S.proj && S.proj.earth) || 0) >= ROCKET_AFTER
     || PART_KEYS.some(k => S.parts[k]) || !!S.wreck);
   const building = () => rocketTime() && !allParts();
@@ -1083,7 +1083,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       id: 'o' + (oid++), char, say, give, nrg,
       needs,
       // contracts are where coins come from: chapters and producer upgrades are paid from them
-      coins: Math.round((Math.round(worth * (2.6 + Math.random() * 0.8)) + 12) * coinMult() * (1 + res('trader') * 0.08)),
+      coins: Math.round((Math.round(worth * (1.1 + Math.random() * 0.4)) + 5) * coinMult() * (1 + res('trader') * 0.08)),
       xp: Math.round((CONFIG.xp.orderBase + needs.reduce((a, nd) => a + ITEMS[nd.id].tier + nd.qty, 0)) * xpMult()),
     };
   }
@@ -1260,6 +1260,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       floatText(i, c.ch + ' left', '#ffe9a8');
     } else if (p.mode === 'battery') {
       if (!c.ch) { sfx.no(); offerRecharge(i); return; }
+      // every tap costs energy, battery or not: energy is the pace of the game
+      if (S.energy < 1) { sfx.no(); bumpChip('#chipEnergy'); toast(`Out of energy — every tap costs <b>1 ⚡</b>.`); setTimeout(energyPop, 500); return; }
+      S.energy -= 1; S.eAt = S.eAt || Date.now(); bumpChip('#chipEnergy'); floatText(i, '-1 ⚡', '#9be8ff');
       const cap = capOf(p, plv(c));
       if (c.ch >= cap) c.at = Date.now();          // start the clock on the first tap
       c.ch--;
@@ -3114,8 +3117,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     stat('chest');
     const cfg = CFG.chest[c.id];
     const pool: string[] = [];
-    liveChains().forEach(ch => CHAINS[ch].items.forEach(id => { if (ITEMS[id].tier <= cfg.maxTier) pool.push(id); }));
-    if (!pool.length) return;
+    const chs = liveChains().length ? liveChains() : W().chains;
+    chs.forEach((ch: string) => CHAINS[ch].items.forEach(id => { if (ITEMS[id].tier <= cfg.maxTier) pool.push(id); }));
+    if (!pool.length) { toast('📦 Nothing to find in here yet — bring a producer back first.'); return; }
     b[i] = null; board.consume(i, c.id);
     let n = 0;
     for (let k = 0; k < cfg.items; k++) {
@@ -3783,9 +3787,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const st = (k: string, fx: number, fy: number, ic: string, emo: string, t: string, sub: string, hot: boolean) =>
       `<button class="labSt${hot ? ' hot' : ''}" data-st="${k}" data-fx="${fx}" data-fy="${fy}"><span class="lsIc">${ART.uiIcon(ic, emo)}</span><b>${t}</b><i>${sub}</i></button>`;
     host.innerHTML = `<div class="sceneWrap lab"><div class="sceneBlur"></div><div class="sceneImg"></div><div class="sceneVig"></div>
-      <div class="lxLoop labTop">${ART.uiIcon('ic_recycle', '♻️')}<span>Recycle</span><i>➜</i>${ART.uiIcon('ic_science', '🧪')}<span>Science</span><i>➜</i>${ART.uiIcon('ic_experiment', '⚗️')}<span>Experiments &amp; upgrades</span></div>
-      ${st('rec', 0.2, 0.47, 'ic_recycle', '♻️', 'Recycler', spareN ? spareN + ' spares' : 'no spares', spareN > 0)}
-      ${st('exp', 0.43, 0.47, 'ic_experiment', '⚗️', 'Experiments', 'two in, one out', false)}
+      <div class="labHint">${ART.uiIcon('ic_recycle', '♻️')} Recycle spares for <b>🧪 Science</b>, then spend it at the bench and on the shelf</div>
+      ${st('rec', 0.235, 0.47, 'ic_recycle', '♻️', 'Recycler', spareN ? spareN + ' spares' : 'no spares', spareN > 0)}
+      ${st('exp', 0.45, 0.47, 'ic_experiment', '⚗️', 'Experiments', 'two in, one out', false)}
       ${st('grow', 0.67, 0.47, 'ic_grow', '⏫', 'Grow', a ? (left ? mmss(left) : 'Ready!') : 'one step up', !!(a && !left))}
       ${st('res', 0.28, 0.24, 'ic_upgrades', '🔬', 'Upgrades', resReady ? resReady + ' ready' : 'forever perks', resReady > 0)}
       ${petOn() ? st('goo', 0.86, 0.40, 'ic_goostill', '🧪', 'Goo Still', stillLeft() ? mmss(stillLeft()) : 'free goo!', !stillLeft()) : ''}
@@ -5167,7 +5171,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // a painted camp has buildings out to the edges: show its full width
     const full = wrap.classList.contains('camp') && !!(sceneAnchors(S.world) as any).painted;
     // a painted camp fills the screen as far as it can while every plinth (x 13%–87%) stays on it
-    const sc = full ? Math.min(Math.max(W2 / iw, H / ih), W2 / (0.86 * iw)) : Math.max(H / ih, W2 / iw) * iw > W2 / 0.86 ? W2 / (0.86 * iw) : Math.max(W2 / iw, H / ih);
+    const sc = full ? Math.min(Math.max(W2 / iw, H / ih), W2 / (0.95 * iw)) : Math.max(H / ih, W2 / iw) * iw > W2 / 0.86 ? W2 / (0.86 * iw) : Math.max(W2 / iw, H / ih);
     const dw = iw * sc, dh = ih * sc;
     const ox = (W2 - dw) / 2, oy = dh < H ? H - dh : Math.max(H - dh, (H - dh) / 2);
     const img = wrap.querySelector('.sceneImg') as HTMLElement;
@@ -5592,7 +5596,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       return;
     }
     if (c.bub) { pick(null); hideInfo(); tapBubble(i); return; }
-    if (c.p) { pick(null); hideInfo(); useProducer(i); return; }
+    if (c.p) { pick(null); hideInfo(); useProducer(i); if (B()[i] && B()[i].p && !$('#modal').classList.contains('open')) showProdInfo(i); return; }
     if (isChest(c.id) && sel !== i && !(sel !== null && B()[sel] && mergeResult(B()[sel].id, c.id))) { pick(null); hideInfo(); openChest(i); return; }
     // double-tap: the item finds its nearest twin and merges with it — no dragging needed
     const now = Date.now(), dbl = lastTap.i === i && now - lastTap.t < 400;
@@ -5640,6 +5644,17 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       S.coins -= sold.coins; b[at] = { id: sold.id }; sfx.pop(); paintBoard(); renderHUD(); renderOrders(); save();
     };
     clearTimeout(undoT); undoT = setTimeout(() => bar.classList.remove('on', 'undo'), 4000);
+  }
+  /** the bottom bar for a producer: its name, level and a way back to its card */
+  function showProdInfo(i: number) {
+    const c = B()[i]; if (!c || !c.p) return;
+    const p = PRODS[c.p];
+    $('#infoBar').classList.add('on');
+    $('#infoTxt').innerHTML = `<b>${p.name} <small>lv ${plv(c)}</small> <span class="infoQ">i</span></b><i>tap it to make things · tap here for info</i>`;
+    ($('#infoTxt') as HTMLElement).onclick = () => { sfx.tap(); producerPanel(i); };
+    ['#btnStash', '#btnShow', '#btnRecycle'].forEach(k => { const e = $(k) as HTMLElement; if (e) e.style.display = 'none'; });
+    $('#btnSell').innerHTML = 'Info';
+    $('#btnSell').onclick = () => { sfx.tap(); producerPanel(i); };
   }
   function showInfo(i: number) {
     const c = B()[i]; if (!c || !c.id) return;

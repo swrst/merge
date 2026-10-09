@@ -334,46 +334,58 @@ WORLDS = {
 
 
 def phrase(w, k):
-    """One quiet, melodic space piece (~60 s). A warm, slow pad under a gentle
-    melody on a soft glassy piano, answered now and then by a far-off star
-    bell; a soft sub and a long echo-y hall. Slow (one chord every 7 s), quiet
-    and in a major-pentatonic-friendly mode so it never grates. Each loop
-    plays the melody once, then lets the pad breathe for a bar."""
+    """A playful little space tune (~42 s): a bouncy kalimba/pluck melody that
+    states its tune twice, a hopping sub bass, a soft "boop" kick and airy
+    shaker on the off-beats, sparkly bells, and a gentle pad underneath.
+    Bright, light and loopable, never loud."""
     cfg = WORLDS[w]
-    rng = np.random.default_rng(sum(ord(c) * 31 ** i for i, c in enumerate(w)) % 100000 * 10 + k + 7)
+    rng = np.random.default_rng(sum(ord(c) * 31 ** i for i, c in enumerate(w)) % 100000 * 10 + k + 21)
     np.random.seed(int(rng.integers(1e9)))
     scale, root = cfg['scale'], cfg['root']
-    prog = cfg['progs'][(k * 2 + 1) % len(cfg['progs'])]   # 8 chords
-    bar = 7.0; eighth = bar / 8
-    total = bar * (len(prog) + 1) + 6.0
+    prog = cfg['progs'][k % len(cfg['progs'])]
+    bpm = cfg['bpm'] + 38                      # ~94-104: walking pace, cheerful
+    beat = 60 / bpm; bar = beat * 4; eighth = beat / 2
+    bars = len(prog) * 2
+    total = bar * bars + 4.0
     buf = [np.zeros(int(SR * total)), np.zeros(int(SR * total))]
-    for b, ch in enumerate(prog + [prog[-1]]):
-        deg = DEG[ch]
-        tones = [root - 12 + sd_to_semi(scale, x) for x in chord_tones(scale, deg)]
-        voicing = [tones[0] - 12, tones[0], tones[2], tones[1] + 12]
-        place(buf, b * bar, analog_pad([hz(x) for x in voicing], bar + 1.5, 0.16, cfg['bright'] * 0.45), 0.55, -0.25 if b % 2 else 0.25)
-        place(buf, b * bar, bass(hz(tones[0] - 12), bar - 0.5, 0.35), 0.3, 0.0)
-    # the melody: a real tune, played softly on glassy piano + a bell an octave up for colour
-    mel = compose(scale, prog, rng, lo=7, hi=16)
-    for (st, d, sd) in mel:
-        f = hz(root + 12 + sd_to_semi(scale, sd - 7))
-        t0 = st * eighth
-        place(buf, t0, epiano(f, d * eighth, 0.42, tail=2.4), 0.36, float(np.sin(st * 0.7)) * 0.35)
-        if d >= 3 and rng.random() < 0.45:
-            place(buf, t0 + 0.02, fmbell(f * 2, 0.2, 0.16, ratio=3.5, index=1.1, tau=1.8), 0.16, float(rng.uniform(-0.6, 0.6)))
-    # a few far stars between phrases
-    for _ in range(5):
-        at = float(rng.uniform(2, total - 8))
-        place(buf, at, fmbell(hz(root + 24 + pent(int(rng.integers(0, 8)))), 0.2, 0.12, ratio=4.0, index=1.2, tau=2.2), 0.12, float(rng.uniform(-0.8, 0.8)))
-    L, R = pingpong(buf[0], buf[1], eighth * 1.5, fb=0.35, mix=0.22, damp=2000)
-    L = hall(L, 5.0, mix=0.5, seed=1, damp=2200)[0]
-    R = hall(R, 5.0, mix=0.5, seed=2, damp=2200)[1]
-    L, R = onepole_lp(L, 4200), onepole_lp(R, 4200)
+    mel = compose(scale, prog, rng, lo=7, hi=17)
+    lead = kalimba if cfg['lead'] in ('lead', 'bell', 'bubble') else pluck
+    for rep in range(2):
+        off = rep * len(prog) * bar
+        for b, ch in enumerate(prog):
+            deg = DEG[ch]
+            tones = [root - 12 + sd_to_semi(scale, x) for x in chord_tones(scale, deg)]
+            t0 = off + b * bar
+            place(buf, t0, analog_pad([hz(tones[0]), hz(tones[1]), hz(tones[2])], bar + 0.3, 0.1, cfg['bright'] * 0.7), 0.3, 0.0)
+            # hopping bass: root on 1, fifth on 2-and, root on 3, octave on 4-and
+            for (bt, semi, d) in ((0, 0, 0.9), (1.5, 7, 0.45), (2, 0, 0.9), (3.5, 12, 0.45)):
+                place(buf, t0 + bt * beat, bass(hz(tones[0] - 12 + semi), d * beat, 0.5), 0.42, 0.0)
+            # soft "boop" kick on 1 and 3, shaker on every off-beat
+            for bt in (0, 2):
+                tt = T(0.18); kick = np.sin(2 * np.pi * np.cumsum(90 * np.exp(-tt / 0.05) + 45) / SR) * np.exp(-tt / 0.09)
+                place(buf, t0 + bt * beat, kick, 0.5, 0.0)
+            for bt in (0.5, 1.5, 2.5, 3.5):
+                place(buf, t0 + bt * beat, softnoise(0.07, 5000, 11000, 0.02), 0.07 if rep == 0 else 0.1, 0.35 if bt % 1 else -0.35)
+        # the tune (second time an octave-up bell doubles it)
+        for (st, d, sd) in mel:
+            f = hz(root + 12 + sd_to_semi(scale, sd - 7))
+            t0 = off + st * eighth
+            place(buf, t0, lead(f, d * eighth, 0.55), 0.42, float(np.sin(st * 0.9)) * 0.3)
+            if rep == 1 and d >= 2:
+                place(buf, t0, fmbell(f * 2, 0.2, 0.2, ratio=3.5, index=1.2, tau=0.9), 0.14, float(rng.uniform(-0.5, 0.5)))
+    # sparkles at phrase ends
+    for at in (len(prog) * bar - beat, 2 * len(prog) * bar - beat):
+        for i in range(4):
+            place(buf, at + i * 0.07, fmbell(hz(root + 24 + pent(5 + i)), 0.15, 0.2, ratio=4.0, index=1.0, tau=0.6), 0.12, -0.5 + i * 0.33)
+    L, R = pingpong(buf[0], buf[1], eighth * 3, fb=0.25, mix=0.16, damp=2600)
+    L = hall(L, 2.2, mix=0.25, seed=1, damp=3000)[0]
+    R = hall(R, 2.2, mix=0.25, seed=2, damp=3000)[1]
+    L, R = onepole_lp(L, 7000), onepole_lp(R, 7000)
     m = max(np.max(np.abs(L)), np.max(np.abs(R)), 1e-9)
-    L, R = L / m * 0.7, R / m * 0.7
-    fade = int(SR * 5.0)
+    L, R = L / m * 0.72, R / m * 0.72
+    fade = int(SR * 3.0)
     L[-fade:] *= np.linspace(1, 0, fade); R[-fade:] *= np.linspace(1, 0, fade)
-    fi = int(SR * 3.0)
+    fi = int(SR * 0.5)
     L[:fi] *= np.linspace(0, 1, fi); R[:fi] *= np.linspace(0, 1, fi)
     return L, R
 
@@ -664,7 +676,7 @@ def main():
             for f in os.listdir(OUT):
                 if f.startswith(f'music_{w}_'):
                     os.remove(os.path.join(OUT, f))
-            for k in range(2):
+            for k in range(3):
                 L, R = phrase(w, k)
                 total += to_ogg(f'music_{w}_{k + 1}', L, R, q='0')
             L, R = ambience(w)

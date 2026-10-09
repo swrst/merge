@@ -155,8 +155,8 @@ class Audio {
       this.current = { name: pick, src, gain: g };
       // after this phrase: another one, or a quiet stretch with just the ambience
       this.runLeft--;
-      const rest = this.runLeft > 0 ? 0 : 6000 + Math.random() * 10000;
-      if (this.runLeft <= 0) this.runLeft = 2 + (Math.random() < 0.5 ? 1 : 0);
+      const rest = this.runLeft > 0 ? 0 : 2500 + Math.random() * 4000;
+      if (this.runLeft <= 0) this.runLeft = 3;
       clearTimeout(this.phraseTimer);
       this.phraseTimer = setTimeout(() => this.nextPhrase(w, phrases), buf.duration * 1000 - 600 + rest);
     });

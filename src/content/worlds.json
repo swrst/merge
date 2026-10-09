@@ -312,7 +312,7 @@
           ]
         ],
         "coins": 0,
-        "xp": 15,
+        "xp": 33,
         "unlock": [
           "rocks"
         ],
@@ -339,11 +339,11 @@
           ],
           [
             "log",
-            2
+            1
           ]
         ],
-        "coins": 60,
-        "xp": 25,
+        "coins": 70,
+        "xp": 51,
         "unlock": [
           "bush"
         ],
@@ -354,10 +354,10 @@
           ],
           [
             "grandma",
-            "Some crystal rocks and a metal ingot for a border, dear."
+            "3 Crystal Rocks and a Metal Ingot, please."
           ]
         ],
-        "text": "A tidy border. Nana is very pleased. Next door, an old snack cart beeps awake."
+        "text": "A tidy border. Next door, an old snack cart beeps awake."
       },
       {
         "id": "e3",
@@ -365,28 +365,28 @@
         "who": "grandma",
         "needs": [
           [
-            "jam",
-            2
-          ],
-          [
             "berries",
             3
           ],
           [
+            "jam",
+            1
+          ],
+          [
             "rock",
-            3
+            2
           ]
         ],
-        "coins": 100,
-        "xp": 35,
+        "coins": 110,
+        "xp": 69,
         "talk": [
           [
             "grandma",
-            "Snacks! One food tube and some snack cubes for the picnic, and a rock to sit on."
+            "Snacks! A picnic for the whole village, and something to sit on."
           ],
           [
-            "biscuit",
-            "The snacks are hereby confiscated. Mayoral privilege."
+            "grandma",
+            "3 Snack Cubes, a Food Tube and 2 Crystal Rocks, please."
           ]
         ],
         "text": "First proper meal in years! Nana even washed the jars."
@@ -406,11 +406,11 @@
           ],
           [
             "berries",
-            3
+            2
           ]
         ],
-        "coins": 160,
-        "xp": 50,
+        "coins": 150,
+        "xp": 87,
         "event": "meteor",
         "unlock": [
           "well"
@@ -418,11 +418,11 @@
         "talk": [
           [
             "biscuit",
-            "Citizens! A town needs a table. A table needs metal plates. And a glow geode, for dignity."
+            "Citizens! A town needs a table. A table needs dignity."
           ],
           [
-            "grandma",
-            "And a snack cube for whoever builds it."
+            "biscuit",
+            "A Metal Plates, 2 Glow Geodes and 2 Snack Cubes, please."
           ]
         ],
         "text": "A fine table. Behind it, the old moonwater well starts to drip. ...Wait. What is that in the sky?"
@@ -445,8 +445,8 @@
             2
           ]
         ],
-        "coins": 240,
-        "xp": 70,
+        "coins": 200,
+        "xp": 105,
         "lab": true,
         "talk": [
           [
@@ -455,14 +455,10 @@
           ],
           [
             "bloop",
-            "I need a workshop: one Star Scrap, some metal plates and a shiny geode."
-          ],
-          [
-            "timmy",
-            "A REAL alien! Can I help? CAN I?"
+            "3 Star Scraps, a Metal Plates and 2 Glow Geodes, please."
           ]
         ],
-        "text": "Dr. Zonk's Lab hums to life. He wants to show you what it can do."
+        "text": "Dr. Zonk drew up plans for a lab. He wants to show you what it can do."
       },
       {
         "id": "e6",
@@ -471,7 +467,7 @@
         "needs": [
           [
             "jug",
-            2
+            1
           ],
           [
             "puddle",
@@ -482,19 +478,20 @@
             1
           ]
         ],
-        "coins": 320,
-        "xp": 90,
+        "coins": 240,
+        "xp": 123,
         "unlock": [
           "meadow"
         ],
+        "gift": "chest",
         "talk": [
           [
-            "pip",
-            "Tap the well: water drops make puddles, puddles make a canister."
+            "grandma",
+            "The garden is thirsty, and so am I."
           ],
           [
             "grandma",
-            "A canister, some puddles, and a ration tray for the thirsty gardener."
+            "A Water Canister, 3 Crater Puddles and a Ration Tray, please."
           ]
         ],
         "text": "The garden perks up. On the hill, a little solar farm unfolds its panels."
@@ -517,16 +514,20 @@
             1
           ]
         ],
-        "coins": 400,
-        "xp": 110,
+        "coins": 290,
+        "xp": 141,
         "talk": [
           [
             "grandma",
-            "A supper under the stars! Some solar cells for the lights, a ration tray and a water tank."
+            "A supper under the stars! With lights, for once."
           ],
           [
             "bloop",
             "What is supper. I would like to learn about supper."
+          ],
+          [
+            "grandma",
+            "3 Solar Cells, a Ration Tray and a Water Tank, please."
           ]
         ],
         "text": "Dr. Zonk had three trays."
@@ -549,8 +550,8 @@
             1
           ]
         ],
-        "coins": 480,
-        "xp": 130,
+        "coins": 340,
+        "xp": 159,
         "unlock": [
           "flowerbed"
         ],
@@ -561,14 +562,14 @@
         "talk": [
           [
             "biscuit",
-            "Citizens! The fence is broken. Also a moon goat ate my hat."
+            "The fence is broken. Also a moon goat ate my hat."
           ],
           [
-            "grandma",
-            "A cargo crate of parts, a solar panel for the gate light and a star gem for the lock, please."
+            "biscuit",
+            "A Cargo Crate, 2 Solar Panels and a Star Gem, please."
           ]
         ],
-        "text": "The fence stands. The Meteor Heap gave its last metal and cools down for good. In its place, a little light stall opens."
+        "text": "The fence stands. The Meteor Heap gave its last metal and cools down. In its place, a little light stall opens."
       },
       {
         "id": "e9",
@@ -588,13 +589,8 @@
             1
           ]
         ],
-        "coins": 560,
-        "xp": 150,
-        "temp": {
-          "p": "hive",
-          "taps": 18,
-          "mins": 30
-        },
+        "coins": 390,
+        "xp": 177,
         "talk": [
           [
             "gigi",
@@ -602,18 +598,18 @@
           ],
           [
             "gigi",
-            "Some glow bulbs for the stall, a gem for the sign and a jelly dome for the opening."
+            "3 Glow Bulbs, a Star Gem and a Jelly Dome, please."
           ]
         ],
-        "text": "The market glows! And buzzbots have moved in next door, just for a while."
+        "text": "The market glows. Somewhere above, something buzzes."
       },
       {
         "id": "e10",
-        "name": "Nectar Jelly",
-        "who": "gigi",
+        "name": "Lost Socks",
+        "who": "grandma",
         "needs": [
           [
-            "honeycomb",
+            "sockpair",
             2
           ],
           [
@@ -621,32 +617,103 @@
             2
           ],
           [
-            "fountain",
+            "barrel",
             1
           ]
         ],
-        "coins": 640,
-        "xp": 170,
+        "coins": 440,
+        "xp": 195,
         "unlock": [
-          "teabush"
+          "hive"
         ],
         "retire": [
           "rocks"
         ],
         "talk": [
           [
-            "gigi",
-            "Nectar jelly! A hex cell of nectar, quickly, before the buzzbots leave."
+            "grandma",
+            "Every sock in the village has vanished. The well washes them out of orbit."
           ],
           [
             "grandma",
-            "And a space lamp to see by, and a fountain to wash the jars."
+            "2 Sock Pairs, 2 Space Lamps and a Water Tank, please."
           ]
         ],
-        "text": "Jelly for all. The starstones are all used up, and a fizz vent starts to bubble where they were."
+        "text": "Socks for all. The starstones are used up, and buzzbots move into a hive by the hill."
       },
       {
         "id": "e11",
+        "name": "Nectar Jelly",
+        "who": "gigi",
+        "needs": [
+          [
+            "honeydrop",
+            3
+          ],
+          [
+            "bloombud",
+            1
+          ],
+          [
+            "hat",
+            1
+          ]
+        ],
+        "coins": 490,
+        "xp": 213,
+        "gift": "chest",
+        "talk": [
+          [
+            "gigi",
+            "Nectar jelly! Quickly, before the buzzbots eat it all."
+          ],
+          [
+            "gigi",
+            "3 Nectar Bubbles, a Space Lamp and a Panel Array, please."
+          ]
+        ],
+        "text": "Jelly for all. Sirra wore a nectar bubble as a hat. It was a look."
+      },
+      {
+        "id": "e12",
+        "name": "Wash Day",
+        "who": "grandma",
+        "needs": [
+          [
+            "shirtstack",
+            2
+          ],
+          [
+            "honeycomb",
+            1
+          ],
+          [
+            "fountain",
+            1
+          ]
+        ],
+        "coins": 550,
+        "xp": 231,
+        "unlock": [
+          "teabush"
+        ],
+        "retire": [
+          "bush"
+        ],
+        "talk": [
+          [
+            "grandma",
+            "Wash day! Everything smells of nectar and space dust."
+          ],
+          [
+            "grandma",
+            "2 Shirt Stacks, a Hex Cell and an Orb Fountain, please."
+          ]
+        ],
+        "text": "The village sparkles. The snack cart has given its last cookie, and a fizz vent starts to bubble."
+      },
+      {
+        "id": "e13",
         "name": "The Soda Stand",
         "who": "timmy",
         "needs": [
@@ -655,146 +722,240 @@
             3
           ],
           [
-            "bouquet",
-            1
+            "icecone",
+            2
           ],
           [
-            "icecone",
-            3
+            "bouquet",
+            1
           ]
         ],
-        "coins": 720,
-        "xp": 190,
-        "temp": {
-          "p": "mosslog",
-          "taps": 16,
-          "mins": 30
-        },
+        "coins": 610,
+        "xp": 249,
         "talk": [
           [
             "timmy",
-            "A soda stand! Some drink pouches, a star lantern for the sign and an ice cream cone for the menu!"
-          ],
-          [
-            "pip",
-            "Who will run it?"
+            "A soda stand! I will run it. I will also drink it."
           ],
           [
             "timmy",
-            "ME. Obviously."
+            "3 Drink Pouchs, 2 Ice Cones and a Star Lantern, please."
           ]
         ],
-        "text": "Timmy sold four sodas. He drank nine. In the woods, an eyeshroom log is blinking awake."
+        "text": "Ember sold four sodas. He drank nine."
       },
       {
-        "id": "e12",
+        "id": "e14",
+        "name": "Ice Cream Social",
+        "who": "mumbo",
+        "needs": [
+          [
+            "triplecone",
+            1
+          ],
+          [
+            "teacup",
+            1
+          ],
+          [
+            "hat",
+            1
+          ],
+          [
+            "honeycomb",
+            1
+          ]
+        ],
+        "coins": 670,
+        "xp": 267,
+        "unlock": [
+          "mosslog"
+        ],
+        "retire": [
+          "well"
+        ],
+        "gift": "chest",
+        "talk": [
+          [
+            "mumbo",
+            "Chef Gubbo! Ice cream for everyone, powered by sunshine."
+          ],
+          [
+            "mumbo",
+            "A Triple Cone, a Soda Can, a Panel Array and a Hex Cell, please."
+          ]
+        ],
+        "text": "Everyone has a cone. The old well has done its job, and in the woods an eyeshroom log blinks awake."
+      },
+      {
+        "id": "e15",
         "name": "Forest Fizz",
         "who": "grandma",
         "needs": [
           [
-            "mushring",
-            2
+            "toadstool",
+            3
           ],
           [
             "teacup",
             2
           ],
           [
-            "hat",
+            "honeypot",
             1
           ]
         ],
-        "coins": 800,
-        "xp": 210,
-        "unlock": [
-          "nestbox"
-        ],
-        "retire": [
-          "bush"
-        ],
+        "coins": 730,
+        "xp": 285,
         "talk": [
           [
             "grandma",
-            "My mother's forest fizz: a bunch of eyeshrooms and a can of soda."
-          ],
-          [
-            "grandma",
-            "And a panel array to keep it cold. Some traditions change."
+            "My mother's forest fizz: eyeshrooms and soda. Some traditions are strange."
           ],
           [
             "bloop",
             "On my world, soda is a colour. Fascinating."
+          ],
+          [
+            "grandma",
+            "3 Eyeshrooms, 2 Soda Cans and a Nectar Pot, please."
           ]
         ],
-        "text": "Fizz for everyone. The snack cart has given its last cookie. Behind the shed: a jet wreck full of spare gear."
+        "text": "Fizz for everyone. Nobody saw straight for an hour."
       },
       {
-        "id": "e13",
+        "id": "e16",
+        "name": "The Shroom Walk",
+        "who": "timmy",
+        "needs": [
+          [
+            "mushring",
+            2
+          ],
+          [
+            "bouquet",
+            1
+          ],
+          [
+            "triplecone",
+            1
+          ]
+        ],
+        "coins": 790,
+        "xp": 303,
+        "unlock": [
+          "nestbox"
+        ],
+        "retire": [
+          "meadow"
+        ],
+        "talk": [
+          [
+            "timmy",
+            "The forest lights up at night! Let us make a path through it."
+          ],
+          [
+            "timmy",
+            "2 Shroom Bunchs, a Star Lantern and a Triple Cone, please."
+          ]
+        ],
+        "text": "A glowing path through the woods. The solar farm goes quiet; a jet wreck turns up behind the shed."
+      },
+      {
+        "id": "e17",
         "name": "Jet Day",
         "who": "timmy",
         "needs": [
           [
-            "nest",
-            2
+            "plume",
+            3
           ],
           [
-            "garland",
-            1
+            "maproll",
+            2
           ],
           [
             "teapot",
             1
           ]
         ],
-        "coins": 880,
-        "xp": 230,
-        "temp": {
-          "p": "cottonpatch",
-          "taps": 24,
-          "mins": 40
-        },
+        "coins": 860,
+        "xp": 321,
+        "gift": "chest",
         "talk": [
           [
             "timmy",
-            "A jet boot and a light string so it looks cool!"
+            "A jet boot! And a map, so I know where I crash."
           ],
           [
             "pip",
-            "Jetpacks do not care about lights, Ember."
+            "Jetpacks do not care about maps, Ember."
           ],
           [
             "timmy",
-            "THIS jetpack does. And a fizz bottle for the pilot."
+            "3 Thrusters, 2 Map Rolls and a Fizz Bottle, please."
           ]
         ],
-        "text": "Timmy flew all evening. A suit loom hums nearby for a little while. Sirra has ideas."
+        "text": "Ember flew all evening. Mostly in circles."
       },
       {
-        "id": "e14",
+        "id": "e18",
+        "name": "Charting the Hills",
+        "who": "pip",
+        "needs": [
+          [
+            "maptube",
+            1
+          ],
+          [
+            "nest",
+            1
+          ],
+          [
+            "fairyring",
+            1
+          ]
+        ],
+        "coins": 920,
+        "xp": 339,
+        "unlock": [
+          "cottonpatch"
+        ],
+        "retire": [
+          "flowerbed"
+        ],
+        "talk": [
+          [
+            "pip",
+            "There is more Meadow over the hills. Somebody should map it."
+          ],
+          [
+            "pip",
+            "A Map Tube, a Jet Boot and a Shroom Ring, please."
+          ]
+        ],
+        "text": "New paths on the map. The light stall is spent; a suit loom hums in its place."
+      },
+      {
+        "id": "e19",
         "name": "Spacesuits for All",
         "who": "gigi",
         "needs": [
           [
-            "clothbolt",
+            "thread",
+            3
+          ],
+          [
+            "yarn",
             1
           ],
           [
             "speckegg",
             1
-          ],
-          [
-            "sockpair",
-            3
           ]
         ],
-        "coins": 960,
-        "xp": 250,
-        "unlock": [
-          "toychest"
-        ],
-        "retire": [
-          "well"
-        ],
+        "coins": 990,
+        "xp": 357,
         "talk": [
           [
             "gigi",
@@ -802,13 +963,52 @@
           ],
           [
             "gigi",
-            "A space helmet, a twin jetpack and a pair of clean socks. I do the rest. I always do the rest."
+            "3 Suit Patchs, a Space Glove and a Twin Jetpack, please."
           ]
         ],
-        "text": "Suits for all. The old well has done its job, and a toy chest turns up on the doorstep. Nobody ordered it."
+        "text": "Suits for all. Sirra does the rest. She always does the rest."
       },
       {
-        "id": "e15",
+        "id": "e20",
+        "name": "Sirra's Salon",
+        "who": "gigi",
+        "needs": [
+          [
+            "bobbles",
+            2
+          ],
+          [
+            "yarn",
+            1
+          ],
+          [
+            "atlas",
+            1
+          ]
+        ],
+        "coins": 1060,
+        "xp": 375,
+        "unlock": [
+          "toychest"
+        ],
+        "retire": [
+          "hive"
+        ],
+        "gift": "chest",
+        "talk": [
+          [
+            "gigi",
+            "Antennae deserve better. I am opening a salon."
+          ],
+          [
+            "gigi",
+            "2 Antenna Bobbles, a Space Glove and a Star Atlas, please."
+          ]
+        ],
+        "text": "Antennae have never looked so good. The buzzbots fly off, and a toy chest appears on the doorstep."
+      },
+      {
+        "id": "e21",
         "name": "Toys for Everyone",
         "who": "biscuit",
         "needs": [
@@ -817,17 +1017,16 @@
             3
           ],
           [
-            "songbird",
+            "dryerhelmet",
             1
           ],
           [
-            "triplecone",
+            "sundae",
             1
           ]
         ],
-        "coins": 1040,
-        "xp": 270,
-        "gift": "chest",
+        "coins": 1130,
+        "xp": 393,
         "talk": [
           [
             "biscuit",
@@ -835,255 +1034,178 @@
           ],
           [
             "biscuit",
-            "Some saucer tops, a hoverboard and a triple cone for whoever builds the shelf. For the voters of tomorrow."
+            "3 Saucer Tops, a Bubble Dryer and a Moon Sundae, please."
           ]
         ],
-        "text": "The square is full of spinning tops. Mayor Marin pretends to dislike it."
+        "text": "The square is full of spinning tops."
       },
       {
-        "id": "e16",
-        "name": "A Garden for Guests",
-        "who": "biscuit",
+        "id": "e22",
+        "name": "Sports Day",
+        "who": "timmy",
         "needs": [
-          [
-            "scarecrow",
-            1
-          ],
-          [
-            "toyrobot",
-            2
-          ],
-          [
-            "teaset",
-            1
-          ]
-        ],
-        "coins": 1120,
-        "xp": 290,
-        "unlock": [
-          "vegpatch"
-        ],
-        "retire": [
-          "meadow"
-        ],
-        "talk": [
-          [
-            "biscuit",
-            "The space crows threaten civic order. I drafted a strongly worded letter."
-          ],
-          [
-            "pip",
-            "Or a power station, a toy robot to scare them and a drink dispenser for the guards?"
-          ]
-        ],
-        "text": "The solar farm powers the last station and goes quiet. Grandma plants a hydro bed in its place."
-      },
-      {
-        "id": "e17",
-        "name": "Grow Day",
-        "who": "grandma",
-        "needs": [
-          [
-            "carrot",
-            2
-          ],
-          [
-            "toyrocket",
-            1
-          ],
           [
             "hoverskates",
             2
-          ]
-        ],
-        "coins": 1200,
-        "xp": 310,
-        "temp": {
-          "p": "crashsite",
-          "taps": 20,
-          "mins": 30
-        },
-        "talk": [
-          [
-            "grandma",
-            "Grow tubes! Some of them, dear. Real food grows in tubes now, apparently."
           ],
           [
-            "timmy",
-            "And a toy rocket! For... the harvest. And hover skates to get between the tubes."
-          ]
-        ],
-        "text": "The first grow tubes are full. Then something small crashes behind the hill, blinking!"
-      },
-      {
-        "id": "e18",
-        "name": "The Little Visitors",
-        "who": "timmy",
-        "needs": [
-          [
-            "alienkid",
-            2
-          ],
-          [
-            "vegbundle",
+            "toyrobot",
             1
           ],
           [
-            "flowercrown",
+            "clothbolt",
             1
           ]
         ],
-        "coins": 1300,
-        "xp": 330,
+        "coins": 1210,
+        "xp": 411,
         "unlock": [
-          "tinkerbench"
-        ],
-        "retire": [
-          "flowerbed"
-        ],
-        "gift": "chest",
-        "talk": [
-          [
-            "bloop",
-            "Blinkies! Babies. Far from home, like me."
-          ],
-          [
-            "timmy",
-            "Help one grow up: a hydro tray for its lunch and an orbit lamp for its room. Can we keep it?!"
-          ]
-        ],
-        "text": "The little visitors are safe and very hungry. The light stall is spent; a lens workbench takes its corner."
-      },
-      {
-        "id": "e19",
-        "name": "Stargazing Night",
-        "who": "timmy",
-        "needs": [
-          [
-            "spyglass",
-            2
-          ],
-          [
-            "puppets",
-            1
-          ],
-          [
-            "handsprout",
-            3
-          ]
-        ],
-        "coins": 1400,
-        "xp": 350,
-        "gift": "chest",
-        "talk": [
-          [
-            "timmy",
-            "Dr. Zonk says his home is up THERE. Behind the Moon!"
-          ],
-          [
-            "grandma",
-            "A spyglass, alien puppets for the little ones and a hand sprout to wave at the Moon. Nobody stargazes on an empty stomach."
-          ]
-        ],
-        "text": "The Moon has tiny lights. \"Friends,\" whispers Dr. Zonk. And in the woods: his ship. In pieces. Time to build a rocket!"
-      },
-      {
-        "id": "e20",
-        "name": "Lenses for the Dome",
-        "who": "bloop",
-        "needs": [
-          [
-            "telescope",
-            1
-          ],
-          [
-            "vegcrate",
-            1
-          ],
-          [
-            "teaset",
-            1
-          ]
-        ],
-        "coins": 1500,
-        "xp": 370,
-        "unlock": [
-          "lilypond"
+          "crashsite"
         ],
         "retire": [
           "teabush"
         ],
         "talk": [
           [
-            "bloop",
-            "To fly, I must see. A brass telescope, please."
+            "timmy",
+            "Sports day! Zero gravity, maximum glory!"
           ],
           [
-            "grandma",
-            "And a grow rack and a drink dispenser for the long nights of building."
+            "timmy",
+            "2 Hover Skates, a Toy Robot and a Space Helmet, please."
           ]
         ],
-        "text": "The fizz vent sighs its last bubble. Down by the water, a slime pond fills up."
+        "text": "Ember won everything. The fizz vent sighs its last; something small crashes behind the hill, blinking!"
       },
       {
-        "id": "e21",
-        "name": "Slime Day",
+        "id": "e23",
+        "name": "The Little Visitors",
         "who": "timmy",
         "needs": [
           [
-            "lilypad",
-            3
+            "blinky",
+            2
           ],
           [
-            "toyshop",
+            "hoopgoal",
             1
           ],
           [
-            "bathbomb",
-            3
+            "dryerhelmet",
+            1
           ]
         ],
-        "coins": 1600,
-        "xp": 390,
-        "temp": {
-          "p": "picnichamper",
-          "taps": 14,
-          "mins": 30
-        },
+        "coins": 1280,
+        "xp": 429,
+        "gift": "chest",
         "talk": [
           [
             "timmy",
-            "A party at the slime pond! Slime deserves nice things."
+            "Blinkies! Babies, far from home."
+          ],
+          [
+            "bloop",
+            "Far from home, like me. Blorp."
           ],
           [
             "timmy",
-            "Some slime puddles to splash in, a toy starport for the prizes and a bath bomb for afterwards."
+            "2 Blinkys, a Hoop Goal and a Bubble Dryer, please."
           ]
         ],
-        "text": "The slime frogs hold a party. The Duchess sends her cargo pod ahead of her."
+        "text": "The little visitors are safe and very hungry."
       },
       {
-        "id": "e22",
-        "name": "Fizz in the Garden",
-        "who": "pim",
+        "id": "e24",
+        "name": "A Garden for Guests",
+        "who": "biscuit",
         "needs": [
           [
-            "picnicbasket",
-            2
+            "alienkid",
+            1
           ],
           [
-            "lotus",
-            2
+            "toyrocket",
+            1
           ],
           [
-            "observatory",
+            "atlas",
             1
           ]
         ],
-        "coins": 1700,
-        "xp": 410,
+        "coins": 1360,
+        "xp": 447,
         "unlock": [
-          "windmill"
+          "vegpatch"
+        ],
+        "retire": [
+          "mosslog"
+        ],
+        "talk": [
+          [
+            "biscuit",
+            "Our guests need a garden. A civic garden."
+          ],
+          [
+            "biscuit",
+            "A Little Alien, a Toy Rocket and a Star Atlas, please."
+          ]
+        ],
+        "text": "A garden marked out. The eyeshroom log sleeps; a hydro bed takes its place."
+      },
+      {
+        "id": "e25",
+        "name": "Grow Day",
+        "who": "grandma",
+        "needs": [
+          [
+            "seedling",
+            3
+          ],
+          [
+            "handsprout",
+            2
+          ],
+          [
+            "hoopgoal",
+            1
+          ]
+        ],
+        "coins": 1440,
+        "xp": 465,
+        "talk": [
+          [
+            "grandma",
+            "Grow tubes! Real food grows in tubes now, apparently."
+          ],
+          [
+            "grandma",
+            "3 Sprout Tubes, 2 Hand Sprouts and a Hoop Goal, please."
+          ]
+        ],
+        "text": "The first tubes are full. One of the plants bit Ember."
+      },
+      {
+        "id": "e26",
+        "name": "The Biting Garden",
+        "who": "timmy",
+        "needs": [
+          [
+            "toothpot",
+            1
+          ],
+          [
+            "carrot",
+            2
+          ],
+          [
+            "alienexplorer",
+            1
+          ]
+        ],
+        "coins": 1520,
+        "xp": 483,
+        "unlock": [
+          "tinkerbench"
         ],
         "retire": [
           "nestbox"
@@ -1091,22 +1213,230 @@
         "gift": "chest",
         "talk": [
           [
-            "pim",
-            "Duchess Splatt. I have come a very long way for a proper picnic."
+            "timmy",
+            "The plants bite! I love them! Let us grow MORE."
           ],
           [
-            "pim",
-            "A cargo crate of fine things, a slime jar to keep it cool and an observatory. One must see the stars while dining."
+            "timmy",
+            "A Toothy Pot, 2 Grow Tubes and an Alien Explorer, please."
+          ]
+        ],
+        "text": "A garden that waves back. The jet wreck is picked clean; a lens workbench sets up shop."
+      },
+      {
+        "id": "e27",
+        "name": "Clockwork Mayor",
+        "who": "biscuit",
+        "needs": [
+          [
+            "hourglass",
+            2
+          ],
+          [
+            "lens",
+            2
+          ],
+          [
+            "vegbundle",
+            1
+          ]
+        ],
+        "coins": 1600,
+        "xp": 501,
+        "talk": [
+          [
+            "biscuit",
+            "Nobody in this town is ever on time. Including me."
+          ],
+          [
+            "biscuit",
+            "2 Star Hourglass, 2 Star Lens and a Hydro Tray, please."
+          ]
+        ],
+        "text": "A town clock that works. Mostly."
+      },
+      {
+        "id": "e28",
+        "name": "Lenses for the Dome",
+        "who": "bloop",
+        "needs": [
+          [
+            "spyglass",
+            1
+          ],
+          [
+            "pocketwatch",
+            1
+          ],
+          [
+            "walkplant",
+            1
+          ]
+        ],
+        "coins": 1690,
+        "xp": 519,
+        "unlock": [
+          "grubmound"
+        ],
+        "retire": [
+          "cottonpatch"
+        ],
+        "talk": [
+          [
+            "bloop",
+            "To see home, I must see far."
+          ],
+          [
+            "bloop",
+            "A Planet Spyglass, a Pocket Watch and a Walking Plant, please."
+          ]
+        ],
+        "text": "Lenses ground and polished. The suit loom rests; glowbugs crawl out of a burrow."
+      },
+      {
+        "id": "e29",
+        "name": "Glowbug Night",
+        "who": "grandma",
+        "needs": [
+          [
+            "chrysalis",
+            3
+          ],
+          [
+            "spyglass",
+            1
+          ],
+          [
+            "puppets",
+            1
+          ]
+        ],
+        "coins": 1770,
+        "xp": 537,
+        "gift": "chest",
+        "talk": [
+          [
+            "grandma",
+            "On warm nights the glowbugs dance. They have not danced in years."
           ],
           [
             "grandma",
-            "Finally, someone with manners."
+            "3 Glow Cocoons, a Planet Spyglass and an Alien Puppets, please."
           ]
         ],
-        "text": "Picnic under the stars. The jet wreck is picked clean; a cheese mill creaks into life instead."
+        "text": "The meadow twinkles like the sky."
       },
       {
-        "id": "e23",
+        "id": "e30",
+        "name": "Firefly Lanterns",
+        "who": "gigi",
+        "needs": [
+          [
+            "flutter",
+            1
+          ],
+          [
+            "alarmbot",
+            1
+          ],
+          [
+            "vegbundle",
+            1
+          ]
+        ],
+        "coins": 1860,
+        "xp": 555,
+        "unlock": [
+          "lilypond"
+        ],
+        "retire": [
+          "toychest"
+        ],
+        "talk": [
+          [
+            "gigi",
+            "Lanterns made of glowbugs, darling. Volunteer glowbugs."
+          ],
+          [
+            "gigi",
+            "A Glowbug, an Alarm Bot and a Hydro Tray, please."
+          ]
+        ],
+        "text": "Lanterns everywhere. The toy chest is empty; down by the water, a slime pond fills up."
+      },
+      {
+        "id": "e31",
+        "name": "Stargazing Night",
+        "who": "timmy",
+        "needs": [
+          [
+            "telescope",
+            1
+          ],
+          [
+            "lilypad",
+            3
+          ],
+          [
+            "flutter",
+            1
+          ]
+        ],
+        "coins": 1950,
+        "xp": 573,
+        "gift": "chest",
+        "talk": [
+          [
+            "timmy",
+            "Dr. Zonk says his home is up THERE. Behind the Moon!"
+          ],
+          [
+            "timmy",
+            "A Brass Telescope, 3 Slime Puddles and a Glowbug, please."
+          ]
+        ],
+        "text": "The Moon has tiny lights. \"Friends,\" whispers Dr. Zonk. And in the woods: his ship. In pieces. Time to build a rocket!"
+      },
+      {
+        "id": "e32",
+        "name": "Slime Day",
+        "who": "timmy",
+        "needs": [
+          [
+            "lotus",
+            1
+          ],
+          [
+            "bathbomb",
+            2
+          ],
+          [
+            "alienexplorer",
+            1
+          ]
+        ],
+        "coins": 2040,
+        "xp": 591,
+        "unlock": [
+          "windmill"
+        ],
+        "retire": [
+          "crashsite"
+        ],
+        "talk": [
+          [
+            "timmy",
+            "A party at the slime pond! Slime deserves nice things."
+          ],
+          [
+            "timmy",
+            "A Slime Jar, 2 Planet Bath Bombs and an Alien Explorer, please."
+          ]
+        ],
+        "text": "The slime frogs hold a party. The crash site is empty; a cheese mill creaks up the hill."
+      },
+      {
+        "id": "e33",
         "name": "The Cheese Shop",
         "who": "mumbo",
         "needs": [
@@ -1115,16 +1445,17 @@
             3
           ],
           [
-            "pondfrog",
+            "lotus",
             1
           ],
           [
-            "hourglass",
-            2
+            "soapbrush",
+            1
           ]
         ],
-        "coins": 1800,
-        "xp": 430,
+        "coins": 2140,
+        "xp": 609,
+        "gift": "chest",
         "talk": [
           [
             "mumbo",
@@ -1132,56 +1463,122 @@
           ],
           [
             "mumbo",
-            "Some cheese cubes to start, a slime frog to guard them, and star hourglasses to time the ageing."
+            "3 Cheese Cubes, a Slime Jar and a Soap & Brush, please."
           ]
         ],
         "text": "The cheese shop is open. Moon cheese for everyone!"
       },
       {
-        "id": "e24",
-        "name": "Cheese and Slime",
+        "id": "e34",
+        "name": "Bath Night",
+        "who": "pim",
+        "needs": [
+          [
+            "soapbrush",
+            1
+          ],
+          [
+            "roll",
+            1
+          ],
+          [
+            "swarm",
+            1
+          ]
+        ],
+        "coins": 2230,
+        "xp": 627,
+        "unlock": [
+          "raincloud"
+        ],
+        "retire": [
+          "vegpatch"
+        ],
+        "talk": [
+          [
+            "pim",
+            "Duchess Splatt. I have come a very long way for a proper bath."
+          ],
+          [
+            "pim",
+            "A Soap & Brush, a Cheese Wedge and a Bug Jar, please."
+          ]
+        ],
+        "text": "Bubbles everywhere. The hydro bed rests; a little weather cloud settles over the hill."
+      },
+      {
+        "id": "e35",
+        "name": "Rain for the Pond",
+        "who": "bloop",
+        "needs": [
+          [
+            "puffcloud",
+            3
+          ],
+          [
+            "pondfrog",
+            1
+          ],
+          [
+            "roll",
+            1
+          ]
+        ],
+        "coins": 2330,
+        "xp": 645,
+        "gift": "chest",
+        "talk": [
+          [
+            "bloop",
+            "The pond is low. On my world we would ask the sky nicely."
+          ],
+          [
+            "bloop",
+            "3 Sleepy Clouds, a Slime Frog and a Cheese Wedge, please."
+          ]
+        ],
+        "text": "Rain! The slime frogs sang all night."
+      },
+      {
+        "id": "e36",
+        "name": "Cheese and Clouds",
         "who": "mumbo",
         "needs": [
+          [
+            "raincloud2",
+            1
+          ],
           [
             "loaf",
             1
           ],
           [
-            "koipair",
-            1
-          ],
-          [
-            "telescope",
+            "alarmbot",
             1
           ]
         ],
-        "coins": 1900,
-        "xp": 450,
+        "coins": 2430,
+        "xp": 663,
         "unlock": [
           "claypit"
         ],
         "retire": [
-          "toychest"
+          "tinkerbench"
         ],
-        "gift": "chest",
         "talk": [
           [
             "mumbo",
-            "The finest pairing in the galaxy: a cheese wheel and a slime fountain."
-          ],
-          [
-            "bloop",
-            "And a telescope. For... cheese astronomy."
+            "The finest pairing in the galaxy: cheese, ripened in a cloud."
           ],
           [
             "mumbo",
-            "Yes. That."
+            "A Zap Cloud, a Cheese Wheel and an Alarm Bot, please."
           ]
         ],
-        "text": "Nobody understood the pairing. Everybody ate it. The toy chest is empty; a goo pit bubbles by the river."
+        "text": "Nobody understood it. Everybody ate it. The workbench is packed away; a goo pit bubbles by the river."
       },
       {
-        "id": "e25",
+        "id": "e37",
         "name": "Goo Day",
         "who": "gigi",
         "needs": [
@@ -1190,21 +1587,16 @@
             3
           ],
           [
-            "claypot",
-            2
+            "raincloud2",
+            1
           ],
           [
-            "breadbasket",
+            "rockettub",
             1
           ]
         ],
-        "coins": 2000,
-        "xp": 470,
-        "temp": {
-          "p": "raincloud",
-          "taps": 10,
-          "mins": 12
-        },
+        "coins": 2530,
+        "xp": 681,
         "talk": [
           [
             "gigi",
@@ -1212,19 +1604,90 @@
           ],
           [
             "gigi",
-            "Some goo lumps, a goo pot and a cheese stack for the potters. There is moon goo by the river."
+            "3 Goo Lumps, a Zap Cloud and a Rocket Tub, please."
           ]
         ],
-        "text": "Sirra ordered twelve vases. A little weather cloud drifts over, just for a while."
+        "text": "Sirra ordered twelve goo vases."
       },
       {
-        "id": "e26",
-        "name": "Rain for the Pond",
-        "who": "bloop",
+        "id": "e38",
+        "name": "The Pottery Fair",
+        "who": "pim",
         "needs": [
           [
-            "raincloud2",
+            "claypot",
             2
+          ],
+          [
+            "loaf",
+            1
+          ],
+          [
+            "pondfrog",
+            1
+          ]
+        ],
+        "coins": 2630,
+        "xp": 699,
+        "unlock": [
+          "picnichamper"
+        ],
+        "retire": [
+          "grubmound"
+        ],
+        "gift": "chest",
+        "talk": [
+          [
+            "pim",
+            "A fair! One must display one's pots."
+          ],
+          [
+            "pim",
+            "2 Goo Pots, a Cheese Wheel and a Slime Frog, please."
+          ]
+        ],
+        "text": "Pots of every shape. The glowbugs drift off; a cargo pod lands with a thump."
+      },
+      {
+        "id": "e39",
+        "name": "Parcels!",
+        "who": "blorb",
+        "needs": [
+          [
+            "sandwich",
+            3
+          ],
+          [
+            "claypot",
+            1
+          ],
+          [
+            "rainbowcloud",
+            1
+          ]
+        ],
+        "coins": 2730,
+        "xp": 717,
+        "talk": [
+          [
+            "blorb",
+            "Parcel! For everyone! Sign here. Any leg."
+          ],
+          [
+            "blorb",
+            "3 Parcels, a Goo Pot and an Aurora Cloud, please."
+          ]
+        ],
+        "text": "Postie Blorb delivered everything. Twice."
+      },
+      {
+        "id": "e40",
+        "name": "Picnic in Orbit",
+        "who": "grandma",
+        "needs": [
+          [
+            "picnicbasket",
+            1
           ],
           [
             "urn",
@@ -1235,51 +1698,47 @@
             1
           ]
         ],
-        "coins": 2100,
-        "xp": 490,
+        "coins": 2840,
+        "xp": 735,
         "unlock": [
           "eggnest"
         ],
         "retire": [
-          "vegpatch"
+          "lilypond"
         ],
+        "gift": "chest",
         "talk": [
           [
-            "bloop",
-            "The pond is low. On my world we would ask the sky nicely."
+            "grandma",
+            "A picnic on the hill where you can see the Moon."
           ],
           [
-            "bloop",
-            "A zap cloud, an orbit urn to catch the rain, and a cheese wheel for the cloud. Clouds like cheese. I assume."
+            "grandma",
+            "A Cargo Crate, an Orbit Urn and a Cheese Wheel, please."
           ]
         ],
-        "text": "Rain! The hydro bed rests, and behind the crates, pet eggs start to wobble."
+        "text": "The best picnic ever. The slime pond dries up; behind the crates, pet eggs start to wobble."
       },
       {
-        "id": "e27",
+        "id": "e41",
         "name": "Pets for the Blinkies",
         "who": "bloop",
         "needs": [
           [
-            "blobling",
+            "hatchegg",
             2
           ],
           [
-            "claypot",
-            2
-          ],
-          [
-            "koipond",
+            "picnicbasket",
             1
           ],
           [
-            "soapbrush",
-            2
+            "rainbowcloud",
+            1
           ]
         ],
-        "coins": 2200,
-        "xp": 510,
-        "gift": "chest",
+        "coins": 2950,
+        "xp": 753,
         "talk": [
           [
             "bloop",
@@ -1291,51 +1750,259 @@
           ],
           [
             "bloop",
-            "A blobling to play with, some goo pots for its dinner, a slime pool for its bath and soap. Lots of soap."
+            "2 Peeking Eggs, a Cargo Crate and an Aurora Cloud, please."
           ]
         ],
-        "text": "The Blinkies have a pet now. It has their sash."
+        "text": "The Blinkies have a pet now. It has the sash."
       },
       {
-        "id": "e28",
+        "id": "e42",
         "name": "The Pet Show",
         "who": "pip",
         "needs": [
           [
-            "blobpup",
+            "blobling",
             1
           ],
           [
-            "kiln",
+            "urn",
             1
           ],
           [
-            "buntower",
+            "picnicblanket",
             1
           ]
         ],
-        "coins": 2300,
-        "xp": 530,
+        "coins": 3060,
+        "xp": 771,
         "unlock": [
           "buskbot"
         ],
         "retire": [
           "windmill"
         ],
+        "gift": "chest",
         "talk": [
           [
             "pip",
-            "A pet show! Blobbo the blob pup is entered in every category."
+            "A pet show! Blobbo is entered in every category."
           ],
           [
             "pip",
-            "A rocket kiln for the trophies and a cheese cart for the snacks."
+            "A Blobling, an Orbit Urn and a Crate Stack, please."
           ]
         ],
-        "text": "Blobbo won everything. The cheese mill retires with honours, and a busker bot rolls in to play."
+        "text": "Blobbo won everything. The cheese mill retires with honours; a busker bot rolls in to play."
       },
       {
-        "id": "e29",
+        "id": "e43",
+        "name": "Music on the Hill",
+        "who": "timmy",
+        "needs": [
+          [
+            "whistle",
+            3
+          ],
+          [
+            "blobling",
+            1
+          ],
+          [
+            "weathervane",
+            1
+          ]
+        ],
+        "coins": 3170,
+        "xp": 789,
+        "talk": [
+          [
+            "timmy",
+            "The busker bot plays one chord. Let us teach it more."
+          ],
+          [
+            "timmy",
+            "3 Rocket Whistles, a Blobling and a Rocket Vane, please."
+          ]
+        ],
+        "text": "Now it plays two chords. Progress."
+      },
+      {
+        "id": "e44",
+        "name": "Say Cheese!",
+        "who": "gigi",
+        "needs": [
+          [
+            "instaphoto",
+            2
+          ],
+          [
+            "ukulele",
+            1
+          ],
+          [
+            "picnicblanket",
+            1
+          ]
+        ],
+        "coins": 3280,
+        "xp": 807,
+        "unlock": [
+          "rockethull"
+        ],
+        "retire": [
+          "raincloud"
+        ],
+        "gift": "chest",
+        "talk": [
+          [
+            "gigi",
+            "Darling, nobody will believe this village unless we take pictures."
+          ],
+          [
+            "gigi",
+            "2 Planet Photos, a Star Ukulele and a Crate Stack, please."
+          ]
+        ],
+        "text": "Photos on every wall. The weather cloud drifts off, and the old scrap hull is full of rocket bits."
+      },
+      {
+        "id": "e45",
+        "name": "Rocket Bits",
+        "who": "bloop",
+        "needs": [
+          [
+            "gear",
+            3
+          ],
+          [
+            "camera",
+            1
+          ],
+          [
+            "blobpup",
+            1
+          ]
+        ],
+        "coins": 3400,
+        "xp": 825,
+        "talk": [
+          [
+            "bloop",
+            "Every bolt counts. Every gear. Every slightly chewed fin."
+          ],
+          [
+            "bloop",
+            "3 Star Gears, a Space Camera and a Blobbo, please."
+          ]
+        ],
+        "text": "A pile of parts, sorted by Dr. Zonk, re-sorted by the Blinkies."
+      },
+      {
+        "id": "e46",
+        "name": "The Band Practice",
+        "who": "timmy",
+        "needs": [
+          [
+            "drum",
+            1
+          ],
+          [
+            "fin",
+            1
+          ],
+          [
+            "camera",
+            1
+          ]
+        ],
+        "coins": 3510,
+        "xp": 843,
+        "retire": [
+          "claypit"
+        ],
+        "gift": "chest",
+        "talk": [
+          [
+            "timmy",
+            "A launch needs a band. I play the drum. Loudly."
+          ],
+          [
+            "timmy",
+            "A Planet Drum, a Rocket Fin and a Space Camera, please."
+          ]
+        ],
+        "text": "The band is terrible and wonderful. The goo pit is dry."
+      },
+      {
+        "id": "e47",
+        "name": "The Pet Parade",
+        "who": "grandma",
+        "needs": [
+          [
+            "blobpup",
+            1
+          ],
+          [
+            "ukulele",
+            1
+          ],
+          [
+            "fin",
+            1
+          ]
+        ],
+        "coins": 3630,
+        "xp": 861,
+        "talk": [
+          [
+            "grandma",
+            "Every pet in the Meadow wants to see the launch."
+          ],
+          [
+            "grandma",
+            "A Blobbo, a Star Ukulele and a Rocket Fin, please."
+          ]
+        ],
+        "text": "A parade of blobs. Blobbo led it, in the sash."
+      },
+      {
+        "id": "e48",
+        "name": "Photos for the Road",
+        "who": "gigi",
+        "needs": [
+          [
+            "tripodcam",
+            1
+          ],
+          [
+            "nosecone",
+            1
+          ],
+          [
+            "blobling",
+            1
+          ]
+        ],
+        "coins": 3750,
+        "xp": 879,
+        "retire": [
+          "picnichamper"
+        ],
+        "gift": "chest",
+        "talk": [
+          [
+            "gigi",
+            "Every traveller needs photos of home, darling."
+          ],
+          [
+            "gigi",
+            "A Tripod Cam, a Porthole Cone and a Blobling, please."
+          ]
+        ],
+        "text": "An album for the trip. The cargo pod flies off with the last parcel."
+      },
+      {
+        "id": "e49",
         "name": "The Space Parade",
         "who": "pip",
         "needs": [
@@ -1348,33 +2015,26 @@
             1
           ],
           [
-            "urn",
+            "tripodcam",
             1
-          ],
-          [
-            "instaphoto",
-            3
           ]
         ],
-        "coins": 2400,
-        "xp": 550,
-        "unlock": [
-          "rockethull"
-        ],
-        "retire": [
-          "claypit"
-        ],
-        "gift": "chest",
+        "coins": 3880,
+        "xp": 897,
         "talk": [
           [
             "pip",
-            "A parade before the launch! A planet drum, a blob bed for the float, an orbit urn and a photo to remember it."
+            "A parade before the launch! The whole village!"
+          ],
+          [
+            "pip",
+            "A Planet Drum, a Blob Bed and a Tripod Cam, please."
           ]
         ],
-        "text": "Best parade ever. The goo pit is dry. Under it, an old scrap hull full of rocket bits. \"Nearly there,\" says Dr. Zonk."
+        "text": "Best parade ever. \"Nearly there,\" says Dr. Zonk, patting a fin. The fin falls off."
       },
       {
-        "id": "e30",
+        "id": "e50",
         "name": "The Launch Pad",
         "who": "bloop",
         "needs": [
@@ -1383,20 +2043,20 @@
             1
           ],
           [
-            "telescope",
+            "drum",
             1
-          ],
-          [
-            "lotus",
-            2
           ],
           [
             "blobpup",
             1
+          ],
+          [
+            "camera",
+            1
           ]
         ],
-        "coins": 2240,
-        "xp": 600,
+        "coins": 4000,
+        "xp": 915,
         "launch": true,
         "rocket": true,
         "unlock": [
@@ -1406,11 +2066,15 @@
         "talk": [
           [
             "bloop",
-            "A nose cone, a telescope, some slime jars to cool the engines, and a blob pup. It insists on coming."
+            "This is it. A nose cone, a band, a pet that insists on coming, and photos of home."
           ],
           [
             "bloop",
             "Miss you? No. You are coming too."
+          ],
+          [
+            "bloop",
+            "A Porthole Cone, a Planet Drum, a Blobbo and a Space Camera, please."
           ]
         ],
         "text": "The rocket stands. Sunny Meadow is awake, and the Moon is waiting."
