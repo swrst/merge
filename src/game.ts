@@ -2707,7 +2707,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   const launchDone = (w: string) => { const i = launchIdx(w); return i < 0 || projDone(w) > i; };
   /* A chapter is earned, not just assembled: on top of its items it asks for a
      few contracts filled since the last one, rising slowly through the world. */
-  const cNeed = (p?: any) => { const k = projDone(); return p && p.launch ? 3 : Math.min(3, 1 + Math.floor((k + 1) / 2)); };
+  const cNeed = (p?: any) => { const k = projDone(); return p && p.launch ? 4 : S.world === 'earth' ? Math.min(5, 2 + Math.floor(k / 3)) : Math.min(3, 1 + Math.floor((k + 1) / 2)); };
   const cHave = () => (S.cSince && S.cSince[S.world]) || 0;
   /* A new producer only comes once the ones you have are grown all the way:
      from chapter 6 on, a chapter that brings a producer asks for every one on
@@ -4953,6 +4953,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       S.met ? 'Rocket' : '???',
       S.met ? (allParts() ? 'Ready · ⛽' + S.fuel + '/' + CONFIG.rocket.fuelToLaunch : built + '/4 parts') : 'nothing here yet',
       'ship' + (S.met && allParts() && S.fuel >= CONFIG.rocket.fuelToLaunch ? ' ready' : ''));
+    // no lab yet: its corner of the painting is a grey, boarded-up ruin
+    if (!labOpen() && P) ents += `<div class="labRuin" data-fx="${PAD.lab[0]}" data-fy="${PAD.lab[1]}"><span>🚧</span></div>`;
+    if (!labOpen() && !labOffered() && P) ents += spot('lab', PAD.lab, hole('lb'), 'Old ruin', 'nothing here yet', 'lab painted empty');
     if (!labOpen() && labOffered()) ents += spot('lab', PAD.lab, P ? hole('lb') : '<div class="spotGhost">🔬</div>', 'Build the Lab', `${CONFIG.lab.build.coins} 🪙 · ${CONFIG.lab.build.qty} scrap`, (P ? 'lab painted ' : 'lab ') + (S.coins >= CONFIG.lab.build.coins && countItem(CONFIG.lab.build.item) >= CONFIG.lab.build.qty ? 'ready' : 'empty'));
     if (labOpen() && P) ents += spot('lab', PAD.lab, hole('lb'), "Dr. Zonk's Lab", S.acc && !accLeft() ? '⚗️ ready!' : '🧪 ' + S.sci, 'lab painted' + (S.acc && !accLeft() ? ' ready' : ''));
     else if (labOpen()) ents += spot('lab', PAD.lab, ART.spriteUi('camp_lab') ? `<img class="campImg" src="${ART.spriteUi('camp_lab')}">` : ART.icon('flask'), "Dr. Zonk's Lab", S.acc && !accLeft() ? '⚗️ ready!' : '🧪 ' + S.sci, 'lab' + (S.acc && !accLeft() ? ' ready' : ''));
@@ -5163,7 +5166,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function campTap(kind: string) {
     sfx.tap();
     if (kind === 'rocket') { rocketPanel(); return; }
-    if (kind === 'lab') { if (labOpen()) setView('lab'); else buildLab(); return; }
+    if (kind === 'lab') { if (labOpen()) setView('lab'); else if (labOffered()) buildLab(); else { sfx.no(); toast('An old, broken workshop. Someone clever could fix it up one day…'); } return; }
     if (kind === 'heart') { heartPanel(); return; }
     if (kind === 'next') { nextPlotPanel(); return; }
     if (kind[0] === 'p') producerPanel(+kind.slice(1));

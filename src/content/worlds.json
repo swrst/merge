@@ -335,11 +335,11 @@
         "needs": [
           [
             "rock",
-            2
+            3
           ],
           [
             "log",
-            1
+            2
           ]
         ],
         "coins": 60,
@@ -354,7 +354,7 @@
           ],
           [
             "grandma",
-            "Two crystal rocks and a metal ingot for a border, dear."
+            "Some crystal rocks and a metal ingot for a border, dear."
           ]
         ],
         "text": "A tidy border. Nana is very pleased. Next door, an old snack cart beeps awake."
@@ -366,15 +366,15 @@
         "needs": [
           [
             "jam",
-            1
-          ],
-          [
-            "berries",
             2
           ],
           [
+            "berries",
+            3
+          ],
+          [
             "rock",
-            1
+            3
           ]
         ],
         "coins": 100,
@@ -382,7 +382,7 @@
         "talk": [
           [
             "grandma",
-            "Snacks! One food tube and two snack cubes for the picnic, and a rock to sit on."
+            "Snacks! One food tube and some snack cubes for the picnic, and a rock to sit on."
           ],
           [
             "biscuit",
@@ -402,11 +402,11 @@
           ],
           [
             "geode",
-            1
+            2
           ],
           [
             "berries",
-            1
+            3
           ]
         ],
         "coins": 160,
@@ -434,7 +434,7 @@
         "needs": [
           [
             "scrap",
-            1
+            3
           ],
           [
             "lumber",
@@ -442,7 +442,7 @@
           ],
           [
             "geode",
-            1
+            2
           ]
         ],
         "coins": 240,
@@ -471,11 +471,11 @@
         "needs": [
           [
             "jug",
-            1
+            2
           ],
           [
             "puddle",
-            2
+            3
           ],
           [
             "pie",
@@ -494,7 +494,7 @@
           ],
           [
             "grandma",
-            "A canister, two puddles, and a ration tray for the thirsty gardener."
+            "A canister, some puddles, and a ration tray for the thirsty gardener."
           ]
         ],
         "text": "The garden perks up. On the hill, a little solar farm unfolds its panels."
@@ -506,7 +506,7 @@
         "needs": [
           [
             "hay",
-            2
+            3
           ],
           [
             "pie",
@@ -522,7 +522,7 @@
         "talk": [
           [
             "grandma",
-            "A supper under the stars! Two solar cells for the lights, a ration tray and a water tank."
+            "A supper under the stars! Some solar cells for the lights, a ration tray and a water tank."
           ],
           [
             "bloop",
@@ -542,7 +542,7 @@
           ],
           [
             "bale",
-            1
+            2
           ],
           [
             "gem",
@@ -577,7 +577,7 @@
         "needs": [
           [
             "sprig",
-            2
+            3
           ],
           [
             "gem",
@@ -602,7 +602,7 @@
           ],
           [
             "gigi",
-            "Two glow bulbs for the stall, a gem for the sign and a jelly dome for the opening."
+            "Some glow bulbs for the stall, a gem for the sign and a jelly dome for the opening."
           ]
         ],
         "text": "The market glows! And buzzbots have moved in next door, just for a while."
@@ -614,11 +614,11 @@
         "needs": [
           [
             "honeycomb",
-            1
+            2
           ],
           [
             "bloombud",
-            1
+            2
           ],
           [
             "fountain",
@@ -652,7 +652,7 @@
         "needs": [
           [
             "teabundle",
-            2
+            3
           ],
           [
             "bouquet",
@@ -660,7 +660,7 @@
           ],
           [
             "icecone",
-            1
+            3
           ]
         ],
         "coins": 720,
@@ -673,7 +673,7 @@
         "talk": [
           [
             "timmy",
-            "A soda stand! Two drink pouches, a star lantern for the sign and an ice cream cone for the menu!"
+            "A soda stand! Some drink pouches, a star lantern for the sign and an ice cream cone for the menu!"
           ],
           [
             "pip",
@@ -693,11 +693,11 @@
         "needs": [
           [
             "mushring",
-            1
+            2
           ],
           [
             "teacup",
-            1
+            2
           ],
           [
             "hat",
@@ -735,7 +735,7 @@
         "needs": [
           [
             "nest",
-            1
+            2
           ],
           [
             "garland",
@@ -784,7 +784,7 @@
           ],
           [
             "sockpair",
-            1
+            3
           ]
         ],
         "coins": 960,
@@ -814,7 +814,7 @@
         "needs": [
           [
             "spintop",
-            2
+            3
           ],
           [
             "songbird",
@@ -822,7 +822,7 @@
           ],
           [
             "bobbles",
-            1
+            3
           ]
         ],
         "coins": 1040,
@@ -835,7 +835,7 @@
           ],
           [
             "biscuit",
-            "Two saucer tops, a hoverboard and antenna bobbles for the toy shelf. For the voters of tomorrow."
+            "Some saucer tops, a hoverboard and antenna bobbles for the toy shelf. For the voters of tomorrow."
           ]
         ],
         "text": "The square is full of spinning tops. Mayor Marin pretends to dislike it."
@@ -851,7 +851,7 @@
           ],
           [
             "toyrobot",
-            1
+            2
           ],
           [
             "teaset",
@@ -893,7 +893,7 @@
           ],
           [
             "hourglass",
-            1
+            3
           ]
         ],
         "coins": 1200,
@@ -906,7 +906,7 @@
         "talk": [
           [
             "grandma",
-            "Grow tubes! Two of them, dear. Real food grows in tubes now, apparently."
+            "Grow tubes! Some of them, dear. Real food grows in tubes now, apparently."
           ],
           [
             "timmy",
@@ -922,7 +922,7 @@
         "needs": [
           [
             "alienkid",
-            1
+            2
           ],
           [
             "vegbundle",
@@ -961,7 +961,7 @@
         "needs": [
           [
             "spyglass",
-            1
+            2
           ],
           [
             "puppets",
@@ -969,7 +969,7 @@
           ],
           [
             "handsprout",
-            1
+            3
           ]
         ],
         "coins": 1400,
@@ -1032,7 +1032,7 @@
         "needs": [
           [
             "lilypad",
-            2
+            3
           ],
           [
             "toyshop",
@@ -1040,7 +1040,7 @@
           ],
           [
             "bathbomb",
-            1
+            3
           ]
         ],
         "coins": 1600,
@@ -1057,7 +1057,7 @@
           ],
           [
             "timmy",
-            "Two slime puddles to splash in, a toy starport for the prizes and a bath bomb for afterwards."
+            "Some slime puddles to splash in, a toy starport for the prizes and a bath bomb for afterwards."
           ]
         ],
         "text": "The slime frogs hold a party. The Duchess sends her cargo pod ahead of her."
@@ -1069,11 +1069,11 @@
         "needs": [
           [
             "picnicbasket",
-            1
+            2
           ],
           [
             "lotus",
-            1
+            2
           ],
           [
             "observatory",
@@ -1112,7 +1112,7 @@
         "needs": [
           [
             "dough",
-            2
+            3
           ],
           [
             "pondfrog",
@@ -1120,7 +1120,7 @@
           ],
           [
             "maproll",
-            1
+            3
           ]
         ],
         "coins": 1800,
@@ -1132,7 +1132,7 @@
           ],
           [
             "mumbo",
-            "Two cheese cubes to start, a slime frog to guard them, and a map roll so the customers can find the shop."
+            "Some cheese cubes to start, a slime frog to guard them, and a map roll so the customers can find the shop."
           ]
         ],
         "text": "The cheese shop is open. Moon cheese for everyone!"
@@ -1187,11 +1187,11 @@
         "needs": [
           [
             "claylump",
-            2
+            3
           ],
           [
             "claypot",
-            1
+            2
           ],
           [
             "breadbasket",
@@ -1212,7 +1212,7 @@
           ],
           [
             "gigi",
-            "Two goo lumps, a goo pot and a cheese stack for the potters. There is moon goo by the river."
+            "Some goo lumps, a goo pot and a cheese stack for the potters. There is moon goo by the river."
           ]
         ],
         "text": "Sirra ordered twelve vases. A little weather cloud drifts over, just for a while."
@@ -1224,7 +1224,7 @@
         "needs": [
           [
             "raincloud2",
-            1
+            2
           ],
           [
             "urn",
@@ -1262,7 +1262,7 @@
         "needs": [
           [
             "blobling",
-            1
+            2
           ],
           [
             "claypot",
@@ -1274,7 +1274,7 @@
           ],
           [
             "soapbrush",
-            1
+            2
           ]
         ],
         "coins": 2200,
@@ -1291,7 +1291,7 @@
           ],
           [
             "bloop",
-            "A blobling to play with, two goo pots for its dinner, a slime pool for its bath and soap. Lots of soap."
+            "A blobling to play with, some goo pots for its dinner, a slime pool for its bath and soap. Lots of soap."
           ]
         ],
         "text": "The Blinkies have a pet now. It has their sash."
@@ -1353,7 +1353,7 @@
           ],
           [
             "instaphoto",
-            1
+            3
           ]
         ],
         "coins": 2400,
@@ -1406,7 +1406,7 @@
         "talk": [
           [
             "bloop",
-            "A nose cone, a telescope, two slime jars to cool the engines, and a blob pup. It insists on coming."
+            "A nose cone, a telescope, some slime jars to cool the engines, and a blob pup. It insists on coming."
           ],
           [
             "bloop",

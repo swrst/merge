@@ -367,7 +367,7 @@ class PixiBoard {
     if (c.f) {
       // a sealed tile: the item sits inside, dimmed, waiting for its twin
       s.art = this.sprite('i:' + c.f, i, 0.72);
-      s.art.alpha = 0.6;
+      s.art.alpha = 0.95; (s.art as any).tint = 0x6c7398;   // dark and dull until it is opened
       const p = this.center(i), g = new Graphics(), r = this.cell * 0.15;
       g.circle(0, 0, r).fill({ color: 0x2a3f8f }).stroke({ color: 0xffffff, width: 2 });
       g.roundRect(-r * 0.45, -r * 0.1, r * 0.9, r * 0.7, 2).fill({ color: 0xffe07a });

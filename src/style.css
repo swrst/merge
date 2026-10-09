@@ -2621,6 +2621,14 @@ html body .app .hud .hudShop .uiIc,html body .app .hud .hudShop img,html body .a
 html body .app .hud .chip>span:last-child{font-size:12px!important;overflow:visible}
 html body .app .hud .chip{padding-right:3px!important}
 /* painted space-station frame around the board */
-html.ui-panel_board body .app .stage{border:14px solid transparent!important;border-image:var(--ui-panel_board) 70 fill / 14px stretch!important;border-radius:0!important;padding:2px!important;
-  background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(226,242,255,.9)) padding-box!important;box-shadow:none!important}
-html.ui-panel_board body .app .stage{background:rgba(235,246,255,.55) content-box!important}
+/* the painted frame is laid OVER the whole stage, so it always wraps the board whatever its size */
+html.ui-panel_board body .app .stage{border:0!important;border-image:none!important;border-radius:18px!important;padding:6px!important;
+  background:rgba(235,246,255,.6)!important;box-shadow:none!important;overflow:visible!important}
+html.ui-panel_board body .app .stage::after{content:"";position:absolute;inset:-16px -13px -14px -14px;z-index:6;pointer-events:none;
+  border-style:solid;border-width:26px 18px 23px 20px;border-color:transparent;border-image:var(--ui-panel_board) 146 82 128 97 / 26px 18px 23px 20px stretch}
+html.ui-panel_board body .app .stage{margin:12px 14px 14px!important}
+.labRuin{position:absolute;width:26%;height:14%;transform:translate(-50%,-92%);border-radius:40% 40% 20% 20%;pointer-events:none;z-index:1;
+  -webkit-backdrop-filter:grayscale(1) brightness(.5) blur(2px);backdrop-filter:grayscale(1) brightness(.5) blur(2px);
+  -webkit-mask-image:radial-gradient(closest-side,#000 70%,transparent);mask-image:radial-gradient(closest-side,#000 70%,transparent);
+  display:flex;align-items:center;justify-content:center}
+.labRuin span{font-size:30px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.6))}
