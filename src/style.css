@@ -2721,3 +2721,19 @@ html.ui-galaxy_bg .sceneWrap.camp .sceneBlur{background:var(--ui-galaxy_bg) cent
 /* v54: the frame's rim sits a few px outside the grid, so no tile is ever under it */
 html.ui-panel_board body .app #board::after{left:calc(var(--gx,0px) - 25px);top:calc(var(--gy,0px) - 31px);width:calc(var(--gw,100%) + 49px);height:calc(var(--gh,100%) + 58px)}
 html.ui-panel_board body .app #board::before{left:calc(var(--gx,0px) - 6px);top:calc(var(--gy,0px) - 6px);width:calc(var(--gw,100%) + 12px);height:calc(var(--gh,100%) + 12px)}
+
+/* v55: one clean, even frame round the board — drawn, not a stretched picture,
+   so every side has the same rim and nothing kinks on tall or wide boards */
+html.ui-panel_board body .app #board::after{border:0!important;border-image:none!important;border-radius:22px;
+  left:calc(var(--gx,0px) - 13px);top:calc(var(--gy,0px) - 13px);width:calc(var(--gw,100%) + 26px);height:calc(var(--gh,100%) + 26px);
+  box-shadow:inset 0 0 0 2px #1d6fb8,inset 0 0 0 7px #ffffff,inset 0 0 0 9px #7fd8f7,inset 0 0 0 10px rgba(29,111,184,.55),
+    0 0 0 2px #1d6fb8,0 0 0 4px rgba(255,255,255,.55),0 8px 18px rgba(20,30,80,.35)}
+html.ui-panel_board body .app #board::before{border-radius:14px;background:rgba(232,244,255,.78);
+  left:calc(var(--gx,0px) - 4px);top:calc(var(--gy,0px) - 4px);width:calc(var(--gw,100%) + 8px);height:calc(var(--gh,100%) + 8px)}
+
+.enArt{display:block;width:110px;height:110px;object-fit:contain;margin:-6px auto -4px;filter:drop-shadow(0 6px 10px rgba(0,0,0,.25));animation:enBob 2.4s ease-in-out infinite}
+@keyframes enBob{50%{transform:translateY(-5px) rotate(-2deg)}}
+.rwcChest{width:120px;height:120px;object-fit:contain;filter:drop-shadow(0 6px 10px rgba(0,0,0,.3))}
+/* any icon nobody sized sits inline at text size, never at its painted size */
+:where(img.ic){width:1.3em;height:1.3em;object-fit:contain;vertical-align:-.28em}
+:where(img.uiIc){max-width:100%;object-fit:contain}

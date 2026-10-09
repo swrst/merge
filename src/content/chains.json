@@ -1938,6 +1938,186 @@
       "Fluffy, please!"
     ]
   },
+  "pizza": {
+    "name": "Space Pizzeria",
+    "world": "earth",
+    "unlock": 8,
+    "items": [
+      "doughstar",
+      "pizzaslice",
+      "moonpizza",
+      "pizzaboxes",
+      "pizzasaucer",
+      "pizzeria"
+    ],
+    "asks": [
+      "Pizza night!",
+      "Extra crater cheese, please.",
+      "Delivery to the hill!"
+    ]
+  },
+  "aquarium": {
+    "name": "Glow Aquarium",
+    "world": "earth",
+    "unlock": 10,
+    "items": [
+      "fishegg",
+      "guppy3",
+      "pufferstar",
+      "jellylamp",
+      "bubblefish",
+      "aquadome"
+    ],
+    "asks": [
+      "A fish for my tank.",
+      "It glows! I want it.",
+      "The guppies need a friend."
+    ]
+  },
+  "skyfort": {
+    "name": "Sky Fort",
+    "world": "earth",
+    "unlock": 12,
+    "items": [
+      "starsign",
+      "ropeladder",
+      "boxhut",
+      "scopetreehouse",
+      "stiltfort",
+      "cloudfort"
+    ],
+    "asks": [
+      "Fort building day!",
+      "No grown-ups allowed.",
+      "A lookout for the kids."
+    ]
+  },
+  "artclub": {
+    "name": "Art Club",
+    "world": "earth",
+    "unlock": 15,
+    "items": [
+      "paintdrop",
+      "glowbrush",
+      "planetpalette",
+      "rocketeasel",
+      "aliensculpt",
+      "artdome"
+    ],
+    "asks": [
+      "Art class starts now!",
+      "Paint me something cosmic.",
+      "For the gallery wall."
+    ]
+  },
+  "dinos": {
+    "name": "Space Dinos",
+    "world": "earth",
+    "unlock": 17,
+    "items": [
+      "fossilchip",
+      "dinoegg",
+      "babydino",
+      "crystaldino",
+      "longneck",
+      "dinopark"
+    ],
+    "asks": [
+      "I found a fossil!",
+      "A dino for the park.",
+      "It hatched! Now what?"
+    ]
+  },
+  "arcade": {
+    "name": "Arcade",
+    "world": "earth",
+    "unlock": 19,
+    "items": [
+      "arcadetoken",
+      "joystick",
+      "cartridge",
+      "handheld",
+      "arcadecab",
+      "arcadehall"
+    ],
+    "asks": [
+      "High score time!",
+      "One more game. Just one.",
+      "Tokens, please!"
+    ]
+  },
+  "playground": {
+    "name": "Bouncy Playground",
+    "world": "earth",
+    "unlock": 13,
+    "items": [
+      "bounceball",
+      "bigspring",
+      "ringswing",
+      "twistslide",
+      "bouncycastle",
+      "playdome"
+    ],
+    "asks": [
+      "Playtime!",
+      "Higher on the swing!",
+      "The kids are bouncing off the walls."
+    ]
+  },
+  "library": {
+    "name": "Star Library",
+    "world": "earth",
+    "unlock": 16,
+    "items": [
+      "starpage",
+      "planetbook",
+      "bookstack",
+      "floattome",
+      "robobookshelf",
+      "librarytower"
+    ],
+    "asks": [
+      "Quiet, please. Story time.",
+      "A book about the Moon.",
+      "Overdue since 1987."
+    ]
+  },
+  "treasure": {
+    "name": "Treasure Hunt",
+    "world": "earth",
+    "unlock": 11,
+    "items": [
+      "mappiece",
+      "starshovel",
+      "starkey",
+      "woodchest",
+      "gemchest",
+      "treasureship"
+    ],
+    "asks": [
+      "X marks the spot!",
+      "Treasure hunt today!",
+      "Shiny things only."
+    ]
+  },
+  "hotsprings": {
+    "name": "Hot Springs",
+    "world": "earth",
+    "unlock": 20,
+    "items": [
+      "warmpebble",
+      "startowel",
+      "steambucket",
+      "stonepool",
+      "springfall",
+      "spalodge"
+    ],
+    "asks": [
+      "My tentacles are sore.",
+      "Spa day!",
+      "Warm water, cold drink."
+    ]
+  },
   "mail": {
     "name": "Moon Mail",
     "world": "luna",

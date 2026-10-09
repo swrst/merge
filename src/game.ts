@@ -3516,7 +3516,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (c.r.spin) one(ART.uiIcon('ic_spin', '🎡'), '+' + c.r.spin + ' spin');
     if (c.r.boost) one(rewardIcon({ boost: c.r.boost }), (SHOP.boosters.find((x: any) => x.id === c.r.boost) || { name: c.r.boost }).name);
     el.innerHTML = `<div class="rwcRays"></div><div class="rwcCard"><div class="rwcRib">${c.title}</div>
-      ${c.who ? `<div class="rwcWho">${c.who.startsWith('<') ? c.who : ART.char(c.who)}</div>` : ''}
+      ${c.who ? `<div class="rwcWho">${c.who.startsWith('<') ? c.who : ART.char(c.who)}</div>` : ART.spriteUi('chest_opening') ? `<div class="rwcWho"><img class="rwcChest" src="${ART.spriteUi('chest_opening')}" alt=""></div>` : ''}
       <div class="rwcLine">${c.line}</div><div class="rwcRow">${parts.join('')}</div>
       <button class="big" id="rwcGo">Collect</button></div>`;
     el.className = 'open';
@@ -4367,7 +4367,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function energyPop() {
     const per = regenMs(), full = S.energy >= maxEnergy();
     const next = full ? 0 : Math.max(0, per - (Date.now() - (S.eAt || Date.now())));
-    pop('⚡ Energy', `<div class="enBig">${ART.icon('energy')}<b>${S.energy}</b><i>/ ${maxEnergy()}</i></div>
+    pop('⚡ Energy', `${ART.spriteUi('energy_refill') ? `<img class="enArt" src="${ART.spriteUi('energy_refill')}" alt="">` : ''}<div class="enBig">${ART.icon('energy')}<b>${S.energy}</b><i>/ ${maxEnergy()}</i></div>
       <div class="noteLine" style="margin-top:2px">${full ? 'Full! Go merge something.' : `+1 every ${Math.round(per / 60000 * 10) / 10} min · next in <b>${mmss(next)}</b>`}</div>
       <div class="enRow"><span class="enIc">${ART.icon('gem')}</span><div><b>Big refill</b><i>+${CFG.gems.refill.energy} energy</i></div>
         <button class="buyBtn gem" id="enGem">💎 ${CFG.gems.refill.gems}</button></div>

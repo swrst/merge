@@ -161,7 +161,8 @@ await page.evaluate(() => { const s = window.__game.state(); s.tipsOff = 1; wind
 await page.waitForFunction(() => document.querySelector('#ribbon.show'), null, { timeout: 5000 }).catch(async () => console.log('   state:', await page.evaluate(() => ({ view: document.querySelector('.screen.open')?.id, pop: document.querySelector('#pop.open') ? 1 : 0, modal: document.querySelector('#modal.open') ? 1 : 0, talk: document.querySelector('#talk.open') ? 1 : 0, rwc: document.querySelector('#rwc')?.className, rb: document.querySelector('#ribbon')?.className, claims: window.__claims() }))));
 must(await page.locator('#ribbon.show').count() === 1, 'a new claimable slides in as a ribbon');
 must(await page.locator('#dotWorld').isVisible(), 'and the galaxy button shows a badge');
-const rbText = (await page.textContent('#ribbon')).trim(); await page.locator('#ribbon .rbGo').click(); await page.waitForTimeout(700);
+for (let k = 0; k < 12 && await page.locator('#talk.open').count(); k++) { await page.click('#talk'); await page.waitForTimeout(250); }
+const rbText = (await page.textContent('#ribbon')).trim(); await page.evaluate(() => { window.__game.v9.closePop(); document.querySelector('#ribbon .rbGo').click(); }); await page.waitForTimeout(700);
 must(await page.locator('#pop.open, .screen.open, #modal.open').count() >= 1, 'tapping the ribbon goes straight there (' + rbText + ')');
 await page.evaluate(() => { const s = window.__game.state(); document.querySelectorAll('#modal,#talk').forEach(e => e.classList.remove('open')); s.proj.earth = window.__prevProj; s.world = window.__prevWorld; window.__game.hud(); });
 await page.waitForTimeout(3500); await shoo(); await page.evaluate(() => { document.querySelectorAll('#modal,#talk').forEach(e => e.classList.remove('open')); window.__game.v9.closePop(); }); await shoo();
@@ -173,20 +174,24 @@ console.log('\n12. Power x2 and the Moon Pup');
 const bx = await page.evaluate(() => {
   const g = window.__game, s = g.state(), b = s.boards[s.world];
   for (let i = 0; i < b.length; i++) if (b[i] && !b[i].b) b[i] = null;
-  b[10] = { p: 'tree' }; s.lvl = 9; s.boost2 = 1; s.energy = 20; window.__board.sync(b); g.hud();
+  b[10] = { p: 'tree' }; s.lvl = 9; s.boost2 = 1; s.pinfo = Object.assign(s.pinfo || {}, { tree: 1 }); s.energy = 20; window.__board.sync(b); g.hud();
   return 10;
 });
 await page.waitForTimeout(600);
+for (let k = 0; k < 12 && await page.locator('#talk.open').count(); k++) { await page.click('#talk'); await page.waitForTimeout(250); }
+await page.evaluate(() => { const s = window.__game.state(); s.energy = 20; window.__game.hud(); });
 { const q = await pt(bx); await page.mouse.click(q.x, q.y); await page.waitForTimeout(700); }
 const after = await page.evaluate(() => { const s = window.__game.state(); return { e: s.energy, items: s.boards[s.world].filter(c => c && c.id).map(c => window.__game.items[c.id].tier) }; });
 must(after.e <= 18 && after.items.length === 1 && after.items[0] >= 2, `⚡×2 tap costs double and drops a step higher (energy ${after.e}, tier ${after.items[0]})`);
 await page.evaluate(() => { const s = window.__game.state(); s.boost2 = 0; s.pup = { at: 0, n: 4, form: 'baby', lv: 1, xp: 0, food: Date.now() }; window.__game.hud(); });
 await page.waitForTimeout(1200);
-await page.locator('.qChip.pup').click({ force: true }); await page.waitForTimeout(900);
+for (let k = 0; k < 12 && await page.locator('#talk.open').count(); k++) { await page.click('#talk'); await page.waitForTimeout(250); }
+await page.evaluate(() => { window.__game.v9.closePop(); document.querySelector('.qChip.pup').click(); }); await page.waitForTimeout(900);
 must(await page.locator('#rwc.open').count() === 1, 'a ready pet brings a reward card');
 await page.locator('#rwcGo').click(); await page.waitForTimeout(700);
 must(await page.evaluate(() => window.__game.state().pup.n) === 5, 'and collecting it counts');
-await page.locator('.qChip.pup').click({ force: true }); await page.waitForTimeout(900);
+for (let k = 0; k < 12 && await page.locator('#talk.open').count(); k++) { await page.click('#talk'); await page.waitForTimeout(250); }
+await page.evaluate(() => { window.__game.v9.closePop(); document.querySelector('.qChip.pup').click(); }); await page.waitForTimeout(900);
 must(await page.locator('#pop.open .pupStage img').count() === 1 && await page.evaluate(() => /pet_baby/.test(document.querySelector('#pop.open .pupStage img').src) || document.querySelector('#pop.open .pupStage img').src.startsWith('data:')), 'its panel shows the painted alien');
 await page.evaluate(() => window.__game.v9.closePop()); await page.waitForTimeout(300);
 

@@ -166,7 +166,7 @@ class PixiBoard {
     add('coin', ART.iconSvg('coin'), ART.spriteUi('icon_coin') || undefined);
     // shared tiles, plus each world's own set when it has been painted (tile_light_luna …)
     const tiles = ['tile_light', 'tile_dark', 'tile_locked'];
-    [...tiles, 'bubble_film', 'meteor', 'ic_star_tag', ...Object.keys(THEME).flatMap(w => tiles.map(t => t + '_' + w))].forEach(k => {
+    [...tiles, 'bubble_film', 'seal_bubble', 'seal_crack', 'meteor', 'ic_star_tag', ...Object.keys(THEME).flatMap(w => tiles.map(t => t + '_' + w))].forEach(k => {
       const url = ART.spriteUi(k); if (url) add('ui:' + k, '', url);
     });
     await Promise.all(jobs);
@@ -384,6 +384,12 @@ class PixiBoard {
       s.art = this.sprite('i:' + c.f, i, 0.6);
       s.art.alpha = 0.9; (s.art as any).tint = 0xaab4d8;   // dark and dull until it is opened
       const p = this.center(i), g = new Graphics(), r = this.cell * 0.15;
+      if (this.tex['ui:seal_bubble']) {
+        // painted glass bubble over the tile (it carries its own little padlock)
+        const b = new Sprite(this.tex['ui:seal_bubble']); b.anchor.set(0.5); b.width = b.height = this.cell * 1.0;
+        b.position.set(p.x, p.y); this.lItem.addChild(b); (s as any).seal = b; s.timer = undefined;
+        return;
+      }
       g.circle(0, 0, r).fill({ color: 0x2a3f8f }).stroke({ color: 0xffffff, width: 2 });
       g.roundRect(-r * 0.45, -r * 0.1, r * 0.9, r * 0.7, 2).fill({ color: 0xffe07a });
       g.arc(0, -r * 0.1, r * 0.32, Math.PI, 0).stroke({ color: 0xffe07a, width: 2 });
@@ -502,13 +508,13 @@ class PixiBoard {
     const s = this.slots[i] as any;
     if (s.pending) { s.pending.kill(); s.pending = undefined; }
     if (s.idle) { s.idle.kill(); s.idle = undefined; }
-    [s.art, s.timer, s.badge, s.bar, s.cost, s.ring, s.readyRing, s.aura, s.spin, s.clock, s.unseal].forEach((o: any) => {
+    [s.art, s.timer, s.badge, s.bar, s.cost, s.ring, s.readyRing, s.aura, s.spin, s.clock, s.unseal, s.seal].forEach((o: any) => {
       if (o) { gsap.killTweensOf(o); gsap.killTweensOf(o.scale); o.destroy({ children: true }); }
     });
     s.art = s.timer = undefined; s.badge = undefined; s.ring = undefined;
     s.bar = undefined; s.barW = undefined; s.barFrac = undefined;
     s.aura = undefined; s.spin = undefined; s.cost = undefined; s.clock = undefined;
-    s.readyRing = null; s.hinting = false; s.unseal = null;
+    s.readyRing = null; s.hinting = false; s.unseal = null; s.seal = null;
   }
   /** Re-seat everything on tile `i` after the grid has moved or resized.
    *  Rings, badges and running tweens all hold coordinates from the layout they
@@ -532,6 +538,8 @@ class PixiBoard {
     if (s.timer && s.key.startsWith('b')) {
       s.timer.style.fontSize = this.cell * 0.22;
       s.timer.position.set(p.x, p.y);
+    } else if ((s as any).seal && s.key.startsWith('f')) {
+      (s as any).seal.position.set(p.x, p.y); (s as any).seal.width = (s as any).seal.height = this.cell;
     } else if (s.timer && s.key.startsWith('f')) {
       s.timer.position.set(p.x + this.cell * 0.3, p.y + this.cell * 0.3);
     } else if (s.timer) {
@@ -893,6 +901,7 @@ class PixiBoard {
       g.position.set(p.x, p.y); this.lFx.addChild(g); s.unseal = g;
       gsap.to(g, { alpha: 0.35, duration: 0.55, repeat: -1, yoyo: true, ease: 'sine.inOut' });
       s.art.tint = 0xffffff; s.art.alpha = 1;
+      if (s.seal && this.tex['ui:seal_crack']) s.seal.texture = this.tex['ui:seal_crack'];
       if (s.idle) s.idle.kill();
       const sc = this.spriteScale(i);
       s.idle = gsap.to(s.art.scale, { x: sc * 1.12, y: sc * 1.12, duration: 0.45, repeat: -1, yoyo: true, ease: 'sine.inOut' });
@@ -901,6 +910,7 @@ class PixiBoard {
     } else if (!on && s.unseal) {
       gsap.killTweensOf(s.unseal); s.unseal.destroy(); s.unseal = null;
       s.art.tint = 0xaab4d8; s.art.alpha = 0.9;
+      if (s.seal && this.tex['ui:seal_bubble']) s.seal.texture = this.tex['ui:seal_bubble'];
       if (s.idle) s.idle.kill(); const sc = this.spriteScale(i); s.art.scale.set(sc, sc); this.idleBob(i);
     }
   }

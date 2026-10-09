@@ -43,6 +43,7 @@
       "dew",
       "lostsock",
       "lostsock",
+      "fishegg",
       "puddle"
     ],
     "mode": "energy",
@@ -117,7 +118,8 @@
       "fibre",
       "fibre",
       "comb3",
-      "comb3",
+      "paintdrop",
+      "paintdrop",
       "thread"
     ],
     "mode": "energy",
@@ -128,9 +130,10 @@
     "art": "nestbox",
     "drops": [
       "down",
-      "down",
       "mapscrap",
       "mapscrap",
+      "starpage",
+      "starpage",
       "plume"
     ],
     "mode": "energy",
@@ -160,6 +163,8 @@
     "drops": [
       "grub",
       "grub",
+      "fossilchip",
+      "fossilchip",
       "chrysalis"
     ],
     "spec": {
@@ -175,9 +180,10 @@
     "art": "vegpatch",
     "drops": [
       "vegseed",
-      "vegseed",
       "sleepyseed",
       "sleepyseed",
+      "mappiece",
+      "mappiece",
       "seedling"
     ],
     "spec": {
@@ -267,9 +273,10 @@
     "art": "teabush",
     "drops": [
       "tealeaf",
-      "tealeaf",
       "icescoop",
       "icescoop",
+      "warmpebble",
+      "warmpebble",
       "teabundle"
     ],
     "mode": "battery",
@@ -300,9 +307,10 @@
     "art": "toychest",
     "drops": [
       "block",
-      "block",
       "craterball",
       "craterball",
+      "bounceball",
+      "bounceball",
       "spintop"
     ],
     "spec": {
@@ -319,9 +327,10 @@
     "art": "picnichamper",
     "drops": [
       "crumb",
-      "crumb",
+      "doughstar",
       "postcard",
       "postcard",
+      "doughstar",
       "sandwich"
     ],
     "spec": {
@@ -356,9 +365,9 @@
     "art": "buskbot",
     "drops": [
       "notepebble",
-      "notepebble",
       "filmroll",
-      "filmroll",
+      "arcadetoken",
+      "arcadetoken",
       "whistle"
     ],
     "spec": {
@@ -375,7 +384,8 @@
     "drops": [
       "hexbolt",
       "hexbolt",
-      "hexbolt",
+      "starsign",
+      "starsign",
       "gear"
     ],
     "spec": {
