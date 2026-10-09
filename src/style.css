@@ -2710,3 +2710,10 @@ html body .app .pop.holo .lxSpares{grid-template-columns:repeat(4,1fr)!important
 html body .app .pop.holo .lxSp{width:auto!important;min-width:0}
 html body .app .pop.holo .labIntro{font-size:12.5px;margin-bottom:10px;background:rgba(255,255,255,.7);border-radius:12px;padding:6px 10px;color:var(--sp-ink)}
 html body .app .pop.holo .popBox{max-width:350px!important}
+
+/* v53: a veil over the painted lab until it is built, and a real sky above a short camp */
+.labHide{position:absolute;width:34%;aspect-ratio:1.25;transform:translate(-50%,-78%);pointer-events:none;z-index:1;
+  -webkit-backdrop-filter:blur(9px) saturate(.35) brightness(.8);backdrop-filter:blur(9px) saturate(.35) brightness(.8);
+  -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 55%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 55%,transparent 100%)}
+.labRuin.art{z-index:2}
+html.ui-galaxy_bg .sceneWrap.camp .sceneBlur{background:var(--ui-galaxy_bg) center top/cover no-repeat;filter:brightness(.9)}

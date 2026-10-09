@@ -1244,7 +1244,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     S.pinfo = S.pinfo || {};
     if (!S.pinfo[c.p]) {
       S.pinfo[c.p] = 1; save();
-      if (S.tut && !c.tmp && p.mode !== 'once' && c.p !== 'wreck') { sfx.tap(); producerPanel(i); return; }
+      if (S.tut && !c.tmp && p.mode !== 'once' && c.p !== 'wreck') { sfx.tap(); board.bump(i); showProdInfo(i); return; }
     }
     const spot = nearFree(i);
     if (spot < 0) {
@@ -5022,6 +5022,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       S.met ? (allParts() ? 'Ready · ⛽' + S.fuel + '/' + CONFIG.rocket.fuelToLaunch : built + '/4 parts') : 'nothing here yet',
       'ship' + (S.met && allParts() && S.fuel >= CONFIG.rocket.fuelToLaunch ? ' ready' : ''));
     // no lab yet: its corner of the painting is a grey, boarded-up ruin
+    // the painting has a finished lab in it: veil that corner first, so only the ruin reads
+    if (!labOpen() && P && ART.spriteUi('camp_lab_ruin')) ents += `<div class="labHide" data-fx="${PAD.lab[0]}" data-fy="${PAD.lab[1]}"></div>`;
     if (!labOpen() && P) ents += ART.spriteUi('camp_lab_ruin')
       ? `<div class="labRuin art" data-fx="${PAD.lab[0]}" data-fy="${PAD.lab[1]}"><img src="${ART.spriteUi('camp_lab_ruin')}" alt=""></div>`
       : `<div class="labRuin" data-fx="${PAD.lab[0]}" data-fy="${PAD.lab[1]}"><span>🚧</span></div>`;
@@ -5650,7 +5652,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const c = B()[i]; if (!c || !c.p) return;
     const p = PRODS[c.p];
     $('#infoBar').classList.add('on');
-    $('#infoTxt').innerHTML = `<b>${p.name} <small>lv ${plv(c)}</small> <span class="infoQ">i</span></b><i>tap it to make things · tap here for info</i>`;
+    $('#infoTxt').innerHTML = `<b>${p.name} <small>lv ${plv(c)}</small> <span class="infoQ">i</span></b><i>tap again to use it · ⓘ more info</i>`;
     ($('#infoTxt') as HTMLElement).onclick = () => { sfx.tap(); producerPanel(i); };
     ['#btnStash', '#btnShow', '#btnRecycle'].forEach(k => { const e = $(k) as HTMLElement; if (e) e.style.display = 'none'; });
     $('#btnSell').innerHTML = 'Info';
