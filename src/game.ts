@@ -520,9 +520,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
 
   function renderHUD() {
-    $('#coins').textContent = S.coins;
-    $('#gems').textContent = S.gems || 0;
-    $('#energy').textContent = S.energy + '/' + maxEnergy();
+    $('#coins').textContent = kN(S.coins);
+    $('#gems').textContent = kN(S.gems || 0);
+    $('#energy').textContent = String(S.energy);
     $('#lvl').textContent = S.lvl;
     const av = $('#avatar');
     if (av && !av.dataset.on && document.documentElement.classList.contains('has-player')) { av.innerHTML = ART.char('player'); av.dataset.on = '1'; }
@@ -560,7 +560,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     add('disc', 'Book', (S.disc || []).length, ART.uiIcon('badge_new', '🆕'), 'New discovery in your Album', () => setView('book'));
     add('shop', 'Shop', shopOpen() && giftReady() ? 1 : 0, ART.uiIcon('cl_gift', '🎁'), 'Free gift in the Star Bazaar', () => setView('shop'));
     // a restocked shelf is news, not a present: a badge, never a "free gift" banner
-    add('shopnew', 'Shop', shopOpen() && !giftReady() && S.shop.at > (S.shop.seenAt || 0) ? 1 : 0, ART.uiIcon('ic_cart', '🛒'), 'New stock in the Star Bazaar', () => setView('shop'), true);
+    add('shopnew', 'Shop', shopOpen() && !giftReady() && S.shop.at > (S.shop.seenAt || 0) ? 1 : 0, ART.uiIcon('ic_shop', '🛒'), 'New stock in the Star Bazaar', () => setView('shop'), true);
     add('labOffer', 'Shop', labOffered() && !S.lab.built ? 1 : 0, ART.uiIcon('ic_microscope', '🔬'), 'The Lab can be built', () => setView('shop'));
     const e = evNow();
     add('event', 'Fun', e && S.ev.join !== (e as any).key ? 1 : 0, ART.uiIcon('ic_event', '🎪'), 'An event has started!', () => setView('fun'));
@@ -590,6 +590,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     for (const [tab, n] of Object.entries(per)) {
       const d = document.getElementById('dot' + tab); if (!d) continue;
       d.style.display = n ? '' : 'none';
+      if (tab === 'Shop') { const t = document.getElementById('tabShop'); if (t) t.classList.toggle('hot', !!n); }
       d.textContent = n > 1 ? (n > 9 ? '9+' : String(n)) : '';
       if (n > (badgeN[tab] || 0) && claimSeen) { d.classList.remove('bump'); void d.offsetWidth; d.classList.add('bump'); }
       badgeN[tab] = n;
@@ -688,7 +689,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      early (chapter 4) but his ship only turns up after Stargazing Night, when
      everyone has seen where home is — so rocket pieces stay out of the game
      until then. A save that already started building keeps going. */
-  const ROCKET_AFTER = 15;
+  const ROCKET_AFTER = 19;
   const rocketTime = () => !!S.met && (S.world !== 'earth' || ((S.proj && S.proj.earth) || 0) >= ROCKET_AFTER
     || PART_KEYS.some(k => S.parts[k]) || !!S.wreck);
   const building = () => rocketTime() && !allParts();
@@ -1981,25 +1982,26 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      rotating task board, the relic perks and the star favours. */
   function renderRocket() {
     const host = $('#rocketBody'); if (!host) return;
-    const ar = achReady();
-    const achHTML = `<button class="card achCard${ar ? ' ready' : ''}" id="openAch"><span class="achIc">${ART.uiIcon('ic_trophy', '🏆')}</span>
-          <span><b>Achievements</b><i>${ar ? ar + ' ready to claim!' : 'Long-term goals with big rewards'}</i></span>${ar ? '<span class="claimPill">CLAIM</span>' : '<span class="qGo">›</span>'}</button>`;
-    const dt = dailyOk(), chestReady = CFG.daily2.marks.some((m: number, k: number) => !dt.got[k] && dt.pts >= m);
-    // whatever can be claimed comes first, so it is the first thing you see
-    host.innerHTML = (ar ? achHTML : '') + (chestReady ? dailyCard() : '') + projectCard()
-      + (ar ? '' : achHTML)
-      + (chestReady ? '' : dailyCard())
-      + `<div class="card"><div class="cardTitle">${ART.uiIcon('sec_quest', '🎯')} Getting started</div>
-        <div class="noteLine" style="margin-top:0">The first steps with Zib and Dr. Zonk: ${MISSIONS.length - questsLeft()}/${MISSIONS.length} done.</div>
-        <button class="big soft" id="openQuests">Open the quest list</button></div>`
-      + vaultCard();
+    const ar = achReady(), ql = questsLeft();
+    const tile = (id: string, ic: string, emo: string, t: string, sub: string, hot: boolean) =>
+      `<button class="mlTile${hot ? ' hot' : ''}" id="${id}"><span class="mlIc">${ART.uiIcon(ic, emo)}</span><b>${t}</b><i>${sub}</i>${hot ? '<em class="dot"></em>' : ''}</button>`;
+    host.innerHTML = projectCard()
+      + `<div class="mlTiles">
+          ${tile('openAch', 'ic_trophy', '🏆', 'Medals', ar ? ar + ' to claim!' : 'long-term goals', !!ar)}
+          ${tile('openQuests', 'sec_quest', '🎯', 'Cadet Training', ql ? (MISSIONS.length - ql) + '/' + MISSIONS.length + ' done' : 'all done ✓', false)}
+          ${S.seen.relic1 || labOpen() ? tile('openVault', 'sec_vault', '🏛️', 'Relic Vault', 'perks forever', false) : ''}
+        </div>`
+      + dailyCard();
     host.querySelectorAll('[data-dchest]').forEach((b: any) => b.onclick = () => claimDaily(+b.dataset.dchest));
-    host.querySelectorAll('[data-vault]').forEach((b: any) => b.onclick = () => vaultBuy(b.dataset.vault));
     host.querySelectorAll('.pNeed[data-need]').forEach((n: any) => n.onclick = () => chainPanel(n.dataset.need));
     const bp = $('#btnProject'); if (bp) bp.onclick = buildProject;
     const bt = $('#btnTalk'); if (bt) bt.onclick = () => chapterIntro(true);
     const q = $('#openQuests'); if (q) q.onclick = questPanel;
     const oa = $('#openAch'); if (oa) oa.onclick = achPop;
+    const ov = $('#openVault'); if (ov) ov.onclick = () => {
+      pop('🏛️ Relic Vault', vaultCard(), 'vault');
+      $('#popBody').querySelectorAll('[data-vault]').forEach((b: any) => b.onclick = () => { vaultBuy(b.dataset.vault); ov.click(); });
+    };
   }
 
   /* --------------------------------------------------------------- quests
@@ -2871,8 +2873,35 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           : ''), 'Wonderful');
       setAfter(() => chapterIntro());
     };
-    reward();
+    chapterFanfare(p, () => reward());
     paintBoard(); renderRocket(); renderHUD(); renderOrders(); save();
+  }
+  /* Finishing a chapter is a moment: the things you brought fly into a glowing
+     ring around whoever asked, a COMPLETE stamp lands, the journey bar ticks
+     one step on and the next chapter's name slides in. Tap to skip. */
+  function chapterFanfare(p: any, done: () => void) {
+    let el = document.getElementById('chFan');
+    if (!el) { el = document.createElement('div'); el.id = 'chFan'; $('#app').appendChild(el); }
+    const n = projDone(), list = projList(), next = curProject();
+    const items = p.needs.map(([id]: [string, number], k: number, arr: any[]) => {
+      const a = (Math.PI * 2 * k) / arr.length - Math.PI / 2;
+      return `<span class="cfIt" style="--dx:${Math.round(Math.cos(a) * 130)}px;--dy:${Math.round(Math.sin(a) * 130)}px;animation-delay:${0.15 + k * 0.12}s">${ART.item(id)}</span>`;
+    }).join('');
+    const strip = `<div class="mlJourney cfStrip">${list.map((_: any, k: number) => `<i class="${k < n - 1 ? 'done' : k === n - 1 ? 'done cfJust' : k === n ? 'now' : ''}"></i>`).join('')}</div>`;
+    el.innerHTML = `<div class="cfRays"></div>
+      <div class="cfStage"><div class="cfRing"></div><span class="cfFace">${ART.char(p.who)}</span>${items}</div>
+      <div class="cfTxt"><i>Chapter ${n}</i><b>${p.name}</b></div>
+      <div class="cfStamp">COMPLETE!</div>
+      ${strip}
+      ${next ? `<div class="cfNext">Next up · <b>Chapter ${n + 1}: ${next.name}</b></div>` : `<div class="cfNext"><b>${W().name} is awake!</b></div>`}`;
+    el.className = 'open'; sfx.whoosh(); audio.duck(3, 0.25);
+    setTimeout(() => { sfx.popHi(); }, 500);
+    setTimeout(() => { sfx.big(); haptic('heavy'); burst(el!.querySelector('.cfStage') as HTMLElement, 36); }, 1100);
+    setTimeout(() => sfx.discover(), 1700);
+    let closed = false;
+    const finish = () => { if (closed) return; closed = true; el!.className = ''; done(); };
+    const tmr = setTimeout(finish, 3600);
+    el.onclick = () => { clearTimeout(tmr); finish(); };
   }
   /** the chapter card from the little widget: what it needs, nothing else */
   function chapterSheet() {
@@ -2897,7 +2926,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         <span class="pNeed${cHave() >= cNeed(p) ? ' ok' : ''}">${ART.uiIcon('ic_scroll', '📜')}<b>${Math.min(cHave(), cNeed(p))}/${cNeed(p)}</b></span></div>
       ${ups ? `<div class="upHead">Max these out first</div>${ups}` : ''}
       ${chapterPrize(p)}
-      <button class="big${ok ? '' : ' off'}" id="btnProject">${ok ? 'BUILD IT!' : 'Not yet'}</button>`, 'chapter');
+      <button class="big${ok ? '' : ' off'}" id="btnProject">${ok ? 'COMPLETE THE CHAPTER ✨' : 'Not yet'}</button>`, 'chapter');
     const host = $('#popBody');
     host.querySelectorAll('.pNeed[data-need]').forEach((n: any) => n.onclick = () => { closePop(); chainPanel(n.dataset.need); });
     host.querySelectorAll('[data-upg]').forEach((b: any) => b.onclick = () => { upgradeProducer(+b.dataset.upg); chapterSheet(); });
@@ -2926,27 +2955,28 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const list = projList(), done = projDone(), cur = curProject();
     if (!list.length) return '';
     const coin = ART.icon('coin');
-    const need = (p: any) => p.needs.map(([id, q]: [string, number]) => {
+    const strip = `<div class="mlJourney">${list.map((p: any, k: number) =>
+      `<i class="${k < done ? 'done' : k === done ? 'now' : ''}${p.launch ? ' launch' : ''}" title="${p.name}"></i>`).join('')}</div>`;
+    const head = `<div class="mlHead"><b>${W().name}</b><span>${done}/${list.length} chapters</span></div>${strip}`;
+    if (!cur) return `<div class="card mlMission">${head}<div class="noteLine">Every chapter here is done. This world is awake! ✨</div></div>`;
+    const p = cur, ok = projReady(p);
+    const need = p.needs.map(([id, q]: [string, number]) => {
       const have = Math.min(q, countItem(id));
       return `<span class="pNeed${have >= q ? ' ok' : ''}" data-need="${id}">${ART.item(id)}<b>${have}/${q}</b></span>`;
     }).join('');
-    const rows = list.map((p: any, k: number) => {
-      if (k < done) return `<div class="pRow done"><span class="pTick">✓</span><b>${p.name}</b></div>`;
-      if (k > done) return k === done + 1 ? `<div class="pRow next"><span class="pTick">🔒</span><b>${p.name}</b>${p.launch ? '<i>🚀 opens the next world</i>' : ''}</div>` : '';
-      const ok = projReady(p);
-      return `<div class="pRow cur"><div class="pHead"><span class="pFace">${ART.char(p.who)}</span>
-          <div style="flex:1"><b>Chapter ${k + 1}: ${p.name}</b>${p.launch ? '<i>🚀 opens the next world</i>' : ''}</div>
-          ${p.talk ? '<button class="talkBtn" id="btnTalk" title="Replay the story">💬</button>' : ''}</div>
-          <div class="pNeeds">${need(p)}<span class="pNeed${S.coins >= p.coins ? ' ok' : ''}">${coin}<b>${p.coins}</b></span>
-            ${p.rocket ? `<span class="pNeed${allParts() ? ' ok' : ''}">🚀<b>${PART_KEYS.filter(k => S.parts[k]).length}/4</b></span>` : ''}
-            <span class="pNeed${cHave() >= cNeed(p) ? ' ok' : ''}" title="Contracts filled since the last chapter">${ART.uiIcon('ic_scroll', '📜')}<b>${Math.min(cHave(), cNeed(p))}/${cNeed(p)}</b></span></div>
-          ${chapterPrize(p)}
-          <button class="big${ok ? '' : ' off'}" id="btnProject">${ok ? 'BUILD IT!' : 'Collect the items'}</button></div>`;
-    }).join('');
-    return `<div class="card proj"><div class="cardTitle">${ART.uiIcon('sec_build', '🏗️')} Restore ${W().name}<span class="pCount">${done}/${list.length}</span></div>
-      <div class="catBar"><i style="width:${Math.round(done / list.length * 100)}%"></i></div>
-      ${cur ? '' : '<div class="noteLine">Every project here is done. This world is fully restored!</div>'}${rows}</div>`;
+    const next = list[done + 1];
+    return `<div class="card mlMission">${head}
+      <div class="mlNow"><span class="mlFace">${ART.char(p.who)}</span>
+        <div class="mlTitle"><i>Chapter ${done + 1}</i><b>${p.name}</b>${p.launch ? '<em>🚀 opens the next world</em>' : ''}</div>
+        ${p.talk ? '<button class="talkBtn" id="btnTalk" title="Replay the story">💬</button>' : ''}</div>
+      <div class="pNeeds">${need}${p.coins ? `<span class="pNeed${S.coins >= p.coins ? ' ok' : ''}">${coin}<b>${kN(p.coins)}</b></span>` : ''}
+        ${p.rocket ? `<span class="pNeed${allParts() ? ' ok' : ''}">🚀<b>${PART_KEYS.filter(k => S.parts[k]).length}/4</b></span>` : ''}
+        <span class="pNeed${cHave() >= cNeed(p) ? ' ok' : ''}" title="Contracts filled since the last chapter">${ART.uiIcon('ic_scroll', '📜')}<b>${Math.min(cHave(), cNeed(p))}/${cNeed(p)}</b></span></div>
+      ${chapterPrize(p)}
+      <button class="big${ok ? '' : ' off'}" id="btnProject">${ok ? 'COMPLETE THE CHAPTER ✨' : 'Gather everything above'}</button>
+      ${next ? `<div class="mlNext">Next: <b>${next.name}</b></div>` : ''}</div>`;
   }
+
 
   /* ------------------------------------------------------------ daily tasks */
   const DAILY_KINDS = [
@@ -2956,7 +2986,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     { kind: 'tier4', label: 'Make {n} items of tier 4+', n: [2, 4], pts: 20 },
     { kind: 'sell', label: 'Sell {n} spare things', n: [4, 8], pts: 10 },
     { kind: 'chest', label: 'Open {n} chests', n: [1, 2], pts: 20 },
-    { kind: 'project', label: 'Finish a restoration project', n: [1, 1], pts: 30 },
+    { kind: 'project', label: 'Finish a chapter', n: [1, 1], pts: 30 },
   ];
   function rollDaily() {
     const list: any[] = [];
@@ -3006,7 +3036,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
   function dailyCard() {
     const dt = dailyOk(), max = CFG.daily2.marks[CFG.daily2.marks.length - 1];
-    return `<div class="card daily"><div class="cardTitle">${ART.uiIcon('ic_calendar', '📅')} Today<span class="pCount">${dt.pts} pts</span></div>
+    return `<div class="card daily"><div class="cardTitle">${ART.uiIcon('ic_calendar', '📅')} Daily Log<span class="pCount">${dt.pts} pts</span></div>
       <div class="dTrack"><div class="dFill" style="width:${Math.min(100, dt.pts / max * 100)}%"></div>
         ${CFG.daily2.marks.map((m: number, k: number) => `<button class="dChest${dt.got[k] ? ' got' : dt.pts >= m ? ' ready' : ''}" data-dchest="${k}"
           style="left:${m / max * 100}%">${ART.item(k === 0 ? 'chest' : 'bigchest')}<i>${m}</i></button>`).join('')}</div>
@@ -3162,6 +3192,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (w === 'earth') return true;
     if (!S.unlocked[w]) return false;
     if (w === S.world) return true;
+    // really been there: landed once (S.been), or finished a chapter there in an older save
+    if (!(S.been && S.been[w]) && !projDone(w)) return false;
     const prev = WORLD_ORDER[WORLD_ORDER.indexOf(w) - 1];
     return !!prev && visited(prev) && prevOpen(prev);
   };
@@ -3193,7 +3225,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     cut.classList.add('show'); sfx.launch();
     setTimeout(() => {
       if (!S.boards[w]) S.boards[w] = freshBoard(w);
-      S.world = w; S.unlocked[w] = 1; sel = null;
+      S.world = w; S.unlocked[w] = 1; (S.been = S.been || {})[w] = 1; sel = null;
       // you arrive standing in the new camp, not looking at the star chart
       worldTab = 'camp';
       if (!S.wlv[w]) { S.wlv[w] = 1; S.wxp[w] = 0; }
@@ -3583,23 +3615,101 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     toast(`⚗️ Out comes a <b>${ITEMS[out].name}</b>!`);
     renderLab(); renderHUD(); renderOrders(); save();
   }
-  /* The Lab is a place, not a list: the page is the lab painting, the bench
-     in the middle is Fusion, and Research and the Accelerator are two stations
-     you open from it. */
+  /* THE LAB (v46). One loop, said in one line at the top:
+       ♻️ recycle spare items → 🧪 Science → spend it on experiments, growing
+       things one step, and permanent upgrades.
+     No guessing: every experiment shows exactly what goes in and what comes out. */
+  const isSpare = (id: string) => {
+    const d = ITEMS[id]; if (!d || d.part || isChest(id) || id === 'rainbow' || POUCH.includes(id)) return false;
+    if (S.orders.some(o => o.needs.some(nd => nd.id === id))) return false;
+    if (curProject() && curProject().needs.some(([x]: [string, number]) => x === id)) return false;
+    return true;
+  };
+  const brewSci = (r: any) => 8 + 6 * ITEMS[r.result].tier;
+  /** experiments you could do on this world: inputs come from here (or anywhere) */
+  function labExperiments() {
+    const here = (id: string) => { const w = CHAINS[ITEMS[id].chain].world; return w === S.world || w === 'any' || w === 'ship' || inventory()[id] > 0; };
+    const open = RECIPES.filter(r => r.inputs.every(here));
+    const fresh = open.filter(r => !S.lab.disc[r.id]), known = open.filter(r => S.lab.disc[r.id]);
+    return { list: fresh.slice(0, 3).concat(known.slice(0, 3)), total: RECIPES.length, made: RECIPES.filter(r => S.lab.disc[r.id]).length };
+  }
+  function brewRecipe(id: string) {
+    const r = RECIPES.find(x => x.id === id); if (!r) return;
+    const inv = inventory();
+    const same = r.inputs[0] === r.inputs[1];
+    const miss = r.inputs.filter(x => (inv[x] || 0) < (same ? 2 : 1));
+    if (miss.length) { sfx.no(); toast('You need ' + [...new Set(miss)].map(x => `<b>${ITEMS[x].name}</b>`).join(' and ') + ' on the board.'); return; }
+    const c = brewSci(r);
+    if (S.sci < c) { sfx.no(); toast(`Needs <b>${c} 🧪</b> — recycle a few spare items first.`); return; }
+    if (!freeCells().length) { sfx.no(); toast('Leave one tile free for the result!'); return; }
+    S.sci -= c; consumeOne(r.inputs[0]); consumeOne(r.inputs[1]);
+    const knew = !!S.lab.disc[r.id];
+    const at = giveItem(r.result);
+    S.lab.disc[r.id] = 1; S.lab.made = (S.lab.made || 0) + 1;
+    sfx.discover(); haptic('heavy'); confetti();
+    if (at >= 0) { sparkle(at, 24, '#ffe9a8'); floatText(at, ITEMS[r.result].name, '#fff'); }
+    addXp(4 + ITEMS[r.result].tier * 3); prog('research', 1);
+    toast((knew ? '✨ ' : '🎉 First time! ') + '<b>' + ITEMS[r.result].name + '</b> is on your board.');
+    renderLab(); renderHUD(); renderOrders(); paintBoard(); save();
+  }
+  function recycleMany(ids: string[]) {
+    const b = B(); let got = 0, n = 0;
+    ids.forEach(id => { for (let i = 0; i < N; i++) if (b[i] && b[i].id === id) { got += sciOf(id); b[i] = null; n++; sparkle(i, 8, '#c9b3ff'); break; } });
+    if (!n) return;
+    S.sci += got; sfx.discover(); haptic('light'); tally('sell');
+    toast(`♻️ Recycled ${n} spare${n > 1 ? 's' : ''}: <b>+${got} 🧪</b>`);
+    paintBoard(); renderLab(); renderHUD(); renderOrders(); save();
+  }
   function renderLab() {
     const host = $('#labBody'); if (!host) return;
     $('#labCoins').textContent = S.sci;
-    renderFusion();
+    const inv = inventory();
+    const spares = Object.keys(inv).filter(id => inv[id] > 0 && isSpare(id) && B().some(c => c && c.id === id))
+      .sort((x, y) => ITEMS[x].tier - ITEMS[y].tier).slice(0, 10);
+    const lows = spares.filter(id => ITEMS[id].tier <= 2);
+    const lowSci = lows.reduce((t, id) => t + sciOf(id) * B().filter(c => c && c.id === id).length, 0);
+    const ex = labExperiments();
     const a = S.acc, left = accLeft();
-    host.insertAdjacentHTML('beforeend', `<div class="labStations">
-        <button class="hubBtn" data-station="research"><span class="ti">🔬</span><i>Research</i>${L2().research.some((r: any) => res(r.id) < r.max && S.sci >= researchCost(r)) ? '<span class="dot"></span>' : ''}</button>
-        <button class="hubBtn" data-station="acc"><span class="ti">⚗️</span><i>${a ? (left ? mmss(left) : 'Ready!') : 'Grow'}</i>${a && !left ? '<span class="dot"></span>' : ''}</button>
-        <button class="hubBtn still" data-station="still"><span class="ti">${ART.uiIcon('ic_lab', '🧪')}</span><i>${stillLeft() ? mmss(stillLeft()) : 'Goo!'}</i>${!stillLeft() ? '<span class="dot"></span>' : ''}</button>
-      </div>`);
-    host.querySelectorAll('[data-station]').forEach((b: any) => b.onclick = () => { sfx.tap(); const st = b.dataset.station; st === 'acc' ? labAccPop() : st === 'still' ? stillPop() : labResPop(); });
+    const resReady = L2().research.filter((r: any) => res(r.id) < r.max && S.sci >= researchCost(r)).length;
+    const cell = (id: string, ok: boolean) => `<span class="lxIt${ok ? ' ok' : ''}" data-what="${id}">${ART.item(id)}${ok ? '<i>✓</i>' : ''}</span>`;
+    host.innerHTML = `<div class="labBg"></div><div class="labV2">
+      <div class="lxLoop">♻️ Recycle spares <i>➜</i> 🧪 Science <i>➜</i> ⚗️ Experiments · ⏫ Grow · 🔬 Upgrades</div>
+      <div class="lxCard"><div class="lxT">♻️ Recycler <small>tap a spare to turn it into Science</small></div>
+        ${spares.length ? `<div class="lxSpares">${spares.map(id => `<button class="lxSp" data-rec="${id}">${ART.item(id)}<b>×${B().filter(c => c && c.id === id).length}</b><em>+${sciOf(id)}🧪</em></button>`).join('')}</div>
+          ${lows.length ? `<button class="big blue lxAll" id="lxAll">Recycle all small spares · +${lowSci} 🧪</button>` : ''}`
+          : '<div class="lxNone">No spares right now — everything on your board is wanted by a contract or the chapter.</div>'}</div>
+      <div class="lxCard"><div class="lxT">⚗️ Experiments <small>${ex.made}/${ex.total} discovered</small></div>
+        ${ex.list.length ? ex.list.map(r => {
+          const same = r.inputs[0] === r.inputs[1];
+          const okA = (inv[r.inputs[0]] || 0) >= 1, okB = (inv[r.inputs[1]] || 0) >= (same ? 2 : 1);
+          const ready = okA && okB, c = brewSci(r);
+          return `<div class="lxEx${S.lab.disc[r.id] ? ' known' : ''}">${cell(r.inputs[0], okA)}<span class="lxOp">+</span>${cell(r.inputs[1], okB)}<span class="lxOp">➜</span>
+            <span class="lxIt res">${S.lab.disc[r.id] ? ART.item(r.result) : `<span class="lxQ">?</span>`}</span>
+            <button class="buyBtn${ready && S.sci >= c ? '' : ' off'}" data-brew="${r.id}">🧪${c}</button></div>`;
+        }).join('') : '<div class="lxNone">Experiments open up as you explore this world.</div>'}
+        <div class="lxHint">Put the two things on your board, then press brew. A ✓ means you have it.</div></div>
+      <div class="lxRow">
+        <button class="lxMini" id="lxGrow"><span>⏫</span><b>Grow</b><i>${a ? (left ? mmss(left) : 'Ready!') : 'one item, one step up'}</i>${a && !left ? '<em class="dot"></em>' : ''}</button>
+        <button class="lxMini" id="lxRes"><span>🔬</span><b>Upgrades</b><i>${resReady ? resReady + ' ready to buy' : 'permanent perks'}</i>${resReady ? '<em class="dot"></em>' : ''}</button>
+        <button class="lxMini" id="lxGoo"><span>${ART.uiIcon('ic_lab', '🧪')}</span><b>Goo Still</b><i>${stillLeft() ? mmss(stillLeft()) : 'free goo!'}</i>${!stillLeft() ? '<em class="dot"></em>' : ''}</button>
+      </div></div>`;
+    host.querySelectorAll('[data-rec]').forEach((e: any) => e.onclick = () => recycleMany([e.dataset.rec]));
+    const all = $('#lxAll'); if (all) all.onclick = () => recycleMany(lows.flatMap(id => B().filter(c => c && c.id === id).map(() => id)));
+    host.querySelectorAll('[data-brew]').forEach((e: any) => e.onclick = () => brewRecipe(e.dataset.brew));
+    host.querySelectorAll('[data-what]').forEach((e: any) => e.onclick = () => { sfx.tap(); const id = e.dataset.what; toast(`<b>${ITEMS[id].name}</b> — ${sourceHint(id)}`); });
+    ($('#lxGrow') as HTMLElement).onclick = () => { sfx.tap(); labAccPop(); };
+    ($('#lxRes') as HTMLElement).onclick = () => { sfx.tap(); labResPop(); };
+    ($('#lxGoo') as HTMLElement).onclick = () => { sfx.tap(); stillPop(); };
     if (popOpen() && $('#pop').classList.contains('labres')) labResPop(true);
     if (popOpen() && $('#pop').classList.contains('labacc')) labAccPop(true);
     if (popOpen() && $('#pop').classList.contains('labstill')) stillPop(true);
+    if (!S.labIntro && view === 'lab') {
+      S.labIntro = 1; save();
+      setTimeout(() => talkScene([
+        ['bloop', 'Blorp! My lab. It runs on one thing: 🧪 Science.'],
+        ['bloop', 'You get Science by recycling spare things from your board — tap them in the Recycler.'],
+        ['bloop', 'Spend it on Experiments (two things in, a treasure out), on Grow (one item, one step up) or on Upgrades that last forever.']], () => { }), 400);
+    }
   }
   function labResPop(quiet = false) {
     const html = `<div class="labIntro">Recycle spare items on the board (tap one, then 🧪) to earn Science.</div>
@@ -4706,25 +4816,29 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     let el = document.getElementById('skyChart');
     if (!el) { el = document.createElement('div'); el.id = 'skyChart'; $('#app').appendChild(el); }
     const bg = ART.spriteUi('sky_chart') || ART.spriteUi('galaxy_bg');
-    const dust = Array.from({ length: 70 }, () => `<i class="skTw" style="left:${(Math.random() * 100).toFixed(1)}%;top:${(Math.random() * SKY_H).toFixed(0)}px;animation-delay:${(-Math.random() * 4).toFixed(2)}s;--s:${(0.5 + Math.random() * 1.6).toFixed(2)}"></i>`).join('');
-    const svgOf = (c: any, cls: string) => {
-      const d = c.pts.map((p: number[], i: number) => (i ? 'L' : 'M') + p[0] + ' ' + p[1]).join(' ');
-      return `<svg viewBox="0 0 100 100" class="skC ${cls}"><path class="skLine" d="${d}" pathLength="100"/>${c.pts.map((p: number[]) => `<circle class="skDot" cx="${p[0]}" cy="${p[1]}" r="2.2"/>`).join('')}</svg>`;
-    };
-    const nodes = CONSTS.map((c, i) => {
-      const pos = SKY_SPOT(i), on = lit(c.id), open = visited(c.world), afford = countItem('starcore') >= c.cost;
-      const state = on ? 'lit' : open ? 'open' : 'locked';
-      return `<button class="skNode ${state}" data-sk="${c.id}" style="left:${pos.x}%;top:${pos.y}px">
-        ${svgOf(c, state)}
-        <span class="skName"><b>${c.name}</b><i>${on ? '✦ ' + c.perk : open ? `${c.cost} ⭐ · ${c.perk}` : '🔒 ' + WORLDS[c.world].name}</i>${open && !on && afford ? '<em class="skGo">Trace!</em>' : ''}</span></button>`;
+    const cores = countItem('starcore'), scrap = pouch('scrap');
+    const pathOf = (c: any) => c.pts.map((p: number[], i: number) => (i ? 'L' : 'M') + p[0] + ' ' + p[1]).join(' ');
+    const svgOf = (c: any) => `<svg viewBox="-4 -4 108 108" class="skMini"><path class="skLine" d="${pathOf(c)}"/>${c.pts.map((p: number[]) => `<circle class="skDot" cx="${p[0]}" cy="${p[1]}" r="3.2"/>`).join('')}</svg>`;
+    const cards = CONSTS.map(c => {
+      const on = lit(c.id), open = visited(c.world), can = open && !on && cores >= c.cost;
+      const st = on ? 'lit' : open ? 'open' : 'locked';
+      const pct = Math.min(100, Math.round(cores / c.cost * 100));
+      return `<div class="skCard ${st}" id="sk-${c.id}"><div class="skPic">${svgOf(c)}${!open ? `<span class="skLock">${ART.uiIcon('gal_lock', '🔒')}</span>` : ''}</div>
+        <div class="skInfo"><b>${c.name}</b><i>${c.perk}</i>
+          ${on ? '<span class="skDone">✦ Lit — active in every world</span>'
+          : !open ? `<span class="skNeed">Visible from <b>${WORLDS[c.world].name}</b></span>`
+          : `<div class="skBar"><em style="width:${pct}%"></em><span>${ART.item('starcore')} ${Math.min(cores, c.cost)}/${c.cost} Star Cores</span></div>`}
+        </div>${can ? `<button class="big gold skLight" data-light="${c.id}">Light ✨</button>` : ''}</div>`;
     }).join('');
     el.innerHTML = `<div class="skBg" style="background-image:url(${bg})"></div>
-      <div class="skTop"><button class="galBack" id="skBack">↩ Galaxy</button><b>✨ Star Chart</b>
-        <span class="skPouch">${ART.item('starcore')}<b>${pouch('starcore')}</b></span></div>
-      <div class="skScroll" id="skScroll"><div class="skField" style="height:${SKY_H}px">${dust}${nodes}</div></div>
-      <div class="skFoot"><span>${CONSTS.filter(c => lit(c.id)).length}/${CONSTS.length} lit</span>
-        <button class="buyBtn green" id="skFuse" ${pouch('scrap') < 3 ? 'disabled' : ''}>Fuse 3 ${ART.item('scrap')} → 1 ${ART.item('starcore')}</button></div>
-      <div class="skTrace" id="skTrace"></div>`;
+      <div class="skTop"><button class="galBack" id="skBack">↩ Galaxy</button><b>Star Chart</b><span class="skPouch">${ART.item('starcore')}<b>${cores}</b></span></div>
+      <div class="skScroll" id="skScroll">
+        <div class="skHow"><b>How it works</b>
+          <div class="skSteps"><span>☄️ Dig meteor craters</span><i>➜</i><span>${ART.item('scrap')} Star Scrap</span><i>➜</i><span>3 scrap = 1 ${ART.item('starcore')}</span><i>➜</i><span>✨ Light a constellation</span></div>
+          <button class="big blue skFuse" id="skFuse" ${scrap < 3 ? 'disabled' : ''}>Fuse 3 Star Scrap → 1 Star Core · you have ${scrap}</button></div>
+        ${cards}
+        <div class="skFootTxt">${CONSTS.filter(c => lit(c.id)).length}/${CONSTS.length} constellations lit</div></div>
+      <div class="skShow" id="skShow"></div>`;
     el.className = 'open'; audio.duck(1, 0.5);
     ($('#skBack') as HTMLElement).onclick = () => { sfx.close(); el!.className = ''; };
     ($('#skFuse') as HTMLElement).onclick = () => {
@@ -4732,76 +4846,36 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       S.wal.scrap -= 3; S.wal.starcore = pouch('starcore') + 1; S.seen.starcore = 1;
       sfx.discover(); haptic('medium'); save(); starChart();
     };
-    el.querySelectorAll<HTMLElement>('[data-sk]').forEach(b => b.onclick = () => skyOpen(b.dataset.sk!));
-    const sc = $('#skScroll') as HTMLElement, first = CONSTS.findIndex(c => !lit(c.id) && visited(c.world));
-    const at = focus ? CONSTS.findIndex(c => c.id === focus) : first;
-    if (sc) sc.scrollTop = Math.max(0, SKY_SPOT(Math.max(0, at)).y - sc.clientHeight / 2 + 60);
+    el.querySelectorAll<HTMLElement>('[data-light]').forEach(b => b.onclick = () => skyLight(b.dataset.light!));
+    const target = focus || (CONSTS.find(c => !lit(c.id) && visited(c.world)) || {}).id;
+    const card = target && document.getElementById('sk-' + target);
+    if (card) setTimeout(() => card.scrollIntoView({ block: 'center' }), 50);
   }
-  function skyOpen(id: string) {
-    const c = CONSTS.find(x => x.id === id); if (!c) return;
-    if (lit(id)) { sfx.tap(); toast(`✦ <b>${c.name}</b> is lit: ${c.perk}.`); return; }
-    if (!visited(c.world)) { sfx.no(); toast(`🔒 You can see <b>${c.name}</b> from <b>${WORLDS[c.world].name}</b>. Fly there first.`); return; }
-    const have = countItem('starcore');
-    if (have < c.cost) { sfx.no(); toast(`Needs <b>${c.cost} Star Cores</b>, you have ${have}. Dig meteor craters and fuse Star Scrap.`); return; }
-    skyTrace = { c, next: 0 };
-    const t = $('#skTrace') as HTMLElement;
-    const d = c.pts.map((p: number[], i: number) => (i ? 'L' : 'M') + p[0] + ' ' + p[1]).join(' ');
-    t.innerHTML = `<div class="sktHead"><b>${c.name}</b><i>Tap the stars in order. ${c.cost} ⭐ when it lights up.</i></div>
-      <svg viewBox="-6 -6 112 112" class="skBig"><path class="skGhost" d="${d}"/><path class="skDraw" id="skDraw" d=""/>
-        ${c.pts.map((p: number[], i: number) => `<g class="skSt" data-i="${i}"><circle class="skHalo" cx="${p[0]}" cy="${p[1]}" r="6"/><circle class="skCore" cx="${p[0]}" cy="${p[1]}" r="2.6"/><text x="${p[0]}" y="${p[1] - 5}" class="skNum">${i + 1}</text><circle cx="${p[0]}" cy="${p[1]}" r="8" fill="transparent" data-tap="${i}"/></g>`).join('')}</svg>
-      <button class="big soft" id="skCancel">Not now</button>`;
-    t.className = 'skTrace on'; sfx.whoosh();
-    skyMark();
-    t.querySelectorAll<SVGElement>('[data-tap]').forEach(n => n.addEventListener('click', () => skyTap(+(n as any).dataset.tap)));
-    ($('#skCancel') as HTMLElement).onclick = () => { t.className = 'skTrace'; skyTrace = null; };
-  }
-  function skyMark() {
-    const st = skyTrace; if (!st) return;
-    document.querySelectorAll('#skTrace .skSt').forEach((g: any) => {
-      const i = +g.dataset.i; g.classList.toggle('on', i < st.next); g.classList.toggle('next', i === st.next);
-    });
-  }
-  function skyTap(i: number) {
-    const st = skyTrace; if (!st) return;
-    // the shape may close on its first star: that star is also the last one
-    const want = st.next;
-    const same = (a: number[], b: number[]) => a[0] === b[0] && a[1] === b[1];
-    if (i !== want && !(want === st.c.pts.length - 1 && same(st.c.pts[i], st.c.pts[want]))) {
-      sfx.no(); haptic('light'); const t = $('#skTrace'); t.classList.remove('shake'); void (t as HTMLElement).offsetWidth; t.classList.add('shake'); return;
-    }
-    st.next++; sfx.voice('nix', 1); sfx.popHi();
-    const pts = st.c.pts.slice(0, st.next);
-    const path = document.getElementById('skDraw');
-    if (path && pts.length > 1) {
-      // the new segment draws itself
-      const full = pts.map((p: number[], k: number) => (k ? 'L' : 'M') + p[0] + ' ' + p[1]).join(' ');
-      path.setAttribute('d', full);
-      const len = (path as any).getTotalLength ? (path as any).getTotalLength() : 100;
-      const a = st.c.pts[st.next - 2], b = st.c.pts[st.next - 1], seg = Math.hypot(b[0] - a[0], b[1] - a[1]);
-      path.style.transition = 'none'; path.style.strokeDasharray = `${len}`; path.style.strokeDashoffset = `${seg}`;
-      void (path as any).getBoundingClientRect();
-      path.style.transition = 'stroke-dashoffset .35s ease-out'; path.style.strokeDashoffset = '0';
-    }
-    skyMark();
-    if (st.next < st.c.pts.length) return;
-    // lit: pay, glow, a shooting star, and the blessing
-    const c = st.c;
+  /* Lighting one: the stars pop one after another and the lines draw between
+     them, a shooting star crosses, then the reward. No tracing to fumble. */
+  function skyLight(id: string) {
+    const c = CONSTS.find(x => x.id === id); if (!c || lit(id)) return;
+    if (countItem('starcore') < c.cost) { sfx.no(); return; }
     for (let k = 0; k < c.cost; k++) consumeOne('starcore');
-    S.stars[c.id] = 1; prog('star', 1);
-    const t = $('#skTrace') as HTMLElement; t.classList.add('lit');
-    sfx.discover(); audio.duck(2.5, 0.2); haptic('heavy');
-    const shoot = document.createElement('i'); shoot.className = 'skShoot'; t.appendChild(shoot);
-    save();
+    S.stars[c.id] = 1; prog('star', 1); save();
+    const t = $('#skShow') as HTMLElement;
+    const segs = c.pts.slice(1).map((p: number[], i: number) => { const a = c.pts[i]; return `<line class="skSeg" x1="${a[0]}" y1="${a[1]}" x2="${p[0]}" y2="${p[1]}" style="animation-delay:${0.25 + i * 0.22}s"/>`; }).join('');
+    t.innerHTML = `<div class="skShowIn"><b>${c.name}</b>
+      <svg viewBox="-8 -8 116 116" class="skBig">${segs}${c.pts.map((p: number[], i: number) => `<circle class="skStar" cx="${p[0]}" cy="${p[1]}" r="3.4" style="animation-delay:${i * 0.22}s"/>`).join('')}</svg>
+      <i>${c.perk}</i></div><i class="skShoot"></i>`;
+    t.className = 'skShow on'; sfx.whoosh(); audio.duck(3, 0.2);
+    c.pts.forEach((_: any, i: number) => setTimeout(() => sfx.popHi(), i * 220));
+    setTimeout(() => { sfx.discover(); haptic('heavy'); confetti(); }, c.pts.length * 220 + 300);
     setTimeout(() => {
-      t.className = 'skTrace'; skyTrace = null;
+      t.className = 'skShow';
       paintBoard(); renderHUD();
       const r: Reward = c.reward || {};
       if (c.reward && r.item && freeCells().length) giveItem(r.item);
       if (r.gems) S.gems += r.gems;
       if (r.energy) S.energy += r.energy;
-      rewardCard(ART.item('starcore'), `${c.name} is lit!`, c.reward ? 'The sky hands you a gift.' : `${c.perk}. For good, in every world.`, c.reward ? r : { energy: 10 }, () => starChart(c.id));
       save();
-    }, 1700);
+      rewardCard(ART.item('starcore'), `${c.name} is lit!`, c.reward ? 'The sky hands you a gift.' : `${c.perk}. For good, in every world.`, c.reward ? r : { energy: 10 }, () => starChart(c.id));
+    }, c.pts.length * 220 + 1600);
   }
 
   /* ============================================================ WORLD SCREEN
@@ -5578,7 +5652,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      popups, screens, toasts, buttons. An emoji without a painting stays. */
   const EMO: Record<string, string> = {
     '🪙': 'icon_coin', '💎': 'icon_gem', '⚡': 'icon_energy', '🧪': 'icon_flask', '🔒': 'sec_lock', '⏳': 'cl_timer',
-    '📜': 'ic_scroll', '🎁': 'ic_gift', '🏆': 'ic_trophy', '📦': 'ic_box', '🎡': 'ic_spin', '🔬': 'ic_microscope', '🛒': 'ic_cart',
+    '📜': 'ic_scroll', '🎁': 'ic_gift', '🏆': 'ic_trophy', '📦': 'ic_box', '🎡': 'ic_spin', '🔬': 'ic_microscope', '🛒': 'ic_shop',
     '🎪': 'ic_tent', '📖': 'ic_album2', '🗺️': 'ic_map2', '🗺': 'ic_map2', '🔑': 'ic_key', '🔔': 'cl_bell', '🌌': 'ic_galaxy', '💡': 'ic_hint', '⬆': 'ic_up', '🧺': 'ic_pouch',
   };
   const EMO_RE = new RegExp(Object.keys(EMO).filter(k => ART.spriteUi(EMO[k])).sort((a, b) => b.length - a.length).join('|'), 'g');
@@ -5767,7 +5841,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed, ecost,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
       fly: (w: string) => galaxyTap(w), view: (v: string) => setView(v),
-      curProject: () => curProject(), v9: { paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
+      curProject: () => curProject(), v9: { paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
     };
     setInterval(tick, 500);
     setInterval(() => { if (!document.hidden) S.playMs = (S.playMs || 0) + 5000; }, 5000);
