@@ -2669,7 +2669,7 @@ html.ui-panel_board body .app .stage{margin:14px 20px 16px!important}
 /* nothing at the bottom of a popup is ever clipped */
 html body .app .popBody,html body .app .mBody{padding-bottom:12px!important;padding-left:4px;padding-right:4px}
 html body .app .popBody .big:last-child,html body .app .mBoxW .big{margin-bottom:6px!important}
-.labRuin.art{width:25%!important;transform:translate(-44%,-86%)!important}
+.labRuin.art{width:31%!important;transform:translate(-47%,-84%)!important}
 .infoQ{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:#1aa6e0;color:#fff;font:800 11px/1 Fredoka,system-ui,sans-serif;vertical-align:1px;margin-left:3px;box-shadow:0 0 0 1.5px #fff}
 #infoTxt{cursor:pointer}
 .recList{display:flex;flex-direction:column;gap:4px;margin:6px 0}
@@ -2717,3 +2717,7 @@ html body .app .pop.holo .popBox{max-width:350px!important}
   -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 55%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 55%,transparent 100%)}
 .labRuin.art{z-index:2}
 html.ui-galaxy_bg .sceneWrap.camp .sceneBlur{background:var(--ui-galaxy_bg) center top/cover no-repeat;filter:brightness(.9)}
+
+/* v54: the frame's rim sits a few px outside the grid, so no tile is ever under it */
+html.ui-panel_board body .app #board::after{left:calc(var(--gx,0px) - 25px);top:calc(var(--gy,0px) - 31px);width:calc(var(--gw,100%) + 49px);height:calc(var(--gh,100%) + 58px)}
+html.ui-panel_board body .app #board::before{left:calc(var(--gx,0px) - 6px);top:calc(var(--gy,0px) - 6px);width:calc(var(--gw,100%) + 12px);height:calc(var(--gh,100%) + 12px)}

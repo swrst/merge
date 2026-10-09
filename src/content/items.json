@@ -7225,6 +7225,700 @@
       ]
     }
   },
+  "pretzelplanet": {
+    "name": "Planet Pretzel",
+    "chain": "pastry",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "ring",
+      "mat": "topaz"
+    }
+  },
+  "pancakestack": {
+    "name": "Float Pancakes",
+    "chain": "pastry",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "cake",
+      "mat": "topaz",
+      "accent": "aurora"
+    }
+  },
+  "moondonut": {
+    "name": "Moon Donut",
+    "chain": "pastry",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "ring",
+      "mat": "aurora"
+    }
+  },
+  "rocketcake": {
+    "name": "Rocket Cake",
+    "chain": "pastry",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "cake",
+      "mat": "cream",
+      "accent": "ruby"
+    }
+  },
+  "bakecart": {
+    "name": "Bake Cart",
+    "chain": "pastry",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "crate",
+      "mat": "ruby",
+      "accent": "cream"
+    }
+  },
+  "cupcakehouse": {
+    "name": "Cupcake Bakery",
+    "chain": "pastry",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "aurora",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "windupmouse": {
+    "name": "Wind-up Mouse",
+    "chain": "robopets",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "cog",
+      "mat": "steel"
+    }
+  },
+  "robopup": {
+    "name": "Robo Pup",
+    "chain": "robopets",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "cog",
+      "mat": "cream",
+      "accent": "ruby"
+    }
+  },
+  "robocat": {
+    "name": "Robo Cat",
+    "chain": "robopets",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "cog",
+      "mat": "cream",
+      "accent": "sapphire"
+    }
+  },
+  "robodragon": {
+    "name": "Robo Dragon",
+    "chain": "robopets",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "cog",
+      "mat": "ruby",
+      "accent": "gold"
+    }
+  },
+  "petbasket": {
+    "name": "Charging Basket",
+    "chain": "robopets",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "crate",
+      "mat": "cream",
+      "accent": "sapphire"
+    }
+  },
+  "pethotel": {
+    "name": "Pet Hotel",
+    "chain": "robopets",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "cream",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "gnomehat": {
+    "name": "Gnome Hat",
+    "chain": "gnomes",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "leaf",
+      "mat": "sapphire"
+    }
+  },
+  "gnome": {
+    "name": "Cyclops Gnome",
+    "chain": "gnomes",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "totem",
+      "mat": "moss",
+      "accent": "sapphire"
+    }
+  },
+  "snailgnome": {
+    "name": "Snail Rider",
+    "chain": "gnomes",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "totem",
+      "mat": "moss",
+      "accent": "aurora"
+    }
+  },
+  "jetgnome": {
+    "name": "Jet Gnome",
+    "chain": "gnomes",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "totem",
+      "mat": "ruby",
+      "accent": "gold"
+    }
+  },
+  "gnomefamily": {
+    "name": "Gnome Family",
+    "chain": "gnomes",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "house",
+      "mat": "ruby",
+      "accent": "moss"
+    }
+  },
+  "gnomevillage": {
+    "name": "Stump Village",
+    "chain": "gnomes",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "wood",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "foldpaper": {
+    "name": "Star Paper",
+    "chain": "lanterns",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "leaf",
+      "mat": "sapphire"
+    }
+  },
+  "fishlantern": {
+    "name": "Fish Lantern",
+    "chain": "lanterns",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "berry",
+      "mat": "ruby",
+      "accent": "gold"
+    }
+  },
+  "rocketlantern": {
+    "name": "Rocket Lantern",
+    "chain": "lanterns",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "bottle",
+      "mat": "ruby",
+      "accent": "gold"
+    }
+  },
+  "planetlights": {
+    "name": "Planet Lights",
+    "chain": "lanterns",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "rope",
+      "mat": "aurora",
+      "accent": "gold"
+    }
+  },
+  "lanternbarge": {
+    "name": "Lantern Barge",
+    "chain": "lanterns",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "crate",
+      "mat": "gold",
+      "accent": "sapphire",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "lanterntower": {
+    "name": "Lantern Tower",
+    "chain": "lanterns",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "gold",
+      "accent": "sapphire",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "kitespool": {
+    "name": "Glow String",
+    "chain": "kites",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "rope",
+      "mat": "aurora"
+    }
+  },
+  "starkite": {
+    "name": "Star Kite",
+    "chain": "kites",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "leaf",
+      "mat": "sapphire",
+      "accent": "ruby"
+    }
+  },
+  "cometkite": {
+    "name": "Comet Kite",
+    "chain": "kites",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "leaf",
+      "mat": "gold",
+      "accent": "aurora"
+    }
+  },
+  "satkite": {
+    "name": "Satellite Kite",
+    "chain": "kites",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "crate",
+      "mat": "sapphire",
+      "accent": "gold"
+    }
+  },
+  "whalekite": {
+    "name": "Whale Kite",
+    "chain": "kites",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "bird",
+      "mat": "sapphire",
+      "accent": "aurora"
+    }
+  },
+  "kitetower": {
+    "name": "Kite Tower",
+    "chain": "kites",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "sapphire",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "bubblewhistle": {
+    "name": "Bubble Whistle",
+    "chain": "bubbletunes",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "bottle",
+      "mat": "glass",
+      "accent": "gold"
+    }
+  },
+  "crystalxylo": {
+    "name": "Crystal Xylo",
+    "chain": "bubbletunes",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "plank",
+      "mat": "aurora"
+    }
+  },
+  "jellydrum": {
+    "name": "Jelly Drum",
+    "chain": "bubbletunes",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "crate",
+      "mat": "glass",
+      "accent": "gold"
+    }
+  },
+  "bubbletrumpet": {
+    "name": "Bubble Horn",
+    "chain": "bubbletunes",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "bottle",
+      "mat": "glass",
+      "accent": "gold"
+    }
+  },
+  "bubbleorgan": {
+    "name": "Bubble Organ",
+    "chain": "bubbletunes",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "house",
+      "mat": "aurora",
+      "accent": "gold"
+    }
+  },
+  "bubbledome": {
+    "name": "Bubble Concert",
+    "chain": "bubbletunes",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "glass",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "canbot": {
+    "name": "Sprinkle Bot",
+    "chain": "farmbots",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "cog",
+      "mat": "cream",
+      "accent": "sapphire"
+    }
+  },
+  "seedbot": {
+    "name": "Seeder Bot",
+    "chain": "farmbots",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "cog",
+      "mat": "gold",
+      "accent": "sapphire"
+    }
+  },
+  "scarebot": {
+    "name": "Scare Bot",
+    "chain": "farmbots",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "totem",
+      "mat": "topaz",
+      "accent": "ruby"
+    }
+  },
+  "harvestbot": {
+    "name": "Harvest Bot",
+    "chain": "farmbots",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "cog",
+      "mat": "gold",
+      "accent": "leaf"
+    }
+  },
+  "tractorbot": {
+    "name": "Tractor Bot",
+    "chain": "farmbots",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "crate",
+      "mat": "gold",
+      "accent": "sapphire"
+    }
+  },
+  "farmmech": {
+    "name": "Farm Mech",
+    "chain": "farmbots",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "cog",
+      "mat": "gold",
+      "accent": "leaf"
+    }
+  },
+  "robobarn": {
+    "name": "Robo Barn",
+    "chain": "farmbots",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "house",
+      "mat": "ruby",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "postcard": {
+    "name": "Planet Postcard",
+    "chain": "starpost",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "plank",
+      "mat": "sapphire"
+    }
+  },
+  "postbag": {
+    "name": "Post Bag",
+    "chain": "starpost",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "crate",
+      "mat": "sapphire",
+      "accent": "ruby"
+    }
+  },
+  "antennabox": {
+    "name": "Antenna Mailbox",
+    "chain": "starpost",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "crate",
+      "mat": "sapphire",
+      "accent": "gold"
+    }
+  },
+  "postdrone": {
+    "name": "Post Drone",
+    "chain": "starpost",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "cog",
+      "mat": "cream",
+      "accent": "sapphire"
+    }
+  },
+  "postrocket": {
+    "name": "Post Rocket",
+    "chain": "starpost",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "bottle",
+      "mat": "ruby",
+      "accent": "cream"
+    }
+  },
+  "postlighthouse": {
+    "name": "Post Lighthouse",
+    "chain": "starpost",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "sapphire",
+      "accent": "ruby",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "pricetag": {
+    "name": "Star Tag",
+    "chain": "yardsale",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "leaf",
+      "mat": "cream",
+      "accent": "gold"
+    }
+  },
+  "gadgetbox": {
+    "name": "Gadget Box",
+    "chain": "yardsale",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "crate",
+      "mat": "wood",
+      "accent": "steel"
+    }
+  },
+  "planetlamp": {
+    "name": "Planet Lamp",
+    "chain": "yardsale",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "ring",
+      "mat": "gold",
+      "accent": "sapphire"
+    }
+  },
+  "comicstack": {
+    "name": "Space Comics",
+    "chain": "yardsale",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "plank",
+      "mat": "ruby",
+      "accent": "sapphire"
+    }
+  },
+  "saucerstall": {
+    "name": "Saucer Stall",
+    "chain": "yardsale",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "house",
+      "mat": "steel",
+      "accent": "gold"
+    }
+  },
+  "saucermarket": {
+    "name": "Saucer Market",
+    "chain": "yardsale",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "steel",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "cloudwool": {
+    "name": "Cloud Wool",
+    "chain": "cloudsheep",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "berry",
+      "mat": "cloud"
+    }
+  },
+  "cloudlamb": {
+    "name": "Cloud Lamb",
+    "chain": "cloudsheep",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "berry",
+      "mat": "cloud",
+      "accent": "plum"
+    }
+  },
+  "cloudsheep": {
+    "name": "Cloud Sheep",
+    "chain": "cloudsheep",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "berry",
+      "mat": "cloud",
+      "accent": "plum"
+    }
+  },
+  "rainbowsheep": {
+    "name": "Rainbow Sheep",
+    "chain": "cloudsheep",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "berry",
+      "mat": "aurora"
+    }
+  },
+  "sheepmum": {
+    "name": "Sheep Mum",
+    "chain": "cloudsheep",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "berry",
+      "mat": "cloud",
+      "accent": "plum"
+    }
+  },
+  "cloudbarn": {
+    "name": "Cloud Barn",
+    "chain": "cloudsheep",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "cloud",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
   "stampchip": {
     "name": "Stamp Chip",
     "chain": "mail",

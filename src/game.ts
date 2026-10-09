@@ -511,6 +511,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
   function tickProducers() {
     const now = Date.now();
+    // a sealed tile whose twin is loose on the board lights up: "drag it here!"
+    const loose = new Set<string>(); B().forEach((c: any) => { if (c && c.id) loose.add(c.id); });
+    for (let i = 0; i < N; i++) { const c = B()[i]; if (c && c.f) board.setUnsealable(i, loose.has(c.f)); }
     for (let i = 0; i < N; i++) {
       const c = B()[i]; if (!c || !c.p) continue;
       const p = PRODS[c.p];
@@ -3426,7 +3429,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   /** the world you are standing in, painted: its own picture if one was dropped
    *  into public/sprites/scenes, otherwise the meadow */
   function applyScene() {
-    const url = ART.spriteScene(S.world) || ART.spriteScene('earth');
+    // before the Lab is built, the camp is painted without it (the ruin sits on bare ground)
+    const url = (!labOpen() && ART.spriteScene(S.world + '_nolab')) || ART.spriteScene(S.world) || ART.spriteScene('earth');
     $('#app').style.setProperty('--camp', `url(${url})`);
     document.body.style.setProperty('--camp', `url(${url})`);
   }
@@ -5023,11 +5027,12 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       'ship' + (S.met && allParts() && S.fuel >= CONFIG.rocket.fuelToLaunch ? ' ready' : ''));
     // no lab yet: its corner of the painting is a grey, boarded-up ruin
     // the painting has a finished lab in it: veil that corner first, so only the ruin reads
-    if (!labOpen() && P && ART.spriteUi('camp_lab_ruin')) ents += `<div class="labHide" data-fx="${PAD.lab[0]}" data-fy="${PAD.lab[1]}"></div>`;
+    if (!labOpen() && P && ART.spriteUi('camp_lab_ruin') && !ART.spriteScene(S.world + '_nolab')) ents += `<div class="labHide" data-fx="${PAD.lab[0]}" data-fy="${PAD.lab[1]}"></div>`;
+    applyScene();
     if (!labOpen() && P) ents += ART.spriteUi('camp_lab_ruin')
       ? `<div class="labRuin art" data-fx="${PAD.lab[0]}" data-fy="${PAD.lab[1]}"><img src="${ART.spriteUi('camp_lab_ruin')}" alt=""></div>`
       : `<div class="labRuin" data-fx="${PAD.lab[0]}" data-fy="${PAD.lab[1]}"><span>🚧</span></div>`;
-    if (!labOpen() && !labOffered() && P) ents += spot('lab', PAD.lab, hole('lb'), 'Old ruin', 'nothing here yet', 'lab painted empty');
+    if (!labOpen() && !labOffered() && P) ents += spot('lab', PAD.lab, hole('lb'), 'Old ruin', 'a ruin… for now', 'lab painted empty');
     if (!labOpen() && labOffered()) ents += spot('lab', PAD.lab, P ? hole('lb') : '<div class="spotGhost">🔬</div>', 'Build the Lab', `${CONFIG.lab.build.coins} 🪙 · ${CONFIG.lab.build.qty} scrap`, (P ? 'lab painted ' : 'lab ') + (S.coins >= CONFIG.lab.build.coins && countItem(CONFIG.lab.build.item) >= CONFIG.lab.build.qty ? 'ready' : 'empty'));
     if (labOpen() && P) ents += spot('lab', PAD.lab, hole('lb'), "Dr. Zonk's Lab", S.acc && !accLeft() ? '⚗️ ready!' : '🧪 ' + S.sci, 'lab painted' + (S.acc && !accLeft() ? ' ready' : ''));
     else if (labOpen()) ents += spot('lab', PAD.lab, ART.spriteUi('camp_lab') ? `<img class="campImg" src="${ART.spriteUi('camp_lab')}">` : ART.icon('flask'), "Dr. Zonk's Lab", S.acc && !accLeft() ? '⚗️ ready!' : '🧪 ' + S.sci, 'lab' + (S.acc && !accLeft() ? ' ready' : ''));

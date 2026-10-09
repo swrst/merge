@@ -55,6 +55,8 @@
       "grass",
       "grass",
       "grass",
+      "kitespool",
+      "kitespool",
       "hay"
     ],
     "mode": "energy",
@@ -66,7 +68,8 @@
     "drops": [
       "bulbseed",
       "bulbseed",
-      "bulbseed",
+      "foldpaper",
+      "foldpaper",
       "sprig"
     ],
     "mode": "energy",
@@ -95,6 +98,8 @@
     "drops": [
       "caplet",
       "caplet",
+      "gnomehat",
+      "gnomehat",
       "toadstool"
     ],
     "spec": {
@@ -137,7 +142,8 @@
     "drops": [
       "mud",
       "mud",
-      "mud",
+      "pricetag",
+      "pricetag",
       "claylump"
     ],
     "spec": {
@@ -206,6 +212,8 @@
     "drops": [
       "oddegg",
       "oddegg",
+      "canbot",
+      "canbot",
       "blinky"
     ],
     "spec": {
@@ -223,6 +231,8 @@
     "drops": [
       "raindrop",
       "raindrop",
+      "cloudwool",
+      "cloudwool",
       "puffcloud"
     ],
     "spec": {
@@ -240,7 +250,8 @@
     "drops": [
       "flour",
       "flour",
-      "flour",
+      "pretzelplanet",
+      "pretzelplanet",
       "dough"
     ],
     "spec": {
@@ -272,7 +283,8 @@
       "ponddrop",
       "ponddrop",
       "squeakytoy",
-      "squeakytoy",
+      "bubblewhistle",
+      "bubblewhistle",
       "lilypad"
     ],
     "spec": {
@@ -308,7 +320,8 @@
     "drops": [
       "crumb",
       "crumb",
-      "crumb",
+      "postcard",
+      "postcard",
       "sandwich"
     ],
     "spec": {
@@ -325,6 +338,8 @@
     "drops": [
       "petegg",
       "petegg",
+      "windupmouse",
+      "windupmouse",
       "hatchegg"
     ],
     "spec": {

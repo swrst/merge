@@ -3,110 +3,86 @@
 Send the SETUP from ART-PROMPTS.md first, with STYLE-REFERENCE.png. Then one block per message (ChatGPT makes one image per message).
 
 
-## New chains for Sunny Meadow (each step a clearly different shape)
+## Sunny Meadow
 
-**NEW-18. sheet_alien_bakery**
-
-```
-Sheet NEW-18: Alien Bakery (no cheese, no cookies — those exist). One image: a grid of 3×2, one object per cell, left to right:
-1. a twisted pretzel shaped like a ringed planet
-2. a stack of three floating pancakes
-3. a doughnut with a tiny moon in the hole
-4. a layered cake shaped like a rocket
-5. a bakery cart with a striped awning on hover pads
-6. a bakery shaped like a giant cupcake with a chimney
-```
-
-**NEW-19. sheet_robo_pets**
+**1. sheet_kites**
 
 ```
-Sheet NEW-19: Robo Pets (alien critters). One image: a grid of 3×2, one object per cell, left to right:
-1. a little wind-up mouse made of tin
-2. a robot puppy with a spring tail
-3. a robot cat with screen eyes
-4. a robot dragon the size of a dog
-5. a robot pet and its charging basket
-6. a robot pet hotel with a satellite dish
-```
-
-**NEW-20. sheet_garden_gnomes**
-
-```
-Sheet NEW-20: Space Gnomes. One image: a grid of 3×2, one object per cell, left to right:
-1. a tiny gnome hat
-2. a little alien gnome with one eye and a beard
-3. a gnome riding a snail
-4. a gnome with a jetpack
-5. a family of three gnomes on a mushroom
-6. a gnome village built in a hollow tree stump
-```
-
-**NEW-21. sheet_lanterns_festival**
-
-```
-Sheet NEW-21: Festival Lanterns. One image: a grid of 3×2, one object per cell, left to right:
-1. a folded paper square
-2. a paper lantern shaped like a fish
-3. a lantern shaped like a rocket
-4. a string of lanterns shaped like planets
-5. a floating lantern boat
-6. a giant lantern tower with stairs
-```
-
-**NEW-22. sheet_moon_kites**
-
-```
-Sheet NEW-22: Moon Kites. One image: a grid of 3×2, one object per cell, left to right:
-1. a spool of glowing string
-2. a small diamond kite with a star
+Sheet 1: Moon Kites. One image: a grid of 3×2, one object per cell, left to right:
+1. a spool of
+2. a little diamond kite
 3. a kite shaped like a comet
 4. a box kite shaped like a satellite
-5. a kite shaped like a big friendly space whale
-6. a kite festival tower with many kites flying from it
+5. a kite shaped like a friendly space whale
+6. a festival tower
 ```
 
-**NEW-23. sheet_alien_music_toys**
+**2. sheet_lanterns**
 
 ```
-Sheet NEW-23: Bubble Instruments. One image: a grid of 3×2, one object per cell, left to right:
-1. a little bubble whistle
-2. a xylophone made of crystal tubes
-3. a jelly drum that wobbles
-4. a trumpet that blows bubbles
-5. a bubble organ with pipes of different sizes
-6. a concert dome made of bubbles
+Sheet 2: Sky Lanterns. One image: a grid of 3×2, one object per cell, left to right:
+1. a folded square of star paper
+2. a paper lantern shaped like a fish
+3. a lantern shaped like a rocket
+4. a string of planet lanterns
+5. a floating lantern boat
+6. a giant lantern tower
 ```
 
-**NEW-24. sheet_crop_bots**
+**3. sheet_gnomes**
 
 ```
-Sheet NEW-24: Farm Bots. One image: a grid of 4×2 with the last cell empty, one object per cell, left to right:
+Sheet 3: Space Gnomes. One image: a grid of 3×2, one object per cell, left to right:
+1. a tiny star-spangled gnome hat
+2. a little one-eyed alien gnome
+3. a gnome riding a glowing snail
+4. a gnome
+5. a family of gnomes
+6. a gnome village
+```
+
+**4. sheet_pastry**
+
+```
+Sheet 4: Alien Bakery. One image: a grid of 3×2, one object per cell, left to right:
+1. a twisted pretzel shaped like a ringed planet
+2. a stack of three floating pancakes
+3. a doughnut
+4. a layered cake shaped like a rocket
+5. a bakery cart
+6. a bakery shaped like a giant cupcake
+```
+
+**5. sheet_farmbots**
+
+```
+Sheet 5: Farm Bots. One image: a grid of 4×2 with the last cell empty, one object per cell, left to right:
 1. a small watering-can robot
 2. a seed-planting robot on one wheel
-3. a scarecrow robot with flapping arms
-4. a harvesting robot with basket arms
-5. a little tractor robot with big eyes
-6. a giant farming mech with a greenhouse on its back
-7. a robot farm barn with a glowing roof
+3. a scarecrow robot
+4. a harvesting robot
+5. a tractor robot
+6. a giant farming mech
+7. a robot farm barn
 ```
 
-**NEW-25. sheet_star_post**
+**6. sheet_starpost**
 
 ```
-Sheet NEW-25: Star Post. One image: a grid of 3×2, one object per cell, left to right:
+Sheet 6: Star Post. One image: a grid of 3×2, one object per cell, left to right:
 1. a postcard of a ringed planet
-2. a small post bag with a star badge
-3. a mailbox with a little antenna
+2. a post bag
+3. a mailbox
 4. a delivery drone carrying a parcel
-5. a post rocket with a letter on its fin
-6. a post office shaped like a tall lighthouse
+5. a post rocket
+6. a post office shaped like a lighthouse
 ```
 
-**NEW-26. sheet_ufo_yard_sale**
+**7. sheet_yardsale**
 
 ```
-Sheet NEW-26: Yard Sale. One image: a grid of 3×2, one object per cell, left to right:
-1. a price tag with a star
+Sheet 7: Saucer Sale. One image: a grid of 3×2, one object per cell, left to right:
+1. a price tag
 2. a box of odd gadgets
 3. a wobbly lamp shaped like a planet
 4. a stack of old space comics
@@ -114,70 +90,223 @@ Sheet NEW-26: Yard Sale. One image: a grid of 3×2, one object per cell, left to
 6. a whole market of saucer stalls
 ```
 
-**NEW-27. sheet_cloud_sheep**
+**8. sheet_robopets**
 
 ```
-Sheet NEW-27: Cloud Sheep (alien critters). One image: a grid of 3×2, one object per cell, left to right:
+Sheet 8: Robo Pets. One image: a grid of 3×2, one object per cell, left to right:
+1. a little wind-up tin mouse
+2. a robot puppy
+3. a robot cat
+4. a robot dragon the size of a dog
+5. a robot pet in its charging basket
+6. a robot pet hotel
+```
+
+**9. sheet_bubbletunes**
+
+```
+Sheet 9: Bubble Band. One image: a grid of 3×2, one object per cell, left to right:
+1. a little bubble whistle
+2. a xylophone of crystal tubes
+3. a wobbly jelly drum
+4. a trumpet
+5. a bubble organ
+6. a concert dome made of bubbles
+```
+
+**10. sheet_cloudsheep**
+
+```
+Sheet 10: Cloud Sheep. One image: a grid of 3×2, one object per cell, left to right:
 1. a tuft of cloud wool
-2. a tiny cloud lamb with three eyes
+2. a tiny three-eyed cloud lamb
 3. a fluffy cloud sheep
-4. a cloud sheep with a rainbow fleece
-5. a cloud sheep mother with two lambs
-6. a cloud barn floating on a cloud
+4. a cloud sheep
+5. a cloud sheep mother
+6. a cloud barn
+```
+
+## New chains for Sunny Meadow (each step a clearly different shape)
+
+**NEW-28. sheet_space_pizzeria**
+
+```
+Sheet NEW-28: Space Pizzeria. One image: a grid of 3×2, one object per cell, left to right:
+1. a round ball of dough with a star poked in it
+2. a pizza slice with little craters of cheese
+3. a whole round pizza shaped like a moon
+4. a stack of pizza boxes with a planet logo
+5. a pizza delivery saucer with a warming box
+6. a pizzeria shaped like a rocket oven with a chimney
+```
+
+**NEW-29. sheet_glow_aquarium**
+
+```
+Sheet NEW-29: Glow Aquarium (alien fish). One image: a grid of 3×2, one object per cell, left to right:
+1. a single glowing fish egg
+2. a tiny three-eyed guppy
+3. a round puffer fish with star spots
+4. a jellyfish that glows like a lamp
+5. a fish swimming in a bubble helmet on little legs
+6. a big aquarium dome with fish and coral inside
+```
+
+**NEW-30. sheet_sky_fort**
+
+```
+Sheet NEW-30: Sky Fort. One image: a grid of 3×2, one object per cell, left to right:
+1. a crooked wooden sign with a star
+2. a rope ladder
+3. a little cardboard hut with a flag
+4. a treehouse with a telescope
+5. a fort on stilts with a slide
+6. a floating fort with balloons and flags
+```
+
+**NEW-31. sheet_alien_art_club**
+
+```
+Sheet NEW-31: Art Club. One image: a grid of 3×2, one object per cell, left to right:
+1. a single drop of rainbow paint
+2. a brush with a glowing tip
+3. a paint palette shaped like a planet
+4. an easel with a painting of a rocket
+5. a wobbly statue of a three-eyed alien
+6. an art gallery shaped like a dome with paintings on the outside
+```
+
+**NEW-32. sheet_space_dinos**
+
+```
+Sheet NEW-32: Space Dinos (alien critters). One image: a grid of 3×2, one object per cell, left to right:
+1. a fossil chip with a star print
+2. a spotted dino egg
+3. a baby dino hatching, two antennae
+4. a small happy dino with crystal spikes
+5. a big gentle long-neck dino with a saddle
+6. a dino park gate with a volcano behind it
+```
+
+**NEW-33. sheet_arcade**
+
+```
+Sheet NEW-33: Arcade. One image: a grid of 3×2, one object per cell, left to right:
+1. an arcade token with a planet
+2. a joystick
+3. a game cartridge with a rocket sticker
+4. a handheld game console with an alien on the screen
+5. an arcade cabinet with flashing lights
+6. an arcade hall shaped like a flying saucer
+```
+
+**NEW-34. sheet_bouncy_playground**
+
+```
+Sheet NEW-34: Bouncy Playground. One image: a grid of 3×2, one object per cell, left to right:
+1. a bouncy ball with stripes
+2. a big spring
+3. a swing on a ring
+4. a twisty slide
+5. a bouncy castle shaped like a rocket
+6. a playground dome with slides coming out of it
+```
+
+**NEW-35. sheet_star_library**
+
+```
+Sheet NEW-35: Star Library. One image: a grid of 3×2, one object per cell, left to right:
+1. a single loose page with a star map
+2. a small book with a planet on the cover
+3. a stack of books with a bookmark
+4. a big tome with a tiny planet floating above it
+5. a robot bookshelf on wheels
+6. a library tower with a dome on top
+```
+
+**NEW-36. sheet_treasure_hunt**
+
+```
+Sheet NEW-36: Treasure Hunt. One image: a grid of 3×2, one object per cell, left to right:
+1. a torn piece of treasure map
+2. a little shovel
+3. a star-shaped key
+4. a small wooden chest
+5. a golden chest overflowing with gems
+6. a treasure ship sailing on a cloud
+```
+
+**NEW-37. sheet_hot_springs**
+
+```
+Sheet NEW-37: Hot Springs. One image: a grid of 3×2, one object per cell, left to right:
+1. a warm pebble with a little steam curl
+2. a rolled-up towel with stars
+3. a wooden bucket of steaming water
+4. a small stone pool with steam
+5. a hot spring with a tiny waterfall
+6. a spa lodge with steaming pools around it
 ```
 
 ---
 
 ## UI pieces
 
-**UI-13. sheet_resource_icons**
+**UI-18. sheet_sealed_tile**
 
 ```
-Small round-cornered icons, one image: a grid of 3×2, one per cell, left to right:
-1. energy: a little battery cell glowing with a lightning bolt
-2. coin: a coin with a ringed planet
-3. gem: a faceted space crystal
-4. science: a bubbling flask
-5. xp: a star with a small rocket trail
-6. star core: a glowing star inside a round shell
+One image: a grid of 2×1, transparent background, one per cell, each a square board tile overlay seen from the front, empty and see-through in the middle:
+1. a glass bubble over a tile with a small star padlock at the bottom right, slightly frosty
+2. the same glass bubble cracking open with golden light leaking out of the cracks
 ```
 
-**UI-14. sheet_hud_frame**
-
-```
-One image: a grid of 2×2, transparent background, all empty in the middle:
-1. a level badge shaped like a round porthole with a small number plate
-2. a long thin XP bar like a spaceship fuel gauge
-3. a resource pill shaped like a small capsule window
-4. a square shop button frame like a docking hatch
-```
-
-**UI-15. sheet_notifications**
+**UI-19. sheet_shop_packs**
 
 ```
 One image: a grid of 3×2, transparent background, one per cell:
-1. a small red alert light for "something new"
-2. a little speech bubble with an exclamation mark
-3. a gift box with a ribbon, glowing
-4. a timer clock face with a rocket hand
-5. a check mark inside a ring of stars
-6. a small padlock with a star keyhole
+1. a small pile of coins
+2. a big sack of coins
+3. a treasure chest full of coins
+4. a small handful of space crystals
+5. a pouch of space crystals
+6. a crate of space crystals glowing
 ```
 
-**UI-16. sheet_lab_stations**
+**UI-20. sheet_offer_badges**
 
 ```
-One image: a grid of 3×2, transparent background, one per cell, each a round glowing holographic projector base seen from the front:
-1. a recycling projector with arrows going round
-2. an experiment projector with two flasks
-3. a growing projector with a sprout
-4. an upgrades projector with a book
-5. a goo still projector with a jar
-6. a science counter projector with a flask
+One image: a grid of 3×2, transparent background, one per cell:
+1. a ribbon banner, empty, for a word like BEST
+2. a round starburst sticker, empty
+3. a small hourglass timer tag, empty
+4. a gift tag on a string, empty
+5. a corner ribbon for a card, empty
+6. a shiny "new" star badge, empty
 ```
 
-**UI-17. ui_toast_strip**
+**UI-21. sheet_chapter_rewards**
 
 ```
-One image, wide 1536×256, transparent background: an empty, slim, rounded message strip like a spaceship status display, with a little light at the left end.
+One image: a grid of 3×1, transparent background, one per cell:
+1. a closed treasure chest with a planet lock
+2. the same chest opening with light and stars bursting out
+3. the same chest open and empty
+```
+
+**UI-22. energy_refill_art**
+
+```
+One image, square, transparent background: a big battery cell with a lightning bolt, overflowing with sparkles and little stars, a tiny alien hugging it.
+```
+
+**UI-23. sheet_round_buttons**
+
+```
+One image: a grid of 3×2, transparent background, one per cell, each an empty round glossy button seen from the front:
+1. orange
+2. sky blue
+3. pink
+4. gold
+5. white with a blue rim
+6. grey, looking pressed
 ```

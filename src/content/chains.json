@@ -1757,6 +1757,187 @@
       "Something sparkly, darling."
     ]
   },
+  "pastry": {
+    "name": "Alien Bakery",
+    "world": "earth",
+    "unlock": 9,
+    "items": [
+      "pretzelplanet",
+      "pancakestack",
+      "moondonut",
+      "rocketcake",
+      "bakecart",
+      "cupcakehouse"
+    ],
+    "asks": [
+      "Fresh from the oven!",
+      "Breakfast that floats, please.",
+      "A treat for the Mayor."
+    ]
+  },
+  "robopets": {
+    "name": "Robo Pets",
+    "world": "earth",
+    "unlock": 14,
+    "items": [
+      "windupmouse",
+      "robopup",
+      "robocat",
+      "robodragon",
+      "petbasket",
+      "pethotel"
+    ],
+    "asks": [
+      "My bot wants a pet.",
+      "Something that purrs. Electrically.",
+      "A walkies buddy!"
+    ]
+  },
+  "gnomes": {
+    "name": "Space Gnomes",
+    "world": "earth",
+    "unlock": 7,
+    "items": [
+      "gnomehat",
+      "gnome",
+      "snailgnome",
+      "jetgnome",
+      "gnomefamily",
+      "gnomevillage"
+    ],
+    "asks": [
+      "The gnomes are back!",
+      "A gnome for my garden.",
+      "Who keeps moving my gnomes?"
+    ]
+  },
+  "lanterns": {
+    "name": "Sky Lanterns",
+    "world": "earth",
+    "unlock": 6,
+    "items": [
+      "foldpaper",
+      "fishlantern",
+      "rocketlantern",
+      "planetlights",
+      "lanternbarge",
+      "lanterntower"
+    ],
+    "asks": [
+      "Lantern night!",
+      "Light the way home.",
+      "For the night market."
+    ]
+  },
+  "kites": {
+    "name": "Moon Kites",
+    "world": "earth",
+    "unlock": 4,
+    "items": [
+      "kitespool",
+      "starkite",
+      "cometkite",
+      "satkite",
+      "whalekite",
+      "kitetower"
+    ],
+    "asks": [
+      "Windy day!",
+      "Kite race on the hill.",
+      "Higher! Higher!"
+    ]
+  },
+  "bubbletunes": {
+    "name": "Bubble Band",
+    "world": "earth",
+    "unlock": 16,
+    "items": [
+      "bubblewhistle",
+      "crystalxylo",
+      "jellydrum",
+      "bubbletrumpet",
+      "bubbleorgan",
+      "bubbledome"
+    ],
+    "asks": [
+      "The band needs a drummer.",
+      "Something that goes POP.",
+      "Music for the dance!"
+    ]
+  },
+  "farmbots": {
+    "name": "Farm Bots",
+    "world": "earth",
+    "unlock": 11,
+    "items": [
+      "canbot",
+      "seedbot",
+      "scarebot",
+      "harvestbot",
+      "tractorbot",
+      "farmmech",
+      "robobarn"
+    ],
+    "asks": [
+      "The field won't weed itself.",
+      "Harvest time!",
+      "A helper for the farm."
+    ]
+  },
+  "starpost": {
+    "name": "Star Post",
+    "world": "earth",
+    "unlock": 12,
+    "items": [
+      "postcard",
+      "postbag",
+      "antennabox",
+      "postdrone",
+      "postrocket",
+      "postlighthouse"
+    ],
+    "asks": [
+      "A letter to the Moon!",
+      "Parcel for the Mayor.",
+      "Post day!"
+    ]
+  },
+  "yardsale": {
+    "name": "Saucer Sale",
+    "world": "earth",
+    "unlock": 13,
+    "items": [
+      "pricetag",
+      "gadgetbox",
+      "planetlamp",
+      "comicstack",
+      "saucerstall",
+      "saucermarket"
+    ],
+    "asks": [
+      "One alien's junk...",
+      "Bargain hunting!",
+      "Anything shiny?"
+    ]
+  },
+  "cloudsheep": {
+    "name": "Cloud Sheep",
+    "world": "earth",
+    "unlock": 18,
+    "items": [
+      "cloudwool",
+      "cloudlamb",
+      "cloudsheep",
+      "rainbowsheep",
+      "sheepmum",
+      "cloudbarn"
+    ],
+    "asks": [
+      "Wool for winter.",
+      "The sheep floated off again.",
+      "Fluffy, please!"
+    ]
+  },
   "mail": {
     "name": "Moon Mail",
     "world": "luna",

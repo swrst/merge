@@ -502,13 +502,13 @@ class PixiBoard {
     const s = this.slots[i] as any;
     if (s.pending) { s.pending.kill(); s.pending = undefined; }
     if (s.idle) { s.idle.kill(); s.idle = undefined; }
-    [s.art, s.timer, s.badge, s.bar, s.cost, s.ring, s.readyRing, s.aura, s.spin, s.clock].forEach((o: any) => {
+    [s.art, s.timer, s.badge, s.bar, s.cost, s.ring, s.readyRing, s.aura, s.spin, s.clock, s.unseal].forEach((o: any) => {
       if (o) { gsap.killTweensOf(o); gsap.killTweensOf(o.scale); o.destroy({ children: true }); }
     });
     s.art = s.timer = undefined; s.badge = undefined; s.ring = undefined;
     s.bar = undefined; s.barW = undefined; s.barFrac = undefined;
     s.aura = undefined; s.spin = undefined; s.cost = undefined; s.clock = undefined;
-    s.readyRing = null; s.hinting = false;
+    s.readyRing = null; s.hinting = false; s.unseal = null;
   }
   /** Re-seat everything on tile `i` after the grid has moved or resized.
    *  Rings, badges and running tweens all hold coordinates from the layout they
@@ -882,6 +882,26 @@ class PixiBoard {
       gsap.to(g, { rotation: Math.PI / 2, duration: 2.4, repeat: -1, ease: 'none' });
     } else if (!on && has) {
       const g = (s as any).readyRing; gsap.killTweensOf(g); gsap.killTweensOf(g.scale); g.destroy(); (s as any).readyRing = null;
+    }
+  }
+  /** a sealed tile with its twin on the board: glow, wake up and beat so it can't be missed */
+  setUnsealable(i: number, on: boolean) {
+    const s = this.slots[i] as any; if (!s || !s.art || !s.key.startsWith('f')) return;
+    if (on && !s.unseal) {
+      const p = this.center(i), g = new Graphics(), R = this.cell * 0.47;
+      g.roundRect(-R, -R, R * 2, R * 2, this.cell * 0.16).fill({ color: 0xffd34d, alpha: 0.28 }).stroke({ color: 0xffe066, width: Math.max(3, this.cell * 0.06) });
+      g.position.set(p.x, p.y); this.lFx.addChild(g); s.unseal = g;
+      gsap.to(g, { alpha: 0.35, duration: 0.55, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+      s.art.tint = 0xffffff; s.art.alpha = 1;
+      if (s.idle) s.idle.kill();
+      const sc = this.spriteScale(i);
+      s.idle = gsap.to(s.art.scale, { x: sc * 1.12, y: sc * 1.12, duration: 0.45, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+    } else if (on && s.unseal) {
+      const p = this.center(i); s.unseal.position.set(p.x, p.y);
+    } else if (!on && s.unseal) {
+      gsap.killTweensOf(s.unseal); s.unseal.destroy(); s.unseal = null;
+      s.art.tint = 0xaab4d8; s.art.alpha = 0.9;
+      if (s.idle) s.idle.kill(); const sc = this.spriteScale(i); s.art.scale.set(sc, sc); this.idleBob(i);
     }
   }
   /** charge battery under a producer: a bar you can watch empty, and the count */
