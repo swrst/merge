@@ -100,7 +100,7 @@ for (const w of WORLDS) {
     name: w.name, subtitle: w.subtitle, planet: w.planet,
     chains: mine,
     start: starts[w.key] || [],
-    locks: { ...locks },
+    locks: w.locks ? { ...w.locks } : { ...locks },
     sealed: w.sealed || {},
     folks: w.folks,
     grow: grow[w.key] || [],

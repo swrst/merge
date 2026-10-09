@@ -2624,7 +2624,15 @@ html body .app .hud .chip{padding-right:3px!important}
 /* the painted frame is laid OVER the whole stage, so it always wraps the board whatever its size */
 html.ui-panel_board body .app .stage{border:0!important;border-image:none!important;border-radius:18px!important;padding:6px!important;
   background:rgba(235,246,255,.6)!important;box-shadow:none!important;overflow:visible!important}
-html.ui-panel_board body .app .stage::after{content:"";position:absolute;inset:-16px -13px -14px -14px;z-index:6;pointer-events:none;
+html.ui-panel_board body .app .stage::after{content:none}
+html.ui-panel_board body .app .stage{background:none!important;padding:4px!important}
+html.ui-panel_board body .app #board{position:relative}
+html.ui-panel_board body .app #board::after{content:"";position:absolute;z-index:6;pointer-events:none;box-sizing:border-box;
+  left:calc(var(--gx,0px) - 20px);top:calc(var(--gy,0px) - 26px);width:calc(var(--gw,100%) + 39px);height:calc(var(--gh,100%) + 48px);
+  border-style:solid;border-width:26px 18px 23px 20px;border-color:transparent;border-image:var(--ui-panel_board) 146 82 128 97 / 26px 18px 23px 20px stretch}
+html.ui-panel_board body .app #board::before{content:"";position:absolute;z-index:0;pointer-events:none;border-radius:10px;background:rgba(235,246,255,.7);
+  left:calc(var(--gx,0px) - 3px);top:calc(var(--gy,0px) - 3px);width:calc(var(--gw,100%) + 6px);height:calc(var(--gh,100%) + 6px)}
+.old-frame-unused{
   border-style:solid;border-width:26px 18px 23px 20px;border-color:transparent;border-image:var(--ui-panel_board) 146 82 128 97 / 26px 18px 23px 20px stretch}
 html.ui-panel_board body .app .stage{margin:12px 14px 14px!important}
 .labRuin{position:absolute;width:26%;height:14%;transform:translate(-50%,-92%);border-radius:40% 40% 20% 20%;pointer-events:none;z-index:1;
@@ -2632,3 +2640,30 @@ html.ui-panel_board body .app .stage{margin:12px 14px 14px!important}
   -webkit-mask-image:radial-gradient(closest-side,#000 70%,transparent);mask-image:radial-gradient(closest-side,#000 70%,transparent);
   display:flex;align-items:center;justify-content:center}
 .labRuin span{font-size:30px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.6))}
+/* ===== v49 polish ===== */
+/* buttons: compact capsules; the main action is green */
+html body .app .big{max-width:230px!important;min-height:38px!important;font-size:14px!important;padding:5px 14px!important;margin-top:8px!important}
+html body .app .big.soft{max-width:170px!important;min-height:34px!important;font-size:13px!important}
+html body .app .big:not(.blue):not(.gold):not(.soft):not(.adBtn):not(.alt):not(:disabled):not(.off){
+  background:linear-gradient(180deg,#a6f27f 0%,#5fd23f 50%,#3caa2a 100%)!important;color:#fff!important;text-shadow:0 1px 0 #1f6d14!important;
+  box-shadow:0 0 0 2px #2f8a1f,0 3px 0 #23701a,0 5px 10px rgba(40,140,30,.3)!important}
+html body .app .buyBtn:not(:disabled):not(.gem):not(.maxed){background:linear-gradient(180deg,#a6f27f,#5fd23f 50%,#3caa2a)!important;text-shadow:0 1px 0 #1f6d14!important;box-shadow:0 0 0 2px #2f8a1f,0 3px 0 #23701a!important}
+html body .app .adB{max-width:240px!important;padding:4px 6px 4px 4px!important;margin-top:8px!important}
+html body .app .adB .adPlay{width:28px!important;height:28px!important}
+html body .app .adB .adPlay::before{border-left-width:10px!important;border-top-width:6px!important;border-bottom-width:6px!important}
+html body .app .adB b{font-size:13px!important}html body .app .adB i{font-size:9.5px!important}
+html body .app .adB .adLeft{transform:scale(.85)}
+html body .app .buyBtn{padding:5px 10px!important;font-size:11.5px!important}
+/* tabs and pills never clipped */
+.shopTabs{padding:6px 4px 10px!important}
+/* storage small, galaxy big */
+html body .app #btnStore{width:44px!important;height:44px!important;border-radius:14px!important}
+html body .app #btnStore .ti,html body .app #btnStore .ti *{width:32px!important;height:32px!important;font-size:22px}
+html body .app .galBtn{width:70px!important;height:70px!important}
+html body .app .galBtn .ti,html body .app .galBtn .ti .uiIc,html body .app .galBtn .ti svg{width:56px!important;height:56px!important}
+/* painted ruin over the camp's lab */
+.labRuin.art{width:37%;height:auto;transform:translate(-46%,-84%);-webkit-backdrop-filter:none;backdrop-filter:none;-webkit-mask-image:none;mask-image:none;border-radius:0}
+.labRuin.art img{width:100%;display:block;filter:drop-shadow(0 4px 6px rgba(0,0,0,.35))}
+html.ui-panel_board body .app #board canvas{position:relative;z-index:1}
+html.ui-panel_board body .app #board,html.ui-panel_board body .app .stage{overflow:visible!important}
+html.ui-panel_board body .app .stage{margin:14px 20px 16px!important}

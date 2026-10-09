@@ -257,6 +257,10 @@ class PixiBoard {
     }
     this.ox = Math.round((w - gw) / 2);
     this.oy = Math.round((h - gh) / 2);
+    // tell the page where the grid really is, so the painted frame hugs it
+    const st = this.host.style;
+    st.setProperty('--gx', this.ox + 'px'); st.setProperty('--gy', this.oy + 'px');
+    st.setProperty('--gw', gw + 'px'); st.setProperty('--gh', gh + 'px');
     for (let i = 0; i < this.tiles.length; i++) this.drawTile(i);
     for (let i = 0; i < this.slots.length; i++) this.placeSlot(i);
     this.placeTags();
@@ -308,8 +312,19 @@ class PixiBoard {
     g.clear();
     const art = this.tileArt[i];
     const kind = locked ? 'tile_locked' : dark ? 'tile_dark' : 'tile_light';
-    const paint = this.tex['ui:' + kind + '_' + this.theme] || this.tex['ui:' + kind]
-      || (locked ? undefined : this.tex['ui:tile_light_' + this.theme] || this.tex['ui:tile_light']);
+    // locked tiles are a dark space-station hatch, drawn here (no crystals)
+    const paint = locked ? undefined : (this.tex['ui:' + kind + '_' + this.theme] || this.tex['ui:' + kind]
+      || this.tex['ui:tile_light_' + this.theme] || this.tex['ui:tile_light']);
+    if (locked) {
+      if (art) art.visible = false;
+      g.roundRect(p.x + 1.5, p.y + 1.5, c - 3, c - 3, R).fill({ color: dark ? 0x26306a : 0x2d3a7c }).stroke({ color: 0x6fd8ff, width: 2, alpha: 0.7 });
+      g.roundRect(p.x + c * 0.12, p.y + c * 0.12, c * 0.76, c * 0.76, R * 0.7).stroke({ color: 0xffffff, width: 1.2, alpha: 0.12 });
+      const rv = Math.max(1.5, c * 0.035);
+      [[0.14, 0.14], [0.86, 0.14], [0.14, 0.86], [0.86, 0.86]].forEach(([fx, fy]) => g.circle(p.x + c * fx, p.y + c * fy, rv).fill({ color: 0x9fe6ff, alpha: 0.55 }));
+      [[0.3, 0.32], [0.68, 0.24], [0.5, 0.7], [0.24, 0.62], [0.74, 0.6]].forEach(([fx, fy], k) => g.circle(p.x + c * fx, p.y + c * fy, (k % 2 ? 0.8 : 1.1) * c * 0.012).fill({ color: 0xffffff, alpha: 0.5 }));
+      if (this.wanted.has(i)) g.roundRect(p.x + 2, p.y + 2, c - 4, c - 4, R).stroke({ color: 0xffd75e, width: 3, alpha: 1 });
+      return;
+    }
     if (art) art.visible = !!paint;
     if (paint && art) {
       // a painted tile carries its own light and shade; only the rarity frame is drawn over it
@@ -366,8 +381,8 @@ class PixiBoard {
     if (!c) return;
     if (c.f) {
       // a sealed tile: the item sits inside, dimmed, waiting for its twin
-      s.art = this.sprite('i:' + c.f, i, 0.72);
-      s.art.alpha = 0.95; (s.art as any).tint = 0x6c7398;   // dark and dull until it is opened
+      s.art = this.sprite('i:' + c.f, i, 0.6);
+      s.art.alpha = 0.9; (s.art as any).tint = 0xaab4d8;   // dark and dull until it is opened
       const p = this.center(i), g = new Graphics(), r = this.cell * 0.15;
       g.circle(0, 0, r).fill({ color: 0x2a3f8f }).stroke({ color: 0xffffff, width: 2 });
       g.roundRect(-r * 0.45, -r * 0.1, r * 0.9, r * 0.7, 2).fill({ color: 0xffe07a });
@@ -380,10 +395,10 @@ class PixiBoard {
       // a painted overgrown tile already carries its weeds
       s.art = this.sprite('w:' + this.theme, i, 0.78);
       s.art.alpha = 0; s.art.visible = false;   // every world has a painted locked tile now: no extra weeds on top
-      const t = new Text({ text: 'lv' + c.b, style: { fontFamily: 'Fredoka, sans-serif', fontSize: this.cell * 0.22, fontWeight: '700', fill: 0xffffff, stroke: { color: 0x4b2a86, width: Math.max(2, this.cell * 0.05) } } });
+      const t = new Text({ text: 'Lv ' + c.b, style: { fontFamily: 'Fredoka, sans-serif', fontSize: this.cell * 0.22, fontWeight: '700', fill: 0xffffff, stroke: { color: 0x1b2560, width: Math.max(2, this.cell * 0.05) } } });
       t.anchor.set(0.5);
       const p = this.center(i);
-      t.position.set(p.x + this.cell * 0.28, p.y + this.cell * 0.3);
+      t.position.set(p.x, p.y);
       this.lItem.addChild(t);
       s.timer = t;
     } else if (c.bub) {
@@ -508,7 +523,7 @@ class PixiBoard {
     if (!s.art) return;
     if (s.timer && s.key.startsWith('b')) {
       s.timer.style.fontSize = this.cell * 0.22;
-      s.timer.position.set(p.x + this.cell * 0.28, p.y + this.cell * 0.3);
+      s.timer.position.set(p.x, p.y);
     } else if (s.timer && s.key.startsWith('f')) {
       s.timer.position.set(p.x + this.cell * 0.3, p.y + this.cell * 0.3);
     } else if (s.timer) {

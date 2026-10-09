@@ -6,8 +6,9 @@ export const WORLDS = [
     tapCost: 1, perk: 'rain',
     folks: ['pip', 'grandma', 'timmy', 'gigi', 'biscuit', 'mumbo', 'pim', 'blorb', 'grubs'],
     /* sealed tiles: an item waits inside; merge its twin into it to open the tile */
-    sealed: { 6: 'branch', 7: 'rock', 8: 'berries', 9: 'puddle', 10: 'pebble', 11: 'twig',
-      36: 'hay', 37: 'sprig', 38: 'honeydrop', 39: 'thread', 40: 'spintop', 41: 'dew' },
+    sealed: { 0: 'branch', 1: 'rock', 2: 'berries', 3: 'puddle', 4: 'pebble', 5: 'twig',
+      42: 'hay', 43: 'sprig', 44: 'honeydrop', 45: 'thread', 46: 'spintop', 47: 'dew' },
+    locks: { 6: 2, 11: 2, 7: 3, 10: 3, 8: 4, 9: 4, 36: 2, 41: 2, 37: 3, 40: 3, 38: 4, 39: 4 },
     heart: 'Meadow Heart',
     /* what the Heart wants, stage by stage — each stage visibly wakes the world */
     bloom: [

@@ -1260,7 +1260,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (boostOn() && p.mode === 'energy' && !c.tmp && nextOf(id) && !ITEMS[id].part) id = nextOf(id) as string;
     // Golden Touch: now and then the drop arrives one step up
     if (res('golden') && Math.random() < res('golden') * 0.03 && nextOf(id) && !ITEMS[id].part) { id = nextOf(id) as string; setTimeout(() => floatText(spot, '✨ Golden!', '#ffe07a'), 300); }
-    b[spot] = { id }; gotItem(id);
+    b[spot] = { id }; gotItem(id); setTimeout(() => sealTip(id, spot), 700);
     // Lucky Taps: a second one for free
     if (res('lucky') && Math.random() < res('lucky') * 0.04) {
       const s2 = nearFree(i);
@@ -1288,6 +1288,14 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
   /* Sealed tiles (Travel Town fog): an item waits inside, dimmed. Bring its
      twin and merge into it: the tile opens and the next step comes out. */
+  function sealTip(id: string, at: number) {
+    if (S.sealTip || !S.tut) return;
+    const b = B(), k = b.findIndex((c: any) => c && c.f === id); if (k < 0) return;
+    S.sealTip = 1; save();
+    hintPair = [at, k]; board.setHint(hintPair); setTimeout(() => { hintPair = null; board.setHint(null); }, 6000);
+    setTimeout(() => modal('pip', 'A locked tile!',
+      `That dimmed <b>${ITEMS[id].name}</b> with the lock is sealed. Drag your <b>${ITEMS[id].name}</b> onto it: they merge and the tile opens. Every locked item opens the same way.`, 'Got it'), 500);
+  }
   function unseal(from: number, to: number) {
     const b = B(), a = b[from], c = b[to]; if (!a || !c || !c.f) return;
     const nx = nextOf(c.f) as string;
@@ -1305,7 +1313,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       if (a.id === c.id) toast(ITEMS[a.id].name + ' is already the best in its chain!');
       return false;
     }
-    b[from] = null; b[to] = { id: nx }; gotItem(nx);
+    b[from] = null; b[to] = { id: nx }; gotItem(nx); setTimeout(() => sealTip(nx, to), 700);
     board.animMerge(from, to, nx);
     const crown = CHAINS[ITEMS[nx].chain].items.slice(-1)[0] === nx && CHAINS[ITEMS[nx].chain].items.length > 2;
     if (crown) { sfx.crown(); haptic('medium'); } else { sfx.merge(ITEMS[nx].tier); haptic('light'); } floatText(to, ITEMS[nx].name, '#fff');
@@ -4954,7 +4962,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       S.met ? (allParts() ? 'Ready · ⛽' + S.fuel + '/' + CONFIG.rocket.fuelToLaunch : built + '/4 parts') : 'nothing here yet',
       'ship' + (S.met && allParts() && S.fuel >= CONFIG.rocket.fuelToLaunch ? ' ready' : ''));
     // no lab yet: its corner of the painting is a grey, boarded-up ruin
-    if (!labOpen() && P) ents += `<div class="labRuin" data-fx="${PAD.lab[0]}" data-fy="${PAD.lab[1]}"><span>🚧</span></div>`;
+    if (!labOpen() && P) ents += ART.spriteUi('camp_lab_ruin')
+      ? `<div class="labRuin art" data-fx="${PAD.lab[0]}" data-fy="${PAD.lab[1]}"><img src="${ART.spriteUi('camp_lab_ruin')}" alt=""></div>`
+      : `<div class="labRuin" data-fx="${PAD.lab[0]}" data-fy="${PAD.lab[1]}"><span>🚧</span></div>`;
     if (!labOpen() && !labOffered() && P) ents += spot('lab', PAD.lab, hole('lb'), 'Old ruin', 'nothing here yet', 'lab painted empty');
     if (!labOpen() && labOffered()) ents += spot('lab', PAD.lab, P ? hole('lb') : '<div class="spotGhost">🔬</div>', 'Build the Lab', `${CONFIG.lab.build.coins} 🪙 · ${CONFIG.lab.build.qty} scrap`, (P ? 'lab painted ' : 'lab ') + (S.coins >= CONFIG.lab.build.coins && countItem(CONFIG.lab.build.item) >= CONFIG.lab.build.qty ? 'ready' : 'empty'));
     if (labOpen() && P) ents += spot('lab', PAD.lab, hole('lb'), "Dr. Zonk's Lab", S.acc && !accLeft() ? '⚗️ ready!' : '🧪 ' + S.sci, 'lab painted' + (S.acc && !accLeft() ? ' ready' : ''));
