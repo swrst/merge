@@ -381,13 +381,13 @@ class PixiBoard {
     if (!c) return;
     if (c.f) {
       // a sealed tile: the item sits inside, dimmed, waiting for its twin
-      s.art = this.sprite('i:' + c.f, i, 0.6);
-      s.art.alpha = 1; (s.art as any).tint = 0xd4dcf4;   // a little dull until it is opened, but easy to read
+      s.art = this.sprite('i:' + c.f, i, 0.6); (s as any).sealedItem = true;
+      s.art.alpha = 0.55; (s.art as any).tint = 0xdfe6ff;   // ghostly inside the glass until it is opened
       const p = this.center(i), g = new Graphics(), r = this.cell * 0.15;
       if (this.tex['ui:seal_bubble']) {
         // painted glass bubble over the tile (it carries its own little padlock)
         const b = new Sprite(this.tex['ui:seal_bubble']); b.anchor.set(0.5); b.width = b.height = this.cell * 1.0;
-        b.alpha = 0.5; b.position.set(p.x, p.y); this.lItem.addChild(b); (s as any).seal = b; s.timer = undefined;
+        b.alpha = 1; b.position.set(p.x, p.y); this.lItem.addChild(b); (s as any).seal = b; s.timer = undefined;
         return;
       }
       g.circle(0, 0, r).fill({ color: 0x2a3f8f }).stroke({ color: 0xffffff, width: 2 });
@@ -412,12 +412,12 @@ class PixiBoard {
          item sits small and pale inside a bright soap film drawn ON TOP of it,
          the tile goes blue, and a gold price tag hangs off the bottom. */
       const p = this.center(i), R = this.cell * 0.46;
-      s.art = this.sprite('i:' + c.bub, i, 0.76);
+      s.art = this.sprite('i:' + c.bub, i, 0.58);
       s.art.alpha = 1;
       const film = new Container();
       const g = new Graphics();
       if (this.tex['ui:bubble_film']) {
-        const fs = new Sprite(this.tex['ui:bubble_film']); fs.anchor.set(0.5); fs.width = fs.height = R * 2.15; fs.alpha = 0.5; film.addChild(fs);
+        const fs = new Sprite(this.tex['ui:bubble_film']); fs.anchor.set(0.5); fs.width = fs.height = R * 2.15; fs.alpha = 0.9; film.addChild(fs);
       } else {
       g.circle(0, 0, R).fill({ color: 0x9fdcff, alpha: 0.3 });
       g.circle(0, 0, R).stroke({ color: 0x58b8f0, alpha: 1, width: 3.5 });
@@ -552,10 +552,10 @@ class PixiBoard {
     if (s.art.parent !== this.lItem) this.lItem.addChild(s.art);
     gsap.killTweensOf(s.art);
     gsap.killTweensOf(s.art.scale);
-    const scale = s.key.startsWith('p') ? 1.02 : s.key.startsWith('b') ? 0.82 : 1.0;
+    const scale = s.key.startsWith('p') ? 1.02 : s.key.startsWith('b') ? 0.82 : s.key.startsWith('f') ? 0.6 : s.key.startsWith('u') ? 0.58 : 1.0;
     s.art.position.set(p.x, p.y);
     s.art.width = s.art.height = this.cell * scale;
-    s.art.alpha = 1;
+    s.art.alpha = s.key.startsWith('f') ? ((s as any).unseal ? 0.85 : 0.55) : 1;
     s.art.rotation = 0;
     if (!s.key.startsWith('b')) this.idleBob(i);
   }
@@ -588,7 +588,7 @@ class PixiBoard {
   }
   private spriteScale(i: number) {
     const s = this.slots[i];
-    const scale = s.key.startsWith('p') ? 1.02 : s.key.startsWith('b') ? 0.82 : 1.0;
+    const scale = s.key.startsWith('p') ? 1.02 : s.key.startsWith('b') ? 0.82 : s.key.startsWith('f') ? 0.6 : s.key.startsWith('u') ? 0.58 : 1.0;
     return (this.cell * scale) / TEX;
   }
   /** producer squash when used */
@@ -900,8 +900,8 @@ class PixiBoard {
       g.roundRect(-R, -R, R * 2, R * 2, this.cell * 0.16).fill({ color: 0xffd34d, alpha: 0.28 }).stroke({ color: 0xffe066, width: Math.max(3, this.cell * 0.06) });
       g.position.set(p.x, p.y); this.lFx.addChild(g); s.unseal = g;
       gsap.to(g, { alpha: 0.35, duration: 0.55, repeat: -1, yoyo: true, ease: 'sine.inOut' });
-      s.art.tint = 0xffffff; s.art.alpha = 1;
-      if (s.seal && this.tex['ui:seal_crack']) { s.seal.texture = this.tex['ui:seal_crack']; s.seal.alpha = 0.6; }
+      s.art.tint = 0xffffff; s.art.alpha = 0.85;
+      if (s.seal && this.tex['ui:seal_crack']) { s.seal.texture = this.tex['ui:seal_crack']; s.seal.alpha = 1; }
       if (s.idle) s.idle.kill();
       const sc = this.spriteScale(i);
       s.idle = gsap.to(s.art.scale, { x: sc * 1.12, y: sc * 1.12, duration: 0.45, repeat: -1, yoyo: true, ease: 'sine.inOut' });
@@ -909,8 +909,8 @@ class PixiBoard {
       const p = this.center(i); s.unseal.position.set(p.x, p.y);
     } else if (!on && s.unseal) {
       gsap.killTweensOf(s.unseal); s.unseal.destroy(); s.unseal = null;
-      s.art.tint = 0xd4dcf4; s.art.alpha = 1;
-      if (s.seal && this.tex['ui:seal_bubble']) { s.seal.texture = this.tex['ui:seal_bubble']; s.seal.alpha = 0.5; }
+      s.art.tint = 0xdfe6ff; s.art.alpha = 0.55;
+      if (s.seal && this.tex['ui:seal_bubble']) { s.seal.texture = this.tex['ui:seal_bubble']; s.seal.alpha = 1; }
       if (s.idle) s.idle.kill(); const sc = this.spriteScale(i); s.art.scale.set(sc, sc); this.idleBob(i);
     }
   }

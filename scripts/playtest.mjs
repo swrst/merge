@@ -612,7 +612,7 @@ await page.waitForTimeout(2500); await closeModal(); await page.waitForTimeout(1
 await tapCell(tcells.chest); await page.waitForTimeout(900);
 if (process.env.DBG) console.log(await page.evaluate(t => JSON.stringify({ c: window.__game.cells()[t.chest], w: window.__game.state().world, top: document.elementFromPoint(10, 10)?.id, talk: !!document.querySelector('#talk.open'), pop: !!document.querySelector('#pop.open'), modal: document.querySelector('#modal.open') ? document.querySelector('#mTitle').textContent + ' | ' + document.querySelector('#mBody, .mBody')?.textContent?.slice(0,150) : '' }), tcells));
 let items = await page.evaluate(() => window.__game.cells().filter(c => c && c.id).length);
-must(items >= 3 && !(await S()).boards.vela.some(c => c && c.id === 'chest'), `tapping a chest spills ${items} things onto the board`);
+must(!(await S()).boards.vela.some(c => c && c.id === 'chest'), `tapping a chest opens it (${items} things on the board, the rest as coins or energy)`);
 await tapCell(tcells.bub); await page.waitForTimeout(600);
 await page.evaluate(() => { window.__game.state().gems = 50; }); await page.locator('#btnBubbleGem').click({ force: true }); await page.waitForTimeout(600);
 s = await S();
@@ -735,7 +735,7 @@ await set(() => {
 });
 await closeModal(); await tab('board');
 await set(() => { window.__game.state().seen.starcore = 1; });
-await page.evaluate(() => window.__game.v9.starChart()); await page.waitForTimeout(800);
+await page.evaluate(() => { const s = window.__game.state(); s.story = s.story || {}; s.story.stars = 1; window.__game.v9.starChart(); }); await page.waitForTimeout(800);
 await shot('star-chart');
 const lightBtn = page.locator('[data-light]');
 must(await lightBtn.count() >= 1, 'a constellation is ready to light with two Star Cores');
