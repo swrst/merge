@@ -742,6 +742,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     rainbow: { who: 'pip', title: 'Wildcard', say: 'drop it on any item to level it up.' },
     fuel: { who: 'bloop', title: 'Fuel', say: 'merge ore into rocket fuel.' },
     part: { who: 'bloop', title: 'Rocket piece', say: 'merge pieces into a whole part.' },
+    junk: { who: 'zib', title: 'Space Junk', say: 'is worth triple 🧪 Science in the Lab recycler — and seven merged up, the Junk Rocket coughs out Fuel Ore every time.' },
   };
   function explainFirst(id: string) {
     const d = ITEMS[id]; if (!d) return;
@@ -3337,6 +3338,11 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   /** completing a chain for the first time is what produces Bloom Essence */
   function checkChainFinale(id: string, at: number) {
     const d = ITEMS[id], ch = CHAINS[d.chain];
+    // space junk is a fuel recycler: a finished Junk Rocket always gives back fuel ore
+    if (id === 'junkrocket') {
+      setTimeout(() => { const g = giveItem('fuelore', at); if (g >= 0) sparkle(g, 18, '#b6ffd2'); sfx.discover(); toast('🛠️ The Junk Rocket coughs out some <b>Fuel Ore</b>!'); }, 600);
+      return;
+    }
     if (!ch || ch.world === 'ship' || ch.world === 'any') return;
     if (ch.items[ch.items.length - 1] !== id) return;
     if (S.firsts[d.chain]) return;
@@ -3566,7 +3572,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
   /* --------------------------------------------------------------- the Lab */
   const L2 = () => CFG.lab2;
-  const sciOf = (id: string) => ITEMS[id].tier * ITEMS[id].tier;
+  const sciOf = (id: string) => ITEMS[id].tier * ITEMS[id].tier * (ITEMS[id].chain === 'junk' ? 3 : 1);
   function recycleItem(i: number) {
     const b = B(), c = b[i]; if (!c || !c.id) return;
     const wanted = S.orders.some(o => o.needs.some(nd => nd.id === c.id))
@@ -4992,7 +4998,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       <div class="sceneName">${w.name}<i>lv ${wlv()}</i></div>
       <button class="starMapBtn" data-pop="galaxy"><span>${ART.uiIcon('ic_galaxy', '🌌')}</span><b>Galaxy</b></button>
       <div class="campRail">
-        ${hubBtn('book', 'ic_album', '📖', 'Album')}
+        ${hubBtn('book', 'ic_chapter', '📖', 'Album')}
         ${hubBtn('fun', 'ic_fun', '🎪', 'Games')}
         ${labOpen() ? hubBtn('lab', 'ic_lab', '🔬', 'Lab') : ''}
       </div>

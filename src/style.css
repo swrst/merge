@@ -2667,3 +2667,7 @@ html body .app .galBtn .ti,html body .app .galBtn .ti .uiIc,html body .app .galB
 html.ui-panel_board body .app #board canvas{position:relative;z-index:1}
 html.ui-panel_board body .app #board,html.ui-panel_board body .app .stage{overflow:visible!important}
 html.ui-panel_board body .app .stage{margin:14px 20px 16px!important}
+/* nothing at the bottom of a popup is ever clipped */
+html body .app .popBody,html body .app .mBody{padding-bottom:12px!important;padding-left:4px;padding-right:4px}
+html body .app .popBody .big:last-child,html body .app .mBoxW .big{margin-bottom:6px!important}
+.labRuin.art{width:25%!important;transform:translate(-44%,-86%)!important}
