@@ -65,6 +65,8 @@
     "drops": [
       "bulbseed",
       "bulbseed",
+      "comb3",
+      "comb3",
       "sprig"
     ],
     "mode": "energy",
@@ -109,7 +111,8 @@
     "drops": [
       "fibre",
       "fibre",
-      "fibre",
+      "lostsock",
+      "lostsock",
       "thread"
     ],
     "mode": "energy",
@@ -121,6 +124,8 @@
     "drops": [
       "down",
       "down",
+      "clockgear",
+      "clockgear",
       "plume"
     ],
     "mode": "energy",
@@ -165,7 +170,8 @@
     "drops": [
       "vegseed",
       "vegseed",
-      "vegseed",
+      "sleepyseed",
+      "sleepyseed",
       "seedling"
     ],
     "spec": {
@@ -182,7 +188,8 @@
     "drops": [
       "lenschip",
       "lenschip",
-      "lenschip",
+      "mapscrap",
+      "mapscrap",
       "lens"
     ],
     "spec": {
@@ -250,6 +257,8 @@
     "drops": [
       "tealeaf",
       "tealeaf",
+      "icescoop",
+      "icescoop",
       "teabundle"
     ],
     "mode": "battery",
@@ -262,7 +271,8 @@
     "drops": [
       "ponddrop",
       "ponddrop",
-      "ponddrop",
+      "squeakytoy",
+      "squeakytoy",
       "lilypad"
     ],
     "spec": {
@@ -279,6 +289,8 @@
     "drops": [
       "block",
       "block",
+      "craterball",
+      "craterball",
       "spintop"
     ],
     "spec": {
@@ -330,7 +342,8 @@
     "drops": [
       "notepebble",
       "notepebble",
-      "notepebble",
+      "filmroll",
+      "filmroll",
       "whistle"
     ],
     "spec": {

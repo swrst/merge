@@ -6,7 +6,7 @@ import gsap from 'gsap';
 import { ART } from './art';
 import { ITEMS, CHAINS, PRODUCERS } from './content';
 
-export type Cell = { b?: number; p?: string; id?: string; ch?: number; at?: number; bub?: string; until?: number; tmp?: number; pr?: number } | null;
+export type Cell = { f?: string; b?: number; p?: string; id?: string; ch?: number; at?: number; bub?: string; until?: number; tmp?: number; pr?: number } | null;
 
 export type Hooks = {
   onTap: (i: number) => void;
@@ -299,7 +299,7 @@ class PixiBoard {
   }
   private drawTile(i: number) {
     const g = this.tiles[i], p = this.pos(i), c = this.cell, th = THEME[this.theme];
-    const locked = this.slots[i] && this.slots[i].key.startsWith('b');
+    const locked = this.slots[i] && (this.slots[i].key.startsWith('b') || this.slots[i].key.startsWith('f'));
     const r = locked ? 0 : this.rarity(i);
     const R = c * 0.16;
     // a checkerboard, not a grid of buttons: the two tones alternate and the
@@ -346,7 +346,7 @@ class PixiBoard {
   }
 
   /* ---------------------------------------------------------------- sync */
-  private keyOf(c: Cell) { return !c ? 'e' : c.b ? 'b' + c.b : c.bub ? 'u' + c.bub : c.p ? 'p' + c.p + (c.tmp ? '*' : '') : 'i' + c.id; }
+  private keyOf(c: Cell) { return !c ? 'e' : c.f ? 'f' + c.f : c.b ? 'b' + c.b : c.bub ? 'u' + c.bub : c.p ? 'p' + c.p + (c.tmp ? '*' : '') : 'i' + c.id; }
 
   sync(cells: Cell[]) {
     if (this.slots.length < cells.length) return;       // not built yet: the first sync after init draws it
@@ -364,6 +364,18 @@ class PixiBoard {
     this.clearSlot(i);
     s.key = key ?? this.keyOf(c);
     if (!c) return;
+    if (c.f) {
+      // a sealed tile: the item sits inside, dimmed, waiting for its twin
+      s.art = this.sprite('i:' + c.f, i, 0.72);
+      s.art.alpha = 0.6;
+      const p = this.center(i), g = new Graphics(), r = this.cell * 0.15;
+      g.circle(0, 0, r).fill({ color: 0x2a3f8f }).stroke({ color: 0xffffff, width: 2 });
+      g.roundRect(-r * 0.45, -r * 0.1, r * 0.9, r * 0.7, 2).fill({ color: 0xffe07a });
+      g.arc(0, -r * 0.1, r * 0.32, Math.PI, 0).stroke({ color: 0xffe07a, width: 2 });
+      g.position.set(p.x + this.cell * 0.3, p.y + this.cell * 0.3);
+      this.lItem.addChild(g); s.timer = g as any;
+      return;
+    }
     if (c.b) {
       // a painted overgrown tile already carries its weeds
       s.art = this.sprite('w:' + this.theme, i, 0.78);
@@ -497,6 +509,8 @@ class PixiBoard {
     if (s.timer && s.key.startsWith('b')) {
       s.timer.style.fontSize = this.cell * 0.22;
       s.timer.position.set(p.x + this.cell * 0.28, p.y + this.cell * 0.3);
+    } else if (s.timer && s.key.startsWith('f')) {
+      s.timer.position.set(p.x + this.cell * 0.3, p.y + this.cell * 0.3);
     } else if (s.timer) {
       s.timer.destroy(); s.timer = undefined;
     }

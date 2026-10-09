@@ -1592,6 +1592,171 @@
       "Express delivery, please."
     ]
   },
+  "laundry": {
+    "name": "Cosmic Laundry",
+    "world": "earth",
+    "unlock": 5,
+    "items": [
+      "lostsock",
+      "sockpair",
+      "shirtstack",
+      "laundryjet",
+      "washbot",
+      "laundromat"
+    ],
+    "asks": [
+      "Wash day!",
+      "I lost a sock in orbit.",
+      "Clean suits for the crew."
+    ]
+  },
+  "icecream": {
+    "name": "Nebula Ice Cream",
+    "world": "earth",
+    "unlock": 10,
+    "items": [
+      "icescoop",
+      "icecone",
+      "triplecone",
+      "sundae",
+      "icecart",
+      "icevan",
+      "iceparlour"
+    ],
+    "asks": [
+      "Too hot on the hill!",
+      "Dessert time!",
+      "A cone for the kids."
+    ]
+  },
+  "snapshots": {
+    "name": "Snapshots",
+    "world": "earth",
+    "unlock": 21,
+    "items": [
+      "filmroll",
+      "instaphoto",
+      "camera",
+      "tripodcam",
+      "camdrone",
+      "photobooth"
+    ],
+    "asks": [
+      "Say cheese!",
+      "A photo for my album.",
+      "Postcards from the Meadow."
+    ]
+  },
+  "zerog": {
+    "name": "Zero-G Sports",
+    "world": "earth",
+    "unlock": 14,
+    "items": [
+      "craterball",
+      "hoverskates",
+      "hoopgoal",
+      "jetboard",
+      "rockettrophy",
+      "arena"
+    ],
+    "asks": [
+      "Game day!",
+      "Training for the cup.",
+      "Catch!"
+    ]
+  },
+  "starmaps": {
+    "name": "Star Maps",
+    "world": "earth",
+    "unlock": 18,
+    "items": [
+      "mapscrap",
+      "maproll",
+      "maptube",
+      "atlas",
+      "galaxyglobe",
+      "maptower"
+    ],
+    "asks": [
+      "Where is the Moon again?",
+      "Maps for the explorers.",
+      "Plotting a course."
+    ]
+  },
+  "snapplants": {
+    "name": "Snap Plants",
+    "world": "earth",
+    "unlock": 16,
+    "items": [
+      "sleepyseed",
+      "handsprout",
+      "toothpot",
+      "walkplant",
+      "snapper",
+      "potplant",
+      "plantmonster"
+    ],
+    "asks": [
+      "This one bites. I love it.",
+      "A pet plant, please.",
+      "Feed me. The plant, not me."
+    ]
+  },
+  "bath": {
+    "name": "Bath Time",
+    "world": "earth",
+    "unlock": 17,
+    "items": [
+      "squeakytoy",
+      "bathbomb",
+      "soapbrush",
+      "rockettub",
+      "hottub",
+      "bathhouse"
+    ],
+    "asks": [
+      "Bath night!",
+      "The Blinkies need a wash.",
+      "Bubbles, lots of bubbles."
+    ]
+  },
+  "timemachine": {
+    "name": "Time Machine",
+    "world": "earth",
+    "unlock": 12,
+    "items": [
+      "clockgear",
+      "hourglass",
+      "pocketwatch",
+      "alarmbot",
+      "pendulum",
+      "timechair",
+      "timebox"
+    ],
+    "asks": [
+      "I am always late.",
+      "Fixing the town clock.",
+      "What time is it on Mars?"
+    ]
+  },
+  "salon": {
+    "name": "Antenna Salon",
+    "world": "earth",
+    "unlock": 8,
+    "items": [
+      "comb3",
+      "bobbles",
+      "dryerhelmet",
+      "salonchair",
+      "lightmirror",
+      "curlersalon"
+    ],
+    "asks": [
+      "My antennae are a mess!",
+      "Big night out tonight.",
+      "Something sparkly, darling."
+    ]
+  },
   "mail": {
     "name": "Moon Mail",
     "world": "luna",

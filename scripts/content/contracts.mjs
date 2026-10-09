@@ -106,6 +106,15 @@ export const ASKS = {
   kite: ['Delivery by drone!', 'The drone needs a rotor.', 'Express delivery, please.'],
 
 
+  laundry: ['Wash day!', 'I lost a sock in orbit.', 'Clean suits for the crew.'],
+  icecream: ['Too hot on the hill!', 'Dessert time!', 'A cone for the kids.'],
+  snapshots: ['Say cheese!', 'A photo for my album.', 'Postcards from the Meadow.'],
+  zerog: ['Game day!', 'Training for the cup.', 'Catch!'],
+  starmaps: ['Where is the Moon again?', 'Maps for the explorers.', 'Plotting a course.'],
+  snapplants: ['This one bites. I love it.', 'A pet plant, please.', 'Feed me. The plant, not me.'],
+  bath: ['Bath night!', 'The Blinkies need a wash.', 'Bubbles, lots of bubbles.'],
+  timemachine: ['I am always late.', 'Fixing the town clock.', 'What time is it on Mars?'],
+  salon: ['My antennae are a mess!', 'Big night out tonight.', 'Something sparkly, darling.'],
   /* ---------------------------------------------------------- v45 chains */
   mail: ['Post for the far craters!', 'A parcel for my mum.', 'Sign here. Any leg.'],
   bots: ['A helper for the garage.', 'Bots do the dusting now.', 'My bot needs a friend.'],
@@ -126,13 +135,13 @@ export const ASKS = {
 /* Each character's favourite chains, in no particular order. They can live
    in more than one world; a contract only picks from chains awake right here. */
 export const LIKES = {
-  pip: ['wood', 'stone', 'veggie', 'visitor', 'water', 'parts'],
-  grandma: ['berry', 'honey', 'flower', 'cloth', 'mush', 'clay', 'weather', 'picnic'],
-  timmy: ['stone', 'stargaze', 'visitor', 'feather', 'garden', 'wood', 'toys', 'pond', 'pets', 'music'],
-  gigi: ['flower', 'cloth', 'clay', 'feather', 'honey', 'berry'],
-  biscuit: ['wood', 'berry', 'water', 'grass', 'veggie', 'toys', 'weather', 'music'],
-  mumbo: ['bakery', 'berry', 'honey', 'veggie', 'grass', 'water', 'picnic'],
-  pim: ['tea', 'flower', 'clay', 'pond', 'honey', 'cloth', 'picnic', 'pets'],
+  pip: ['starmaps', 'snapplants', 'wood', 'stone', 'veggie', 'visitor', 'water', 'parts'],
+  grandma: ['laundry', 'bath', 'berry', 'honey', 'flower', 'cloth', 'mush', 'clay', 'weather', 'picnic'],
+  timmy: ['zerog', 'snapshots', 'icecream', 'stone', 'stargaze', 'visitor', 'feather', 'garden', 'wood', 'toys', 'pond', 'pets', 'music'],
+  gigi: ['salon', 'snapshots', 'flower', 'cloth', 'clay', 'feather', 'honey', 'berry'],
+  biscuit: ['timemachine', 'starmaps', 'wood', 'berry', 'water', 'grass', 'veggie', 'toys', 'weather', 'music'],
+  mumbo: ['icecream', 'bakery', 'berry', 'honey', 'veggie', 'grass', 'water', 'picnic'],
+  pim: ['salon', 'bath', 'tea', 'flower', 'clay', 'pond', 'honey', 'cloth', 'picnic', 'pets'],
   blorb: ['mail', 'picnic', 'bakery', 'parts', 'weather', 'wood', 'cloth', 'harbour', 'sunkn', 'seaglass', 'balloonc', 'kite', 'satellite'],
   grubs: ['sweets', 'veggie', 'berry', 'mush', 'pets', 'garden', 'honey', 'spice', 'shroom', 'glassw', 'emberfruit', 'skyfruit'],
   oops: ['moon', 'crystal', 'glow', 'ice', 'dust', 'tide', 'pearlc', 'lumin', 'nebula', 'comet'],

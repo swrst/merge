@@ -27,7 +27,16 @@
       "pets",
       "music",
       "parts",
-      "weather"
+      "weather",
+      "laundry",
+      "icecream",
+      "snapshots",
+      "zerog",
+      "starmaps",
+      "snapplants",
+      "bath",
+      "timemachine",
+      "salon"
     ],
     "start": [
       {
@@ -48,6 +57,20 @@
       "45": 4,
       "46": 3,
       "47": 2
+    },
+    "sealed": {
+      "6": "branch",
+      "7": "rock",
+      "8": "berries",
+      "9": "puddle",
+      "10": "pebble",
+      "11": "twig",
+      "36": "hay",
+      "37": "sprig",
+      "38": "honeydrop",
+      "39": "thread",
+      "40": "spintop",
+      "41": "dew"
     },
     "folks": [
       "pip",
@@ -636,7 +659,7 @@
             1
           ],
           [
-            "barrel",
+            "icecone",
             1
           ]
         ],
@@ -650,7 +673,7 @@
         "talk": [
           [
             "timmy",
-            "A soda stand! Two drink pouches, a star lantern for the sign and a water tank to fill them!"
+            "A soda stand! Two drink pouches, a star lantern for the sign and an ice cream cone for the menu!"
           ],
           [
             "pip",
@@ -760,7 +783,7 @@
             1
           ],
           [
-            "teacup",
+            "sockpair",
             1
           ]
         ],
@@ -779,7 +802,7 @@
           ],
           [
             "gigi",
-            "A space helmet, a twin jetpack and a soda for the tailor. I do the rest. I always do the rest."
+            "A space helmet, a twin jetpack and a pair of clean socks. I do the rest. I always do the rest."
           ]
         ],
         "text": "Suits for all. The snack cart is empty, and a toy chest turns up on the doorstep. Nobody ordered it."
@@ -798,7 +821,7 @@
             1
           ],
           [
-            "bouquet",
+            "bobbles",
             1
           ]
         ],
@@ -812,7 +835,7 @@
           ],
           [
             "biscuit",
-            "Two saucer tops, a hoverboard and a star lantern for the toy shelf. For the voters of tomorrow."
+            "Two saucer tops, a hoverboard and antenna bobbles for the toy shelf. For the voters of tomorrow."
           ]
         ],
         "text": "The square is full of spinning tops. Mayor Marin pretends to dislike it."
@@ -869,7 +892,7 @@
             1
           ],
           [
-            "garland",
+            "hourglass",
             1
           ]
         ],
@@ -887,7 +910,7 @@
           ],
           [
             "timmy",
-            "And a toy rocket! For... the harvest. And a light string."
+            "And a toy rocket! For... the harvest. And a star hourglass to time it."
           ]
         ],
         "text": "The first grow tubes are full. Then something small crashes behind the hill, blinking!"
@@ -945,7 +968,7 @@
             1
           ],
           [
-            "carrot",
+            "handsprout",
             1
           ]
         ],
@@ -959,7 +982,7 @@
           ],
           [
             "grandma",
-            "A spyglass, alien puppets for the little ones and a grow tube. Nobody stargazes on an empty stomach."
+            "A spyglass, alien puppets for the little ones and a hand sprout to wave at the Moon. Nobody stargazes on an empty stomach."
           ]
         ],
         "text": "The Moon has tiny lights. \"Friends,\" whispers Dr. Zonk. And in the woods: his ship. In pieces. Time to build a rocket!"
@@ -1014,6 +1037,10 @@
           [
             "toyshop",
             1
+          ],
+          [
+            "bathbomb",
+            1
           ]
         ],
         "coins": 1600,
@@ -1030,7 +1057,7 @@
           ],
           [
             "timmy",
-            "Two slime puddles to splash in and a toy starport for the prizes."
+            "Two slime puddles to splash in, a toy starport for the prizes and a bath bomb for afterwards."
           ]
         ],
         "text": "The slime frogs hold a party. The Duchess sends her cargo pod ahead of her."
@@ -1092,7 +1119,7 @@
             1
           ],
           [
-            "vegcrate",
+            "maproll",
             1
           ]
         ],
@@ -1105,7 +1132,7 @@
           ],
           [
             "mumbo",
-            "Two cheese cubes to start, a slime frog to guard them, and a grow rack for the herbs."
+            "Two cheese cubes to start, a slime frog to guard them, and a map roll so the customers can find the shop."
           ]
         ],
         "text": "The cheese shop is open. Moon cheese for everyone!"
@@ -1244,6 +1271,10 @@
           [
             "koipond",
             1
+          ],
+          [
+            "soapbrush",
+            1
           ]
         ],
         "coins": 2200,
@@ -1260,7 +1291,7 @@
           ],
           [
             "bloop",
-            "A blobling to play with, two goo pots for its dinner and a slime pool for its bath."
+            "A blobling to play with, two goo pots for its dinner, a slime pool for its bath and soap. Lots of soap."
           ]
         ],
         "text": "The Blinkies have a pet now. It has their sash."
@@ -1319,6 +1350,10 @@
           [
             "urn",
             1
+          ],
+          [
+            "instaphoto",
+            1
           ]
         ],
         "coins": 2400,
@@ -1333,7 +1368,7 @@
         "talk": [
           [
             "pip",
-            "A parade before the launch! A planet drum, a blob bed for the float and an orbit urn."
+            "A parade before the launch! A planet drum, a blob bed for the float, an orbit urn and a photo to remember it."
           ]
         ],
         "text": "Best parade ever. The goo pit is dry. Under it, an old scrap hull full of rocket bits. \"Nearly there,\" says Dr. Zonk."
@@ -1429,6 +1464,7 @@
       "46": 3,
       "47": 2
     },
+    "sealed": {},
     "folks": [
       "bloop",
       "zib",
@@ -2159,6 +2195,7 @@
       "46": 3,
       "47": 2
     },
+    "sealed": {},
     "folks": [
       "vulk",
       "ember",
@@ -2884,6 +2921,7 @@
       "46": 3,
       "47": 2
     },
+    "sealed": {},
     "folks": [
       "marin",
       "kelpa",
@@ -3584,6 +3622,7 @@
       "46": 3,
       "47": 2
     },
+    "sealed": {},
     "folks": [
       "zephyr",
       "halo",

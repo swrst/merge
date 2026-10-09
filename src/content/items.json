@@ -6583,6 +6583,648 @@
       ]
     }
   },
+  "lostsock": {
+    "name": "Lost Sock",
+    "chain": "laundry",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "leaf",
+      "mat": "cream"
+    }
+  },
+  "sockpair": {
+    "name": "Sock Pair",
+    "chain": "laundry",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "leaf",
+      "mat": "cream",
+      "accent": "ruby"
+    }
+  },
+  "shirtstack": {
+    "name": "Shirt Stack",
+    "chain": "laundry",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "plank",
+      "mat": "cream",
+      "accent": "sapphire"
+    }
+  },
+  "laundryjet": {
+    "name": "Jet Basket",
+    "chain": "laundry",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "crate",
+      "mat": "cream",
+      "accent": "glass"
+    }
+  },
+  "washbot": {
+    "name": "Wash Bot",
+    "chain": "laundry",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "cog",
+      "mat": "cream",
+      "accent": "sapphire"
+    }
+  },
+  "laundromat": {
+    "name": "Laundromat",
+    "chain": "laundry",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "cream",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "icescoop": {
+    "name": "Ice Scoop",
+    "chain": "icecream",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "berry",
+      "mat": "aurora"
+    }
+  },
+  "icecone": {
+    "name": "Ice Cone",
+    "chain": "icecream",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "cake",
+      "mat": "topaz",
+      "accent": "aurora"
+    }
+  },
+  "triplecone": {
+    "name": "Triple Cone",
+    "chain": "icecream",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "cake",
+      "mat": "topaz",
+      "accent": "aurora"
+    }
+  },
+  "sundae": {
+    "name": "Moon Sundae",
+    "chain": "icecream",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "cake",
+      "mat": "glass",
+      "accent": "aurora"
+    }
+  },
+  "icecart": {
+    "name": "Ice Cream Cart",
+    "chain": "icecream",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "crate",
+      "mat": "cream",
+      "accent": "ruby"
+    }
+  },
+  "icevan": {
+    "name": "Saucer Van",
+    "chain": "icecream",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "cream",
+      "accent": "aurora"
+    }
+  },
+  "iceparlour": {
+    "name": "Cone Parlour",
+    "chain": "icecream",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "house",
+      "mat": "aurora",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "filmroll": {
+    "name": "Film Roll",
+    "chain": "snapshots",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "bottle",
+      "mat": "plum"
+    }
+  },
+  "instaphoto": {
+    "name": "Planet Photo",
+    "chain": "snapshots",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "plank",
+      "mat": "cream"
+    }
+  },
+  "camera": {
+    "name": "Space Camera",
+    "chain": "snapshots",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "cog",
+      "mat": "cream",
+      "accent": "sapphire"
+    }
+  },
+  "tripodcam": {
+    "name": "Tripod Cam",
+    "chain": "snapshots",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "cog",
+      "mat": "topaz",
+      "accent": "sapphire"
+    }
+  },
+  "camdrone": {
+    "name": "Camera Drone",
+    "chain": "snapshots",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "cog",
+      "mat": "cream",
+      "accent": "sapphire"
+    }
+  },
+  "photobooth": {
+    "name": "Photo Booth",
+    "chain": "snapshots",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "ruby",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "craterball": {
+    "name": "Crater Ball",
+    "chain": "zerog",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "berry",
+      "mat": "topaz"
+    }
+  },
+  "hoverskates": {
+    "name": "Hover Skates",
+    "chain": "zerog",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "leaf",
+      "mat": "cream",
+      "accent": "ruby"
+    }
+  },
+  "hoopgoal": {
+    "name": "Hoop Goal",
+    "chain": "zerog",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "ring",
+      "mat": "glass",
+      "accent": "steel"
+    }
+  },
+  "jetboard": {
+    "name": "Jet Board",
+    "chain": "zerog",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "plank",
+      "mat": "cream",
+      "accent": "ruby"
+    }
+  },
+  "rockettrophy": {
+    "name": "Rocket Trophy",
+    "chain": "zerog",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "crown",
+      "mat": "gold"
+    }
+  },
+  "arena": {
+    "name": "Sky Arena",
+    "chain": "zerog",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "cream",
+      "accent": "sapphire",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "mapscrap": {
+    "name": "Map Scrap",
+    "chain": "starmaps",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "leaf",
+      "mat": "cream"
+    }
+  },
+  "maproll": {
+    "name": "Map Roll",
+    "chain": "starmaps",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "rope",
+      "mat": "sapphire",
+      "accent": "gold"
+    }
+  },
+  "maptube": {
+    "name": "Map Tube",
+    "chain": "starmaps",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "bottle",
+      "mat": "sapphire",
+      "accent": "gold"
+    }
+  },
+  "atlas": {
+    "name": "Star Atlas",
+    "chain": "starmaps",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "plank",
+      "mat": "sapphire",
+      "accent": "gold"
+    }
+  },
+  "galaxyglobe": {
+    "name": "Galaxy Globe",
+    "chain": "starmaps",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "ring",
+      "mat": "sapphire",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "maptower": {
+    "name": "Map Tower",
+    "chain": "starmaps",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "cream",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "sleepyseed": {
+    "name": "Sleepy Seed",
+    "chain": "snapplants",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "seed",
+      "mat": "leaf"
+    }
+  },
+  "handsprout": {
+    "name": "Hand Sprout",
+    "chain": "snapplants",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "sprout",
+      "mat": "leaf"
+    }
+  },
+  "toothpot": {
+    "name": "Toothy Pot",
+    "chain": "snapplants",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "sprout",
+      "mat": "leaf",
+      "accent": "clay"
+    }
+  },
+  "walkplant": {
+    "name": "Walking Plant",
+    "chain": "snapplants",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "sprout",
+      "mat": "leaf"
+    }
+  },
+  "snapper": {
+    "name": "Triple Snapper",
+    "chain": "snapplants",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "sprout",
+      "mat": "leaf",
+      "accent": "ruby"
+    }
+  },
+  "potplant": {
+    "name": "Pot Helmet",
+    "chain": "snapplants",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "sprout",
+      "mat": "leaf",
+      "accent": "clay"
+    }
+  },
+  "plantmonster": {
+    "name": "Garden Giant",
+    "chain": "snapplants",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "house",
+      "mat": "leaf",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "squeakytoy": {
+    "name": "Squeaky Toy",
+    "chain": "bath",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "berry",
+      "mat": "moss"
+    }
+  },
+  "bathbomb": {
+    "name": "Planet Bath Bomb",
+    "chain": "bath",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "berry",
+      "mat": "aurora"
+    }
+  },
+  "soapbrush": {
+    "name": "Soap & Brush",
+    "chain": "bath",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "plank",
+      "mat": "ruby",
+      "accent": "cream"
+    }
+  },
+  "rockettub": {
+    "name": "Rocket Tub",
+    "chain": "bath",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "crate",
+      "mat": "cream",
+      "accent": "ruby"
+    }
+  },
+  "hottub": {
+    "name": "Hot Tub",
+    "chain": "bath",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "crate",
+      "mat": "wood",
+      "accent": "glass"
+    }
+  },
+  "bathhouse": {
+    "name": "Bathhouse",
+    "chain": "bath",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "topaz",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "clockgear": {
+    "name": "Clock Gear",
+    "chain": "timemachine",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "cog",
+      "mat": "gold"
+    }
+  },
+  "hourglass": {
+    "name": "Star Hourglass",
+    "chain": "timemachine",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "bottle",
+      "mat": "gold",
+      "accent": "aurora"
+    }
+  },
+  "pocketwatch": {
+    "name": "Pocket Watch",
+    "chain": "timemachine",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "ring",
+      "mat": "gold",
+      "accent": "sapphire"
+    }
+  },
+  "alarmbot": {
+    "name": "Alarm Bot",
+    "chain": "timemachine",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "cog",
+      "mat": "ruby",
+      "accent": "gold"
+    }
+  },
+  "pendulum": {
+    "name": "Pendulum Clock",
+    "chain": "timemachine",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "house",
+      "mat": "gold",
+      "accent": "sapphire"
+    }
+  },
+  "timechair": {
+    "name": "Time Chair",
+    "chain": "timemachine",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "cog",
+      "mat": "gold",
+      "accent": "ruby"
+    }
+  },
+  "timebox": {
+    "name": "Time Box",
+    "chain": "timemachine",
+    "tier": 7,
+    "sell": 430,
+    "art": {
+      "shape": "house",
+      "mat": "ruby",
+      "accent": "aurora",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
+  "comb3": {
+    "name": "Three-Tooth Comb",
+    "chain": "salon",
+    "tier": 1,
+    "sell": 2,
+    "art": {
+      "shape": "leaf",
+      "mat": "aurora"
+    }
+  },
+  "bobbles": {
+    "name": "Antenna Bobbles",
+    "chain": "salon",
+    "tier": 2,
+    "sell": 5,
+    "art": {
+      "shape": "ring",
+      "mat": "plum",
+      "accent": "aurora"
+    }
+  },
+  "dryerhelmet": {
+    "name": "Bubble Dryer",
+    "chain": "salon",
+    "tier": 3,
+    "sell": 13,
+    "art": {
+      "shape": "cog",
+      "mat": "plum",
+      "accent": "cream"
+    }
+  },
+  "salonchair": {
+    "name": "Salon Chair",
+    "chain": "salon",
+    "tier": 4,
+    "sell": 32,
+    "art": {
+      "shape": "crate",
+      "mat": "ruby",
+      "accent": "gold"
+    }
+  },
+  "lightmirror": {
+    "name": "Star Mirror",
+    "chain": "salon",
+    "tier": 5,
+    "sell": 78,
+    "art": {
+      "shape": "ring",
+      "mat": "gold",
+      "accent": "plum"
+    }
+  },
+  "curlersalon": {
+    "name": "Curler Salon",
+    "chain": "salon",
+    "tier": 6,
+    "sell": 185,
+    "art": {
+      "shape": "house",
+      "mat": "ruby",
+      "accent": "gold",
+      "deco": [
+        "glow"
+      ]
+    }
+  },
   "stampchip": {
     "name": "Stamp Chip",
     "chain": "mail",

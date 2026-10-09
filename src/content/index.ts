@@ -60,6 +60,7 @@ export interface WorldDef {
   start: { cell: number; producer: string }[];
   /** board cell index -> level that clears it */
   locks: Record<string, number>;
+  sealed?: Record<string, string>;
   /** characters who place orders here */
   folks: string[];
   /** producers that turn up as the player levels, instead of being hard-coded */

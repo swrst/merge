@@ -101,6 +101,7 @@ for (const w of WORLDS) {
     chains: mine,
     start: starts[w.key] || [],
     locks: { ...locks },
+    sealed: w.sealed || {},
     folks: w.folks,
     grow: grow[w.key] || [],
     tapCost: w.tapCost, perk: w.perk,

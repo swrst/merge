@@ -2586,3 +2586,41 @@ html body .app .stage{border-image:none!important;border:3px solid #fff!importan
 html body .app .stage .board{margin:0!important}
 /* album world tabs and other pills */
 html body .app .wTab.on,html body .app .sTab.on,html body .app .albW.on{background:linear-gradient(180deg,#5fe4ff,#1aa6e0)!important;color:#fff!important;box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--sp-rim)!important}
+.mlUp{display:flex;align-items:center;gap:8px;margin:6px 0;padding:6px 8px;border-radius:14px;background:#eef7ff;box-shadow:inset 0 0 0 2px #bfe0f2;font-size:12px;color:var(--sp-ink)}.mlUp .art,.mlUp svg,.mlUp img{width:34px;height:34px;flex:none}
+/* shop: no dot, no halo — it just wiggles when something is waiting */
+html body .app .hud .hudShop .dot{display:none!important}
+html body .app .hud .hudShop.hot::after{content:none!important}
+html body .app .hud .hudShop.hot{animation:shopCall 1.8s ease-in-out infinite!important}
+.app .oMile{right:auto!important;left:10px!important}
+.app .oMile{bottom:-26px!important;left:14px!important}
+/* dialog portrait: only the wrapper is the porthole; the art inside fills it */
+html body .app .mBoxW #mFace{width:82px!important;height:82px!important;margin:-50px auto 4px!important;display:block}
+html body .app .mBoxW #mFace>.face,html body .app .mBoxW #mFace>svg,html body .app .mBoxW #mFace>img{width:100%!important;height:100%!important;margin:0!important;border:0!important;
+  box-shadow:none!important;background:none!important;border-radius:0!important;transform:translateY(4%) scale(1.08)!important;overflow:visible!important}
+html body .app .tBubble .face>svg,html body .app .coachFace>svg{border:0!important;box-shadow:none!important;background:none!important;margin:0!important}
+/* buttons: a sensible size, nothing clipped */
+html body .app .big{min-height:44px!important;font-size:15px!important;padding:6px 16px!important;overflow:visible!important}
+html body .app .big:disabled::after,html body .app .big.off::after,html body .app .buyBtn:disabled::after{display:none}
+html body .app .big::after{top:3px!important;left:12%!important;right:12%!important;height:35%!important}
+/* lab: you can see you are in the lab — the painting stays sharp, the cards are glass on it */
+.labBg{filter:none!important}
+.labBg::after{background:linear-gradient(180deg,rgba(235,246,255,0) 0,rgba(235,246,255,0) 30%,rgba(235,246,255,.35) 100%)!important}
+.labV2{padding-top:calc(var(--hudH,52px) + 150px)!important}
+.labV2 .lxCard{background:rgba(255,255,255,.86)!important;backdrop-filter:blur(3px)}
+.lxLoop{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px}
+.lxLoop .uiIc{width:22px;height:22px}.lxLoop span{font-weight:800}
+.lxT .uiIc{width:26px;height:26px;vertical-align:-7px}
+.lxMini span .uiIc{width:38px!important;height:38px!important}
+.mlIc .uiIc{width:40px!important;height:40px!important}
+.cfStampImg{width:min(62vw,250px);transform:rotate(-6deg);animation:cfStamp .45s cubic-bezier(.3,1.8,.5,1) 1.1s both;filter:drop-shadow(0 6px 14px rgba(0,0,0,.4))}
+html body .app .hud #chipEnergy{flex:1.35 1 0!important}
+html body .app .hud #chipEnergy>span:last-child{font-size:12px!important}
+html body .app .hud .lvlBox{width:90px!important}
+html body .app .hud .hudShop,html body .app .hud #btnGear{width:36px!important;height:36px!important}
+html body .app .hud .hudShop .uiIc,html body .app .hud .hudShop img,html body .app .hud #btnGear .uiIc,html body .app .hud #btnGear img{width:36px!important;height:36px!important}
+html body .app .hud .chip>span:last-child{font-size:12px!important;overflow:visible}
+html body .app .hud .chip{padding-right:3px!important}
+/* painted space-station frame around the board */
+html.ui-panel_board body .app .stage{border:14px solid transparent!important;border-image:var(--ui-panel_board) 70 fill / 14px stretch!important;border-radius:0!important;padding:2px!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(226,242,255,.9)) padding-box!important;box-shadow:none!important}
+html.ui-panel_board body .app .stage{background:rgba(235,246,255,.55) content-box!important}

@@ -5,6 +5,9 @@ export const WORLDS = [
     key: 'earth', name: 'Sunny Meadow', subtitle: 'Home world', planet: 'earth',
     tapCost: 1, perk: 'rain',
     folks: ['pip', 'grandma', 'timmy', 'gigi', 'biscuit', 'mumbo', 'pim', 'blorb', 'grubs'],
+    /* sealed tiles: an item waits inside; merge its twin into it to open the tile */
+    sealed: { 6: 'branch', 7: 'rock', 8: 'berries', 9: 'puddle', 10: 'pebble', 11: 'twig',
+      36: 'hay', 37: 'sprig', 38: 'honeydrop', 39: 'thread', 40: 'spintop', 41: 'dew' },
     heart: 'Meadow Heart',
     /* what the Heart wants, stage by stage — each stage visibly wakes the world */
     bloom: [
