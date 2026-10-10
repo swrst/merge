@@ -2996,3 +2996,51 @@ html body .app .galStars2{background:none!important;border:0!important;box-shado
 #petPeek i{position:absolute;top:-14px;right:-14px;font-style:normal;font-size:12px;font-weight:800;color:#3b2a8a;background:#fff;border-radius:12px;padding:2px 8px;box-shadow:0 2px 6px rgba(0,0,0,.25)}
 #petPeek.r i{right:auto;left:-14px}
 @keyframes peekBob{50%{transform:translateY(-8px)}}
+.pupMood img{width:46px;height:46px;object-fit:contain;animation:peekBob 1.6s ease-in-out infinite}
+.petBall img{width:44px;height:44px;object-fit:contain}
+#petPeek .peekEmo{position:absolute;top:-30px;right:-24px;width:44px;height:44px;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,.25))}
+#petPeek.r .peekEmo{right:auto;left:-24px}
+.petZoo{margin-top:10px;text-align:center}.petZoo>b{font-size:12px;color:var(--sp-ink,#1b2c55)}.petZoo>i{display:block;font-style:normal;font-size:10.5px;color:#5a6a90}
+.petZoo>div{display:flex;justify-content:center;gap:8px;margin:4px 0}
+.zooPet{display:flex;flex-direction:column;align-items:center;width:90px;padding:4px;border:0;border-radius:14px;background:#fff;box-shadow:0 0 0 2px #c9b8ff}
+.zooPet .pupImg{width:60px!important;height:60px!important;transform:none!important;animation:none!important}
+.zooPet i{font-style:normal;font-size:10px;font-weight:800;color:#3b2a8a}
+.incList{display:flex;flex-direction:column;gap:6px;margin:6px 0}
+.incRow{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:14px;background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 1.5px rgba(127,216,247,.5);text-align:left}
+.incRow .incArt{flex:none;width:60px;height:60px}.incRow .incArt .pupImg{width:60px!important;height:60px!important;transform:none!important}
+.incRow div{flex:1;min-width:0}.incRow b{display:block;font-size:13px}.incRow i{font-style:normal;font-size:11px;opacity:.85}
+.incRow em{font-style:normal;font-weight:800;color:#7fe0a0}
+.incEgg{position:relative;width:150px;height:150px;margin:0 auto}.incEgg>img{width:100%;height:100%;object-fit:contain;animation:fuHum 1.6s ease-in-out infinite}
+.incEgg span{position:absolute;inset:30%;opacity:.25;filter:blur(1px) brightness(2)}.incEgg span .pupImg{width:100%!important;height:100%!important;transform:none!important}
+.incEgg.ready>img{animation:skPulse .8s ease-in-out infinite}
+.condArt{position:relative;width:130px;height:130px;margin:0 auto}.condArt img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 12px rgba(95,228,255,.7))}
+.condFill{position:absolute;left:41%;width:18%;top:30%;height:46%;border-radius:6px;overflow:hidden;opacity:.6}
+.condFill i{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(0deg,#ffe07a,#7fe0ff)}
+/* v60: holographic stations floating over the lab pads */
+.labSt{transform:translate(-50%,-78%)!important}
+.labSt .lsIc{background:none!important;box-shadow:none!important;border:0!important;animation:holoFloat 2.6s ease-in-out infinite}
+.labSt .lsIc,.labSt .lsIc .uiIc{width:84px!important;height:84px!important}
+.labSt .lsIc .uiIc{filter:drop-shadow(0 0 10px rgba(95,228,255,.85)) drop-shadow(0 0 2px #fff);opacity:.95}
+.labSt.hot .lsIc .uiIc{filter:drop-shadow(0 0 14px rgba(255,220,100,1)) drop-shadow(0 0 3px #fff)}
+.labSt.hot .lsIc{animation:holoFloat 1.2s ease-in-out infinite}
+@keyframes holoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.labSt b{background:rgba(20,40,90,.78)!important;color:#fff!important;box-shadow:0 0 0 1.5px #7fd8f7,0 0 10px rgba(127,216,247,.5)!important}
+.labSt:active{transform:translate(-50%,-78%) scale(.94)!important}
+/* painted constellation figures behind the stars */
+.gc,.skCardBig{position:relative}
+.cArt{position:absolute;left:50%;top:44%;width:96%;transform:translate(-50%,-50%);opacity:.16;pointer-events:none;filter:saturate(.5) brightness(1.2);transition:opacity .6s}
+.skCardBig .cArt{top:50%;width:210px}
+.gc-ready .cArt{opacity:.3;animation:cArtB 1.8s ease-in-out infinite}
+.gc-lit .cArt{opacity:.75;filter:drop-shadow(0 0 10px rgba(255,211,77,.7));animation:cArtG 3.2s ease-in-out infinite}
+.gc-locked .cArt{opacity:.06}
+@keyframes cArtB{50%{opacity:.45}}
+@keyframes cArtG{50%{opacity:.95;filter:drop-shadow(0 0 18px rgba(255,211,77,.95))}}
+.fxArtWrap{position:relative;display:inline-block}
+.fxArt{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;animation:fxPop 1s ease-out forwards;filter:drop-shadow(0 0 16px rgba(255,211,77,.9))}
+/* painted cosmic wheel */
+html.ui-wheel .app .wheelWrap.space .wheel{background:var(--ui-wheel) center/100% 100% no-repeat!important;border:0!important;box-shadow:0 0 24px rgba(127,216,247,.6),0 10px 20px rgba(0,0,0,.35)!important}
+html.ui-wheel .app .wheelWrap.space::before,html.ui-wheel .app .wheelWrap.space .wheel::after,html.ui-wheel .app .wheelWrap.space .wSeg:before{display:none}
+html.ui-wheel .app .wheelWrap.space .wSeg span{top:30px}
+html.ui-wheel_hub .app .wheelWrap.space .wHub{width:70px;height:70px;margin:-35px 0 0 -35px;background:none!important;box-shadow:none!important}
+html.ui-wheel_pin .app .wheelPin .uiIc{width:34px;height:58px;object-fit:contain}
+html.ui-wheel_pin .app .wheelPin{top:-30px}

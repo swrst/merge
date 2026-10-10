@@ -1053,7 +1053,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const fans = folks.filter(f => (CHARS[f].likes || []).some(c => open.indexOf(c) >= 0));
     const busy = S.orders.map(o => o.char);
     const pickFrom = (fans.length ? fans : folks).filter(f => busy.indexOf(f) < 0);
-    const char = rnd(pickFrom.length ? pickFrom : (fans.length ? fans : folks));
+    // everyday villagers (once painted) mix in, so the board is not three of the same face
+    const vils = ['vil1', 'vil2', 'vil3', 'vil4', 'vil5', 'vil6', 'vil7', 'vil8'].filter(v => ART.spriteChar(v + '_full') && busy.indexOf(v) < 0);
+    const char = vils.length && (!pickFrom.length || Math.random() < 0.45) ? rnd(vils) : rnd(pickFrom.length ? pickFrom : (fans.length ? fans : folks));
     const theirs = open.filter(c => (CHARS[char].likes || []).indexOf(c) >= 0);
     const chains = theirs.length ? theirs : open;
     let chain = rnd(chains);
@@ -3662,29 +3664,80 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      Like every producer, only waiting, gems or an ad speed it up. */
   const STILL_MIN = 40;
   const stillLeft = () => Math.max(0, (S.still || 0) - Date.now());
+  /* The Energy Condenser (it used to be Gloop's Goo Still): it soaks up starlight
+     and, every so often, hands you a cell of energy. Bigger with research. */
+  const condenseN = () => 12 + res('battery') * 2;
   function stillCollect(rush = false) {
     const left = stillLeft();
     if (left > 0 && !rush) return;
-    if (freeCells().length < 2) { sfx.no(); toast('Make room for two goo blobs first!'); return; }
     if (left > 0 && !spendGems(Math.max(1, Math.ceil(left / 60000 / CFG.gems.rushMinPerGem)), 'rush')) return;
-    const outs = ['goobubble', Math.random() < 0.3 ? 'goovial' : 'goobubble'];
-    outs.forEach(id => { const at = giveItem(id); if (at >= 0) sparkle(at, 16, '#b6ff5c'); });
+    const n = condenseN();
+    S.energy += n; bumpChip('#chipEnergy');
     S.still = Date.now() + STILL_MIN * 60000;
-    sfx.goo(); sfx.voice('gloop', 2);
-    toast('🧪 Gloop bottled some <b>goo</b>! Merge it into potions.');
-    renderLab(); renderHUD(); renderOrders(); save();
+    sfx.boost(); haptic('medium'); confetti();
+    toast(`🔋 The Energy Condenser hums — <b>+${n} ⚡</b>!`);
+    renderLab(); renderHUD(); save();
   }
   function stillPop(quiet = false) {
     const left = stillLeft();
-    const html = `<div class="stillArt">${ART.char('gloop_full')}</div>
-        <div class="labIntro">Gloop brews <b>goo</b> every ${STILL_MIN} minutes. Merge it up to a <b>Potion Tower</b>!</div>
+    const pct = left > 0 ? Math.round((1 - left / (STILL_MIN * 60000)) * 100) : 100;
+    const html = `<div class="condArt"><img src="${ART.spriteUi('lab_energy')}" alt=""><div class="condFill"><i style="height:${pct}%"></i></div></div>
+        <div class="labIntro">The <b>Energy Condenser</b> soaks up starlight and fills a cell with <b>${condenseN()} ⚡</b> every ${STILL_MIN} minutes. Lab research makes it bigger.</div>
         ${left > 0 ? `<div class="accTime" id="stillTime">${mmss(left)}</div>
-          <button class="big gold" id="stillRush">Brew now · 💎 ${Math.max(1, Math.ceil(left / 60000 / CFG.gems.rushMinPerGem))}</button>${adBtn('skipTimer', `−${CFG.ads.skipMin} min`, 'stillAd')}`
-        : `<button class="big" id="stillGet">Collect the goo!</button>`}`;
-    if (quiet) $('#popBody').innerHTML = html; else pop("🧪 Gloop's Goo Still", html, 'labstill');
+          <button class="big gold" id="stillRush">Fill it now · 💎 ${Math.max(1, Math.ceil(left / 60000 / CFG.gems.rushMinPerGem))}</button>${adBtn('skipTimer', `−${CFG.ads.skipMin} min`, 'stillAd')}`
+        : `<button class="big" id="stillGet">Collect ${condenseN()} ⚡</button>`}`;
+    if (quiet) $('#popBody').innerHTML = html; else pop('🔋 Energy Condenser', html, 'labstill holo');
     const g = $('#stillGet'); if (g) g.onclick = () => { closePop(); stillCollect(); };
     const r = $('#stillRush'); if (r) r.onclick = () => { closePop(); stillCollect(true); };
     const a = $('#stillAd'); if (a) a.onclick = () => watchAd('skipTimer', () => { S.still = (S.still || 0) - CFG.ads.skipMin * 60000; renderLab(); save(); });
+  }
+  /* ---------------------------------------------------------- Pet Incubator
+     New kinds of pet come from the Lab: buy an egg with Science, wait, hatch it.
+     Each kind grows through three forms and is good at something different. */
+  const INC_EGGS: { sp: string; name: string; sci: number; mins: number; perk: string }[] = [
+    { sp: 'fox', name: 'Crystal Fox', sci: 60, mins: 90, perk: 'digs up treasure: chests and gems' },
+    { sp: 'ray', name: 'Jelly Ray', sci: 90, mins: 120, perk: 'floats in with energy' },
+    { sp: 'bunny', name: 'Moon Bunny', sci: 120, mins: 150, perk: 'hops back with coins' },
+  ];
+  const ownedSp = (): string[] => [pet() ? (pet().sp || 'blob') : '', ...Object.keys(S.zoo || {})].filter(Boolean);
+  function incPop() {
+    const inc = S.inc, left = inc ? Math.max(0, inc.until - Date.now()) : 0;
+    let html = '';
+    if (inc) {
+      const e = INC_EGGS.find(x => x.sp === inc.sp)!;
+      html = `<div class="incEgg${left ? '' : ' ready'}"><img src="${ART.spriteUi('lab_incubator')}" alt=""><span>${pupArt(PET_FORMS[inc.sp + '1'])}</span></div>
+        <div class="labIntro">A <b>${e.name}</b> egg is warming up.</div>
+        ${left ? `<div class="accTime">${mmss(left)}</div><button class="big gold" id="incRush">Hatch now · 💎 ${Math.max(1, Math.ceil(left / 60000 / CFG.gems.rushMinPerGem))}</button>` : `<button class="big" id="incHatch">Hatch it! 🥚</button>`}`;
+    } else {
+      html = `<div class="labIntro">Grow a new kind of pet from an egg. Each one has its own talent and grows through three forms.</div>
+        <div class="incList">${INC_EGGS.map(e => {
+          const own = ownedSp().includes(e.sp);
+          return `<div class="incRow${own ? ' own' : ''}"><span class="incArt">${pupArt(PET_FORMS[e.sp + '3'])}</span><div><b>${e.name}</b><i>${e.perk}</i></div>
+            ${own ? '<em>✓ yours</em>' : `<button class="buyBtn" data-egg="${e.sp}" ${S.sci >= e.sci ? '' : 'disabled'}>🧪 ${e.sci}</button>`}</div>`;
+        }).join('')}</div>`;
+    }
+    pop('🥚 Pet Incubator', html, 'holo');
+    document.querySelectorAll<HTMLElement>('[data-egg]').forEach(b => b.onclick = () => {
+      const e = INC_EGGS.find(x => x.sp === b.dataset.egg)!; if (S.sci < e.sci) return;
+      S.sci -= e.sci; S.inc = { sp: e.sp, until: Date.now() + e.mins * 60000 }; sfx.discover(); save(); renderLab(); incPop();
+    });
+    const h = $('#incHatch'); if (h) h.onclick = () => { closePop(); incHatch(); };
+    const r = $('#incRush'); if (r) r.onclick = () => { const l = Math.max(0, S.inc.until - Date.now()); if (spendGems(Math.max(1, Math.ceil(l / 60000 / CFG.gems.rushMinPerGem)), 'rush')) { S.inc.until = Date.now(); closePop(); incHatch(); } };
+  }
+  function incHatch() {
+    const inc = S.inc; if (!inc || inc.until > Date.now()) return;
+    const np = { sp: inc.sp, form: inc.sp + '1', lv: 1, xp: 0, n: 0, at: Date.now() - 20 * 60000, food: Date.now(), pet: 0 };
+    S.inc = null; S.petIntro = 1;
+    if (!pet()) S.pup = np; else { S.zoo = S.zoo || {}; S.zoo[inc.sp] = np; }
+    save(); renderLab(); renderQuick();
+    const f = PET_FORMS[np.form];
+    rewardCard(pupArt(f), `${f.name} hatched!`, pet() === np ? 'It blinks at you and decides you are its favourite.' : 'Say hello in the pet room — tap your pet and pick it to swap.', { energy: 5 });
+  }
+  /** swap which pet is out with you */
+  function petSwitch(sp: string) {
+    if (!S.zoo || !S.zoo[sp] || !pet()) return;
+    const cur = pet(); S.zoo[cur.sp || 'blob'] = cur; S.pup = S.zoo[sp]; delete S.zoo[sp];
+    sfx.whoosh(); save(); renderQuick(); pupPop(true);
   }
   function accDur(id: string) { return Math.min(L2().accMaxMin, ITEMS[id].tier * L2().accMinPerTier) * 60000; }
   function accCost(id: string) { return ITEMS[id].tier * L2().accSciPerTier; }
@@ -3795,6 +3848,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (k === 'grow') { labAccPop(); return; }
     if (k === 'res') { labResPop(); return; }
     if (k === 'goo') { stillPop(); return; }
+    if (k === 'inc') { incPop(); return; }
     const draw = () => {
       const body = $('#popBody');
       if (k === 'rec') {
@@ -3806,9 +3860,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         body.querySelectorAll('[data-brew]').forEach((e: any) => e.onclick = () => { brewRecipe(e.dataset.brew); draw(); });
         body.querySelectorAll('[data-what]').forEach((e: any) => e.onclick = () => { sfx.tap(); const id = e.dataset.what; toast(`<b>${ITEMS[id].name}</b> — ${sourceHint(id)}`); });
       }
-      $('#popTitle').innerHTML = k === 'rec' ? '♻️ Recycler' : '⚗️ Experiments';
+      $('#popTitle').innerHTML = k === 'rec' ? '♻️ Recycler' : '⚗️ Fusion Chamber';
     };
-    pop(k === 'rec' ? '♻️ Recycler' : '⚗️ Experiments', '', 'holo');
+    pop(k === 'rec' ? '♻️ Recycler' : '⚗️ Fusion Chamber', '', 'holo');
     draw();
   }
   function renderLab() {
@@ -3820,12 +3874,13 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const st = (k: string, fx: number, fy: number, ic: string, emo: string, t: string, sub: string, hot: boolean) =>
       `<button class="labSt${hot ? ' hot' : ''}" data-st="${k}" data-fx="${fx}" data-fy="${fy}"><span class="lsIc">${ART.uiIcon(ic, emo)}</span><b>${t}</b><i>${sub}</i></button>`;
     host.innerHTML = `<div class="sceneWrap lab"><div class="sceneBlur"></div><div class="sceneImg"></div><div class="sceneVig"></div>
-      <div class="labHint">${ART.uiIcon('ic_recycle', '♻️')} Recycle spares for <b>🧪 Science</b>, then spend it at the bench and on the shelf</div>
-      ${st('rec', 0.235, 0.47, 'ic_recycle', '♻️', 'Recycler', spareN ? spareN + ' spares' : 'no spares', spareN > 0)}
-      ${st('exp', 0.45, 0.47, 'ic_experiment', '⚗️', 'Experiments', 'two in, one out', false)}
-      ${st('grow', 0.67, 0.47, 'ic_grow', '⏫', 'Grow', a ? (left ? mmss(left) : 'Ready!') : 'one step up', !!(a && !left))}
-      ${st('res', 0.28, 0.24, 'ic_upgrades', '🔬', 'Upgrades', resReady ? resReady + ' ready' : 'forever perks', resReady > 0)}
-      ${petOn() ? st('goo', 0.86, 0.40, 'ic_goostill', '🧪', 'Goo Still', stillLeft() ? mmss(stillLeft()) : 'free goo!', !stillLeft()) : ''}
+      <div class="labHint">${ART.uiIcon('ic_recycle', '♻️')} Recycle spares for <b>🧪 Science</b> — spend it on fusion, upgrades and new pets</div>
+      ${st('rec', 0.176, 0.60, 'lab_recycle', '♻️', 'Recycler', spareN ? spareN + ' spares' : 'no spares', spareN > 0)}
+      ${st('exp', 0.50, 0.475, 'lab_fuse', '⚗️', 'Fusion', 'two in, one out', false)}
+      ${st('grow', 0.16, 0.41, 'lab_time', '⏫', 'Time Boost', a ? (left ? mmss(left) : 'Ready!') : 'one step up', !!(a && !left))}
+      ${st('inc', 0.84, 0.41, 'lab_incubator', '🥚', 'Incubator', S.inc ? (S.inc.until > Date.now() ? mmss(S.inc.until - Date.now()) : 'Hatch!') : 'new pets', !!(S.inc && S.inc.until <= Date.now()))}
+      ${st('goo', 0.82, 0.60, 'lab_energy', '🔋', 'Condenser', stillLeft() ? mmss(stillLeft()) : '+' + condenseN() + ' ⚡', !stillLeft())}
+      ${st('res', 0.62, 0.22, 'lab_upgrades', '🔬', 'Upgrades', resReady ? resReady + ' ready' : 'forever perks', resReady > 0)}
     </div>`;
     placeSpots('#labBody');
     host.querySelectorAll('[data-st]').forEach((e: any) => e.onclick = () => labStation(e.dataset.st));
@@ -4558,7 +4613,18 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     nova: { id: 'nova', name: 'Nova Wobbler', stage: 4, art: 'pet_nova', perk: 'Lots of <b>energy</b>. Energy refills <b>20% faster</b>.', mins: 22 },
     titan: { id: 'titan', name: 'Boulderbelly', stage: 4, art: 'pet_titan', perk: 'Higher-tier <b>items</b> and chests.', mins: 22 },
     king: { id: 'king', name: 'Comet Emperor', stage: 4, art: 'pet_king', perk: '<b>Coins and gems</b>. Contracts pay <b>20% more</b>.', mins: 22 },
+    fox1: { id: 'fox1', name: 'Crystal Kit', stage: 1, art: 'pet_fox1', perk: 'Sniffs out <b>chests</b> now and then.', mins: 38 },
+    fox2: { id: 'fox2', name: 'Crystal Fox', stage: 2, art: 'pet_fox2', perk: 'Digs up <b>chests and gems</b>.', mins: 32 },
+    fox3: { id: 'fox3', name: 'Starmane Fox', stage: 3, art: 'pet_fox3', perk: '<b>Treasure Chests</b> and plenty of <b>gems</b>.', mins: 26 },
+    ray1: { id: 'ray1', name: 'Jelly Puff', stage: 1, art: 'pet_ray1', perk: 'Floats in with a little <b>energy</b>.', mins: 36 },
+    ray2: { id: 'ray2', name: 'Jelly Ray', stage: 2, art: 'pet_ray2', perk: 'Brings <b>energy</b>. Energy refills <b>10% faster</b>.', mins: 30 },
+    ray3: { id: 'ray3', name: 'Queen Ray', stage: 3, art: 'pet_ray3', perk: 'Lots of <b>energy</b>. Energy refills <b>20% faster</b>.', mins: 24 },
+    bunny1: { id: 'bunny1', name: 'Moon Bun', stage: 1, art: 'pet_bunny1', perk: 'Hops back with <b>coins</b>.', mins: 36 },
+    bunny2: { id: 'bunny2', name: 'Astro Bunny', stage: 2, art: 'pet_bunny2', perk: '<b>Coins</b>. Contracts pay <b>10% more</b>.', mins: 30 },
+    bunny3: { id: 'bunny3', name: 'Rocket Hare', stage: 3, art: 'pet_bunny3', perk: 'Heaps of <b>coins</b>. Contracts pay <b>20% more</b>.', mins: 24 },
   };
+  /** the Lab's pets grow in a straight line: form 1 → 2 at level 5 → 3 at level 12 */
+  const SP_NEXT: Record<string, [string, number]> = { fox1: ['fox2', 5], fox2: ['fox3', 12], ray1: ['ray2', 5], ray2: ['ray3', 12], bunny1: ['bunny2', 5], bunny2: ['bunny3', 12] };
   /** the pet only exists in the game once ChatGPT has painted its line */
   const petPainted = () => ['baby', 'pup', 'star', 'crater', 'comet', 'nova', 'titan', 'king'].every(k => !!ART.spriteChar('pet_' + k));
   const PET_NEXT: Record<string, string> = { star: 'nova', crater: 'titan', comet: 'king' };
@@ -4572,6 +4638,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   const pet = () => S.pup as any;
   function petMigrate() {
     const p = pet(); if (!p) return;
+    if (!p.sp) p.sp = 'blob';
     if (p.form) return;
     // a pup from v26 (gifts only): keep its progress as levels
     p.form = 'baby'; p.lv = 1; p.xp = (p.n || 0) * 6; p.food = Date.now(); delete p.name;
@@ -4594,8 +4661,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     return `<img class="pupImg ${cls}" style="--s:${(0.62 + form.stage * 0.1).toFixed(2)}" src="${src}" alt="${form.name}">`;
   }
   /** perks other systems read */
-  const petRegen = () => { const f = pet() && pet().form; return f === 'star' ? 0.1 : f === 'nova' ? 0.2 : 0; };
-  const petCoins = () => { const f = pet() && pet().form; return f === 'comet' ? 0.1 : f === 'king' ? 0.2 : 0; };
+  const petRegen = () => { const f = pet() && pet().form; return f === 'star' || f === 'ray2' ? 0.1 : f === 'nova' || f === 'ray3' ? 0.2 : 0; };
+  const petCoins = () => { const f = pet() && pet().form; return f === 'comet' || f === 'bunny2' ? 0.1 : f === 'king' || f === 'bunny3' ? 0.2 : 0; };
 
   const PET_LV = 10;
   function pupTick() {
@@ -4632,8 +4699,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     peekAt = Date.now() + 120000 + Math.random() * 120000;
     let el = document.getElementById('petPeek');
     if (!el) { el = document.createElement('button'); el.id = 'petPeek'; $('#app').appendChild(el); el.onclick = () => { sfx.boing(); el!.className = ''; pupPop(true); }; }
-    const lines = ['Hi!', 'Blorp!', '💗', 'Snack?', '♪♫', 'Play?', '✨'];
-    el.innerHTML = `${pupArt()}<i>${lines[Math.floor(Math.random() * lines.length)]}</i>`;
+    const emo = petMood() === 'hungry' ? 'emo_food' : ['emo_heart', 'emo_play', 'emo_spark', 'emo_what'][Math.floor(Math.random() * 4)];
+    el.innerHTML = `${pupArt()}${ART.spriteUi(emo) ? `<img class="peekEmo" src="${ART.spriteUi(emo)}" alt="">` : '<i>Hi!</i>'}`;
     el.className = 'on' + (Math.random() < 0.5 ? ' r' : '');
     setTimeout(() => { if (el) el.className = el.className.replace('on', '').trim(); }, 5200);
   }
@@ -4643,7 +4710,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const st = $('#pupStage') as HTMLElement; if (!st) return;
     if (Date.now() < (p.play || 0)) { sfx.no(); toast(`${petForm().name} is still puffed out — play again in <b>${mmss((p.play || 0) - Date.now())}</b>.`); return; }
     p.play = Date.now() + 20 * 60000;
-    const star = document.createElement('i'); star.className = 'petBall'; star.textContent = '⭐'; st.appendChild(star);
+    const toy = ['toy_star', 'toy_ball', 'toy_bone'][Math.floor(Math.random() * 3)];
+    const star = document.createElement('i'); star.className = 'petBall'; if (ART.spriteUi(toy)) star.innerHTML = `<img src="${ART.spriteUi(toy)}" alt="">`; else star.textContent = '⭐'; st.appendChild(star);
     st.classList.remove('fetch'); void st.offsetWidth; st.classList.add('fetch');
     sfx.whoosh(); setTimeout(() => { sfx.boing(); sfx.voice('pup', 3); }, 700);
     setTimeout(() => {
@@ -4701,6 +4769,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     toast(`🐾 ${p.name || petForm().name} reached <b>level ${p.lv}</b>!`);
     sfx.coin();
     const f = petForm();
+    if (SP_NEXT[f.id]) { if (p.lv >= SP_NEXT[f.id][1]) setTimeout(() => petEvolve(SP_NEXT[f.id][0]), 900); return; }
     if (f.id === 'baby' && p.lv >= PET_EVOLVE.pup) setTimeout(() => petEvolve('pup'), 900);
     else if (f.id === 'pup' && p.lv >= PET_EVOLVE.branch) setTimeout(petBranch, 900);
     else if (f.stage === 3 && p.lv >= PET_EVOLVE.final) setTimeout(() => petEvolve(PET_NEXT[f.id]), 900);
@@ -4709,6 +4778,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const f = petForm(), k = f.stage, r = Math.random(), lv = pet().lv || 1;
     const tierUp = (f.id === 'crater' || f.id === 'titan') ? 1 : 0;
     const energy = { energy: 5 + k * 3 + Math.floor(lv / 3) }, coins = { coins: 20 + k * 18 + lv * 2 };
+    const sp = pet().sp;
+    if (sp === 'fox') return r < 0.1 + k * 0.06 ? { item: k >= 3 && r < 0.08 ? 'bigchest' : 'chest' } : r < 0.55 ? { gems: k } : { item: miniItem(Math.min(2 + k, 5), 2) };
+    if (sp === 'ray') return r < 0.8 ? { energy: energy.energy + k * 3 } : coins;
+    if (sp === 'bunny') return r < 0.75 ? { coins: Math.round(coins.coins * (1 + k * 0.4)) } : energy;
     if (f.id === 'star' || f.id === 'nova') return r < 0.75 ? { energy: energy.energy + (f.id === 'nova' ? 8 : 4) } : coins;
     if (f.id === 'comet' || f.id === 'king') return r < 0.55 ? { coins: coins.coins * 2 } : r < 0.85 ? { gems: f.id === 'king' ? 3 : 2 } : energy;
     if (tierUp) return r < 0.12 ? { item: f.id === 'titan' ? 'bigchest' : 'chest' } : { item: miniItem(Math.min(3 + tierUp + Math.floor(k / 2), 5), 2) };
@@ -4754,7 +4827,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const evoAt = f.id === 'baby' ? PET_EVOLVE.pup : f.id === 'pup' ? PET_EVOLVE.branch : f.stage === 3 ? PET_EVOLVE.final : 0;
     const feed = petFoodList();
     pop('🐾 ' + (p.name || f.name), `<div class="pupBox">
-      <div class="pupStage ${mood}" id="pupStage">${ART.spriteChar('pet_bed') ? `<img class="pupBed" src="${ART.spriteChar('pet_bed')}" alt="">` : ''}${ART.spriteChar('pet_bowl') ? `<img class="pupBowl${food < 30 ? ' empty' : ''}" src="${ART.spriteChar('pet_bowl')}" alt="">` : ''}${pupArt(f)}<span class="pupMood">${mood === 'happy' ? '💗' : mood === 'hungry' ? '🍖?' : '🙂'}</span>${pupLeft() ? '<span class="pupZ">z<i>z</i><b>z</b></span>' : ''}</div>
+      <div class="pupStage ${mood}" id="pupStage">${ART.spriteChar('pet_bed') ? `<img class="pupBed" src="${ART.spriteChar('pet_bed')}" alt="">` : ''}${ART.spriteChar('pet_bowl') ? `<img class="pupBowl${food < 30 ? ' empty' : ''}" src="${ART.spriteChar('pet_bowl')}" alt="">` : ''}${pupArt(f)}<span class="pupMood">${ART.spriteUi('emo_heart') ? `<img src="${ART.spriteUi(mood === 'happy' ? 'emo_heart' : mood === 'hungry' ? 'emo_food' : pupLeft() ? 'emo_sleep' : 'emo_spark')}" alt="">` : mood === 'happy' ? '💗' : mood === 'hungry' ? '🍖?' : '🙂'}</span>${pupLeft() && !ART.spriteUi('emo_sleep') ? '<span class="pupZ">z<i>z</i><b>z</b></span>' : ''}</div>
       <b class="pupName">${f.name} <small>Lv ${p.lv}</small></b>
       <div class="pupBars"><span>XP</span><div class="catBar"><i style="width:${need ? Math.round(p.xp / need * 100) : 100}%"></i></div>
         <span>Food</span><div class="catBar food"><i style="width:${food}%"></i></div></div>
@@ -4762,7 +4835,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       <div class="noteLine">Next gift in <b>${mmss(pupLeft())}</b>${mood === 'happy' ? ' (fed: faster)' : mood === 'hungry' ? ' — <b>hungry, so slower</b>' : ''}.</div>
       <div class="petFeed"><b>${food >= PET_FULL ? 'Full! Feed it again later' : 'Feed it a spare item'}</b> <i>(${food >= PET_FULL ? 'it gets hungry over a few hours' : 'a few bites, then it is full'})</i>
         <div class="petFoods">${feed.length ? feed.map(([id, n]) => `<button class="petFood" data-feed="${id}">${ART.item(id)}<em>×${n}</em><small>+${petFeedXp(ITEMS[id].tier)} XP</small></button>`).join('') : '<div class="evOff">Nothing spare on the board right now.</div>'}</div></div>
-      <div class="petActs"><button class="big soft" id="pupPet">💗 Pet</button><button class="big blue" id="pupPlay">⭐ Play fetch</button></div></div>`, 'fun');
+      <div class="petActs"><button class="big soft" id="pupPet">💗 Pet</button><button class="big blue" id="pupPlay">⭐ Play fetch</button></div>
+      ${Object.keys(S.zoo || {}).length ? `<div class="petZoo"><b>Your other pets</b><div>${Object.keys(S.zoo).map(sp => `<button class="zooPet" data-zoo="${sp}">${pupArt(PET_FORMS[S.zoo[sp].form])}<i>${PET_FORMS[S.zoo[sp].form].name} · Lv ${S.zoo[sp].lv}</i></button>`).join('')}</div><i>Tap one to take it along instead.</i></div>` : (labOpen() ? '<div class="noteLine">More kinds of pet hatch in the Lab\'s <b>Pet Incubator</b>.</div>' : '')}</div>`, 'fun');
+    document.querySelectorAll<HTMLElement>('[data-zoo]').forEach(b => b.onclick = () => petSwitch(b.dataset.zoo!));
     ($('#pupPlay') as HTMLElement).onclick = petPlay;
     document.querySelectorAll<HTMLElement>('[data-feed]').forEach(b => b.onclick = () => petFeed(b.dataset.feed!));
     ($('#pupPet') as HTMLElement).onclick = () => {
@@ -4799,7 +4874,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const host = $('#quick'); if (!host) return;
     const e = evNow(), bits: string[] = [];
     // contracts until the next chest: a chip with the others, not a tag stuck on the board frame
-    if (S.tut) { const mn = (S.om && S.om.n) || 0; bits.push(`<button class="qChip mile" data-q="mile">${ART.item('chest')}<b>${mn}/${mileGoal()}</b><i>to chest</i></button>`); }
+    if (S.tut) { const mn = (S.om && S.om.n) || 0; bits.push(`<button class="qChip mile" data-q="mile">${ART.uiIcon('ic_mile', ART.item('chest'))}<b>${mn}/${mileGoal()}</b><i>to chest</i></button>`); }
     if (e) bits.push(`<button class="qChip ev" data-q="event">${ART.uiIcon('tok_' + e.theme.id, e.theme.icon)}<b>${S.ev.key === e.key ? S.ev.pts : 0}</b><i>${dhm(e.ends - Date.now())}</i></button>`);
     if (S.lvl >= SP().unlockLevel && spinsLeft()) bits.push(`<button class="qChip spin" data-q="spin">${ART.uiIcon('ic_spin', '🎡')}<b>${spinsLeft()}</b></button>`);
     if (S.seen.scrap || pouch('scrap') || pouch('starcore')) bits.push(`<button class="qChip pouch" data-q="pouch">${ART.uiIcon('ic_pouch', ART.item('starcore'))}<b>${pouch('starcore')}</b><i>${pouch('scrap')} scrap</i></button>`);
@@ -4810,7 +4885,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       const pb = { gift: '🎁', hungry: '🍖', full: '💗' }[ps] || '';
       bits.push(`<button class="qChip pup${ps ? ' ' + ps : ''}${ps === 'gift' ? ' ready' : ''}" data-q="pup">${pupArt()}${pb ? `<b>${pb}</b>` : ''}<i>${pupLeft() ? mmss(pupLeft()) : 'gift!'}</i></button>`);
     }
-    if (S.acc) bits.push(`<button class="qChip acc" data-q="acc">${ART.uiIcon('ic_lab', '⚗️')}<i>${accLeft() ? mmss(accLeft()) : 'done!'}</i></button>`);
+    if (S.acc) bits.push(`<button class="qChip acc" data-q="acc">${ART.uiIcon('ic_labchip', '⚗️')}<i>${accLeft() ? mmss(accLeft()) : 'done!'}</i></button>`);
     const html = bits.join('');
     if (host.dataset.h === html) return;
     // same chips as before, only the numbers moved: update the text in place, so
@@ -5107,6 +5182,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const dots = c.pts.map((p: number[], i: number) => `<circle cx="${p[0]}" cy="${p[1]}" r="${i % 3 ? 3 : 4.2}" style="animation-delay:${(i * 0.37) % 2.2}s"/>`).join('');
     return `<svg viewBox="-8 -8 116 116" class="cSvg ${cls}"><g class="cLines">${segs}</g><g class="cDots">${dots}</g></svg>`;
   }
+  /** the painted figure behind a constellation's stars (const_<id>), when there is one */
+  const constArt = (c: any) => ART.spriteUi('const_' + c.id) ? `<img class="cArt" src="${ART.spriteUi('const_' + c.id)}" alt="">` : '';
   function fuseScrap() {
     if (pouch('scrap') < 3) return false;
     S.wal.scrap -= 3; S.wal.starcore = pouch('starcore') + 1; S.seen.starcore = 1;
@@ -5136,7 +5213,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       : `<div class="skBar2"><em style="width:${pct}%"></em><span>${ART.item('starcore')} ${Math.min(cores, c.cost)} / ${c.cost} Star Cores</span></div>
          ${st === 'ready' ? `<button class="skLightBig" id="skLight"><img src="${ART.spriteUi('sk_shoot')}" alt=""><b>Light it!</b></button>`
            : `<div class="skNeed">${c.cost - cores} more Star Core${c.cost - cores > 1 ? 's' : ''}. Dig meteor craters for Star Scrap, then fuse it.</div>${fuseBtn()}`}`;
-    pop(st === 'locked' ? '✨ Unknown stars' : '✨ ' + c.name, `<div class="skCardBig gc-${st}">${constSvg(c, 'cBig')}</div>
+    pop(st === 'locked' ? '✨ Unknown stars' : '✨ ' + c.name, `<div class="skCardBig gc-${st}">${constArt(c)}${constSvg(c, 'cBig')}</div>
       <div class="skPerk">${st === 'locked' ? 'A constellation nobody has charted yet.' : c.perk}</div>${body}`, 'starsheet');
     const l = $('#skLight'); if (l) l.onclick = () => skyLight(c.id);
     const f = $('#skFuseH'); if (f) f.onclick = () => { if (fuseScrap()) { constCard(id); skyPage(); } };
@@ -5148,7 +5225,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const rows = WORLD_ORDER.filter(w => CONSTS.some(c => c.world === w)).map(w => {
       const two = CONSTS.filter(c => c.world === w).map((c, k) => {
         const st = constState(c);
-        return `<button class="gc gc-${st} ${k ? 'r' : 'l'}" data-const="${c.id}">${constSvg(c)}
+        return `<button class="gc gc-${st} ${k ? 'r' : 'l'}" data-const="${c.id}">${constArt(c)}${constSvg(c)}
           <b>${st === 'locked' ? '???' : c.name}</b>${st === 'ready' ? '<i class="gcTag">✨ Light me!</i>' : st === 'open' ? `<i class="gcCnt">${ART.item('starcore')} ${Math.min(countItem('starcore'), c.cost)}/${c.cost}</i>` : st === 'lit' ? '<i class="gcLit">✦ lit</i>' : ''}</button>`;
       }).join('');
       return `<div class="skRow${visited(w) ? '' : ' far'}"><div class="skWorld">${ART.uiIcon('planet_' + w, '🪐')}<span>Seen from <b>${WORLDS[w].name}</b></span></div><div class="skPair">${two}</div></div>`;
@@ -5208,7 +5285,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const dots = c.pts.map((p: number[], i: number) => `<circle class="skStar" cx="${p[0]}" cy="${p[1]}" r="3.6" style="animation-delay:${i * T}s"/>`).join('');
     const end = c.pts.length * T;
     fx.innerHTML = `<div class="fxSky"></div><div class="fxRays"></div>
-      <div class="fxIn"><div class="fxName">${c.name}</div><svg viewBox="-8 -8 116 116" class="skBig" id="fxSvg">${segs}${dots}</svg>
+      <div class="fxIn"><div class="fxName">${c.name}</div><div class="fxArtWrap">${ART.spriteUi('const_' + c.id) ? `<img class="fxArt" src="${ART.spriteUi('const_' + c.id)}" alt="" style="animation-delay:${end}s">` : ''}<svg viewBox="-8 -8 116 116" class="skBig" id="fxSvg">${segs}${dots}</svg></div>
       <div class="fxLit" style="animation-delay:${end + 0.2}s">CONSTELLATION LIT!</div><div class="fxPerk" style="animation-delay:${end + 0.5}s">${c.perk}</div></div>
       <i class="skShoot" style="animation-delay:${end * 0.6}s"></i><i class="skShoot b" style="animation-delay:${end * 0.6 + 0.5}s"></i>`;
     fx.className = 'on'; sfx.whoosh(); audio.duck(4, 0.2);

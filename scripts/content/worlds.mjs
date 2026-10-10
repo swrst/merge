@@ -75,6 +75,15 @@ export const LOCKS = {
 };
 
 export const CHARACTERS = {
+  /* villagers: everyday aliens of the Meadow who put up contracts (art: chars/vil<n>_full) */
+  vil1: { name: 'Blib', lines: ['Bloop bloop! Thank you!', 'My tentacles salute you.', 'Wonderful!'] },
+  vil2: { name: 'Zuzu', lines: ['All three eyes are impressed.', 'Exactly what I needed.', 'Zuzu approves.'] },
+  vil3: { name: 'Morko', lines: ['Hehe, perfect.', 'You are a star!', 'Morko owes you one.'] },
+  vil4: { name: 'Tibbit', lines: ['Eeee! Thank you!', 'So shiny!', 'Best day ever!'] },
+  vil5: { name: 'Quilla', lines: ['Most kind.', 'My spikes are tingling.', 'Splendid work.'] },
+  vil6: { name: 'Nebbie', lines: ['*happy floating*', 'Fluffy thanks!', 'You made my cloud day.'] },
+  vil7: { name: 'Boltz', lines: ['BEEP. GRATITUDE.', 'Delivery confirmed!', 'Circuits: happy.'] },
+  vil8: { name: 'Fizzle', lines: ['Wobble wobble! Yay!', 'So bouncy, thank you!', 'Fizz-tastic!'] },
   pip: { name: 'Zib', lines: ['Ooh, is that for me?', 'You are quick at this!', 'Perfect. Just perfect.'] },
   grandma: { name: 'Nana Luma', lines: ['Bless you, dear.', 'My garden thanks you.', 'Just like the old days.'] },
   timmy: { name: 'Ember', lines: ['Whoa, cool!', 'Can I keep it?', 'You are the best!'] },

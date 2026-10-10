@@ -123,49 +123,49 @@ Gnome Hat → Cyclops Gnome → Snail Rider → Jet Gnome → Gnome Family → S
 **Sky Lanterns** · 6 steps · Lv 6 · from the Light Stall  
 Star Paper → Fish Lantern → Rocket Lantern → Planet Lights → Lantern Barge → Lantern Tower
 
-**Moon Kites** · 6 steps · Lv 4 · from the Solar Farm  
+**Moon Kites** · 6 steps · Lv 4 · from the Weather Balloon  
 Glow String → Star Kite → Comet Kite → Satellite Kite → Whale Kite → Kite Tower
 
-**Bubble Band** · 6 steps · Lv 16 · from the Slime Pond  
+**Bubble Band** · 6 steps · Lv 16 · from the Busker Bot  
 Bubble Whistle → Crystal Xylo → Jelly Drum → Bubble Horn → Bubble Organ → Bubble Concert
 
-**Farm Bots** · 7 steps · Lv 11 · from the Crash Site  
+**Farm Bots** · 7 steps · Lv 11 · from the Solar Farm  
 Sprinkle Bot → Seeder Bot → Scare Bot → Harvest Bot → Tractor Bot → Farm Mech → Robo Barn
 
 **Star Post** · 6 steps · Lv 12 · from the Cargo Pod  
 Planet Postcard → Post Bag → Antenna Mailbox → Post Drone → Post Rocket → Post Lighthouse
 
-**Saucer Sale** · 6 steps · Lv 13 · from the Goo Pit  
+**Saucer Sale** · 6 steps · Lv 13 · from the Crash Site  
 Star Tag → Gadget Box → Planet Lamp → Space Comics → Saucer Stall → Saucer Market
 
 **Cloud Sheep** · 6 steps · Lv 18 · from the Weather Cloud  
 Cloud Wool → Cloud Lamb → Cloud Sheep → Rainbow Sheep → Sheep Mum → Cloud Barn
 
-**Space Pizzeria** · 6 steps · Lv 8 · from the Cargo Pod  
+**Space Pizzeria** · 6 steps · Lv 8 · from the Snack Cart  
 Star Dough → Crater Slice → Moon Pizza → Pizza Stack → Pizza Saucer → Rocket Pizzeria
 
-**Glow Aquarium** · 6 steps · Lv 10 · from the Moonwater Well  
+**Glow Aquarium** · 6 steps · Lv 10 · from the Slime Pond  
 Glow Egg → Three-Eyed Guppy → Star Puffer → Jelly Lamp → Walking Fish → Aqua Dome
 
 **Sky Fort** · 6 steps · Lv 12 · from the Scrap Hull  
 Star Sign → Rope Ladder → Box Hut → Scope Treehouse → Stilt Fort → Cloud Fort
 
-**Art Club** · 6 steps · Lv 15 · from the Suit Loom  
+**Art Club** · 6 steps · Lv 15 · from the Goo Pit  
 Rainbow Drop → Glow Brush → Planet Palette → Rocket Easel → Alien Statue → Art Dome
 
 **Space Dinos** · 6 steps · Lv 17 · from the Glowbug Burrow  
 Fossil Chip → Dino Egg → Baby Dino → Crystal Dino → Longneck → Dino Park
 
-**Arcade** · 6 steps · Lv 19 · from the Busker Bot  
+**Arcade** · 6 steps · Lv 19 · from the Space Toy Chest  
 Planet Token → Joystick → Rocket Cartridge → Pocket Console → Arcade Cabinet → Saucer Arcade
 
-**Bouncy Playground** · 6 steps · Lv 13 · from the Space Toy Chest  
+**Bouncy Playground** · 6 steps · Lv 13 · from the Scrap Hull  
 Bounce Ball → Big Spring → Ring Swing → Twisty Slide → Rocket Bouncer → Play Dome
 
 **Star Library** · 6 steps · Lv 16 · from the Jet Wreck  
 Star Page → Planet Book → Book Stack → Floating Tome → Shelf Bot → Library Tower
 
-**Treasure Hunt** · 6 steps · Lv 11 · from the Hydro Bed  
+**Treasure Hunt** · 6 steps · Lv 11 · from the Starstone Pile  
 Map Piece → Star Shovel → Star Key → Little Chest → Gem Chest → Cloud Galleon
 
 **Hot Springs** · 6 steps · Lv 20 · from the Fizz Vent  

@@ -1175,16 +1175,14 @@ must(bgS.bingo.done.slice(0, 3).every(Boolean), 'handing in three things marks t
 must(bgS.coins >= c0 + 60, `and a full row pays (${bgS.coins - c0} coins)`);
 await page.evaluate(() => window.__game.v9.closePop());
 
-head("Gloop's Goo Still");
-await set(() => { const g = window.__game, s = g.state(); s.lab.built = 1; s.still = 0; const b = s.boards[s.world]; for (let i = 0; i < 6; i++) b[b.length - 1 - i] = null; window.__board.sync(b); });
-const goo0 = (await S()).boards[(await S()).world].filter(c => c && /^goo/.test(c.id)).length;
+head('Energy Condenser');
+await set(() => { const g = window.__game, s = g.state(); s.lab.built = 1; s.still = 0; s.energy = 10; });
 await page.evaluate(() => window.__game.v9.stillCollect());
-const gooS = await S();
-const goo1 = gooS.boards[gooS.world].filter(c => c && /^goo/.test(c.id)).length;
-must(goo1 === goo0 + 2, `a ready still bottles two goo blobs (${goo1 - goo0})`);
-must(gooS.still > Date.now() + 30 * 60000, 'and starts brewing again for about 40 minutes');
+const condS = await S();
+must(condS.energy > 10, `a full condenser hands over energy (10 -> ${condS.energy})`);
+must(condS.still > Date.now() + 30 * 60000, 'and starts filling again for about 40 minutes');
 await page.evaluate(() => window.__game.v9.stillCollect());
-must((await S()).boards[gooS.world].filter(c => c && /^goo/.test(c.id)).length === goo1, 'and cannot be collected again for free');
+must((await S()).energy === condS.energy, 'and cannot be collected again for free');
 
 head('Console');
 must(errors.length === 0, errors.length ? `console errors:\n${errors.join('\n')}` : 'no console errors');

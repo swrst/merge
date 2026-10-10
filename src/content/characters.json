@@ -1,4 +1,68 @@
 {
+  "vil1": {
+    "name": "Blib",
+    "lines": [
+      "Bloop bloop! Thank you!",
+      "My tentacles salute you.",
+      "Wonderful!"
+    ]
+  },
+  "vil2": {
+    "name": "Zuzu",
+    "lines": [
+      "All three eyes are impressed.",
+      "Exactly what I needed.",
+      "Zuzu approves."
+    ]
+  },
+  "vil3": {
+    "name": "Morko",
+    "lines": [
+      "Hehe, perfect.",
+      "You are a star!",
+      "Morko owes you one."
+    ]
+  },
+  "vil4": {
+    "name": "Tibbit",
+    "lines": [
+      "Eeee! Thank you!",
+      "So shiny!",
+      "Best day ever!"
+    ]
+  },
+  "vil5": {
+    "name": "Quilla",
+    "lines": [
+      "Most kind.",
+      "My spikes are tingling.",
+      "Splendid work."
+    ]
+  },
+  "vil6": {
+    "name": "Nebbie",
+    "lines": [
+      "*happy floating*",
+      "Fluffy thanks!",
+      "You made my cloud day."
+    ]
+  },
+  "vil7": {
+    "name": "Boltz",
+    "lines": [
+      "BEEP. GRATITUDE.",
+      "Delivery confirmed!",
+      "Circuits: happy."
+    ]
+  },
+  "vil8": {
+    "name": "Fizzle",
+    "lines": [
+      "Wobble wobble! Yay!",
+      "So bouncy, thank you!",
+      "Fizz-tastic!"
+    ]
+  },
   "pip": {
     "name": "Zib",
     "lines": [
