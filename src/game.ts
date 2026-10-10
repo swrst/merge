@@ -1034,10 +1034,12 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const wl = Math.min(wlv(), S.lvl);   // the world levels faster than you do; asks follow the slower one
     // the first few levels stay gentle so the intro reads; after that a contract
     // asks for real work: tier 3+ and often two or three different things
-    const early = S.lvl < 3;
+    const pd = S.world === 'earth' ? projDone('earth') : 99;
+    const early = S.lvl < 3 || pd < 6;
     // one step up every four levels: a tier-7 ask at level 8 was an hour of waiting
     // a producer you have upgraded all the way earns harder (better-paid) asks from its chains
-    const reach = (ck: string) => clamp((early ? 2 : 3) + Math.floor((wl - 1) / 5) + ((plvOf[ck] || 0) >= PMAX ? 1 : 0), 2,
+    // the first fifteen Meadow chapters never ask past step 3: you are still learning the chains
+    const reach = (ck: string) => clamp(Math.min((early ? 2 : 3) + Math.floor((wl - 1) / 5) + ((plvOf[ck] || 0) >= PMAX ? 1 : 0), pd < 15 ? (early ? 2 : 3) : 99), 2,
       Math.max(2, CHAINS[ck].items.length - 1));
     const itemFrom = (ck: string, cap?: number) => {
       const top = Math.min(reach(ck), cap ?? 99), lo = early ? 1 : Math.max(2, top - 1);
@@ -1067,7 +1069,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const needs = [{ id: pick, qty: d.tier >= 4 ? 1 : d.tier === 3 ? (Math.random() < 0.35 ? 2 : 1) : 2 }];
     // more things from other chains the same person cares about (or any awake one)
     const pool = chains.length > 1 ? chains : open;
-    const extra = early ? 0 : (Math.random() < Math.min(0.75, 0.35 + S.lvl * 0.03) ? 1 : 0)
+    const extra = early ? 0 : pd < 15 ? (Math.random() < 0.3 ? 1 : 0) : (Math.random() < Math.min(0.75, 0.35 + S.lvl * 0.03) ? 1 : 0)
       + (S.lvl >= 8 && Math.random() < 0.3 ? 1 : 0);
     for (let k = 0; k < extra; k++) {
       const left = pool.filter(c => c !== chain && !needs.some(nd => ITEMS[nd.id].chain === c));
@@ -2655,7 +2657,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       if (!n) return;
       rainBurst();
       sfx.whoosh();
-      toast('🌧️ A shower rolled through — every plant is full!');
+      perkBanner(ART.producer(PRODS.raincloud ? PRODS.raincloud.art : 'raincloud'), 'Star Shower!', `Glowing rain soaked the Meadow — <b>${n}</b> charge starter${n > 1 ? 's are' : ' is'} full again.`);
     } else if (perk === 'eruption') {
       const free = freeCells(); if (free.length < 3) return;
       const drops = CHAINS.magma.items.slice(0, 2);
@@ -2668,10 +2670,19 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       }
       if (!n) return;
       shake(); sfx.dig();
-      toast('🌋 The vents erupted — <b>' + n + '</b> hot rocks landed!');
+      perkBanner(ART.item(drops[0]), 'Eruption!', `The vents erupted — <b>${n}</b> hot rocks landed on your board.`);
     }
     // luna's low gravity is handled inside tryMerge, not on a timer
     renderOrders(); save();
+  }
+  /** a world moment: a card that drops in from the top, says what happened, and goes */
+  function perkBanner(art: string, title: string, text: string) {
+    let el = document.getElementById('perkBan');
+    if (!el) { el = document.createElement('div'); el.id = 'perkBan'; $('#app').appendChild(el); }
+    el.innerHTML = `<div class="pbArt">${art}</div><div class="pbTxt"><b>${title}</b><i>${text}</i></div>`;
+    el.className = 'on'; haptic('light');
+    clearTimeout((el as any)._t); (el as any)._t = setTimeout(() => { el!.className = ''; }, 3800);
+    el.onclick = () => { el!.className = ''; };
   }
   function rainBurst() {
     const host = $('#fx');
@@ -6214,7 +6225,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // a page opened from the map goes back to the map
     document.querySelectorAll<HTMLElement>('.scClose').forEach(b => b.onclick = () => { const back = fromMap && (view === 'book' || view === 'lab'); fromMap = false; setView(back ? 'map' : 'board'); });
     $('#btnHint').onclick = () => { showHint(true); lastAct = Date.now(); };
-    { const hi = document.querySelector('#btnHint .hintIc'); if (hi) hi.innerHTML = ART.uiIcon('ic_hint', '💡'); }
+    { const hi = document.querySelector('#btnHint .hintIc'); if (hi) hi.innerHTML = ART.uiIcon('ic_tips', '💡'); }
     $('#btnSnack').onclick = async () => {
       if (S.energy >= maxEnergy()) { toast('Energy is already full!'); return; }
       // once an ad network is wired up this becomes "watch to refill"; until then

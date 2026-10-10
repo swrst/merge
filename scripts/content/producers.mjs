@@ -22,7 +22,7 @@
 export const PRODUCERS = [
   /* ---------------------------------------------------------- Sunny Meadow */
   ['earth', 1, 'tree|Meteor Heap|tree|nrg:1|twig twig twig branch|a big friendly round-crowned tree with a thick trunk, a few twigs at its roots'],
-  ['earth', 2, 'rocks|Starstone Pile|rocks|nrg:1|pebble pebble pebble mappiece rock|a heap of rounded grey boulders with a pickaxe leaning on it'],
+  ['earth', 2, 'rocks|Starstone Pile|rocks|nrg:1|pebble pebble pebble rock|a heap of rounded grey boulders with a pickaxe leaning on it'],
   ['earth', 2, 'bush|Snack Cart|bush|bat:10/60|berry berry berry doughstar berries|a round leafy bush dotted with red berries'],
   ['earth', 2, 'well|Moonwater Well|well|nrg:1|dew dew dew lostsock puddle|a round stone well with a little wooden roof and a bucket'],
   ['earth', 3, 'meadow|Solar Farm|meadow|nrg:1|grass grass grass canbot hay|a small patch of tall golden meadow grass with a hay fork stuck in it'],
@@ -32,7 +32,7 @@ export const PRODUCERS = [
   ['earth', 5, 'cottonpatch|Suit Loom|cottonpatch|nrg:1|fibre fibre fibre comb3 thread|a low cotton bush with fluffy white bolls'],
   ['earth', 5, 'nestbox|Jet Wreck|nestbox|nrg:1|down down mapscrap starpage plume|a wooden bird box on a post with a round hole'],
   ['earth', 6, 'claypit|Goo Pit|pot:clay/clay|nrg:1|mud mud mud paintdrop claylump|a wet terracotta clay pit with a spade stuck in it'],
-  ['earth', 7, 'grubmound|Glowbug Burrow|cocoon:cream/moss|nrg:1|grub grub grub fossilchip chrysalis|a grassy mound with little burrow holes'],
+  ['earth', 7, 'grubmound|Glowbug Burrow|cocoon:cream/moss|nrg:1|grub grub fossilchip mappiece chrysalis|a grassy mound with little burrow holes'],
   ['earth', 8, 'vegpatch|Hydro Bed|sprout:leaf/clay|nrg:1|vegseed vegseed vegseed sleepyseed seedling|a small tilled veggie patch with carrot tops and a watering can'],
   ['earth', 9, 'tinkerbench|Lens Workbench|anvil:copper/wood|nrg:1|lenschip lenschip lenschip clockgear lens|a wooden workbench with a vice, lens grinder and a brass lamp'],
   ['earth', 10, 'crashsite|Crash Site|planet:steel/clay|bat:10/60|blinky blinky blinky pricetag alienkid|a small silver saucer nose-down in the dirt, dome cracked, little lights still blinking'],

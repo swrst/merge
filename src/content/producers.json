@@ -18,7 +18,6 @@
       "pebble",
       "pebble",
       "pebble",
-      "mappiece",
       "rock"
     ],
     "mode": "energy",
@@ -163,8 +162,8 @@
     "drops": [
       "grub",
       "grub",
-      "grub",
       "fossilchip",
+      "mappiece",
       "chrysalis"
     ],
     "spec": {

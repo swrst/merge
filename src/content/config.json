@@ -362,7 +362,7 @@
     "refillMin": 8
   },
   "bubble": {
-    "chance": 0.07,
+    "chance": 0.025,
     "minTier": 2,
     "lastsMs": 60000,
     "priceMult": 6,
