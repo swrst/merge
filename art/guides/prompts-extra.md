@@ -1,45 +1,39 @@
-## Constellations (drawn behind the stars on the Star Chart)
+## UX polish (v64): status icons, empty screens, reward sparkles
 
-**UI-34. sheet_constellations_a**
-
-```
-One image: a grid of 3×2 with the last cell empty, transparent background, one per cell, each a constellation drawn as a soft glowing golden line illustration, like a drawing on an old star map, thin glowing lines, no stars, no text:
-1. a rocket pointing up
-2. a hanging lantern
-3. a round-eared moon puppy sitting
-4. a treasure vault door with a round handle
-5. an anvil
-```
-
-**UI-35. sheet_constellations_b**
+**UI-36. sheet_status_icons**
 
 ```
-One image: a grid of 3×2 with the last cell empty, transparent background, one per cell, each a constellation drawn as a soft glowing golden line illustration, like a drawing on an old star map, thin glowing lines, no stars, no text:
-1. a firebird with spread wings
-2. a friendly kraken with curling tentacles
-3. a spiral sea shell
-4. a crown
-5. a spiral galaxy
+One image: a grid of 4×2, transparent background, one per cell, each a small chunky game status icon, centered, no text:
+1. a closed padlock
+2. an hourglass with sand running
+3. a big checkmark
+4. a cross mark
+5. a round speech bubble with an exclamation mark
+6. a little sleepy cloud with three z letters
+7. a round button with a plus sign
+8. a fat arrow pointing up
 ```
 
-## Villagers (contract customers)
-
-**CH-1. sheet_villagers_a**
+**UI-37. sheet_empty_states**
 
 ```
-One image: a grid of 4×1, transparent background, one per cell, each a different friendly little alien villager, full body, standing, facing forward, waving or smiling:
-1. a pink jelly blob with two antennae and short tentacle arms
-2. a tall slim green alien with three eyes and a scarf
-3. a round orange alien with four little tentacles and freckles
-4. a tiny teal alien with huge ears and a backpack
+One image: a grid of 2×2, transparent background, one per cell, each a small cute scene with one friendly round alien, no text:
+1. the alien napping curled up inside an empty open cardboard crate
+2. the alien sitting down sleepily, hugging an empty battery
+3. the alien relaxing in a hammock strung between two tiny planets
+4. the alien standing on a small rock looking through binoculars at a far away planet
 ```
 
-**CH-2. sheet_villagers_b**
+**UI-38. sheet_reward_fx**
 
 ```
-One image: a grid of 4×1, transparent background, one per cell, each a different friendly little alien villager, full body, standing, facing forward, waving or smiling:
-1. a purple alien covered in soft round spikes, wearing round glasses
-2. a fluffy white cloud alien with tiny feet and rosy cheeks
-3. a small round robot alien with one big screen eye and an antenna
-4. a yellow bouncy jelly alien with a little hat
+One image: a grid of 4×2, transparent background, one per cell, each a small game effect sprite, centered, no text:
+1. a four pointed sparkle star
+2. a soft round glow puff
+3. a small coin seen from the side, mid spin
+4. a small faceted gem
+5. a small lightning bolt
+6. a little round cloud puff of smoke
+7. a thin glowing ring shockwave
+8. a cluster of five confetti pieces
 ```

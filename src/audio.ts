@@ -9,9 +9,9 @@
    and the game plays on in silence. */
 
 /** music sits well under the effects: it is a bed, not a soundtrack */
-const MUSIC_VOL = 0.24;
+const MUSIC_VOL = 0.3;
 /** the ambience bed sits under the music, and alone in the quiet stretches */
-const AMB_VOL = 0.5;
+const AMB_VOL = 0.32;
 
 const urls = import.meta.glob('./audio/*.ogg', {
   eager: true, query: '?url', import: 'default',
@@ -125,6 +125,7 @@ class Audio {
   private amb: { src: AudioBufferSourceNode; gain: GainNode } | null = null;
   private phraseTimer: any = 0;
   private lastPhrase = '';
+  private tail: { src: AudioBufferSourceNode; gain: GainNode } | null = null;
   private runLeft = 0;
   playMusic(name: string | null) {
     this.wanted = name;
@@ -149,16 +150,19 @@ class Audio {
     this.buffer(pick).then(buf => {
       if (!buf || !this.ctx || this.world !== w) return;
       const now = this.ctx.currentTime, src = this.ctx.createBufferSource(), g = this.ctx.createGain();
-      src.buffer = buf; g.gain.setValueAtTime(0, now); g.gain.linearRampToValueAtTime(1, now + 1.5);
+      // phrases fade in and out on their own, so they overlap into one long drift
+      src.buffer = buf; g.gain.setValueAtTime(1, now);
       src.connect(g); g.connect(this.musicBus); src.start(now);
-      if (this.current) { try { this.current.src.stop(now + 1.5); } catch { } }
+      this.tail = this.current;
+      const prev = this.tail;
+      if (prev) setTimeout(() => { try { prev.src.disconnect(); } catch { } if (this.tail === prev) this.tail = null; }, 9000);
       this.current = { name: pick, src, gain: g };
-      // after this phrase: another one, or a quiet stretch with just the ambience
+      // after this phrase: another one (crossfaded), or a quiet stretch with just the ambience
       this.runLeft--;
-      const rest = this.runLeft > 0 ? 0 : 2500 + Math.random() * 4000;
-      if (this.runLeft <= 0) this.runLeft = 3;
+      const rest = this.runLeft > 0 ? -6000 : 4000 + Math.random() * 8000;
+      if (this.runLeft <= 0) this.runLeft = 2 + (Math.random() < 0.5 ? 1 : 0);
       clearTimeout(this.phraseTimer);
-      this.phraseTimer = setTimeout(() => this.nextPhrase(w, phrases), buf.duration * 1000 - 600 + rest);
+      this.phraseTimer = setTimeout(() => this.nextPhrase(w, phrases), buf.duration * 1000 + rest);
     });
     // the next one loads in the background while this one plays
     phrases.forEach(p => this.buffer(p));
@@ -190,14 +194,14 @@ class Audio {
     this.world = null;
     if (!this.ctx) return;
     const now = this.ctx.currentTime;
-    [this.current, this.amb].forEach(o => {
+    [this.current, this.amb, this.tail].forEach(o => {
       if (!o) return;
       o.gain.gain.cancelScheduledValues(now);
       o.gain.gain.setValueAtTime(o.gain.gain.value, now);
       o.gain.gain.linearRampToValueAtTime(0, now + 0.8);
       try { o.src.stop(now + 0.9); } catch { }
     });
-    this.current = null; this.amb = null;
+    this.current = null; this.amb = null; this.tail = null;
   }
 
   /** Dip the music for a moment so a big effect lands. */

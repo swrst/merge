@@ -11,11 +11,11 @@ Needs numpy, scipy and ffmpeg. Everything is synthesised (no samples, nothing
 to license). Output: src/audio/*.ogg.
 
 The music
-  Ambient space music, deliberately unobtrusive: every world has two slow
-  ~50 s loops (music_<world>_1..2) and a drone bed (amb_<world>). No lead
-  melody to get stuck in your head — drifting analog chords (12 s each), a
-  soft sub, sparse FM star-bells with long echoes, a whisper-quiet pulsing
-  arpeggio that swells in and out, and one cosmic noise swell per loop.
+  Tranquil ambient space music: every world has three ~70 s phrases
+  (music_<world>_1..3) and a drone bed (amb_<world>). Slow soft pads with
+  major-7/add-9 colours, a breathing low drone, and short felt-piano and glass
+  note loops of different lengths that drift in and out of phase, washed in a
+  long hall reverb. No drums and no lead melody.
 
 The effects
   One sci-fi family: bubbly bloops, glassy FM pings, soft laser sweeps and
@@ -333,60 +333,102 @@ WORLDS = {
 }
 
 
+def soft_pad(freqs, dur, vel=0.12, att=4.0, rel=4.0, warm=900):
+    """a pillow of sound: sine-ish partials, gently chorused, slow swell in and out"""
+    n = int(SR * (dur + rel)); t = np.arange(n) / SR
+    x = np.zeros(n)
+    for f in freqs:
+        for d in (-0.0035, 0.0, 0.004):
+            g = f * (1 + d); ph = np.random.uniform(0, 2 * np.pi)
+            wob = 1 + 0.0015 * np.sin(2 * np.pi * np.random.uniform(0.05, 0.13) * t + ph)
+            phase = 2 * np.pi * g * np.cumsum(wob) / SR
+            for k, a in ((1, 1.0), (2, 0.28), (3, 0.1), (4, 0.04)):
+                if g * k > warm * 3:
+                    break
+                x += a * np.exp(-g * k / (warm * 2)) * np.sin(k * phase + ph * k)
+    x /= max(1, len(freqs) * 3)
+    env = np.clip(t / att, 0, 1) ** 1.6
+    s = int(SR * dur)
+    env[s:] *= np.exp(-(t[s:] - dur) / (rel / 3))
+    return x * env * (0.85 + 0.15 * np.sin(2 * np.pi * 0.07 * t)) * vel
+
+
+def felt(f, vel=0.35):
+    """muffled felt piano: soft hammer, long gentle tail"""
+    n = int(SR * 6.0); t = np.arange(n) / SR
+    x = np.zeros(n)
+    for k, a in enumerate([1.0, 0.35, 0.12, 0.05], start=1):
+        x += a * np.sin(2 * np.pi * f * k * (1 + 0.0003 * k * k) * t) * np.exp(-t / (2.6 / k ** 0.8))
+    x *= np.minimum(1, t / 0.012)
+    return onepole_lp(x, 1800) * vel
+
+
+def glass(f, vel=0.25):
+    """a far-off glass star: pure tone with a faint shimmer partial"""
+    n = int(SR * 7.0); t = np.arange(n) / SR
+    x = (np.sin(2 * np.pi * f * t) + 0.18 * np.sin(2 * np.pi * f * 2.76 * t) * np.exp(-t / 0.8)) * np.exp(-t / 2.4)
+    return x * np.minimum(1, t / 0.02) * vel
+
+
 def phrase(w, k):
-    """A playful little space tune (~42 s): a bouncy kalimba/pluck melody that
-    states its tune twice, a hopping sub bass, a soft "boop" kick and airy
-    shaker on the off-beats, sparkly bells, and a gentle pad underneath.
-    Bright, light and loopable, never loud."""
+    """Tranquil space ambient (~70 s), in the spirit of 'Music for Airports':
+    slow drifting pads (major 7 / add 9 colours, a chord every ~11 s), a deep
+    breathing drone, and two or three short note loops of different lengths
+    (felt piano, glass) that drift in and out of phase, all washed in a long
+    hall. No drums, no lead, nothing that demands attention."""
     cfg = WORLDS[w]
-    rng = np.random.default_rng(sum(ord(c) * 31 ** i for i, c in enumerate(w)) % 100000 * 10 + k + 21)
+    rng = np.random.default_rng(sum(ord(c) * 31 ** i for i, c in enumerate(w)) % 100000 * 10 + k + 77)
     np.random.seed(int(rng.integers(1e9)))
     scale, root = cfg['scale'], cfg['root']
-    prog = cfg['progs'][k % len(cfg['progs'])]
-    bpm = cfg['bpm'] + 38                      # ~94-104: walking pace, cheerful
-    beat = 60 / bpm; bar = beat * 4; eighth = beat / 2
-    bars = len(prog) * 2
-    total = bar * bars + 4.0
-    buf = [np.zeros(int(SR * total)), np.zeros(int(SR * total))]
-    mel = compose(scale, prog, rng, lo=7, hi=17)
-    lead = kalimba if cfg['lead'] in ('lead', 'bell', 'bubble') else pluck
-    for rep in range(2):
-        off = rep * len(prog) * bar
-        for b, ch in enumerate(prog):
-            deg = DEG[ch]
-            tones = [root - 12 + sd_to_semi(scale, x) for x in chord_tones(scale, deg)]
-            t0 = off + b * bar
-            place(buf, t0, analog_pad([hz(tones[0]), hz(tones[1]), hz(tones[2])], bar + 0.3, 0.1, cfg['bright'] * 0.7), 0.3, 0.0)
-            # hopping bass: root on 1, fifth on 2-and, root on 3, octave on 4-and
-            for (bt, semi, d) in ((0, 0, 0.9), (1.5, 7, 0.45), (2, 0, 0.9), (3.5, 12, 0.45)):
-                place(buf, t0 + bt * beat, bass(hz(tones[0] - 12 + semi), d * beat, 0.5), 0.42, 0.0)
-            # soft "boop" kick on 1 and 3, shaker on every off-beat
-            for bt in (0, 2):
-                tt = T(0.18); kick = np.sin(2 * np.pi * np.cumsum(90 * np.exp(-tt / 0.05) + 45) / SR) * np.exp(-tt / 0.09)
-                place(buf, t0 + bt * beat, kick, 0.5, 0.0)
-            for bt in (0.5, 1.5, 2.5, 3.5):
-                place(buf, t0 + bt * beat, softnoise(0.07, 5000, 11000, 0.02), 0.07 if rep == 0 else 0.1, 0.35 if bt % 1 else -0.35)
-        # the tune (second time an octave-up bell doubles it)
-        for (st, d, sd) in mel:
-            f = hz(root + 12 + sd_to_semi(scale, sd - 7))
-            t0 = off + st * eighth
-            place(buf, t0, lead(f, d * eighth, 0.55), 0.42, float(np.sin(st * 0.9)) * 0.3)
-            if rep == 1 and d >= 2:
-                place(buf, t0, fmbell(f * 2, 0.2, 0.2, ratio=3.5, index=1.2, tau=0.9), 0.14, float(rng.uniform(-0.5, 0.5)))
-    # sparkles at phrase ends
-    for at in (len(prog) * bar - beat, 2 * len(prog) * bar - beat):
-        for i in range(4):
-            place(buf, at + i * 0.07, fmbell(hz(root + 24 + pent(5 + i)), 0.15, 0.2, ratio=4.0, index=1.0, tau=0.6), 0.12, -0.5 + i * 0.33)
-    L, R = pingpong(buf[0], buf[1], eighth * 3, fb=0.25, mix=0.16, damp=2600)
-    L = hall(L, 2.2, mix=0.25, seed=1, damp=3000)[0]
-    R = hall(R, 2.2, mix=0.25, seed=2, damp=3000)[1]
-    L, R = onepole_lp(L, 7000), onepole_lp(R, 7000)
+    prog = cfg['progs'][k % len(cfg['progs'])][:6]
+    cl = 11.5                                    # seconds per chord
+    total = cl * len(prog) + 8.0
+    n = int(SR * total)
+    buf = [np.zeros(n), np.zeros(n)]
+    t = np.arange(n) / SR
+    # deep drone on the key's root, breathing very slowly
+    drone = 0.6 * np.sin(2 * np.pi * hz(root - 24) * t) + 0.25 * np.sin(2 * np.pi * hz(root - 17) * t)
+    drone *= (0.7 + 0.3 * np.sin(2 * np.pi * t / 13.0)) * np.clip(t / 6, 0, 1)
+    place(buf, 0, onepole_lp(drone, 300), 0.16, 0.0)
+    # pads: open voicings with 7th and 9th, voice-led around the middle register
+    for b, ch in enumerate(prog):
+        deg = DEG[ch]
+        sds = [deg, deg + 4, deg + 6, deg + 8, deg + 9]          # root, 5th, 7th, 9th, 3rd up high
+        semis = [root - 12 + sd_to_semi(scale, sds[0])] + [root + sd_to_semi(scale, x) - (12 if x >= 9 else 0) for x in sds[1:]]
+        place(buf, b * cl, soft_pad([hz(v) for v in semis], cl + 1.5, 0.13, att=4.5, rel=5.0, warm=cfg['bright'] * 0.6), 0.55, float(rng.uniform(-0.2, 0.2)))
+    # generative note loops: each repeats a little cell at its own period
+    pool = [root + 12 + sd_to_semi(scale, x) for x in (0, 1, 2, 4, 5, 7, 8, 9)]
+    if scale is MIN:
+        pool = [root + 12 + sd_to_semi(scale, x) for x in (0, 2, 3, 4, 6, 7, 9)]
+    loops = [(felt, 0.30, rng.uniform(17, 21), -0.45), (felt, 0.24, rng.uniform(23, 27), 0.4),
+             (glass, 0.16, rng.uniform(29, 33), 0.0)]
+    for li, (inst, vel, period, pan) in enumerate(loops):
+        cell = sorted(rng.choice(len(pool), size=int(rng.integers(2, 4)), replace=False))
+        if rng.random() < 0.5:
+            cell = cell[::-1]
+        gaps = rng.uniform(1.4, 3.2, size=len(cell))
+        start = rng.uniform(3, 9) + li * 4
+        at = start
+        while at < total - 10:
+            o = at
+            for idx, gap in zip(cell, gaps):
+                f = hz(pool[idx] + (12 if inst is glass else 0))
+                place(buf, o, inst(f, vel * rng.uniform(0.8, 1.05)), 0.5, pan + float(rng.uniform(-0.1, 0.1)))
+                o += gap
+            at += period
+    # one slow cosmic breath of filtered noise
+    sw = int(SR * 9); tt = np.arange(sw) / SR
+    nz = onepole_lp(onepole_lp(onepole_hp(np.random.randn(sw), 250), 700), 900) * np.sin(np.pi * tt / 9) ** 2 * 0.012
+    place(buf, rng.uniform(15, total - 20), nz, 1.0, float(rng.uniform(-0.5, 0.5)))
+    L, R = pingpong(buf[0], buf[1], 0.62, fb=0.42, mix=0.2, damp=1800)
+    L = hall(L, 6.5, mix=0.48, seed=11, damp=2200)[0]
+    R = hall(R, 6.5, mix=0.48, seed=12, damp=2200)[1]
+    L, R = onepole_lp(L, 3600), onepole_lp(R, 3600)
     m = max(np.max(np.abs(L)), np.max(np.abs(R)), 1e-9)
-    L, R = L / m * 0.72, R / m * 0.72
-    fade = int(SR * 3.0)
-    L[-fade:] *= np.linspace(1, 0, fade); R[-fade:] *= np.linspace(1, 0, fade)
-    fi = int(SR * 0.5)
+    L, R = L / m * 0.6, R / m * 0.6
+    fi, fo = int(SR * 4.0), int(SR * 7.0)
     L[:fi] *= np.linspace(0, 1, fi); R[:fi] *= np.linspace(0, 1, fi)
+    L[-fo:] *= np.linspace(1, 0, fo) ** 1.5; R[-fo:] *= np.linspace(1, 0, fo) ** 1.5
     return L, R
 
 

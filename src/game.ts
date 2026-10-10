@@ -2190,7 +2190,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (e) { e.textContent = n ? String(n) : ''; e.style.display = n ? '' : 'none'; }
   }
   function storeTap() {
-    if (stored().length && !(S.bag || []).length) { storagePop(); return; }
+    if (stored().length && !bagHas()) { storagePop(); return; }
     openBag();
   }
   function openBag(on?: boolean) {
@@ -2203,14 +2203,15 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function renderBag() {
     const host = $('#bagSlots'); if (!host) return;
     const cap = bagCap();
-    $('#bagTitle').innerHTML = `📦 Storage <span style="color:#9a7a4e;font-weight:600">${S.bag.length}/${cap}</span>`
-      + (stored().length ? ` <button class="buyBtn green trayProd" id="trayProd">${stored().length} starter${stored().length > 1 ? 's' : ''}</button>` : '');
-    { const tp = $('#trayProd'); if (tp) tp.onclick = () => { openBag(false); storagePop(); }; }
-    host.innerHTML = Array.from({ length: cap }, (_, k) => {
+    $('#bagTitle').innerHTML = `📦 Storage <span style="color:#9a7a4e;font-weight:600">${S.bag.length}/${cap}</span>`;
+    // starters you put away sit right here too, first, with a little "place" tag — tap one, then a tile
+    host.innerHTML = stored().map((st: any, k: number) => `<button class="bagSlot full prod" data-sprod="${k}">${ART.producer(PRODS[st.p].art)}<em>Place</em></button>`).join('')
+      + Array.from({ length: cap }, (_, k) => {
       const id = S.bag[k];
       return `<button class="bagSlot${id ? ' full' : ''}" data-bag="${k}">${id ? ART.item(id) : ''}</button>`;
     }).join('');
     host.querySelectorAll('[data-bag]').forEach((b: any) => b.onclick = () => unstash(+b.dataset.bag));
+    host.querySelectorAll('[data-sprod]').forEach((b: any) => b.onclick = () => { openBag(false); startPlacing(+b.dataset.sprod); });
   }
   function stashItem(i: number) {
     const b = B(), c = b[i];
@@ -6326,7 +6327,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed, ecost,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
       fly: (w: string) => galaxyTap(w), view: (v: string) => setView(v),
-      curProject: () => curProject(), v9: { paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
+      curProject: () => curProject(), v9: { storeProducer, startPlacing, paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
     };
     setInterval(tick, 500);
     setInterval(() => { if (!document.hidden) S.playMs = (S.playMs || 0) + 5000; }, 5000);

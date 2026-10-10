@@ -3113,3 +3113,16 @@ html body .app .galStars2.inTop{position:relative!important;top:auto!important;l
 .galTop b{min-width:0}
 /* popup ribbons are never cut short */
 html body .app .popRibbon{max-width:none!important;overflow:visible!important;text-overflow:clip!important}
+
+.bagSlot.prod{position:relative;box-shadow:0 0 0 2px #7fe0a0!important}
+.bagSlot.prod em{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);font-style:normal;font-size:9px;font-weight:900;color:#fff;background:#3fbf6a;border-radius:99px;padding:0 6px;box-shadow:0 0 0 1.5px #fff}
+.bagSlot.prod img,.bagSlot.prod svg{width:86%;height:86%;object-fit:contain}
+/* v64: the right-hand helpers are small */
+html body .app .sideR{width:46px}
+html body .app .sideR .tools{gap:6px}
+html body .app .sideR .tools>button{width:42px!important;height:40px!important;border-radius:12px!important}
+html body .app .sideR .tools>button .uiIc,html body .app .sideR .tools>button .hintIc .uiIc{width:26px!important;height:26px!important}
+html body .app .sideR .tools #btnHint .hintIc{width:26px;height:26px;font-size:18px;line-height:26px}
+html body .app .sideR .tools #btnX2 .ic{width:16px!important;height:16px!important}
+html body .app .sideR .tools #btnX2 b{font-size:11px}
+html body .app .sideR .tools .toolbox .n{top:-5px;right:-5px;min-width:16px;height:16px;line-height:16px;font-size:10px}
