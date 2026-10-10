@@ -15,7 +15,7 @@ export const SERVICES = {
     privacyUrl: '',                     // ← your privacy policy page (required by both stores)
     supportEmail: '',                   // ← where "Send feedback" goes; empty = feedback is copied to the clipboard
     /** shown in Settings and stamped on every feedback report */
-    build: '0.58 test',
+    build: '0.59 test',
     /** test builds: tap the version line 5× in Settings for the tester tools */
     testerTools: true,
   },
@@ -40,7 +40,7 @@ export const SERVICES = {
   /** Play Games Services / Game Center: sign-in, leaderboards, achievements, cloud save */
   games: {
     mode: 'mock' as Mode,
-    leaderboards: { level: '', events: '' },     // ← leaderboard ids from Play Console / App Store Connect
+    leaderboards: { level: '', events: '', weekly: '' },     // ← leaderboard ids from Play Console / App Store Connect
     /* store achievements: the in-game id (<achievement>_<star>, e.g. merge_1) → the id
        Play Console / App Store Connect gives it. Empty = only unlocked in the game.
        The same names are used on both stores, so one table fills both. */

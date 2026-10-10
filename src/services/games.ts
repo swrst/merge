@@ -26,10 +26,16 @@ export const games = {
     analytics.track('games_signin', { ok: signedIn });
     return signedIn;
   },
-  async submitScore(board: 'level' | 'events', value: number) {
+  async submitScore(board: 'level' | 'events' | 'weekly', value: number) {
     const id = SERVICES.games.leaderboards[board];
     if (liveOn() && id) { try { await gs().submitScore({ leaderboardId: id, score: value }); } catch { } return; }
     scores[board] = Math.max(scores[board] || 0, value);
+  },
+  /** the store's own leaderboard screen; false when there is none (web / mock) */
+  async showBoard(board: 'level' | 'events' | 'weekly') {
+    const id = SERVICES.games.leaderboards[board];
+    if (liveOn() && id) { try { await gs().showLeaderboard({ leaderboardId: id }); return true; } catch { return false; } }
+    return false;
   },
   async unlock(achievementId: string) {
     if (liveOn()) { try { await gs().unlockAchievement({ achievementId }); } catch { } return; }

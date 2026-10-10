@@ -18,6 +18,7 @@
       "pebble",
       "pebble",
       "pebble",
+      "mappiece",
       "rock"
     ],
     "mode": "energy",
@@ -29,6 +30,8 @@
     "drops": [
       "berry",
       "berry",
+      "berry",
+      "doughstar",
       "berries"
     ],
     "mode": "battery",
@@ -41,9 +44,8 @@
     "drops": [
       "dew",
       "dew",
+      "dew",
       "lostsock",
-      "lostsock",
-      "fishegg",
       "puddle"
     ],
     "mode": "energy",
@@ -56,8 +58,7 @@
       "grass",
       "grass",
       "grass",
-      "kitespool",
-      "kitespool",
+      "canbot",
       "hay"
     ],
     "mode": "energy",
@@ -69,7 +70,7 @@
     "drops": [
       "bulbseed",
       "bulbseed",
-      "foldpaper",
+      "bulbseed",
       "foldpaper",
       "sprig"
     ],
@@ -80,6 +81,7 @@
     "name": "Buzzbot Hive",
     "art": "hive",
     "drops": [
+      "nectar",
       "nectar",
       "nectar",
       "honeydrop"
@@ -99,7 +101,7 @@
     "drops": [
       "caplet",
       "caplet",
-      "gnomehat",
+      "caplet",
       "gnomehat",
       "toadstool"
     ],
@@ -117,9 +119,8 @@
     "drops": [
       "fibre",
       "fibre",
+      "fibre",
       "comb3",
-      "paintdrop",
-      "paintdrop",
       "thread"
     ],
     "mode": "energy",
@@ -130,9 +131,8 @@
     "art": "nestbox",
     "drops": [
       "down",
+      "down",
       "mapscrap",
-      "mapscrap",
-      "starpage",
       "starpage",
       "plume"
     ],
@@ -145,8 +145,8 @@
     "drops": [
       "mud",
       "mud",
-      "pricetag",
-      "pricetag",
+      "mud",
+      "paintdrop",
       "claylump"
     ],
     "spec": {
@@ -163,7 +163,7 @@
     "drops": [
       "grub",
       "grub",
-      "fossilchip",
+      "grub",
       "fossilchip",
       "chrysalis"
     ],
@@ -180,10 +180,9 @@
     "art": "vegpatch",
     "drops": [
       "vegseed",
+      "vegseed",
+      "vegseed",
       "sleepyseed",
-      "sleepyseed",
-      "mappiece",
-      "mappiece",
       "seedling"
     ],
     "spec": {
@@ -200,7 +199,7 @@
     "drops": [
       "lenschip",
       "lenschip",
-      "clockgear",
+      "lenschip",
       "clockgear",
       "lens"
     ],
@@ -216,11 +215,11 @@
     "name": "Crash Site",
     "art": "crashsite",
     "drops": [
-      "oddegg",
-      "oddegg",
-      "canbot",
-      "canbot",
-      "blinky"
+      "blinky",
+      "blinky",
+      "blinky",
+      "pricetag",
+      "alienkid"
     ],
     "spec": {
       "shape": "planet",
@@ -237,7 +236,7 @@
     "drops": [
       "raindrop",
       "raindrop",
-      "cloudwool",
+      "raindrop",
       "cloudwool",
       "puffcloud"
     ],
@@ -256,7 +255,7 @@
     "drops": [
       "flour",
       "flour",
-      "pretzelplanet",
+      "flour",
       "pretzelplanet",
       "dough"
     ],
@@ -273,9 +272,8 @@
     "art": "teabush",
     "drops": [
       "tealeaf",
+      "tealeaf",
       "icescoop",
-      "icescoop",
-      "warmpebble",
       "warmpebble",
       "teabundle"
     ],
@@ -289,9 +287,8 @@
     "drops": [
       "ponddrop",
       "ponddrop",
+      "fishegg",
       "squeakytoy",
-      "bubblewhistle",
-      "bubblewhistle",
       "lilypad"
     ],
     "spec": {
@@ -307,10 +304,9 @@
     "art": "toychest",
     "drops": [
       "block",
+      "block",
       "craterball",
-      "craterball",
-      "bounceball",
-      "bounceball",
+      "arcadetoken",
       "spintop"
     ],
     "spec": {
@@ -327,10 +323,9 @@
     "art": "picnichamper",
     "drops": [
       "crumb",
-      "doughstar",
+      "crumb",
+      "crumb",
       "postcard",
-      "postcard",
-      "doughstar",
       "sandwich"
     ],
     "spec": {
@@ -347,7 +342,7 @@
     "drops": [
       "petegg",
       "petegg",
-      "windupmouse",
+      "petegg",
       "windupmouse",
       "hatchegg"
     ],
@@ -365,9 +360,9 @@
     "art": "buskbot",
     "drops": [
       "notepebble",
+      "notepebble",
+      "bubblewhistle",
       "filmroll",
-      "arcadetoken",
-      "arcadetoken",
       "whistle"
     ],
     "spec": {
@@ -385,7 +380,7 @@
       "hexbolt",
       "hexbolt",
       "starsign",
-      "starsign",
+      "bounceball",
       "gear"
     ],
     "spec": {
@@ -402,6 +397,8 @@
     "drops": [
       "raindrop",
       "raindrop",
+      "raindrop",
+      "kitespool",
       "puffcloud"
     ],
     "spec": {

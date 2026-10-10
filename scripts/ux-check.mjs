@@ -192,7 +192,7 @@ await page.locator('#rwcGo').click(); await page.waitForTimeout(700);
 must(await page.evaluate(() => window.__game.state().pup.n) === 5, 'and collecting it counts');
 for (let k = 0; k < 12 && await page.locator('#talk.open').count(); k++) { await page.click('#talk'); await page.waitForTimeout(250); }
 await page.evaluate(() => { window.__game.v9.closePop(); document.querySelector('.qChip.pup').click(); }); await page.waitForTimeout(900);
-must(await page.locator('#pop.open .pupStage img').count() === 1 && await page.evaluate(() => /pet_baby/.test(document.querySelector('#pop.open .pupStage img').src) || document.querySelector('#pop.open .pupStage img').src.startsWith('data:')), 'its panel shows the painted alien');
+must(await page.locator('#pop.open .pupStage .pupImg').count() === 1 && await page.evaluate(() => /pet_baby/.test(document.querySelector('#pop.open .pupStage img.pupImg, #pop.open .pupStage .pupImg').src) || document.querySelector('#pop.open .pupStage img.pupImg, #pop.open .pupStage .pupImg').src.startsWith('data:')), 'its panel shows the painted alien');
 await page.evaluate(() => window.__game.v9.closePop()); await page.waitForTimeout(300);
 
 console.log('\n13. Console');

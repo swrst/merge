@@ -667,6 +667,46 @@
       },
       {
         "id": "e11",
+        "name": "Pizza Town Meeting",
+        "who": "biscuit",
+        "needs": [
+          [
+            "moonpizza",
+            1
+          ],
+          [
+            "pizzaslice",
+            2
+          ],
+          [
+            "fishlantern",
+            2
+          ],
+          [
+            "seedbot",
+            1
+          ]
+        ],
+        "coins": 490,
+        "xp": 213,
+        "talk": [
+          [
+            "biscuit",
+            "Town meeting! Nobody ever comes to my meetings. Unless there is pizza. And lanterns. And robots."
+          ],
+          [
+            "bloop",
+            "What is a meeting. Is it a picnic where you are not allowed to eat? Blorp."
+          ],
+          [
+            "biscuit",
+            "A Moon Pizza, 2 Crater Slices, 2 Fish Lanterns and a Seeder Bot, please."
+          ]
+        ],
+        "text": "Record turnout! Everyone came for the pizza and left before the speech. And the new Buzzbot Hive buzzes louder…"
+      },
+      {
+        "id": "e12",
         "name": "Nectar Jelly",
         "who": "gigi",
         "needs": [
@@ -683,8 +723,8 @@
             1
           ]
         ],
-        "coins": 490,
-        "xp": 213,
+        "coins": 550,
+        "xp": 231,
         "gift": "chest",
         "talk": [
           [
@@ -699,7 +739,7 @@
         "text": "Sirra wore a Nectar Bubble as a hat. Very chic. Very sticky. Nana is already muttering about wash day."
       },
       {
-        "id": "e12",
+        "id": "e13",
         "name": "Wash Day",
         "who": "grandma",
         "needs": [
@@ -716,8 +756,8 @@
             1
           ]
         ],
-        "coins": 550,
-        "xp": 231,
+        "coins": 610,
+        "xp": 249,
         "unlock": [
           "teabush"
         ],
@@ -737,7 +777,43 @@
         "text": "Clean at last! The Snack Cart serves its very last snack and rolls off to retire. Then the ground starts to fizz…"
       },
       {
-        "id": "e13",
+        "id": "e14",
+        "name": "Warm Socks",
+        "who": "grandma",
+        "needs": [
+          [
+            "startowel",
+            2
+          ],
+          [
+            "sockpair",
+            3
+          ],
+          [
+            "scarebot",
+            1
+          ]
+        ],
+        "coins": 670,
+        "xp": 267,
+        "talk": [
+          [
+            "grandma",
+            "The ground is fizzing and warm, dear. Perfect for drying socks. And for a little soak."
+          ],
+          [
+            "bloop",
+            "On my world we dry socks by shouting at them. Your way seems slower. Blorp."
+          ],
+          [
+            "grandma",
+            "2 Star Towels, 3 Sock Pairs and a Scare Bot, please. The bot keeps the gnoats off the line."
+          ]
+        ],
+        "text": "Toasty socks for all. But the fizzing is getting louder, and a boy with smoking boots is following it…"
+      },
+      {
+        "id": "e15",
         "name": "The Soda Stand",
         "who": "timmy",
         "needs": [
@@ -754,8 +830,8 @@
             1
           ]
         ],
-        "coins": 610,
-        "xp": 249,
+        "coins": 730,
+        "xp": 285,
         "talk": [
           [
             "timmy",
@@ -769,7 +845,7 @@
         "text": "Ember sold four sodas. He drank nine. Chef Gubbo spotted the Ice Cones and got a gleam in his eye…"
       },
       {
-        "id": "e14",
+        "id": "e16",
         "name": "Ice Cream Social",
         "who": "mumbo",
         "needs": [
@@ -790,8 +866,8 @@
             1
           ]
         ],
-        "coins": 670,
-        "xp": 267,
+        "coins": 790,
+        "xp": 303,
         "unlock": [
           "mosslog"
         ],
@@ -812,7 +888,43 @@
         "text": "Cones for everyone! The Moonwater Well gives its last drop (and one last sock). Bye, old well! In the woods, a log blinks."
       },
       {
-        "id": "e15",
+        "id": "e17",
+        "name": "The Hat Hunt",
+        "who": "biscuit",
+        "needs": [
+          [
+            "gnome",
+            2
+          ],
+          [
+            "rocketlantern",
+            2
+          ],
+          [
+            "harvestbot",
+            1
+          ]
+        ],
+        "coins": 860,
+        "xp": 321,
+        "talk": [
+          [
+            "biscuit",
+            "Still no hat. A mayor without a hat is just a man shouting. Ember, search party!"
+          ],
+          [
+            "timmy",
+            "On it! I'll search the woods with lanterns. And robots. And possibly fire."
+          ],
+          [
+            "biscuit",
+            "2 Cyclops Gnomes, 2 Rocket Lanterns and a Harvest Bot, please."
+          ]
+        ],
+        "text": "No hat. But the Cyclops Gnomes in the woods say the blinking log makes a famous drink. Nana knows the recipe."
+      },
+      {
+        "id": "e18",
         "name": "Forest Fizz",
         "who": "grandma",
         "needs": [
@@ -829,8 +941,8 @@
             1
           ]
         ],
-        "coins": 730,
-        "xp": 285,
+        "coins": 920,
+        "xp": 339,
         "talk": [
           [
             "grandma",
@@ -848,7 +960,7 @@
         "text": "Fizz for everyone. Nobody saw straight for an hour. Ember swears the woods are glowing now. They are."
       },
       {
-        "id": "e16",
+        "id": "e19",
         "name": "The Shroom Walk",
         "who": "timmy",
         "needs": [
@@ -865,8 +977,8 @@
             1
           ]
         ],
-        "coins": 790,
-        "xp": 303,
+        "coins": 990,
+        "xp": 357,
         "unlock": [
           "nestbox"
         ],
@@ -886,7 +998,43 @@
         "text": "A glowing path! The Solar Farm folds up for a long nap. Thanks, sunny friend! And behind the shed: a Jet Wreck."
       },
       {
-        "id": "e17",
+        "id": "e20",
+        "name": "A Reading Nook",
+        "who": "pip",
+        "needs": [
+          [
+            "planetbook",
+            3
+          ],
+          [
+            "snailgnome",
+            1
+          ],
+          [
+            "planetlights",
+            1
+          ]
+        ],
+        "coins": 1060,
+        "xp": 375,
+        "talk": [
+          [
+            "pip",
+            "The Jet Wreck came with a shelf of manuals! I want a reading nook before Ember reads them. With his feet."
+          ],
+          [
+            "timmy",
+            "Reading is slow. Flying is fast. Let's do the fast one!"
+          ],
+          [
+            "pip",
+            "3 Planet Books, a Snail Rider and a pack of Planet Lights, please."
+          ]
+        ],
+        "text": "A cosy reading nook. Ember read one page: \"How to start the thrusters.\" He stopped there. Uh-oh."
+      },
+      {
+        "id": "e21",
         "name": "Jet Day",
         "who": "timmy",
         "needs": [
@@ -903,8 +1051,8 @@
             1
           ]
         ],
-        "coins": 860,
-        "xp": 321,
+        "coins": 1130,
+        "xp": 393,
         "gift": "chest",
         "talk": [
           [
@@ -923,7 +1071,7 @@
         "text": "Ember flew all evening, mostly in circles. From up high he spotted hills nobody has ever mapped."
       },
       {
-        "id": "e18",
+        "id": "e22",
         "name": "Charting the Hills",
         "who": "pip",
         "needs": [
@@ -940,8 +1088,8 @@
             1
           ]
         ],
-        "coins": 920,
-        "xp": 339,
+        "coins": 1210,
+        "xp": 411,
         "unlock": [
           "cottonpatch"
         ],
@@ -961,7 +1109,44 @@
         "text": "New paths on the map! The Light Stall glows out. Sweet dreams, little stall! In its place, a Suit Loom hums."
       },
       {
-        "id": "e19",
+        "id": "e23",
+        "name": "The Hill Spring",
+        "who": "grandma",
+        "needs": [
+          [
+            "steambucket",
+            2
+          ],
+          [
+            "jetgnome",
+            1
+          ],
+          [
+            "floattome",
+            1
+          ]
+        ],
+        "gift": "chest",
+        "coins": 1280,
+        "xp": 429,
+        "talk": [
+          [
+            "grandma",
+            "Zib's new map shows a steaming spring past the hills. My knees have waited sixty years for this, dear."
+          ],
+          [
+            "bloop",
+            "You boil yourselves on purpose? And call it relaxing? Blorp. I will try it."
+          ],
+          [
+            "grandma",
+            "2 Steam Buckets, a Jet Gnome and a Floating Tome, please. A good book for a good soak."
+          ]
+        ],
+        "text": "Ahh. Dr. Zonk came out pink and wrinkly. Sirra was horrified by everyone's bathrobes. Something must be done, darling."
+      },
+      {
+        "id": "e24",
         "name": "Spacesuits for All",
         "who": "gigi",
         "needs": [
@@ -974,8 +1159,8 @@
             1
           ]
         ],
-        "coins": 990,
-        "xp": 357,
+        "coins": 1360,
+        "xp": 447,
         "talk": [
           [
             "gigi",
@@ -989,7 +1174,7 @@
         "text": "Suits for all! Sirra did the rest. She always does the rest. Now she's staring at everyone's antennae…"
       },
       {
-        "id": "e20",
+        "id": "e25",
         "name": "Sirra's Salon",
         "who": "gigi",
         "needs": [
@@ -1006,8 +1191,8 @@
             1
           ]
         ],
-        "coins": 1060,
-        "xp": 375,
+        "coins": 1440,
+        "xp": 465,
         "unlock": [
           "toychest"
         ],
@@ -1028,7 +1213,43 @@
         "text": "Antennae have never looked better. The Buzzbots buzz off to new meadows. Bye, busy bots! A toy chest lands on the step."
       },
       {
-        "id": "e21",
+        "id": "e26",
+        "name": "Gnome Makeovers",
+        "who": "gigi",
+        "needs": [
+          [
+            "lightmirror",
+            1
+          ],
+          [
+            "gnomefamily",
+            1
+          ],
+          [
+            "bookstack",
+            2
+          ]
+        ],
+        "coins": 1520,
+        "xp": 483,
+        "talk": [
+          [
+            "gigi",
+            "The Cyclops Gnomes want makeovers, darling. One eye each, so they're very easy to style."
+          ],
+          [
+            "timmy",
+            "I'll hold the dryer! I'll point it at myself first, to test it."
+          ],
+          [
+            "gigi",
+            "A Star Mirror, a Gnome Family and 2 Book Stacks, please. The books are for the waiting area."
+          ]
+        ],
+        "text": "Gnomes: fabulous. Ember's hair: permanently upward. And the toy chest on the step keeps rattling. The children noticed."
+      },
+      {
+        "id": "e27",
         "name": "Toys for Everyone",
         "who": "biscuit",
         "needs": [
@@ -1045,8 +1266,8 @@
             1
           ]
         ],
-        "coins": 1130,
-        "xp": 393,
+        "coins": 1600,
+        "xp": 501,
         "talk": [
           [
             "biscuit",
@@ -1060,7 +1281,7 @@
         "text": "The square is full of spinning tops. Ember is already planning a Sports Day. Zero gravity. Maximum danger."
       },
       {
-        "id": "e22",
+        "id": "e28",
         "name": "Sports Day",
         "who": "timmy",
         "needs": [
@@ -1077,8 +1298,8 @@
             1
           ]
         ],
-        "coins": 1210,
-        "xp": 411,
+        "coins": 1690,
+        "xp": 519,
         "unlock": [
           "crashsite"
         ],
@@ -1098,7 +1319,43 @@
         "text": "Ember won everything. The Fizz Vent burps one last bubble. Cheers, old vent! Then: CRASH. Something small and blinking, behind the hill."
       },
       {
-        "id": "e23",
+        "id": "e29",
+        "name": "The Rematch",
+        "who": "biscuit",
+        "needs": [
+          [
+            "cartridge",
+            2
+          ],
+          [
+            "handheld",
+            1
+          ],
+          [
+            "clothbolt",
+            1
+          ]
+        ],
+        "coins": 1770,
+        "xp": 537,
+        "talk": [
+          [
+            "biscuit",
+            "I demand a rematch. Indoors. Seated. With buttons. Ember can't win at EVERYTHING."
+          ],
+          [
+            "timmy",
+            "Bet I can! Also, did anyone else see something blinking behind the hill?"
+          ],
+          [
+            "biscuit",
+            "2 Rocket Cartridges, a Pocket Console and a Space Helmet, please. Arcade safety."
+          ]
+        ],
+        "text": "Ember won again. The Mayor demands a recount. Then, from behind the hill, more blinking. Lots of it…"
+      },
+      {
+        "id": "e30",
         "name": "The Little Visitors",
         "who": "timmy",
         "needs": [
@@ -1115,8 +1372,8 @@
             1
           ]
         ],
-        "coins": 1280,
-        "xp": 429,
+        "coins": 1860,
+        "xp": 555,
         "gift": "chest",
         "talk": [
           [
@@ -1135,7 +1392,7 @@
         "text": "The little visitors are safe, dry and very, very hungry. The Mayor is already drafting a Guest Garden Act."
       },
       {
-        "id": "e24",
+        "id": "e31",
         "name": "A Garden for Guests",
         "who": "biscuit",
         "needs": [
@@ -1152,8 +1409,8 @@
             1
           ]
         ],
-        "coins": 1360,
-        "xp": 447,
+        "coins": 1950,
+        "xp": 573,
         "unlock": [
           "vegpatch"
         ],
@@ -1173,7 +1430,43 @@
         "text": "The garden is marked out. The Eyeshroom Log finally closes its eyes. Night night, log! A Hydro Bed bubbles up."
       },
       {
-        "id": "e25",
+        "id": "e32",
+        "name": "The Blinkie Yard Sale",
+        "who": "pip",
+        "needs": [
+          [
+            "planetlamp",
+            2
+          ],
+          [
+            "comicstack",
+            1
+          ],
+          [
+            "maptube",
+            2
+          ]
+        ],
+        "coins": 2040,
+        "xp": 591,
+        "talk": [
+          [
+            "pip",
+            "The Blinkies are selling bits of their crashed saucer to buy seeds for the garden. Yard sale!"
+          ],
+          [
+            "biscuit",
+            "Wait. Is that my HAT? …No. It's a lampshade. Carry on."
+          ],
+          [
+            "pip",
+            "2 Planet Lamps, a pack of Space Comics and 2 Map Tubes, please."
+          ]
+        ],
+        "text": "Sold out! The Blinkies bought a sack of seeds and planted them all in one hole. Nana sighs and rolls up her sleeves."
+      },
+      {
+        "id": "e33",
         "name": "Grow Day",
         "who": "grandma",
         "needs": [
@@ -1190,8 +1483,8 @@
             1
           ]
         ],
-        "coins": 1440,
-        "xp": 465,
+        "coins": 2140,
+        "xp": 609,
         "talk": [
           [
             "grandma",
@@ -1205,7 +1498,7 @@
         "text": "The first tubes are full and green. One of the plants bit Ember. Ember is delighted."
       },
       {
-        "id": "e26",
+        "id": "e34",
         "name": "The Biting Garden",
         "who": "timmy",
         "needs": [
@@ -1222,8 +1515,8 @@
             1
           ]
         ],
-        "coins": 1520,
-        "xp": 483,
+        "coins": 2230,
+        "xp": 627,
         "unlock": [
           "tinkerbench"
         ],
@@ -1244,7 +1537,43 @@
         "text": "A garden that waves back (and nibbles). The Jet Wreck is picked clean. Fly free, old jet! A Lens Workbench sets up shop."
       },
       {
-        "id": "e27",
+        "id": "e35",
+        "name": "Bored Biters",
+        "who": "grandma",
+        "needs": [
+          [
+            "arcadecab",
+            1
+          ],
+          [
+            "walkplant",
+            2
+          ],
+          [
+            "saucerstall",
+            1
+          ]
+        ],
+        "coins": 2330,
+        "xp": 645,
+        "talk": [
+          [
+            "grandma",
+            "Those biting plants nibble everyone who walks past. They're bored, dear. Like toddlers with teeth."
+          ],
+          [
+            "timmy",
+            "Give them a video game! I'll test it first. Ow. They bit the joystick."
+          ],
+          [
+            "grandma",
+            "An Arcade Cabinet, 2 Walking Plants and a Saucer Stall, please."
+          ]
+        ],
+        "text": "The plants play arcade games all day and bite nobody. Everyone is late for everything, watching. The Mayor is furious."
+      },
+      {
+        "id": "e36",
         "name": "Clockwork Mayor",
         "who": "biscuit",
         "needs": [
@@ -1261,8 +1590,8 @@
             1
           ]
         ],
-        "coins": 1600,
-        "xp": 501,
+        "coins": 2430,
+        "xp": 663,
         "talk": [
           [
             "biscuit",
@@ -1276,7 +1605,7 @@
         "text": "A town clock that works! Mostly. It runs five minutes late, like the Mayor. Dr. Zonk eyes the spare lenses…"
       },
       {
-        "id": "e28",
+        "id": "e37",
         "name": "Lenses for the Dome",
         "who": "bloop",
         "needs": [
@@ -1293,8 +1622,8 @@
             1
           ]
         ],
-        "coins": 1690,
-        "xp": 519,
+        "coins": 2530,
+        "xp": 681,
         "unlock": [
           "grubmound"
         ],
@@ -1314,7 +1643,44 @@
         "text": "Lenses polished. The Suit Loom ties its last knot. Thanks, stitchy friend! And out of a burrow crawl glowbugs."
       },
       {
-        "id": "e29",
+        "id": "e38",
+        "name": "Bones in the Burrow",
+        "who": "bloop",
+        "needs": [
+          [
+            "babydino",
+            2
+          ],
+          [
+            "crystaldino",
+            1
+          ],
+          [
+            "pendulum",
+            1
+          ]
+        ],
+        "gift": "chest",
+        "coins": 2630,
+        "xp": 699,
+        "talk": [
+          [
+            "bloop",
+            "The glowbug burrow is full of bones. Big ones. Your planet had dinosaurs? And you let them go? Blorp."
+          ],
+          [
+            "timmy",
+            "I'll ride one! The baby one. Okay, the egg."
+          ],
+          [
+            "bloop",
+            "2 Baby Dinos, a Crystal Dino and a Pendulum Clock, please. The clock tells us how old they are."
+          ]
+        ],
+        "text": "A little dino museum! The baby dinos snore. As night falls, the glowbugs creep out to see them. Nana gasps."
+      },
+      {
+        "id": "e39",
         "name": "Glowbug Night",
         "who": "grandma",
         "needs": [
@@ -1331,8 +1697,8 @@
             1
           ]
         ],
-        "coins": 1770,
-        "xp": 537,
+        "coins": 2730,
+        "xp": 717,
         "gift": "chest",
         "talk": [
           [
@@ -1347,7 +1713,7 @@
         "text": "The meadow twinkles like the sky. Sirra has an idea, darling. A very bright one."
       },
       {
-        "id": "e30",
+        "id": "e40",
         "name": "Glowbug Lanterns",
         "who": "gigi",
         "needs": [
@@ -1364,8 +1730,8 @@
             1
           ]
         ],
-        "coins": 1860,
-        "xp": 555,
+        "coins": 2840,
+        "xp": 735,
         "unlock": [
           "lilypond"
         ],
@@ -1385,7 +1751,43 @@
         "text": "Lanterns everywhere. The Toy Chest is empty. Thanks for the fun, old box! By the water, a Slime Pond fills up."
       },
       {
-        "id": "e31",
+        "id": "e41",
+        "name": "Three-Eyed Fans",
+        "who": "timmy",
+        "needs": [
+          [
+            "jellylamp",
+            2
+          ],
+          [
+            "longneck",
+            1
+          ],
+          [
+            "saucerstall",
+            1
+          ]
+        ],
+        "coins": 2950,
+        "xp": 753,
+        "talk": [
+          [
+            "timmy",
+            "The new Slime Pond has fish! Three eyes each! They can watch me from every angle. Finally, fans!"
+          ],
+          [
+            "bloop",
+            "Three eyes is the normal number. Two is the strange one. Blorp. No offence."
+          ],
+          [
+            "timmy",
+            "2 Jelly Lamps, a Longneck and a Saucer Stall, please. The Longneck wants to watch."
+          ]
+        ],
+        "text": "The pond glows at night now. Dr. Zonk stares at the stars in the water for hours. He looks a little homesick."
+      },
+      {
+        "id": "e42",
         "name": "Stargazing Night",
         "who": "timmy",
         "needs": [
@@ -1402,8 +1804,8 @@
             1
           ]
         ],
-        "coins": 1950,
-        "xp": 573,
+        "coins": 3060,
+        "xp": 771,
         "gift": "chest",
         "talk": [
           [
@@ -1422,7 +1824,7 @@
         "text": "Tiny lights on the Moon. \"Friends,\" whispers Dr. Zonk. And in the woods: his ship. In pieces. We're building a rocket!"
       },
       {
-        "id": "e32",
+        "id": "e43",
         "name": "Slime Day",
         "who": "timmy",
         "needs": [
@@ -1439,8 +1841,8 @@
             1
           ]
         ],
-        "coins": 2040,
-        "xp": 591,
+        "coins": 3170,
+        "xp": 789,
         "unlock": [
           "windmill"
         ],
@@ -1454,13 +1856,49 @@
           ],
           [
             "timmy",
-            "An Observatory, 4 Slime Jars and a Bug Jar, please."
+            "A Slime Jar, 2 Planet Bath Bombs and an Alien Explorer, please."
           ]
         ],
         "text": "Best slime party ever. The Blinkies leave the Crash Site and move in for good. Up the hill, a Cheese Mill creaks."
       },
       {
-        "id": "e33",
+        "id": "e44",
+        "name": "A Rocket, to Scale",
+        "who": "mumbo",
+        "needs": [
+          [
+            "rocketcake",
+            2
+          ],
+          [
+            "bakecart",
+            1
+          ],
+          [
+            "jellylamp",
+            1
+          ]
+        ],
+        "coins": 3280,
+        "xp": 807,
+        "talk": [
+          [
+            "mumbo",
+            "A rocket! Then we need a model. An edible model. Chef Gubbo will bake the rocket first, to scale."
+          ],
+          [
+            "bloop",
+            "If we eat the model, how do we build the real one? Blorp. …Fine. One slice."
+          ],
+          [
+            "mumbo",
+            "2 Rocket Cakes, a Bake Cart and a Jelly Lamp, please. Mood lighting for the unveiling."
+          ]
+        ],
+        "text": "The model rocket was eaten in four minutes. Dr. Zonk took notes. Gubbo eyes the creaky mill up the hill: \"Cheese next…\""
+      },
+      {
+        "id": "e45",
         "name": "The Cheese Shop",
         "who": "mumbo",
         "needs": [
@@ -1477,8 +1915,8 @@
             1
           ]
         ],
-        "coins": 2140,
-        "xp": 609,
+        "coins": 3400,
+        "xp": 825,
         "gift": "chest",
         "talk": [
           [
@@ -1493,7 +1931,7 @@
         "text": "Moon cheese for everyone! The smell drifted very, very far. A very posh guest is on her way…"
       },
       {
-        "id": "e34",
+        "id": "e46",
         "name": "Bath Night",
         "who": "pim",
         "needs": [
@@ -1510,8 +1948,8 @@
             1
           ]
         ],
-        "coins": 2230,
-        "xp": 627,
+        "coins": 3510,
+        "xp": 843,
         "unlock": [
           "raincloud"
         ],
@@ -1531,7 +1969,43 @@
         "text": "Bubbles everywhere. The Hydro Bed drains for a rest. Well grown, old bed! A little Weather Cloud settles on the hill."
       },
       {
-        "id": "e35",
+        "id": "e47",
+        "name": "Cloud Sheep",
+        "who": "pim",
+        "needs": [
+          [
+            "rainbowsheep",
+            2
+          ],
+          [
+            "sheepmum",
+            1
+          ],
+          [
+            "bathhouse",
+            1
+          ]
+        ],
+        "coins": 3630,
+        "xp": 861,
+        "talk": [
+          [
+            "pim",
+            "That little cloud brought sheep. One requires a robe of cloud wool. And a proper bathhouse."
+          ],
+          [
+            "gigi",
+            "Darling, cloud wool is SO in this season. It rains on you, but stylishly."
+          ],
+          [
+            "pim",
+            "2 Rainbow Sheep, a Sheep Mum and a Bathhouse, please. Pinkies up."
+          ]
+        ],
+        "text": "The Duchess bathed for six hours. When she got out, the Slime Pond was nearly empty. The frogs are not amused."
+      },
+      {
+        "id": "e48",
         "name": "Rain for the Pond",
         "who": "bloop",
         "needs": [
@@ -1548,8 +2022,8 @@
             1
           ]
         ],
-        "coins": 2330,
-        "xp": 645,
+        "coins": 3750,
+        "xp": 879,
         "gift": "chest",
         "talk": [
           [
@@ -1564,7 +2038,7 @@
         "text": "Rain! The slime frogs sang all night. Chef Gubbo stared at the clouds and whispered, \"Cheese…\""
       },
       {
-        "id": "e36",
+        "id": "e49",
         "name": "Cheese and Clouds",
         "who": "mumbo",
         "needs": [
@@ -1581,8 +2055,8 @@
             1
           ]
         ],
-        "coins": 2430,
-        "xp": 663,
+        "coins": 3880,
+        "xp": 897,
         "unlock": [
           "claypit"
         ],
@@ -1596,13 +2070,50 @@
           ],
           [
             "mumbo",
-            "4 Zap Clouds, a Slime Fountain and a Cheese Wheel, please. The bot tells me when."
+            "A Zap Cloud, a Cheese Wheel and an Alarm Bot, please. The bot tells me when."
           ]
         ],
         "text": "Nobody understood it. Everybody ate it. The Lens Workbench packs up. Sharp work, friend! By the river, a Goo Pit bubbles."
       },
       {
-        "id": "e37",
+        "id": "e50",
+        "name": "The Mayor's Statue",
+        "who": "biscuit",
+        "needs": [
+          [
+            "rocketeasel",
+            2
+          ],
+          [
+            "aliensculpt",
+            1
+          ],
+          [
+            "rainbowsheep",
+            1
+          ]
+        ],
+        "gift": "chest",
+        "coins": 4000,
+        "xp": 915,
+        "talk": [
+          [
+            "biscuit",
+            "Every great town has a statue of its mayor. Ours has a goo pit. Close enough. Art Club, assemble!"
+          ],
+          [
+            "bloop",
+            "Why make a copy of the Mayor? One Mayor is already plenty. Blorp."
+          ],
+          [
+            "biscuit",
+            "2 Rocket Easels, an Alien Statue and a Rainbow Sheep, please. The statue needs a HAT."
+          ]
+        ],
+        "text": "The statue looks like a sheep in a hat. The Mayor loves it. Sirra wants the leftover goo, darling. For bowls."
+      },
+      {
+        "id": "e51",
         "name": "Goo Day",
         "who": "gigi",
         "needs": [
@@ -1619,8 +2130,8 @@
             1
           ]
         ],
-        "coins": 2530,
-        "xp": 681,
+        "coins": 4130,
+        "xp": 933,
         "talk": [
           [
             "gigi",
@@ -1634,7 +2145,7 @@
         "text": "Sirra ordered twelve goo vases. The Duchess wants to show off her pots. Publicly."
       },
       {
-        "id": "e38",
+        "id": "e52",
         "name": "The Pottery Fair",
         "who": "pim",
         "needs": [
@@ -1651,8 +2162,8 @@
             1
           ]
         ],
-        "coins": 2630,
-        "xp": 699,
+        "coins": 4250,
+        "xp": 951,
         "unlock": [
           "picnichamper"
         ],
@@ -1673,7 +2184,43 @@
         "text": "Pots of every shape. The glowbugs drift off to light other meadows. Glow on! Then THUMP: a Cargo Pod lands."
       },
       {
-        "id": "e39",
+        "id": "e53",
+        "name": "Postcards Home",
+        "who": "bloop",
+        "needs": [
+          [
+            "postdrone",
+            2
+          ],
+          [
+            "porcelain",
+            1
+          ],
+          [
+            "bubblefish",
+            1
+          ]
+        ],
+        "coins": 4380,
+        "xp": 969,
+        "talk": [
+          [
+            "bloop",
+            "That Cargo Pod has a slot marked MAIL. I could write home. Tell my Moon friends I am… fine. Blorp."
+          ],
+          [
+            "grandma",
+            "Tell them you've been eating properly, dear. Lie if you must."
+          ],
+          [
+            "bloop",
+            "2 Post Drones, a Nebula Vase and a Walking Fish, please. The fish licks the stamps."
+          ]
+        ],
+        "text": "Postcards sent! Then the Cargo Pod opens, and out climbs a small alien in a large hat. With legs. Many legs."
+      },
+      {
+        "id": "e54",
         "name": "Parcels!",
         "who": "blorb",
         "needs": [
@@ -1690,8 +2237,8 @@
             1
           ]
         ],
-        "coins": 2730,
-        "xp": 717,
+        "coins": 4510,
+        "xp": 987,
         "talk": [
           [
             "blorb",
@@ -1705,7 +2252,7 @@
         "text": "Blorb delivered everything. Twice. One parcel is a picnic set for Nana. From Nana. Posted years ago."
       },
       {
-        "id": "e40",
+        "id": "e55",
         "name": "Picnic in Orbit",
         "who": "grandma",
         "needs": [
@@ -1722,8 +2269,8 @@
             1
           ]
         ],
-        "coins": 2840,
-        "xp": 735,
+        "coins": 4650,
+        "xp": 1005,
         "unlock": [
           "eggnest"
         ],
@@ -1744,7 +2291,43 @@
         "text": "Best picnic ever. The Slime Pond dries up. Farewell, squishy pond! Behind the crates, a nest of eggs starts to wobble."
       },
       {
-        "id": "e41",
+        "id": "e56",
+        "name": "Here Be Dragons",
+        "who": "timmy",
+        "needs": [
+          [
+            "robodragon",
+            2
+          ],
+          [
+            "petbasket",
+            1
+          ],
+          [
+            "buntower",
+            1
+          ]
+        ],
+        "coins": 4780,
+        "xp": 1023,
+        "talk": [
+          [
+            "timmy",
+            "Those eggs take FOREVER. I'm building my own pet. A robot dragon. A fire-breathing robot dragon."
+          ],
+          [
+            "grandma",
+            "No fire, Ember. Last time you set the soup on fire. The soup, dear."
+          ],
+          [
+            "timmy",
+            "2 Robo Dragons, a Charging Basket and a Cheese Cart, please. Dragons love cheese. Probably."
+          ]
+        ],
+        "text": "The robo dragons breathe nice warm air. Perfect for the eggs! Crack… crack… The Blinkies press their noses to the nest."
+      },
+      {
+        "id": "e57",
         "name": "Pets for the Blinkies",
         "who": "bloop",
         "needs": [
@@ -1761,8 +2344,8 @@
             1
           ]
         ],
-        "coins": 2950,
-        "xp": 753,
+        "coins": 4920,
+        "xp": 1041,
         "talk": [
           [
             "bloop",
@@ -1780,7 +2363,7 @@
         "text": "The eggs hatch! The Blinkies have a pet now. It is wearing the Mayor's sash. Its name is Blobbo."
       },
       {
-        "id": "e42",
+        "id": "e58",
         "name": "The Pet Show",
         "who": "pip",
         "needs": [
@@ -1797,8 +2380,8 @@
             1
           ]
         ],
-        "coins": 3060,
-        "xp": 771,
+        "coins": 5060,
+        "xp": 1059,
         "unlock": [
           "buskbot"
         ],
@@ -1819,7 +2402,44 @@
         "text": "Blobbo won everything. The Cheese Mill retires with honours (and a medal). A Busker Bot rolls in to play."
       },
       {
-        "id": "e43",
+        "id": "e59",
+        "name": "Fan Mail for Blobbo",
+        "who": "blorb",
+        "needs": [
+          [
+            "postrocket",
+            1
+          ],
+          [
+            "pupbed",
+            1
+          ],
+          [
+            "bubbletrumpet",
+            2
+          ]
+        ],
+        "gift": "chest",
+        "coins": 5200,
+        "xp": 1077,
+        "talk": [
+          [
+            "blorb",
+            "Fan mail! For Blobbo! Four hundred letters. Mostly from Blobbo. Blobbo has learned to post."
+          ],
+          [
+            "biscuit",
+            "Blobbo is still wearing my sash. I want that noted. In the minutes."
+          ],
+          [
+            "blorb",
+            "A Post Rocket, a Blob Bed and 2 Bubble Horns, please. The horns are for the fanfare."
+          ]
+        ],
+        "text": "Fanfare blown! The Busker Bot joined in with its one chord. Over and over. Somebody, please, teach it more."
+      },
+      {
+        "id": "e60",
         "name": "Music on the Hill",
         "who": "timmy",
         "needs": [
@@ -1836,8 +2456,8 @@
             1
           ]
         ],
-        "coins": 3170,
-        "xp": 789,
+        "coins": 5340,
+        "xp": 1095,
         "talk": [
           [
             "timmy",
@@ -1851,7 +2471,7 @@
         "text": "Now it plays two chords. Progress! Sirra says no other planet will believe any of this without pictures."
       },
       {
-        "id": "e44",
+        "id": "e61",
         "name": "Say Cheese!",
         "who": "gigi",
         "needs": [
@@ -1868,8 +2488,8 @@
             1
           ]
         ],
-        "coins": 3280,
-        "xp": 807,
+        "coins": 5480,
+        "xp": 1113,
         "unlock": [
           "rockethull"
         ],
@@ -1890,7 +2510,43 @@
         "text": "Photos on every wall. The Weather Cloud drifts off. Thanks for the rain! And the old Scrap Hull is full of rocket bits."
       },
       {
-        "id": "e45",
+        "id": "e62",
+        "name": "The Lookout",
+        "who": "pip",
+        "needs": [
+          [
+            "scopetreehouse",
+            2
+          ],
+          [
+            "aliensculpt",
+            1
+          ],
+          [
+            "postdrone",
+            1
+          ]
+        ],
+        "coins": 5630,
+        "xp": 1131,
+        "talk": [
+          [
+            "pip",
+            "The Scrap Hull is huge! Before we strip it, I want a lookout on top. You can see the whole Meadow!"
+          ],
+          [
+            "timmy",
+            "And jump off it! …Into cushions. Nana made me add the cushions."
+          ],
+          [
+            "pip",
+            "2 Scope Treehouses, an Alien Statue and a Post Drone, please."
+          ]
+        ],
+        "text": "From the lookout, Zib spots every bolt in the hull. Dr. Zonk climbs up, sniffles, and says: \"My ship. Let's sort it.\""
+      },
+      {
+        "id": "e63",
         "name": "Rocket Bits",
         "who": "bloop",
         "needs": [
@@ -1907,8 +2563,8 @@
             1
           ]
         ],
-        "coins": 3400,
-        "xp": 825,
+        "coins": 5780,
+        "xp": 1149,
         "talk": [
           [
             "bloop",
@@ -1922,7 +2578,7 @@
         "text": "A pile of parts, sorted by Dr. Zonk, re-sorted by the Blinkies. Ember says a launch needs a band."
       },
       {
-        "id": "e46",
+        "id": "e64",
         "name": "The Band Practice",
         "who": "timmy",
         "needs": [
@@ -1939,8 +2595,8 @@
             1
           ]
         ],
-        "coins": 3510,
-        "xp": 843,
+        "coins": 5930,
+        "xp": 1167,
         "retire": [
           "claypit"
         ],
@@ -1958,7 +2614,43 @@
         "text": "The band is terrible and wonderful. The Goo Pit dries up. Bye, gloopy pal! Every pet in the Meadow heard. Uh-oh."
       },
       {
-        "id": "e47",
+        "id": "e65",
+        "name": "Pets in Town Hall",
+        "who": "biscuit",
+        "needs": [
+          [
+            "twistslide",
+            2
+          ],
+          [
+            "bouncycastle",
+            1
+          ],
+          [
+            "petbasket",
+            1
+          ]
+        ],
+        "coins": 6080,
+        "xp": 1185,
+        "talk": [
+          [
+            "biscuit",
+            "Every pet in the Meadow heard that band and stampeded into town hall. They're sitting in MY chair."
+          ],
+          [
+            "bloop",
+            "They want to be near the music. Like moths. Loud, furry moths. Blorp."
+          ],
+          [
+            "biscuit",
+            "2 Twisty Slides, a Rocket Bouncer and a Charging Basket, please. Lure them outside!"
+          ]
+        ],
+        "text": "Pets out, town hall saved. But the pets won't go home. They have decided to stay until the launch. All of them."
+      },
+      {
+        "id": "e66",
         "name": "The Pet Parade",
         "who": "grandma",
         "needs": [
@@ -1975,8 +2667,8 @@
             1
           ]
         ],
-        "coins": 3630,
-        "xp": 861,
+        "coins": 6230,
+        "xp": 1203,
         "talk": [
           [
             "grandma",
@@ -1990,7 +2682,7 @@
         "text": "A parade of blobs, led by Blobbo, in the sash. Sirra insists on photos for the road."
       },
       {
-        "id": "e48",
+        "id": "e67",
         "name": "Photos for the Road",
         "who": "gigi",
         "needs": [
@@ -2007,8 +2699,8 @@
             1
           ]
         ],
-        "coins": 3750,
-        "xp": 879,
+        "coins": 6390,
+        "xp": 1221,
         "retire": [
           "picnichamper"
         ],
@@ -2023,10 +2715,47 @@
             "A Camera Drone, a Booster and a Blobbo, please."
           ]
         ],
-        "text": "An album for the trip. The Cargo Pod flies off with the last parcel. Safe skies! Zib wants one last parade."
+        "text": "An album for the trip. The Cargo Pod flies off with the last parcel. Safe skies! Now: who minds the Meadow while we're away?"
       },
       {
-        "id": "e49",
+        "id": "e68",
+        "name": "Minding the Meadow",
+        "who": "grandma",
+        "needs": [
+          [
+            "pethotel",
+            1
+          ],
+          [
+            "bubbleorgan",
+            1
+          ],
+          [
+            "stiltfort",
+            1
+          ]
+        ],
+        "gift": "chest",
+        "coins": 6540,
+        "xp": 1239,
+        "talk": [
+          [
+            "grandma",
+            "Somebody has to mind the Meadow while you're on the Moon, dear. I volunteered. So did the pets."
+          ],
+          [
+            "gigi",
+            "A send-off needs music, darling. Bubbles. Possibly a fort. Don't ask why, just trust me."
+          ],
+          [
+            "grandma",
+            "A Pet Hotel, a Bubble Organ and a Stilt Fort, please."
+          ]
+        ],
+        "text": "A Pet Hotel, a bubble send-off and a fort to wave from. Zib wipes a tear and grabs a flag: \"One last parade!\""
+      },
+      {
+        "id": "e69",
         "name": "The Space Parade",
         "who": "pip",
         "needs": [
@@ -2043,8 +2772,8 @@
             1
           ]
         ],
-        "coins": 3880,
-        "xp": 897,
+        "coins": 6700,
+        "xp": 1257,
         "talk": [
           [
             "pip",
@@ -2058,7 +2787,7 @@
         "text": "\"Nearly there,\" says Dr. Zonk, patting the rocket. A fin falls off. \"…Nearly-ish.\" One last push!"
       },
       {
-        "id": "e50",
+        "id": "e70",
         "name": "The Launch Pad",
         "who": "bloop",
         "needs": [
@@ -2079,8 +2808,8 @@
             1
           ]
         ],
-        "coins": 4000,
-        "xp": 915,
+        "coins": 6860,
+        "xp": 1275,
         "launch": true,
         "rocket": true,
         "unlock": [
@@ -2098,7 +2827,7 @@
           ],
           [
             "bloop",
-            "A UFO Jukebox, a Blob House and a Camera Drone, please."
+            "A Porthole Cone, a Planet Drum, a Blobbo and a Space Camera, please."
           ]
         ],
         "text": "The rocket stands tall and Sunny Meadow is wide awake. A Weather Balloon floats up to wave goodbye. Next: the Moon!"

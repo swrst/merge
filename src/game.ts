@@ -716,7 +716,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      early (chapter 4) but his ship only turns up after Stargazing Night, when
      everyone has seen where home is — so rocket pieces stay out of the game
      until then. A save that already started building keeps going. */
-  const ROCKET_AFTER = 31;
+  const ROCKET_AFTER = 42;
   const rocketTime = () => !!S.met && (S.world !== 'earth' || ((S.proj && S.proj.earth) || 0) >= ROCKET_AFTER
     || PART_KEYS.some(k => S.parts[k]) || !!S.wreck);
   const building = () => rocketTime() && !allParts();
@@ -2059,7 +2059,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           ${tile('openQuests', 'ic_cadet', '🎯', 'Cadet Training', ql ? (MISSIONS.length - ql) + '/' + MISSIONS.length + ' done' : 'all done ✓', false)}
           ${S.seen.relic1 || labOpen() ? tile('openVault', 'ic_vault', '🏛️', 'Relic Vault', 'perks forever', false) : ''}
         </div>`
+      + (projDone('earth') >= 3 ? weeklyCard() : '')
       + dailyCard();
+    host.querySelectorAll('[data-wk]').forEach((b: any) => b.onclick = () => wkClaim(+b.dataset.wk));
+    { const wb = $('#wkBoard'); if (wb) wb.onclick = wkBoard; }
     host.querySelectorAll('[data-dchest]').forEach((b: any) => b.onclick = () => claimDaily(+b.dataset.dchest));
     host.querySelectorAll('.pNeed[data-need]').forEach((n: any) => n.onclick = () => chainPanel(n.dataset.need));
     const bp = $('#btnProject'); if (bp) bp.onclick = buildProject;
@@ -2197,7 +2200,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const host = $('#bagSlots'); if (!host) return;
     const cap = bagCap();
     $('#bagTitle').innerHTML = `📦 Storage <span style="color:#9a7a4e;font-weight:600">${S.bag.length}/${cap}</span>`
-      + (stored().length ? ` <button class="buyBtn green trayProd" id="trayProd">${stored().length} producer${stored().length > 1 ? 's' : ''}</button>` : '');
+      + (stored().length ? ` <button class="buyBtn green trayProd" id="trayProd">${stored().length} starter${stored().length > 1 ? 's' : ''}</button>` : '');
     { const tp = $('#trayProd'); if (tp) tp.onclick = () => { openBag(false); storagePop(); }; }
     host.innerHTML = Array.from({ length: cap }, (_, k) => {
       const id = S.bag[k];
@@ -2924,6 +2927,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     p.needs.forEach(([id, q]: [string, number]) => { for (let k = 0; k < q; k++) consumeOne(id); });
     spend(p.coins);
     S.proj[S.world] = projDone() + 1;
+    weeklyAdd(25);
     analytics.track('chapter_built', { world: S.world, chapter: projDone(), level: S.lvl });
     // ask for a rating once, right after a win, never in the first minutes
     if (!S.reviewAsked && S.world === 'earth' && projDone() >= SERVICES.store.askReviewAfterChapter) { S.reviewAsked = 1; setTimeout(() => store.requestReview(), 4000); }
@@ -3089,6 +3093,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   const dailyOk = () => { if (!S.dt || S.dt.key !== dayKey(new Date())) rollDaily(); return S.dt; };
   /** every scoring action in the game funnels through here */
   function tally(kind: string, n = 1) {
+    weeklyTally(kind, n);
     const dt = dailyOk();
     let done = false;
     dt.list.forEach((t: any) => {
@@ -3201,10 +3206,11 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     S.om.n++;
     if (S.om.n >= mileGoal()) {
       S.om.n = 0; S.om.step++;
-      const at = giveItem(S.om.step % 3 === 0 ? 'bigchest' : 'chest');
-      S.energy += CFG.milestone.energy; bumpChip('#chipEnergy');
+      // once in a while, not every few contracts: a chest every other milestone, a little energy in between
+      const chest = S.om.step % 2 === 0, at = chest ? giveItem(S.om.step % 6 === 0 ? 'bigchest' : 'chest') : -1;
+      if (!chest) { S.energy += CFG.milestone.energy; bumpChip('#chipEnergy'); }
       setTimeout(() => { sfx.big(); confetti(); if (at >= 0) sparkle(at, 16, '#ffe9a8');
-        toast(`📦 Contract milestone! A chest and +${CFG.milestone.energy} ⚡`); }, 900);
+        toast(chest ? '📦 Contract milestone! A Supply Chest landed on your board.' : `📦 Contract milestone! +${CFG.milestone.energy} ⚡`); }, 900);
     }
     renderMile();
   }
@@ -4130,7 +4136,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const c = B()[i]; if (!counted(c)) return;
     stored().push({ p: c.p, lv: c.lv, ch: c.ch, at: c.at });
     B()[i] = null; sfx.whoosh(); sparkle(i, 14, '#ffe9a8');
-    toast(`📦 <b>${PRODS[c.p].name}</b> is in storage — tap 📦 above the board to put it back.`);
+    toast(`📦 <b>${PRODS[c.p].name}</b> is in Storage — tap 📦 to put it back.`);
     paintBoard(); renderOrders(); renderQuick(); save();
   }
   function startPlacing(k: number) {
@@ -4150,7 +4156,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const c = B()[i];
     const put = () => { B()[i] = { p: st.p, lv: st.lv, ch: st.ch, at: st.at }; };
     if (!c) {
-      if (prodCount() >= capProd()) { sfx.no(); toast(`The board holds ${capProd()} producers — tap one of them to swap.`); return; }
+      if (prodCount() >= capProd()) { sfx.no(); toast(`No room for another starter — tap one on the board to swap.`); return; }
       stored().splice(k, 1); put();
     } else if (counted(c)) {
       stored().splice(k, 1, { p: c.p, lv: c.lv, ch: c.ch, at: c.at }); put();
@@ -4161,7 +4167,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
   function storagePop() {
     const list = stored();
-    pop(ART.uiIcon('ic_box', '📦') + ' Producer storage', `<div class="noteLine" style="margin-top:0">Your board holds <b>${capProd()}</b> producers (${prodCount()} now). Pick one, then tap an empty tile — or a producer to swap with.</div>
+    pop(ART.uiIcon('ic_box', '📦') + ' Storage', `<div class="noteLine" style="margin-top:0">Starters you put away wait here. Pick one, then tap an empty tile — or a starter to swap with.</div>
       ${list.length ? list.map((s: any, k: number) => `<div class="enRow"><span class="enIc">${ART.producer(PRODS[s.p].art)}</span>
         <div><b>${PRODS[s.p].name}</b><i>Level ${s.lv || 1}</i></div><button class="buyBtn green" data-place="${k}">Place</button></div>`).join('')
         : '<div class="evOff">Nothing in storage. Tap a producer, then <b>Store</b>, to make room.</div>'}`, 'energy');
@@ -4267,6 +4273,73 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     });
   }
 
+
+  /* ============================================================ STAR CHALLENGE
+     A week-long challenge: two featured chains you are playing right now, and
+     points for merging them up, delivering contracts and opening chests.
+     Three medal tiers pay out, and the week's score goes to the leaderboard. */
+  const wkKey = (t = Date.now()) => { const d = new Date(t); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return d.toISOString().slice(0, 10); };
+  const weekEnds = () => { const d = new Date(wkKey() + 'T00:00:00'); d.setDate(d.getDate() + 7); return d.getTime(); };
+  const WK_TIERS = [{ pts: 150, r: { coins: 300, energy: 20 } }, { pts: 400, r: { gems: 15, item: 'chest' } }, { pts: 900, r: { gems: 40, item: 'bigchest', energy: 50 } }];
+  const WK_RIVALS = ['Zorp the Quick', 'Captain Nebula', 'Blibblob', 'Mx. Crater', 'Lady Quasar', 'Glorp Jr.', 'Twinkle-9', 'Sir Orbitson'];
+  function weekly() {
+    const k = wkKey();
+    if (!S.wk || S.wk.k !== k) {
+      const pool = playChains().filter(c => CHAINS[c].items.length >= 5);
+      const pick: string[] = [];
+      let seed = k.split('-').reduce((a, x) => a * 31 + +x, 7);
+      while (pick.length < Math.min(2, pool.length)) { seed = (seed * 9301 + 49297) % 233280; const c = pool[seed % pool.length]; if (!pick.includes(c)) pick.push(c); }
+      if (S.wk && S.wk.pts) { S.wkBest = Math.max(S.wkBest || 0, S.wk.pts); }
+      S.wk = { k, pts: 0, feat: pick, got: [] };
+    }
+    return S.wk;
+  }
+  function weeklyAdd(n: number) {
+    if (!S.tut || projDone('earth') < 3) return;
+    const w = weekly(); const before = w.pts; w.pts += n;
+    games.submitScore('weekly', w.pts);
+    const t = WK_TIERS.findIndex(x => before < x.pts && w.pts >= x.pts);
+    if (t >= 0) setTimeout(() => toast(`🏅 Star Challenge: <b>${['Bronze', 'Silver', 'Gold'][t]}</b> reached! Claim it in the Mission Log.`), 600);
+  }
+  function weeklyTally(kind: string, n: number) {
+    if (kind === 'merge') weeklyAdd(1 * n);
+    else if (kind.startsWith('make:')) { const id = kind.slice(5), it = ITEMS[id]; if (it && weekly().feat.includes(it.chain)) weeklyAdd(it.tier * 3); }
+    else if (kind === 'deliver') weeklyAdd(8 * n);
+    else if (kind === 'chest') weeklyAdd(3 * n);
+    else if (kind === 'chain') weeklyAdd(20 * n);
+    else if (kind === 'bloom') weeklyAdd(4 * n);
+  }
+  /** pretend rivals on the local board: their scores climb through the week */
+  function wkRivals() {
+    const w = weekly(), start = new Date(w.k + 'T00:00:00').getTime(), f = clamp((Date.now() - start) / (7 * 864e5), 0.05, 1);
+    let seed = w.k.split('-').reduce((a, x) => a * 17 + +x, 3);
+    return WK_RIVALS.map(n => { seed = (seed * 9301 + 49297) % 233280; return { n, pts: Math.round((120 + (seed % 900)) * f) }; });
+  }
+  function weeklyCard() {
+    const w = weekly(), left = weekEnds() - Date.now();
+    const top = WK_TIERS[WK_TIERS.length - 1].pts, pct = Math.min(100, Math.round(w.pts / top * 100));
+    return `<div class="card wkCard"><div class="cardTitle">${ART.uiIcon('ic_trophy', '🏆')} Star Challenge<span class="pCount">${dhm(left)} left</span></div>
+      <div class="wkFeat">This week: ${w.feat.map((c: string) => `<span>${ART.item(CHAINS[c].items[0])}<b>${CHAINS[c].name}</b></span>`).join('')}</div>
+      <div class="wkHow">Merge featured chains for big points · contracts 8 · chests 3 · finished chains 20</div>
+      <div class="wkBar"><i style="width:${pct}%"></i>${WK_TIERS.map((t, i) => `<button class="wkMed${w.pts >= t.pts ? ' ok' : ''}${w.got.includes(i) ? ' got' : ''}" data-wk="${i}" style="left:${t.pts / top * 100}%">${['🥉', '🥈', '🥇'][i]}<em>${t.pts}</em></button>`).join('')}</div>
+      <div class="wkPts"><b>${w.pts}</b> points</div>
+      <button class="big soft" id="wkBoard">${ART.uiIcon('ic_medals', '📊')} Leaderboard</button></div>`;
+  }
+  function wkClaim(i: number) {
+    const w = weekly(), t = WK_TIERS[i];
+    if (!t || w.pts < t.pts) { sfx.no(); toast(`Reach <b>${t ? t.pts : 0}</b> points for this medal.`); return; }
+    if (w.got.includes(i)) return;
+    w.got.push(i); save();
+    rewardCard('glimmer', ['🥉 Bronze', '🥈 Silver', '🥇 Gold'][i] + ' — Star Challenge', '<b>Captain Glimmer:</b> "A medal! Shiny. Almost as shiny as me."', t.r as Reward, () => { if (view === 'rocket') renderRocket(); });
+  }
+  async function wkBoard() {
+    if (await games.showBoard('weekly')) return;
+    const w = weekly(), me = { n: games.signedIn ? games.player : 'You', pts: w.pts, me: true };
+    const list = [...wkRivals(), me].sort((a: any, b: any) => b.pts - a.pts);
+    pop('🏆 Galaxy League', `<div class="noteLine" style="margin-top:0">This week · resets in <b>${dhm(weekEnds() - Date.now())}</b></div>
+      <div class="lbList">${list.map((r: any, k: number) => `<div class="lbRow${r.me ? ' me' : ''}"><b>${k + 1}</b><span>${r.n}</span><i>${r.pts}</i></div>`).join('')}</div>
+      <div class="noteLine">${games.signedIn ? 'Your score is sent to the global board.' : 'Sign in to Google Play Games (⚙️ Settings) to compete on the global board. Until then you race these alien rivals.'}</div>`, 'spin');
+  }
   /* ----------------------------------------------------------- coach marks
      One line, pointing at the thing, the first time it matters. Never blocks:
      any tap anywhere dismisses it. */
@@ -4314,6 +4387,52 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     clearInterval(tutTimer); tutTimer = 0;
   }
   function coachOff() { if (jit) jitEnd(); }
+
+  /* ----------------------------------------------------------- rolling tips
+     Every few minutes of play, one short tip about something you have
+     actually unlocked — never the same one twice in a row, each at most twice. */
+  const TIPS: { k: string; who: string; say: string; when: () => boolean }[] = [
+    { k: 'dbl', who: 'pip', say: '<b>Double-tap</b> an item to merge it with its nearest twin — no dragging needed.', when: () => S.lvl >= 2 },
+    { k: 'info', who: 'pip', say: 'Not sure where something comes from? Tap it, then the <b>ⓘ</b> in the bottom bar.', when: () => S.lvl >= 2 },
+    { k: 'sell', who: 'grandma', say: 'Board getting crowded? <b>Sell</b> the little leftovers — every coin helps, dear.', when: () => freeCells().length < 8 },
+    { k: 'store', who: 'grandma', say: 'Tap an item and press <b>Stash</b> to keep it safe in Storage for later.', when: () => bagHas() && S.lvl >= 3 },
+    { k: 'upg', who: 'biscuit', say: 'A <b>levelled-up starter</b> drops better things and holds more charges. Tap one to upgrade it!', when: () => projDone() >= 4 },
+    { k: 'seal', who: 'pip', say: 'See a <b>glowing glass bubble</b>? Drag its twin onto it and whatever is inside is yours.', when: () => B().some((c: any) => c && c.f) },
+    { k: 'lab', who: 'bloop', say: 'Spare items? The <b>Recycler</b> in my Lab turns them into Science for upgrades that last forever.', when: () => labOpen() },
+    { k: 'grow', who: 'bloop', say: 'The Lab can <b>grow</b> one item a step while you play. Put something in before you leave!', when: () => labOpen() && projDone() >= 8 },
+    { k: 'stars', who: 'bloop', say: 'Star Scrap from craters fuses into <b>Star Cores</b>. Light a constellation in the Galaxy for a perk in every world.', when: () => !!(S.seen.scrap || pouch('scrap')) },
+    { k: 'heart', who: 'grandma', say: 'Finishing a chain for the first time earns a <b>Bloom Spark</b>. Feed it to the Meadow Heart on the map!', when: () => projDone() >= 3 },
+    { k: 'magnet', who: 'pip', say: 'Stuck? The <b>Star Magnet</b> pulls every matching pair together at once.', when: () => boostN('wand') > 0 },
+    { k: 'x2', who: 'biscuit', say: 'Energy to spare? Switch on <b>⚡×2</b>: every tap costs double but drops one step higher.', when: () => S.lvl >= BOOST_LV },
+    { k: 'wheel', who: 'oops', say: 'The <b>Cosmic Wheel</b> has a free spin every day. Destiny insists.', when: () => S.lvl >= SP().unlockLevel && spinsLeft() > 0 },
+    { k: 'pet', who: 'bloop', say: 'Your <b>pet</b> fetches gifts on its own. Feed it spare items to help it grow and evolve!', when: () => petOn() },
+    { k: 'daily', who: 'biscuit', say: 'The <b>Daily Log</b> in the Mission Log fills chests just for playing. Vote Marin!', when: () => projDone() >= 2 },
+    { k: 'weekly', who: 'glimmer', say: 'This week\'s <b>Star Challenge</b> is in the Mission Log. Score points, climb the leaderboard!', when: () => projDone() >= 3 },
+    { k: 'event', who: 'gigi', say: 'An <b>event</b> is on! Event items only show up for a few days, darling.', when: () => !!evNow() },
+    { k: 'contracts', who: 'pip', say: 'Chapters need <b>contracts</b> delivered too. Keep an eye on the faces above the board!', when: () => projDone() >= 3 },
+    { k: 'energyfree', who: 'pip', say: 'Out of energy? Energy comes back on its own — and the daily gift in the shop is free.', when: () => S.energy < 10 },
+    { k: 'retire', who: 'grandma', say: 'Starters <b>retire</b> as the story moves on, and new ones arrive. Use them while they are here!', when: () => projDone() >= 6 },
+  ];
+  let tipAt = 0, lastTip = '';
+  function tipTick() {
+    const now = Date.now();
+    if (!tipAt) { tipAt = now + 150000; return; }
+    if (S.tipsOff || now < tipAt || !S.tut || tutOn() || jit || view !== 'board') return;
+    if (popOpen() || $('#modal').classList.contains('open') || $('#talk').classList.contains('open') || now - lastAct < 4000) return;
+    S.tipN = S.tipN || {};
+    const pool = TIPS.filter(t => t.k !== lastTip && (S.tipN[t.k] || 0) < 2 && t.when());
+    tipAt = now + 210000 + Math.random() * 90000;
+    if (!pool.length) return;
+    const t = pool.sort((a, b) => (S.tipN[a.k] || 0) - (S.tipN[b.k] || 0))[0];
+    S.tipN[t.k] = (S.tipN[t.k] || 0) + 1; lastTip = t.k; save();
+    let el = document.getElementById('tipBub');
+    if (!el) { el = document.createElement('div'); el.id = 'tipBub'; $('#app').appendChild(el); }
+    el.innerHTML = `<span class="tbFace">${ART.char(t.who)}</span><div class="tbTxt"><i>${ART.uiIcon('ic_tips', '💡')} Tip</i>${t.say}</div><button class="tbX">✕</button>`;
+    el.className = 'on'; sfx.popHi();
+    const hide = () => { el!.className = ''; };
+    (el.querySelector('.tbX') as HTMLElement).onclick = hide;
+    setTimeout(hide, 9000);
+  }
 
   /* ------------------------------------------------------- the fun corner */
   function funPop() {
@@ -4484,12 +4603,54 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (pet()) {
       petMigrate();
       if (!S.petIntro && S.tut && view === 'board' && !popOpen() && !$('#modal').classList.contains('open') && !$('#talk').classList.contains('open')) { S.petIntro = 1; save(); petIntro(); }
+      petHelp(); petPeek();
       return;
     }
     // it comes from the Moon: the first time you are there (and settled in)
-    if (S.lvl < PET_LV || S.world === 'earth' || !S.tut || view !== 'board' || popOpen() || $('#modal').classList.contains('open') || $('#talk').classList.contains('open')) return;
+    if (S.lvl < PET_LV || (S.world === 'earth' && projDone('earth') < 14) || !S.tut || view !== 'board' || popOpen() || $('#modal').classList.contains('open') || $('#talk').classList.contains('open')) return;
     S.pup = { at: Date.now() - 38 * 60000, n: 0, pet: 0, form: 'baby', lv: 1, xp: 0, food: Date.now() }; S.petIntro = 1; save();
     petHatch(petIntro);
+  }
+
+  /* ---------------------------------------------- the pet lends a paw
+     A fed pet helps on the board now and then: it merges one pair for you.
+     And every so often it pops up at the edge of the board to say hello. */
+  function petHelp() {
+    const p = pet(); if (!p || view !== 'board' || popOpen() || jit || tutOn()) return;
+    if (petMood() === 'hungry' || Date.now() < (p.help || 0)) return;
+    const pair = findPair(); if (!pair) return;
+    p.help = Date.now() + (35 + Math.random() * 20) * 60000; save();
+    if (!tryMerge(pair[0], pair[1])) return;
+    sparkle(pair[1], 18, '#ffb6f0'); sfx.voice('pup', 2);
+    toast(`🐾 <b>${p.name || petForm().name}</b> pushed two things together for you!`);
+    petGainXp(2); petPeek(true);
+  }
+  let peekAt = 0;
+  function petPeek(now = false) {
+    if (!pet() || view !== 'board' || popOpen()) return;
+    if (!now && Date.now() < peekAt) return;
+    peekAt = Date.now() + 120000 + Math.random() * 120000;
+    let el = document.getElementById('petPeek');
+    if (!el) { el = document.createElement('button'); el.id = 'petPeek'; $('#app').appendChild(el); el.onclick = () => { sfx.boing(); el!.className = ''; pupPop(true); }; }
+    const lines = ['Hi!', 'Blorp!', '💗', 'Snack?', '♪♫', 'Play?', '✨'];
+    el.innerHTML = `${pupArt()}<i>${lines[Math.floor(Math.random() * lines.length)]}</i>`;
+    el.className = 'on' + (Math.random() < 0.5 ? ' r' : '');
+    setTimeout(() => { if (el) el.className = el.className.replace('on', '').trim(); }, 5200);
+  }
+  /** play fetch: a star flies across the room and the pet chases it */
+  function petPlay() {
+    const p = pet(); if (!p) return;
+    const st = $('#pupStage') as HTMLElement; if (!st) return;
+    if (Date.now() < (p.play || 0)) { sfx.no(); toast(`${petForm().name} is still puffed out — play again in <b>${mmss((p.play || 0) - Date.now())}</b>.`); return; }
+    p.play = Date.now() + 20 * 60000;
+    const star = document.createElement('i'); star.className = 'petBall'; star.textContent = '⭐'; st.appendChild(star);
+    st.classList.remove('fetch'); void st.offsetWidth; st.classList.add('fetch');
+    sfx.whoosh(); setTimeout(() => { sfx.boing(); sfx.voice('pup', 3); }, 700);
+    setTimeout(() => {
+      star.remove(); st.classList.remove('fetch');
+      const c = 15 + (p.lv || 1) * 3; S.coins += c; bumpChip('#chipCoins'); petGainXp(4); p.food = Math.max(p.food || 0, Date.now() - 3600000);
+      toast(`🐾 Fetch! It brought back <b>${c} 🪙</b> it found under a rock.`); renderHUD(); save();
+    }, 1500);
   }
   /** a ring of sparks and stars flying out of an element: for big moments */
   function burst(host: HTMLElement, n = 26) {
@@ -4593,7 +4754,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const evoAt = f.id === 'baby' ? PET_EVOLVE.pup : f.id === 'pup' ? PET_EVOLVE.branch : f.stage === 3 ? PET_EVOLVE.final : 0;
     const feed = petFoodList();
     pop('🐾 ' + (p.name || f.name), `<div class="pupBox">
-      <div class="pupStage ${mood}" id="pupStage">${pupArt(f)}<span class="pupMood">${mood === 'happy' ? '💗' : mood === 'hungry' ? '🍖?' : '🙂'}</span>${pupLeft() ? '<span class="pupZ">z<i>z</i><b>z</b></span>' : ''}</div>
+      <div class="pupStage ${mood}" id="pupStage">${ART.spriteChar('pet_bed') ? `<img class="pupBed" src="${ART.spriteChar('pet_bed')}" alt="">` : ''}${ART.spriteChar('pet_bowl') ? `<img class="pupBowl${food < 30 ? ' empty' : ''}" src="${ART.spriteChar('pet_bowl')}" alt="">` : ''}${pupArt(f)}<span class="pupMood">${mood === 'happy' ? '💗' : mood === 'hungry' ? '🍖?' : '🙂'}</span>${pupLeft() ? '<span class="pupZ">z<i>z</i><b>z</b></span>' : ''}</div>
       <b class="pupName">${f.name} <small>Lv ${p.lv}</small></b>
       <div class="pupBars"><span>XP</span><div class="catBar"><i style="width:${need ? Math.round(p.xp / need * 100) : 100}%"></i></div>
         <span>Food</span><div class="catBar food"><i style="width:${food}%"></i></div></div>
@@ -4601,7 +4762,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       <div class="noteLine">Next gift in <b>${mmss(pupLeft())}</b>${mood === 'happy' ? ' (fed: faster)' : mood === 'hungry' ? ' — <b>hungry, so slower</b>' : ''}.</div>
       <div class="petFeed"><b>${food >= PET_FULL ? 'Full! Feed it again later' : 'Feed it a spare item'}</b> <i>(${food >= PET_FULL ? 'it gets hungry over a few hours' : 'a few bites, then it is full'})</i>
         <div class="petFoods">${feed.length ? feed.map(([id, n]) => `<button class="petFood" data-feed="${id}">${ART.item(id)}<em>×${n}</em><small>+${petFeedXp(ITEMS[id].tier)} XP</small></button>`).join('') : '<div class="evOff">Nothing spare on the board right now.</div>'}</div></div>
-      <button class="big soft" id="pupPet">Pet ${f.name}</button></div>`, 'fun');
+      <div class="petActs"><button class="big soft" id="pupPet">💗 Pet</button><button class="big blue" id="pupPlay">⭐ Play fetch</button></div></div>`, 'fun');
+    ($('#pupPlay') as HTMLElement).onclick = petPlay;
     document.querySelectorAll<HTMLElement>('[data-feed]').forEach(b => b.onclick = () => petFeed(b.dataset.feed!));
     ($('#pupPet') as HTMLElement).onclick = () => {
       const st = $('#pupStage'); st.classList.remove('petted'); void (st as HTMLElement).offsetWidth; st.classList.add('petted');
@@ -4663,7 +4825,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     host.dataset.h = html; host.innerHTML = html;
     host.querySelectorAll('[data-q]').forEach((b: any) => b.onclick = () => {
       const k = b.dataset.q;
-      if (k === 'mile') { sfx.tap(); toast(`📦 Deliver <b>${mileGoal() - ((S.om && S.om.n) || 0)}</b> more contract${mileGoal() - ((S.om && S.om.n) || 0) === 1 ? '' : 's'} for a free chest and +${CFG.milestone.energy} ⚡`); } else if (k === 'event') eventPop(); else if (k === 'spin') spinPop(); else if (k === 'pup') pupPop(); else if (k === 'store') storagePop(); else if (k === 'pouch') starChart(); else { setView('lab'); labAccPop(); }
+      if (k === 'mile') { sfx.tap(); toast(`📦 Deliver <b>${mileGoal() - ((S.om && S.om.n) || 0)}</b> more contract${mileGoal() - ((S.om && S.om.n) || 0) === 1 ? '' : 's'} for ${((S.om && S.om.step) || 0) % 2 === 1 ? 'a free chest' : `+${CFG.milestone.energy} ⚡`}`); } else if (k === 'event') eventPop(); else if (k === 'spin') spinPop(); else if (k === 'pup') pupPop(); else if (k === 'store') storagePop(); else if (k === 'pouch') starChart(); else { setView('lab'); labAccPop(); }
     });
   }
 
@@ -4945,17 +5107,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const dots = c.pts.map((p: number[], i: number) => `<circle cx="${p[0]}" cy="${p[1]}" r="${i % 3 ? 3 : 4.2}" style="animation-delay:${(i * 0.37) % 2.2}s"/>`).join('');
     return `<svg viewBox="-8 -8 116 116" class="cSvg ${cls}"><g class="cLines">${segs}</g><g class="cDots">${dots}</g></svg>`;
   }
-  /** the constellations in the galaxy sky, two beside each world */
-  function galConsts(pt: (i: number) => { x: number; y: number }) {
-    return CONSTS.map(c => {
-      const wi = WORLD_ORDER.indexOf(c.world); if (wi < 0) return '';
-      const mine = CONSTS.filter(x => x.world === c.world), k = mine.indexOf(c);
-      const p = pt(wi), y = p.y - GAL_STEP * 0.52 + (k ? 12 : -12), x = (p.x < 50) === !k ? 22 : 78;
-      const st = constState(c);
-      return `<button class="gc gc-${st}" data-const="${c.id}" style="left:${x}%;top:${y}px">${constSvg(c)}
-        <b>${st === 'locked' ? '???' : c.name}</b>${st === 'ready' ? '<i class="gcTag">✨ Light me!</i>' : st === 'open' ? `<i class="gcCnt">${Math.min(countItem('starcore'), c.cost)}/${c.cost}</i>` : ''}</button>`;
-    }).join('');
-  }
   function fuseScrap() {
     if (pouch('scrap') < 3) return false;
     S.wal.scrap -= 3; S.wal.starcore = pouch('starcore') + 1; S.seen.starcore = 1;
@@ -4966,7 +5117,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       <span><img src="${ART.spriteUi('starscrap_ui')}" alt=""><i>Star Scrap<b>${pouch('scrap')}</b></i></span><em>➜</em>
       <span><img src="${ART.spriteUi('starcore_ui')}" alt=""><i>Star Core<b>${countItem('starcore')}</b></i></span><em>➜</em>
       <span><img src="${ART.spriteUi('sk_badge')}" alt=""><i>Light a constellation</i></span></div>`;
-  const fuseBtn = () => `<button class="skFuse2" id="skFuse" ${pouch('scrap') < 3 ? 'disabled' : ''}><img src="${ART.spriteUi('sk_fuser')}" alt=""><span><b>Fuse</b><i>3 Star Scrap → 1 Star Core</i></span></button>`;
+  const fuseBtn = () => `<button class="skFuse2" id="skFuseH" ${pouch('scrap') < 3 ? 'disabled' : ''}><img src="${ART.spriteUi('sk_fuser')}" alt=""><span><b>Fuse</b><i>3 Star Scrap → 1 Star Core</i></span></button>`;
   /** how it works, from the star button in the galaxy */
   function starHelp() {
     const n = CONSTS.filter(c => lit(c.id)).length;
@@ -4974,7 +5125,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       <div class="skExplain">Every world has two constellations in its sky. Fill one with <b>Star Cores</b> and it lights up for good: a perk that works in every world, or a big gift.</div>
       ${fuseBtn()}
       <div class="skLitBar"><i style="width:${Math.round(n / CONSTS.length * 100)}%"></i><span>${n}/${CONSTS.length} constellations lit</span></div>`, 'starsheet');
-    const f = $('#skFuse'); if (f) f.onclick = () => { if (fuseScrap()) { starHelp(); renderWorldScreen(); } };
+    const f = $('#skFuseH'); if (f) f.onclick = () => { if (fuseScrap()) { starHelp(); skyPage(); } };
   }
   /** one constellation's card */
   function constCard(id: string) {
@@ -4988,26 +5139,56 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     pop(st === 'locked' ? '✨ Unknown stars' : '✨ ' + c.name, `<div class="skCardBig gc-${st}">${constSvg(c, 'cBig')}</div>
       <div class="skPerk">${st === 'locked' ? 'A constellation nobody has charted yet.' : c.perk}</div>${body}`, 'starsheet');
     const l = $('#skLight'); if (l) l.onclick = () => skyLight(c.id);
-    const f = $('#skFuse'); if (f) f.onclick = () => { if (fuseScrap()) { constCard(id); renderWorldScreen(); } };
+    const f = $('#skFuseH'); if (f) f.onclick = () => { if (fuseScrap()) { constCard(id); skyPage(); } };
   }
-  /** open the chart: the galaxy, scrolled to a constellation (or the help) */
+  /** the Star Chart page: the painted night sky, every constellation drawn on it */
+  function skyPage() {
+    let el = document.getElementById('skyChart');
+    if (!el) { el = document.createElement('div'); el.id = 'skyChart'; $('#app').appendChild(el); }
+    const rows = WORLD_ORDER.filter(w => CONSTS.some(c => c.world === w)).map(w => {
+      const two = CONSTS.filter(c => c.world === w).map((c, k) => {
+        const st = constState(c);
+        return `<button class="gc gc-${st} ${k ? 'r' : 'l'}" data-const="${c.id}">${constSvg(c)}
+          <b>${st === 'locked' ? '???' : c.name}</b>${st === 'ready' ? '<i class="gcTag">✨ Light me!</i>' : st === 'open' ? `<i class="gcCnt">${ART.item('starcore')} ${Math.min(countItem('starcore'), c.cost)}/${c.cost}</i>` : st === 'lit' ? '<i class="gcLit">✦ lit</i>' : ''}</button>`;
+      }).join('');
+      return `<div class="skRow${visited(w) ? '' : ' far'}"><div class="skWorld">${ART.uiIcon('planet_' + w, '🪐')}<span>Seen from <b>${WORLDS[w].name}</b></span></div><div class="skPair">${two}</div></div>`;
+    }).join('');
+    const n = CONSTS.filter(c => lit(c.id)).length;
+    el.innerHTML = `<div class="skBgArt"></div><div class="skNeb"></div>
+      <div class="skTop2"><button class="galBack" id="skBack">↩ Galaxy</button><b>Star Chart</b>
+        <span class="skPouch2"><img src="${ART.spriteUi('starcore_ui')}" alt=""><b>${countItem('starcore')}</b></span><button class="skHelp" id="skHelp">?</button></div>
+      <div class="skLit2"><i style="width:${Math.round(n / CONSTS.length * 100)}%"></i><span>${n}/${CONSTS.length} constellations lit</span></div>
+      <div class="skScroll2" id="skScroll">${rows}<div class="skEnd">More skies wait beyond Aurora Reach…</div></div>
+      <div class="skDock"><button class="skFuser${pouch('scrap') >= 3 ? ' on' : ''}" id="skFuse"><img src="${ART.spriteUi('sk_fuser')}" alt=""></button>
+        <div class="skDockTxt"><b>Star Fuser</b><i>${ART.spriteUi('starscrap_ui') ? `<img src="${ART.spriteUi('starscrap_ui')}" alt="">` : ''} ${pouch('scrap')} scrap · 3 make 1 Star Core</i></div>
+        <button class="skFuseGo" id="skFuseGo" ${pouch('scrap') < 3 ? 'disabled' : ''}>Fuse</button></div>`;
+    el.className = 'open';
+    ($('#skBack') as HTMLElement).onclick = () => { sfx.close(); el!.className = ''; renderWorldScreen(); };
+    ($('#skHelp') as HTMLElement).onclick = () => { sfx.tap(); starHelp(); };
+    const fuse = () => {
+      if (!fuseScrap()) { sfx.no(); toast('Dig meteor craters for Star Scrap — 3 make a Star Core.'); return; }
+      const m = $('#skFuse') as HTMLElement; m.classList.remove('go'); void m.offsetWidth; m.classList.add('go');
+      burst(m, 18); setTimeout(skyPage, 650);
+    };
+    ($('#skFuse') as HTMLElement).onclick = fuse; ($('#skFuseGo') as HTMLElement).onclick = fuse;
+    el.querySelectorAll<HTMLElement>('[data-const]').forEach(b => b.onclick = () => { sfx.tap(); constCard(b.dataset.const!); });
+  }
+  /** open the chart page, optionally scrolled to (and opening) one constellation */
   function starChart(focus?: string) {
-    if (view !== 'map') setView('map');
-    worldTab = 'galaxy'; renderWorldScreen();
+    skyPage(); audio.duck(1, 0.5);
     S.story = S.story || {};
     const go = () => {
-      if (focus) {
-        const el = document.querySelector(`.gc[data-const="${focus}"]`) as HTMLElement, sc = $('#galScroll');
-        if (el && sc) sc.scrollTop = Math.max(0, el.offsetTop - sc.clientHeight / 2);
-        constCard(focus);
-      } else starHelp();
+      if (!focus) return;
+      const el = document.querySelector(`#skyChart .gc[data-const="${focus}"]`) as HTMLElement, sc = $('#skScroll');
+      if (el && sc) sc.scrollTop = Math.max(0, el.offsetTop - sc.clientHeight / 2);
+      constCard(focus);
     };
     if (!S.story.stars) {
       S.story.stars = 1; save();
       talkScene([
-        ['bloop', 'Blorp! See the faint dots between the planets? Constellations. Sleeping ones. Every one of them owes us a favour.'],
-        ['bloop', 'Dig meteor craters for <b>Star Scrap</b>. Three scraps fuse into one glowing <b>Star Core</b>.'],
-        ['bloop', 'Feed a constellation enough Star Cores and it lights up for good. Start with <b>The Rocket</b>, right above our meadow!'],
+        ['bloop', 'Blorp! The Star Chart. Every dot up there is a sleeping constellation — and every one of them owes us a favour.'],
+        ['bloop', 'Dig meteor craters for <b>Star Scrap</b>. Feed three to the <b>Star Fuser</b> down there and out pops a glowing <b>Star Core</b>.'],
+        ['bloop', 'Give a constellation enough Star Cores and it lights up for good — a perk in every world. Start with <b>The Rocket</b>!'],
       ], go);
     } else go();
   }
@@ -5035,8 +5216,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     setTimeout(() => { sfx.discover(); haptic('heavy'); confetti(); fx!.classList.add('flash'); }, (end + 0.2) * 1000);
     setTimeout(() => {
       // fly back into the galaxy, onto its own spot
-      renderWorldScreen();
-      const spot = document.querySelector(`.gc[data-const="${c.id}"]`) as HTMLElement, sc = $('#galScroll');
+      skyPage();
+      const spot = document.querySelector(`#skyChart .gc[data-const="${c.id}"]`) as HTMLElement, sc = $('#skScroll');
       if (spot && sc) sc.scrollTop = Math.max(0, spot.offsetTop - sc.clientHeight / 2);
       const svg = $('#fxSvg') as HTMLElement;
       if (spot && svg) {
@@ -5200,11 +5381,11 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     })();
     return `<div class="gal2"><div class="galSky"></div>
       <div class="galTop"><button class="galBack" data-pop="camp">↩ Camp</button><b>Galaxy</b><span class="galFuel">⛽ ${S.fuel}/${CONFIG.rocket.fuelToLaunch}</span></div>
-      <button class="galStars" data-pop="stars"><img src="${ART.spriteUi('starcore_ui')}" alt=""><b>${countItem('starcore')}</b><i>Star Chart ?</i></button>
+      <button class="galStars2${CONSTS.some(c => constState(c) === 'ready') ? ' ready' : ''}" data-pop="stars"><img src="${ART.spriteUi('gal_starchart')}" alt=""><b>Star Chart</b><i>${CONSTS.filter(c => S.stars && S.stars[c.id]).length}/${CONSTS.length} lit</i></button>
       <div class="galScroll" id="galScroll"><div class="galPath" style="height:${H}px">
         <svg class="galSvg" viewBox="0 0 100 ${H}" preserveAspectRatio="none" style="height:${H}px">
           <path d="${path}" class="galRoute"/><path d="${lit}" class="galRoute lit"/></svg>
-        ${galConsts(pt)}${nodes}</div></div>
+        ${nodes}</div></div>
       <div class="galFoot">A new world costs <b>${CONFIG.rocket.fuelToLaunch} ⛽</b> · flying back is always free</div></div>`;
   }
 
@@ -5227,7 +5408,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       sfx.tap();
       if (k === 'store') { storagePop(); return; }
       if (k === 'games') gamesPanel();
-      else if (k === 'stars') starHelp();
+      else if (k === 'stars') starChart();
       else { worldTab = k === 'camp' ? 'camp' : 'galaxy'; renderWorldScreen(); }
     });
   }
@@ -5388,20 +5569,24 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
 
   function heartPanel() {
-    const w = W(), st = stage(), done = worldAwake();
+    const w = W(), st = stage(), done = worldAwake(), r = CONFIG.bloom.reward;
     const onBoard = B().reduce((a: number, c: any) => a + (c && c.id ? bloomValue(c.id) : 0), 0);
-    modal(w.folks[0] || 'bloop', w.heart,
-      `<div class="noteLine" style="margin-top:0">${done ? 'Awake, and beating on its own.'
-        : `<b>${w.bloom[st].title}</b> — ${fed()}/${bloomGoal()} Bloom`}</div>
-       <div class="catBar"><i style="width:${done ? 100 : clamp(fed() / bloomGoal() * 100, 0, 100)}%"></i></div>
-       <div class="stageList">${w.bloom.map((b: any, i: number) =>
-        `<div class="stageRow${i < st ? ' done' : ''}"><b>${i < st ? '✓' : b.need}</b><span>${b.title}</span></div>`).join('')}</div>
-       <div class="noteLine">Finish a merge chain anywhere in ${w.name} and the Vault pays a <b>Bloom Spark</b>. Sparks merge into bigger essence, worth more.</div>
-       <button class="big" id="feed2"${onBoard ? '' : ' disabled'}>${onBoard ? 'Feed it (' + onBoard + ' Bloom)' : 'No essence on the board'}</button>`,
-      'Close');
-    setTimeout(() => { const f = $('#feed2'); if (f) f.onclick = () => { closeModal(); feedHeart(); }; }, 30);
+    const pct = done ? 100 : clamp(fed() / bloomGoal() * 100, 0, 100);
+    const heartArt = ART.spriteUi(done || st > 0 ? 'camp_heart_on' : 'camp_heart_off') || ART.spriteUi('camp_heart_on');
+    const ess = BLOOM().map((id, i) => `<span class="hEss">${ART.item(id)}<b>${Math.pow(2, i)}</b></span>`).join('<em>+</em>');
+    pop('💗 ' + w.heart, `<div class="hStage${done ? ' awake' : ''}" style="--p:${pct}">
+        <div class="hRing"></div>${heartArt ? `<img class="hArt" src="${heartArt}" alt="">` : '💗'}
+        <div class="hNum">${done ? 'AWAKE' : `${fed()}<i>/${bloomGoal()}</i>`}</div></div>
+      <div class="hLine">${done ? `${w.name} is awake and beating on its own. Thank you, star traveller!` : `Every world has a sleeping Heart. Wake it and the whole planet comes back to life — colour, music and rewards.`}</div>
+      <div class="hHow"><b>How to wake it</b>
+        <div class="hStep"><span>1</span><i>Finish any merge chain for the first time — the top step</i></div>
+        <div class="hStep"><span>2</span><i>The Vault gives you a <b>Bloom Spark</b>. Merge sparks up: each step is worth double</i></div>
+        <div class="hEssRow">${ess}</div>
+        <div class="hStep"><span>3</span><i>Tap <b>Feed</b> and the Heart drinks every essence on your board</i></div></div>
+      <div class="hPath">${w.bloom.map((b: any, i: number) => `<div class="hNode${i < st ? ' done' : i === st ? ' now' : ''}"><i>${i < st ? '✓' : b.need}</i><b>${b.title}</b><em>+${r.coins} 🪙 · +${r.energy} ⚡</em></div>`).join('')}</div>
+      <button class="big gold" id="feed2"${onBoard && !done ? '' : ' disabled'}>${done ? 'Fully awake ✨' : onBoard ? `Feed the Heart · ${onBoard} Bloom` : 'No Bloom essence on the board yet'}</button>`, 'heartsheet');
+    const f = $('#feed2'); if (f) f.onclick = () => { closePop(); feedHeart(); };
   }
-
 
   function producerPanel(cell: number) {
     tutFire('prodpanel');
@@ -5793,7 +5978,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       if (popped) { sfx.pop(); paintBoard(); } }
     worldEvent(now);
     checkStuck(now);
-    renderQuick(); coachTick(); eventTick();
+    renderQuick(); coachTick(); tipTick(); eventTick();
     if (view === 'lab' && S.acc) {
       const t = $('#accTime');
       if (t) { if (accLeft() > 0) t.textContent = mmss(accLeft()); else renderLab(); }

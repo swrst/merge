@@ -2871,3 +2871,128 @@ html.ui-victory_banner .cfTxt.ban{width:min(330px,88vw);margin:0 auto;aspect-rat
 
 .cSvg line{stroke:rgba(210,228,255,.55);stroke-width:1.6}
 .cSvg circle{fill:#f2f6ff;filter:drop-shadow(0 0 3px rgba(200,225,255,.9))}
+/* v59: the world Heart, as a cosmic reactor of life */
+.pop.heartsheet .popBox{background:radial-gradient(ellipse at 50% 0%,#5a2a9a 0%,#24165e 50%,#0e0b36 100%)!important;border-image:none!important;border:0!important;border-radius:26px!important;
+  box-shadow:0 0 0 3px #ff9fe0,0 0 0 6px rgba(255,255,255,.85),0 0 30px rgba(255,140,220,.5),0 18px 40px rgba(0,0,0,.5)!important;color:#fff;position:relative}
+.pop.heartsheet .popBox::before{content:"";position:absolute;inset:0;border-radius:26px;pointer-events:none;opacity:.7;
+  background:radial-gradient(1.5px 1.5px at 14% 18%,#fff,transparent),radial-gradient(1px 1px at 80% 26%,#fff,transparent),radial-gradient(1.5px 1.5px at 70% 80%,#ffd6f5,transparent),radial-gradient(1px 1px at 26% 72%,#fff,transparent)}
+.pop.heartsheet .popBody{position:relative;text-align:center;color:#f1e6ff}
+.hStage{position:relative;width:150px;height:150px;margin:2px auto 0;display:flex;align-items:center;justify-content:center}
+.hRing{position:absolute;inset:0;border-radius:50%;background:conic-gradient(#ff7ad9 calc(var(--p)*1%),rgba(255,255,255,.12) 0);-webkit-mask:radial-gradient(circle,transparent 62%,#000 63%);mask:radial-gradient(circle,transparent 62%,#000 63%);filter:drop-shadow(0 0 8px rgba(255,122,217,.8))}
+.hArt{width:112px;height:112px;object-fit:contain;animation:hBeat 1.4s ease-in-out infinite;filter:drop-shadow(0 0 14px rgba(255,140,220,.8))}
+.hStage:not(.awake) .hArt{filter:saturate(.6) drop-shadow(0 0 8px rgba(160,140,255,.6));animation-duration:2.6s}
+@keyframes hBeat{0%,100%{transform:scale(1)}12%{transform:scale(1.08)}24%{transform:scale(.98)}36%{transform:scale(1.05)}}
+.hNum{position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);background:linear-gradient(180deg,#ff8fe0,#c83fa6);border-radius:99px;padding:2px 12px;font-weight:900;font-size:15px;box-shadow:0 0 0 2px #fff}
+.hNum i{font-style:normal;font-size:11px;opacity:.85}
+.hLine{font-size:12.5px;line-height:1.35;margin:12px 10px 8px;color:#f1e6ff}
+.hHow{margin:4px 6px 8px;padding:8px 10px;border-radius:16px;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1.5px rgba(255,159,224,.35);text-align:left}
+.hHow>b{display:block;text-align:center;color:#ffd6f5;font-size:13px;margin-bottom:4px}
+.hStep{display:flex;gap:8px;align-items:flex-start;margin:4px 0;font-size:11.5px;line-height:1.3}
+.hStep span{flex:none;width:20px;height:20px;border-radius:50%;background:#ff7ad9;color:#fff;font-weight:900;font-size:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 8px rgba(255,122,217,.8)}
+.hStep i{font-style:normal}.hStep b{color:#ffe07a}
+.hEssRow{display:flex;align-items:center;justify-content:center;gap:3px;margin:4px 0}
+.hEss{position:relative;display:flex;flex-direction:column;align-items:center}.hEss .art{width:38px;height:38px}
+.hEss b{font-size:10px;color:#ffe07a;margin-top:-3px}.hEssRow em{font-style:normal;color:#ff9fe0;font-weight:900}
+.hPath{display:flex;justify-content:center;gap:6px;margin:6px 4px 10px}
+.hNode{flex:1;max-width:110px;padding:6px 4px;border-radius:14px;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.18)}
+.hNode i{display:inline-flex;width:24px;height:24px;border-radius:50%;align-items:center;justify-content:center;font-style:normal;font-weight:900;font-size:12px;background:rgba(255,255,255,.15)}
+.hNode b{display:block;font-size:10.5px;margin-top:3px;line-height:1.15}.hNode em{display:block;font-style:normal;font-size:9px;color:#c9b8ff;margin-top:2px}
+.hNode.done{box-shadow:inset 0 0 0 1.5px #7fe0a0}.hNode.done i{background:#3fbf6a}
+.hNode.now{box-shadow:inset 0 0 0 2px #ff7ad9,0 0 12px rgba(255,122,217,.5)}.hNode.now i{background:#ff7ad9}
+/* ============== v59: the Star Chart page (painted sky) ============== */
+#skyChart{position:absolute;inset:0;z-index:120;display:none;overflow:hidden;background:#070b2e}
+#skyChart.open{display:block;animation:skIn .45s ease-out}
+.skBgArt{position:absolute;inset:-6%;background:var(--ui-sky_chart) center/cover no-repeat;animation:skDrift 60s ease-in-out infinite alternate}
+@keyframes skDrift{to{transform:translate(-3%,-2%) scale(1.04)}}
+.skNeb{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 20% 30%,rgba(120,80,255,.18),transparent 55%),radial-gradient(ellipse at 85% 70%,rgba(60,200,255,.14),transparent 50%);animation:skNeb 9s ease-in-out infinite alternate}
+@keyframes skNeb{to{opacity:.5}}
+.skTop2{position:absolute;top:0;left:0;right:0;z-index:5;display:flex;align-items:center;gap:8px;padding:calc(10px + env(safe-area-inset-top,0px)) 12px 6px}
+.skTop2 b{flex:1;text-align:center;color:#fff;font-size:20px;text-shadow:0 2px 0 #2a1460,0 0 12px rgba(120,190,255,.9)}
+.skPouch2{display:flex;align-items:center;gap:3px;padding:2px 10px 2px 3px;border-radius:99px;background:rgba(20,14,70,.75);box-shadow:0 0 0 1.5px rgba(255,211,77,.7)}
+.skPouch2 img{width:28px;height:28px;object-fit:contain}.skPouch2 b{font-size:15px;color:#ffe07a;flex:none;text-shadow:none}
+.skHelp{width:32px;height:32px;border-radius:50%;border:0;background:linear-gradient(180deg,#5fe4ff,#1aa6e0);color:#fff;font-weight:900;font-size:17px;box-shadow:0 0 0 2px #fff,0 0 12px rgba(95,228,255,.7)}
+.skLit2{position:absolute;top:calc(56px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);z-index:5;width:min(300px,80vw);height:18px;border-radius:99px;background:rgba(10,8,40,.6);box-shadow:inset 0 0 0 1.5px rgba(255,211,77,.5);overflow:hidden}
+.skLit2 i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#9f7bff,#ffcb3d)}
+.skLit2 span{position:relative;display:block;text-align:center;line-height:18px;font-size:10.5px;font-weight:800;color:#fff}
+.skScroll2{position:absolute;inset:0;overflow-y:auto;padding:calc(86px + env(safe-area-inset-top,0px)) 8px 120px;-webkit-mask-image:linear-gradient(180deg,transparent 60px,#000 110px,#000 calc(100% - 120px),transparent calc(100% - 80px));mask-image:linear-gradient(180deg,transparent 60px,#000 110px,#000 calc(100% - 120px),transparent calc(100% - 80px))}
+.skRow{margin:4px 0 22px}
+.skRow.far{opacity:.6}
+.skWorld{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:2px;color:#c9d8ff;font-size:11.5px;font-weight:700}
+.skWorld .uiIc{width:26px;height:26px}.skWorld b{color:#fff}
+.skPair{display:flex;justify-content:space-around}
+#skyChart .gc{position:relative;transform:none;left:auto;top:auto;width:46%;max-width:180px}
+#skyChart .gc.r{margin-top:34px}
+#skyChart .gc .cSvg{width:100%;height:auto;aspect-ratio:1}
+#skyChart .gc b{font-size:13px;margin-top:-6px}
+#skyChart .gc i{font-size:10.5px;display:inline-flex;align-items:center;gap:3px}
+#skyChart .gc i .art{width:16px;height:16px}
+.gcLit{color:#ffe07a;background:rgba(40,24,0,.5)}
+.skEnd{text-align:center;color:#9fb0e0;font-size:11px;font-style:italic;margin-top:4px}
+.skDock{position:absolute;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:6;display:flex;align-items:center;gap:8px;padding:6px 10px 6px 6px;border-radius:22px;
+  background:linear-gradient(180deg,rgba(46,32,130,.92),rgba(20,14,66,.94));box-shadow:0 0 0 2px #7fd8f7,0 0 18px rgba(127,216,247,.4),0 8px 18px rgba(0,0,0,.4)}
+.skFuser{flex:none;width:76px;height:76px;margin:-22px 0 -4px;border:0;background:none;padding:0;cursor:pointer}
+.skFuser img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 8px rgba(160,220,255,.6))}
+.skFuser.on img{animation:fuHum 1.2s ease-in-out infinite}
+@keyframes fuHum{50%{transform:translateY(-3px) scale(1.04);filter:drop-shadow(0 0 14px rgba(255,220,120,.9))}}
+.skFuser.go img{animation:fuGo .6s ease-out}
+@keyframes fuGo{0%{transform:scale(1)}30%{transform:scale(1.25) rotate(-6deg);filter:brightness(1.8) drop-shadow(0 0 20px #ffe07a)}100%{transform:scale(1)}}
+.skDockTxt{flex:1;min-width:0;text-align:left;color:#fff}.skDockTxt b{display:block;font-size:14px}
+.skDockTxt i{display:flex;align-items:center;gap:3px;font-style:normal;font-size:11px;color:#c9d8ff}.skDockTxt i img{width:18px;height:18px;object-fit:contain}
+.skFuseGo{flex:none;border:0;border-radius:99px;padding:9px 18px;font-weight:900;font-size:14px;color:#fff;background:linear-gradient(180deg,#5fe4ff,#1aa6e0);box-shadow:0 0 0 2px #fff,0 4px 0 #0e6fa8}
+.skFuseGo:disabled{filter:grayscale(.7) brightness(.8)}
+/* the galaxy's own door to it */
+.galStars2{position:absolute;top:100px;left:10px;z-index:6;display:flex;flex-direction:column;align-items:center;width:84px;border:0;background:none;padding:0;cursor:pointer;color:#fff}
+.galStars2 img{width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 0 10px rgba(255,211,77,.6));animation:gsSpin 12s linear infinite}
+@keyframes gsSpin{50%{transform:rotate(8deg) scale(1.04)}}
+.galStars2 b{font-size:11.5px;font-weight:800;margin-top:-4px;text-shadow:0 1px 3px #000}
+.galStars2 i{font-style:normal;font-size:10px;font-weight:800;color:#ffe07a;text-shadow:0 1px 3px #000}
+.galStars2.ready img{animation:skPulse 1.2s ease-in-out infinite}
+.galStars2.ready::after{content:"!";position:absolute;top:2px;right:6px;width:20px;height:20px;border-radius:50%;background:#ff4d6d;color:#fff;font-weight:900;font-size:13px;line-height:20px;box-shadow:0 0 0 2px #fff}
+html body .app .galStars2{background:none!important;border:0!important;box-shadow:none!important;outline:0}
+#skyChart .gc .cSvg{filter:drop-shadow(0 0 6px rgba(160,200,255,.35))}
+#skyChart .gc-ready .cSvg{filter:drop-shadow(0 0 12px rgba(255,211,77,.8))}
+#skyChart .gc-lit .cSvg{filter:drop-shadow(0 0 10px rgba(255,211,77,.7))}
+#tipBub{position:absolute;left:10px;right:10px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:140;display:flex;align-items:center;gap:8px;padding:8px 34px 8px 8px;border-radius:18px;
+  background:linear-gradient(180deg,rgba(46,32,130,.95),rgba(22,16,70,.95));box-shadow:0 0 0 2px #7fd8f7,0 0 16px rgba(127,216,247,.4),0 8px 18px rgba(0,0,0,.35);color:#fff;
+  transform:translateY(140%);opacity:0;transition:transform .35s cubic-bezier(.3,1.4,.5,1),opacity .25s;pointer-events:none}
+#tipBub.on{transform:none;opacity:1;pointer-events:auto}
+#tipBub .tbFace{flex:none;width:48px;height:48px;border-radius:50%;overflow:hidden;background:rgba(255,255,255,.15);box-shadow:0 0 0 2px #fff}
+#tipBub .tbFace img,#tipBub .tbFace svg{width:100%;height:100%;object-fit:cover}
+#tipBub .tbTxt{font-size:12.5px;line-height:1.3}#tipBub .tbTxt b{color:#ffe07a}
+#tipBub .tbTxt i{display:flex;align-items:center;gap:3px;font-style:normal;font-size:10px;font-weight:800;color:#7fd8f7;text-transform:uppercase;letter-spacing:.06em}
+#tipBub .tbTxt i .uiIc{width:16px;height:16px}
+#tipBub .tbX{position:absolute;top:6px;right:8px;border:0;background:none;color:#c9d8ff;font-size:16px}
+/* v59: Star Challenge */
+.wkCard{background:linear-gradient(180deg,rgba(60,40,150,.12),rgba(255,255,255,.6))}
+.wkFeat{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:11.5px;font-weight:800;color:var(--sp-ink,#1b2c55);margin:4px 0}
+.wkFeat span{display:inline-flex;align-items:center;gap:3px;background:#fff;border-radius:99px;padding:2px 8px 2px 2px;box-shadow:0 0 0 1.5px #b9a6ff}
+.wkFeat .art{width:24px;height:24px}
+.wkHow{font-size:10.5px;color:#5a6a90;margin:2px 0 14px}
+.wkBar{position:relative;height:14px;margin:8px 16px 22px;border-radius:99px;background:#dfe6fb;box-shadow:inset 0 0 0 1.5px #b9c7ee}
+.wkBar>i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,#9f7bff,#ffcb3d)}
+.wkMed{position:absolute;top:50%;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;border:0;background:#fff;box-shadow:0 0 0 2px #c9d4f2;font-size:18px;filter:grayscale(.8);padding:0}
+.wkMed em{position:absolute;top:34px;left:50%;transform:translateX(-50%);font-style:normal;font-size:9.5px;font-weight:800;color:#5a6a90}
+.wkMed.ok{filter:none;box-shadow:0 0 0 2px #ffcb3d,0 0 12px rgba(255,203,61,.8);animation:skPulse 1.3s ease-in-out infinite}
+.wkMed.got{filter:none;animation:none;box-shadow:0 0 0 2px #3fbf6a;opacity:.75}
+.wkPts{text-align:center;font-size:12px;color:#5a6a90;margin:4px 0 6px}.wkPts b{font-size:18px;color:#3b2a8a}
+.lbList{display:flex;flex-direction:column;gap:4px;margin:6px 0}
+.lbRow{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:12px;background:#fff;box-shadow:0 0 0 1.5px #dbe3f8;font-size:13px}
+.lbRow b{width:22px;text-align:center;color:#7a5cff}.lbRow span{flex:1;font-weight:700;color:#1b2c55}.lbRow i{font-style:normal;font-weight:900;color:#e08a0c}
+.lbRow.me{background:linear-gradient(90deg,#fff3c4,#ffe07a);box-shadow:0 0 0 2px #ffcb3d}
+/* v59: pets do more */
+.pupBed{position:absolute;bottom:2px;left:50%;width:150px;transform:translateX(-50%);z-index:0;opacity:.95}
+.pupBowl{position:absolute;bottom:4px;right:10px;width:56px;z-index:2}
+.pupBowl.empty{filter:saturate(.4) brightness(.85)}
+.pupStage .pupImg{position:relative;z-index:1}
+.petActs{display:flex;gap:8px}.petActs .big{flex:1;margin:6px 0 0!important}
+.petBall{position:absolute;bottom:60px;left:-30px;font-size:30px;font-style:normal;z-index:3;animation:petBall 1.4s ease-in-out forwards;filter:drop-shadow(0 0 6px #ffd34d)}
+@keyframes petBall{0%{left:-10%;bottom:40px}40%{left:80%;bottom:120px;transform:rotate(360deg)}70%{left:62%;bottom:20px}100%{left:50%;bottom:60px;opacity:0}}
+.pupStage.fetch .pupImg{animation:petChase 1.4s ease-in-out}
+@keyframes petChase{0%{transform:translateX(0)}35%{transform:translateX(70px) translateY(-30px) scaleX(-1)}60%{transform:translateX(40px) translateY(0)}80%{transform:translateX(10px) translateY(-18px)}100%{transform:none}}
+#petPeek{position:absolute;left:8px;bottom:calc(70px + env(safe-area-inset-bottom,0px));z-index:30;width:78px;height:78px;border:0;background:none;padding:0;transform:translateY(140%) rotate(-12deg);opacity:0;transition:transform .45s cubic-bezier(.3,1.6,.5,1),opacity .3s;pointer-events:none}
+#petPeek.r{left:auto;right:8px;transform:translateY(140%) rotate(12deg)}
+#petPeek.on{transform:none;opacity:1;pointer-events:auto;animation:peekBob 1s ease-in-out .5s 4}
+#petPeek img,#petPeek svg{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,.3))}
+#petPeek i{position:absolute;top:-14px;right:-14px;font-style:normal;font-size:12px;font-weight:800;color:#3b2a8a;background:#fff;border-radius:12px;padding:2px 8px;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+#petPeek.r i{right:auto;left:-14px}
+@keyframes peekBob{50%{transform:translateY(-8px)}}

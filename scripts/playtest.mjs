@@ -670,7 +670,7 @@ await page.waitForTimeout(400);
 await page.evaluate(() => document.querySelector('[data-ent="heart"]').click());
 await page.waitForTimeout(900);
 let feedTxt = await page.textContent('#feed2');
-must(/Feed it/.test(feedTxt), `the Heart offers to eat: "${feedTxt.trim()}"`);
+must(/Feed (it|the Heart)/.test(feedTxt), `the Heart offers to eat: "${feedTxt.trim()}"`);
 await set(() => {
   const g = window.__game, b = g.cells();
   let n = 0;
