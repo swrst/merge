@@ -2292,6 +2292,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   /** the little button row above the board: snack, hint, bag, boosters */
   function renderTools() {
     const host = $('#tools'); if (!host) return;
+    // the helpers live in their own column on the right, mirroring the widgets on the left
+    const col = $('#sideR'); if (col && host.parentElement !== col) col.appendChild(host);
     const keep = ['btnSnack', 'btnHint'].map(id => $('#' + id));
     host.querySelectorAll('.toolBtn').forEach((e: any) => e.remove());
     // boosters live in one toolbox: each opens with what it does before you use it
@@ -4605,7 +4607,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       };
     }
     b.classList.toggle('on', !!S.boost2);
-    b.textContent = S.boost2 ? '⚡×2 ON' : '⚡×2';
+    b.innerHTML = `${ART.icon('energy')}<b>×2</b>`; b.title = S.boost2 ? 'Power ×2 is on' : 'Power ×2';
   }
 
   /* ============================================================ MOON PUP
@@ -5469,8 +5471,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         <div class="gpCard"><b>Uncharted world</b><i>Somewhere past Aurora Reach</i><span class="gpNeed">🔭 Coming soon</span></div></div>`;
     })();
     return `<div class="gal2"><div class="galSky"></div>
-      <div class="galTop"><button class="galBack" data-pop="camp">↩ Camp</button><b>Galaxy</b><span class="galFuel">⛽ ${S.fuel}/${CONFIG.rocket.fuelToLaunch}</span></div>
-      <button class="galStars2${CONSTS.some(c => constState(c) === 'ready') ? ' ready' : ''}" data-pop="stars"><img src="${ART.spriteUi('gal_starchart')}" alt=""><b>Star Chart</b><i>${CONSTS.filter(c => S.stars && S.stars[c.id]).length}/${CONSTS.length} lit</i></button>
+      <div class="galTop"><button class="galBack" data-pop="camp">↩ Camp</button><button class="galStars2 inTop${CONSTS.some(c => constState(c) === 'ready') ? ' ready' : ''}" data-pop="stars"><img src="${ART.spriteUi('gal_starchart')}" alt=""><b>Star Chart</b><i>${CONSTS.filter(c => S.stars && S.stars[c.id]).length}/${CONSTS.length} lit</i></button><b>Galaxy</b><span class="galFuel">⛽ ${S.fuel}/${CONFIG.rocket.fuelToLaunch}</span></div>
+
       <div class="galScroll" id="galScroll"><div class="galPath" style="height:${H}px">
         <svg class="galSvg" viewBox="0 0 100 ${H}" preserveAspectRatio="none" style="height:${H}px">
           <path d="${path}" class="galRoute"/><path d="${lit}" class="galRoute lit"/></svg>
