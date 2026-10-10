@@ -4935,90 +4935,127 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   ];
   const lit = (id: string) => !!(typeof S !== 'undefined' && S && S.stars && S.stars[id]);
   const starPerk = (id: string) => lit(id);
-  /* The Star Chart: a painted night sky, scrolled like the galaxy map. Each
-     constellation sits in its own patch of sky; tap one to fly in, then trace
-     it star by star while the line draws itself. Lit ones glow for good. */
-  const SKY_H = 1650, SKY_SPOT = (i: number) => ({ x: i % 2 ? 66 : 34, y: 110 + i * 150 });
-  let skyTrace: any = null;
-  function starChart(focus?: string) {
-    let el = document.getElementById('skyChart');
-    if (!el) { el = document.createElement('div'); el.id = 'skyChart'; $('#app').appendChild(el); }
-    const bg = ART.spriteUi('sky_chart') || ART.spriteUi('galaxy_bg');
-    const cores = countItem('starcore'), scrap = pouch('scrap');
-    const pathOf = (c: any) => c.pts.map((p: number[], i: number) => (i ? 'L' : 'M') + p[0] + ' ' + p[1]).join(' ');
-    const svgOf = (c: any) => `<svg viewBox="-4 -4 108 108" class="skMini"><path class="skLine" d="${pathOf(c)}"/>${c.pts.map((p: number[]) => `<circle class="skDot" cx="${p[0]}" cy="${p[1]}" r="3.2"/>`).join('')}</svg>`;
-    const cards = CONSTS.map(c => {
-      const on = lit(c.id), open = visited(c.world), can = open && !on && cores >= c.cost;
-      const st = on ? 'lit' : open ? 'open' : 'locked';
-      const pct = Math.min(100, Math.round(cores / c.cost * 100));
-      return `<div class="skCard ${st}" id="sk-${c.id}"><div class="skPic">${svgOf(c)}${on ? `<img class="skBadge" src="${ART.spriteUi('sk_badge')}" alt="">` : ''}${!open ? `<span class="skLock">${ART.uiIcon('gal_lock', '🔒')}</span>` : ''}</div>
-        <div class="skInfo"><b>${c.name}</b><i>${c.perk}</i>
-          ${on ? '<span class="skDone">✦ Lit — active in every world</span>'
-          : !open ? `<span class="skNeed">Visible from <b>${WORLDS[c.world].name}</b></span>`
-          : `<div class="skBar"><em style="width:${pct}%"></em><span>${ART.item('starcore')} ${Math.min(cores, c.cost)}/${c.cost} Star Cores</span></div>`}
-        </div>${can ? `<button class="skLight2" data-light="${c.id}"><img src="${ART.spriteUi('sk_shoot')}" alt=""><b>Light</b></button>` : ''}</div>`;
+  /* The Star Chart lives IN the galaxy: every constellation hangs in the sky
+     beside the world you see it from. Tap one for its card; light it and it
+     draws itself across the sky, then stays glowing there for good. */
+  const constById = (id: string) => CONSTS.find(x => x.id === id);
+  const constState = (c: any) => lit(c.id) ? 'lit' : !visited(c.world) ? 'locked' : countItem('starcore') >= c.cost ? 'ready' : 'open';
+  function constSvg(c: any, cls = '') {
+    const segs = c.pts.slice(1).map((p: number[], i: number) => { const q = c.pts[i]; return `<line x1="${q[0]}" y1="${q[1]}" x2="${p[0]}" y2="${p[1]}"/>`; }).join('');
+    const dots = c.pts.map((p: number[], i: number) => `<circle cx="${p[0]}" cy="${p[1]}" r="${i % 3 ? 3 : 4.2}" style="animation-delay:${(i * 0.37) % 2.2}s"/>`).join('');
+    return `<svg viewBox="-8 -8 116 116" class="cSvg ${cls}"><g class="cLines">${segs}</g><g class="cDots">${dots}</g></svg>`;
+  }
+  /** the constellations in the galaxy sky, two beside each world */
+  function galConsts(pt: (i: number) => { x: number; y: number }) {
+    return CONSTS.map(c => {
+      const wi = WORLD_ORDER.indexOf(c.world); if (wi < 0) return '';
+      const mine = CONSTS.filter(x => x.world === c.world), k = mine.indexOf(c);
+      const p = pt(wi), y = p.y - GAL_STEP * 0.52 + (k ? 12 : -12), x = (p.x < 50) === !k ? 22 : 78;
+      const st = constState(c);
+      return `<button class="gc gc-${st}" data-const="${c.id}" style="left:${x}%;top:${y}px">${constSvg(c)}
+        <b>${st === 'locked' ? '???' : c.name}</b>${st === 'ready' ? '<i class="gcTag">✨ Light me!</i>' : st === 'open' ? `<i class="gcCnt">${Math.min(countItem('starcore'), c.cost)}/${c.cost}</i>` : ''}</button>`;
     }).join('');
-    el.innerHTML = `<div class="skBg" style="background-image:url(${bg})"></div>
-      <div class="skTop"><button class="galBack" id="skBack">↩ Galaxy</button><b>Star Chart</b><span class="skPouch">${ART.item('starcore')}<b>${cores}</b></span></div>
-      <div class="skScroll" id="skScroll">
-        <div class="skHow2">
-          <div class="skFlow">
-            <span><img src="${ART.spriteUi('sk_shoot')}" alt=""><i>Dig craters</i></span><em>➜</em>
-            <span><img src="${ART.spriteUi('starscrap_ui')}" alt=""><i>Star Scrap <b>${scrap}</b></i></span><em>➜</em>
-            <span><img src="${ART.spriteUi('starcore_ui')}" alt=""><i>Star Core <b>${cores}</b></i></span><em>➜</em>
-            <span><img src="${ART.spriteUi('sk_badge')}" alt=""><i>Light it</i></span>
-          </div>
-          <button class="skFuse2" id="skFuse" ${scrap < 3 ? 'disabled' : ''}><img src="${ART.spriteUi('sk_fuser')}" alt=""><span><b>Fuse</b><i>3 scrap → 1 core</i></span></button>
-        </div>
-        ${cards}
-        <div class="skFootTxt">${CONSTS.filter(c => lit(c.id)).length}/${CONSTS.length} constellations lit</div></div>
-      <div class="skShow" id="skShow"></div>`;
-    el.className = 'open'; audio.duck(1, 0.5);
+  }
+  function fuseScrap() {
+    if (pouch('scrap') < 3) return false;
+    S.wal.scrap -= 3; S.wal.starcore = pouch('starcore') + 1; S.seen.starcore = 1;
+    sfx.discover(); haptic('medium'); save(); return true;
+  }
+  const flowHTML = () => `<div class="skFlow">
+      <span><img src="${ART.spriteUi('sk_shoot')}" alt=""><i>Dig meteor craters</i></span><em>➜</em>
+      <span><img src="${ART.spriteUi('starscrap_ui')}" alt=""><i>Star Scrap<b>${pouch('scrap')}</b></i></span><em>➜</em>
+      <span><img src="${ART.spriteUi('starcore_ui')}" alt=""><i>Star Core<b>${countItem('starcore')}</b></i></span><em>➜</em>
+      <span><img src="${ART.spriteUi('sk_badge')}" alt=""><i>Light a constellation</i></span></div>`;
+  const fuseBtn = () => `<button class="skFuse2" id="skFuse" ${pouch('scrap') < 3 ? 'disabled' : ''}><img src="${ART.spriteUi('sk_fuser')}" alt=""><span><b>Fuse</b><i>3 Star Scrap → 1 Star Core</i></span></button>`;
+  /** how it works, from the star button in the galaxy */
+  function starHelp() {
+    const n = CONSTS.filter(c => lit(c.id)).length;
+    pop('✨ Star Chart', `${flowHTML()}
+      <div class="skExplain">Every world has two constellations in its sky. Fill one with <b>Star Cores</b> and it lights up for good: a perk that works in every world, or a big gift.</div>
+      ${fuseBtn()}
+      <div class="skLitBar"><i style="width:${Math.round(n / CONSTS.length * 100)}%"></i><span>${n}/${CONSTS.length} constellations lit</span></div>`, 'starsheet');
+    const f = $('#skFuse'); if (f) f.onclick = () => { if (fuseScrap()) { starHelp(); renderWorldScreen(); } };
+  }
+  /** one constellation's card */
+  function constCard(id: string) {
+    const c = constById(id); if (!c) return;
+    const st = constState(c), cores = countItem('starcore'), pct = Math.min(100, Math.round(cores / c.cost * 100));
+    const body = st === 'lit' ? `<div class="skDone">✦ Lit — ${c.reward ? 'its gift is yours' : 'active in every world'}</div>`
+      : st === 'locked' ? `<div class="skNeed">You can only see it from <b>${WORLDS[c.world].name}</b>. Fly there first.</div>`
+      : `<div class="skBar2"><em style="width:${pct}%"></em><span>${ART.item('starcore')} ${Math.min(cores, c.cost)} / ${c.cost} Star Cores</span></div>
+         ${st === 'ready' ? `<button class="skLightBig" id="skLight"><img src="${ART.spriteUi('sk_shoot')}" alt=""><b>Light it!</b></button>`
+           : `<div class="skNeed">${c.cost - cores} more Star Core${c.cost - cores > 1 ? 's' : ''}. Dig meteor craters for Star Scrap, then fuse it.</div>${fuseBtn()}`}`;
+    pop(st === 'locked' ? '✨ Unknown stars' : '✨ ' + c.name, `<div class="skCardBig gc-${st}">${constSvg(c, 'cBig')}</div>
+      <div class="skPerk">${st === 'locked' ? 'A constellation nobody has charted yet.' : c.perk}</div>${body}`, 'starsheet');
+    const l = $('#skLight'); if (l) l.onclick = () => skyLight(c.id);
+    const f = $('#skFuse'); if (f) f.onclick = () => { if (fuseScrap()) { constCard(id); renderWorldScreen(); } };
+  }
+  /** open the chart: the galaxy, scrolled to a constellation (or the help) */
+  function starChart(focus?: string) {
+    if (view !== 'map') setView('map');
+    worldTab = 'galaxy'; renderWorldScreen();
     S.story = S.story || {};
+    const go = () => {
+      if (focus) {
+        const el = document.querySelector(`.gc[data-const="${focus}"]`) as HTMLElement, sc = $('#galScroll');
+        if (el && sc) sc.scrollTop = Math.max(0, el.offsetTop - sc.clientHeight / 2);
+        constCard(focus);
+      } else starHelp();
+    };
     if (!S.story.stars) {
       S.story.stars = 1; save();
-      setTimeout(() => talkScene([
-        ['bloop', 'Blorp! The Star Chart. Every dot up there is a sleeping constellation, and every one of them owes us a favour.'],
+      talkScene([
+        ['bloop', 'Blorp! See the faint dots between the planets? Constellations. Sleeping ones. Every one of them owes us a favour.'],
         ['bloop', 'Dig meteor craters for <b>Star Scrap</b>. Three scraps fuse into one glowing <b>Star Core</b>.'],
-        ['bloop', 'Feed a constellation enough Star Cores and it lights up for good — with a perk in every world. Start with <b>The Rocket</b>!'],
-      ]), 500);
-    }
-    ($('#skBack') as HTMLElement).onclick = () => { sfx.close(); el!.className = ''; };
-    ($('#skFuse') as HTMLElement).onclick = () => {
-      if (pouch('scrap') < 3) return;
-      S.wal.scrap -= 3; S.wal.starcore = pouch('starcore') + 1; S.seen.starcore = 1;
-      sfx.discover(); haptic('medium'); save(); starChart();
-    };
-    el.querySelectorAll<HTMLElement>('[data-light]').forEach(b => b.onclick = () => skyLight(b.dataset.light!));
-    const target = focus || (CONSTS.find(c => !lit(c.id) && visited(c.world)) || {}).id;
-    const card = target && document.getElementById('sk-' + target);
-    if (card) setTimeout(() => card.scrollIntoView({ block: 'center' }), 50);
+        ['bloop', 'Feed a constellation enough Star Cores and it lights up for good. Start with <b>The Rocket</b>, right above our meadow!'],
+      ], go);
+    } else go();
   }
-  /* Lighting one: the stars pop one after another and the lines draw between
-     them, a shooting star crosses, then the reward. No tracing to fumble. */
+  /* Lighting one: the sky dims, the constellation fills the screen, its stars
+     pop one after another and the lines draw between them, a shooting star
+     crosses, then it shrinks back to its own place in the galaxy, glowing. */
   function skyLight(id: string) {
-    const c = CONSTS.find(x => x.id === id); if (!c || lit(id)) return;
+    const c = constById(id); if (!c || lit(id)) return;
     if (countItem('starcore') < c.cost) { sfx.no(); return; }
     for (let k = 0; k < c.cost; k++) consumeOne('starcore');
     S.stars[c.id] = 1; prog('star', 1); save();
-    const t = $('#skShow') as HTMLElement;
-    const segs = c.pts.slice(1).map((p: number[], i: number) => { const a = c.pts[i]; return `<line class="skSeg" x1="${a[0]}" y1="${a[1]}" x2="${p[0]}" y2="${p[1]}" style="animation-delay:${0.25 + i * 0.22}s"/>`; }).join('');
-    t.innerHTML = `<div class="skShowIn"><b>${c.name}</b>
-      <svg viewBox="-8 -8 116 116" class="skBig">${segs}${c.pts.map((p: number[], i: number) => `<circle class="skStar" cx="${p[0]}" cy="${p[1]}" r="3.4" style="animation-delay:${i * 0.22}s"/>`).join('')}</svg>
-      <i>${c.perk}</i></div><i class="skShoot"></i>`;
-    t.className = 'skShow on'; sfx.whoosh(); audio.duck(3, 0.2);
-    c.pts.forEach((_: any, i: number) => setTimeout(() => sfx.star(), i * 220));
-    setTimeout(() => { sfx.discover(); haptic('heavy'); confetti(); }, c.pts.length * 220 + 300);
+    closePop();
+    let fx = document.getElementById('skFx');
+    if (!fx) { fx = document.createElement('div'); fx.id = 'skFx'; $('#app').appendChild(fx); }
+    const T = 0.24;
+    const segs = c.pts.slice(1).map((p: number[], i: number) => { const q = c.pts[i]; return `<line class="skSeg" x1="${q[0]}" y1="${q[1]}" x2="${p[0]}" y2="${p[1]}" style="animation-delay:${0.3 + i * T}s"/>`; }).join('');
+    const dots = c.pts.map((p: number[], i: number) => `<circle class="skStar" cx="${p[0]}" cy="${p[1]}" r="3.6" style="animation-delay:${i * T}s"/>`).join('');
+    const end = c.pts.length * T;
+    fx.innerHTML = `<div class="fxSky"></div><div class="fxRays"></div>
+      <div class="fxIn"><div class="fxName">${c.name}</div><svg viewBox="-8 -8 116 116" class="skBig" id="fxSvg">${segs}${dots}</svg>
+      <div class="fxLit" style="animation-delay:${end + 0.2}s">CONSTELLATION LIT!</div><div class="fxPerk" style="animation-delay:${end + 0.5}s">${c.perk}</div></div>
+      <i class="skShoot" style="animation-delay:${end * 0.6}s"></i><i class="skShoot b" style="animation-delay:${end * 0.6 + 0.5}s"></i>`;
+    fx.className = 'on'; sfx.whoosh(); audio.duck(4, 0.2);
+    c.pts.forEach((_: any, i: number) => setTimeout(() => sfx.star(), i * T * 1000));
+    setTimeout(() => { sfx.discover(); haptic('heavy'); confetti(); fx!.classList.add('flash'); }, (end + 0.2) * 1000);
     setTimeout(() => {
-      t.className = 'skShow';
-      paintBoard(); renderHUD();
-      const r: Reward = c.reward || {};
-      if (c.reward && r.item && freeCells().length) giveItem(r.item);
-      if (r.gems) S.gems += r.gems;
-      if (r.energy) S.energy += r.energy;
-      save();
-      rewardCard(ART.item('starcore'), `${c.name} is lit!`, c.reward ? 'The sky hands you a gift.' : `${c.perk}. For good, in every world.`, c.reward ? r : { energy: 10 }, () => starChart(c.id));
-    }, c.pts.length * 220 + 1600);
+      // fly back into the galaxy, onto its own spot
+      renderWorldScreen();
+      const spot = document.querySelector(`.gc[data-const="${c.id}"]`) as HTMLElement, sc = $('#galScroll');
+      if (spot && sc) sc.scrollTop = Math.max(0, spot.offsetTop - sc.clientHeight / 2);
+      const svg = $('#fxSvg') as HTMLElement;
+      if (spot && svg) {
+        const a = svg.getBoundingClientRect(), t = spot.querySelector('svg')!.getBoundingClientRect();
+        svg.style.transition = 'transform .7s cubic-bezier(.5,0,.3,1)';
+        svg.style.transform = `translate(${t.left + t.width / 2 - (a.left + a.width / 2)}px, ${t.top + t.height / 2 - (a.top + a.height / 2)}px) scale(${t.width / a.width})`;
+      }
+      fx!.classList.add('out');
+      setTimeout(() => {
+        fx!.className = ''; fx!.innerHTML = '';
+        if (spot) { spot.classList.add('justLit'); burst(spot, 26); }
+        const r: Reward = c.reward || {};
+        if (c.reward && r.item && freeCells().length) giveItem(r.item);
+        if (r.gems) S.gems += r.gems;
+        if (r.energy) S.energy += r.energy;
+        save(); renderHUD();
+        setTimeout(() => rewardCard(`<img class="rwcChest" src="${ART.spriteUi('sk_badge')}" alt="">`, `${c.name} is lit!`, c.reward ? 'The sky hands you a gift.' : `${c.perk}. For good, in every world.`, c.reward ? r : { energy: 10 }), 700);
+      }, 750);
+    }, (end + 2.4) * 1000);
   }
 
   /* ============================================================ WORLD SCREEN
@@ -5119,7 +5156,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     nerith: { tag: 'Ocean planet · reefs & pearls', glow: '#45c7e8' },
     vela: { tag: 'Sky planet · clouds & auroras', glow: '#d08bff' },
   } as Record<string, { tag: string; glow: string }>;
-  const GAL_STEP = 210, GAL_TOP = 90;
+  const GAL_STEP = 300, GAL_TOP = 110;
   function galaxyHTML() {
     const fuelOk = S.fuel >= CONFIG.rocket.fuelToLaunch;
     // one more stop than there are worlds: the path runs on to a planet nobody has charted yet
@@ -5163,11 +5200,11 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     })();
     return `<div class="gal2"><div class="galSky"></div>
       <div class="galTop"><button class="galBack" data-pop="camp">↩ Camp</button><b>Galaxy</b><span class="galFuel">⛽ ${S.fuel}/${CONFIG.rocket.fuelToLaunch}</span></div>
-      ${S.seen.starcore || S.seen.scrap ? `<button class="galStars" data-pop="stars"><span>✨</span><b>Star Chart</b><i>${CONSTS.filter(c => S.stars && S.stars[c.id]).length}/${CONSTS.length}</i></button>` : ''}
+      <button class="galStars" data-pop="stars"><img src="${ART.spriteUi('starcore_ui')}" alt=""><b>${countItem('starcore')}</b><i>Star Chart ?</i></button>
       <div class="galScroll" id="galScroll"><div class="galPath" style="height:${H}px">
         <svg class="galSvg" viewBox="0 0 100 ${H}" preserveAspectRatio="none" style="height:${H}px">
           <path d="${path}" class="galRoute"/><path d="${lit}" class="galRoute lit"/></svg>
-        ${nodes}</div></div>
+        ${galConsts(pt)}${nodes}</div></div>
       <div class="galFoot">A new world costs <b>${CONFIG.rocket.fuelToLaunch} ⛽</b> · flying back is always free</div></div>`;
   }
 
@@ -5182,6 +5219,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     }
     host.querySelectorAll('[data-world]').forEach((b: any) => b.onclick = () => galaxyTap(b.dataset.world));
     host.querySelectorAll('[data-soon]').forEach((b: any) => b.onclick = () => { sfx.no(); toast('🔭 Dr. Zonk is still charting this one. Coming soon!'); });
+    host.querySelectorAll('[data-const]').forEach((b: any) => b.onclick = () => { sfx.tap(); constCard(b.dataset.const); });
     host.querySelectorAll('[data-ent]').forEach((b: any) => b.onclick = () => campTap(b.dataset.ent));
     host.querySelectorAll('[data-hub]').forEach((b: any) => b.onclick = () => { sfx.tap(); const k = b.dataset.hub; if (k === 'fun') { funPop(); } else { setView(k); fromMap = true; } });
     host.querySelectorAll('[data-pop]').forEach((b: any) => b.onclick = () => {
@@ -5189,7 +5227,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       sfx.tap();
       if (k === 'store') { storagePop(); return; }
       if (k === 'games') gamesPanel();
-      else if (k === 'stars') starChart();
+      else if (k === 'stars') starHelp();
       else { worldTab = k === 'camp' ? 'camp' : 'galaxy'; renderWorldScreen(); }
     });
   }

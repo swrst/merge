@@ -2801,3 +2801,73 @@ html.ui-offer_ribbon .gTag{background:var(--ui-offer_ribbon) center/100% 100% no
 html.ui-victory_banner .cfTxt.ban{width:min(330px,88vw);margin:0 auto;aspect-ratio:1.73;display:flex;flex-direction:column;align-items:center;justify-content:center;
   padding:15% 20% 4%;box-sizing:border-box;background:var(--ui-victory_banner) center/contain no-repeat;filter:drop-shadow(0 6px 14px rgba(0,0,0,.4))}
 .cfTxt.ban i{font-size:10.5px}.cfTxt.ban b{font-size:clamp(14px,4.6vw,19px);line-height:1.1}
+/* ============== v58: Star Chart inside the galaxy ============== */
+.galStars{display:flex!important;align-items:center;gap:5px;top:100px!important;bottom:auto!important;right:auto!important;left:10px!important;padding:4px 12px 4px 4px!important;border-radius:99px!important;
+  background:linear-gradient(180deg,rgba(60,40,150,.92),rgba(26,18,80,.92))!important;border:0!important;box-shadow:0 0 0 2px #ffd34d,0 0 16px rgba(255,211,77,.55)!important;color:#fff!important}
+.galStars img{width:32px;height:32px;object-fit:contain;filter:drop-shadow(0 0 5px rgba(255,220,100,.8))}
+.galStars b{font-size:16px;color:#ffe07a}.galStars i{font-style:normal;font-size:11px;font-weight:800;color:#dfe9ff}
+.gc{position:absolute;z-index:2;width:120px;transform:translate(-50%,-50%);display:flex;flex-direction:column;align-items:center;background:none;border:0;padding:0;cursor:pointer}
+.gc .cSvg{width:112px;height:112px;overflow:visible}
+.cSvg line{stroke:rgba(200,220,255,.35);stroke-width:1.4;stroke-dasharray:3 4;stroke-linecap:round}
+.cSvg circle{fill:#e8f0ff;animation:gcTw 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes gcTw{50%{opacity:.35;transform:scale(.7)}}
+.gc b{margin-top:-4px;font-size:10.5px;font-weight:800;color:#dfe9ff;text-shadow:0 1px 3px #000,0 0 6px rgba(20,10,80,.9);white-space:nowrap}
+.gc i{font-style:normal;margin-top:2px;font-size:9.5px;font-weight:800;border-radius:99px;padding:1px 7px}
+.gcCnt{color:#ffe07a;background:rgba(20,12,70,.7)}
+.gcTag{color:#6a3d00;background:linear-gradient(180deg,#fff2a8,#ffcb3d);box-shadow:0 0 10px rgba(255,203,61,.9);animation:skPulse 1.3s ease-in-out infinite}
+.gc-locked{opacity:.45}.gc-locked .cSvg circle{animation:none;fill:#8a94c0}.gc-locked .cSvg line{stroke:rgba(140,150,200,.25)}
+.gc-ready .cSvg circle{fill:#fff6c8;filter:drop-shadow(0 0 3px #ffd34d)}
+.gc-ready .cSvg{filter:drop-shadow(0 0 8px rgba(255,211,77,.6));animation:gcBreath 1.6s ease-in-out infinite}
+@keyframes gcBreath{50%{transform:scale(1.08)}}
+.gc-lit .cSvg line{stroke:#ffe07a;stroke-width:2.2;stroke-dasharray:none;filter:drop-shadow(0 0 3px #ffd34d)}
+.gc-lit .cSvg circle{fill:#fff;filter:drop-shadow(0 0 4px #fff) drop-shadow(0 0 7px #ffd34d)}
+.gc-lit b{color:#ffe07a}
+.gc.justLit .cSvg{animation:gcJust 1.4s ease-out}
+@keyframes gcJust{0%{transform:scale(1.6);filter:drop-shadow(0 0 30px #ffd34d)}100%{transform:scale(1)}}
+/* the star sheet: a window onto the night sky */
+.pop.starsheet .popBox{background:radial-gradient(ellipse at 50% 0%,#3b2a9a 0%,#1a1458 55%,#0d0a33 100%)!important;border-image:none!important;border:0!important;border-radius:26px!important;
+  box-shadow:0 0 0 3px #7fd8f7,0 0 0 6px rgba(255,255,255,.85),0 0 30px rgba(127,216,247,.55),0 18px 40px rgba(0,0,0,.5)!important;color:#fff;position:relative}
+.pop.starsheet .popBox::before{content:"";position:absolute;inset:0;border-radius:26px;pointer-events:none;opacity:.8;
+  background:radial-gradient(1.5px 1.5px at 12% 20%,#fff,transparent),radial-gradient(1px 1px at 30% 70%,#fff,transparent),radial-gradient(1.5px 1.5px at 82% 30%,#fff,transparent),
+  radial-gradient(1px 1px at 66% 84%,#fff,transparent),radial-gradient(1px 1px at 50% 46%,#cfe9ff,transparent),radial-gradient(1.5px 1.5px at 90% 70%,#fff,transparent),radial-gradient(1px 1px at 8% 88%,#fff,transparent)}
+.pop.starsheet #popTitle,.pop.starsheet .popRibbon{color:#fff}
+.pop.starsheet .popBody{position:relative;text-align:center;color:#dfe9ff}
+.skCardBig{display:flex;justify-content:center;margin:2px 0 4px}
+.skCardBig .cSvg.cBig{width:190px;height:190px}
+.skCardBig.gc-open .cSvg.cBig line,.skCardBig.gc-ready .cSvg.cBig line{stroke:rgba(200,220,255,.5)}
+.skPerk{font-size:14px;font-weight:800;color:#fff;margin:2px 10px 8px;text-shadow:0 0 8px rgba(127,216,247,.6)}
+.skExplain{font-size:12.5px;line-height:1.35;color:#dfe9ff;margin:8px 8px 10px}.skExplain b{color:#ffe07a}
+.pop.starsheet .skNeed{font-size:12px;color:#c8d6ff;margin:6px 8px}.pop.starsheet .skDone{color:#ffe07a;font-weight:800;margin:6px}
+.skBar2{position:relative;height:24px;border-radius:99px;background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 1.5px rgba(127,216,247,.6);overflow:hidden;margin:4px 14px 8px}
+.skBar2 em{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#ffe07a,#ffb627);border-radius:99px;box-shadow:0 0 10px rgba(255,203,61,.7)}
+.skBar2 span{position:relative;display:flex;align-items:center;justify-content:center;gap:4px;height:100%;font-size:12px;font-weight:800;color:#fff;text-shadow:0 1px 2px #000}
+.skBar2 .art{width:18px;height:18px}
+.skLightBig{display:inline-flex;align-items:center;gap:8px;padding:8px 26px 8px 12px;margin:4px auto 6px;border:0;border-radius:99px;cursor:pointer;
+  background:radial-gradient(circle at 40% 30%,#fff6c8,#ffcb3d 55%,#e08a0c);box-shadow:0 0 0 3px #fff,0 5px 0 #a8620a,0 0 26px rgba(255,203,61,.9);animation:skPulse 1.3s ease-in-out infinite}
+.skLightBig img{width:46px;height:46px;object-fit:contain;margin:-10px 0}.skLightBig b{font-size:19px;color:#6a3d00}
+.pop.starsheet .skFlow{margin-top:4px}
+.skLitBar{position:relative;height:22px;margin:12px 16px 4px;border-radius:99px;background:rgba(255,255,255,.1);overflow:hidden;box-shadow:inset 0 0 0 1.5px rgba(255,211,77,.5)}
+.skLitBar i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#9f7bff,#ffcb3d)}
+.skLitBar span{position:relative;display:block;line-height:22px;font-size:11.5px;font-weight:800;color:#fff}
+/* the lighting show */
+#skFx{position:absolute;inset:0;z-index:260;display:none;align-items:center;justify-content:center;overflow:hidden}
+#skFx.on{display:flex}
+#skFx .fxSky{position:absolute;inset:0;background:radial-gradient(circle at 50% 45%,rgba(40,26,120,.9),rgba(6,4,24,.97));animation:fxIn .4s ease-out both}
+#skFx .fxRays{position:absolute;left:50%;top:45%;width:900px;height:900px;margin:-450px 0 0 -450px;opacity:0;
+  background:repeating-conic-gradient(rgba(255,230,140,.16) 0 7deg,transparent 7deg 18deg);border-radius:50%;-webkit-mask:radial-gradient(circle,#000 20%,transparent 65%);mask:radial-gradient(circle,#000 20%,transparent 65%)}
+#skFx.flash .fxRays{animation:fxRays 3s linear forwards}
+@keyframes fxRays{0%{opacity:0;transform:rotate(0)}15%{opacity:1}100%{opacity:.8;transform:rotate(60deg)}}
+@keyframes fxIn{from{opacity:0}}
+#skFx .fxIn{position:relative;text-align:center;color:#fff}
+#skFx .fxName{font-size:26px;font-weight:800;text-shadow:0 0 14px #9fe6ff;animation:holoIn .5s both}
+#skFx .skBig{width:min(78vw,320px);height:min(78vw,320px);overflow:visible}
+#skFx.flash .skBig{animation:skFlash 1.4s ease-out}
+#skFx .fxLit{font-size:22px;font-weight:900;letter-spacing:.06em;color:#ffe07a;text-shadow:0 2px 0 #7a4a00,0 0 18px rgba(255,211,77,.9);opacity:0;animation:fxPop .5s cubic-bezier(.3,1.8,.5,1) forwards}
+#skFx .fxPerk{font-size:13.5px;font-weight:700;color:#dfe9ff;margin:6px 24px 0;opacity:0;animation:fxPop .5s ease-out forwards}
+@keyframes fxPop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+#skFx .skShoot{animation-fill-mode:both}
+#skFx .skShoot.b{top:62%;transform:rotate(-12deg)}
+#skFx.out .fxSky,#skFx.out .fxRays,#skFx.out .fxName,#skFx.out .fxLit,#skFx.out .fxPerk{transition:opacity .6s;opacity:0!important}
+
+.cSvg line{stroke:rgba(210,228,255,.55);stroke-width:1.6}
+.cSvg circle{fill:#f2f6ff;filter:drop-shadow(0 0 3px rgba(200,225,255,.9))}

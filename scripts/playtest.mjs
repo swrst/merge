@@ -730,20 +730,22 @@ await set(() => {
   const g = window.__game, s = g.state(), b = g.cells();
   s.stars = {};
   let n = 0;
-  for (let i = 0; i < b.length && n < 2; i++) if (!b[i]) { b[i] = { id: 'starcore' }; n++; }
+  for (let i = 0; i < b.length && n < 3; i++) if (!b[i]) { b[i] = { id: 'starcore' }; n++; }
   window.__board.sync(b);
 });
 await closeModal(); await tab('board');
 await set(() => { window.__game.state().seen.starcore = 1; });
-await page.evaluate(() => { const s = window.__game.state(); s.story = s.story || {}; s.story.stars = 1; window.__game.v9.starChart(); }); await page.waitForTimeout(800);
+await page.evaluate(() => { const s = window.__game.state(); s.story = s.story || {}; s.story.stars = 1; window.__game.v9.starChart('plough'); }); await page.waitForTimeout(900);
 await shot('star-chart');
-const lightBtn = page.locator('[data-light]');
-must(await lightBtn.count() >= 1, 'a constellation is ready to light with two Star Cores');
-await lightBtn.first().click({ force: true }); await page.waitForTimeout(2500);
+must(await page.locator('.gc[data-const]').count() >= 10, 'the constellations hang in the galaxy sky');
+const lightBtn = page.locator('#skLight');
+must(await lightBtn.count() === 1, 'a constellation is ready to light with its Star Cores');
+await lightBtn.click({ force: true }); await page.waitForTimeout(6500);
 s = await S();
 must(Object.keys(s.stars).length === 1, 'lighting it records the constellation');
 const cores = await page.evaluate(() => window.__game.cells().filter(c => c && c.id === 'starcore').length);
-must(cores === 0, 'and it ate the two Star Cores');
+must(cores === 0, 'and it ate the Star Cores');
+must(await page.locator('.gc-lit').count() === 1, 'and it glows in the galaxy');
 await closeModal(); await page.waitForTimeout(300);
 
 head('Catalogue is big and every item can be drawn');
