@@ -1760,7 +1760,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         `<button class="buyBtn green" data-giftad="1">📺 Watch</button>`, 'hot') : '')
       + card(ART.icon('energy'), 'Energy refill', `+${CFG.gems.refill.energy} ⚡ right now`,
         `<button class="buyBtn gem" data-refill="1" ${S.gems < CFG.gems.refill.gems ? 'disabled' : ''}>${ART.icon('gem')}${CFG.gems.refill.gems}</button>`)
-      + `</div><div class="noteLine">🔄 The free gift resets every day</div></div>`;
+      + `</div><div class="noteLine">${ART.uiIcon('offer_timer', '🔄')} The free gift resets every day</div></div>`;
 
     html += `<div id="sh-gems">${gemsShop()}</div>`;
     html += coinShop();
@@ -4124,7 +4124,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       const what = [p.gems ? p.gems + ' 💎' : '', p.energy ? p.energy + ' ⚡' : '', p.coins ? p.coins + ' 🪙' : '',
         p.boosts ? Object.entries(p.boosts).map(([k, n]) => n + '× ' + ((SHOP.boosters.find((x: any) => x.id === k) || { name: k }).name)).join(', ') : '', p.item ? ITEMS[p.item].name : '', p.adfree ? 'No ad videos — rewards are instant' : '']
         .filter(Boolean).join(' · ');
-      return `<div class="sCard gemCard${p.tag ? ' hot' : ''}${owned ? ' owned' : ''}">${p.tag ? `<span class="gTag">${p.tag}</span>` : ''}
+      return `<div class="sCard gemCard${p.tag ? ' hot' : ''}${owned ? ' owned' : ''}">${p.tag ? (/-\d+%/.test(p.tag) && ART.spriteUi('offer_burst') ? `<span class="gBurst">${p.tag.match(/-\d+%/)[0]}</span><span class="gTag">${p.tag.replace(/\s*·?\s*-\d+%/, '')}</span>` : `<span class="gTag">${p.tag}</span>`) : ''}
         <div class="sCArt">${({ gems_s: 'gem_s', gems_m: 'gem_m', gems_l: 'gem_l', gems_xl: 'gem_xl', adfree: 'ic_ad', energy_pack: 'crate_store' } as Record<string, string>)[p.id]
           ? ART.uiIcon(({ gems_s: 'gem_s', gems_m: 'gem_m', gems_l: 'gem_l', gems_xl: 'gem_xl', adfree: 'ic_ad', energy_pack: 'crate_store' } as Record<string, string>)[p.id], p.adfree ? '📺' : p.id === 'energy_pack' ? ART.icon('energy') : ART.icon('gem'))
           : ART.item('bigchest')}</div>
@@ -4148,7 +4148,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     return `<div class="sSec" id="sh-coins"><div class="sSecT">🪙 Coins</div><div class="shopGrid">`
       + COIN_GEMS.map((c, k) => `<div class="sCard"><div class="sCArt">${art(k + 1)}</div><div class="sCName">${c.coins.toLocaleString()} coins</div><div class="sCDesc">for gems</div>
           <button class="buyBtn gem" data-coingem="${k}" ${S.gems < c.gems ? 'disabled' : ''}>💎 ${c.gems}</button></div>`).join('')
-      + PRODUCTS.filter(p => p.id.startsWith('coins_')).map((p, k) => `<div class="sCard gemCard${p.tag ? ' hot' : ''}">${p.tag ? `<span class="gTag">${p.tag}</span>` : ''}
+      + PRODUCTS.filter(p => p.id.startsWith('coins_')).map((p, k) => `<div class="sCard gemCard${p.tag ? ' hot' : ''}">${p.tag ? (/-\d+%/.test(p.tag) && ART.spriteUi('offer_burst') ? `<span class="gBurst">${p.tag.match(/-\d+%/)[0]}</span><span class="gTag">${p.tag.replace(/\s*·?\s*-\d+%/, '')}</span>` : `<span class="gTag">${p.tag}</span>`) : ''}
           <div class="sCArt">${art(k + 1)}</div><div class="sCName">${p.name}</div><div class="sCDesc">${(p.coins || 0).toLocaleString()} coins</div>
           <button class="buyBtn cash" data-iap="${p.id}">${p.price}</button></div>`).join('')
       + `</div></div>`;
@@ -5159,16 +5159,16 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      in over the whole game, not in an afternoon. A constellation can only be
      traced once you have reached its world. Positions are on a 100 x 100 box. */
   const CONSTS: any[] = [
-    { id: 'plough', name: 'The Rocket', world: 'earth', cost: 3, perk: '+10% coins from every sale and contract', pts: [[50, 12], [62, 34], [62, 70], [74, 86], [50, 78], [26, 86], [38, 70], [38, 34], [50, 12]] },
-    { id: 'lantern', name: 'The Lantern', world: 'earth', cost: 5, perk: 'Every producer holds 20% more charges', pts: [[50, 14], [72, 30], [76, 62], [50, 84], [24, 62], [28, 30], [50, 14]] },
-    { id: 'seed', name: 'The Moon Pup', world: 'luna', cost: 7, perk: 'Producers recharge 20% faster', pts: [[22, 40], [38, 24], [52, 40], [70, 34], [82, 52], [66, 72], [40, 74], [22, 40]] },
-    { id: 'vault', name: 'The Vault', world: 'luna', cost: 9, perk: 'Every Bloom Essence you feed a Heart counts double', pts: [[24, 30], [50, 16], [76, 30], [76, 66], [50, 84], [24, 66], [24, 30]] },
-    { id: 'forge', name: 'The Anvil', world: 'cindra', cost: 12, reward: { gems: 25, item: 'bigchest' }, perk: 'A Treasure Chest and 25 gems', pts: [[18, 36], [82, 36], [70, 52], [60, 52], [64, 80], [36, 80], [40, 52], [30, 52], [18, 36]] },
-    { id: 'phoenix', name: 'The Firebird', world: 'cindra', cost: 14, reward: { gems: 30, energy: 60 }, perk: '30 gems and 60 energy', pts: [[50, 20], [34, 44], [12, 36], [30, 62], [50, 84], [70, 62], [88, 36], [66, 44], [50, 20]] },
-    { id: 'squid', name: 'The Kraken', world: 'nerith', cost: 16, reward: { gems: 35, item: 'bigchest' }, perk: 'A Treasure Chest and 35 gems', pts: [[50, 14], [70, 34], [64, 56], [80, 84], [58, 66], [50, 88], [42, 66], [20, 84], [36, 56], [30, 34], [50, 14]] },
-    { id: 'shell', name: 'The Shell', world: 'nerith', cost: 18, reward: { gems: 40, energy: 80 }, perk: '40 gems and 80 energy', pts: [[50, 82], [20, 40], [34, 24], [50, 18], [66, 24], [80, 40], [50, 82]] },
-    { id: 'crown', name: 'The Crown', world: 'vela', cost: 22, reward: { gems: 60, item: 'bigchest' }, perk: 'A Treasure Chest and 60 gems', pts: [[16, 74], [16, 30], [34, 52], [50, 20], [66, 52], [84, 30], [84, 74], [16, 74]] },
-    { id: 'galaxy', name: 'The Galaxy', world: 'vela', cost: 30, reward: { gems: 100, item: 'bigchest', energy: 100 }, perk: '100 gems, 100 energy and a Treasure Chest', pts: [[50, 50], [62, 42], [64, 58], [48, 68], [32, 54], [38, 32], [60, 24], [80, 40], [80, 66], [56, 84], [24, 76]] },
+    { id: 'plough', name: 'The Rocket', world: 'earth', cost: 3, perk: '+10% coins from every sale and contract', pts: [[23.8, 50.2], [49.6, 1.4], [55.1, 31.4], [77.7, 52.1], [78.7, 76.8], [50.4, 98.4], [50.2, 67.0], [21.3, 76.8], [23.8, 50.2]] },
+    { id: 'lantern', name: 'The Lantern', world: 'earth', cost: 5, perk: 'Every producer holds 20% more charges', pts: [[45.7, 29.3], [49.4, 1.2], [65.0, 27.1], [74.2, 45.1], [66.6, 59.6], [50.4, 98.0], [52.0, 67.0], [26.0, 49.8], [45.7, 29.3]] },
+    { id: 'seed', name: 'The Moon Pup', world: 'luna', cost: 7, perk: 'Producers recharge 20% faster', pts: [[8.6, 39.1], [21.1, 11.1], [50.4, 1.8], [53.3, 47.1], [87.7, 33.0], [92.6, 69.7], [68.2, 95.1], [32.8, 97.3], [26.8, 65.6], [8.6, 39.1]] },
+    { id: 'vault', name: 'The Vault', world: 'luna', cost: 9, perk: 'Every Bloom Essence you feed a Heart counts double', pts: [[14.1, 15.6], [49.4, 44.7], [48.0, 2.1], [81.2, 14.6], [95.5, 47.3], [84.8, 81.4], [52.5, 96.9], [18.6, 85.5], [7.2, 51.6], [14.1, 15.6]] },
+    { id: 'forge', name: 'The Anvil', world: 'cindra', cost: 12, reward: { gems: 25, item: 'bigchest' }, perk: 'A Treasure Chest and 25 gems', pts: [[29.1, 49.6], [15.8, 17.0], [55.5, 26.6], [96.3, 23.2], [77.3, 43.9], [77.5, 74.8], [45.9, 81.8], [13.7, 81.1], [29.1, 49.6]] },
+    { id: 'phoenix', name: 'The Firebird', world: 'cindra', cost: 14, reward: { gems: 30, energy: 60 }, perk: '30 gems and 60 energy', pts: [[11.3, 30.7], [19.7, 0.8], [51.8, 21.9], [80.1, 4.9], [89.3, 27.9], [67.2, 56.4], [82.0, 79.3], [62.1, 98.0], [49.2, 75.4], [26.8, 89.6], [31.1, 53.7], [11.3, 30.7]] },
+    { id: 'squid', name: 'The Kraken', world: 'nerith', cost: 16, reward: { gems: 35, item: 'bigchest' }, perk: 'A Treasure Chest and 35 gems', pts: [[15.8, 31.6], [42.6, 46.5], [47.7, 1.4], [64.8, 23.4], [87.9, 39.5], [68.6, 65.4], [82.2, 94.5], [42.4, 93.4], [33.6, 69.9], [9.8, 77.9], [12.1, 54.7], [15.8, 31.6]] },
+    { id: 'shell', name: 'The Shell', world: 'nerith', cost: 18, reward: { gems: 40, energy: 80 }, perk: '40 gems and 80 energy', pts: [[42.2, 41.0], [48.0, 1.8], [71.3, 18.4], [82.0, 44.9], [88.5, 75.4], [66.6, 97.7], [53.5, 68.6], [30.9, 87.9], [7.0, 59.4], [42.2, 41.0]] },
+    { id: 'crown', name: 'The Crown', world: 'vela', cost: 22, reward: { gems: 60, item: 'bigchest' }, perk: 'A Treasure Chest and 60 gems', pts: [[4.5, 38.1], [32.2, 30.1], [49.6, 4.7], [71.3, 33.2], [96.7, 40.2], [87.7, 65.0], [60.9, 94.1], [21.5, 91.6], [43.0, 55.3], [12.3, 65.0], [4.5, 38.1]] },
+    { id: 'galaxy', name: 'The Galaxy', world: 'vela', cost: 30, reward: { gems: 100, item: 'bigchest', energy: 100 }, perk: '100 gems, 100 energy and a Treasure Chest', pts: [[6.6, 36.5], [28.1, 8.6], [49.6, 46.9], [63.1, 4.7], [86.1, 28.9], [91.2, 62.1], [65.8, 66.4], [71.1, 91.2], [35.7, 94.1], [29.7, 61.9], [7.0, 72.5], [6.6, 36.5]] },
   ];
   const lit = (id: string) => !!(typeof S !== 'undefined' && S && S.stars && S.stars[id]);
   const starPerk = (id: string) => lit(id);
@@ -5180,10 +5180,11 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function constSvg(c: any, cls = '') {
     const segs = c.pts.slice(1).map((p: number[], i: number) => { const q = c.pts[i]; return `<line x1="${q[0]}" y1="${q[1]}" x2="${p[0]}" y2="${p[1]}"/>`; }).join('');
     const dots = c.pts.map((p: number[], i: number) => `<circle cx="${p[0]}" cy="${p[1]}" r="${i % 3 ? 3 : 4.2}" style="animation-delay:${(i * 0.37) % 2.2}s"/>`).join('');
-    return `<svg viewBox="-8 -8 116 116" class="cSvg ${cls}"><g class="cLines">${segs}</g><g class="cDots">${dots}</g></svg>`;
+    const art = ART.spriteUi('const_' + c.id);
+    return `<svg viewBox="-8 -8 116 116" class="cSvg ${cls}${art ? ' hasArt' : ''}">${art ? `<image class="cImg" href="${art}" x="0" y="0" width="100" height="100"/>` : ''}<g class="cLines">${segs}</g><g class="cDots">${dots}</g></svg>`;
   }
   /** the painted figure behind a constellation's stars (const_<id>), when there is one */
-  const constArt = (c: any) => ART.spriteUi('const_' + c.id) ? `<img class="cArt" src="${ART.spriteUi('const_' + c.id)}" alt="">` : '';
+  const constArt = (_c: any) => '';   // the painted figure now sits inside the svg, under its own stars
   function fuseScrap() {
     if (pouch('scrap') < 3) return false;
     S.wal.scrap -= 3; S.wal.starcore = pouch('starcore') + 1; S.seen.starcore = 1;
@@ -5285,7 +5286,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const dots = c.pts.map((p: number[], i: number) => `<circle class="skStar" cx="${p[0]}" cy="${p[1]}" r="3.6" style="animation-delay:${i * T}s"/>`).join('');
     const end = c.pts.length * T;
     fx.innerHTML = `<div class="fxSky"></div><div class="fxRays"></div>
-      <div class="fxIn"><div class="fxName">${c.name}</div><div class="fxArtWrap">${ART.spriteUi('const_' + c.id) ? `<img class="fxArt" src="${ART.spriteUi('const_' + c.id)}" alt="" style="animation-delay:${end}s">` : ''}<svg viewBox="-8 -8 116 116" class="skBig" id="fxSvg">${segs}${dots}</svg></div>
+      <div class="fxIn"><div class="fxName">${c.name}</div><div class="fxArtWrap"><svg viewBox="-8 -8 116 116" class="skBig" id="fxSvg">${ART.spriteUi('const_' + c.id) ? `<image class="fxArt" href="${ART.spriteUi('const_' + c.id)}" x="0" y="0" width="100" height="100" style="animation-delay:${end * 0.5}s"/>` : ''}${segs}${dots}</svg></div>
       <div class="fxLit" style="animation-delay:${end + 0.2}s">CONSTELLATION LIT!</div><div class="fxPerk" style="animation-delay:${end + 0.5}s">${c.perk}</div></div>
       <i class="skShoot" style="animation-delay:${end * 0.6}s"></i><i class="skShoot b" style="animation-delay:${end * 0.6 + 0.5}s"></i>`;
     fx.className = 'on'; sfx.whoosh(); audio.duck(4, 0.2);

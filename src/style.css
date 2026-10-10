@@ -3044,3 +3044,24 @@ html.ui-wheel .app .wheelWrap.space .wSeg span{top:30px}
 html.ui-wheel_hub .app .wheelWrap.space .wHub{width:70px;height:70px;margin:-35px 0 0 -35px;background:none!important;box-shadow:none!important}
 html.ui-wheel_pin .app .wheelPin .uiIc{width:34px;height:58px;object-fit:contain}
 html.ui-wheel_pin .app .wheelPin{top:-30px}
+/* v61: painted constellation figures inside the star svg */
+.cSvg .cImg{opacity:.22;transition:opacity .6s}
+.gc-locked .cSvg .cImg{opacity:.07}
+.gc-ready .cSvg .cImg{opacity:.4;animation:cImgB 1.6s ease-in-out infinite}
+.gc-lit .cSvg .cImg{opacity:1;animation:cImgG 3s ease-in-out infinite}
+@keyframes cImgB{50%{opacity:.62}}
+@keyframes cImgG{50%{opacity:.75}}
+.cSvg.hasArt line{stroke-width:1;stroke:rgba(200,230,255,.45);stroke-dasharray:2 3}
+.gc-lit .cSvg.hasArt line{stroke:rgba(255,224,122,.35);stroke-dasharray:none}
+.cSvg.hasArt circle{r:2.8}
+.gc-lit .cSvg.hasArt{filter:drop-shadow(0 0 12px rgba(255,200,80,.75))}
+#skFx .fxArt{opacity:0;animation:fxImg 1.2s ease-out forwards}
+@keyframes fxImg{0%{opacity:0}60%{opacity:1}100%{opacity:.95}}
+/* v61: painted round buttons and offer stickers */
+html.ui-rb_blue body .app .stage .tools #btnHint{width:38px;height:38px;padding:0!important;border:0!important;border-radius:50%;background:var(--ui-rb_blue) center/100% 100% no-repeat!important;box-shadow:0 3px 6px rgba(0,0,0,.25)!important;display:flex;align-items:center;justify-content:center}
+html.ui-rb_gold body .app .stage .tools #btnX2{min-width:38px;height:38px;padding:0 6px!important;border:0!important;border-radius:50%;background:var(--ui-rb_white) center/100% 100% no-repeat!important;color:#7a4f06!important;font-weight:900!important;box-shadow:0 3px 6px rgba(0,0,0,.25)!important}
+html.ui-rb_gold body .app .stage .tools #btnX2.on{background:var(--ui-rb_orange) center/100% 100% no-repeat!important;color:#fff!important;text-shadow:0 1px 0 #a04a00}
+.noteLine .uiIc{width:18px;height:18px;vertical-align:-4px}
+.gBurst{position:absolute;top:-12px;right:-10px;z-index:3;width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#7a2a00;transform:rotate(12deg);
+  background:var(--ui-offer_burst) center/contain no-repeat;animation:burstWob 1.6s ease-in-out infinite}
+@keyframes burstWob{50%{transform:rotate(4deg) scale(1.1)}}
