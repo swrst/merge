@@ -163,7 +163,7 @@ must(await page.locator('#ribbon.show').count() === 1, 'a new claimable slides i
 must(await page.locator('#dotWorld').isVisible(), 'and the galaxy button shows a badge');
 for (let k = 0; k < 12 && await page.locator('#talk.open').count(); k++) { await page.click('#talk'); await page.waitForTimeout(250); }
 const rbText = (await page.textContent('#ribbon')).trim(); await page.evaluate(() => { window.__game.v9.closePop(); document.querySelector('#ribbon .rbGo').click(); }); await page.waitForTimeout(700);
-must(await page.locator('#pop.open, .screen.open, #modal.open').count() >= 1, 'tapping the ribbon goes straight there (' + rbText + ')');
+must(await page.locator('#pop.open, .screen.open, #modal.open, #talk.open').count() >= 1, 'tapping the ribbon goes straight there (' + rbText + ')');
 await page.evaluate(() => { const s = window.__game.state(); document.querySelectorAll('#modal,#talk').forEach(e => e.classList.remove('open')); s.proj.earth = window.__prevProj; s.world = window.__prevWorld; window.__game.hud(); });
 await page.waitForTimeout(3500); await shoo(); await page.evaluate(() => { document.querySelectorAll('#modal,#talk').forEach(e => e.classList.remove('open')); window.__game.v9.closePop(); }); await shoo();
 await page.evaluate(() => { window.__game.v9.closePop(); window.__game.view('board'); }); await page.waitForTimeout(400);

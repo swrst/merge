@@ -1807,54 +1807,17 @@
       "accent": "aurora"
     }
   },
-  "weathervane": {
-    "name": "Rocket Vane",
-    "chain": "weather",
-    "tier": 5,
-    "sell": 78,
-    "art": {
-      "shape": "totem",
-      "mat": "copper",
-      "accent": "gold"
-    }
-  },
-  "weatherstation": {
-    "name": "Dish Station",
-    "chain": "weather",
-    "tier": 6,
-    "sell": 185,
-    "art": {
-      "shape": "tower",
-      "mat": "steel",
-      "accent": "sapphire"
-    }
-  },
   "cloudmachine": {
     "name": "Cloud Machine",
     "chain": "weather",
-    "tier": 7,
-    "sell": 430,
+    "tier": 5,
+    "sell": 78,
     "art": {
       "shape": "house",
       "mat": "cloud",
       "accent": "gold",
       "deco": [
         "glow"
-      ]
-    }
-  },
-  "sundial": {
-    "name": "Two-Sun Dial",
-    "chain": "weather",
-    "tier": 8,
-    "sell": 980,
-    "art": {
-      "shape": "arch",
-      "mat": "gold",
-      "accent": "aurora",
-      "deco": [
-        "glow",
-        "motes"
       ]
     }
   },
@@ -7178,11 +7141,22 @@
       "accent": "aurora"
     }
   },
-  "dryerhelmet": {
-    "name": "Bubble Dryer",
+  "lightmirror": {
+    "name": "Star Mirror",
     "chain": "salon",
     "tier": 3,
     "sell": 13,
+    "art": {
+      "shape": "ring",
+      "mat": "gold",
+      "accent": "plum"
+    }
+  },
+  "dryerhelmet": {
+    "name": "Bubble Dryer",
+    "chain": "salon",
+    "tier": 4,
+    "sell": 32,
     "art": {
       "shape": "cog",
       "mat": "plum",
@@ -7192,23 +7166,12 @@
   "salonchair": {
     "name": "Salon Chair",
     "chain": "salon",
-    "tier": 4,
-    "sell": 32,
+    "tier": 5,
+    "sell": 78,
     "art": {
       "shape": "crate",
       "mat": "ruby",
       "accent": "gold"
-    }
-  },
-  "lightmirror": {
-    "name": "Star Mirror",
-    "chain": "salon",
-    "tier": 5,
-    "sell": 78,
-    "art": {
-      "shape": "ring",
-      "mat": "gold",
-      "accent": "plum"
     }
   },
   "curlersalon": {
@@ -7805,33 +7768,11 @@
       "accent": "steel"
     }
   },
-  "planetlamp": {
-    "name": "Planet Lamp",
-    "chain": "yardsale",
-    "tier": 3,
-    "sell": 13,
-    "art": {
-      "shape": "ring",
-      "mat": "gold",
-      "accent": "sapphire"
-    }
-  },
-  "comicstack": {
-    "name": "Space Comics",
-    "chain": "yardsale",
-    "tier": 4,
-    "sell": 32,
-    "art": {
-      "shape": "plank",
-      "mat": "ruby",
-      "accent": "sapphire"
-    }
-  },
   "saucerstall": {
     "name": "Saucer Stall",
     "chain": "yardsale",
-    "tier": 5,
-    "sell": 78,
+    "tier": 3,
+    "sell": 13,
     "art": {
       "shape": "house",
       "mat": "steel",
@@ -7841,8 +7782,8 @@
   "saucermarket": {
     "name": "Saucer Market",
     "chain": "yardsale",
-    "tier": 6,
-    "sell": 185,
+    "tier": 4,
+    "sell": 32,
     "art": {
       "shape": "house",
       "mat": "steel",
@@ -7852,21 +7793,11 @@
       ]
     }
   },
-  "cloudwool": {
-    "name": "Cloud Wool",
-    "chain": "cloudsheep",
-    "tier": 1,
-    "sell": 2,
-    "art": {
-      "shape": "berry",
-      "mat": "cloud"
-    }
-  },
   "cloudlamb": {
     "name": "Cloud Lamb",
     "chain": "cloudsheep",
-    "tier": 2,
-    "sell": 5,
+    "tier": 1,
+    "sell": 2,
     "art": {
       "shape": "berry",
       "mat": "cloud",
@@ -7876,8 +7807,8 @@
   "cloudsheep": {
     "name": "Cloud Sheep",
     "chain": "cloudsheep",
-    "tier": 3,
-    "sell": 13,
+    "tier": 2,
+    "sell": 5,
     "art": {
       "shape": "berry",
       "mat": "cloud",
@@ -7887,8 +7818,8 @@
   "rainbowsheep": {
     "name": "Rainbow Sheep",
     "chain": "cloudsheep",
-    "tier": 4,
-    "sell": 32,
+    "tier": 3,
+    "sell": 13,
     "art": {
       "shape": "berry",
       "mat": "aurora"
@@ -7897,8 +7828,8 @@
   "sheepmum": {
     "name": "Sheep Mum",
     "chain": "cloudsheep",
-    "tier": 5,
-    "sell": 78,
+    "tier": 4,
+    "sell": 32,
     "art": {
       "shape": "berry",
       "mat": "cloud",
@@ -7908,8 +7839,8 @@
   "cloudbarn": {
     "name": "Cloud Barn",
     "chain": "cloudsheep",
-    "tier": 6,
-    "sell": 185,
+    "tier": 5,
+    "sell": 78,
     "art": {
       "shape": "house",
       "mat": "cloud",
@@ -8466,32 +8397,11 @@
       ]
     }
   },
-  "mappiece": {
-    "name": "Map Piece",
-    "chain": "treasure",
-    "tier": 1,
-    "sell": 2,
-    "art": {
-      "shape": "leaf",
-      "mat": "sand"
-    }
-  },
-  "starshovel": {
-    "name": "Star Shovel",
-    "chain": "treasure",
-    "tier": 2,
-    "sell": 5,
-    "art": {
-      "shape": "leaf",
-      "mat": "sapphire",
-      "accent": "gold"
-    }
-  },
   "starkey": {
     "name": "Star Key",
     "chain": "treasure",
-    "tier": 3,
-    "sell": 13,
+    "tier": 1,
+    "sell": 2,
     "art": {
       "shape": "ring",
       "mat": "gold"
@@ -8500,8 +8410,8 @@
   "woodchest": {
     "name": "Little Chest",
     "chain": "treasure",
-    "tier": 4,
-    "sell": 32,
+    "tier": 2,
+    "sell": 5,
     "art": {
       "shape": "crate",
       "mat": "wood",
@@ -8511,8 +8421,8 @@
   "gemchest": {
     "name": "Gem Chest",
     "chain": "treasure",
-    "tier": 5,
-    "sell": 78,
+    "tier": 3,
+    "sell": 13,
     "art": {
       "shape": "crate",
       "mat": "gold",
@@ -8522,8 +8432,8 @@
   "treasureship": {
     "name": "Cloud Galleon",
     "chain": "treasure",
-    "tier": 6,
-    "sell": 185,
+    "tier": 4,
+    "sell": 32,
     "art": {
       "shape": "house",
       "mat": "wood",
@@ -8543,21 +8453,11 @@
       "mat": "topaz"
     }
   },
-  "startowel": {
-    "name": "Star Towel",
-    "chain": "hotsprings",
-    "tier": 2,
-    "sell": 5,
-    "art": {
-      "shape": "rope",
-      "mat": "sapphire"
-    }
-  },
   "steambucket": {
     "name": "Steam Bucket",
     "chain": "hotsprings",
-    "tier": 3,
-    "sell": 13,
+    "tier": 2,
+    "sell": 5,
     "art": {
       "shape": "crate",
       "mat": "wood",
@@ -8567,8 +8467,8 @@
   "stonepool": {
     "name": "Stone Pool",
     "chain": "hotsprings",
-    "tier": 4,
-    "sell": 32,
+    "tier": 3,
+    "sell": 13,
     "art": {
       "shape": "ring",
       "mat": "slate",
@@ -8578,8 +8478,8 @@
   "springfall": {
     "name": "Spring Falls",
     "chain": "hotsprings",
-    "tier": 5,
-    "sell": 78,
+    "tier": 4,
+    "sell": 32,
     "art": {
       "shape": "house",
       "mat": "slate",
@@ -8589,8 +8489,8 @@
   "spalodge": {
     "name": "Spa Lodge",
     "chain": "hotsprings",
-    "tier": 6,
-    "sell": 185,
+    "tier": 5,
+    "sell": 78,
     "art": {
       "shape": "house",
       "mat": "wood",

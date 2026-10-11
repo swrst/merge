@@ -163,7 +163,7 @@
       "grub",
       "grub",
       "fossilchip",
-      "mappiece",
+      "starkey",
       "chrysalis"
     ],
     "spec": {
@@ -236,7 +236,7 @@
       "raindrop",
       "raindrop",
       "raindrop",
-      "cloudwool",
+      "cloudlamb",
       "puffcloud"
     ],
     "spec": {
@@ -272,8 +272,8 @@
     "drops": [
       "tealeaf",
       "tealeaf",
+      "tealeaf",
       "icescoop",
-      "warmpebble",
       "teabundle"
     ],
     "mode": "battery",
@@ -901,6 +901,7 @@
       "steampuff",
       "steampuff",
       "steampuff",
+      "warmpebble",
       "steampipe"
     ],
     "spec": {

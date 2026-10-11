@@ -3126,3 +3126,51 @@ html body .app .sideR .tools #btnHint .hintIc{width:26px;height:26px;font-size:1
 html body .app .sideR .tools #btnX2 .ic{width:16px!important;height:16px!important}
 html body .app .sideR .tools #btnX2 b{font-size:11px}
 html body .app .sideR .tools .toolbox .n{top:-5px;right:-5px;min-width:16px;height:16px;line-height:16px;font-size:10px}
+/* v65: recycler value tag — small navy pill, flask icon at text size (the item rule was blowing it up) */
+html body .app .lxSp em{bottom:3px;display:inline-flex;align-items:center;gap:2px;background:rgba(18,40,86,.88);box-shadow:0 0 0 1.5px #7fd0ff;padding:1px 6px 1px 5px;font-size:10px;line-height:14px}
+html body .app .lxSp em img,html body .app .lxSp em .ic,html body .app .lxSp em svg{width:12px!important;height:12px!important;min-width:0;flex:none}
+/* v65: daily gift art = chest + energy tag */
+.giftArt{position:relative;display:inline-block;width:100%;height:100%}
+.giftArt>img,.giftArt>.ic,.giftArt>svg{width:100%;height:100%;object-fit:contain}
+.giftNrg{position:absolute;right:-2px;bottom:-2px;display:inline-flex;align-items:center;gap:1px;padding:1px 6px 1px 3px;border-radius:99px;background:rgba(18,40,86,.9);box-shadow:0 0 0 1.5px #7fd0ff;color:#fff;font:800 12px/16px inherit;white-space:nowrap}
+.giftNrg img,.giftNrg .ic,.giftNrg svg{width:15px!important;height:15px!important}
+html body .app .sCard .sCArt .giftArt{width:62px;height:58px;display:inline-flex;align-items:center;justify-content:center}
+html body .app .sCard .sCArt .giftNrg{position:absolute;right:-14px;bottom:-4px;width:auto;height:auto;font-size:11px;line-height:15px;padding:1px 6px 1px 2px}
+html body .app .sCard .sCArt .giftNrg img,html body .app .sCard .sCArt .giftNrg .ic,html body .app .sCard .sCArt .giftNrg .uiIc,html body .app .sCard .sCArt .giftNrg svg{width:14px!important;height:14px!important;max-width:14px!important;max-height:14px!important}
+/* v65: pet incubator — one pet only */
+.incLock{margin:6px 0 8px;padding:7px 10px;border-radius:10px;background:rgba(18,40,86,.08);font-size:12.5px;line-height:1.35;color:var(--sp-ink2,#2d3a66)}
+.incRow small{display:block;font-size:10.5px;opacity:.75;margin-top:1px}
+.incSwap{display:flex;align-items:center;justify-content:center;gap:14px;margin:6px 0 4px}
+.incSwap .incArt{width:84px;height:84px;display:flex;align-items:center;justify-content:center}
+.incSwap .incArt img{max-width:100%;max-height:100%}
+.incSwap b{font-size:22px;color:#4c7bd9}
+/* v65: XP bar in green so it reads against the navy track */
+html body .app .hud .xpbar i{background:linear-gradient(180deg,#c4ff8a,#46d65a 55%,#24b04a)!important;box-shadow:0 0 6px rgba(120,255,130,.75)!important}
+html body .app .hud .xplabel{text-shadow:0 1px 0 #0b2a2b,0 0 3px #0b2a2b,0 0 2px #000!important}
+html body .app .hud .lvlBox{cursor:pointer}
+html body .app .hud .lvlBox:active{transform:scale(.96)}
+/* v65: profile card */
+.pfHead{display:flex;gap:12px;align-items:center;margin:2px 0 10px}
+.pfAv{flex:none;width:76px;height:76px;border-radius:50%;overflow:hidden;background:#eef7ff;box-shadow:0 0 0 3px #e9a82a,0 3px 8px rgba(0,0,0,.25)}
+.pfAv>*{width:100%;height:100%;object-fit:cover}
+.pfWho{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.pfWho input{font:800 18px/1.1 Fredoka,system-ui,sans-serif;color:#1d2a55;border:0;border-bottom:2px dashed rgba(29,42,85,.25);background:transparent;padding:2px 0;width:100%;min-width:0}
+.pfWho input:focus{outline:none;border-bottom-color:#4c7bd9}
+.pfLv{font-size:12.5px;color:#4a5682}
+.pfXp{position:relative;height:16px;border-radius:99px;background:linear-gradient(180deg,#1d2f6e,#2a3f8f);overflow:hidden;box-shadow:0 0 0 1.5px #fff}
+.pfXp i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(180deg,#c4ff8a,#46d65a 55%,#24b04a)}
+.pfXp em{position:relative;display:block;text-align:center;font:800 10px/16px Fredoka,system-ui,sans-serif;font-style:normal;color:#fff;text-shadow:0 1px 0 #0b2a2b}
+.pfWho small{font-size:11px;color:#6a74a0}
+.pfGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+.pfStat{display:grid;grid-template-columns:30px 1fr;grid-template-rows:auto auto;column-gap:7px;align-items:center;padding:7px 9px;border-radius:12px;background:rgba(255,255,255,.75);box-shadow:inset 0 0 0 1.5px rgba(120,160,230,.35)}
+.pfStat>:first-child{grid-row:1/3;width:30px!important;height:30px!important;object-fit:contain;font-size:22px;display:flex;align-items:center;justify-content:center}
+.pfStat b{font:800 15px/1.1 Fredoka,system-ui,sans-serif;color:#1d2a55;font-variant-numeric:tabular-nums}
+.pfStat i{font-style:normal;font-size:10.5px;color:#5d6890;line-height:1.15}
+.pfPet{display:flex;align-items:center;gap:10px;width:100%;margin-top:9px;padding:6px 10px;border:0;border-radius:12px;background:rgba(255,255,255,.75);box-shadow:inset 0 0 0 1.5px rgba(120,160,230,.35);text-align:left}
+.pfPet .pupImg{width:46px;height:46px;object-fit:contain;flex:none}
+.pfPet span{display:flex;flex-direction:column;min-width:0}
+.pfPet b{font:800 14px/1.2 Fredoka,system-ui,sans-serif;color:#1d2a55}
+.pfPet i{font-style:normal;font-size:11px;color:#5d6890;line-height:1.25}
+.pfDot{display:inline-block;min-width:18px;padding:0 5px;border-radius:99px;background:#ff5b6e;color:#fff;font-style:normal;font-size:11px;line-height:18px}
+.sTab{display:inline-flex;align-items:center;gap:4px}
+html body .app .sTab img,html body .app .sTab .uiIc,html body .app .sTab .ic{width:18px!important;height:18px!important;object-fit:contain;flex:none}

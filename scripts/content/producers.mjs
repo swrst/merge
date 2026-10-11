@@ -32,17 +32,17 @@ export const PRODUCERS = [
   ['earth', 5, 'cottonpatch|Suit Loom|cottonpatch|nrg:1|fibre fibre fibre comb3 thread|a low cotton bush with fluffy white bolls'],
   ['earth', 5, 'nestbox|Jet Wreck|nestbox|nrg:1|down down mapscrap starpage plume|a wooden bird box on a post with a round hole'],
   ['earth', 6, 'claypit|Goo Pit|pot:clay/clay|nrg:1|mud mud mud paintdrop claylump|a wet terracotta clay pit with a spade stuck in it'],
-  ['earth', 7, 'grubmound|Glowbug Burrow|cocoon:cream/moss|nrg:1|grub grub fossilchip mappiece chrysalis|a grassy mound with little burrow holes'],
+  ['earth', 7, 'grubmound|Glowbug Burrow|cocoon:cream/moss|nrg:1|grub grub fossilchip starkey chrysalis|a grassy mound with little burrow holes'],
   ['earth', 8, 'vegpatch|Hydro Bed|sprout:leaf/clay|nrg:1|vegseed vegseed vegseed sleepyseed seedling|a small tilled veggie patch with carrot tops and a watering can'],
   ['earth', 9, 'tinkerbench|Lens Workbench|anvil:copper/wood|nrg:1|lenschip lenschip lenschip clockgear lens|a wooden workbench with a vice, lens grinder and a brass lamp'],
   ['earth', 10, 'crashsite|Crash Site|planet:steel/clay|bat:10/60|blinky blinky blinky pricetag alienkid|a small silver saucer nose-down in the dirt, dome cracked, little lights still blinking'],
 
   /* story guests: never planted by level, only by a chapter of the story */
-  ['earth', 99, 'raincloud|Weather Cloud|cloud:water/cloud|bat:10/30|raindrop raindrop raindrop cloudwool puffcloud|a fat grey-blue rain cloud drizzling onto a little puddle'],
+  ['earth', 99, 'raincloud|Weather Cloud|cloud:water/cloud|bat:10/30|raindrop raindrop raindrop cloudlamb puffcloud|a fat grey-blue rain cloud drizzling onto a little puddle'],
 
   /* v16: story unlocks for the later Meadow chapters */
   ['earth', 99, 'windmill|Cheese Mill|tower:wood/grass|nrg:1|flour flour flour pretzelplanet dough|a small stone windmill with turning cloth sails'],
-  ['earth', 99, 'teabush|Fizz Vent|teabush|bat:10/60|tealeaf tealeaf icescoop warmpebble teabundle|a neat round tea bush with fresh green tips'],
+  ['earth', 99, 'teabush|Fizz Vent|teabush|bat:10/60|tealeaf tealeaf tealeaf icescoop teabundle|a neat round tea bush with fresh green tips'],
   ['earth', 99, 'lilypond|Slime Pond|wave:water/moss|nrg:1|ponddrop ponddrop fishegg squeakytoy lilypad|a small round pond with lily pads and a reed'],
   ['earth', 99, 'toychest|Space Toy Chest|chest:cherry/moss|bat:10/60|block block craterball arcadetoken spintop|a painted toy chest, lid open, toys peeking out'],
   /* v25 */
@@ -87,7 +87,7 @@ export const PRODUCERS = [
   ['cindra', 7, 'warmnest|Warm Nest|egg:ember/obsidian|bat:10/60|warmegg warmegg snailegg snailegg newt|a nest of warm stones around a small lava pool, orange eggs inside'],
   ['cindra', 8, 'basaltcliff|Basalt Cliff|prism:slate/obsidian|nrg:1|basaltchip basaltchip basaltchip basaltblock|a short cliff of hexagonal basalt columns'],
   ['cindra', 9, 'sulfurspring|Sulfur Spring|bubble:topaz/obsidian|nrg:1|sulfurdust sulfurdust fwspark fwspark sulfurcrystal|a bubbling pool crusted with bright yellow sulfur'],
-  ['cindra', 10, 'steamvent|Steam Vent|cloud:smoke/obsidian|nrg:1|steampuff steampuff steampuff steampipe|a rock vent capped with a copper pipe puffing steam'],
+  ['cindra', 10, 'steamvent|Steam Vent|cloud:smoke/obsidian|nrg:1|steampuff steampuff steampuff warmpebble steampipe|a rock vent capped with a copper pipe puffing steam'],
   ['cindra', 11, 'charstump|Lava Vent Stump|stump:coal/obsidian|bat:10/60|charseed charseed embersprout|a burnt stump with glowing orange shoots sprouting from it'],
   ['cindra', 12, 'rubyvein|Ruby Vein|ore:ruby/obsidian|nrg:1|redchip redchip redchip rubyshard|a dark rock studded with raw red rubies'],
 
