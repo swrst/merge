@@ -3174,3 +3174,19 @@ html body .app .hud .lvlBox:active{transform:scale(.96)}
 .pfDot{display:inline-block;min-width:18px;padding:0 5px;border-radius:99px;background:#ff5b6e;color:#fff;font-style:normal;font-size:11px;line-height:18px}
 .sTab{display:inline-flex;align-items:center;gap:4px}
 html body .app .sTab img,html body .app .sTab .uiIc,html body .app .sTab .ic{width:18px!important;height:18px!important;object-fit:contain;flex:none}
+/* v66: the old dialog (#modal) now wears the same painted frame + ribbon title as every popup */
+html.ui-popup_frame body .app .mBoxW{border-image:var(--ui-popup_frame) 64 fill / 24px stretch!important;border-width:24px!important;border-style:solid!important;
+  background:none!important;border-radius:0!important;box-shadow:none!important;padding:30px 8px 6px!important;max-width:350px;overflow:visible}
+html body .app .mBoxW::before{display:none}
+html body .app .mBoxW .mTitle{position:absolute;top:-20px;left:50%;transform:translateX(-50%);z-index:3;margin:0;max-width:calc(100% + 20px);white-space:nowrap;
+  padding:5px 36px 15px;font-size:15px;font-weight:700;line-height:1.2;color:#fff!important;
+  background:var(--ui-ribbon,linear-gradient(180deg,#5fe4ff,#1aa6e0)) center/100% 100% no-repeat;text-shadow:0 2px 0 #0b5c96,0 0 6px rgba(10,80,140,.6)!important}
+html body .app .mBoxW #mFace{width:64px!important;height:64px!important;margin:4px auto 6px!important}
+html body .app .mBoxW .mX{top:-14px!important;right:-14px!important;z-index:4}
+html.ui-popup_frame body .app .mBoxW{background:linear-gradient(180deg,#ffffff,#e3f2ff)!important;background-clip:padding-box!important}
+html body .app .mBoxW .mTitle{padding:5px 46px 15px}
+/* v66: a completed chain waiting for its medal */
+.aTile.claim{background:linear-gradient(180deg,#fff6c9,#ffd56a)!important;box-shadow:0 0 0 2px #ffb11f,0 0 12px rgba(255,190,40,.7)!important;animation:claimPulse 1.6s ease-in-out infinite}
+.aTile.claim i{color:#a2580a!important;font-weight:800}
+@keyframes claimPulse{50%{transform:scale(1.04)}}
+@media (prefers-reduced-motion: reduce){.aTile.claim{animation:none}}

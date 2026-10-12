@@ -11,9 +11,9 @@
     "world": "earth"
   },
   "energy": {
-    "base": 40,
+    "base": 50,
     "perLevel": 2,
-    "regenMs": 120000,
+    "regenMs": 100000,
     "snack": {
       "amount": 15,
       "cooldownMs": 14400000

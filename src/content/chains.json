@@ -1589,24 +1589,6 @@
       "Express delivery, please."
     ]
   },
-  "laundry": {
-    "name": "Cosmic Laundry",
-    "world": "earth",
-    "unlock": 5,
-    "items": [
-      "lostsock",
-      "sockpair",
-      "shirtstack",
-      "laundryjet",
-      "washbot",
-      "laundromat"
-    ],
-    "asks": [
-      "Wash day!",
-      "I lost a sock in orbit.",
-      "Clean suits for the crew."
-    ]
-  },
   "icecream": {
     "name": "Nebula Ice Cream",
     "world": "earth",
@@ -1626,42 +1608,6 @@
       "A cone for the kids."
     ]
   },
-  "snapshots": {
-    "name": "Snapshots",
-    "world": "earth",
-    "unlock": 21,
-    "items": [
-      "filmroll",
-      "instaphoto",
-      "camera",
-      "tripodcam",
-      "camdrone",
-      "photobooth"
-    ],
-    "asks": [
-      "Say cheese!",
-      "A photo for my album.",
-      "Postcards from the Meadow."
-    ]
-  },
-  "zerog": {
-    "name": "Zero-G Sports",
-    "world": "earth",
-    "unlock": 14,
-    "items": [
-      "craterball",
-      "hoverskates",
-      "hoopgoal",
-      "jetboard",
-      "rockettrophy",
-      "arena"
-    ],
-    "asks": [
-      "Game day!",
-      "Training for the cup.",
-      "Catch!"
-    ]
-  },
   "starmaps": {
     "name": "Star Maps",
     "world": "earth",
@@ -1678,43 +1624,6 @@
       "Where is the Moon again?",
       "Maps for the explorers.",
       "Plotting a course."
-    ]
-  },
-  "snapplants": {
-    "name": "Snap Plants",
-    "world": "earth",
-    "unlock": 16,
-    "items": [
-      "sleepyseed",
-      "handsprout",
-      "toothpot",
-      "walkplant",
-      "snapper",
-      "potplant",
-      "plantmonster"
-    ],
-    "asks": [
-      "This one bites. I love it.",
-      "A pet plant, please.",
-      "Feed me. The plant, not me."
-    ]
-  },
-  "bath": {
-    "name": "Bath Time",
-    "world": "earth",
-    "unlock": 17,
-    "items": [
-      "squeakytoy",
-      "bathbomb",
-      "soapbrush",
-      "rockettub",
-      "hottub",
-      "bathhouse"
-    ],
-    "asks": [
-      "Bath night!",
-      "The Blinkies need a wash.",
-      "Bubbles, lots of bubbles."
     ]
   },
   "timemachine": {
@@ -1736,42 +1645,6 @@
       "What time is it on Mars?"
     ]
   },
-  "salon": {
-    "name": "Antenna Salon",
-    "world": "earth",
-    "unlock": 8,
-    "items": [
-      "comb3",
-      "bobbles",
-      "lightmirror",
-      "dryerhelmet",
-      "salonchair",
-      "curlersalon"
-    ],
-    "asks": [
-      "My antennae are a mess!",
-      "Big night out tonight.",
-      "Something sparkly, darling."
-    ]
-  },
-  "pastry": {
-    "name": "Alien Bakery",
-    "world": "earth",
-    "unlock": 9,
-    "items": [
-      "pretzelplanet",
-      "pancakestack",
-      "moondonut",
-      "rocketcake",
-      "bakecart",
-      "cupcakehouse"
-    ],
-    "asks": [
-      "Fresh from the oven!",
-      "Breakfast that floats, please.",
-      "A treat for the Mayor."
-    ]
-  },
   "robopets": {
     "name": "Robo Pets",
     "world": "earth",
@@ -1788,42 +1661,6 @@
       "My bot wants a pet.",
       "Something that purrs. Electrically.",
       "A walkies buddy!"
-    ]
-  },
-  "gnomes": {
-    "name": "Space Gnomes",
-    "world": "earth",
-    "unlock": 7,
-    "items": [
-      "gnomehat",
-      "gnome",
-      "snailgnome",
-      "jetgnome",
-      "gnomefamily",
-      "gnomevillage"
-    ],
-    "asks": [
-      "The gnomes are back!",
-      "A gnome for my garden.",
-      "Who keeps moving my gnomes?"
-    ]
-  },
-  "lanterns": {
-    "name": "Sky Lanterns",
-    "world": "earth",
-    "unlock": 6,
-    "items": [
-      "foldpaper",
-      "fishlantern",
-      "rocketlantern",
-      "planetlights",
-      "lanternbarge",
-      "lanterntower"
-    ],
-    "asks": [
-      "Lantern night!",
-      "Light the way home.",
-      "For the night market."
     ]
   },
   "kites": {
@@ -1844,61 +1681,6 @@
       "Higher! Higher!"
     ]
   },
-  "bubbletunes": {
-    "name": "Bubble Band",
-    "world": "earth",
-    "unlock": 16,
-    "items": [
-      "bubblewhistle",
-      "crystalxylo",
-      "jellydrum",
-      "bubbletrumpet",
-      "bubbleorgan",
-      "bubbledome"
-    ],
-    "asks": [
-      "The band needs a drummer.",
-      "Something that goes POP.",
-      "Music for the dance!"
-    ]
-  },
-  "farmbots": {
-    "name": "Farm Bots",
-    "world": "earth",
-    "unlock": 11,
-    "items": [
-      "canbot",
-      "seedbot",
-      "scarebot",
-      "harvestbot",
-      "tractorbot",
-      "farmmech",
-      "robobarn"
-    ],
-    "asks": [
-      "The field won't weed itself.",
-      "Harvest time!",
-      "A helper for the farm."
-    ]
-  },
-  "starpost": {
-    "name": "Star Post",
-    "world": "earth",
-    "unlock": 12,
-    "items": [
-      "postcard",
-      "postbag",
-      "antennabox",
-      "postdrone",
-      "postrocket",
-      "postlighthouse"
-    ],
-    "asks": [
-      "A letter to the Moon!",
-      "Parcel for the Mayor.",
-      "Post day!"
-    ]
-  },
   "yardsale": {
     "name": "Saucer Sale",
     "world": "earth",
@@ -1913,183 +1695,6 @@
       "One alien's junk...",
       "Bargain hunting!",
       "Anything shiny?"
-    ]
-  },
-  "cloudsheep": {
-    "name": "Cloud Sheep",
-    "world": "earth",
-    "unlock": 18,
-    "items": [
-      "cloudlamb",
-      "cloudsheep",
-      "rainbowsheep",
-      "sheepmum",
-      "cloudbarn"
-    ],
-    "asks": [
-      "Wool for winter.",
-      "The sheep floated off again.",
-      "Fluffy, please!"
-    ]
-  },
-  "pizza": {
-    "name": "Space Pizzeria",
-    "world": "earth",
-    "unlock": 8,
-    "items": [
-      "doughstar",
-      "pizzaslice",
-      "moonpizza",
-      "pizzaboxes",
-      "pizzasaucer",
-      "pizzeria"
-    ],
-    "asks": [
-      "Pizza night!",
-      "Extra crater cheese, please.",
-      "Delivery to the hill!"
-    ]
-  },
-  "aquarium": {
-    "name": "Glow Aquarium",
-    "world": "earth",
-    "unlock": 10,
-    "items": [
-      "fishegg",
-      "guppy3",
-      "pufferstar",
-      "jellylamp",
-      "bubblefish",
-      "aquadome"
-    ],
-    "asks": [
-      "A fish for my tank.",
-      "It glows! I want it.",
-      "The guppies need a friend."
-    ]
-  },
-  "skyfort": {
-    "name": "Sky Fort",
-    "world": "earth",
-    "unlock": 12,
-    "items": [
-      "starsign",
-      "ropeladder",
-      "boxhut",
-      "scopetreehouse",
-      "stiltfort",
-      "cloudfort"
-    ],
-    "asks": [
-      "Fort building day!",
-      "No grown-ups allowed.",
-      "A lookout for the kids."
-    ]
-  },
-  "artclub": {
-    "name": "Art Club",
-    "world": "earth",
-    "unlock": 15,
-    "items": [
-      "paintdrop",
-      "glowbrush",
-      "planetpalette",
-      "rocketeasel",
-      "aliensculpt",
-      "artdome"
-    ],
-    "asks": [
-      "Art class starts now!",
-      "Paint me something cosmic.",
-      "For the gallery wall."
-    ]
-  },
-  "dinos": {
-    "name": "Space Dinos",
-    "world": "earth",
-    "unlock": 17,
-    "items": [
-      "fossilchip",
-      "dinoegg",
-      "babydino",
-      "crystaldino",
-      "longneck",
-      "dinopark"
-    ],
-    "asks": [
-      "I found a fossil!",
-      "A dino for the park.",
-      "It hatched! Now what?"
-    ]
-  },
-  "arcade": {
-    "name": "Arcade",
-    "world": "earth",
-    "unlock": 19,
-    "items": [
-      "arcadetoken",
-      "joystick",
-      "cartridge",
-      "handheld",
-      "arcadecab",
-      "arcadehall"
-    ],
-    "asks": [
-      "High score time!",
-      "One more game. Just one.",
-      "Tokens, please!"
-    ]
-  },
-  "playground": {
-    "name": "Bouncy Playground",
-    "world": "earth",
-    "unlock": 13,
-    "items": [
-      "bounceball",
-      "bigspring",
-      "ringswing",
-      "twistslide",
-      "bouncycastle",
-      "playdome"
-    ],
-    "asks": [
-      "Playtime!",
-      "Higher on the swing!",
-      "The kids are bouncing off the walls."
-    ]
-  },
-  "library": {
-    "name": "Star Library",
-    "world": "earth",
-    "unlock": 16,
-    "items": [
-      "starpage",
-      "planetbook",
-      "bookstack",
-      "floattome",
-      "robobookshelf",
-      "librarytower"
-    ],
-    "asks": [
-      "Quiet, please. Story time.",
-      "A book about the Moon.",
-      "Overdue since 1987."
-    ]
-  },
-  "treasure": {
-    "name": "Treasure Hunt",
-    "world": "earth",
-    "unlock": 11,
-    "items": [
-      "starkey",
-      "woodchest",
-      "gemchest",
-      "treasureship"
-    ],
-    "asks": [
-      "X marks the spot!",
-      "Treasure hunt today!",
-      "Shiny things only."
     ]
   },
   "hotsprings": {

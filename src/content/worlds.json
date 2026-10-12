@@ -28,34 +28,12 @@
       "music",
       "parts",
       "weather",
-      "laundry",
       "icecream",
-      "snapshots",
-      "zerog",
       "starmaps",
-      "snapplants",
-      "bath",
       "timemachine",
-      "salon",
-      "pastry",
       "robopets",
-      "gnomes",
-      "lanterns",
       "kites",
-      "bubbletunes",
-      "farmbots",
-      "starpost",
-      "yardsale",
-      "cloudsheep",
-      "pizza",
-      "aquarium",
-      "skyfort",
-      "artclub",
-      "dinos",
-      "arcade",
-      "playground",
-      "library",
-      "treasure"
+      "yardsale"
     ],
     "start": [
       {
@@ -624,15 +602,15 @@
             "3 Space Lamps, a Star Gem and a Jelly Dome, please. Sparkle is not optional."
           ]
         ],
-        "text": "The market glows and everyone looks fabulous. Everyone, it turns out, is also missing a sock…"
+        "text": "The market glows and everyone looks fabulous. Then Nana spots something sparkling deep inside the Starstone Pile…"
       },
       {
         "id": "e10",
-        "name": "Lost Socks",
+        "name": "Crystal Night",
         "who": "grandma",
         "needs": [
           [
-            "shirtstack",
+            "geode",
             2
           ],
           [
@@ -655,34 +633,34 @@
         "talk": [
           [
             "grandma",
-            "Every sock in the village has vanished! I blame the well. It burps them into orbit."
+            "The Starstone Pile is full of geodes, dear! Light them up and they glow all night. Better than the telly."
           ],
           [
             "grandma",
-            "2 Shirt Stacks, 2 Space Lamps and a Water Tank, please."
+            "2 Glow Geodes, 2 Space Lamps and a Water Tank, please. The tank is for the tea."
           ]
         ],
-        "text": "Warm toes all round. The Starstone Pile is used up. Rest well, sparkly pile! Then: buzzing. A Buzzbot Hive!"
+        "text": "A sparkly night for all. The Starstone Pile is used up. Rest well, sparkly pile! Then: buzzing. A Buzzbot Hive!"
       },
       {
         "id": "e11",
-        "name": "Pizza Town Meeting",
+        "name": "Town Meeting",
         "who": "biscuit",
         "needs": [
           [
-            "moonpizza",
+            "jam",
             1
           ],
           [
-            "pizzaslice",
+            "puddle",
             2
           ],
           [
-            "fishlantern",
+            "hay",
             2
           ],
           [
-            "seedbot",
+            "sprig",
             1
           ]
         ],
@@ -691,7 +669,7 @@
         "talk": [
           [
             "biscuit",
-            "Town meeting! Nobody ever comes to my meetings. Unless there is pizza. And lanterns. And robots."
+            "Town meeting! Nobody ever comes to my meetings. Unless there are snacks. And lights. And somewhere dry to stand."
           ],
           [
             "bloop",
@@ -699,10 +677,10 @@
           ],
           [
             "biscuit",
-            "A Moon Pizza, 2 Crater Slices, 2 Fish Lanterns and a Seeder Bot, please."
+            "A Food Tube, 2 Crater Puddles, 2 Solar Cells and a Glow Bulb, please. The puddles are for my fountain plan."
           ]
         ],
-        "text": "Record turnout! Everyone came for the pizza and left before the speech. And the new Buzzbot Hive buzzes louder…"
+        "text": "Record turnout! Everyone came for the snacks and left before the speech. And the new Buzzbot Hive buzzes louder…"
       },
       {
         "id": "e12",
@@ -739,11 +717,11 @@
       },
       {
         "id": "e13",
-        "name": "Wash Day",
+        "name": "The Last Feast",
         "who": "grandma",
         "needs": [
           [
-            "laundryjet",
+            "pie",
             2
           ],
           [
@@ -766,18 +744,18 @@
         "talk": [
           [
             "grandma",
-            "Wash day! Everything smells of nectar and space dust. Especially Sirra."
+            "The Snack Cart is tired, dear. One last big feast before it rolls off to rest."
           ],
           [
             "grandma",
-            "2 Jet Baskets, a Hex Cell and an Orb Fountain, please."
+            "2 Ration Trays, a Hex Cell and an Orb Fountain, please."
           ]
         ],
-        "text": "Clean at last! The Snack Cart serves its very last snack and rolls off to retire. Then the ground starts to fizz…"
+        "text": "A feast to remember! The Snack Cart serves its very last snack and rolls off to retire. Then the ground starts to fizz…"
       },
       {
         "id": "e14",
-        "name": "Warm Socks",
+        "name": "Warm Ground",
         "who": "grandma",
         "needs": [
           [
@@ -785,11 +763,11 @@
             2
           ],
           [
-            "sockpair",
+            "honeydrop",
             3
           ],
           [
-            "scarebot",
+            "triplecone",
             1
           ]
         ],
@@ -798,18 +776,18 @@
         "talk": [
           [
             "grandma",
-            "The ground is fizzing and warm, dear. Perfect for drying socks. And for a fizzy drink while they dry."
+            "The ground is fizzing and warm, dear. Perfect for a picnic. And for a fizzy drink."
           ],
           [
             "bloop",
-            "On my world we dry socks by shouting at them. Your way seems slower. Blorp."
+            "On my world the ground fizzes when it is cross. Yours seems happy. Blorp."
           ],
           [
             "grandma",
-            "2 Soda Cans, 3 Sock Pairs and a Scare Bot, please. The bot keeps the gnoats off the line."
+            "2 Soda Cans, 3 Nectar Bubbles and a Triple Cone, please."
           ]
         ],
-        "text": "Toasty socks for all. But the fizzing is getting louder, and a boy with smoking boots is following it…"
+        "text": "A warm, fizzy picnic for all. But the fizzing is getting louder, and a boy with smoking boots is following it…"
       },
       {
         "id": "e15",
@@ -884,7 +862,7 @@
             "A Moon Sundae, a Soda Can, a Panel Array and a Hex Cell, please."
           ]
         ],
-        "text": "Cones for everyone! The Moonwater Well gives its last drop (and one last sock). Bye, old well! In the woods, a log blinks."
+        "text": "Cones for everyone! The Moonwater Well gives its very last drop. Bye, old well! In the woods, a log blinks."
       },
       {
         "id": "e17",
@@ -892,15 +870,15 @@
         "who": "biscuit",
         "needs": [
           [
-            "gnome",
+            "teabundle",
             2
           ],
           [
-            "rocketlantern",
+            "mushring",
             2
           ],
           [
-            "harvestbot",
+            "hat",
             1
           ]
         ],
@@ -913,14 +891,14 @@
           ],
           [
             "timmy",
-            "On it! I'll search the woods with lanterns. And robots. And possibly fire."
+            "On it! I'll search the woods with lights. And snacks. And possibly fire."
           ],
           [
             "biscuit",
-            "2 Cyclops Gnomes, 2 Rocket Lanterns and a Harvest Bot, please."
+            "2 Drink Pouches, 2 Shroom Bunches and a Panel Array, please. Search parties get thirsty."
           ]
         ],
-        "text": "No hat. But the Cyclops Gnomes in the woods say the blinking log makes a famous drink. Nana knows the recipe."
+        "text": "No hat. But the eyeshrooms in the woods whisper that the blinking log makes a famous drink. Nana knows the recipe."
       },
       {
         "id": "e18",
@@ -998,19 +976,19 @@
       },
       {
         "id": "e20",
-        "name": "A Reading Nook",
+        "name": "Flight School",
         "who": "pip",
         "needs": [
           [
-            "planetbook",
+            "plume",
             3
           ],
           [
-            "snailgnome",
+            "maptube",
             1
           ],
           [
-            "planetlights",
+            "bouquet",
             1
           ]
         ],
@@ -1019,7 +997,7 @@
         "talk": [
           [
             "pip",
-            "The Jet Wreck came with a shelf of manuals! I want a reading nook before Ember reads them. With his feet."
+            "The Jet Wreck came with a shelf of flight manuals! I want a little flight school before Ember reads them. With his feet."
           ],
           [
             "timmy",
@@ -1027,10 +1005,10 @@
           ],
           [
             "pip",
-            "3 Planet Books, a Snail Rider and a pack of Planet Lights, please."
+            "3 Thrusters, a Map Tube and a Star Lantern, please. Safety first."
           ]
         ],
-        "text": "A cosy reading nook. Ember read one page: \"How to start the thrusters.\" He stopped there. Uh-oh."
+        "text": "A tiny flight school. Ember read one page: \"How to start the thrusters.\" He stopped there. Uh-oh."
       },
       {
         "id": "e21",
@@ -1117,11 +1095,11 @@
             2
           ],
           [
-            "jetgnome",
+            "clothbolt",
             1
           ],
           [
-            "floattome",
+            "honeypot",
             1
           ]
         ],
@@ -1139,7 +1117,7 @@
           ],
           [
             "grandma",
-            "2 Soda Cans, a Jet Gnome and a Floating Tome, please. A cold drink and a good book for a good soak."
+            "2 Soda Cans, a Space Helmet and a Nectar Pot, please. Cold drinks and warm nectar for a good soak."
           ]
         ],
         "text": "Ahh. Dr. Zonk came out pink and wrinkly. Sirra was horrified by everyone's bathrobes. Something must be done, darling."
@@ -1174,11 +1152,11 @@
       },
       {
         "id": "e25",
-        "name": "Sirra's Salon",
+        "name": "Sirra's Fizz Rinse",
         "who": "gigi",
         "needs": [
           [
-            "dryerhelmet",
+            "teapot",
             2
           ],
           [
@@ -1202,30 +1180,30 @@
         "talk": [
           [
             "gigi",
-            "Antennae this droopy are a crime, darling. I'm opening a salon."
+            "Antennae this droopy are a crime, darling. A fizz rinse will perk them right up."
           ],
           [
             "gigi",
-            "2 Bubble Dryers, a Space Glove and a Star Atlas, please."
+            "2 Fizz Bottles, a Space Glove and a Star Atlas, please. The atlas is for style ideas."
           ]
         ],
         "text": "Antennae have never looked better. The Buzzbots buzz off to new meadows. Bye, busy bots! A toy chest lands on the step."
       },
       {
         "id": "e26",
-        "name": "Gnome Makeovers",
+        "name": "Shroom Makeovers",
         "who": "gigi",
         "needs": [
           [
-            "lightmirror",
+            "toyrobot",
             1
           ],
           [
-            "gnomefamily",
+            "icecart",
             1
           ],
           [
-            "bookstack",
+            "mushring",
             2
           ]
         ],
@@ -1234,18 +1212,18 @@
         "talk": [
           [
             "gigi",
-            "The Cyclops Gnomes want makeovers, darling. One eye each, so they're very easy to style."
+            "The eyeshrooms want makeovers, darling. One eye each, so they're very easy to style."
           ],
           [
             "timmy",
-            "I'll hold the dryer! I'll point it at myself first, to test it."
+            "I'll hold the mirror! I'll look in it first, to test it."
           ],
           [
             "gigi",
-            "A Star Mirror, a Gnome Family and 2 Book Stacks, please. The books are for the waiting area."
+            "A Toy Robot, an Ice Cream Cart and 2 Shroom Bunches, please. The robot holds the mirror."
           ]
         ],
-        "text": "Gnomes: fabulous. Ember's hair: permanently upward. And the toy chest on the step keeps rattling. The children noticed."
+        "text": "Shrooms: fabulous. Ember's hair: permanently upward. And the toy chest on the step keeps rattling. The children noticed."
       },
       {
         "id": "e27",
@@ -1257,7 +1235,7 @@
             4
           ],
           [
-            "salonchair",
+            "songbird",
             1
           ],
           [
@@ -1274,7 +1252,7 @@
           ],
           [
             "biscuit",
-            "4 Toy Robots, a Salon Chair and an Ice Cream Cart, please."
+            "4 Toy Robots, a Hoverboard and an Ice Cream Cart, please."
           ]
         ],
         "text": "The square is full of spinning tops. Ember is already planning a Sports Day. Zero gravity. Maximum danger."
@@ -1285,7 +1263,7 @@
         "who": "timmy",
         "needs": [
           [
-            "hoopgoal",
+            "maptube",
             3
           ],
           [
@@ -1312,22 +1290,22 @@
           ],
           [
             "timmy",
-            "3 Hoop Goals, a Toy Rocket and a pack of Moon Boots, please!"
+            "3 Map Tubes for the race route, a Toy Rocket and a pair of Moon Boots, please!"
           ]
         ],
         "text": "Ember won everything. The Fizz Vent burps one last bubble. Cheers, old vent! Then: CRASH. Something small and blinking, behind the hill."
       },
       {
         "id": "e29",
-        "name": "The Rematch",
-        "who": "biscuit",
+        "name": "Behind the Hill",
+        "who": "timmy",
         "needs": [
           [
-            "cartridge",
+            "alienkid",
             2
           ],
           [
-            "handheld",
+            "saucerstall",
             1
           ],
           [
@@ -1339,19 +1317,19 @@
         "xp": 537,
         "talk": [
           [
+            "timmy",
+            "Something crashed behind the hill! It blinks. It squeaks. It is selling things?"
+          ],
+          [
             "biscuit",
-            "I demand a rematch. Indoors. Seated. With buttons. Ember can't win at EVERYTHING."
+            "Nobody sells anything in my town without a permit. Bring them here."
           ],
           [
             "timmy",
-            "Bet I can! Also, did anyone else see something blinking behind the hill?"
-          ],
-          [
-            "biscuit",
-            "2 Rocket Cartridges, a Pocket Console and a Space Helmet, please. Arcade safety."
+            "2 Little Aliens, a Saucer Stall and a Space Helmet, please! The helmet is for me. Just in case."
           ]
         ],
-        "text": "Ember won again. The Mayor demands a recount. Then, from behind the hill, more blinking. Lots of it…"
+        "text": "Little blinking aliens, selling bits of their saucer from a stall. The Mayor issued a permit. Then, from behind the hill, more blinking. Lots of it…"
       },
       {
         "id": "e30",
@@ -1363,11 +1341,11 @@
             3
           ],
           [
-            "jetboard",
+            "clothbolt",
             1
           ],
           [
-            "salonchair",
+            "puppets",
             1
           ]
         ],
@@ -1385,7 +1363,7 @@
           ],
           [
             "timmy",
-            "3 Little Aliens, a Jet Board and a Salon Chair, please."
+            "3 Little Aliens, a Space Helmet and a set of Alien Puppets, please. Puppets calm them down."
           ]
         ],
         "text": "The little visitors are safe, dry and very, very hungry. The Mayor is already drafting a Guest Garden Act."
@@ -1474,11 +1452,11 @@
             4
           ],
           [
-            "toothpot",
+            "alienkid",
             3
           ],
           [
-            "jetboard",
+            "saucerstall",
             1
           ]
         ],
@@ -1491,18 +1469,18 @@
           ],
           [
             "grandma",
-            "4 Grow Tubes, 3 Toothy Pots and a Jet Board, please."
+            "4 Grow Tubes, 3 Little Aliens and a Saucer Stall, please. The little ones can sell the greens."
           ]
         ],
-        "text": "The first tubes are full and green. One of the plants bit Ember. Ember is delighted."
+        "text": "The first tubes are full and green. The Blinkies sold every leaf. Ember bought them all back."
       },
       {
         "id": "e34",
-        "name": "The Biting Garden",
+        "name": "The Floating Garden",
         "who": "timmy",
         "needs": [
           [
-            "walkplant",
+            "speckegg",
             1
           ],
           [
@@ -1526,26 +1504,26 @@
         "talk": [
           [
             "timmy",
-            "The plants BITE! Best garden ever. Let's grow MORE biters!"
+            "The Blinkies want a garden that floats! On jetpacks! Best garden ever!"
           ],
           [
             "timmy",
-            "A Walking Plant, 2 Hydro Trays and a Flying Saucer, please."
+            "A Twin Jetpack, 2 Hydro Trays and a Flying Saucer, please."
           ]
         ],
-        "text": "A garden that waves back (and nibbles). The Jet Wreck is picked clean. Fly free, old jet! A Lens Workbench sets up shop."
+        "text": "A garden that hovers over the Meadow. The Jet Wreck is picked clean. Fly free, old jet! A Lens Workbench sets up shop."
       },
       {
         "id": "e35",
-        "name": "Bored Biters",
+        "name": "Bored Blinkies",
         "who": "grandma",
         "needs": [
           [
-            "arcadecab",
+            "vegcrate",
             1
           ],
           [
-            "walkplant",
+            "telescope",
             2
           ],
           [
@@ -1558,18 +1536,18 @@
         "talk": [
           [
             "grandma",
-            "Those biting plants nibble everyone who walks past. They're bored, dear. Like toddlers with teeth."
+            "The Blinkies are bored, dear. Bored Blinkies chew things. Like toddlers with antennae."
           ],
           [
             "timmy",
-            "Give them a video game! I'll test it first. Ow. They bit the joystick."
+            "Give them telescopes! I'll test one first. Ow. They chewed the eyepiece."
           ],
           [
             "grandma",
-            "An Arcade Cabinet, 2 Walking Plants and a Saucer Stall, please."
+            "A Grow Rack, 2 Brass Telescopes and a Saucer Stall, please."
           ]
         ],
-        "text": "The plants play arcade games all day and bite nobody. Everyone is late for everything, watching. The Mayor is furious."
+        "text": "The Blinkies stargaze all night and chew nobody. Everyone is late for everything, watching with them. The Mayor is furious."
       },
       {
         "id": "e36",
@@ -1617,7 +1595,7 @@
             1
           ],
           [
-            "snapper",
+            "vegcrate",
             1
           ]
         ],
@@ -1636,22 +1614,22 @@
           ],
           [
             "bloop",
-            "A Brass Telescope, an Alarm Bot and a Triple Snapper, please. The plant insisted."
+            "A Brass Telescope, an Alarm Bot and a Grow Rack, please. Plants like stars too."
           ]
         ],
         "text": "Lenses polished. The Suit Loom ties its last knot. Thanks, stitchy friend! And out of a burrow crawl glowbugs."
       },
       {
         "id": "e38",
-        "name": "Bones in the Burrow",
+        "name": "Glowbug Night",
         "who": "bloop",
         "needs": [
           [
-            "babydino",
+            "flutter",
             2
           ],
           [
-            "crystaldino",
+            "telescope",
             1
           ],
           [
@@ -1665,18 +1643,18 @@
         "talk": [
           [
             "bloop",
-            "The glowbug burrow is full of bones. Big ones. Your planet had dinosaurs? And you let them go? Blorp."
+            "The burrow is full of glowbugs. On my world they are sky maps that wriggle. Blorp."
           ],
           [
             "timmy",
-            "I'll ride one! The baby one. Okay, the egg."
+            "I'll catch one! The small one. Okay, it caught me."
           ],
           [
             "bloop",
-            "2 Baby Dinos, a Crystal Dino and a Pendulum Clock, please. The clock tells us how old they are."
+            "2 Glowbugs, a Brass Telescope and a Pendulum Clock, please. The clock tells us when they wake."
           ]
         ],
-        "text": "A little dino museum! The baby dinos snore. As night falls, the glowbugs creep out to see them. Nana gasps."
+        "text": "A glowbug watch party! As night falls, the bugs drift up in shapes, just like stars. Nana gasps."
       },
       {
         "id": "e39",
@@ -1755,11 +1733,11 @@
         "who": "timmy",
         "needs": [
           [
-            "jellylamp",
+            "alarmbot",
             2
           ],
           [
-            "longneck",
+            "koipair",
             1
           ],
           [
@@ -1772,7 +1750,7 @@
         "talk": [
           [
             "timmy",
-            "The new Slime Pond has fish! Three eyes each! They can watch me from every angle. Finally, fans!"
+            "The new Slime Pond has slime frogs! Three eyes each! They can watch me from every angle. Finally, fans!"
           ],
           [
             "bloop",
@@ -1780,7 +1758,7 @@
           ],
           [
             "timmy",
-            "2 Jelly Lamps, a Longneck and a Saucer Stall, please. The Longneck wants to watch."
+            "2 Alarm Bots, a Slime Fountain and a Saucer Stall, please. The frogs need wake-up calls."
           ]
         ],
         "text": "The pond glows at night now. Dr. Zonk stares at the stars in the water for hours. He looks a little homesick."
@@ -1832,7 +1810,7 @@
             1
           ],
           [
-            "bathbomb",
+            "hourglass",
             2
           ],
           [
@@ -1855,7 +1833,7 @@
           ],
           [
             "timmy",
-            "A Slime Jar, 2 Planet Bath Bombs and an Alien Explorer, please."
+            "A Slime Jar, 2 Star Hourglasses and an Alien Explorer, please. The party starts on time."
           ]
         ],
         "text": "Best slime party ever. The Blinkies leave the Crash Site and move in for good. Up the hill, a Cheese Mill creaks."
@@ -1866,15 +1844,15 @@
         "who": "mumbo",
         "needs": [
           [
-            "rocketcake",
+            "loaf",
             2
           ],
           [
-            "bakecart",
+            "swarm",
             1
           ],
           [
-            "jellylamp",
+            "pondfrog",
             1
           ]
         ],
@@ -1883,7 +1861,7 @@
         "talk": [
           [
             "mumbo",
-            "A rocket! Then we need a model. An edible model. Chef Gubbo will bake the rocket first, to scale."
+            "A rocket! Then we need a model. An edible model. Chef Gubbo will carve the rocket first, in cheese, to scale."
           ],
           [
             "bloop",
@@ -1891,10 +1869,10 @@
           ],
           [
             "mumbo",
-            "2 Rocket Cakes, a Bake Cart and a Jelly Lamp, please. Mood lighting for the unveiling."
+            "2 Cheese Wheels, a Bug Jar and a Slime Frog, please. Mood lighting and a judge."
           ]
         ],
-        "text": "The model rocket was eaten in four minutes. Dr. Zonk took notes. Gubbo eyes the creaky mill up the hill: \"Cheese next…\""
+        "text": "The cheese rocket was eaten in four minutes. Dr. Zonk took notes. Gubbo eyes the creaky mill up the hill: \"More cheese…\""
       },
       {
         "id": "e45",
@@ -1910,7 +1888,7 @@
             1
           ],
           [
-            "rockettub",
+            "vegbundle",
             1
           ]
         ],
@@ -1924,18 +1902,18 @@
           ],
           [
             "mumbo",
-            "4 Cheese Wedges, a Slime Frog and a Rocket Tub, please. Clean hands, clean cheese!"
+            "4 Cheese Wedges, a Slime Frog and a Hydro Tray, please. Fresh greens on the side!"
           ]
         ],
         "text": "Moon cheese for everyone! The smell drifted very, very far. A very posh guest is on her way…"
       },
       {
         "id": "e46",
-        "name": "Bath Night",
+        "name": "The Duchess Arrives",
         "who": "pim",
         "needs": [
           [
-            "rockettub",
+            "telescope",
             1
           ],
           [
@@ -1958,30 +1936,30 @@
         "talk": [
           [
             "pim",
-            "Duchess Splatt. I followed that cheese across three galaxies. Now I require a proper bath."
+            "Duchess Splatt. I followed that cheese across three galaxies. Now I require a proper welcome."
           ],
           [
             "pim",
-            "A Rocket Tub, a Cheese Wheel and a Glowbug Queen, please. Pinkies up."
+            "A Brass Telescope, a Cheese Wheel and a Glowbug Queen, please. Pinkies up."
           ]
         ],
-        "text": "Bubbles everywhere. The Hydro Bed drains for a rest. Well grown, old bed! A little Weather Cloud settles on the hill."
+        "text": "A welcome fit for a duchess. The Hydro Bed drains for a rest. Well grown, old bed! A little Weather Cloud settles on the hill."
       },
       {
         "id": "e47",
-        "name": "Cloud Sheep",
+        "name": "A Private Shower",
         "who": "pim",
         "needs": [
           [
-            "rainbowsheep",
+            "raincloud2",
             2
           ],
           [
-            "sheepmum",
+            "loaf",
             1
           ],
           [
-            "bathhouse",
+            "timechair",
             1
           ]
         ],
@@ -1990,18 +1968,18 @@
         "talk": [
           [
             "pim",
-            "That little cloud brought sheep. One requires a robe of cloud wool. And a proper bathhouse."
+            "That little cloud makes rain. I require a private shower. Warm, and on time."
           ],
           [
             "gigi",
-            "Darling, cloud wool is SO in this season. It rains on you, but stylishly."
+            "Darling, rain is SO in this season. It falls on you, but stylishly."
           ],
           [
             "pim",
-            "2 Rainbow Sheep, a Sheep Mum and a Bathhouse, please. Pinkies up."
+            "2 Zap Clouds, a Cheese Wheel and a Time Chair, please. Pinkies up."
           ]
         ],
-        "text": "The Duchess bathed for six hours. When she got out, the Slime Pond was nearly empty. The frogs are not amused."
+        "text": "The Duchess showered for six hours. When she got out, the Slime Pond was nearly empty. The frogs are not amused."
       },
       {
         "id": "e48",
@@ -2027,7 +2005,7 @@
         "talk": [
           [
             "bloop",
-            "The Duchess used the whole pond for her bath. On my world, we ask the sky nicely."
+            "The Duchess used the whole pond for her shower. On my world, we ask the sky nicely."
           ],
           [
             "bloop",
@@ -2080,15 +2058,15 @@
         "who": "biscuit",
         "needs": [
           [
-            "rocketeasel",
+            "urn",
             2
           ],
           [
-            "aliensculpt",
+            "rainbowcloud",
             1
           ],
           [
-            "rainbowsheep",
+            "flutter",
             1
           ]
         ],
@@ -2098,7 +2076,7 @@
         "talk": [
           [
             "biscuit",
-            "Every great town has a statue of its mayor. Ours has a goo pit. Close enough. Art Club, assemble!"
+            "Every great town has a statue of its mayor. Ours has a goo pit. Close enough. Sculpt me!"
           ],
           [
             "bloop",
@@ -2106,10 +2084,10 @@
           ],
           [
             "biscuit",
-            "2 Rocket Easels, an Alien Statue and a Rainbow Sheep, please. The statue needs a HAT."
+            "2 Orbit Urns, an Aurora Cloud and a Glowbug, please. The statue needs a HAT."
           ]
         ],
-        "text": "The statue looks like a sheep in a hat. The Mayor loves it. Sirra wants the leftover goo, darling. For bowls."
+        "text": "The goo statue looks like an urn in a hat. The Mayor loves it. Sirra wants the leftover goo, darling. For bowls."
       },
       {
         "id": "e51",
@@ -2125,7 +2103,7 @@
             1
           ],
           [
-            "hottub",
+            "koipair",
             1
           ]
         ],
@@ -2138,7 +2116,7 @@
           ],
           [
             "gigi",
-            "3 Orbit Urns, an Aurora Cloud and a Hot Tub, please."
+            "3 Orbit Urns, an Aurora Cloud and a Slime Fountain, please."
           ]
         ],
         "text": "Sirra ordered twelve goo vases. The Duchess wants to show off her pots. Publicly."
@@ -2188,7 +2166,7 @@
         "who": "bloop",
         "needs": [
           [
-            "postdrone",
+            "picnicblanket",
             2
           ],
           [
@@ -2196,7 +2174,7 @@
             1
           ],
           [
-            "bubblefish",
+            "breadbasket",
             1
           ]
         ],
@@ -2213,7 +2191,7 @@
           ],
           [
             "bloop",
-            "2 Post Drones, a Nebula Vase and a Walking Fish, please. The fish licks the stamps."
+            "2 Crate Stacks, a Nebula Vase and a Cheese Stack, please. Presents travel better than postcards."
           ]
         ],
         "text": "Postcards sent! Then the Cargo Pod opens, and out climbs a small alien in a large hat. With legs. Many legs."
@@ -2406,7 +2384,7 @@
         "who": "blorb",
         "needs": [
           [
-            "postrocket",
+            "petbasket",
             1
           ],
           [
@@ -2414,7 +2392,7 @@
             1
           ],
           [
-            "bubbletrumpet",
+            "drum",
             2
           ]
         ],
@@ -2432,10 +2410,10 @@
           ],
           [
             "blorb",
-            "A Post Rocket, a Blob Bed and 2 Bubble Horns, please. The horns are for the fanfare."
+            "A Charging Basket, a Blob Bed and 2 Planet Drums, please. The drums are for the fanfare."
           ]
         ],
-        "text": "Fanfare blown! The Busker Bot joined in with its one chord. Over and over. Somebody, please, teach it more."
+        "text": "Fanfare drummed! The Busker Bot joined in with its one chord. Over and over. Somebody, please, teach it more."
       },
       {
         "id": "e60",
@@ -2475,7 +2453,7 @@
         "who": "gigi",
         "needs": [
           [
-            "tripodcam",
+            "blobpup",
             2
           ],
           [
@@ -2499,14 +2477,14 @@
         "talk": [
           [
             "gigi",
-            "Darling, other planets will never believe this village. We need pictures."
+            "Darling, other planets will never believe this village. We need a portrait. Everyone, pose!"
           ],
           [
             "gigi",
-            "2 Tripod Cams, a Planet Drum and a Container, please. Chef, say cheese!"
+            "2 Blobbos, a Planet Drum and a Container, please. Chef, say cheese!"
           ]
         ],
-        "text": "Photos on every wall. The Weather Cloud drifts off. Thanks for the rain! And the old Scrap Hull is full of rocket bits."
+        "text": "A portrait on every wall. The Weather Cloud drifts off. Thanks for the rain! And the old Scrap Hull is full of rocket bits."
       },
       {
         "id": "e62",
@@ -2514,15 +2492,15 @@
         "who": "pip",
         "needs": [
           [
-            "scopetreehouse",
+            "nosecone",
             2
           ],
           [
-            "aliensculpt",
+            "kiln",
             1
           ],
           [
-            "postdrone",
+            "picnicblanket",
             1
           ]
         ],
@@ -2539,7 +2517,7 @@
           ],
           [
             "pip",
-            "2 Scope Treehouses, an Alien Statue and a Post Drone, please."
+            "2 Porthole Cones, a Rocket Kiln and a Crate Stack, please. Portholes make great windows."
           ]
         ],
         "text": "From the lookout, Zib spots every bolt in the hull. Dr. Zonk climbs up, sniffles, and says: \"My ship. Let's sort it.\""
@@ -2554,7 +2532,7 @@
             3
           ],
           [
-            "tripodcam",
+            "robodragon",
             1
           ],
           [
@@ -2571,7 +2549,7 @@
           ],
           [
             "bloop",
-            "3 Porthole Cones, a Tripod Cam and a Blob Bed, please. Blobbo knows where the bolts are hidden."
+            "3 Porthole Cones, a Robo Dragon and a Blob Bed, please. Blobbo knows where the bolts are hidden."
           ]
         ],
         "text": "A pile of parts, sorted by Dr. Zonk, re-sorted by the Blinkies. Ember says a launch needs a band."
@@ -2590,7 +2568,7 @@
             1
           ],
           [
-            "tripodcam",
+            "blobpup",
             1
           ]
         ],
@@ -2607,7 +2585,7 @@
           ],
           [
             "timmy",
-            "A UFO Jukebox, a Porthole Cone and a Tripod Cam, please."
+            "A UFO Jukebox, a Porthole Cone and a Blobbo, please."
           ]
         ],
         "text": "The band is terrible and wonderful. The Goo Pit dries up. Bye, gloopy pal! Every pet in the Meadow heard. Uh-oh."
@@ -2618,11 +2596,11 @@
         "who": "biscuit",
         "needs": [
           [
-            "twistslide",
+            "drum",
             2
           ],
           [
-            "bouncycastle",
+            "booster",
             1
           ],
           [
@@ -2643,7 +2621,7 @@
           ],
           [
             "biscuit",
-            "2 Twisty Slides, a Rocket Bouncer and a Charging Basket, please. Lure them outside!"
+            "2 Planet Drums, a Booster and a Charging Basket, please. Lure them outside with a beat!"
           ]
         ],
         "text": "Pets out, town hall saved. But the pets won't go home. They have decided to stay until the launch. All of them."
@@ -2686,7 +2664,7 @@
         "who": "gigi",
         "needs": [
           [
-            "camdrone",
+            "lemonadeset",
             1
           ],
           [
@@ -2707,14 +2685,14 @@
         "talk": [
           [
             "gigi",
-            "Every traveller needs photos of home, darling. Even the ones with Ember pulling faces."
+            "Every traveller needs something from home, darling. Even if it's Ember pulling faces."
           ],
           [
             "gigi",
-            "A Camera Drone, a Booster and a Blobbo, please."
+            "A Container, a Booster and a Blobbo, please."
           ]
         ],
-        "text": "An album for the trip. The Cargo Pod flies off with the last parcel. Safe skies! Now: who minds the Meadow while we're away?"
+        "text": "Bags packed for the trip. The Cargo Pod flies off with the last parcel. Safe skies! Now: who minds the Meadow while we're away?"
       },
       {
         "id": "e68",
@@ -2726,11 +2704,11 @@
             1
           ],
           [
-            "bubbleorgan",
+            "pupbed",
             1
           ],
           [
-            "stiltfort",
+            "jukebox",
             1
           ]
         ],
@@ -2744,14 +2722,14 @@
           ],
           [
             "gigi",
-            "A send-off needs music, darling. Bubbles. Possibly a fort. Don't ask why, just trust me."
+            "A send-off needs music, darling. And somewhere cosy for the pets."
           ],
           [
             "grandma",
-            "A Pet Hotel, a Bubble Organ and a Stilt Fort, please."
+            "A Pet Hotel, a Blob Bed and a UFO Jukebox, please."
           ]
         ],
-        "text": "A Pet Hotel, a bubble send-off and a fort to wave from. Zib wipes a tear and grabs a flag: \"One last parade!\""
+        "text": "A Pet Hotel, a cosy bed and a jukebox send-off. Zib wipes a tear and grabs a flag: \"One last parade!\""
       },
       {
         "id": "e69",
@@ -2767,7 +2745,7 @@
             1
           ],
           [
-            "camdrone",
+            "petbasket",
             1
           ]
         ],
@@ -2780,7 +2758,7 @@
           ],
           [
             "pip",
-            "A UFO Jukebox, a Blob House and a Camera Drone, please."
+            "A UFO Jukebox, a Blob House and a Charging Basket, please."
           ]
         ],
         "text": "\"Nearly there,\" says Dr. Zonk, patting the rocket. A fin falls off. \"…Nearly-ish.\" One last push!"
@@ -2803,7 +2781,7 @@
             1
           ],
           [
-            "camera",
+            "robocat",
             1
           ]
         ],
@@ -2826,7 +2804,7 @@
           ],
           [
             "bloop",
-            "A Porthole Cone, a Planet Drum, a Blobbo and a Space Camera, please."
+            "A Porthole Cone, a Planet Drum, a Blobbo and a Robo Cat, please."
           ]
         ],
         "text": "The rocket stands tall and Sunny Meadow is wide awake. A Weather Balloon floats up to wave goodbye. Next: the Moon!"

@@ -97,3 +97,66 @@ One image: a grid of 2×1, transparent background, one per cell, each a wide fla
 1. a tab made of frosted glass with a thin glowing rim, unselected
 2. the same tab, selected, glowing brightly
 ```
+
+## Story characters, redrawn to match the player and villagers (replace the old portraits)
+
+Full body, standing, facing forward. Each one gets its own look, so none of them share a drawing any more.
+
+**CH-6. sheet_cast_meadow_a**
+
+```
+One image: a grid of 4×1, transparent background, one per cell, each a different alien character, full body, standing, facing forward:
+1. Zib, a young scout: a small green alien with big pointed ears, aviator goggles pushed up on its head, a red scarf and a satchel stuffed with rolled-up maps, eager curious face
+2. Nana Luma, a kind grandmother: a pink jellyfish alien with flowing tentacles, a little flower crown, round reading glasses and a knitted shawl, warm gentle face
+3. Ember, a cheeky boy made of living fire: a small flame alien wearing smoking boots, big excited eyes, a mischievous grin
+4. Sirra, a glamorous stylist: an elegant coral fish alien with a swept fin hairdo, a shimmering gown and a comb in one hand, one eyebrow raised
+```
+
+**CH-7. sheet_cast_meadow_b**
+
+```
+One image: a grid of 4×1, transparent background, one per cell, each a different alien character, full body, standing, facing forward:
+1. Mayor Marin, a pompous mayor: a stout blue alien with a big walrus moustache, a mayor's sash and a chain of office, no hat, chest puffed out, one finger raised as if giving a speech
+2. Chef Gubbo, a cook: a big round red alien in an apron and a tall chef's hat, holding a ladle, licking its lips
+3. Duchess Splatt, a posh noble: a green octopus alien with a pearl necklace, a tiny tiara and a lorgnette, nose in the air
+4. Dr. Zonk, an old scientist: a grey alien with a big glass dome head showing a glowing brain, a lab coat and a bubbling flask, absent-minded look
+```
+
+**CH-8. sheet_cast_helpers**
+
+```
+One image: a grid of 4×1, transparent background, one per cell, each a different alien character, full body, standing, facing forward:
+1. Postie Blorb, a mail carrier: a six-legged blue alien with a postman's cap and an overflowing mail bag, out of breath
+2. Kix, a little trader: a small mint blob alien with a huge backpack covered in trinkets and a jeweller's loupe over one eye
+3. Moonbeam, a moon dweller: a pale glowing moth-like alien with soft feathery antennae, holding a small lantern, calm dreamy face
+4. Rokk, a robot butler: a tall polite robot with a round head, one round eye lens, a bow tie and a clipboard
+```
+
+**CH-9. sheet_cast_worlds_a**
+
+```
+One image: a grid of 4×1, transparent background, one per cell, each a different alien character, full body, standing, facing forward:
+1. Nix, a collector: a thin violet crystal alien in a fancy long coat, holding a magnifying glass, sly look
+2. Vulk, a blacksmith: a huge alien made of rock with glowing lava cracks, a leather apron and a giant hammer resting on its shoulder, gruff face
+3. Fizz, a fire sprite: a small round ball of fire with tiny hands and a spark trail for a tail, playful sneaky look
+4. Harbourmaster Brine, an old sailor: a blue fish alien with a captain's cap, a thick white beard and a pipe shaped like a shell, squinting into the distance
+```
+
+**CH-10. sheet_cast_worlds_b**
+
+```
+One image: a grid of 5×1, transparent background, one per cell, each a different alien character, full body, standing, facing forward:
+1. Kelpa, a gardener: a tall seaweed alien with leafy hair and a little rake, sleepy relaxed face
+2. Pearl, a singer: a graceful coral fish alien holding a pearl up to her ear, eyes closed, listening
+3. Zephyr, a pilot: a fluffy white cloud alien with aviator goggles and a long red scarf blowing in the wind, arms spread wide
+4. Halo, a seer: a tall slender crystal alien with a glowing ring floating above its head, serene face
+5. Wren, an explorer: a tall golden bird-like alien with a crest of feathers and a nest-shaped hat, excited pose
+```
+
+## Producer redraw
+
+**PR-1. meteor_crater**
+
+```
+One image, transparent background, a game producer object, centered, no text: a small smoking meteor crater in the ground with a glowing space rock half buried in the middle, a few bits of shiny star scrap and little sparks around the rim
+```

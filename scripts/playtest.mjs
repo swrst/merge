@@ -179,7 +179,7 @@ after = await S();
 must(after.up.energy === 1, 'Bigger Backpack bought');
 must(after.coins < before, 'upgrade cost coins');
 const maxTxt = await page.locator('#energy').textContent();
-must(maxTxt.endsWith('/60'), `max energy grew to ${maxTxt.split('/')[1]} (40 + 2x5 + 10)`);
+must(maxTxt.endsWith('/70'), `max energy grew to ${maxTxt.split('/')[1]} (50 + 2x5 + 10)`);
 before = await page.evaluate(() => window.__game.orderSlots());
 await page.locator('#shopBody [data-up="orders"]').click(); await page.waitForTimeout(500);
 must(await page.evaluate(() => window.__game.orderSlots()) === before + 1,

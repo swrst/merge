@@ -583,6 +583,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const add = (k: string, tab: string, n: number, icon: string, say: string, go: () => void, quiet = false) => { if (n > 0) out.push({ k, tab, n, icon, say, go, quiet }); };
     const ar = achReady(), td = tasksDone();
     add('ach', 'Rocket', ar, ART.uiIcon('ic_trophy', '🏆'), ar > 1 ? `${ar} achievements to claim` : 'Achievement ready to claim', () => setView('rocket'));
+    { const cc = Object.keys(CHAINS).filter(k => CHAINS[k].world !== 'ship' && CHAINS[k].items.every(id => S.seen[id]) && !(S.cclaim && S.cclaim[k])).length;
+      add('cclaim', 'Book', cc, ART.uiIcon('ic_album', '📖'), cc > 1 ? `${cc} chains complete — collect your medals` : 'Chain complete — collect your medal', () => setView('book')); }
     add('task', 'Rocket', td, ART.uiIcon('cl_tasks', '✅'), 'Daily task done — reward waiting', () => setView('rocket'));
     add('disc', 'Book', (S.disc || []).length, ART.uiIcon('badge_new', '🆕'), 'New discovery in your Album', () => setView('book'));
     add('shop', 'Shop', shopOpen() && giftReady() ? 1 : 0, ART.uiIcon('cl_gift', '🎁'), 'Free gift in the Star Bazaar', () => setView('shop'));
@@ -1018,6 +1020,15 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
   /* ================================================================ ORDERS */
   let oid = 1;
+  /** which producer feeds a chain (its first item's source); chains with no producer count as themselves */
+  const chainProdCache: Record<string, string> = {};
+  function prodOfChain(ck: string): string {
+    if (chainProdCache[ck]) return chainProdCache[ck];
+    const base = CHAINS[ck] ? CHAINS[ck].items[0] : '';
+    let k = 'c:' + ck;
+    for (const key in PRODS) if (PRODS[key].drops.indexOf(base) >= 0) { k = key; break; }
+    return (chainProdCache[ck] = k);
+  }
   function rollOrder() {
     // only ask for things the player can actually make right now: a chain counts
     // if one of its producers is sitting on the board
@@ -1039,7 +1050,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // one step up every four levels: a tier-7 ask at level 8 was an hour of waiting
     // a producer you have upgraded all the way earns harder (better-paid) asks from its chains
     // the first fifteen Meadow chapters never ask past step 3: you are still learning the chains
-    const reach = (ck: string) => clamp(Math.min((early ? 2 : 3) + Math.floor((wl - 1) / 5) + ((plvOf[ck] || 0) >= PMAX ? 1 : 0), pd < 15 ? (early ? 2 : 3) : 99), 2,
+    const reach = (ck: string) => clamp(Math.min((early ? 2 : 3) + Math.floor((wl - 1) / 7) + ((plvOf[ck] || 0) >= PMAX ? 1 : 0), pd < 15 ? (early ? 2 : 3) : 99), 2,
       Math.max(2, CHAINS[ck].items.length - 1));
     const itemFrom = (ck: string, cap?: number) => {
       const top = Math.min(reach(ck), cap ?? 99), lo = early ? 1 : Math.max(2, top - 1);
@@ -1058,19 +1069,24 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // everyday villagers (once painted) mix in, so the board is not three of the same face
     const vils = ['vil1', 'vil2', 'vil3', 'vil4', 'vil5', 'vil6', 'vil7', 'vil8'].filter(v => ART.spriteChar(v + '_full') && busy.indexOf(v) < 0);
     const char = vils.length && (!pickFrom.length || Math.random() < 0.45) ? rnd(vils) : rnd(pickFrom.length ? pickFrom : (fans.length ? fans : folks));
-    const theirs = open.filter(c => (CHARS[char].likes || []).indexOf(c) >= 0);
-    const chains = theirs.length ? theirs : open;
+    /* Never the same producer twice in a row: a contract does not ask for a chain whose
+       producer an open contract already uses, or that the last delivered one used. */
+    const blocked = new Set<string>([...S.orders.flatMap((o: any) => o.needs.map((nd: any) => prodOfChain(ITEMS[nd.id].chain))), ...((S.lastProds || []) as string[])]);
+    const freeOpen = open.filter(c => !blocked.has(prodOfChain(c)));
+    const open2 = freeOpen.length ? freeOpen : open;
+    const theirs = open2.filter(c => (CHARS[char].likes || []).indexOf(c) >= 0);
+    const chains = theirs.length ? theirs : open2;
     let chain = rnd(chains);
     let pick = itemFrom(chain);
     // the odd special request: a relic. Never a rocket piece or star scrap —
     // those get used up elsewhere, and a contract for one could wait forever.
     if (S.seen.relic1 && Math.random() < 0.08) { pick = 'relic1'; chain = 'relic'; }
     const d = ITEMS[pick];
-    const needs = [{ id: pick, qty: d.tier >= 4 ? 1 : d.tier === 3 ? (Math.random() < 0.35 ? 2 : 1) : 2 }];
+    const needs = [{ id: pick, qty: d.tier >= 3 ? 1 : 2 }];
     // more things from other chains the same person cares about (or any awake one)
-    const pool = chains.length > 1 ? chains : open;
-    const extra = early ? 0 : pd < 15 ? (Math.random() < 0.3 ? 1 : 0) : (Math.random() < Math.min(0.75, 0.35 + S.lvl * 0.03) ? 1 : 0)
-      + (S.lvl >= 8 && Math.random() < 0.3 ? 1 : 0);
+    const pool = chains.length > 1 ? chains : open2;
+    const extra = early ? 0 : pd < 15 ? (Math.random() < 0.2 ? 1 : 0) : (Math.random() < Math.min(0.5, 0.2 + S.lvl * 0.02) ? 1 : 0)
+      + (S.lvl >= 14 && Math.random() < 0.15 ? 1 : 0);
     for (let k = 0; k < extra; k++) {
       const left = pool.filter(c => c !== chain && !needs.some(nd => ITEMS[nd.id].chain === c));
       if (!left.length) break;
@@ -1152,6 +1168,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (cardXY) { flyCoins(cardXY, o.coins, 380); flyXp(cardXY, 480); }
     const idx = S.orders.findIndex(x => x.id === id);
     S.orders.splice(idx, 1);
+    S.lastProds = [...new Set(o.needs.map((nd: any) => prodOfChain(ITEMS[nd.id].chain)))];   // the next contract asks for something else
     S.orderCap = undefined;
     // keep at least the floor filled straight away; the rest drift in on the timer
     if (S.orders.length < Math.min(CONFIG.orders.minSlots, orderSlots())) fillOrders();
@@ -1530,6 +1547,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   /* ============================================================== SCREENS */
   const SCREENS = ['shop', 'lab', 'rocket', 'book', 'map'];
   function setView(v: string) {
+    setTimeout(() => document.querySelectorAll<HTMLElement>('.screen.open .scTitle').forEach(fitRibbon), 80);
     if (v !== 'board') { hideInfo(); sel = null; board.setSelected(null); }   // the item bar belongs to the board
     if (v === 'fun') { if (view !== 'board') setView('board'); funPop(); return; }
     if (popOpen()) closePop();
@@ -2144,9 +2162,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       const ch = CHAINS[k], known = ch.items.filter(id => S.seen[id]);
       const best = known.length ? known[known.length - 1] : ch.items[0];
       const done = known.length === ch.items.length;
-      return `<button class="aTile${locked ? ' locked' : ''}${done ? ' done' : ''}" data-chain="${k}">
+      const claim = done && !(S.cclaim && S.cclaim[k]);
+      return `<button class="aTile${locked ? ' locked' : ''}${done ? ' done' : ''}${claim ? ' claim' : ''}" data-chain="${k}">
         <span class="aArt${known.length ? '' : ' unk'}">${known.length ? ART.item(best) : '?'}</span>
-        <b>${ch.name}</b><i>${locked ? '🔒 lv ' + locked : done ? '★ complete' : known.length + '/' + ch.items.length}</i></button>`;
+        <b>${ch.name}</b><i>${locked ? '🔒 lv ' + locked : claim ? '🎁 Claim!' : done ? '★ complete' : known.length + '/' + ch.items.length}</i></button>`;
     };
     const here = Object.keys(CHAINS).filter(k => CHAINS[k].world === albumWorld);
     const awake = albumWorld === S.world ? liveChains() : here.filter(k => CHAINS[k].items.some(id => S.seen[id]));
@@ -2171,7 +2190,14 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const cda = $('#claimDiscAd'); if (cda) cda.onclick = () => watchAd('disc', () => claimDisc(2));
     host.querySelectorAll('[data-aw]').forEach((b: any) => b.onclick = () => { albumWorld = b.dataset.aw; sfx.tap(); renderBook(); });
     host.querySelectorAll('[data-chain]').forEach((b: any) => b.onclick = () => {
-      const ch = CHAINS[b.dataset.chain], known = ch.items.filter(id => S.seen[id]);
+      const ck = b.dataset.chain, ch = CHAINS[ck], known = ch.items.filter(id => S.seen[id]);
+      if (known.length === ch.items.length && !(S.cclaim && S.cclaim[ck])) {
+        // a finished chain is a collectable: a medal on its tile and a reward, once
+        (S.cclaim = S.cclaim || {})[ck] = 1; save(); renderBook();
+        rewardCard(ART.item(ch.items[ch.items.length - 1]), `${ch.name} complete!`, 'Every step of this chain is in your collection. It gets a medal on its tile.',
+          { coins: 40 * ch.items.length, gems: 3 + Math.floor(ch.items.length / 2), energy: 10 });
+        return;
+      }
       sfx.tap(); chainPanel(known.length ? known[known.length - 1] : ch.items[0]);
     });
   }
@@ -2361,7 +2387,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const list = CONFIG.daily.rewards;
     const yesterday = dayKey(new Date(Date.now() - 86400000));
     S.daily.day = S.daily.key === yesterday ? (S.daily.day % list.length) + 1 : 1;
-    S.daily.key = today;
+    S.daily.key = today; stat('days');
     const r = list[S.daily.day - 1];
     dailyReward(r);
     sfx.coin(); confetti();
@@ -2590,7 +2616,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (lv >= PMAX) { sfx.no(); toast(p.name + ' is as good as it gets.'); return; }
     const price = upCost(p, lv);
     if (S.coins < price) { sfx.no(); toast('Needs ' + price + ' 🪙 — you have ' + S.coins + '.'); return; }
-    spend(price);
+    spend(price); stat('up');
     c.lv = lv + 1;
     c.ch = capOf(p, c.lv);                                  // a fresh battery, on the house
     c.at = Date.now();
@@ -2783,9 +2809,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   /** contracts to deliver before a chapter can be built: the story gets steeper as you go — 3, then 5, 7 and 10 */
   const cNeed = (p?: any) => {
     const k = projDone(), n = projList().length || 50, f = k / n;
-    if (p && p.launch) return 10;
-    if (k < 2) return k + 1;                       // the first two chapters teach it
-    return f < 0.24 ? 3 : f < 0.5 ? 5 : f < 0.8 ? 7 : 10;
+    if (p && p.launch) return 6;
+    if (k < 3) return 1;                           // the first chapters teach it
+    return f < 0.24 ? 2 : f < 0.5 ? 3 : f < 0.8 ? 4 : 5;
   };
   const cHave = () => (S.cSince && S.cSince[S.world]) || 0;
   /* A new producer only comes once the ones you have are grown all the way:
@@ -2796,7 +2822,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      remembered per chapter, so finishing it never reveals another one. */
   function upNeeds(p: any): { k: string; lv: number }[] {
     if (!p || !scripted()) return [];
-    const k = projList().indexOf(p); if (k < 5 || k % 2 === 0) return [];
+    const k = projList().indexOf(p); if (k < 7 || k % 3 !== 0) return [];   // v66: every third chapter, from chapter 8
     S.upAsk = S.upAsk || {};
     const lvOf = (key: string) => { let lv = 0; B().forEach((c: any) => { if (c && c.p === key && !c.tmp) lv = Math.max(lv, plv(c)); }); stored().forEach((c: any) => { if (c.p === key) lv = Math.max(lv, c.lv || 1); }); return lv; };
     let ask = S.upAsk[p.id];
@@ -3593,10 +3619,29 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
   /* ------------------------------------------------------- generic popup */
   let popClose: (() => void) | null = null;
+  /** a ribbon title never runs past its ribbon: shrink the type until it fits the box (wings stay clear) */
+  function fitRibbon(el: HTMLElement | null) {
+    if (!el) return;
+    el.style.fontSize = ''; el.style.paddingLeft = ''; el.style.paddingRight = '';
+    requestAnimationFrame(() => {
+      const box = el.parentElement as HTMLElement; if (!box || !box.clientWidth) return;
+      const max = Math.min(box.clientWidth * 0.96, 330);
+      // the ribbon art has wings: keep the words inside its middle 60%
+      const fit = () => {
+        const cs = getComputedStyle(el), padNow = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+        const tw = el.scrollWidth - padNow, pad = Math.max(30, Math.round(tw * 0.3));
+        el.style.paddingLeft = el.style.paddingRight = pad + 'px';
+        return tw + pad * 2;
+      };
+      let fs = parseFloat(getComputedStyle(el).fontSize) || 15, n = 0;
+      while (fit() > max && fs > 10 && n++ < 20) { fs -= 0.5; el.style.fontSize = fs + 'px'; }
+    });
+  }
   function pop(title: string, html: string, cls = '', onClose?: () => void) {
     $('#popTitle').innerHTML = title;
     $('#popBody').innerHTML = html;
     $('#pop').className = 'pop open ' + cls;
+    fitRibbon($('#popTitle'));
     popClose = onClose || null;
     sfx.open();
     { const rb = document.getElementById('ribbon'); if (rb && rb.className === 'show') rb.className = 'hide'; }
@@ -3665,7 +3710,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const v = sciOf(c.id);
     S.sci += v; sfx.discover(); haptic('light');
     floatText(i, '+' + v + ' 🧪', '#c9b3ff'); sparkle(i, 10, '#c9b3ff');
-    b[i] = null; sel = null; tally('sell');
+    b[i] = null; sel = null; tally('sell'); stat('recycle');
     paintCell(i); renderHUD(); renderOrders(); save();
   }
   let labTab = 'research';
@@ -3838,7 +3883,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const b = B(); let got = 0, n = 0;
     ids.forEach(id => { for (let i = 0; i < N; i++) if (b[i] && b[i].id === id) { got += sciOf(id); b[i] = null; n++; sparkle(i, 8, '#c9b3ff'); break; } });
     if (!n) return;
-    S.sci += got; sfx.discover(); haptic('light'); tally('sell');
+    S.sci += got; sfx.discover(); haptic('light'); tally('sell'); stat('recycle', n);
     toast(`♻️ Recycled ${n} spare${n > 1 ? 's' : ''}: <b>+${got} 🧪</b>`);
     paintBoard(); renderLab(); renderHUD(); renderOrders(); save();
   }
@@ -4045,6 +4090,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (spinning || !spinsLeft()) return;
     spinning = true;
     if (freeSpin()) S.spin.day = today(); else S.spin.tok--;
+    stat('spin');
     const seg = SP().segments, tot = seg.reduce((a: number, s: any) => a + s.w, 0);
     let r = Math.random() * tot, k = 0;
     while (r >= seg[k].w) { r -= seg[k].w; k++; }
@@ -4356,23 +4402,34 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
   /* ------------------------------------------------------- achievements */
   const stat = (k: string, n = 1) => { S.stats = S.stats || {}; S.stats[k] = (S.stats[k] || 0) + n; };
+  /** chains you have seen every step of */
+  const chainsDone = () => Object.keys(CHAINS).filter(k => CHAINS[k].world !== 'ship' && CHAINS[k].items.every(id => S.seen[id])).length;
+  const stv = (k: string) => (S.stats && S.stats[k]) || 0;
   const ACH = [
-    { id: 'merge', icon: '✨', name: 'Merge Master', d: 'Merge {n} times', at: [50, 250, 1000, 5000], v: () => (S.stats && S.stats.merge) || 0 },
-    { id: 'deliver', icon: '📦', name: 'Good Neighbour', d: 'Fill {n} contracts', at: [10, 50, 200, 800], v: () => (S.stats && S.stats.deliver) || 0 },
-    { id: 'seen', icon: '📖', name: 'Collector', d: 'Discover {n} items', at: [20, 60, 120, 250], v: () => Object.keys(S.seen).length },
-    { id: 'chest', icon: '🎁', name: 'Treasure Hunter', d: 'Open {n} chests', at: [5, 25, 100], v: () => (S.stats && S.stats.chest) || 0 },
-    { id: 'story', icon: '📜', name: 'Storyteller', d: 'Finish {n} chapters', at: [5, 16, 40], v: () => Object.values(S.proj || {}).reduce((a: number, b: any) => a + Math.min(b, 99), 0) as number },
+    { id: 'merge', icon: '✨', name: 'Merge Master', d: 'Merge {n} times', at: [25, 150, 600, 2500, 8000], v: () => stv('merge') },
+    { id: 'deliver', icon: '📦', name: 'Good Neighbour', d: 'Fill {n} contracts', at: [5, 25, 100, 400, 1000], v: () => stv('deliver') },
+    { id: 'seen', icon: '📖', name: 'Collector', d: 'Discover {n} items', at: [15, 50, 120, 250, 450], v: () => Object.keys(S.seen).length },
+    { id: 'chains', icon: '🏅', name: 'Chain Completer', d: 'Complete {n} chain{s}', at: [1, 5, 15, 30, 60], v: chainsDone },
+    { id: 'chest', icon: '🎁', name: 'Treasure Hunter', d: 'Open {n} chests', at: [3, 15, 60, 200], v: () => stv('chest') },
+    { id: 'story', icon: '📜', name: 'Storyteller', d: 'Finish {n} chapters', at: [3, 10, 25, 50, 100], v: () => Object.values(S.proj || {}).reduce((a: number, b: any) => a + Math.min(b, 99), 0) as number },
+    { id: 'planets', icon: '🪐', name: 'Explorer', d: 'Reach {n} planets', at: [2, 3, 4, 5], v: () => WORLD_ORDER.filter(w => S.boards && S.boards[w]).length },
+    { id: 'stars', icon: '🌟', name: 'Stargazer', d: 'Light {n} constellation{s}', at: [1, 3, 6, 10], v: () => CONSTS.filter(c => S.stars && S.stars[c.id]).length },
+    { id: 'up', icon: '🔧', name: 'Tinkerer', d: 'Upgrade producers {n} time{s}', at: [1, 5, 15, 40], v: () => stv('up') },
+    { id: 'feed', icon: '🐾', name: 'Pet Pal', d: 'Feed your pet {n} time{s}', at: [3, 15, 50, 150], v: () => stv('feed') },
+    { id: 'spin', icon: '🎡', name: 'Lucky Spinner', d: 'Spin the wheel {n} time{s}', at: [1, 10, 30, 100], v: () => stv('spin') },
+    { id: 'recycle', icon: '♻️', name: 'Recycler', d: 'Recycle {n} spares', at: [10, 50, 200, 600], v: () => stv('recycle') },
+    { id: 'days', icon: '📅', name: 'Regular', d: 'Play on {n} different days', at: [2, 7, 30, 100], v: () => stv('days') },
     { id: 'friend', icon: '❤️', name: 'Best Friends', d: 'Reach friendship {n} with anyone', at: [2, 3, 4, 5], v: () => Math.max(0, ...Object.keys(S.fr || {}).map(frLv)) },
-    { id: 'level', icon: '⭐', name: 'Rising Star', d: 'Reach level {n}', at: [5, 10, 20, 30], v: () => S.lvl },
+    { id: 'level', icon: '⭐', name: 'Rising Star', d: 'Reach level {n}', at: [5, 10, 15, 20, 30], v: () => S.lvl },
   ];
   const achTier = (a: any) => (S.ach && S.ach[a.id]) || 0;
   const achReady = () => ACH.filter(a => achTier(a) < a.at.length && a.v() >= a.at[achTier(a)]).length;
-  const achReward = (t: number): Reward => t === 0 ? { coins: 60, gems: 3 } : t === 1 ? { coins: 150, energy: 10, gems: 6 } : t === 2 ? { coins: 400, spin: 1, gems: 12 } : { coins: 900, spin: 2, gems: 25 };
+  const achReward = (t: number): Reward => t === 0 ? { coins: 60, energy: 5, gems: 3 } : t === 1 ? { coins: 150, energy: 10, gems: 6 } : t === 2 ? { coins: 400, spin: 1, gems: 12 } : t === 3 ? { coins: 900, spin: 2, gems: 25 } : { coins: 2000, spin: 3, gems: 40 };
   function achPop() {
     pop(`${ART.uiIcon('ic_trophy', '🏆')} Achievements`, `<div class="achList">${ACH.map(a => {
       const t = achTier(a), max = t >= a.at.length, need = a.at[Math.min(t, a.at.length - 1)], v = a.v(), ok = !max && v >= need;
       return `<div class="enRow ach${ok ? ' ready' : ''}"><span class="enIc">${a.icon}</span>
-        <div><b>${a.name} ${'★'.repeat(t)}<span class="achDim">${'★'.repeat(a.at.length - t)}</span></b><i>${max ? 'Complete!' : a.d.replace('{n}', String(need))}</i>
+        <div><b>${a.name} ${'★'.repeat(t)}<span class="achDim">${'★'.repeat(a.at.length - t)}</span></b><i>${max ? 'Complete!' : a.d.replace('{n}', String(need)).replace('{s}', need === 1 ? '' : 's')}</i>
           ${max ? '' : `<span class="achBar"><em style="width:${Math.min(100, Math.round(v / need * 100))}%"></em></span>`}</div>
         ${max ? '<span class="achDone">✓</span>' : `<button class="buyBtn" data-ach="${a.id}"${ok ? '' : ' disabled'}>${ok ? 'Claim' : Math.min(v, need) + '/' + need}</button>`}</div>`;
     }).join('')}</div>`, 'spin');
@@ -4871,7 +4928,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const b = B(), at = b.findIndex((c: any) => c && c.id === id); if (at < 0) return;
     if (petFood() >= PET_FULL) { sfx.no(); toast(`😋 ${petForm().name} is full! Feed it again in about ${Math.ceil((petFood() - PET_FULL + 1) * 8 / 100 * 60)} min.`); return; }
     const t = ITEMS[id].tier, xp = petFeedXp(t);
-    board.consume(at, id); b[at] = null;
+    board.consume(at, id); b[at] = null; stat('feed');
     pet().food = Date.now() - (100 - Math.min(100, petFood() + PET_MEAL)) * 8 * 36000;
     sfx.pop(); setTimeout(() => sfx.voice('pup', 2), 120); haptic('light');
     const st = $('#pupStage'); if (st) { st.classList.remove('eating'); void (st as HTMLElement).offsetWidth; st.classList.add('eating'); }
@@ -5980,6 +6037,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     $('#modal').classList.remove('lite');
     if (!$('#modal').classList.contains('open')) sfx.open();
     $('#modal').classList.add('open');
+    fitRibbon($('#mTitle'));
   }
   const closeModal = () => { sfx.close(); $('#modal').classList.remove('open'); setTimeout(nextModal, 450); };
   /** something to do once the player has read the modal (a story beat chains on) */
