@@ -13,6 +13,8 @@ import { PRODUCERS, CELLS } from './content/producers.mjs';
 import { WORLDS, LOCKS, CHARACTERS, STORY } from './content/worlds.mjs';
 import { ASKS, LIKES } from './content/contracts.mjs';
 import { PROJECTS } from './content/projects.mjs';
+import { MORE } from './content/projects-more.mjs';
+for (const [w, list] of Object.entries(MORE)) PROJECTS[w] = (PROJECTS[w] || []).concat(list);
 
 const OUT = join(dirname(fileURLToPath(import.meta.url)), '..', 'src', 'content');
 

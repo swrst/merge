@@ -409,6 +409,484 @@
     "cap": 12,
     "every": 225000
   },
+  "seedvault": {
+    "name": "Star Seed Vault",
+    "art": "seedvault",
+    "drops": [
+      "starseedpod",
+      "starseedpod",
+      "starseedpod",
+      "glowsprout"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "paintpod": {
+    "name": "Paint Pod",
+    "art": "paintpod",
+    "drops": [
+      "glowpaint",
+      "glowpaint",
+      "glowpaint",
+      "paintpods"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "tinkershed": {
+    "name": "Tinker Shed",
+    "art": "tinkershed",
+    "drops": [
+      "circuitchip",
+      "circuitchip",
+      "holochip",
+      "holochip",
+      "chipboard"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "hatstand": {
+    "name": "Hat Stand",
+    "art": "hatstand",
+    "drops": [
+      "antennacap",
+      "antennacap",
+      "antennacap",
+      "propcap"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "labcart": {
+    "name": "Lab Cart",
+    "art": "labcart",
+    "drops": [
+      "testtube",
+      "testtube",
+      "testtube",
+      "tuberack"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "toybox": {
+    "name": "Pet Toy Box",
+    "art": "toybox",
+    "drops": [
+      "chewbolt",
+      "chewbolt",
+      "chewbolt",
+      "squeakstar"
+    ],
+    "mode": "battery",
+    "cap": 10,
+    "every": 360000
+  },
+  "baseyard": {
+    "name": "Base Yard",
+    "art": "baseyard",
+    "drops": [
+      "basebolt",
+      "basebolt",
+      "basebolt",
+      "wallpanel"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "orevein": {
+    "name": "Ore Vein",
+    "art": "orevein",
+    "drops": [
+      "orechunk",
+      "orechunk",
+      "orechunk",
+      "orecart"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "cauldron": {
+    "name": "Bubble Cauldron",
+    "art": "cauldron",
+    "drops": [
+      "starvial",
+      "starvial",
+      "starvial",
+      "bubblebrew"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "swirlrift": {
+    "name": "Swirl Rift",
+    "art": "swirlrift",
+    "drops": [
+      "darkspeck",
+      "darkspeck",
+      "darkspeck",
+      "tinyswirl"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "rescuehut": {
+    "name": "Rescue Hut",
+    "art": "rescuehut",
+    "drops": [
+      "flare",
+      "flare",
+      "flare",
+      "beacon2"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "bouncepad": {
+    "name": "Bounce Pad",
+    "art": "bouncepad",
+    "drops": [
+      "springpad",
+      "springpad",
+      "springpad",
+      "bouncemat"
+    ],
+    "mode": "battery",
+    "cap": 10,
+    "every": 360000
+  },
+  "kartgarage": {
+    "name": "Kart Garage",
+    "art": "kartgarage",
+    "drops": [
+      "kartwheel",
+      "kartwheel",
+      "kartwheel",
+      "gokart"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "dragonroost": {
+    "name": "Dragon Roost",
+    "art": "dragonroost",
+    "drops": [
+      "dragonegg",
+      "dragonegg",
+      "dragonegg",
+      "crackedegg"
+    ],
+    "mode": "battery",
+    "cap": 10,
+    "every": 360000
+  },
+  "armoranvil": {
+    "name": "Armor Anvil",
+    "art": "armoranvil",
+    "drops": [
+      "armorplate",
+      "armorplate",
+      "armorplate",
+      "gauntlet"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "golempit": {
+    "name": "Golem Pit",
+    "art": "golempit",
+    "drops": [
+      "facepebble",
+      "facepebble",
+      "facepebble",
+      "pebblegolem"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "heatwell": {
+    "name": "Heat Well",
+    "art": "heatwell",
+    "drops": [
+      "heatcoil",
+      "heatcoil",
+      "heatcoil",
+      "lavapump"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "lavaoven": {
+    "name": "Lava Oven",
+    "art": "lavaoven",
+    "drops": [
+      "emberbite",
+      "emberbite",
+      "emberbite",
+      "lavacookie"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "surfshack": {
+    "name": "Surf Shack",
+    "art": "surfshack",
+    "drops": [
+      "lavafin",
+      "lavafin",
+      "lavafin",
+      "lavaboard"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "ruinsite": {
+    "name": "Sunken Ruin",
+    "art": "ruinsite",
+    "drops": [
+      "relicshard",
+      "relicshard",
+      "relicshard",
+      "oldcoin"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "anemonebed": {
+    "name": "Anemone Bed",
+    "art": "anemonebed",
+    "drops": [
+      "anemonebud",
+      "anemonebud",
+      "anemonebud",
+      "glowanemone"
+    ],
+    "mode": "battery",
+    "cap": 10,
+    "every": 360000
+  },
+  "ponyreef": {
+    "name": "Pony Reef",
+    "art": "ponyreef",
+    "drops": [
+      "ponyegg",
+      "ponyegg",
+      "ponyegg",
+      "ponyfoal"
+    ],
+    "mode": "battery",
+    "cap": 10,
+    "every": 360000
+  },
+  "sonarbuoy": {
+    "name": "Sonar Buoy",
+    "art": "sonarbuoy",
+    "drops": [
+      "sonarping",
+      "sonarping",
+      "sonarping",
+      "sonarbox"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "wavegen": {
+    "name": "Wave Generator",
+    "art": "wavegen",
+    "drops": [
+      "wavecoil",
+      "wavecoil",
+      "wavecoil",
+      "tidecell"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "bottlebeach": {
+    "name": "Bottle Beach",
+    "art": "bottlebeach",
+    "drops": [
+      "tinybottle",
+      "tinybottle",
+      "tinybottle",
+      "msgbottle"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "drydock": {
+    "name": "Dry Dock",
+    "art": "drydock",
+    "drops": [
+      "shiphull",
+      "shiphull",
+      "shiphull",
+      "wingfin"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "whalecloud": {
+    "name": "Whale Cloud",
+    "art": "whalecloud",
+    "drops": [
+      "whaleegg",
+      "whaleegg",
+      "whaleegg",
+      "whalecalf"
+    ],
+    "mode": "battery",
+    "cap": 10,
+    "every": 360000
+  },
+  "isleanchor": {
+    "name": "Isle Anchor",
+    "art": "isleanchor",
+    "drops": [
+      "skypebble",
+      "skypebble",
+      "skypebble",
+      "floatrock"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "sailloom": {
+    "name": "Sail Loom",
+    "art": "sailloom",
+    "drops": [
+      "sailscrap",
+      "sailscrap",
+      "sailscrap",
+      "minisail"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "cometramp": {
+    "name": "Comet Ramp",
+    "art": "cometramp",
+    "drops": [
+      "boarddeck",
+      "boarddeck",
+      "boarddeck",
+      "cometboard"
+    ],
+    "mode": "battery",
+    "cap": 10,
+    "every": 360000
+  },
+  "gummachine": {
+    "name": "Gum Machine",
+    "art": "gummachine",
+    "drops": [
+      "gumblob",
+      "gumblob",
+      "gumblob",
+      "gumbubble"
+    ],
+    "mode": "battery",
+    "cap": 10,
+    "every": 360000
+  },
+  "shellphonebed": {
+    "name": "Shell Exchange",
+    "art": "shellphonebed",
+    "drops": [
+      "shellphone",
+      "shellphone",
+      "shellphone",
+      "shellradio"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "skystation": {
+    "name": "Sky Platform",
+    "art": "skystation",
+    "drops": [
+      "railpiece",
+      "railpiece",
+      "railpiece",
+      "railloop"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "botdock": {
+    "name": "Farm Bot Dock",
+    "art": "botdock",
+    "drops": [
+      "canbot",
+      "canbot",
+      "canbot",
+      "seedbot"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "snapbed": {
+    "name": "Snap Plant Bed",
+    "art": "snapbed",
+    "drops": [
+      "sleepyseed",
+      "sleepyseed",
+      "sleepyseed",
+      "handsprout"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "postbeacon": {
+    "name": "Post Beacon",
+    "art": "postbeacon",
+    "drops": [
+      "postcard",
+      "postcard",
+      "postcard",
+      "postbag"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "arcadepod": {
+    "name": "Arcade Pod",
+    "art": "arcadepod",
+    "drops": [
+      "arcadetoken",
+      "arcadetoken",
+      "craterball",
+      "craterball",
+      "joystick"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "photobot": {
+    "name": "Photo Bot",
+    "art": "photobot",
+    "drops": [
+      "filmroll",
+      "filmroll",
+      "filmroll",
+      "instaphoto"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
+  "bubblestage": {
+    "name": "Bubble Stage",
+    "art": "bubblestage",
+    "drops": [
+      "bubblewhistle",
+      "bubblewhistle",
+      "bubblewhistle",
+      "crystalxylo"
+    ],
+    "mode": "energy",
+    "cost": 1
+  },
   "fallingstar": {
     "name": "Falling Star",
     "art": "fallingstar",

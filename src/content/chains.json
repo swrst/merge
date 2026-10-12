@@ -141,7 +141,9 @@
       "toadstool",
       "mushring",
       "fairyring",
-      "mossheart"
+      "mossheart",
+      "shroomhouse",
+      "shroomvillage"
     ],
     "asks": [
       "Eyeshroom friends for my garden.",
@@ -213,7 +215,9 @@
       "chrysalis",
       "flutter",
       "swarm",
-      "meadowheart"
+      "meadowheart",
+      "glowhive",
+      "glowcastle"
     ],
     "asks": [
       "Glowbugs for the garden.",
@@ -439,7 +443,9 @@
       "puffcloud",
       "raincloud2",
       "rainbowcloud",
-      "cloudmachine"
+      "cloudmachine",
+      "stormtower",
+      "weatherdome"
     ],
     "asks": [
       "Will it rain tomorrow?",
@@ -625,7 +631,9 @@
       "cometice",
       "cometcore",
       "cometstone",
-      "cometheart"
+      "cometheart",
+      "comettailarch",
+      "cometshrine"
     ],
     "asks": [
       "Comets carry old seeds.",
@@ -643,7 +651,9 @@
       "mothcocoon",
       "lunamothi",
       "moonmoth",
-      "craterheart"
+      "craterheart",
+      "mothnest",
+      "mothmoon"
     ],
     "asks": [
       "The moths guide travellers.",
@@ -928,7 +938,9 @@
       "emberegg",
       "firebird",
       "phoenix",
-      "hollowheart"
+      "hollowheart",
+      "firebirdnest",
+      "phoenixspire"
     ],
     "asks": [
       "The firebird is nesting.",
@@ -980,7 +992,10 @@
       "sulfurdust",
       "sulfurcrystal",
       "sulfurcluster",
-      "brimstone"
+      "brimstone",
+      "sulfurgeyser",
+      "sulfurpool",
+      "sulfurspire"
     ],
     "asks": [
       "Sulfur for the fireworks!",
@@ -1148,7 +1163,9 @@
       "seafoam",
       "tidewave",
       "tidalorb",
-      "tidalheart"
+      "tidalheart",
+      "tidefountain",
+      "tidetemple"
     ],
     "asks": [
       "Reading the tides.",
@@ -1203,7 +1220,9 @@
       "jellybell",
       "deeplantern",
       "abyssorb",
-      "shallowheart"
+      "shallowheart",
+      "glowcavern",
+      "abyssbeacon"
     ],
     "asks": [
       "Light for the deep dive.",
@@ -1237,7 +1256,10 @@
       "turtleegg",
       "hatchling",
       "seaturtle",
-      "islandturtle"
+      "islandturtle",
+      "twinshells",
+      "shellisles",
+      "shellkingdom"
     ],
     "asks": [
       "The shellkins need help.",
@@ -1290,7 +1312,10 @@
       "urchinspine",
       "urchin",
       "starurchin",
-      "starfishcrown"
+      "starfishcrown",
+      "spikeking",
+      "spikegarden",
+      "spikecastle"
     ],
     "asks": [
       "Urchins keep the reef tidy.",
@@ -1306,7 +1331,9 @@
       "babymanta",
       "manta",
       "starmanta",
-      "skymanta"
+      "skymanta",
+      "gliderpair",
+      "glideflock"
     ],
     "asks": [
       "The mantas are migrating.",
@@ -1467,7 +1494,9 @@
       "silkbag",
       "driftballoon",
       "skyship",
-      "reachheart"
+      "reachheart",
+      "balloonfleet",
+      "balloonharbour"
     ],
     "asks": [
       "Patching the balloon.",
@@ -1581,7 +1610,10 @@
       "kitetail",
       "kitediamond",
       "boxkite",
-      "dragonkite"
+      "dragonkite",
+      "droneswarm",
+      "dronetower",
+      "dronehub"
     ],
     "asks": [
       "Delivery by drone!",
@@ -2008,6 +2040,775 @@
     ],
     "asks": [
       "Topping up the tank."
+    ]
+  },
+  "stargarden": {
+    "name": "Star Garden",
+    "world": "earth",
+    "unlock": 12,
+    "items": [
+      "starseedpod",
+      "glowsprout",
+      "curlsprout",
+      "bubblebloom",
+      "lanternplant",
+      "tentaclevine",
+      "crystalfern",
+      "orbstalk",
+      "gardendome",
+      "worldsprout"
+    ],
+    "asks": [
+      "My garden needs a sprout.",
+      "Something green and glowing.",
+      "For the seed bank."
+    ]
+  },
+  "cosmicart": {
+    "name": "Cosmic Art",
+    "world": "earth",
+    "unlock": 12,
+    "items": [
+      "glowpaint",
+      "paintpods",
+      "starbrush",
+      "nebulacanvas",
+      "planetsculpt",
+      "holomural",
+      "stargallery"
+    ],
+    "asks": [
+      "A painting for my wall.",
+      "Art for the gallery!",
+      "Something beautiful, please."
+    ]
+  },
+  "gadgets": {
+    "name": "Alien Gadgets",
+    "world": "earth",
+    "unlock": 12,
+    "items": [
+      "circuitchip",
+      "chipboard",
+      "laserpen",
+      "hoverdisc",
+      "holowatch",
+      "robotarm",
+      "teleportpad"
+    ],
+    "asks": [
+      "A gadget for my toolbox.",
+      "Tech, please!",
+      "Something with buttons."
+    ]
+  },
+  "holograms": {
+    "name": "Holograms",
+    "world": "earth",
+    "unlock": 12,
+    "items": [
+      "holochip",
+      "holocube",
+      "holopet",
+      "holosign",
+      "holostage",
+      "holotheater"
+    ],
+    "asks": [
+      "A hologram for the show.",
+      "Make it shine!",
+      "Projection time."
+    ]
+  },
+  "hats": {
+    "name": "Antenna Hats",
+    "world": "earth",
+    "unlock": 12,
+    "items": [
+      "antennacap",
+      "propcap",
+      "bubblebonnet",
+      "startophat",
+      "ringhat",
+      "hattower",
+      "hatshop"
+    ],
+    "asks": [
+      "My antennae are cold.",
+      "A hat for the party!",
+      "I need a new look."
+    ]
+  },
+  "science": {
+    "name": "Science Kits",
+    "world": "earth",
+    "unlock": 12,
+    "items": [
+      "testtube",
+      "tuberack",
+      "beakerset",
+      "microscope",
+      "labbench",
+      "robolab",
+      "sciencedome"
+    ],
+    "asks": [
+      "For my experiment!",
+      "Lab supplies, please.",
+      "Science waits for no one."
+    ]
+  },
+  "pettoys": {
+    "name": "Pet Toys",
+    "world": "earth",
+    "unlock": 12,
+    "items": [
+      "chewbolt",
+      "squeakstar",
+      "toyrope",
+      "pettunnel",
+      "petgym",
+      "petplaypark",
+      "petresort"
+    ],
+    "asks": [
+      "My pet is bored.",
+      "A toy for my blob!",
+      "Playtime!"
+    ]
+  },
+  "moonbase": {
+    "name": "Moon Base",
+    "world": "luna",
+    "unlock": 12,
+    "items": [
+      "basebolt",
+      "wallpanel",
+      "airlock",
+      "habmodule",
+      "twinhabs",
+      "habring",
+      "habdome",
+      "lunarbase",
+      "lunartown",
+      "lunarcity"
+    ],
+    "asks": [
+      "Building the base!",
+      "More room for the crew.",
+      "We need shelter."
+    ]
+  },
+  "mining": {
+    "name": "Asteroid Mining",
+    "world": "luna",
+    "unlock": 12,
+    "items": [
+      "orechunk",
+      "orecart",
+      "handdrill",
+      "minebot",
+      "miningrig",
+      "refinery",
+      "asteroidbase"
+    ],
+    "asks": [
+      "Ore for the smelter.",
+      "Dig deeper!",
+      "The refinery is hungry."
+    ]
+  },
+  "brews": {
+    "name": "Moon Brews",
+    "world": "luna",
+    "unlock": 12,
+    "items": [
+      "starvial",
+      "bubblebrew",
+      "brewtrio",
+      "brewrack",
+      "cauldronbot",
+      "brewlab"
+    ],
+    "asks": [
+      "A brew for my cold.",
+      "Something fizzy and strange.",
+      "For my potion shelf."
+    ]
+  },
+  "wormhole": {
+    "name": "Wormholes",
+    "world": "luna",
+    "unlock": 12,
+    "items": [
+      "darkspeck",
+      "tinyswirl",
+      "vortexorb",
+      "swirlgate",
+      "wormring",
+      "blackcore"
+    ],
+    "asks": [
+      "A shortcut, please.",
+      "Something swirly.",
+      "Where does this one go?"
+    ]
+  },
+  "rescue": {
+    "name": "Space Rescue",
+    "world": "luna",
+    "unlock": 12,
+    "items": [
+      "flare",
+      "beacon2",
+      "rescuedrone",
+      "rescuepod",
+      "rescuerover",
+      "rescuestation"
+    ],
+    "asks": [
+      "Someone is stuck out there!",
+      "Rescue gear, quick.",
+      "Safety first."
+    ]
+  },
+  "bounce": {
+    "name": "Bounce Park",
+    "world": "luna",
+    "unlock": 12,
+    "items": [
+      "springpad",
+      "bouncemat",
+      "trampoline",
+      "bouncetower",
+      "moonjumper",
+      "bouncepark"
+    ],
+    "asks": [
+      "Boing! Please!",
+      "For the bounce park.",
+      "Higher! Higher!"
+    ]
+  },
+  "karts": {
+    "name": "Crater Karts",
+    "world": "luna",
+    "unlock": 12,
+    "items": [
+      "kartwheel",
+      "gokart",
+      "turbokart",
+      "kartteam",
+      "raceramp",
+      "kartarena"
+    ],
+    "asks": [
+      "Race day!",
+      "For the crater track.",
+      "Vroom, please."
+    ]
+  },
+  "dragons": {
+    "name": "Star Dragons",
+    "world": "cindra",
+    "unlock": 12,
+    "items": [
+      "dragonegg",
+      "crackedegg",
+      "dragonhatch",
+      "babydragon",
+      "youngdragon",
+      "firedrake",
+      "starwyrm",
+      "dragonpair",
+      "dragonnest",
+      "dragonpeak"
+    ],
+    "asks": [
+      "My dragon is hungry.",
+      "A dragon friend!",
+      "Warm wings, please."
+    ]
+  },
+  "lavaarmor": {
+    "name": "Lava Armor",
+    "world": "cindra",
+    "unlock": 12,
+    "items": [
+      "armorplate",
+      "gauntlet",
+      "lavahelm",
+      "lavashield",
+      "armorsuit",
+      "lavamech"
+    ],
+    "asks": [
+      "Armor for the forge crew.",
+      "Something heat-proof.",
+      "I need protection."
+    ]
+  },
+  "golems": {
+    "name": "Rock Golems",
+    "world": "cindra",
+    "unlock": 12,
+    "items": [
+      "facepebble",
+      "pebblegolem",
+      "stonegolem",
+      "lavagolem",
+      "crystalgolem",
+      "titangolem"
+    ],
+    "asks": [
+      "A helper made of rock.",
+      "Heavy lifting needed.",
+      "Strong friends wanted."
+    ]
+  },
+  "thermal": {
+    "name": "Thermal Tech",
+    "world": "cindra",
+    "unlock": 12,
+    "items": [
+      "heatcoil",
+      "lavapump",
+      "magmadrill",
+      "heattower",
+      "geocore",
+      "firereactor"
+    ],
+    "asks": [
+      "Power from the lava!",
+      "The heaters are down.",
+      "Hot tech, please."
+    ]
+  },
+  "volcsnacks": {
+    "name": "Volcano Snacks",
+    "world": "cindra",
+    "unlock": 12,
+    "items": [
+      "emberbite",
+      "lavacookie",
+      "magmamuffin",
+      "hotpot",
+      "firegrill",
+      "volcdiner"
+    ],
+    "asks": [
+      "Spicy snack time!",
+      "Hot food, please.",
+      "Lunch from the lava oven."
+    ]
+  },
+  "lavasurf": {
+    "name": "Lava Surfing",
+    "world": "cindra",
+    "unlock": 12,
+    "items": [
+      "lavafin",
+      "lavaboard",
+      "surfrider",
+      "surfpair",
+      "lavawave",
+      "surftower"
+    ],
+    "asks": [
+      "Surf is up!",
+      "A board for the lava waves.",
+      "Ride the heat!"
+    ]
+  },
+  "kingdom": {
+    "name": "Sunken Kingdom",
+    "world": "nerith",
+    "unlock": 12,
+    "items": [
+      "relicshard",
+      "oldcoin",
+      "coinpile",
+      "seaidol",
+      "relicchest",
+      "templepillar",
+      "templegate",
+      "sunkenshrine",
+      "sunkentemple",
+      "sunkenkingdom"
+    ],
+    "asks": [
+      "Treasures from the ruins.",
+      "For the museum.",
+      "Something very old."
+    ]
+  },
+  "seagarden": {
+    "name": "Sea Garden",
+    "world": "nerith",
+    "unlock": 12,
+    "items": [
+      "anemonebud",
+      "glowanemone",
+      "anemoneclump",
+      "seabloom",
+      "reefgarden",
+      "grotto"
+    ],
+    "asks": [
+      "My reef is bare.",
+      "Something glowing for the garden.",
+      "Plant it in the sand."
+    ]
+  },
+  "seaponies": {
+    "name": "Sea Ponies",
+    "world": "nerith",
+    "unlock": 12,
+    "items": [
+      "ponyegg",
+      "ponyfoal",
+      "seapony",
+      "racepony",
+      "ponypair",
+      "royalsteed",
+      "ponystable"
+    ],
+    "asks": [
+      "A pony for the race.",
+      "My foal needs a friend.",
+      "Giddy-up, under water!"
+    ]
+  },
+  "deeptech": {
+    "name": "Deep Sea Tech",
+    "world": "nerith",
+    "unlock": 12,
+    "items": [
+      "sonarping",
+      "sonarbox",
+      "seadrone",
+      "divingbell",
+      "deeplab",
+      "abyssbase"
+    ],
+    "asks": [
+      "Deep sea gear, please.",
+      "For the expedition.",
+      "Down we go!"
+    ]
+  },
+  "tidal": {
+    "name": "Tidal Energy",
+    "world": "nerith",
+    "unlock": 12,
+    "items": [
+      "wavecoil",
+      "tidecell",
+      "tideturbine",
+      "turbinepair",
+      "waveplant",
+      "tidalcity"
+    ],
+    "asks": [
+      "Power from the waves.",
+      "The lights are flickering.",
+      "Tide tech, please."
+    ]
+  },
+  "bottles": {
+    "name": "Bottle Ships",
+    "world": "nerith",
+    "unlock": 12,
+    "items": [
+      "tinybottle",
+      "msgbottle",
+      "bottleship",
+      "bottlefleet",
+      "bottletower",
+      "bottlepalace"
+    ],
+    "asks": [
+      "A ship in a bottle!",
+      "For my collection.",
+      "A message from far away."
+    ]
+  },
+  "shipyard": {
+    "name": "Starship Yard",
+    "world": "vela",
+    "unlock": 12,
+    "items": [
+      "shiphull",
+      "wingfin",
+      "cockpit",
+      "starscout",
+      "starfighter",
+      "twinfighters",
+      "starcruiser",
+      "carrier",
+      "flagship",
+      "shipdock"
+    ],
+    "asks": [
+      "Parts for the fleet.",
+      "We need ships!",
+      "Ready for launch."
+    ]
+  },
+  "skywhales": {
+    "name": "Sky Whales",
+    "world": "vela",
+    "unlock": 12,
+    "items": [
+      "whaleegg",
+      "whalecalf",
+      "skywhale",
+      "starwhale",
+      "whalepod",
+      "greatwhale"
+    ],
+    "asks": [
+      "The whales are singing.",
+      "A whale friend, please.",
+      "Up with the whales!"
+    ]
+  },
+  "floatisles": {
+    "name": "Floating Isles",
+    "world": "vela",
+    "unlock": 12,
+    "items": [
+      "skypebble",
+      "floatrock",
+      "tinyisle",
+      "waterisle",
+      "twinisles",
+      "islevillage",
+      "archipelago"
+    ],
+    "asks": [
+      "A rock that floats!",
+      "Room to build, up high.",
+      "Island hopping!"
+    ]
+  },
+  "lightsails": {
+    "name": "Light Sails",
+    "world": "vela",
+    "unlock": 12,
+    "items": [
+      "sailscrap",
+      "minisail",
+      "sailglider",
+      "sailship",
+      "sailregatta",
+      "sailharbour"
+    ],
+    "asks": [
+      "Catch the starlight!",
+      "Sails for the regatta.",
+      "Wind of light, please."
+    ]
+  },
+  "cometboards": {
+    "name": "Comet Riders",
+    "world": "vela",
+    "unlock": 12,
+    "items": [
+      "boarddeck",
+      "cometboard",
+      "boostboard",
+      "boardpair",
+      "cometloop",
+      "cometstadium"
+    ],
+    "asks": [
+      "A board for the comet run.",
+      "Tricks in the sky!",
+      "Ride the comet!"
+    ]
+  },
+  "bubblegum": {
+    "name": "Bubble Gum",
+    "world": "earth",
+    "unlock": 12,
+    "items": [
+      "gumblob",
+      "gumbubble",
+      "gumpack",
+      "gumjar",
+      "gumcart",
+      "gumfactory"
+    ],
+    "asks": [
+      "Something chewy!",
+      "Gum for the trip.",
+      "Blow me a bubble."
+    ]
+  },
+  "shellphones": {
+    "name": "Shell Phones",
+    "world": "nerith",
+    "unlock": 12,
+    "items": [
+      "shellphone",
+      "shellradio",
+      "shellspeaker",
+      "shellantenna",
+      "shelltower",
+      "shellnetwork"
+    ],
+    "asks": [
+      "Call me back!",
+      "The line is down.",
+      "A shell to talk through."
+    ]
+  },
+  "skytrains": {
+    "name": "Sky Trains",
+    "world": "vela",
+    "unlock": 12,
+    "items": [
+      "railpiece",
+      "railloop",
+      "tramcar",
+      "skytrain",
+      "expresstrain",
+      "trainstation",
+      "railhub"
+    ],
+    "asks": [
+      "All aboard!",
+      "The train is late.",
+      "Rails across the sky."
+    ]
+  },
+  "farmbots": {
+    "name": "Farm Bots",
+    "world": "earth",
+    "unlock": 11,
+    "items": [
+      "canbot",
+      "seedbot",
+      "scarebot",
+      "harvestbot",
+      "tractorbot",
+      "farmmech",
+      "robobarn"
+    ],
+    "asks": [
+      "The fields need hands.",
+      "Robots for the harvest!",
+      "My crops need watering."
+    ]
+  },
+  "snapplants": {
+    "name": "Snap Plants",
+    "world": "earth",
+    "unlock": 16,
+    "items": [
+      "sleepyseed",
+      "handsprout",
+      "toothpot",
+      "walkplant",
+      "snapper",
+      "potplant",
+      "plantmonster"
+    ],
+    "asks": [
+      "Something that bites back.",
+      "For my scary garden!",
+      "Feed me. I mean, them."
+    ]
+  },
+  "starpost": {
+    "name": "Star Post",
+    "world": "earth",
+    "unlock": 12,
+    "items": [
+      "postcard",
+      "postbag",
+      "antennabox",
+      "postdrone",
+      "postrocket",
+      "postlighthouse"
+    ],
+    "asks": [
+      "Mail from home, please!",
+      "Parcels to send.",
+      "The post must go on."
+    ]
+  },
+  "arcade": {
+    "name": "Arcade",
+    "world": "earth",
+    "unlock": 19,
+    "items": [
+      "arcadetoken",
+      "joystick",
+      "cartridge",
+      "handheld",
+      "arcadecab",
+      "arcadehall"
+    ],
+    "asks": [
+      "High score time!",
+      "One more game!",
+      "Insert token, please."
+    ]
+  },
+  "zerog": {
+    "name": "Zero-G Sports",
+    "world": "earth",
+    "unlock": 14,
+    "items": [
+      "craterball",
+      "hoverskates",
+      "hoopgoal",
+      "jetboard",
+      "rockettrophy",
+      "arena"
+    ],
+    "asks": [
+      "Game day in zero gravity!",
+      "For the floating league.",
+      "Let us play!"
+    ]
+  },
+  "snapshots": {
+    "name": "Snapshots",
+    "world": "earth",
+    "unlock": 21,
+    "items": [
+      "filmroll",
+      "instaphoto",
+      "camera",
+      "tripodcam",
+      "camdrone",
+      "photobooth"
+    ],
+    "asks": [
+      "Say cheese!",
+      "For my photo album.",
+      "Smile for the camera!"
+    ]
+  },
+  "bubbletunes": {
+    "name": "Bubble Band",
+    "world": "earth",
+    "unlock": 16,
+    "items": [
+      "bubblewhistle",
+      "crystalxylo",
+      "jellydrum",
+      "bubbletrumpet",
+      "bubbleorgan",
+      "bubbledome"
+    ],
+    "asks": [
+      "Play me a bubble song.",
+      "For the band!",
+      "Music, please!"
     ]
   }
 }
