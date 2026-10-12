@@ -3190,3 +3190,65 @@ html body .app .mBoxW .mTitle{padding:5px 46px 15px}
 .aTile.claim i{color:#a2580a!important;font-weight:800}
 @keyframes claimPulse{50%{transform:scale(1.04)}}
 @media (prefers-reduced-motion: reduce){.aTile.claim{animation:none}}
+/* v67: painted effects, empty states */
+.bstP.pic{width:22px;height:22px;margin:-11px;border-radius:0;background:transparent center/contain no-repeat;box-shadow:none;clip-path:none}
+.bstRing.pic{border:0;border-radius:0;box-shadow:none;background:transparent center/contain no-repeat;width:70px;height:70px;margin:-35px}
+.emptyArt{display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 0}
+.emptyArt img{width:150px;max-width:60%;height:auto}
+.enArt.wide{width:170px!important;height:auto!important}
+/* v67: Star Album */
+.albHead{text-align:center;margin:2px 0 8px}
+.albHead>b{display:block;font:800 18px/1.1 Fredoka,system-ui,sans-serif;color:#1d2a55}
+.albHead>i{font-style:normal;font-size:11.5px;color:#5d6890}
+.albProg{position:relative;height:18px;margin:6px 4px 0;border-radius:99px;background:linear-gradient(180deg,#1d2f6e,#2a3f8f);overflow:hidden;box-shadow:0 0 0 1.5px #fff}
+.albProg i{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(180deg,#ffe58a,#ffb21f)}
+.albProg em{position:relative;display:block;text-align:center;font:800 10.5px/18px Fredoka,system-ui,sans-serif;font-style:normal;color:#fff;text-shadow:0 1px 0 #3a2400}
+.albPacks{display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap;margin:6px 0 8px}
+.albDust{font-size:12.5px;color:#5d6890}.albDust b{color:#1d2a55}
+.albSets{display:flex;flex-direction:column;gap:7px}
+.albSet{padding:6px 7px 8px;border-radius:14px;background:rgba(255,255,255,.8);box-shadow:inset 0 0 0 1.5px rgba(120,160,230,.35)}
+.albSet.done{background:linear-gradient(180deg,#fff8d6,#ffe9a3);box-shadow:inset 0 0 0 2px #ffb11f}
+.albSetH{display:flex;align-items:baseline;gap:6px;margin-bottom:5px}
+.albSetH b{font:800 13px/1.1 Fredoka,system-ui,sans-serif;color:#1d2a55}
+.albSetH i{font-style:normal;font-size:11px;color:#5d6890;font-variant-numeric:tabular-nums}
+.albSetH span{margin-left:auto;font-size:10px;color:#6a74a0;white-space:nowrap}
+.albGrid{display:grid;grid-template-columns:repeat(9,1fr);gap:3px}
+.albGrid.pick{grid-template-columns:repeat(5,1fr);gap:6px}
+.albSlot{position:relative;aspect-ratio:1;border-radius:8px;background:#e7ecf8;display:flex;align-items:center;justify-content:center;border:0;padding:2px;min-width:0}
+.albSlot i{font-style:normal;font-weight:800;color:#b3bcd8;font-size:13px}
+.albSlot u{position:absolute;bottom:-2px;left:0;right:0;text-align:center;text-decoration:none;font-size:6.5px;color:#ffb11f;letter-spacing:-.5px;text-shadow:0 0 2px #fff}
+.albSlot.got{background:#fff;box-shadow:0 1px 3px rgba(20,40,90,.25)}
+.albSlot.s5.got{box-shadow:0 0 0 1.5px #ffb11f,0 0 6px rgba(255,180,30,.8)}
+.albSlot em{position:absolute;top:-4px;right:-4px;font-style:normal;font-size:8px;background:#4c7bd9;color:#fff;border-radius:99px;padding:0 3px}
+.stk{display:block;width:100%;height:100%;filter:drop-shadow(0 0 1px #fff) drop-shadow(0 0 1px #fff)}
+.stk img,.stk svg,.stk .art{width:100%!important;height:100%!important;object-fit:contain}
+.albShop{display:flex;flex-direction:column;gap:5px;margin-top:9px}
+.albShop>b{font:800 13px/1.1 Fredoka,system-ui,sans-serif;color:#1d2a55}
+.packRow{display:flex;gap:8px;justify-content:center;margin:8px 0 12px;perspective:600px}
+.pkCard{position:relative;width:74px;height:100px;transform-style:preserve-3d;animation:pkFlip .5s ease-out both}
+.pkBack,.pkFace{position:absolute;inset:0;border-radius:12px;backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.pkBack{background:linear-gradient(160deg,#5b7cff,#8a4bff);box-shadow:inset 0 0 0 3px #fff;transform:rotateY(0)}
+.pkFace{background:#fff;box-shadow:inset 0 0 0 3px #cfe0ff,0 4px 10px rgba(20,40,90,.25);transform:rotateY(180deg);padding:6px 4px}
+.pkFace.s4{box-shadow:inset 0 0 0 3px #b88cff,0 0 10px rgba(160,110,255,.6)}
+.pkFace.s5{box-shadow:inset 0 0 0 3px #ffb11f,0 0 14px rgba(255,180,30,.9)}
+.pkFace .stk{width:52px;height:52px}
+.pkFace em{font-style:normal;font-size:10px;color:#ffb11f;letter-spacing:-1px}
+.pkNew{font-size:10px;color:#fff;background:#ff5b6e;border-radius:99px;padding:0 6px}
+.pkDup{font-size:9px;color:#5d6890;font-weight:700}
+@keyframes pkFlip{0%{transform:rotateY(0) scale(.6);opacity:0}40%{transform:rotateY(0) scale(1);opacity:1}100%{transform:rotateY(180deg) scale(1);opacity:1}}
+@media (prefers-reduced-motion: reduce){.pkCard{animation:none;transform:rotateY(180deg)}}
+.pfAlb{display:flex;align-items:center;gap:10px;width:100%;margin-top:9px;padding:8px 10px;border:0;border-radius:12px;background:linear-gradient(180deg,#fff8d6,#ffe9a3);box-shadow:inset 0 0 0 1.5px #ffcf55;text-align:left}
+.pfAlb>span:first-child{font-size:24px}
+.pfAlb b{display:block;font:800 14px/1.2 Fredoka,system-ui,sans-serif;color:#5a3a00}
+.pfAlb i{font-style:normal;font-size:11px;color:#7a5a10}
+.pfBadges{margin-top:8px}.pfBadges>b{font:800 12px/1 Fredoka,system-ui,sans-serif;color:#1d2a55}
+.pfBadges>div{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.pfBadge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px 2px 4px;border-radius:99px;background:#fff3c4;box-shadow:inset 0 0 0 1.5px #ffcf55;font-size:12px}
+.pfBadge i{font-style:normal;font-size:10.5px;color:#5a3a00;font-weight:700}
+.qChip.album.ready{animation:claimPulse 1.4s ease-in-out infinite}
+/* pack reveal without 3D: the back pops away, the sticker pops in */
+.pkCard{transform:none!important;animation:none!important}
+.pkBack{animation:pkOut .35s ease-in forwards;animation-delay:inherit}
+.pkFace{transform:none!important;opacity:0;animation:pkIn .45s cubic-bezier(.3,1.6,.5,1) forwards;animation-delay:inherit}
+@keyframes pkOut{to{transform:scale(.2) rotate(-12deg);opacity:0}}
+@keyframes pkIn{from{transform:scale(.4)!important;opacity:0}to{transform:scale(1);opacity:1}}

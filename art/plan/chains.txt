@@ -1,0 +1,269 @@
+# world | chainkey | Chain Name | producer id | Producer Name | producer description
+## each item: id | Name | what to draw
+@earth|stargarden|Star Garden|seedvault|Star Seed Vault|a round glass seed vault on a little mound, glowing seeds floating inside
+starseedpod|Seed Pod|a closed seed pod with a tiny star on top
+glowsprout|Glow Sprout|a tiny sprout with one glowing bulb leaf
+curlsprout|Curly Sprout|a bigger sprout with two curly glowing leaves
+bubblebloom|Bubble Bloom|an alien bloom holding a floating bubble in its petals
+lanternplant|Lantern Plant|a plant with three glowing lantern pods hanging from it
+tentaclevine|Tentacle Vine|a tall wiggly vine with soft tentacle leaves
+crystalfern|Crystal Fern|a big fern made of shiny crystal leaves
+orbstalk|Orb Stalk|a tall alien stalk carrying glowing orbs
+gardendome|Garden Dome|a glass dome full of glowing alien plants
+worldsprout|World Sprout|a giant sprout curling around a tiny planet
+@earth|cosmicart|Cosmic Art|paintpod|Paint Pod|a round pod spilling glowing paint of many colours
+glowpaint|Glow Paint|a single drop of glowing paint
+paintpods|Paint Pods|three little pods of glowing paint
+starbrush|Star Brush|a brush with a glowing star tip, dripping paint
+nebulacanvas|Nebula Canvas|a small canvas painted with a swirling nebula
+planetsculpt|Planet Sculpture|a sculpture of a ringed planet on a stand
+holomural|Holo Mural|a big floating holographic painting of a galaxy
+stargallery|Star Gallery|an art gallery dome with paintings glowing in its windows
+@earth|gadgets|Alien Gadgets|tinkershed|Tinker Shed|a small round workshop shed with antennas and sparks
+circuitchip|Circuit Chip|a small glowing circuit chip
+chipboard|Circuit Board|a circuit board covered in glowing chips
+laserpen|Laser Pointer|a chunky laser pointer with a bright beam
+hoverdisc|Hover Disc|a small disc gadget hovering on blue light
+holowatch|Holo Watch|a wrist gadget projecting a little hologram
+robotarm|Robot Arm|a robotic arm on a round base
+teleportpad|Teleporter Pad|a round teleporter platform with a beam of light
+@earth|holograms|Holograms|tinkershed|Tinker Shed|
+holochip|Holo Chip|a small chip projecting a tiny hologram star
+holocube|Holo Cube|a glass cube with a spinning hologram inside
+holopet|Holo Pet|a hologram of a little alien pet above a projector
+holosign|Holo Sign|a glowing hologram sign on a pole
+holostage|Holo Stage|a stage with hologram dancers
+holotheater|Holo Theater|a round theater dome beaming holograms into the sky
+@earth|hats|Antenna Hats|hatstand|Hat Stand|a tall hat stand on a little mound with alien hats hanging on it
+antennacap|Antenna Cap|a little cap with two holes for antennae
+propcap|Propeller Cap|a cap with a tiny spinning propeller on top
+bubblebonnet|Bubble Bonnet|a hat with a glass bubble on top
+startophat|Star Top Hat|a tall top hat covered in stars
+ringhat|Ring Hat|a hat with a planet ring circling it
+hattower|Hat Tower|a wobbly tower of stacked alien hats
+hatshop|Hat Shop|a little shop shaped like a giant hat
+@earth|science|Science Kits|labcart|Lab Cart|a small rolling lab cart with bubbling flasks
+testtube|Test Tube|a test tube with glowing liquid
+tuberack|Tube Rack|a rack of three glowing test tubes
+beakerset|Beaker Set|a set of bubbling beakers
+microscope|Star Microscope|a chunky microscope with a star lens
+labbench|Lab Bench|a lab bench full of bubbling equipment
+robolab|Robo Lab|a small robot lab with mechanical arms
+sciencedome|Science Dome|a domed science centre with a big antenna
+@earth|pettoys|Pet Toys|toybox|Pet Toy Box|a round toy box for pets with toys peeking out
+chewbolt|Chew Bolt|a rubbery chew toy shaped like a bolt
+squeakstar|Squeaky Star|a squeaky toy shaped like a star
+toyrope|Comet Tug|a tug toy shaped like a comet with a tail
+pettunnel|Pet Tunnel|a crinkly play tunnel for pets
+petgym|Pet Gym|a pet climbing gym with platforms
+petplaypark|Pet Park|a play park dome for alien pets
+petresort|Pet Resort|a floating resort for alien pets with pools and slides
+@luna|moonbase|Moon Base|baseyard|Base Yard|a construction yard with a small crane and stacked panels
+basebolt|Base Bolt|a big glowing bolt
+wallpanel|Wall Panel|a curved white wall panel with a window
+airlock|Airlock Hatch|a round airlock hatch door
+habmodule|Hab Module|a round habitat module with windows
+twinhabs|Twin Habs|two habitat modules joined by a tunnel
+habring|Hab Ring|a ring of habitat modules
+habdome|Hab Dome|a big glass habitat dome
+lunarbase|Moon Base|a moon base with domes and a landing pad
+lunartown|Lunar Town|a small town of domes on the moon
+lunarcity|Lunar City|a glowing city of domes and towers on the moon
+@luna|mining|Asteroid Mining|orevein|Ore Vein|a rocky outcrop with glowing blue ore veins
+orechunk|Ore Chunk|a lumpy chunk of glowing blue ore
+orecart|Ore Cart|a small cart full of glowing ore
+handdrill|Hand Drill|a chunky handheld drill
+minebot|Mining Bot|a little robot with a drill nose
+miningrig|Mining Rig|a tall mining rig with a big drill
+refinery|Ore Refinery|a refinery tower melting ore into bars
+asteroidbase|Asteroid Base|a mining base built on a small asteroid
+@luna|brews|Moon Brews|cauldron|Bubble Cauldron|a round cauldron on little legs bubbling with glowing brew
+starvial|Star Vial|a tiny vial of sparkly brew
+bubblebrew|Bubbling Brew|a round flask of bubbling brew
+brewtrio|Brew Trio|three flasks of different colourful brews
+brewrack|Brew Rack|a rack full of glowing brews
+cauldronbot|Cauldron Bot|a robot with a cauldron belly
+brewlab|Brew Lab|a little brewing tower with pipes and flasks
+@luna|wormhole|Wormholes|swirlrift|Swirl Rift|a crack in the ground swirling with space light
+darkspeck|Dark Speck|a tiny speck of swirling dark space
+tinyswirl|Tiny Swirl|a small swirl of space with stars in it
+vortexorb|Vortex Orb|a glass orb holding a spinning vortex
+swirlgate|Swirl Gate|a small gate frame with a swirling portal
+wormring|Wormhole Ring|a big metal ring holding a wormhole
+blackcore|Black Hole Core|a glowing black hole with a bright ring of light
+@luna|rescue|Space Rescue|rescuehut|Rescue Hut|a little rescue hut with a flashing light on top
+flare|Rescue Flare|a glowing rescue flare
+beacon2|Rescue Beacon|a blinking rescue beacon
+rescuedrone|Rescue Drone|a drone carrying a first aid kit
+rescuepod|Rescue Pod|a round rescue pod with a hatch
+rescuerover|Rescue Rover|a rescue rover with flashing lights
+rescuestation|Rescue Station|a rescue station with a landing pad
+@luna|bounce|Bounce Park|bouncepad|Bounce Pad|a springy bounce pad on the moon dust
+springpad|Spring Pad|a small spring pad
+bouncemat|Bounce Mat|a round bouncy mat
+trampoline|Moon Trampoline|a big moon trampoline
+bouncetower|Bounce Tower|a tower of stacked trampolines
+moonjumper|Moon Jumper|a giant bouncy jumping castle shaped like a moon
+bouncepark|Bounce Park|a whole park of trampolines and springs
+@luna|karts|Crater Karts|kartgarage|Kart Garage|a small garage with a checkered flag
+kartwheel|Kart Wheel|a chunky kart wheel
+gokart|Crater Kart|a small moon go-kart
+turbokart|Turbo Kart|a go-kart with a rocket booster
+kartteam|Kart Team|three karts lined up
+raceramp|Race Ramp|a big jump ramp
+kartarena|Kart Arena|a crater race track with stands
+@cindra|dragons|Star Dragons|dragonroost|Dragon Roost|a rocky roost with a glowing nest on top
+dragonegg|Dragon Egg|a glowing spotted dragon egg
+crackedegg|Cracked Egg|a dragon egg cracking open with light inside
+dragonhatch|Hatchling|a tiny dragon hatchling peeking out of its shell
+babydragon|Baby Dragon|a small dragon with tiny wings
+youngdragon|Young Dragon|a young dragon with bigger wings
+firedrake|Fire Drake|a fire dragon breathing a small flame
+starwyrm|Star Wyrm|a long dragon with star patterns
+dragonpair|Dragon Pair|two dragons curled together
+dragonnest|Dragon Nest|a big nest with sleeping dragons
+dragonpeak|Dragon Peak|a mountain peak with dragons flying around it
+@cindra|lavaarmor|Lava Armor|armoranvil|Armor Anvil|an anvil on a lava rock with a hammer
+armorplate|Armor Plate|a single glowing armor plate
+gauntlet|Lava Gauntlet|an armored glove with glowing cracks
+lavahelm|Lava Helm|an armored helmet with glowing cracks
+lavashield|Lava Shield|a round shield with a glowing core
+armorsuit|Armor Suit|a full armor suit on a stand
+lavamech|Lava Mech|a big walking mech made of lava armor
+@cindra|golems|Rock Golems|golempit|Golem Pit|a stone pit with a glowing rune
+facepebble|Face Pebble|a pebble with a little face
+pebblegolem|Pebble Golem|a tiny golem made of pebbles
+stonegolem|Stone Golem|a sturdy golem made of stones
+lavagolem|Lava Golem|a golem with glowing lava cracks
+crystalgolem|Crystal Golem|a golem studded with crystals
+titangolem|Titan Golem|a huge golem holding a boulder
+@cindra|thermal|Thermal Tech|heatwell|Heat Well|a metal well over a lava vent with a pressure gauge
+heatcoil|Heat Coil|a glowing copper coil
+lavapump|Lava Pump|a small pump pushing glowing lava
+magmadrill|Magma Drill|a big drill dripping lava
+heattower|Heat Tower|a tower venting hot steam
+geocore|Geo Core|a glowing core in a metal cage
+firereactor|Fire Reactor|a big reactor dome glowing orange
+@cindra|volcsnacks|Volcano Snacks|lavaoven|Lava Oven|a stone oven built into a small volcano
+emberbite|Ember Bite|a tiny glowing hot crumb
+lavacookie|Lava Cookie|a cookie with glowing lava chips
+magmamuffin|Magma Muffin|a muffin with a lava top
+hotpot|Hot Pot|a bubbling pot of hot stew
+firegrill|Fire Grill|a grill over a lava pit with skewers
+volcdiner|Volcano Diner|a diner built into a little volcano
+@cindra|lavasurf|Lava Surfing|surfshack|Surf Shack|a little shack with surfboards on a lava shore
+lavafin|Board Fin|a fin for a lava surfboard
+lavaboard|Lava Board|a heat-proof surfboard
+surfrider|Surf Rider|a surfboard with a little engine
+surfpair|Surf Pair|two lava boards crossed
+lavawave|Lava Wave|a curling wave of lava with a board on top
+surftower|Surf Tower|a lookout tower over the lava waves
+@nerith|kingdom|Sunken Kingdom|ruinsite|Sunken Ruin|a broken stone arch half buried in sand with bubbles rising
+relicshard|Relic Shard|a shard of carved glowing stone
+oldcoin|Old Coin|an ancient coin with a star
+coinpile|Coin Pile|a pile of ancient coins
+seaidol|Sea Idol|a small stone idol of a sea creature
+relicchest|Relic Chest|a barnacle covered chest glowing inside
+templepillar|Temple Pillar|a carved stone pillar with seaweed
+templegate|Temple Gate|a carved temple gate
+sunkenshrine|Sunken Shrine|a small shrine with a glowing orb
+sunkentemple|Sunken Temple|a big temple under the sea
+sunkenkingdom|Sunken Kingdom|a whole glowing kingdom of temples under the sea
+@nerith|seagarden|Sea Garden|anemonebed|Anemone Bed|a rock covered in colourful anemones
+anemonebud|Anemone Bud|a tiny anemone bud
+glowanemone|Glow Anemone|a glowing anemone with waving tentacles
+anemoneclump|Anemone Clump|a clump of glowing anemones
+seabloom|Sea Bloom|a big glowing sea bloom
+reefgarden|Reef Garden|a little garden of sea blooms on a rock
+grotto|Garden Grotto|a cave filled with glowing sea plants
+@nerith|seaponies|Sea Ponies|ponyreef|Pony Reef|a curved reef with a little pony-shaped hole
+ponyegg|Pony Egg|a spiral shell egg
+ponyfoal|Pony Foal|a tiny alien sea pony foal
+seapony|Sea Pony|an alien sea pony with fins
+racepony|Racing Pony|a sea pony wearing a racing saddle
+ponypair|Pony Pair|two sea ponies with tails curled together
+royalsteed|Royal Steed|a big sea pony with a crown of shells
+ponystable|Pony Stable|a stable made of shells
+@nerith|deeptech|Deep Sea Tech|sonarbuoy|Sonar Buoy|a floating buoy with a sonar dish
+sonarping|Sonar Ping|a little glowing sonar dot with ripples
+sonarbox|Sonar Box|a small sonar device with a screen
+seadrone|Sea Drone|an underwater drone with lights
+divingbell|Diving Bell|a round diving bell with windows
+deeplab|Deep Lab|an underwater lab with tubes
+abyssbase|Abyss Base|a big base on the sea floor
+@nerith|tidal|Tidal Energy|wavegen|Wave Generator|a striped buoy generator bobbing on the waves
+wavecoil|Wave Coil|a small coil sparkling with sea water
+tidecell|Tide Cell|a battery cell filled with glowing water
+tideturbine|Tide Turbine|a small underwater turbine
+turbinepair|Turbine Pair|two turbines on one pole
+waveplant|Wave Plant|a power station on the waves
+tidalcity|Tidal City|a floating city powered by waves
+@nerith|bottles|Bottle Ships|bottlebeach|Bottle Beach|a sandy mound with bottles sticking out
+tinybottle|Tiny Bottle|a tiny glass bottle with a cork
+msgbottle|Message Bottle|a bottle with a rolled note inside
+bottleship|Bottle Ship|a little spaceship inside a bottle
+bottlefleet|Bottle Fleet|three ships in bottles
+bottletower|Bottle Tower|a tower of stacked bottles with ships
+bottlepalace|Bottle Palace|a giant bottle with a glowing city inside
+@vela|shipyard|Starship Yard|drydock|Dry Dock|a floating dock frame with a crane arm
+shiphull|Ship Plating|a curved hull plate
+wingfin|Wing Fin|a starship wing fin
+cockpit|Cockpit|a bubble cockpit
+starscout|Star Scout|a tiny scout starship
+starfighter|Star Fighter|a sleek star fighter
+twinfighters|Twin Fighters|two star fighters flying side by side
+starcruiser|Star Cruiser|a big star cruiser
+carrier|Star Carrier|a huge carrier ship with landing decks
+flagship|Flagship|a grand flagship with glowing engines
+shipdock|Starship Dock|a space dock with ships parked around it
+@vela|skywhales|Sky Whales|whalecloud|Whale Cloud|a big cloud shaped like a sleeping whale
+whaleegg|Whale Egg|a soft glowing whale egg
+whalecalf|Whale Calf|a tiny sky whale calf
+skywhale|Sky Whale|a sky whale with fins like wings
+starwhale|Star Whale|a whale with stars on its skin
+whalepod|Whale Pod|a family of sky whales
+greatwhale|Great Whale|a giant whale carrying a little island on its back
+@vela|floatisles|Floating Isles|isleanchor|Isle Anchor|a chained anchor holding a small floating rock
+skypebble|Sky Pebble|a small floating pebble
+floatrock|Float Rock|a floating rock with a little grass tuft of crystals
+tinyisle|Tiny Isle|a tiny floating island
+waterisle|Waterfall Isle|a floating island with a waterfall
+twinisles|Twin Isles|two floating islands joined by a bridge
+islevillage|Isle Village|a floating island with little houses
+archipelago|Sky Archipelago|a cluster of floating islands with bridges
+@vela|lightsails|Light Sails|sailloom|Sail Loom|a loom weaving glowing sail cloth
+sailscrap|Sail Scrap|a scrap of glowing sail cloth
+minisail|Mini Sail|a tiny glowing sail on a mast
+sailglider|Sail Glider|a small glider with a light sail
+sailship|Sail Ship|a ship with big glowing sails
+sailregatta|Sail Regatta|three sail ships racing
+sailharbour|Sail Harbour|a sky harbour full of sail ships
+@vela|cometboards|Comet Riders|cometramp|Comet Ramp|a curved ramp of light with a comet streak
+boarddeck|Board Deck|a plain hoverboard deck
+cometboard|Comet Board|a hoverboard with a comet tail
+boostboard|Boost Board|a hoverboard with twin boosters
+boardpair|Board Pair|two comet boards crossed
+cometloop|Comet Loop|a loop track made of light
+cometstadium|Comet Stadium|a floating stadium with comet tracks
+@earth|bubblegum|Bubble Gum|gummachine|Gum Machine|a round gumball machine full of glowing space gum
+gumblob|Gum Blob|a small blob of glowing gum
+gumbubble|Gum Bubble|a big pink bubble of gum
+gumpack|Gum Pack|a pack of star-shaped gum
+gumjar|Gum Jar|a jar full of colourful gum balls
+gumcart|Gum Cart|a little hovering gum cart
+gumfactory|Gum Factory|a factory blowing giant gum bubbles from its chimneys
+@nerith|shellphones|Shell Phones|shellphonebed|Shell Exchange|a rock covered in spiral shells with tiny antennas
+shellphone|Shell Phone|a small spiral shell used as a phone
+shellradio|Shell Radio|a shell radio with a little dial
+shellspeaker|Shell Speaker|a big shell speaker with bubbles coming out
+shellantenna|Shell Antenna|a tall shell antenna sending signals
+shelltower|Shell Tower|a tower made of shells with signal rings
+shellnetwork|Shell Network|three shell towers sending signals to each other
+@vela|skytrains|Sky Trains|skystation|Sky Platform|a floating train platform with a little sign post
+railpiece|Rail Piece|a short piece of glowing sky rail
+railloop|Rail Loop|a curled loop of sky rail
+tramcar|Sky Tram|a little tram car floating on a rail
+skytrain|Sky Train|a train of three cars floating on rails
+expresstrain|Star Express|a sleek fast sky train
+trainstation|Sky Station|a train station on a cloud
+railhub|Rail Hub|a hub where sky rails meet in every direction

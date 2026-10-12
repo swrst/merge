@@ -7,6 +7,7 @@ import { board } from './board';
 import { ads, iap, PRODUCTS, analytics, store, notify, games, mockControls, SERVICES } from './services';
 import { isNative } from './native';
 import { audio } from './audio';
+import { shareImage } from './services/share';
 import {
   ITEMS, CHAINS, PRODUCERS as PRODS, WORLDS, CHARACTERS as CHARS, MISSIONS, CONFIG,
   RECIPES, SHOP, STORY, ITEM_IDS, PRODUCER_ARTS, nextOf, validateContent,
@@ -384,7 +385,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const host = $('#fx'), cols = ['#ffcb3d', '#ff7fb6', '#6ed156', '#56bcff', '#a77bff'];
     for (let i = 0; i < 26; i++) {
       const c = el('div', 'confetti');
-      c.style.cssText = `left:${10 + Math.random() * 80}%;top:-20px;background:${rnd(cols)};animation-delay:${Math.random() * .4}s`;
+      const pic = i % 3 === 0 ? ART.spriteUi('fx_sparkle') : i % 3 === 1 ? ART.spriteUi('fx_confetti') : '';
+      c.style.cssText = `left:${10 + Math.random() * 80}%;top:-20px;background:${pic ? `url(${pic}) center/contain no-repeat` : rnd(cols)};${pic ? 'width:20px;height:20px;border-radius:0;' : ''}animation-delay:${Math.random() * .4}s`;
       host.appendChild(c); setTimeout(() => c.remove(), 2200);
     }
   }
@@ -583,6 +585,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const add = (k: string, tab: string, n: number, icon: string, say: string, go: () => void, quiet = false) => { if (n > 0) out.push({ k, tab, n, icon, say, go, quiet }); };
     const ar = achReady(), td = tasksDone();
     add('ach', 'Rocket', ar, ART.uiIcon('ic_trophy', '🏆'), ar > 1 ? `${ar} achievements to claim` : 'Achievement ready to claim', () => setView('rocket'));
+    if (albumOpen() && packsWaiting()) add('packs', 'Book', packsWaiting(), ART.uiIcon('ic_album', '🎴'), packsWaiting() > 1 ? `${packsWaiting()} sticker packs to open` : 'A sticker pack to open', () => albumPop());
     { const cc = Object.keys(CHAINS).filter(k => CHAINS[k].world !== 'ship' && CHAINS[k].items.every(id => S.seen[id]) && !(S.cclaim && S.cclaim[k])).length;
       add('cclaim', 'Book', cc, ART.uiIcon('ic_album', '📖'), cc > 1 ? `${cc} chains complete — collect your medals` : 'Chain complete — collect your medal', () => setView('book')); }
     add('task', 'Rocket', td, ART.uiIcon('cl_tasks', '✅'), 'Daily task done — reward waiting', () => setView('rocket'));
@@ -1067,7 +1070,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const busy = S.orders.map(o => o.char);
     const pickFrom = (fans.length ? fans : folks).filter(f => busy.indexOf(f) < 0);
     // everyday villagers (once painted) mix in, so the board is not three of the same face
-    const vils = ['vil1', 'vil2', 'vil3', 'vil4', 'vil5', 'vil6', 'vil7', 'vil8'].filter(v => ART.spriteChar(v + '_full') && busy.indexOf(v) < 0);
+    const vils = Array.from({ length: 12 }, (_, k) => 'vil' + (k + 1)).filter(v => ART.spriteChar(v + '_full') && busy.indexOf(v) < 0);
     const char = vils.length && (!pickFrom.length || Math.random() < 0.45) ? rnd(vils) : rnd(pickFrom.length ? pickFrom : (fans.length ? fans : folks));
     /* Never the same producer twice in a row: a contract does not ask for a chain whose
        producer an open contract already uses, or that the last delivered one used. */
@@ -1184,6 +1187,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     analytics.track('contract_done', { coins: o.coins, needs: o.needs.length });
     S.cSince = S.cSince || {}; S.cSince[S.world] = (S.cSince[S.world] || 0) + 1;
     befriend(o.char); stat('deliver');
+    if (Math.random() < 0.22) setTimeout(() => albumGive('basic', 'from the contract'), 700);
     evPts(CFG.event.points.contract + CFG.event.points.perNeed * o.needs.length);
     addXp(o.xp);
     paintBoard(); tutFire('deliver');
@@ -1194,7 +1198,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   /* ============================================================ PROGRESSION */
   function addXp(n: number) {
     S.xp += n; let up = false;
-    while (S.xp >= xpNeed(S.lvl)) { S.xp -= xpNeed(S.lvl); S.lvl++; up = true; onLevel(); }
+    while (S.xp >= xpNeed(S.lvl)) { S.xp -= xpNeed(S.lvl); S.lvl++; up = true; onLevel(); albumGive('basic', 'for levelling up'); }
     if (up) { levelBanner(); prog('level', 0, S.lvl); }
     addWorldXp(n);
     renderHUD();
@@ -1784,6 +1788,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         `<button class="buyBtn green" data-gift="1" ${giftReady() ? '' : 'disabled'}>${giftReady() ? 'FREE' : 'Tomorrow'}</button>`, giftReady() ? 'hot' : '')
       + (S.giftAd === today() && S.giftAd2 !== today() ? card(giftArt(), 'Double the gift', `Watch a video for another Supply Chest and ${CFG.shop2.freeGiftEnergy} ${ART.icon('energy')}`,
         `<button class="buyBtn green" data-giftad="1">📺 Watch</button>`, 'hot') : '')
+      + (albumOpen() ? card(ART.uiIcon('ic_album', '🎴'), 'Sticker pack', '3 stickers for your Star Album', `<button class="buyBtn gem" data-pack="basic" ${S.gems < 8 ? 'disabled' : ''}>${ART.icon('gem')}8</button>`)
+        + card(ART.uiIcon('ic_album', '🌟'), 'Golden pack', '4 stickers, one is 3★ or better', `<button class="buyBtn gem" data-pack="gold" ${S.gems < 20 ? 'disabled' : ''}>${ART.icon('gem')}20</button>`) : '')
       + card(ART.uiIcon('lab_energy', ART.icon('energy')), 'Energy refill', `+${CFG.gems.refill.energy} ⚡ right now`,
         `<button class="buyBtn gem" data-refill="1" ${S.gems < CFG.gems.refill.gems ? 'disabled' : ''}>${ART.icon('gem')}${CFG.gems.refill.gems}</button>`)
       + `</div><div class="noteLine">${ART.uiIcon('offer_timer', '🔄')} The free gift resets every day</div></div>`;
@@ -1867,6 +1873,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     host.querySelectorAll('[data-refill]').forEach((b: any) => b.onclick = () => { gemRefill(); renderShop(); });
     host.querySelectorAll('[data-chestbuy]').forEach((b: any) => b.onclick = () => buyChest(b.dataset.chestbuy));
     host.querySelectorAll('[data-buy]').forEach((b: any) => b.onclick = () => buySupply(+b.dataset.buy));
+    host.querySelectorAll('[data-pack]').forEach((b: any) => b.onclick = () => { const kd = b.dataset.pack as 'basic' | 'gold'; if (!spendGems(kd === 'gold' ? 20 : 8, 'pack')) return; const a = alb(); a.packs[kd] = (a.packs[kd] || 0) + 1; save(); renderShop(); openPack(kd); });
     host.querySelectorAll('[data-crate]').forEach((b: any) => b.onclick = () => buyCrate(b.dataset.crate));
     host.querySelectorAll('[data-up]').forEach((b: any) => b.onclick = () => buyUpgrade(b.dataset.up));
     host.querySelectorAll('[data-depot]').forEach((b: any) => b.onclick = () => buyDepot(+b.dataset.depot));
@@ -2977,6 +2984,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     p.needs.forEach(([id, q]: [string, number]) => { for (let k = 0; k < q; k++) consumeOne(id); });
     spend(p.coins);
     S.proj[S.world] = projDone() + 1;
+    albumGive(projDone() % 5 === 0 ? 'gold' : 'basic', 'for the chapter');
     weeklyAdd(25);
     analytics.track('chapter_built', { world: S.world, chapter: projDone(), level: S.lvl });
     // ask for a rating once, right after a win, never in the first minutes
@@ -3163,6 +3171,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const dt = dailyOk(), mark = CFG.daily2.marks[k];
     if (dt.got[k] || dt.pts < mark) { sfx.no(); toast(`Reach ${mark} points first — you have ${dt.pts}.`); return; }
     dt.got[k] = 1;
+    if (k === CFG.daily2.marks.length - 1) setTimeout(() => albumGive('gold', 'for the daily tasks'), 1200);
     const at = giveItem(k === 0 ? 'chest' : 'bigchest');
     S.energy = Math.min(maxEnergy(), S.energy + 5 + k * 5);
     if (k === 2) { giveBoost('rainbow'); S.coins += 200; }
@@ -3189,6 +3198,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function openChest(i: number) {
     const b = B(), c = b[i]; if (!c || !isChest(c.id)) return;
     stat('chest');
+    if (Math.random() < 0.2) setTimeout(() => albumGive('basic', 'inside the chest'), 900);
     const cfg = CFG.chest[c.id];
     /* only what you are playing with right now: chains whose producer stands on
        this board (or waits in storage), and only steps you have already made */
@@ -4198,8 +4208,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         p.boosts ? Object.entries(p.boosts).map(([k, n]) => n + '× ' + ((SHOP.boosters.find((x: any) => x.id === k) || { name: k }).name)).join(', ') : '', p.item ? ITEMS[p.item].name : '', p.adfree ? 'No ad videos — rewards are instant' : '']
         .filter(Boolean).join(' · ');
       return `<div class="sCard gemCard${p.tag ? ' hot' : ''}${owned ? ' owned' : ''}">${p.tag ? (/-\d+%/.test(p.tag) && ART.spriteUi('offer_burst') ? `<span class="gBurst">${p.tag.match(/-\d+%/)[0]}</span><span class="gTag">${p.tag.replace(/\s*·?\s*-\d+%/, '')}</span>` : `<span class="gTag">${p.tag}</span>`) : ''}
-        <div class="sCArt">${({ gems_s: 'gem_s', gems_m: 'gem_m', gems_l: 'gem_l', gems_xl: 'gem_xl', adfree: 'ic_ad', energy_pack: 'energy_refill' } as Record<string, string>)[p.id]
-          ? ART.uiIcon(({ gems_s: 'gem_s', gems_m: 'gem_m', gems_l: 'gem_l', gems_xl: 'gem_xl', adfree: 'ic_ad', energy_pack: 'energy_refill' } as Record<string, string>)[p.id], p.adfree ? '📺' : p.id === 'energy_pack' ? ART.icon('energy') : ART.icon('gem'))
+        <div class="sCArt">${({ gems_s: 'gem_s', gems_m: 'gem_m', gems_l: 'gem_l', gems_xl: 'gem_xl', adfree: 'ic_ad', energy_pack: 'crate_energy' } as Record<string, string>)[p.id]
+          ? ART.uiIcon(({ gems_s: 'gem_s', gems_m: 'gem_m', gems_l: 'gem_l', gems_xl: 'gem_xl', adfree: 'ic_ad', energy_pack: 'crate_energy' } as Record<string, string>)[p.id], p.adfree ? '📺' : p.id === 'energy_pack' ? ART.icon('energy') : ART.icon('gem'))
           : ART.item('bigchest')}</div>
         <div class="sCName">${p.name}</div><div class="sCDesc">${what}</div>
         <button class="buyBtn${owned ? '' : ' cash'}" data-iap="${p.id}"${owned ? ' disabled' : ''}>${owned ? 'Owned' : p.price}</button></div>`;
@@ -4298,7 +4308,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     pop(ART.uiIcon('ic_box', '📦') + ' Storage', `<div class="noteLine" style="margin-top:0">Starters you put away wait here. Pick one, then tap an empty tile — or a starter to swap with.</div>
       ${list.length ? list.map((s: any, k: number) => `<div class="enRow"><span class="enIc">${ART.producer(PRODS[s.p].art)}</span>
         <div><b>${PRODS[s.p].name}</b><i>Level ${s.lv || 1}</i></div><button class="buyBtn green" data-place="${k}">Place</button></div>`).join('')
-        : '<div class="evOff">Nothing in storage. Tap a producer, then <b>Store</b>, to make room.</div>'}`, 'energy');
+        : `<div class="emptyArt">${ART.spriteUi('empty_storage') ? `<img src="${ART.spriteUi('empty_storage')}" alt="">` : ''}<div class="evOff">Nothing in storage. Tap a producer, then <b>Store</b>, to make room.</div></div>`}`, 'energy');
     document.querySelectorAll<HTMLElement>('[data-place]').forEach(b => b.onclick = () => startPlacing(+b.dataset.place!));
   }
 
@@ -4367,6 +4377,184 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     renderBook(); renderHUD(); save();
   }
 
+  /* ================================================================ STAR ALBUM
+     A sticker album that resets every 4 weeks, the thing players brag about:
+     "finished the Comet Carnival album!". Ten sets of nine stickers, painted
+     with the game's own item art. Packs come from contracts, chapters, level-ups,
+     chests and the daily tasks (or a few gems). Duplicates turn into Star Dust,
+     which buys the last stubborn sticker. A full set pays out; a full album pays
+     big and leaves a permanent badge on your profile you can share. */
+  const ALBUM_DAYS = 28;
+  const ALBUM_EPOCH = Date.UTC(2026, 9, 5);   // season 1 starts the week the album shipped
+  const ALBUM_THEMES = ['Nebula Nights', 'Comet Carnival', 'Crystal Caves', 'Ocean of Stars', 'Aurora Dreams', 'Lava Lights', 'Moon Party', 'Rocket Season'];
+  const seasonNo = () => Math.max(0, Math.floor((Date.now() - ALBUM_EPOCH) / (ALBUM_DAYS * 86400000)));
+  const seasonName = (n = seasonNo()) => ALBUM_THEMES[n % ALBUM_THEMES.length];
+  const seasonEnds = () => ALBUM_EPOCH + (seasonNo() + 1) * ALBUM_DAYS * 86400000;
+  const stickerStars = (id: string) => { const t = ITEMS[id] ? ITEMS[id].tier : 1; return t <= 2 ? 1 : t === 3 ? 2 : t === 4 ? 3 : t === 5 ? 4 : 5; };
+  const DUST = [0, 1, 2, 4, 7, 12];
+  type ASet = { key: string; name: string; ids: string[] };
+  let albumCache: { no: number; sets: ASet[] } | null = null;
+  const ALBUM_GROUPS: [string, string, (k: string) => boolean][] = [
+    ['meadow', 'Sunny Meadow', k => CHAINS[k].world === 'earth'],
+    ['moon', 'Crater Camp', k => CHAINS[k].world === 'luna'],
+    ['ember', 'Ember Hollow', k => CHAINS[k].world === 'cindra'],
+    ['tide', 'Tidal Shallows', k => CHAINS[k].world === 'nerith'],
+    ['aurora', 'Aurora Reach', k => CHAINS[k].world === 'vela'],
+    ['critters', 'Cosmic Critters', k => ['pets', 'robopets', 'visitor', 'moonpup', 'lunamoth', 'phoenix', 'salamander', 'snail', 'squid', 'turtle', 'jelly', 'manta', 'starling', 'skynest', 'fishc', 'urchin', 'garden'].includes(k)],
+    ['tech', 'Rockets & Robots', k => ['parts', 'rover', 'bots', 'satellite', 'station', 'dish', 'helium', 'kite', 'steam', 'copper', 'harbour', 'feather', 'timemachine', 'stargaze'].includes(k)],
+    ['treats', 'Space Treats', k => ['berry', 'bakery', 'tea', 'icecream', 'sweets', 'skyfruit', 'spice', 'moonmelon', 'honey'].includes(k)],
+    ['gems', 'Gems & Crystals', k => ['stone', 'crystal', 'rubyc', 'pearlc', 'silver', 'seaglass', 'prismv', 'obsid', 'salt', 'meteorite', 'ice'].includes(k)],
+    ['wonders', 'Galactic Wonders', k => ['planets', 'nebula', 'starc', 'starflower', 'aurorac', 'comet', 'cloudc', 'coralc', 'shellc', 'magma'].includes(k)],
+  ];
+  function albumSets(): ASet[] {
+    const no = seasonNo();
+    if (albumCache && albumCache.no === no) return albumCache.sets;
+    let seed = no * 7919 + 17;
+    const rand = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    const used = new Set<string>(), sets: ASet[] = [];
+    for (const [key, name, test] of ALBUM_GROUPS) {
+      const pool = Object.keys(CHAINS).filter(k => CHAINS[k] && test(k)).flatMap(k => CHAINS[k].items)
+        .filter(id => ITEMS[id] && !used.has(id) && ART.spriteItem(id));
+      const byStars = (s: number) => pool.filter(id => stickerStars(id) === s && !used.has(id));
+      const ids: string[] = [];
+      for (const s of [1, 1, 1, 2, 2, 3, 3, 4, 5]) {
+        let c = byStars(s); if (!c.length) c = pool.filter(id => !used.has(id));
+        if (!c.length) break;
+        const id = c[Math.floor(rand() * c.length)]; used.add(id); ids.push(id);
+      }
+      if (ids.length >= 6) sets.push({ key, name, ids });
+    }
+    albumCache = { no, sets };
+    return sets;
+  }
+  function alb() {
+    const no = seasonNo();
+    if (!S.alb || S.alb.no !== no) S.alb = { no, have: {}, dust: 0, sets: {}, done: 0, packs: (S.alb && S.alb.packs) || { basic: 1, gold: 0 } };
+    S.alb.packs = S.alb.packs || { basic: 0, gold: 0 };
+    return S.alb;
+  }
+  const albumCount = () => { const a = alb(); return albumSets().reduce((n, s) => n + s.ids.filter(id => a.have[id]).length, 0); };
+  const albumTotal = () => albumSets().reduce((n, s) => n + s.ids.length, 0);
+  const albumOpen = () => S.lvl >= 4;
+  const packsWaiting = () => { const p = alb().packs; return (p.basic || 0) + (p.gold || 0); };
+  /** a pack lands in the album, opened from there */
+  function albumGive(kind: 'basic' | 'gold', why = '') {
+    if (!albumOpen()) return;
+    const a = alb(); a.packs[kind] = (a.packs[kind] || 0) + 1; save(); renderQuick();
+    toast(`${kind === 'gold' ? '🌟 Golden sticker pack' : '🎴 Sticker pack'}${why ? ' ' + why : ''}! Open it in the Star Album.`);
+  }
+  function rollSticker(minStars = 1): string {
+    const all = albumSets().flatMap(s => s.ids);
+    const w = [0, 45, 28, 16, 8, 3];
+    let r = Math.random() * w.slice(minStars).reduce((a, b) => a + b, 0), s = minStars;
+    for (; s < 5; s++) { if (r < w[s]) break; r -= w[s]; }
+    const c = all.filter(id => stickerStars(id) === s);
+    return (c.length ? c : all)[Math.floor(Math.random() * (c.length || all.length))];
+  }
+  function openPack(kind: 'basic' | 'gold') {
+    const a = alb(); if (!a.packs[kind]) return;
+    a.packs[kind]--;
+    const n = kind === 'gold' ? 4 : 3;
+    const got = Array.from({ length: n }, (_, k) => rollSticker(kind === 'gold' && k === 0 ? 3 : 1));
+    const res = got.map(id => { const isNew = !a.have[id]; a.have[id] = (a.have[id] || 0) + 1; const d = isNew ? 0 : DUST[stickerStars(id)]; a.dust += d; return { id, isNew, d }; });
+    stat('stickers', n); save();
+    // the reveal: cards flip one after the other
+    pop(`${kind === 'gold' ? '🌟 Golden pack' : '🎴 Sticker pack'}`, `<div class="packRow">${res.map((r, k) => `<div class="pkCard">
+        <div class="pkBack" style="animation-delay:${0.25 + k * 0.35}s"></div><div class="pkFace s${stickerStars(r.id)}" style="animation-delay:${0.45 + k * 0.35}s">${stickerHtml(r.id)}<em>${'★'.repeat(stickerStars(r.id))}</em>${r.isNew ? '<b class="pkNew">NEW!</b>' : `<b class="pkDup">+${r.d} ✨ dust</b>`}</div></div>`).join('')}</div>
+      <button class="big" id="pkGo">${packsWaiting() ? 'Next pack' : 'To the album'}</button>`, 'fun album');
+    sfx.whoosh(); res.forEach((r, k) => setTimeout(() => { (r.isNew ? sfx.discover : sfx.pop)(); }, 450 + k * 350));
+    ($('#pkGo') as HTMLElement).onclick = () => { if (packsWaiting()) openPack(a.packs.gold ? 'gold' : 'basic'); else albumPop(); };
+    setTimeout(albumCheck, 400 + n * 350);
+  }
+  const stickerHtml = (id: string) => `<span class="stk">${ART.item(id)}</span>`;
+  const setReward = (k: number): Reward => ({ coins: 150 + k * 60, gems: 4 + k, energy: 15 });
+  function albumCheck() {
+    const a = alb(), sets = albumSets();
+    sets.forEach((s, k) => {
+      if (a.sets[s.key] || !s.ids.every(id => a.have[id])) return;
+      a.sets[s.key] = 1; save();
+      rewardCard(ART.item(s.ids[s.ids.length - 1]), `${s.name} set complete!`, 'Nine stickers, all yours. The set gets a gold border.', setReward(k), () => albumPop());
+    });
+    if (!a.done && sets.length && sets.every(s => a.sets[s.key])) {
+      a.done = 1;
+      S.albBadges = S.albBadges || [];
+      if (!S.albBadges.some((b: any) => b.no === a.no)) S.albBadges.push({ no: a.no, name: seasonName(a.no), at: Date.now() });
+      stat('albums'); save();
+      rewardCard(ART.uiIcon('medal_1', '🏅'), `${seasonName()} album complete!`, 'Every sticker found. A permanent badge is on your profile. Show it off!', { coins: 2500, gems: 60, energy: 100, spin: 3 }, () => albumPop());
+    }
+  }
+  const DUST_SHOP = [
+    { id: 'energy', name: '+40 energy', cost: 60, give: () => { S.energy += 40; bumpChip('#chipEnergy'); } },
+    { id: 'chest', name: 'Supply Chest', cost: 120, give: () => { giveItem('chest'); } },
+    { id: 'pick', name: 'Pick a missing sticker (up to 4★)', cost: 240, give: () => { } },
+  ];
+  function albumPop() {
+    if (!albumOpen()) { toast('The Star Album opens at level 4.'); return; }
+    const a = alb(), sets = albumSets(), left = seasonEnds() - Date.now();
+    const days = Math.max(0, Math.ceil(left / 86400000));
+    pop(`⭐ Star Album`, `<div class="albHead"><b>${seasonName()}</b><i>Season ${a.no + 1} · ends in ${days} day${days === 1 ? '' : 's'}</i>
+        <div class="albProg"><i style="width:${Math.round(albumCount() / Math.max(1, albumTotal()) * 100)}%"></i><em>${albumCount()} / ${albumTotal()} stickers</em></div></div>
+      <div class="albPacks">
+        <button class="buyBtn" id="pkBasic" ${a.packs.basic ? '' : 'disabled'}>🎴 Open pack${a.packs.basic ? ' ×' + a.packs.basic : ''}</button>
+        <button class="buyBtn gold" id="pkGold" ${a.packs.gold ? '' : 'disabled'}>🌟 Golden${a.packs.gold ? ' ×' + a.packs.gold : ''}</button>
+        <span class="albDust">✨ <b>${a.dust}</b> dust</span></div>
+      <div class="albSets">${sets.map((s, k) => {
+        const n = s.ids.filter(id => a.have[id]).length, done = !!a.sets[s.key];
+        return `<div class="albSet${done ? ' done' : ''}"><div class="albSetH"><b>${s.name}</b><i>${n}/${s.ids.length}</i><span>${done ? '✓ complete' : rewardText(setReward(k))}</span></div>
+          <div class="albGrid">${s.ids.map(id => `<span class="albSlot s${stickerStars(id)}${a.have[id] ? ' got' : ''}">${a.have[id] ? stickerHtml(id) + (a.have[id] > 1 ? `<em>×${a.have[id]}</em>` : '') : '<i>?</i>'}<u>${'★'.repeat(stickerStars(id))}</u></span>`).join('')}</div></div>`;
+      }).join('')}</div>
+      <div class="albShop"><b>Star Dust swap</b>${DUST_SHOP.map(d => `<button class="buyBtn" data-dust="${d.id}" ${a.dust >= d.cost ? '' : 'disabled'}>${d.name} · ✨${d.cost}</button>`).join('')}</div>
+      <div class="noteLine">Packs come from contracts, chapters, level-ups, chests and daily tasks. Finish the whole album before the season ends for a permanent badge.</div>
+      <button class="big soft" id="albShare">📤 Share my album</button>`, 'fun album');
+    const b1 = $('#pkBasic'); if (b1) b1.onclick = () => openPack('basic');
+    const b2 = $('#pkGold'); if (b2) b2.onclick = () => openPack('gold');
+    document.querySelectorAll<HTMLElement>('[data-dust]').forEach(b => b.onclick = () => {
+      const d = DUST_SHOP.find(x => x.id === b.dataset.dust)!; if (a.dust < d.cost) return;
+      if (d.id === 'pick') { pickSticker(); return; }
+      a.dust -= d.cost; d.give(); sfx.coin(); renderHUD(); save(); albumPop();
+    });
+    ($('#albShare') as HTMLElement).onclick = () => shareCard();
+  }
+  function pickSticker() {
+    const a = alb(), miss = albumSets().flatMap(s => s.ids).filter(id => !a.have[id] && stickerStars(id) <= 4);
+    if (!miss.length) { toast('Nothing left to pick up to 4★ — only the rarest are missing!'); return; }
+    pop('✨ Pick a sticker', `<div class="albGrid pick">${miss.map(id => `<button class="albSlot s${stickerStars(id)}" data-pick="${id}">${stickerHtml(id)}<u>${'★'.repeat(stickerStars(id))}</u></button>`).join('')}</div>`, 'fun album');
+    document.querySelectorAll<HTMLElement>('[data-pick]').forEach(b => b.onclick = () => {
+      if (a.dust < 240) return;
+      a.dust -= 240; a.have[b.dataset.pick!] = 1; sfx.discover(); save(); albumPop(); setTimeout(albumCheck, 300);
+    });
+  }
+  /** a brag card: avatar, name, album progress and badges, drawn on a canvas and shared as a picture */
+  async function shareCard() {
+    const W2 = 1080, H2 = 1350, cv = document.createElement('canvas'); cv.width = W2; cv.height = H2;
+    const g = cv.getContext('2d')!;
+    const bg = g.createLinearGradient(0, 0, 0, H2); bg.addColorStop(0, '#1b2a6b'); bg.addColorStop(0.55, '#3a2a8a'); bg.addColorStop(1, '#0d1338');
+    g.fillStyle = bg; g.fillRect(0, 0, W2, H2);
+    for (let k = 0; k < 140; k++) { g.fillStyle = `rgba(255,255,255,${0.2 + Math.random() * 0.7})`; g.beginPath(); g.arc(Math.random() * W2, Math.random() * H2, Math.random() * 2.6 + 0.4, 0, 7); g.fill(); }
+    const load = (src: string) => new Promise<HTMLImageElement | null>(res => { if (!src) return res(null); const im = new Image(); im.onload = () => res(im); im.onerror = () => res(null); im.src = src; });
+    const font = (w: number, s: number) => `${w} ${s}px Fredoka, "Trebuchet MS", system-ui, sans-serif`;
+    g.textAlign = 'center'; g.fillStyle = '#ffe07a'; g.font = font(700, 54); g.fillText('GALAXY ADVENTURE', W2 / 2, 110);
+    const av = await load(ART.spriteChar('player_full') || ART.spriteChar('player') || '');
+    if (av) { g.save(); g.beginPath(); g.arc(W2 / 2, 300, 150, 0, 7); g.fillStyle = '#eef7ff'; g.fill(); g.clip(); g.drawImage(av, W2 / 2 - 140, 165, 280, 280); g.restore(); g.lineWidth = 12; g.strokeStyle = '#ffc93a'; g.beginPath(); g.arc(W2 / 2, 300, 150, 0, 7); g.stroke(); }
+    g.fillStyle = '#ffffff'; g.font = font(700, 64); g.fillText(S.pname || 'Captain', W2 / 2, 530);
+    g.font = font(500, 38); g.fillStyle = '#c9d6ff'; g.fillText(`Level ${S.lvl} · ${W().name}`, W2 / 2, 585);
+    const a = alb(), done = !!a.done, cnt = albumCount(), tot = albumTotal();
+    g.fillStyle = 'rgba(255,255,255,.12)'; g.beginPath(); (g as any).roundRect(90, 640, W2 - 180, 300, 36); g.fill();
+    g.fillStyle = done ? '#ffe07a' : '#ffffff'; g.font = font(700, 52); g.fillText(done ? `${seasonName()} album COMPLETE!` : `${seasonName()} album`, W2 / 2, 725);
+    g.fillStyle = 'rgba(0,0,0,.35)'; g.beginPath(); (g as any).roundRect(160, 770, W2 - 320, 56, 28); g.fill();
+    const pg = g.createLinearGradient(160, 0, W2 - 160, 0); pg.addColorStop(0, '#c4ff8a'); pg.addColorStop(1, '#46d65a');
+    g.fillStyle = pg; g.beginPath(); (g as any).roundRect(160, 770, Math.max(56, (W2 - 320) * cnt / Math.max(1, tot)), 56, 28); g.fill();
+    g.fillStyle = '#fff'; g.font = font(700, 36); g.fillText(`${cnt} / ${tot} stickers · ${Object.keys(a.sets).length}/${albumSets().length} sets`, W2 / 2, 811);
+    g.font = font(500, 34); g.fillStyle = '#c9d6ff'; g.fillText(`${(S.albBadges || []).length} album badge${(S.albBadges || []).length === 1 ? '' : 's'} · ${Object.keys(S.seen || {}).length} items discovered`, W2 / 2, 895);
+    // a row of the rarest stickers you own
+    const best = albumSets().flatMap(s => s.ids).filter(id => a.have[id]).sort((x, y) => stickerStars(y) - stickerStars(x)).slice(0, 5);
+    for (let k = 0; k < best.length; k++) { const im = await load(ART.spriteItem(best[k]) || ''); if (im) g.drawImage(im, W2 / 2 - best.length * 90 + k * 180 + 10, 990, 160, 160); }
+    g.font = font(600, 34); g.fillStyle = '#ffe07a'; g.fillText('Can you beat my album?', W2 / 2, 1260);
+    sfx.tap();
+    const ok = await shareImage(cv.toDataURL('image/png'), done ? `I completed the ${seasonName()} album in Galaxy Adventure! 🌟` : `My ${seasonName()} album in Galaxy Adventure: ${cnt}/${tot} stickers!`);
+    if (!ok) toast('Sharing is not available here.');
+  }
+
   /* ------------------------------------------------------- profile card */
   function profilePop() {
     S.born = S.born || Date.now();
@@ -4394,11 +4582,15 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         ${cell(ART.uiIcon('ic_calendar', '📅'), String(days), days === 1 ? 'day exploring' : 'days exploring')}
       </div>
       ${p && petPainted() ? `<button class="pfPet" id="pfPet">${pupArt(petForm())}<span><b>${p.name || petForm().name}</b><i>Level ${p.lv} · ${petForm().perk.replace(/<[^>]+>/g, '')}</i></span></button>` : ''}
-      <div class="petActs"><button class="big soft" id="pfAch">${ART.uiIcon('ic_trophy', '🏆')} Achievements${achReady() ? ` <em class="pfDot">${achReady()}</em>` : ''}</button></div>`, 'fun');
+      ${albumOpen() ? `<button class="pfAlb" id="pfAlb"><span>⭐</span><span><b>${seasonName()} album</b><i>${albumCount()} / ${albumTotal()} stickers${alb().done ? ' · COMPLETE' : ''}</i></span></button>` : ''}
+      ${(S.albBadges || []).length ? `<div class="pfBadges"><b>Album badges</b><div>${S.albBadges.map((b: any) => `<span class="pfBadge" title="${b.name}">🏅<i>${b.name}</i></span>`).join('')}</div></div>` : ''}
+      <div class="petActs"><button class="big soft" id="pfAch">${ART.uiIcon('ic_trophy', '🏆')} Achievements${achReady() ? ` <em class="pfDot">${achReady()}</em>` : ''}</button>${albumOpen() ? '<button class="big blue" id="pfShare">📤 Share</button>' : ''}</div>`, 'fun');
     const nm = $('#pfName') as HTMLInputElement;
     if (nm) nm.onchange = () => { const v = nm.value.trim().slice(0, 16); S.pname = v || 'Captain'; save(); };
     const pb = $('#pfPet'); if (pb) pb.onclick = () => { closePop(); pupPop(true); };
     ($('#pfAch') as HTMLElement).onclick = () => { closePop(); achPop(); };
+    const pa = $('#pfAlb'); if (pa) pa.onclick = () => albumPop();
+    const ps = $('#pfShare'); if (ps) ps.onclick = () => shareCard();
   }
   /* ------------------------------------------------------- achievements */
   const stat = (k: string, n = 1) => { S.stats = S.stats || {}; S.stats[k] = (S.stats[k] || 0) + n; };
@@ -4683,7 +4875,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function energyPop() {
     const per = regenMs(), full = S.energy >= maxEnergy();
     const next = full ? 0 : Math.max(0, per - (Date.now() - (S.eAt || Date.now())));
-    pop('⚡ Energy', `${ART.spriteUi('energy_refill') ? `<img class="enArt" src="${ART.spriteUi('energy_refill')}" alt="">` : ''}<div class="enBig">${ART.icon('energy')}<b>${S.energy}</b><i>/ ${maxEnergy()}</i></div>
+    const enPic = S.energy <= 0 && ART.spriteUi('empty_energy') ? 'empty_energy' : 'energy_refill';
+    pop('⚡ Energy', `${ART.spriteUi(enPic) ? `<img class="enArt${enPic === 'empty_energy' ? ' wide' : ''}" src="${ART.spriteUi(enPic)}" alt="">` : ''}<div class="enBig">${ART.icon('energy')}<b>${S.energy}</b><i>/ ${maxEnergy()}</i></div>
       <div class="noteLine" style="margin-top:2px">${full ? 'Full! Go merge something.' : `+1 every ${Math.round(per / 60000 * 10) / 10} min · next in <b>${mmss(next)}</b>`}</div>
       <div class="enRow"><span class="enIc">${ART.icon('gem')}</span><div><b>Big refill</b><i>+${CFG.gems.refill.energy} energy</i></div>
         <button class="buyBtn gem" id="enGem">💎 ${CFG.gems.refill.gems}</button></div>
@@ -4847,11 +5040,12 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const cols = ['#ffe48a', '#ff8ad8', '#8af0ff', '#b6ff5c', '#ffffff', '#ffb02e'];
     for (let k = 0; k < n; k++) {
       const p = document.createElement('i'); p.className = 'bstP' + (k % 3 ? '' : ' star');
+      if (!(k % 3) && ART.spriteUi('fx_sparkle')) { p.className = 'bstP pic'; p.style.backgroundImage = `url(${ART.spriteUi('fx_sparkle')})`; }
       const a = (Math.PI * 2 * k) / n + Math.random() * 0.3, d = 90 + Math.random() * 110;
       p.style.cssText = `--dx:${(Math.cos(a) * d).toFixed(0)}px;--dy:${(Math.sin(a) * d).toFixed(0)}px;--c:${cols[k % cols.length]};animation-delay:${(Math.random() * 0.15).toFixed(2)}s`;
       host.appendChild(p); setTimeout(() => p.remove(), 1500);
     }
-    const ring = document.createElement('i'); ring.className = 'bstRing'; host.appendChild(ring); setTimeout(() => ring.remove(), 1000);
+    const ring = document.createElement('i'); ring.className = 'bstRing' + (ART.spriteUi('fx_ring') ? ' pic' : ''); if (ART.spriteUi('fx_ring')) ring.style.backgroundImage = `url(${ART.spriteUi('fx_ring')})`; host.appendChild(ring); setTimeout(() => ring.remove(), 1000);
   }
   /* The hatch: an egg drops in, wobbles, cracks with a flash and the pet pops out. */
   function petHatch(done: () => void) {
@@ -4999,6 +5193,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (e) bits.push(`<button class="qChip ev" data-q="event">${ART.uiIcon('tok_' + e.theme.id, e.theme.icon)}<b>${S.ev.key === e.key ? S.ev.pts : 0}</b><i>${dhm(e.ends - Date.now())}</i></button>`);
     if (S.lvl >= SP().unlockLevel && spinsLeft()) bits.push(`<button class="qChip spin" data-q="spin">${ART.uiIcon('ic_spin', '🎡')}<b>${spinsLeft()}</b></button>`);
     if (S.seen.scrap || pouch('scrap') || pouch('starcore')) bits.push(`<button class="qChip pouch" data-q="pouch">${ART.uiIcon('ic_pouch', ART.item('starcore'))}<b>${pouch('starcore')}</b><i>${pouch('scrap')} scrap</i></button>`);
+    if (albumOpen()) bits.push(`<button class="qChip album${packsWaiting() ? ' ready' : ''}" data-q="album">${ART.uiIcon('ic_album', '⭐')}<b>${packsWaiting() ? '🎴' + packsWaiting() : albumCount() + '/' + albumTotal()}</b></button>`);
     if (stored().length) bits.push(`<button class="qChip store" data-q="store">${ART.uiIcon('ic_box', '📦')}<b>${stored().length}</b></button>`);
     if (petOn()) {
       // the pet says how it is at a glance: a gift waiting, hungry, or full
@@ -5021,7 +5216,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     host.dataset.h = html; host.innerHTML = html;
     host.querySelectorAll('[data-q]').forEach((b: any) => b.onclick = () => {
       const k = b.dataset.q;
-      if (k === 'mile') { sfx.tap(); toast(`📦 Deliver <b>${mileGoal() - ((S.om && S.om.n) || 0)}</b> more contract${mileGoal() - ((S.om && S.om.n) || 0) === 1 ? '' : 's'} for ${((S.om && S.om.step) || 0) % 2 === 1 ? 'a free chest' : `+${CFG.milestone.energy} ⚡`}`); } else if (k === 'event') eventPop(); else if (k === 'spin') spinPop(); else if (k === 'pup') pupPop(); else if (k === 'store') storagePop(); else if (k === 'pouch') starChart(); else { setView('lab'); labAccPop(); }
+      if (k === 'mile') { sfx.tap(); toast(`📦 Deliver <b>${mileGoal() - ((S.om && S.om.n) || 0)}</b> more contract${mileGoal() - ((S.om && S.om.n) || 0) === 1 ? '' : 's'} for ${((S.om && S.om.step) || 0) % 2 === 1 ? 'a free chest' : `+${CFG.milestone.energy} ⚡`}`); } else if (k === 'event') eventPop(); else if (k === 'spin') spinPop(); else if (k === 'pup') pupPop(); else if (k === 'store') storagePop(); else if (k === 'album') albumPop(); else if (k === 'pouch') starChart(); else { setView('lab'); labAccPop(); }
     });
   }
 
@@ -6245,7 +6440,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      the page swaps each one for its painted icon as it appears, everywhere —
      popups, screens, toasts, buttons. An emoji without a painting stays. */
   const EMO: Record<string, string> = {
-    '🪙': 'icon_coin', '💎': 'icon_gem', '⚡': 'icon_energy', '🧪': 'icon_flask', '🔒': 'sec_lock', '⏳': 'cl_timer',
+    '🪙': 'icon_coin', '💎': 'icon_gem', '⚡': 'icon_energy', '🧪': 'icon_flask', '🔒': 'st_lock', '⏳': 'st_wait', '✅': 'st_check', '❗': 'st_alert', '💤': 'st_sleep',
     '📜': 'ic_scroll', '🎁': 'ic_gift', '🏆': 'ic_trophy', '📦': 'ic_box', '🎡': 'ic_spin', '🔬': 'ic_microscope', '🛒': 'ic_shop',
     '🎪': 'ic_tent', '📖': 'ic_album2', '🗺️': 'ic_map2', '🗺': 'ic_map2', '🔑': 'ic_key', '🔔': 'cl_bell', '🌌': 'ic_galaxy', '💡': 'ic_hint', '⬆': 'ic_up', '🧺': 'ic_pouch', '✉️': 'ic_feedback', '📅': 'ic_calendar', '🍪': 'ic_cookie', '🧲': 'icon_magnet', '🔊': 'ic_sound', '🎵': 'ic_music', '💾': 'ic_saved', '➡️': 'ic_nextch', '🛸': 'ic_galaxy',
   };
@@ -6436,7 +6631,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed, ecost,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
       fly: (w: string) => galaxyTap(w), view: (v: string) => setView(v),
-      curProject: () => curProject(), v9: { storeProducer, startPlacing, paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
+      curProject: () => curProject(), v9: { albumPop, openPack, albumGive, shareCard, alb, storeProducer, startPlacing, paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
     };
     setInterval(tick, 500);
     setInterval(() => { if (!document.hidden) S.playMs = (S.playMs || 0) + 5000; }, 5000);

@@ -1,66 +1,98 @@
 {
   "vil1": {
-    "name": "Blib",
+    "name": "Ploob",
     "lines": [
-      "Bloop bloop! Thank you!",
-      "My tentacles salute you.",
-      "Wonderful!"
+      "Fine. That will do.",
+      "Noted. Thank you.",
+      "Ploob is satisfied."
     ]
   },
   "vil2": {
-    "name": "Zuzu",
+    "name": "Grizz",
     "lines": [
-      "All three eyes are impressed.",
-      "Exactly what I needed.",
-      "Zuzu approves."
+      "Took you long enough.",
+      "Hmph. Acceptable.",
+      "I suppose that is right."
     ]
   },
   "vil3": {
-    "name": "Morko",
+    "name": "Wibble",
     "lines": [
-      "Hehe, perfect.",
-      "You are a star!",
-      "Morko owes you one."
+      "WOBBLE WOBBLE!",
+      "Hee! Hee! Again!",
+      "My eyes went two ways! Thanks!"
     ]
   },
   "vil4": {
-    "name": "Tibbit",
+    "name": "Klank",
     "lines": [
-      "Eeee! Thank you!",
-      "So shiny!",
-      "Best day ever!"
+      "Yeah. Okay.",
+      "That fits. Probably.",
+      "Back to work, I guess."
     ]
   },
   "vil5": {
-    "name": "Quilla",
+    "name": "Rumble",
     "lines": [
-      "Most kind.",
-      "My spikes are tingling.",
-      "Splendid work."
+      "FINALLY!",
+      "GRR. Fine. GOOD.",
+      "Do not keep me waiting next time!"
     ]
   },
   "vil6": {
-    "name": "Nebbie",
+    "name": "Squint",
     "lines": [
-      "*happy floating*",
-      "Fluffy thanks!",
-      "You made my cloud day."
+      "Hmm. Is it real?",
+      "Looks genuine. For now.",
+      "I will be watching."
     ]
   },
   "vil7": {
-    "name": "Boltz",
+    "name": "Yikes",
     "lines": [
-      "BEEP. GRATITUDE.",
-      "Delivery confirmed!",
-      "Circuits: happy."
+      "AAAH! It is perfect!",
+      "Oh no oh no oh yes!",
+      "I nearly cracked!"
     ]
   },
   "vil8": {
-    "name": "Fizzle",
+    "name": "Elder Moss",
     "lines": [
-      "Wobble wobble! Yay!",
-      "So bouncy, thank you!",
-      "Fizz-tastic!"
+      "In my day we waited longer.",
+      "Good work, young one.",
+      "The old ways approve."
+    ]
+  },
+  "vil9": {
+    "name": "Zen",
+    "lines": [
+      "Balance restored.",
+      "Breathe in. Merge out.",
+      "All is well."
+    ]
+  },
+  "vil10": {
+    "name": "Duo",
+    "lines": [
+      "Great! / Boring.",
+      "We agree. / We do not.",
+      "Thanks! / Whatever."
+    ]
+  },
+  "vil11": {
+    "name": "Spore",
+    "lines": [
+      "HEHEHE. Lovely.",
+      "Spin spin spin!",
+      "My cap is tingling!"
+    ]
+  },
+  "vil12": {
+    "name": "Unit 9",
+    "lines": [
+      "ORDER COMPLETE.",
+      "SATISFACTION: 87%.",
+      "PROCESSING THANKS."
     ]
   },
   "pip": {
