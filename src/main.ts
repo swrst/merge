@@ -37,13 +37,36 @@ function fit() {
 fit();
 window.addEventListener('resize', fit);
 
+/* If anything breaks while the game boots, say so on the loading screen and offer
+   a way out, instead of leaving the player staring at it forever. "Start fresh"
+   keeps the old save under a backup key so it can still be recovered. */
+function bootFailed(err: any) {
+  const scr = document.getElementById('bootScr'); if (!scr || scr.classList.contains('gone')) return;
+  if (scr.querySelector('.bootErr')) return;
+  const msg = String((err && (err.message || err.reason || err)) || 'unknown error').slice(0, 160);
+  const box = document.createElement('div'); box.className = 'bootErr';
+  box.innerHTML = `<b>The game could not start.</b><i>${msg.replace(/</g, '&lt;')}</i>
+    <button id="bootRetry">Try again</button><button id="bootFresh" class="soft">Start fresh (your save is backed up)</button>`;
+  scr.appendChild(box);
+  (document.getElementById('bootRetry') as HTMLElement).onclick = () => location.reload();
+  (document.getElementById('bootFresh') as HTMLElement).onclick = () => {
+    try { const s = localStorage.getItem('mergeRocket_v2'); if (s) localStorage.setItem('mergeRocket_v2_backup_' + Date.now(), s); localStorage.removeItem('mergeRocket_v2'); } catch (e) { }
+    location.reload();
+  };
+}
+window.addEventListener('error', e => bootFailed(e.error || e.message));
+window.addEventListener('unhandledrejection', e => bootFailed((e as any).reason));
+if (import.meta.env.PROD) setTimeout(() => bootFailed('Loading is taking too long.'), 45000);
+
 async function main() {
-  await hydrateSave();      // pull a native save back into localStorage before boot
-  paintHudIcons();
-  setupChrome();
-  startSaveMirror();
-  initServices();
-  startGame();
+  try {
+    await hydrateSave();      // pull a native save back into localStorage before boot
+    paintHudIcons();
+    setupChrome();
+    startSaveMirror();
+    initServices();
+    await startGame();
+  } catch (err) { console.error(err); bootFailed(err); }
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => { main(); });

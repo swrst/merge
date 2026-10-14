@@ -225,6 +225,23 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       }
     });
     if (Array.isArray(p.bag)) p.bag = p.bag.filter((id: string) => !!ITEMS[id]);
+    /* v69: chains come and go between builds (v66 cut 22 of them), so anything in a
+       save that names an item or producer must still exist, or the game stops
+       on the loading screen. Sweep every place a save can hold one. */
+    Object.keys(p.boards || {}).forEach(w => {
+      const b = p.boards[w]; if (!Array.isArray(b)) return;
+      for (let i = 0; i < b.length; i++) { const c = b[i]; if (c && c.f && !ITEMS[c.f]) b[i] = null; }
+    });
+    if (Array.isArray(p.orders)) p.orders = p.orders.filter((o: any) => o && Array.isArray(o.needs) && o.needs.length && o.needs.every((nd: any) => nd && ITEMS[nd.id]) && (!o.give || ITEMS[o.give]));
+    if (p.shop && Array.isArray(p.shop.stock) && p.shop.stock.some((st: any) => !st || !ITEMS[st.id])) p.shop.stock = null;
+    if (p.trophy) Object.keys(p.trophy).forEach(id => { if (!ITEMS[id]) delete p.trophy[id]; });
+    if (Array.isArray(p.disc)) p.disc = p.disc.filter((id: string) => !!ITEMS[id]);
+    if (p.store) Object.keys(p.store).forEach(w => { if (Array.isArray(p.store[w])) p.store[w] = p.store[w].filter((st: any) => st && PRODS[st.p]); });
+    if (p.plots) Object.keys(p.plots).forEach(w => { if (Array.isArray(p.plots[w])) p.plots[w] = p.plots[w].filter((k: string) => !!PRODS[k]); });
+    if (p.acc && p.acc.id && !ITEMS[p.acc.id]) p.acc = null;
+    if (p.vis && p.vis.p && !PRODS[p.vis.p]) p.vis = null;
+    if (p.upAsk) Object.keys(p.upAsk).forEach(k => { if (p.upAsk[k] && !PRODS[p.upAsk[k].k]) delete p.upAsk[k]; });
+    if (p.alb && p.alb.have) Object.keys(p.alb.have).forEach(id => { if (!ITEMS[id]) delete p.alb.have[id]; });
     if (Array.isArray(p.lab && p.lab.slots)) p.lab.slots = p.lab.slots.map((id: any) => (id && ITEMS[id]) ? id : null);
     p.v = 6;
     return p;

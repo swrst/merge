@@ -3252,3 +3252,8 @@ html body .app .mBoxW .mTitle{padding:5px 46px 15px}
 .pkFace{transform:none!important;opacity:0;animation:pkIn .45s cubic-bezier(.3,1.6,.5,1) forwards;animation-delay:inherit}
 @keyframes pkOut{to{transform:scale(.2) rotate(-12deg);opacity:0}}
 @keyframes pkIn{from{transform:scale(.4)!important;opacity:0}to{transform:scale(1);opacity:1}}
+/* boot failure panel */
+.bootErr{position:absolute;left:50%;bottom:16%;transform:translateX(-50%);width:min(300px,86%);display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:16px;background:rgba(10,20,60,.88);color:#fff;text-align:center;font:600 13px/1.35 Fredoka,system-ui,sans-serif;z-index:5}
+.bootErr i{font-style:normal;font-size:11px;opacity:.75;word-break:break-word}
+.bootErr button{border:0;border-radius:99px;padding:9px 12px;font:800 14px Fredoka,system-ui,sans-serif;background:linear-gradient(180deg,#8fe86d,#3fbf4a);color:#fff}
+.bootErr button.soft{background:rgba(255,255,255,.18);font-size:12px}
