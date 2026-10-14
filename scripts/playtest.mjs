@@ -589,7 +589,7 @@ await set(() => {
   window.__board.sync(b);
 });
 await tab('rocket');
-must(await page.locator('#rocketBody .mlJourney i.now').count() === 1, 'the Goals screen shows the current project');
+must(await page.locator('#rocketBody .chRow i.now').count() === 1, 'the Goals screen shows the current project');
 await page.locator('#btnProject').click({ force: true }); await page.waitForTimeout(900);
 s = await S();
 must(s.proj.vela === 1, 'building it moves the world on to the next project');

@@ -3516,9 +3516,45 @@ html body .app .gp .gpRing{animation:gpRing 3s ease-in-out infinite}
 html body .app .galRoute{animation:gpFlow 1.6s linear infinite}
 html body .app .galRoute.lit{stroke-dasharray:8 10;animation:gpFlow 1s linear infinite}
 @keyframes gpFlow{to{stroke-dashoffset:-28}}
-html body .app .galComet{position:absolute;width:120px;height:2px;border-radius:2px;pointer-events:none;z-index:0;
-  background:linear-gradient(90deg,transparent,rgba(190,240,255,.9),#fff);box-shadow:0 0 8px #bff3ff;opacity:0;animation:galComet 9s linear infinite}
-html body .app .galComet::after{content:'';position:absolute;right:-3px;top:-3px;width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 10px #fff,0 0 20px #8ff3ff}
-@keyframes galComet{0%{transform:translate(-160px,0) rotate(18deg);opacity:0}4%{opacity:1}14%{transform:translate(520px,170px) rotate(18deg);opacity:0}100%{opacity:0;transform:translate(520px,170px) rotate(18deg)}}
+/* a meteor (the painted one) streaks diagonally down the sky now and then, along the same line its tail points */
+html body .app .galComet{position:absolute;right:-60px;width:46px;height:48px;pointer-events:none;z-index:0;opacity:0;
+  filter:drop-shadow(0 0 8px rgba(255,170,80,.8));animation:galComet 13s cubic-bezier(.35,.1,.6,1) infinite;will-change:transform,opacity}
+@keyframes galComet{0%{transform:translate(0,0) scale(.6);opacity:0}2%{opacity:1}11%{transform:translate(-300px,300px) scale(1);opacity:1}14%{transform:translate(-380px,380px) scale(1);opacity:0}100%{transform:translate(-380px,380px);opacity:0}}
 @media (prefers-reduced-motion:reduce){html body .app .gp .galArt,html body .app .galRoute,html body .app .galComet,html body .app .gp .gpRing{animation:none}}
 @media (max-width:430px){html body .app .galTop>b{display:none}}
+/* v72: the XP pill is wide enough to read the green fill, numbers sit on top with an outline */
+html body .app .hud .lvlBox{width:112px!important}
+html body .app .hud .lvlBox .xpwrap{overflow:hidden}
+html body .app .hud .xpbar{background:rgba(6,16,50,.85)!important}
+html body .app .hud .xpbar i{background:linear-gradient(180deg,#b9ff8a,#46d65a 55%,#1f9e44)!important;box-shadow:0 0 8px rgba(120,255,130,.8)!important;transition:width .5s cubic-bezier(.3,1.3,.5,1)}
+html body .app .hud .lvlBox .xplabel{position:relative;z-index:2}
+html body .app .hud .lvlBox .xplabel span{font-family:var(--hx-title)!important;font-weight:400!important;font-size:12px!important}
+/* v72: chapter bars, back as bars: ten chunky holo segments for the current stretch */
+html body .app .chBars{margin:6px 0 10px}
+html body .app .chRow{display:flex;gap:4px;padding:6px;border-radius:14px;background:linear-gradient(180deg,#14205a,#0b1440);box-shadow:inset 0 0 0 1.5px rgba(111,227,255,.45),0 2px 0 rgba(0,0,0,.2)}
+html body .app .chRow i{position:relative;flex:1;height:22px;border-radius:7px;background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center}
+html body .app .chRow i b{font:400 11px/1 'Lilita One',Fredoka,sans-serif;color:rgba(255,255,255,.45)}
+html body .app .chRow i.done{background:linear-gradient(180deg,#9ff3ff,#2fb8e6 60%,#1a8dc4);box-shadow:0 0 8px rgba(80,220,255,.7),inset 0 1.5px 0 rgba(255,255,255,.6)}
+html body .app .chRow i.done b{color:#06305a}
+html body .app .chRow i.now{background:linear-gradient(180deg,#ffe98a,#ffbf2e);box-shadow:0 0 10px rgba(255,200,60,.9),0 0 0 2px #fff;animation:chNow 1.6s ease-in-out infinite}
+html body .app .chRow i.now b{color:#6a3d00}
+html body .app .chRow i.cfJust{animation:chJust .8s ease-out}
+html body .app .chRow i.launch img{position:absolute;top:-14px;right:-6px;width:22px;height:22px;transform:rotate(35deg);filter:drop-shadow(0 0 4px rgba(255,170,80,.9))}
+@keyframes chNow{50%{transform:translateY(-2px);box-shadow:0 0 16px rgba(255,200,60,1),0 0 0 2px #fff}}
+@keyframes chJust{0%{transform:scale(.3);filter:brightness(2.5)}60%{transform:scale(1.2)}100%{transform:none}}
+html body .app .chAll{display:flex;align-items:center;gap:8px;margin-top:6px;font-size:11px;font-weight:700;color:#4b5a8c}
+html body .app .chAll em{position:relative;flex:1;height:6px;border-radius:99px;background:rgba(40,60,130,.18)}
+html body .app .chAll em u{position:absolute;left:0;top:0;bottom:0;border-radius:99px;background:linear-gradient(90deg,#33c3ea,#7dff9a)}
+html body .app .chAll em img{position:absolute;top:50%;width:16px;height:16px;transform:translate(-50%,-50%) rotate(35deg)}
+html body .app .cfStrip .chAll span,html body .app .cfStrip .mlNote{color:#e8f0ff}
+@media (prefers-reduced-motion:reduce){html body .app .chRow i.now,html body .app .chRow i.cfJust{animation:none}}
+/* v72: smoother open animations: transform and opacity only (animating filter repaints every frame on phones) */
+@keyframes holoIn{0%{opacity:0;transform:scale(.94,.25)}50%{opacity:1;transform:scale(1.025,1.02)}75%{transform:scale(.995,.998)}100%{opacity:1;transform:none}}
+html body .app .modal.open .mBoxW,html body .app .pop.open .popBox,html body .app .talk.open .tkBox,html body .app .pop.holo .popBox{will-change:transform,opacity;backface-visibility:hidden}
+html body .app .pop,html body .app .modal{transition:opacity .2s ease-out}
+html body .app .pop,html body .app .modal{background:rgba(6,12,40,.62)!important}
+html body .app .ordEmpty{display:flex;align-items:center;gap:8px;padding:6px 12px;margin:8px auto;border-radius:16px;background:rgba(10,24,74,.72);box-shadow:0 0 0 1.5px #6fe3ff;color:#fff}
+html body .app .ordEmpty img{width:64px;height:64px;object-fit:contain}
+html body .app .ordEmpty b{display:block;font:400 16px/1.1 'Lilita One',Fredoka,sans-serif;text-shadow:var(--hx-out)}
+html body .app .ordEmpty i{font-style:normal;font-size:11.5px;opacity:.85}
+html body .app .gpNeed .uiIc{width:18px!important;height:18px!important;vertical-align:-4px}

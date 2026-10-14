@@ -177,6 +177,12 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
   /** Old saves keep their progress — missing fields are simply filled in. */
   function migrate(p: any) {
+    // v70 stored the expedition in S.xp, on top of the player's XP: move it out and repair the number
+    if (p.xp && typeof p.xp === 'object') { if (!p.exped) p.exped = p.xp; p.xp = 0; }
+    if (typeof p.xp === 'string' && p.xp.startsWith('[object')) p.xp = 0;
+    for (const [k, d] of [['xp', 0], ['coins', 0], ['gems', 0], ['energy', 0], ['lvl', 1], ['sci', 0], ['fuel', 0]] as [string, number][]) {
+      if (p[k] !== undefined && !Number.isFinite(+p[k])) p[k] = d; else if (p[k] !== undefined) p[k] = +p[k];
+    }
     p.up = p.up || {};
     p.shop = p.shop || { stock: null, at: 0 };
     p.lab = p.lab || { disc: {}, clue: {}, slots: [null, null], tries: 0, made: 0 };
@@ -471,7 +477,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       };
     }
   }
-  const coinHtml = () => ART.icon('coin');
+  const coinHtml = () => ART.spriteUi('fx_coin') ? `<img class="ic" src="${ART.spriteUi('fx_coin')}" alt="">` : ART.icon('coin');
   function flyCoins(from: XY, amount: number, delay = 0) {
     const n = clamp(Math.ceil(amount / 6), 1, 8);
     flyTo(from, $('#chipCoins'), coinHtml(), n, { delay, onEach: () => audio.playVary('coin', 0.08, 0.35) });
@@ -871,6 +877,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       card.onclick = () => ready ? deliver(o.id) : contractSheet(o.id);
       host.appendChild(card);
     });
+    if (!S.orders.length && !S.ship && ART.spriteUi('empty_done')) host.innerHTML = `<div class="ordEmpty"><img src="${ART.spriteUi('empty_done')}" alt=""><span><b>All caught up!</b><i>New contracts are on their way.</i></span></div>`;
     orderArrows(); updateWanted(); renderStrip();
     // never let the row collapse between contracts: if it shrinks, the whole
     // board jumps up under the player's finger mid-drag
@@ -3055,7 +3062,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       const a = (Math.PI * 2 * k) / arr.length - Math.PI / 2;
       return `<span class="cfIt" style="--dx:${Math.round(Math.cos(a) * 130)}px;--dy:${Math.round(Math.sin(a) * 130)}px;animation-delay:${0.15 + k * 0.12}s">${ART.item(id)}</span>`;
     }).join('');
-    const strip = `<div class="mlJourney cfStrip">${list.map((_: any, k: number) => `<i class="${k < n - 1 ? 'done' : k === n - 1 ? 'done cfJust' : k === n ? 'now' : ''}"></i>`).join('')}</div>`;
+    const strip = chapterBars(list, n - 1, true).replace('class="chBars"', 'class="chBars cfStrip"');
     el.innerHTML = `<div class="cfRays"></div>
       <div class="cfStage"><div class="cfRing"></div><span class="cfFace">${ART.char(p.who)}</span>${items}</div>
       <div class="cfTxt${ART.spriteUi('victory_banner') ? ' ban' : ''}"><i>Chapter ${n}</i><b>${p.name}</b></div>
@@ -3119,16 +3126,27 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (p.launch) bits.push(`<span class="prz">🚀<b>A new world</b></span>`);
     return bits.length ? `<div class="przRow"><i>🎁 Unlocks</i>${bits.join('')}</div>` : '';
   }
+  /** the chapter bars: ten chunky bars for the stretch of the story you are in
+      (a hundred slivers read as nothing), the rocket on the chapter that opens the next world,
+      and a thin line for the whole world under it */
+  function chapterBars(list: any[], done: number, just = false) {
+    const total = list.length, start = Math.min(Math.floor(Math.min(done, total - 1) / 10) * 10, Math.max(0, total - 10)), end = Math.min(total, start + 10);
+    const rk = ART.spriteUi('gal_rocket') || ART.spriteUi('rocket_3');
+    const bars = list.slice(start, end).map((p: any, j: number) => {
+      const k = start + j, cls = k < done ? 'done' : k === done ? (just ? 'done cfJust' : 'now') : '';
+      return `<i class="${cls}${p.launch ? ' launch' : ''}" title="${p.name}"><b>${k + 1}</b>${p.launch ? `<img src="${rk}" alt="">` : ''}</i>`;
+    }).join('');
+    const li = list.findIndex((p: any) => p.launch);
+    return `<div class="chBars"><div class="chRow">${bars}</div>
+      <div class="chAll"><span>Chapters ${start + 1}–${end}</span><em><u style="width:${Math.round(done / Math.max(1, total) * 100)}%"></u>${li >= 0 ? `<img src="${rk}" alt="" style="left:${((li + 0.5) / total * 100).toFixed(1)}%">` : ''}</em><span>${done}/${total}</span></div>
+      ${li >= 0 && done <= li ? `<div class="mlNote"><img src="${rk}" alt=""> Chapter ${li + 1} launches the rocket to a new world</div>` : ''}</div>`;
+  }
   function projectCard() {
     const list = projList(), done = projDone(), cur = curProject();
     if (!list.length) return '';
     const coin = ART.icon('coin');
-    const strip = `<div class="mlJourney">${list.map((p: any, k: number) =>
-      `<i class="${k < done ? 'done' : k === done ? 'now' : ''}${p.launch ? ' launch' : ''}" title="${p.name}">${p.launch ? `<img src="${ART.spriteUi('gal_rocket') || ART.spriteUi('rocket_3')}" alt="">` : ''}</i>`).join('')}</div>`;
-    // the rocket on the strip is the chapter where the next world opens: say so
-    const li = list.findIndex((p: any) => p.launch);
-    const note = li >= 0 && done <= li ? `<div class="mlNote"><img src="${ART.spriteUi('gal_rocket') || ART.spriteUi('rocket_3')}" alt=""> Chapter ${li + 1}: the rocket launches to a new world</div>` : '';
-    const head = `<div class="mlHead"><b>${W().name}</b><span>${done}/${list.length} chapters</span></div>${strip}${note}`;
+    const strip = chapterBars(list, done);
+    const head = `<div class="mlHead"><b>${W().name}</b><span>${done}/${list.length} chapters</span></div>${strip}`;
     if (!cur) return `<div class="card mlMission">${head}<div class="noteLine">Every chapter here is done. This world is awake! ✨</div></div>`;
     const p = cur, ok = projReady(p);
     const need = p.needs.map(([id, q]: [string, number]) => {
@@ -5010,7 +5028,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const enPic = S.energy <= 0 && ART.spriteUi('empty_energy') ? 'empty_energy' : 'energy_refill';
     pop('⚡ Energy', `${ART.spriteUi(enPic) ? `<img class="enArt${enPic === 'empty_energy' ? ' wide' : ''}" src="${ART.spriteUi(enPic)}" alt="">` : ''}<div class="enBig">${ART.icon('energy')}<b>${S.energy}</b><i>/ ${maxEnergy()}</i></div>
       <div class="noteLine" style="margin-top:2px">${full ? 'Full! Go merge something.' : `+1 every ${Math.round(per / 60000 * 10) / 10} min · next in <b>${mmss(next)}</b>`}</div>
-      <div class="enRow"><span class="enIc">${ART.icon('gem')}</span><div><b>Big refill</b><i>+${CFG.gems.refill.energy} energy</i></div>
+      <div class="enRow"><span class="enIc">${ART.uiIcon('energy_cells', ART.icon('gem'))}</span><div><b>Big refill</b><i>+${CFG.gems.refill.energy} energy</i></div>
         <button class="buyBtn gem" id="enGem">💎 ${CFG.gems.refill.gems}</button></div>
       ${adBtn('energy', `+${CFG.ads.energy} ⚡ energy`, 'enAd')}
       <div class="noteLine">More energy: daily tasks, the 🎡 wheel, events, and 🔬 Lab research.</div>`, 'energy');
@@ -5888,7 +5906,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       const prog = seen && list.length ? `<div class="gpBar"><i style="width:${Math.round(done / list.length * 100)}%"></i></div>
         <em>📜 ${done}/${list.length} chapters${worldDone(k) ? ' · restored ✨' : ''}</em>` : '';
       const btn = here ? '<button class="gpGo here" data-pop="camp">📍 You are here · Enter camp</button>'
-        : !painted(k) ? '<span class="gpNeed">🎨 Coming soon</span>'
+        : !painted(k) ? `<span class="gpNeed">${ART.uiIcon('empty_soon', '🔭')} Coming soon</span>`
         : !reached ? `<span class="gpNeed">🔒 ${prev && visited(prev) ? `Restore ${WORLDS[prev].name} · ${projDone(prev)}/${projList(prev).length}` : 'Far away'}</span>`
           : seen ? `<button class="gpGo" data-world="${k}">${S.unlocked[k] && projDone(k) ? 'Fly back ✈️' : 'Fly there ✈️'}</button>`
             : can ? `<button class="gpGo launch" data-world="${k}">LAUNCH 🚀</button>`
@@ -5905,7 +5923,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       return `<div class="gp gp-next locked side-${side}" style="left:${p.x}%;top:${p.y}px;--glow:#8b7bd8">
         <button class="gpPlanet" data-soon="1"><span class="gpRing"></span>
           ${ART.spriteUi('planet_unknown') ? `<span class="galArt">${ART.uiIcon('planet_unknown', '')}</span>` : `<span class="galArt mystery">${ART.uiIcon('planet_vela', ART.planet('aurora'))}</span><b class="galQ">?</b>`}</button>
-        <div class="gpCard"><b>Uncharted world</b><i>Somewhere past Aurora Reach</i><span class="gpNeed">🔭 Coming soon</span></div></div>`;
+        <div class="gpCard"><b>Uncharted world</b><i>Somewhere past Aurora Reach</i><span class="gpNeed">${ART.uiIcon('empty_soon', '🔭')} Coming soon</span></div></div>`;
     })();
     return `<div class="gal2"><div class="galSky"></div>
       <div class="galTop"><button class="galBack" data-pop="camp">↩ Camp</button><button class="galStars2 inTop${CONSTS.some(c => constState(c) === 'ready') ? ' ready' : ''}" data-pop="stars"><img src="${ART.spriteUi('gal_starchart')}" alt=""><b>Star Chart</b><i>${CONSTS.filter(c => S.stars && S.stars[c.id]).length}/${CONSTS.length} lit</i></button><b>Galaxy</b><span class="galFuel">⛽ ${S.fuel}/${CONFIG.rocket.fuelToLaunch}</span></div>
@@ -5913,7 +5931,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       <div class="galScroll" id="galScroll"><div class="galPath" style="height:${H}px">
         <svg class="galSvg" viewBox="0 0 100 ${H}" preserveAspectRatio="none" style="height:${H}px">
           <path d="${path}" class="galRoute"/><path d="${lit}" class="galRoute lit"/></svg>
-        ${[0, 1, 2].map(k => `<i class="galComet" style="top:${80 + k * Math.round(H / 3)}px;left:-40px;animation-delay:${k * 3.1}s"></i>`).join('')}
+        ${ART.spriteUi('meteor') ? [0, 1, 2].map(k => `<img class="galComet" src="${ART.spriteUi('meteor')}" alt="" style="top:${40 + k * Math.round(H / 3)}px;animation-delay:${k * 4.3 + 1}s">`).join('') : ''}
         ${nodes}</div></div>
       <div class="galFoot">A new world costs <b>${CONFIG.rocket.fuelToLaunch} ⛽</b> · flying back is always free</div></div>`;
   }
@@ -6593,7 +6611,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   const EMO: Record<string, string> = {
     '🪙': 'icon_coin', '💎': 'icon_gem', '⚡': 'icon_energy', '🧪': 'icon_flask', '🔒': 'st_lock', '⏳': 'st_wait', '✅': 'st_check', '❗': 'st_alert', '💤': 'st_sleep',
     '📜': 'ic_scroll', '🎁': 'ic_gift', '🏆': 'ic_trophy', '📦': 'ic_box', '🎡': 'ic_spin', '🔬': 'ic_microscope', '🛒': 'ic_shop',
-    '🎪': 'ic_tent', '📖': 'ic_album2', '🗺️': 'ic_map2', '🗺': 'ic_map2', '🔑': 'ic_key', '🔔': 'cl_bell', '🌌': 'ic_galaxy', '💡': 'ic_hint', '⬆': 'ic_up', '🧺': 'ic_pouch', '✉️': 'ic_feedback', '📅': 'ic_calendar', '🍪': 'ic_cookie', '🧲': 'icon_magnet', '🔊': 'ic_sound', '🎵': 'ic_music', '💾': 'ic_saved', '➡️': 'ic_nextch', '🛸': 'ic_galaxy',
+    '🎪': 'ic_tent', '📖': 'ic_album2', '🗺️': 'ic_map2', '🗺': 'ic_map2', '🔑': 'ic_key', '🔔': 'cl_bell', '🌌': 'ic_galaxy', '💡': 'ic_hint', '⬆': 'ic_up', '🧺': 'ic_pouch', '✉️': 'ic_feedback', '📅': 'ic_calendar', '🍪': 'ic_cookie', '🧲': 'icon_magnet', '🔊': 'ic_sound', '🎵': 'ic_music', '💾': 'ic_saved', '➡️': 'ic_nextch', '🛸': 'ic_galaxy', '❌': 'st_cross', '➕': 'st_plus', '🎯': 'sec_quest', '🏗️': 'sec_build', '🔨': 'sec_build', '🛍️': 'ic_cart', '🌱': 'ic_grow', '⚗️': 'ic_experiment',
   };
   const EMO_RE = new RegExp(Object.keys(EMO).filter(k => ART.spriteUi(EMO[k])).sort((a, b) => b.length - a.length).join('|'), 'g');
   function paintEmoji(root: Node) {

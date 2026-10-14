@@ -3,6 +3,22 @@
    geometry. Art comes from the existing SVG set, rasterised once into textures. */
 import { Application, Container, Graphics, Sprite, Text, Texture } from 'pixi.js';
 import gsap from 'gsap';
+
+/* A tween that outlives its sprite reads a destroyed object's position or scale,
+   throws inside GSAP's ticker, and from then on every animation on the board
+   freezes (items stuck mid-drag, merges that never finish). So whatever Pixi
+   destroys first loses its tweens. */
+{
+  const proto = (Container.prototype as any);
+  if (!proto.__gsapSafe) {
+    const orig = proto.destroy;
+    proto.destroy = function (this: any, ...args: any[]) {
+      try { gsap.killTweensOf(this); if (this.scale) gsap.killTweensOf(this.scale); if (this.position) gsap.killTweensOf(this.position); } catch { /* already gone */ }
+      return orig.apply(this, args);
+    };
+    proto.__gsapSafe = true;
+  }
+}
 import { ART } from './art';
 import { ITEMS, CHAINS, PRODUCERS } from './content';
 
@@ -99,6 +115,7 @@ class PixiBoard {
     this.app.stage.eventMode = 'static';
     this.app.stage.hitArea = this.app.screen;
     this.app.stage.on('pointerdown', this.down);
+    setInterval(() => { try { this.reconcile(); } catch { /* never let the safety net throw */ } }, 700);
     this.app.stage.on('pointermove', this.move);
     this.app.stage.on('pointerup', this.up);
     this.app.stage.on('pointerupoutside', this.up);
@@ -106,7 +123,7 @@ class PixiBoard {
     if ('ResizeObserver' in window) new ResizeObserver(() => this.layout()).observe(host);
     this.ready = true;
     this.layout();
-    if (import.meta.env.DEV) (window as any).__board = this;   // test hook, dev builds only
+    if (import.meta.env.DEV) { (window as any).__board = this; (window as any).gsap = gsap; }   // test hooks, dev builds only
   }
 
   /* ------------------------------------------------------------ textures */
@@ -561,9 +578,51 @@ class PixiBoard {
   }
   private idleBob(i: number) {
     const s = this.slots[i]; if (!s.art || s.art.destroyed) return;
-    s.idle = gsap.to(s.art, {
-      y: '+=' + (this.cell * 0.035), duration: 1.6 + Math.random() * 0.8,
+    const art = s.art, p = this.center(i);
+    // never start the bob while the sprite is still gliding home: a relative bob that starts
+    // mid-flight keeps swinging around the wrong spot, which is how items got stuck off their tile
+    if (gsap.isTweening(art) || Math.abs(art.x - p.x) > 1 || Math.abs(art.y - p.y) > 1) {
+      if (s.idle) { s.idle.kill(); s.idle = undefined; }
+      if (!gsap.isTweening(art)) gsap.to(art, { x: p.x, y: p.y, duration: 0.18, ease: 'power2.out', onComplete: () => { if (this.slots[i].art === art && !art.destroyed && !this.slots[i].idle) this.idleBob(i); } });
+      else gsap.delayedCall(0.3, () => { if (this.slots[i].art === art && !art.destroyed && !this.slots[i].idle) this.idleBob(i); });
+      return;
+    }
+    s.idle = gsap.fromTo(art, { y: p.y }, {
+      y: p.y + this.cell * 0.035, duration: 1.6 + Math.random() * 0.8,
       repeat: -1, yoyo: true, ease: 'sine.inOut', delay: Math.random(),
+    });
+  }
+  /** safety net: anything resting off its tile with nothing moving it glides home */
+  private reconcile() {
+    if (this.drag && this.drag.moved) return;
+    // anything left floating in the drag layer that no tile owns and nothing animates is litter
+    // the picture must match the save: any tile that drifted (an animation cut short) is redrawn
+    const cells = this.lastCells as any[];
+    if (cells && cells.length === this.slots.length) for (let i = 0; i < cells.length; i++) {
+      const s: any = this.slots[i];
+      if (s.pending) { if (performance.now() - (s.pendingAt || 0) > 1500) { try { s.pending.progress(1); } catch { s.pending = undefined; } } continue; }
+      const k = this.keyOf(cells[i]);
+      if (s.key !== k) { this.fill(i, cells[i], k); this.drawTile(i); }
+    }
+    const owned = new Set(this.slots.map((s: any) => s.art));
+    [...this.lDrag.children].forEach((c: any) => { if (!owned.has(c) && !gsap.isTweening(c) && !gsap.isTweening(c.scale)) c.destroy(); });
+    this.slots.forEach((s: any, i) => {
+      const a = s.art; if (!a || a.destroyed || s.pending || !s.key || /^[bfue]/.test(s.key)) return;
+      if (a.parent && a.parent !== this.lItem) { if (a.parent === this.lDrag) this.lItem.addChild(a); else return; }
+      const p = this.center(i);
+      const tweening = gsap.getTweensOf(a).some(t => t !== s.idle && t.isActive());
+      if (tweening) { s.offN = 0; return; }
+      const off = Math.abs(a.x - p.x) > 2 || Math.abs(a.y - p.y) > this.cell * 0.06;
+      const sc = this.spriteScale(i), badScale = !gsap.isTweening(a.scale) && !s.matchGlow && Math.abs(a.scale.x - sc) > sc * 0.2;
+      if (off) {
+        // first time: glide home; still off on the next check: put it there outright
+        s.offN = (s.offN || 0) + 1;
+        if (s.idle) { s.idle.kill(); s.idle = undefined; }
+        if (s.offN >= 2) { gsap.killTweensOf(a); gsap.killTweensOf(a.scale); a.position.set(p.x, p.y); a.rotation = 0; a.scale.set(sc); s.offN = 0; this.idleBob(i); }
+        else gsap.to(a, { x: p.x, y: p.y, rotation: 0, duration: 0.2, ease: 'power2.out', onComplete: () => { if (!a.destroyed && !s.idle) this.idleBob(i); } });
+      } else s.offN = 0;
+      if (badScale) gsap.to(a.scale, { x: sc, y: sc, duration: 0.2 });
+      if (a.alpha < 0.3 && !s.key.startsWith('f')) a.alpha = 1;
     });
   }
 
@@ -628,6 +687,7 @@ class PixiBoard {
       const sc = this.spriteScale(to);
       gsap.to(b.art.scale, { x: sc * 1.25, y: sc * 0.8, duration: 0.12, ease: 'power2.out' });
     }
+    (b as any).pendingAt = performance.now();
     b.pending = gsap.delayedCall(0.13, () => {
       this.slots[to].pending = undefined;
       this.fill(to, { id: newId }, 'i' + newId);
@@ -1056,7 +1116,7 @@ class PixiBoard {
     const dx = e.global.x - d.x, dy = e.global.y - d.y;
     if (!d.moved) {
       if (Math.hypot(dx, dy) < 6) return;
-      if (!this.hooks.canDrag(d.i)) { this.drag = null; return; }
+      if (!this.hooks.canDrag(d.i) || (this.slots[d.i] as any).pending) { this.drag = null; return; }
       const s = this.slots[d.i];
       if (!s.art) { this.drag = null; return; }
       d.moved = true;
@@ -1072,6 +1132,8 @@ class PixiBoard {
       this.showMatches(d.i);
       this.hooks.onLift?.(d.i);
     }
+    // the board changed under the finger (a timer, a delivery): drop the drag quietly
+    if (!d.sprite || d.sprite.destroyed || this.slots[d.i].art !== d.sprite) { this.abortDrag(); return; }
     // the item rides a little above the finger, so the finger never hides it,
     // and leans into the direction it is being pulled
     d.sprite.position.set(e.global.x, e.global.y - this.cell * 0.32);
@@ -1091,6 +1153,7 @@ class PixiBoard {
     this.clearDropHighlight();
     this.hideMatches();
     if (!d.moved) { this.hooks.onTap(d.i); return; }
+    if (!d.sprite || d.sprite.destroyed || this.slots[d.i].art !== d.sprite) { this.drag = d; this.abortDrag(); return; }
     const slot = this.slots[d.i] as any;
     [slot.aura, slot.spin].forEach((o: any) => { if (o && !o.destroyed) o.visible = true; });
     const t = this.target(d.i, e.global.x, e.global.y);
@@ -1116,6 +1179,13 @@ class PixiBoard {
     gsap.to(d.sprite.scale, { x: sc, y: sc, duration: 0.12 });
     this.hooks.onDrop(d.i, to);                    // game decides what happens
   };
+  /** the dragged sprite was replaced under the finger: put whatever is in its slot back home */
+  private abortDrag() {
+    const d = this.drag; this.drag = null;
+    this.clearDropHighlight(); this.hideMatches();
+    if (d && d.sprite && !d.sprite.destroyed && d.sprite.parent === this.lDrag && this.slots[d.i].art !== d.sprite) d.sprite.destroy();
+    if (d) { const s = this.slots[d.i]; if (s.art && !s.art.destroyed) { this.lItem.addChild(s.art); this.settle(d.i); } }
+  }
   /** where the last drag was let go, so a move can glide from there */
   private lastDrop: { x: number; y: number } | null = null;
   private dropRing: Graphics | null = null;

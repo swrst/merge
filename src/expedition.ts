@@ -92,17 +92,17 @@ export function createExpedition(ctx: XpCtx) {
   /* ------------------------------------------------------------- state */
   function st() {
     const k = key();
-    if (!ctx.S.xp || ctx.S.xp.key !== k) {
-      const old = ctx.S.xp;
+    if (!ctx.S.exped || ctx.S.exped.key !== k) {
+      const old = ctx.S.exped;
       if (old && old.key && old.pts && !old.told) { old.told = 1; ctx.S.xpPast = (ctx.S.xpPast || []).concat([{ key: old.key, pts: old.pts, medals: Object.keys(old.ach || {}).length }]).slice(-12); }
       const b: (string | null)[] = Array(N).fill(null);
       b[PROD_AT] = 'P';
       const [a, c] = cur().chains;
       [[PROD_AT - 1, a.steps[0][0]], [PROD_AT + 1, c.steps[0][0]], [PROD_AT + W, a.steps[0][0]], [PROD_AT - W, c.steps[0][0]]].forEach(([i, id]) => { b[i as number] = id as string; });
-      ctx.S.xp = { key: k, pts: 0, got: 0, b, disc: { [a.steps[0][0]]: 1, [c.steps[0][0]]: 1 }, ord: [], ach: {}, intro: 0, ch: CHARGE_MAX, chAt: Date.now(), wait: [] };
+      ctx.S.exped = { key: k, pts: 0, got: 0, b, disc: { [a.steps[0][0]]: 1, [c.steps[0][0]]: 1 }, ord: [], ach: {}, intro: 0, ch: CHARGE_MAX, chAt: Date.now(), wait: [] };
       fillOrders();
     }
-    const x = ctx.S.xp;
+    const x = ctx.S.exped;
     if (x.ch === undefined) { x.ch = CHARGE_MAX; x.chAt = Date.now(); x.wait = []; }
     // the producer refills over time; visitors whose wait is over step up
     if (x.ch < CHARGE_MAX) { const n = Math.floor((Date.now() - x.chAt) / CHARGE_MS); if (n > 0) { x.ch = Math.min(CHARGE_MAX, x.ch + n); x.chAt += n * CHARGE_MS; } }
@@ -113,9 +113,9 @@ export function createExpedition(ctx: XpCtx) {
   }
 
   /* ------------------------------------------------------------- requests */
-  function best(c: Chain) { const x = ctx.S.xp; let t = 1; c.steps.forEach(([id], k) => { if (x.disc[id]) t = Math.max(t, k + 1); }); return t; }
+  function best(c: Chain) { const x = ctx.S.exped; let t = 1; c.steps.forEach(([id], k) => { if (x.disc[id]) t = Math.max(t, k + 1); }); return t; }
   function fillOrders() {
-    const x = ctx.S.xp;
+    const x = ctx.S.exped;
     while (x.ord.length + (x.wait || []).length < 3) {
       const used = new Set(x.ord.map((o: any) => o.who));
       const pool = VISITORS.filter(v => !used.has(v)), who = pool[Math.floor(Math.random() * pool.length)];
@@ -129,11 +129,11 @@ export function createExpedition(ctx: XpCtx) {
       x.ord.push({ who, id });
     }
   }
-  const has = (id: string) => ctx.S.xp.b.indexOf(id);
+  const has = (id: string) => ctx.S.exped.b.indexOf(id);
 
   /* ------------------------------------------------------------- points & medals */
   function addPts(n: number) {
-    const x = ctx.S.xp; x.pts += n;
+    const x = ctx.S.exped; x.pts += n;
     while (x.got < TRACK.length && x.pts >= TRACK[x.got][0]) {
       const r = TRACK[x.got][1]; x.got++;
       const last = x.got === TRACK.length;
@@ -153,14 +153,14 @@ export function createExpedition(ctx: XpCtx) {
     ];
   };
   function medal(k: string) {
-    const x = ctx.S.xp; if (x.ach[k]) return;
+    const x = ctx.S.exped; if (x.ach[k]) return;
     x.ach[k] = 1; ctx.S.xpMedals = (ctx.S.xpMedals || 0) + 1;
     const m = MEDALS().find(z => z.k === k)!;
     setTimeout(() => ctx.rewardCard('', '🏅 ' + m.name, `An expedition medal: <b>${m.say}</b>.`, { gems: m.gems }), 400);
     ctx.save();
   }
   function discover(id: string) {
-    const x = ctx.S.xp; if (x.disc[id]) return false;
+    const x = ctx.S.exped; if (x.disc[id]) return false;
     x.disc[id] = 1;
     const s = info(id), [a] = cur().chains;
     if (s.t === s.c.steps.length) medal(s.c === a ? 'topA' : 'topB');
@@ -170,13 +170,13 @@ export function createExpedition(ctx: XpCtx) {
 
   /* ------------------------------------------------------------- board actions */
   function nearestFree(from: number) {
-    const x = ctx.S.xp, fx = from % W, fy = Math.floor(from / W);
+    const x = ctx.S.exped, fx = from % W, fy = Math.floor(from / W);
     let bestI = -1, bd = 1e9;
     for (let i = 0; i < N; i++) if (!x.b[i]) { const d = Math.hypot(i % W - fx, Math.floor(i / W) - fy) + Math.random() * 0.3; if (d < bd) { bd = d; bestI = i; } }
     return bestI;
   }
   function tapProducer() {
-    const x = ctx.S.xp;
+    const x = ctx.S.exped;
     const to = nearestFree(PROD_AT);
     if (to < 0) { sfx.no(); ctx.toast('The expedition board is full — merge something first!'); return; }
     if (x.ch < 1) { sfx.no(); say(`The <b>${cur().producer.name}</b> is recharging: next tap in <b>${mmss(CHARGE_MS - (Date.now() - x.chAt))}</b>.`); return; }
@@ -193,7 +193,7 @@ export function createExpedition(ctx: XpCtx) {
     ctx.save();
   }
   function moveOrMerge(from: number, to: number) {
-    const x = ctx.S.xp, a = x.b[from], b = x.b[to];
+    const x = ctx.S.exped, a = x.b[from], b = x.b[to];
     if (from === to || !a) return;
     if (a === 'P') { if (!b) { x.b[to] = 'P'; x.b[from] = null; paintBoard(); ctx.save(); } return; }   // the producer may move to an empty spot
     if (!b) { x.b[to] = a; x.b[from] = null; sfx.tap(); paintBoard(); ctx.save(); return; }
@@ -215,7 +215,7 @@ export function createExpedition(ctx: XpCtx) {
     x.b[from] = b; x.b[to] = a; sfx.tap(); paintBoard(); ctx.save();       // swap
   }
   function give(k: number) {
-    const x = ctx.S.xp, o = x.ord[k]; if (!o) return;
+    const x = ctx.S.exped, o = x.ord[k]; if (!o) return;
     const i = has(o.id); if (i < 0) return;
     const t = info(o.id).t;
     x.b[i] = null; x.ord.splice(k, 1);
@@ -232,7 +232,7 @@ export function createExpedition(ctx: XpCtx) {
   let sel = -1;
   function say(h: string) { const e = document.getElementById('xpSay'); if (e) { e.innerHTML = h; e.classList.remove('flash'); void e.offsetWidth; e.classList.add('flash'); } }
   function describe(i: number) {
-    const v = ctx.S.xp.b[i];
+    const v = ctx.S.exped.b[i];
     if (v === 'P') return say(`<b>${cur().producer.name}</b>: tap for ${cur().chains[0].name} and ${cur().chains[1].name} · 1 ⚡ a tap`);
     if (!v) return;
     const s = info(v);
@@ -240,7 +240,7 @@ export function createExpedition(ctx: XpCtx) {
   }
   function paintBoard(pop = -1, big = false) {
     const g = document.getElementById('xpGrid'); if (!g) return;
-    const x = ctx.S.xp;
+    const x = ctx.S.exped;
     const want = new Set(x.ord.map((o: any) => o.id));
     g.innerHTML = x.b.map((v: string | null, i: number) => {
       const cls = 'xpC' + ((Math.floor(i / W) + i) % 2 ? ' alt' : '') + (v === 'P' ? ' prod' : '') + (i === sel ? ' sel' : '') + (i === pop ? (big ? ' merged' : ' dropped') : '') + (v && v !== 'P' && want.has(v) ? ' want' : '');
@@ -250,17 +250,17 @@ export function createExpedition(ctx: XpCtx) {
   }
   function paintOrders() {
     const h = document.getElementById('xpOrd'); if (!h) return;
-    const x = ctx.S.xp;
+    const x = ctx.S.exped;
     h.innerHTML = x.ord.map((o: any, k: number) => {
       const ok = has(o.id) >= 0;
       return `<div class="xpO${ok ? ' ok' : ''}"><span class="xpWho">${ART.char(o.who)}</span>
         <span class="xpWant">${pic(o.id)}</span><i>${info(o.id).name}</i>
         <button class="xpGive" data-give="${k}"${ok ? '' : ' disabled'}>${ok ? 'Give' : `+${5 * info(o.id).t}`}</button></div>`;
-    }).join('') + (x.wait || []).map((t: number) => `<div class="xpO wait"><span class="xpWant">${ART.uiIcon('st_wait', '⏳')}</span><i>Next visitor</i><b class="xpWaitT" data-t="${t}">${mmss(t - Date.now())}</b></div>`).join('');
+    }).join('') + (x.wait || []).map((t: number) => `<div class="xpO wait"><span class="xpWant">${ART.uiIcon('empty_soon', ART.uiIcon('st_wait', '⏳'))}</span><i>Next visitor</i><b class="xpWaitT" data-t="${t}">${mmss(t - Date.now())}</b></div>`).join('');
     h.querySelectorAll<HTMLElement>('[data-give]').forEach(b => b.onclick = () => give(+b.dataset.give!));
   }
   function paintTop() {
-    const x = ctx.S.xp, nx = TRACK[x.got], prev = x.got ? TRACK[x.got - 1][0] : 0;
+    const x = ctx.S.exped, nx = TRACK[x.got], prev = x.got ? TRACK[x.got - 1][0] : 0;
     const bar = document.getElementById('xpBar'); if (!bar) return;
     const pct = nx ? Math.min(100, (x.pts - prev) / (nx[0] - prev) * 100) : 100;
     bar.innerHTML = `<div class="xpPts"><b>${x.pts}</b><i>points</i></div>
@@ -303,7 +303,7 @@ export function createExpedition(ctx: XpCtx) {
   function hide() { const el = document.getElementById('xpScr'); if (el) el.className = ''; document.getElementById('xpPanel')?.remove(); sfx.close(); ctx.renderHUD(); }
   function panel(kind: 'log' | 'goals' | 'help') {
     document.getElementById('xpPanel')?.remove();
-    const x = ctx.S.xp, e = cur();
+    const x = ctx.S.exped, e = cur();
     const p = document.createElement('div'); p.id = 'xpPanel';
     let body = '';
     if (kind === 'log') body = e.chains.map(c => `<div class="xpLogC"><b>${c.name}</b><div class="xpLogRow">${c.steps.map(([id, name]) =>
@@ -333,7 +333,7 @@ export function createExpedition(ctx: XpCtx) {
     g.onpointerdown = (ev: PointerEvent) => {
       const c = (ev.target as HTMLElement).closest('.xpC') as HTMLElement | null; if (!c) return;
       from = +c.dataset.i!; sx = ev.clientX; sy = ev.clientY; pid = ev.pointerId;
-      if (!ctx.S.xp.b[from]) { from = -1; return; }
+      if (!ctx.S.exped.b[from]) { from = -1; return; }
       g.setPointerCapture(pid);
     };
     g.onpointermove = (ev: PointerEvent) => {
@@ -356,8 +356,8 @@ export function createExpedition(ctx: XpCtx) {
         sel = -1; return;
       }
       // a tap
-      if (ctx.S.xp.b[f] === 'P') { tapProducer(); return; }
-      if (sel >= 0 && sel !== f && ctx.S.xp.b[sel] === ctx.S.xp.b[f]) { const s = sel; sel = -1; moveOrMerge(s, f); return; }
+      if (ctx.S.exped.b[f] === 'P') { tapProducer(); return; }
+      if (sel >= 0 && sel !== f && ctx.S.exped.b[sel] === ctx.S.exped.b[f]) { const s = sel; sel = -1; moveOrMerge(s, f); return; }
       sel = f; describe(f); paintBoard();
     };
     g.onpointerup = end; g.onpointercancel = (ev: PointerEvent) => { if (ghost) { ghost.remove(); ghost = null; } from = -1; void ev; paintBoard(); };
@@ -369,7 +369,7 @@ export function createExpedition(ctx: XpCtx) {
     /** the side chip on the main screen */
     chip: () => {
       if (!open()) return '';
-      const x = ctx.S.xp && ctx.S.xp.key === key() ? ctx.S.xp : null;
+      const x = ctx.S.exped && ctx.S.exped.key === key() ? ctx.S.exped : null;
       const ready = x ? x.ord.some((o: any) => x.b.indexOf(o.id) >= 0) : true;
       return `<button class="qChip xp${ready ? ' ready' : ''}" data-q="xp">${prodPic()}<b>${x ? x.pts : 'NEW'}</b><i>${dhm(left())}</i></button>`;
     },
@@ -377,7 +377,7 @@ export function createExpedition(ctx: XpCtx) {
       if (document.getElementById('xpScr')?.className !== 'open' || document.getElementById('xpGhost')) return;
       paintEnergy();
       const t = document.querySelector('#xpScr .xpTime'); if (t) t.innerHTML = `${ART.uiIcon('cl_timer', '⏳')} ${dhm(left())}`;
-      const x = ctx.S.xp, was = x.ch + '|' + x.ord.length;
+      const x = ctx.S.exped, was = x.ch + '|' + x.ord.length;
       st();
       if (x.ch + '|' + x.ord.length !== was) paintBoard();
       document.querySelectorAll<HTMLElement>('.xpWaitT').forEach(e => { e.textContent = mmss(+e.dataset.t! - Date.now()); });
