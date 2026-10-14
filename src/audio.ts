@@ -13,13 +13,15 @@ const MUSIC_VOL = 0.3;
 /** the ambience bed sits under the music, and alone in the quiet stretches */
 const AMB_VOL = 0.32;
 
-const urls = import.meta.glob('./audio/*.ogg', {
+// .ogg are the built-in sounds; an .mp3 with the same name (say, one made with an AI sound
+// tool and dropped into src/audio) replaces it, so new sounds need no converting
+const urls = import.meta.glob('./audio/*.{ogg,mp3}', {
   eager: true, query: '?url', import: 'default',
 }) as Record<string, string>;
 
 const SRC: Record<string, string> = {};
-for (const path in urls) {
-  const name = path.split('/').pop()!.replace('.ogg', '');
+for (const path of Object.keys(urls).sort((a, b) => (a.endsWith('.mp3') ? 1 : 0) - (b.endsWith('.mp3') ? 1 : 0))) {
+  const name = path.split('/').pop()!.replace(/\.(ogg|mp3)$/, '');
   SRC[name] = urls[path];
 }
 

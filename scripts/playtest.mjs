@@ -112,7 +112,7 @@ const pop = async (k, title) => {
 const travel = async (world) => {
   await closeModal();
   // new worlds open once the one before has its launch pad restored
-  await set(() => { const st = window.__game.state(); st.fuel = 9; st.proj = { earth: 99, luna: 99, cindra: 99, nerith: 99, vela: 99 }; });
+  await set(() => { const st = window.__game.state(); st.fuel = 9; st.proj = { earth: 100, luna: 30, cindra: 30, nerith: 30, vela: 30 }; });
   await closeModal();
   await tab('map');
   // the galaxy is a sub-view of the World tab, and it remembers which view it
@@ -575,8 +575,8 @@ const after4 = await page.evaluate(() => {
   const g = window.__game;
   return { live: g.liveChains().length, prods: g.cells().filter(c => c && c.p && !c.tmp && c.p !== "crater").length };
 });
-must(after4.prods > before2.prods, `reaching the level planted a new producer (${before2.prods} -> ${after4.prods})`);
-must(after4.live > before2.live, `and woke its chain (${before2.live} -> ${after4.live} awake)`);
+// since v68 every producer on the far worlds arrives with a story chapter, not with a world level
+must(after4.prods === before2.prods, `story producers wait for their chapter, not the world level (${before2.prods} -> ${after4.prods})`);
 await closeModal();
 
 head('Restoration projects');

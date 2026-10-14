@@ -74,3 +74,49 @@ One image: a grid of 3×2, transparent background, one per cell, each a game ico
 5. a round silver medal badge with a comet and a ribbon
 6. a small pile of sparkling star dust
 ```
+
+### Hint button (v70)
+
+**UI-42. ic_scan** (save as `ic_scan.png`; it replaces the light bulb on the hint button)
+
+```
+One game icon, centered, transparent background, no text: a small round alien scanner gadget with a glowing cyan radar screen showing two matching blips, a tiny antenna on top and a gold rim.
+```
+
+### Star Expeditions (v70)
+
+The monthly event board. The four expeditions in the game now use art you already made; these add their own producers and the next two expeditions.
+
+**EX-1. sheet_expedition_producers** (Toy Saucer, Comet Easel, Paint Rover, Treasure Comet)
+
+```
+One image: a grid of 2×2, transparent background, one per cell, each a game producer standing on its own small round patch of ground, centered, no text, left to right:
+1. a small flying saucer with an open hatch spilling toy balls and springs
+2. a tall easel holding a glowing comet painting, paint pots at its feet
+3. a little six-wheeled rover with paint buckets and a brush arm
+4. a comet stuck in the ground with a treasure chest poking out of its tail
+```
+
+**EX-2. sheet_expedition_spooks** (Nebula Spooks expedition: Glow Wisp → Wisp Pair → Spook Jar → Moon Rock Lantern → Haunted Station → Spook King)
+
+```
+One image: a grid of 3×2, transparent background, one per cell, each a game item, centered, no text, left to right:
+1. a tiny glowing purple ghost wisp with one big eye
+2. two little ghost wisps holding hands
+3. a glass jar with a giggling green ghost inside
+4. a moon rock carved into a lantern with a three-eyed face, glowing inside
+5. a creaky little floating space station with glowing windows and ghosts peeking out
+6. a big round ghost alien wearing a star crown
+```
+
+**EX-3. sheet_expedition_fashion** (Alien Fashion Show expedition: Star Button → Thread Spool → Antenna Hat → Glow Gown → Sewing Bot → Runway Dome)
+
+```
+One image: a grid of 3×2, transparent background, one per cell, each a game item, centered, no text, left to right:
+1. a shiny round button with a star in the middle
+2. a spool of glowing thread
+3. a fancy hat with two bobbly antennae
+4. a sparkly gown on a dress stand, glowing at the hem
+5. a little round robot with a sewing needle arm
+6. a fashion dome with a lit-up runway in front
+```

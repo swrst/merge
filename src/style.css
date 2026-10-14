@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+/* fonts are bundled (see main.ts), so they work offline in the app */
 
 :root{
   --ink:#4a3620; --ink-soft:#7a6244;
@@ -3257,3 +3257,208 @@ html body .app .mBoxW .mTitle{padding:5px 46px 15px}
 .bootErr i{font-style:normal;font-size:11px;opacity:.75;word-break:break-word}
 .bootErr button{border:0;border-radius:99px;padding:9px 12px;font:800 14px Fredoka,system-ui,sans-serif;background:linear-gradient(180deg,#8fe86d,#3fbf4a);color:#fff}
 .bootErr button.soft{background:rgba(255,255,255,.18);font-size:12px}
+
+/* =====================================================================
+   v70 "Holo Command" theme: every window is a holographic glass panel with
+   a glowing rim and corner brackets, titles sit on an angular command banner
+   that grows with its text, and titles/buttons/numbers use a chunky outlined
+   display face (Lilita One), Clash-of-Clans style. Body text stays Fredoka.
+   ===================================================================== */
+:root{--hx-rim:#6fe3ff;--hx-rim2:#2aa7e8;--hx-deep:#0d1f4f;--hx-title:'Lilita One',Fredoka,'Trebuchet MS',system-ui,sans-serif;
+  --hx-out:0 2px 0 rgba(6,20,61,.9),1px 0 0 rgba(6,20,61,.7),-1px 0 0 rgba(6,20,61,.7),0 -1px 0 rgba(6,20,61,.6)}
+/* panels */
+html body .app .pop .popBox,html body .app .mBoxW{
+  background:linear-gradient(180deg,rgba(236,251,255,.97),rgba(206,238,255,.96))!important;border-image:none!important;
+  border:2px solid var(--hx-rim)!important;border-radius:20px!important;
+  box-shadow:0 0 0 3px rgba(13,31,79,.88),0 0 0 5px rgba(111,227,255,.35),0 0 30px rgba(80,210,255,.5),inset 0 0 26px rgba(120,230,255,.35)!important;
+  padding:26px 12px 12px!important;overflow:visible}
+html body .app .pop .popBox::after,html body .app .mBoxW::after{content:"";position:absolute;inset:-8px;pointer-events:none;z-index:2;
+  background:
+    linear-gradient(var(--hx-rim),var(--hx-rim)) left top/24px 3px no-repeat,linear-gradient(var(--hx-rim),var(--hx-rim)) left top/3px 24px no-repeat,
+    linear-gradient(var(--hx-rim),var(--hx-rim)) right top/24px 3px no-repeat,linear-gradient(var(--hx-rim),var(--hx-rim)) right top/3px 24px no-repeat,
+    linear-gradient(var(--hx-rim),var(--hx-rim)) left bottom/24px 3px no-repeat,linear-gradient(var(--hx-rim),var(--hx-rim)) left bottom/3px 24px no-repeat,
+    linear-gradient(var(--hx-rim),var(--hx-rim)) right bottom/24px 3px no-repeat,linear-gradient(var(--hx-rim),var(--hx-rim)) right bottom/3px 24px no-repeat;
+  filter:drop-shadow(0 0 4px rgba(111,227,255,.9))}
+html body .app .pop .popBox::before{content:"";position:absolute;inset:0;border-radius:18px;pointer-events:none;opacity:.22;
+  background:repeating-linear-gradient(180deg,transparent 0 3px,rgba(80,200,255,.3) 3px 4px)}
+/* title banner: grows with its text, never a fixed ribbon */
+html body .app .popRibbon,html body .app .mBoxW .mTitle,html body .app .screen:not(.scene) .scTitle{
+  position:absolute;top:-21px!important;left:50%!important;transform:translateX(-50%)!important;z-index:3;
+  background:linear-gradient(180deg,#2c63c9 0%,#173a8f 55%,#0e2565 100%)!important;
+  clip-path:polygon(16px 0,calc(100% - 16px) 0,100% 50%,calc(100% - 16px) 100%,16px 100%,0 50%);
+  box-shadow:inset 0 2px 0 rgba(160,235,255,.75),inset 0 -2px 0 rgba(111,227,255,.9),inset 0 0 14px rgba(111,227,255,.45)!important;
+  padding:8px 34px 9px!important;min-width:150px;max-width:calc(100% + 10px)!important;white-space:nowrap;overflow:visible!important;text-overflow:clip!important;
+  font-family:var(--hx-title)!important;font-weight:400!important;font-size:20px!important;line-height:1.1;letter-spacing:.03em;color:#fff!important;
+  text-shadow:var(--hx-out),0 0 10px rgba(111,227,255,.8)!important;border:0!important;border-radius:0!important}
+html body .app .popRibbon img,html body .app .popRibbon .uiIc,html body .app .scTitle img,html body .app .scTitle .uiIc{width:22px!important;height:22px!important;vertical-align:-4px}
+/* the close button: a round red holo button */
+html body .app .popX,html body .app .mX{z-index:4}
+/* chunky outlined display type for buttons, titles and numbers */
+html body .app .big,html body .app .buyBtn,html body .app .sTab,html body .app .qChip b,html body .app .chip span:last-child,
+html body .app .sCName,html body .app .sSecT,html body .app .cardTitle,html body .app .albHead>b,html body .app .pfWho input,html body .app .pfStat b,
+html body .app .pupName,html body .app .accTime,html body .app .enBig b,html body .app .rwcTitle,html body .app .npwName,html body .app .lvlBox .orb{
+  font-family:var(--hx-title)!important;font-weight:400!important;letter-spacing:.02em}
+html body .app .big,html body .app .buyBtn{text-shadow:var(--hx-out)!important}
+html body .app .big.soft,html body .app .buyBtn:disabled{text-shadow:none!important}
+html body .app .big{font-size:17px!important}
+/* v70: side helpers — small dark holo buttons with a cyan rim */
+html body .app .sideR{width:38px}
+html body .app .sideR .tools{gap:5px}
+html body .app .sideR .tools>button{width:34px!important;height:34px!important;border-radius:10px!important;padding:0!important;
+  background:radial-gradient(circle at 50% 30%,rgba(60,120,220,.9),rgba(13,31,79,.92))!important;border:1.5px solid var(--hx-rim)!important;
+  box-shadow:0 0 8px rgba(111,227,255,.55),inset 0 0 8px rgba(111,227,255,.35)!important}
+html body .app .sideR .tools>button .uiIc,html body .app .sideR .tools>button .hintIc .uiIc{width:21px!important;height:21px!important}
+html body .app .sideR .tools #btnHint .hintIc{width:21px;height:21px;font-size:15px;line-height:21px;animation:hxPulse 2.4s ease-in-out infinite}
+html body .app .sideR .tools #btnX2 .ic{width:13px!important;height:13px!important}
+html body .app .sideR .tools #btnX2 b{font-size:10px;color:#fff;text-shadow:var(--hx-out)}
+@keyframes hxPulse{50%{filter:drop-shadow(0 0 5px #8ff3ff) brightness(1.2)}}
+@media (prefers-reduced-motion: reduce){html body .app .sideR .tools #btnHint .hintIc{animation:none}}
+/* v70: pointing hand for first-time guides (fixed to the screen, above everything) */
+#domHand{position:fixed;z-index:9999;pointer-events:none;width:0;height:0}
+#domHand .dhRing{position:absolute;left:-30px;top:-30px;width:60px;height:60px;border-radius:50%;border:3px solid #8ff3ff;box-shadow:0 0 14px #6fe3ff;animation:dhRing 1.2s ease-out infinite}
+#domHand .dhHand{position:absolute;left:4px;top:8px;width:46px;height:auto;font-size:34px;animation:dhTap 1.2s ease-in-out infinite;filter:drop-shadow(0 3px 4px rgba(0,0,0,.4))}
+#domHand .dhSay{position:absolute;right:20px;top:38px;white-space:nowrap;font-style:normal;font:400 15px/1 'Lilita One',Fredoka,sans-serif;color:#fff;background:linear-gradient(180deg,#2c63c9,#0e2565);padding:7px 12px;border-radius:12px;box-shadow:0 0 0 2px #6fe3ff,0 0 12px rgba(111,227,255,.7);text-shadow:0 2px 0 #06143d}
+@keyframes dhRing{from{transform:scale(.6);opacity:1}to{transform:scale(1.4);opacity:0}}
+@keyframes dhTap{50%{transform:translate(-6px,-8px)}}
+.shopGuide{display:flex;flex-direction:column;gap:7px;text-align:left;margin:4px 0 6px}
+.shopGuide>div{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:12px;background:rgba(255,255,255,.75);box-shadow:inset 0 0 0 1.5px rgba(111,200,255,.45)}
+.shopGuide span{flex:none;width:34px;height:34px;display:flex;align-items:center;justify-content:center}
+.shopGuide span img,.shopGuide span .uiIc{width:34px!important;height:34px!important;object-fit:contain}
+.shopGuide p{margin:0;font-size:12.5px;line-height:1.3}
+/* v70: page screens sit fully below the HUD so the title banner is never tucked under it,
+   and the close button lives on the panel corner instead of on top of the first row */
+html body .app .screen:not(.scene){top:calc(var(--hudH,52px) + 24px)!important}
+html body .app .screen:not(.scene) .scHead{position:static!important;margin-top:0!important;height:16px}
+html body .app .screen:not(.scene) .scHead .scClose{position:absolute!important;top:-14px!important;right:-8px!important;left:auto!important;margin:0!important;z-index:5}
+/* v70: the Meadow Heart panel was drawn for a dark window; on the light holo glass its text needs dark ink */
+html body .app .hLine{color:#24305e}
+html body .app .hHow{background:rgba(255,255,255,.8);box-shadow:inset 0 0 0 1.5px rgba(255,122,217,.45)}
+html body .app .hHow>b{color:#b0238a}
+html body .app .hStep{color:#24305e}html body .app .hStep b{color:#c2410c}
+html body .app .hNode{background:rgba(255,255,255,.8);box-shadow:inset 0 0 0 1.5px rgba(120,140,200,.35);color:#24305e}
+html body .app .hNode i{background:#e3e8f7;color:#24305e}html body .app .hNode em{color:#5d6688}
+html body .app .hNode.done{box-shadow:inset 0 0 0 1.5px #3fbf6a}html body .app .hNode.done i{color:#fff}
+/* v70: side helpers one notch smaller still */
+html body .app .sideR{width:34px}
+html body .app .sideR .tools>button{width:30px!important;height:30px!important;border-radius:9px!important}
+html body .app .sideR .tools>button .uiIc,html body .app .sideR .tools>button .hintIc .uiIc,html body .app .sideR .tools #btnHint .hintIc{width:22px!important;height:22px!important}
+/* v70: the Heart as painted on the camp map, framed in a round holo window */
+html body .app .hCrop{width:118px;height:118px;border-radius:50%;background-repeat:no-repeat;background-color:#bfe3ff;
+  box-shadow:0 0 0 3px #fff,0 0 0 5px #6fe3ff,0 0 18px rgba(255,140,220,.7);margin:0 auto;animation:none}
+html body .app .hStage:not(.awake) .hCrop{filter:none}
+/* ===================================================== v70: Star Expeditions (event board) */
+#xpScr{position:fixed;inset:0;z-index:100;display:none;flex-direction:column;align-items:center;gap:7px;
+  padding:calc(10px + env(safe-area-inset-top,0px)) 12px calc(10px + env(safe-area-inset-bottom,0px));overflow:hidden;color:#fff;
+  font-family:Fredoka,sans-serif;--xh:45}
+#xpScr.open{display:flex;animation:xpIn .35s ease-out}
+@keyframes xpIn{from{opacity:0;transform:scale(1.04)}to{opacity:1;transform:none}}
+#xpScr .xpSky{position:absolute;inset:0;z-index:-1;
+  background:radial-gradient(ellipse at 20% 15%,hsla(var(--xh),90%,60%,.55),transparent 55%),
+    radial-gradient(ellipse at 85% 70%,hsla(calc(var(--xh) + 160),85%,55%,.45),transparent 60%),
+    radial-gradient(1.5px 1.5px at 12% 30%,#fff,transparent),radial-gradient(1px 1px at 70% 12%,#fff,transparent),
+    radial-gradient(1.5px 1.5px at 40% 80%,#fff,transparent),radial-gradient(1px 1px at 88% 40%,#fff,transparent),
+    radial-gradient(1px 1px at 30% 55%,#fff,transparent),radial-gradient(1.5px 1.5px at 60% 92%,#fff,transparent),
+    linear-gradient(180deg,#0b1440,#16245f 50%,#0a1236)}
+.xpHead{position:relative;width:100%;max-width:420px;display:flex;flex-direction:column;align-items:center;padding-top:4px}
+.xpTitle{font:400 21px/1.1 'Lilita One',Fredoka,sans-serif;letter-spacing:.03em;padding:8px 30px 9px;color:#fff;
+  background:linear-gradient(180deg,hsl(var(--xh),80%,55%),hsl(var(--xh),75%,35%));
+  clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,14px 100%,0 50%);
+  text-shadow:0 2px 0 rgba(0,0,0,.45),0 0 10px rgba(255,255,255,.35);box-shadow:inset 0 2px 0 rgba(255,255,255,.5)}
+.xpSub{display:flex;gap:8px;margin-top:6px}
+.xpSub>span{display:flex;align-items:center;gap:5px;padding:3px 10px 3px 6px;border-radius:99px;background:rgba(8,18,60,.75);
+  box-shadow:0 0 0 1.5px #6fe3ff,0 0 8px rgba(111,227,255,.4);font:400 14px/1 'Lilita One',Fredoka,sans-serif}
+.xpSub img,.xpSub .uiIc,.xpSub svg{width:20px!important;height:20px!important}
+#xpScr .xpX{position:absolute;right:0;top:0;width:36px;height:36px;border-radius:50%;border:0;color:#fff;font-weight:800;font-size:15px;
+  background:var(--ui-btn_close,linear-gradient(180deg,#ff8a78,#e8483a)) center/100% 100% no-repeat;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+html.ui-btn_close #xpScr .xpX{font-size:0}
+.xpBar{width:100%;max-width:400px;display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:14px;
+  background:rgba(10,24,74,.72);box-shadow:inset 0 0 0 1.5px rgba(111,227,255,.6),0 0 12px rgba(111,227,255,.25)}
+.xpPts{display:flex;flex-direction:column;align-items:center;min-width:52px}
+.xpPts b{font:400 22px/1 'Lilita One',Fredoka,sans-serif;color:#ffe27a;text-shadow:0 2px 0 #7a4b00}
+.xpPts i{font-style:normal;font-size:10px;opacity:.8}
+.xpTrack{flex:1;position:relative;height:18px;border-radius:99px;background:#0a1236;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.25);overflow:hidden}
+.xpTrack i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(180deg,#7dff9a,#22b85a);border-radius:99px;transition:width .4s}
+.xpTrack em{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:400 12px/1 'Lilita One',Fredoka,sans-serif;font-style:normal;text-shadow:0 1px 2px #000}
+.xpNext{width:38px;height:38px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:rgba(255,255,255,.12);box-shadow:inset 0 0 0 1.5px rgba(255,226,122,.7)}
+.xpNext img,.xpNext svg,.xpNext .uiIc{width:30px!important;height:30px!important}
+.xpOrd{width:100%;max-width:400px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;min-height:118px}
+.xpO{position:relative;display:flex;flex-direction:column;align-items:center;padding:4px 4px 6px;border-radius:14px;
+  background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(214,232,255,.92));color:#1d2a5c;box-shadow:0 0 0 2px rgba(111,227,255,.7),0 3px 0 rgba(0,0,0,.25);animation:xpPop .3s ease-out}
+.xpO.ok{box-shadow:0 0 0 2.5px #4ee07a,0 0 12px rgba(78,224,122,.7),0 3px 0 rgba(0,0,0,.25)}
+.xpWho{position:absolute;left:-2px;top:-4px;width:34px;height:34px;border-radius:50%;overflow:hidden;background:#cfe2ff;box-shadow:0 0 0 2px #fff}
+.xpWho img,.xpWho svg{width:100%;height:100%;object-fit:cover}
+.xpWant{width:52px;height:52px;margin-top:2px}.xpWant img{width:100%;height:100%;object-fit:contain}
+.xpO>i{font-style:normal;font-size:10.5px;font-weight:700;line-height:1.1;text-align:center;min-height:23px;display:flex;align-items:center}
+.xpGive{margin-top:2px;border:0;border-radius:99px;padding:4px 12px;font:400 13px/1 'Lilita One',Fredoka,sans-serif;color:#fff;
+  background:linear-gradient(180deg,#5fe07f,#1f9e4a);box-shadow:0 2px 0 #12682f;text-shadow:0 1px 0 rgba(0,0,0,.35)}
+.xpGive:disabled{background:linear-gradient(180deg,#9aa7cc,#6c78a3);box-shadow:0 2px 0 #4a557c}
+.xpBoard{width:100%;max-width:400px;padding:7px;border-radius:18px;background:rgba(8,18,60,.6);
+  box-shadow:inset 0 0 0 2px rgba(111,227,255,.7),0 0 18px rgba(111,227,255,.3)}
+.xpGrid{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;touch-action:none}
+.xpC{position:relative;aspect-ratio:1;border-radius:10px;background:rgba(190,215,255,.22);display:flex;align-items:center;justify-content:center;user-select:none;-webkit-user-select:none}
+.xpC.alt{background:rgba(190,215,255,.14)}
+.xpC>img{width:88%;height:88%;object-fit:contain;pointer-events:none;filter:drop-shadow(0 2px 2px rgba(0,0,0,.35))}
+.xpC.prod{background:radial-gradient(circle,hsla(var(--xh),90%,65%,.6),rgba(190,215,255,.15));box-shadow:inset 0 0 0 2px hsla(var(--xh),90%,70%,.9)}
+.xpC.prod>img{width:100%;height:100%;animation:xpBob 2s ease-in-out infinite}
+.xpBolt img,.xpBolt svg,.xpBolt .uiIc{width:11px!important;height:11px!important;vertical-align:-1px}
+.xpBolt{position:absolute;right:1px;bottom:1px;font:400 10px/1 'Lilita One',Fredoka,sans-serif;background:#0d2a6e;border-radius:99px;padding:2px 4px;box-shadow:0 0 0 1px #6fe3ff}
+.xpC.sel{box-shadow:inset 0 0 0 2.5px #ffe27a,0 0 10px rgba(255,226,122,.7)}
+.xpC.want::after{content:'';position:absolute;right:3px;top:3px;width:9px;height:9px;border-radius:50%;background:#4ee07a;box-shadow:0 0 0 1.5px #fff}
+.xpC.lifted>img{opacity:.3}
+.xpC.dropped>img{animation:xpPop .35s ease-out}
+.xpC.merged>img{animation:xpMerge .45s ease-out}
+.xpGhost{position:fixed;z-index:9999;width:60px;height:60px;margin:-34px 0 0 -30px;pointer-events:none}
+.xpGhost>img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 6px 6px rgba(0,0,0,.45))}
+.xpGhost .xpBolt{display:none}
+@keyframes xpPop{from{transform:scale(.2)}70%{transform:scale(1.15)}to{transform:none}}
+@keyframes xpMerge{0%{transform:scale(.6)}50%{transform:scale(1.3);filter:brightness(1.6)}to{transform:none}}
+@keyframes xpBob{50%{transform:translateY(-3px) scale(1.03)}}
+.xpSay{width:100%;max-width:400px;min-height:34px;padding:6px 12px;border-radius:12px;background:rgba(8,18,60,.75);font-size:13px;line-height:1.3;text-align:center;
+  box-shadow:inset 0 0 0 1.5px rgba(111,227,255,.45)}
+.xpSay b{color:#ffe27a}.xpSay.flash{animation:xpFlash .4s ease-out}
+@keyframes xpFlash{from{background:rgba(111,227,255,.5)}}
+.xpTabs{display:flex;gap:8px;width:100%;max-width:400px}
+.xpTabs button{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;height:44px;border:0;border-radius:14px;color:#fff;
+  font:400 15px/1 'Lilita One',Fredoka,sans-serif;background:linear-gradient(180deg,#3d7de0,#183f9a);box-shadow:0 3px 0 #0c2563,inset 0 1.5px 0 rgba(255,255,255,.45);text-shadow:0 1px 0 rgba(0,0,0,.4)}
+.xpTabs button img,.xpTabs button .uiIc,.xpTabs button svg{width:26px!important;height:26px!important}
+.xpTabs b{color:#ffe27a;font-weight:400}
+#xpPanel{position:absolute;inset:0;z-index:5;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(4,10,35,.6);animation:xpIn .25s ease-out}
+.xpPBox{position:relative;width:100%;max-width:360px;max-height:86%;display:flex;flex-direction:column;align-items:center;gap:10px;padding:30px 14px 14px;border-radius:20px;color:#1d2a5c;
+  background:linear-gradient(180deg,#f4f8ff,#d9e7ff);box-shadow:0 0 0 2px #6fe3ff,0 0 20px rgba(111,227,255,.6),0 12px 30px rgba(0,0,0,.5)}
+.xpPT{position:absolute;top:-18px;left:50%;transform:translateX(-50%);white-space:nowrap;font:400 19px/1.1 'Lilita One',Fredoka,sans-serif;color:#fff;padding:8px 28px 9px;
+  background:linear-gradient(180deg,#2c63c9,#0e2565);clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 50%,calc(100% - 14px) 100%,14px 100%,0 50%);text-shadow:0 2px 0 #06143d}
+.xpPBox .xpX{top:-14px!important;right:-8px!important}
+.xpPB{width:100%;overflow:auto;display:flex;flex-direction:column;gap:8px}
+.xpPB p{margin:0;font-size:13.5px;line-height:1.35;text-align:center}
+.xpHelpArt{width:110px;height:110px;margin:0 auto}.xpHelpArt img{width:100%;height:100%;object-fit:contain}
+.xpSteps{margin:0;padding-left:22px;font-size:13px;line-height:1.45}
+.xpNote{font-size:12px;text-align:center;color:#4b5a8c}
+.xpLogC>b{display:block;font:400 15px/1.2 'Lilita One',Fredoka,sans-serif;margin-bottom:4px}
+.xpLogRow{display:flex;flex-wrap:wrap;gap:5px}
+.xpLogRow span{width:calc((100% - 25px) / 6);display:flex;flex-direction:column;align-items:center;padding:3px;border-radius:10px;background:#fff;box-shadow:inset 0 0 0 1.5px rgba(111,160,255,.4)}
+.xpLogRow img{width:100%;aspect-ratio:1;object-fit:contain}
+.xpLogRow i{font-style:normal;font-size:8.5px;font-weight:700;text-align:center;line-height:1.1}
+.xpLogRow .unk img{filter:brightness(0) opacity(.25)}
+.xpMedal{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:12px;background:#fff;box-shadow:inset 0 0 0 1.5px rgba(111,160,255,.4)}
+.xpMedal span{width:36px;height:36px;flex:none}.xpMedal span img,.xpMedal span .uiIc{width:36px!important;height:36px!important;object-fit:contain}
+.xpMedal:not(.got) span{filter:grayscale(1) opacity(.5)}
+.xpMedal div{flex:1;display:flex;flex-direction:column}.xpMedal b{font-size:13.5px}.xpMedal i{font-style:normal;font-size:11.5px;color:#4b5a8c}
+.xpMedal em{font-style:normal;font-weight:800;font-size:13px;color:#1f9e4a}
+.xpMedal.got{box-shadow:inset 0 0 0 2px #4ee07a}
+.xpTrackList{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+.xpTrackList span{display:flex;flex-direction:column;align-items:center;padding:4px 2px;border-radius:10px;background:#fff;font-size:11px;font-weight:800;box-shadow:inset 0 0 0 1.5px rgba(111,160,255,.4)}
+.xpTrackList span img,.xpTrackList span svg,.xpTrackList span .uiIc{width:28px!important;height:28px!important}
+.xpTrackList i{font-style:normal}
+.xpTrackList .got{background:#dcf8e4;box-shadow:inset 0 0 0 2px #4ee07a}
+.qChip.xp img{width:30px;height:30px;object-fit:contain}
+@media (prefers-reduced-motion:reduce){#xpScr.open,.xpC.prod img,.xpC.dropped img,.xpC.merged img,.xpO{animation:none}}
+/* v70: HUD in the Holo Command look: dark glass capsules with a cyan rim and chunky outlined numbers (Clash-style) */
+html body .app .hud .chip{background:linear-gradient(180deg,rgba(28,58,140,.92),rgba(10,24,74,.94))!important;border:0!important;
+  box-shadow:0 0 0 1.5px #6fe3ff,0 0 8px rgba(111,227,255,.45),inset 0 1.5px 0 rgba(160,235,255,.55),0 2px 0 rgba(0,0,0,.35)!important}
+html body .app .hud #energy,html body .app .hud #coins,html body .app .hud #gems{color:#fff!important;font-family:var(--hx-title)!important;font-weight:400!important;text-shadow:var(--hx-out)!important}
+html body .app .hud .lvlBox .xpwrap{background:linear-gradient(180deg,rgba(28,58,140,.92),rgba(10,24,74,.94))!important;box-shadow:0 0 0 1.5px #6fe3ff,0 0 8px rgba(111,227,255,.45)!important}
+html body .app .hud .lvlBox .xplabel span{color:#fff!important;text-shadow:var(--hx-out)!important}
+html body .app .qChip{background:linear-gradient(180deg,rgba(28,58,140,.9),rgba(10,24,74,.92))!important;border:0!important;
+  box-shadow:0 0 0 1.5px #6fe3ff,0 0 6px rgba(111,227,255,.4)!important}
+html body .app .qChip b,html body .app .qChip i{color:#fff!important;text-shadow:var(--hx-out)!important}
+html body .app .qChip.ready{box-shadow:0 0 0 2px #7dff9a,0 0 10px rgba(125,255,154,.7)!important}

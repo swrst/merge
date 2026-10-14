@@ -8,6 +8,7 @@ import { ads, iap, PRODUCTS, analytics, store, notify, games, mockControls, SERV
 import { isNative } from './native';
 import { audio } from './audio';
 import { shareImage } from './services/share';
+import { createExpedition, XP_UNLOCK } from './expedition';
 import {
   ITEMS, CHAINS, PRODUCERS as PRODS, WORLDS, CHARACTERS as CHARS, MISSIONS, CONFIG,
   RECIPES, SHOP, STORY, ITEM_IDS, PRODUCER_ARTS, nextOf, validateContent,
@@ -1237,7 +1238,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     addGems(CFG.gems.perLevel + (S.lvl % 5 === 0 ? CFG.gems.everyFiveLevels : 0));
     // a level is a treat, not a free refill: a top-up that never overfills
     S.energy = Math.max(S.energy, Math.min(maxEnergy(), S.energy + (CONFIG.energy.levelUp || 20)));
-    if (S.lvl === CONFIG.unlocks.shopAtLevel) setTimeout(() => toast('🛒 The <b>shop</b> is open — top right!'), 2300);
+    if (S.lvl === CONFIG.unlocks.shopAtLevel) setTimeout(shopUnlockHint, 2300);
+    if (S.lvl === XP_UNLOCK) setTimeout(xpUnlockHint, 4200);
     paintBoard();
   }
   /** the good bit: a world level is what actually hands you new things to merge */
@@ -1376,7 +1378,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const b = B(), k = b.findIndex((c: any) => c && c.f === id); if (k < 0) return;
     S.sealTip = 1; save();
     hintPair = [at, k]; board.setHint(hintPair); setTimeout(() => { hintPair = null; board.setHint(null); }, 6000);
-    setTimeout(() => modal('pip', 'A locked tile!',
+    setTimeout(() => modal('player', 'A locked tile!',
       `That dimmed <b>${ITEMS[id].name}</b> with the lock is sealed. Drag your <b>${ITEMS[id].name}</b> onto it: they merge and the tile opens. Every locked item opens the same way.`, 'Got it'), 500);
   }
   function unseal(from: number, to: number) {
@@ -1588,7 +1590,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (v === 'rocket') renderRocket();
     if (v === 'book') renderBook();
     if (v === 'map') renderWorldScreen();
-    if (v === 'shop') { S.shop.seenAt = S.shop.at; renderShop(); renderHUD(); }
+    if (v === 'shop') { S.shop.seenAt = S.shop.at; renderShop(); renderHUD(); domHand(null); if (!S.shopSeen) { S.shopSeen = 1; save(); setTimeout(shopWelcome, 500); } }
     if (v === 'lab') renderLab();
   }
 
@@ -2415,7 +2417,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const r = list[S.daily.day - 1];
     dailyReward(r);
     sfx.coin(); confetti();
-    modal('pip', 'Welcome back!',
+    modal('player', 'Welcome back!',
       `Day <b>${S.daily.day}</b> of your streak — here is <b>${r.label}</b>!
        <div class="dayGrid">${list.map((x: any, k: number) => `
          <div class="dayCell${k + 1 < S.daily.day ? ' done' : ''}${k + 1 === S.daily.day ? ' today' : ''}">
@@ -3649,19 +3651,14 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   /** a ribbon title never runs past its ribbon: shrink the type until it fits the box (wings stay clear) */
   function fitRibbon(el: HTMLElement | null) {
     if (!el) return;
-    el.style.fontSize = ''; el.style.paddingLeft = ''; el.style.paddingRight = '';
+    el.style.removeProperty('font-size'); el.style.removeProperty('padding-left'); el.style.removeProperty('padding-right');
     requestAnimationFrame(() => {
       const box = el.parentElement as HTMLElement; if (!box || !box.clientWidth) return;
-      const max = Math.min(box.clientWidth * 0.96, 330);
-      // the ribbon art has wings: keep the words inside its middle 60%
-      const fit = () => {
-        const cs = getComputedStyle(el), padNow = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
-        const tw = el.scrollWidth - padNow, pad = Math.max(30, Math.round(tw * 0.3));
-        el.style.paddingLeft = el.style.paddingRight = pad + 'px';
-        return tw + pad * 2;
-      };
-      let fs = parseFloat(getComputedStyle(el).fontSize) || 15, n = 0;
-      while (fit() > max && fs > 10 && n++ < 20) { fs -= 0.5; el.style.fontSize = fs + 'px'; }
+      // the command banner grows with its title; only a very long title shrinks to stay inside the window
+      const max = Math.min(box.offsetWidth - 92, 320);   // room for the close button on the right
+      let fs = parseFloat(getComputedStyle(el).fontSize) || 20, n = 0;
+      if (el.offsetWidth > max) { el.style.setProperty('padding-left', '22px', 'important'); el.style.setProperty('padding-right', '22px', 'important'); }
+      while (el.offsetWidth > max && fs > 12 && n++ < 24) { fs -= 0.5; el.style.setProperty('font-size', fs + 'px', 'important'); }
     });
   }
   function pop(title: string, html: string, cls = '', onClose?: () => void) {
@@ -4572,6 +4569,50 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (!ok) toast('Sharing is not available here.');
   }
 
+  /* ------------------------------------------------------- Star Expeditions (monthly event board) */
+  const XP = createExpedition({
+    get S() { return S; }, ART, sfx, haptic: (k: string) => haptic(k as any),
+    save: () => save(), toast: (h: string) => toast(h),
+    grant: (r: any) => grant(r), rewardCard: (w: string, t: string, l: string, r: any, f?: () => void) => rewardCard(w, t, l, r, f),
+    albumGive: (k: 'basic' | 'gold', why?: string) => albumGive(k, why), energyPop: () => energyPop(),
+    renderHUD: () => { renderHUD(); renderQuick(); }, level: () => S.lvl,
+  } as any);
+
+  /* ------------------------------------------------------- first visit to the shop
+     The shop opening is a moment: a hand points at the button, and the first
+     visit explains what is inside and hands over the free gift straight away. */
+  function domHand(target: HTMLElement | null, say = '') {
+    document.getElementById('domHand')?.remove();
+    if (!target) return;
+    const r = target.getBoundingClientRect(); if (!r.width) return;
+    const h = document.createElement('div'); h.id = 'domHand';
+    h.innerHTML = `<i class="dhRing"></i>${ART.spriteUi('hand') ? `<img class="dhHand" src="${ART.spriteUi('hand')}" alt="">` : '<b class="dhHand">👆</b>'}${say ? `<em class="dhSay">${say}</em>` : ''}`;
+    h.style.left = (r.left + r.width / 2) + 'px'; h.style.top = (r.top + r.height / 2) + 'px';
+    document.body.appendChild(h);
+    setTimeout(() => { if (h.isConnected) h.remove(); }, 20000);
+  }
+  function shopUnlockHint() {
+    if (dialogBusy() || popOpen()) { setTimeout(shopUnlockHint, 1500); return; }
+    sfx.discover(); toast('🛒 The <b>Star Bazaar</b> is open!');
+    domHand($('#tabShop'), 'The shop is open!');
+  }
+  function xpUnlockHint() {
+    if (dialogBusy() || popOpen()) { setTimeout(xpUnlockHint, 1500); return; }
+    renderQuick();
+    sfx.discover(); toast('🚀 <b>Star Expeditions</b> are open: a new event board every month!');
+    domHand(document.querySelector('.qChip.xp') as HTMLElement, 'New: Expedition!');
+  }
+  function shopWelcome() {
+    const ready = giftReady();
+    modal('player', 'The Star Bazaar', `<div class="shopGuide">
+      <div><span>${ART.uiIcon('chest_closed', '🎁')}</span><p><b>A free gift every day</b>: a Supply Chest and energy.</p></div>
+      <div><span>${ART.uiIcon('lab_energy', '⚡')}</span><p><b>Energy refills</b> when you run low.</p></div>
+      <div><span>${ART.uiIcon('ic_album', '🎴')}</span><p><b>Sticker packs</b> for your Star Album.</p></div>
+      <div><span>${ART.uiIcon('sec_up', '⭐')}</span><p><b>Upgrades</b> that last forever: more storage, more energy, more contracts.</p></div></div>`,
+      ready ? 'Claim my free gift' : 'Got it');
+    if (ready) setAfter(() => { claimGift(); });
+  }
+
   /* ------------------------------------------------------- profile card */
   function profilePop() {
     S.born = S.born || Date.now();
@@ -4584,7 +4625,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const st = (k: string) => kN((S.stats && S.stats[k]) || 0);
     const p = pet();
     const cell = (ic: string, v: string, l: string) => `<div class="pfStat">${ic}<b>${v}</b><i>${l}</i></div>`;
-    pop(`${ART.uiIcon('portrait_ring', '👤')} Captain's Log`, `<div class="pfHead">
+    pop(`Captain's Log`, `<div class="pfHead">
         <span class="pfAv">${ART.char('player')}</span>
         <div class="pfWho"><input id="pfName" maxlength="16" value="${(S.pname || 'Captain').replace(/"/g, '')}" aria-label="Your captain name"><span class="pfLv">Level <b>${S.lvl}</b> · ${W().name}</span>
           <div class="pfXp"><i style="width:${pct}%"></i><em>${kN(S.xp)} / ${kN(need)} XP</em></div><small>${kN(Math.max(0, need - S.xp))} XP to level ${S.lvl + 1}</small></div></div>
@@ -4750,7 +4791,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     });
     if (!c) return;
     coachOn = c.k; S.coach[c.k] = 1; coachT = Date.now() + 120000; save();
-    jit = { id: 'jit:' + c.k, who: S.met ? 'bloop' : 'pip', say: c.say, on: c.on, at: typeof c.at === 'string' ? (() => c.at as string) : c.at };
+    jit = { id: 'jit:' + c.k, who: 'player', say: c.say, on: c.on, at: typeof c.at === 'string' ? (() => c.at as string) : c.at };
     tutShow(); sfx.tap();
     // a tip never traps the player: tapping the dark area closes it, and it
     // gives up on its own if the thing it points at goes away
@@ -5208,6 +5249,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // contracts until the next chest: a chip with the others, not a tag stuck on the board frame
     if (S.tut) { const mn = (S.om && S.om.n) || 0; bits.push(`<button class="qChip mile" data-q="mile">${ART.uiIcon('ic_mile', ART.item('chest'))}<b>${mn}/${mileGoal()}</b><i>to chest</i></button>`); }
     if (e) bits.push(`<button class="qChip ev" data-q="event">${ART.uiIcon('tok_' + e.theme.id, e.theme.icon)}<b>${S.ev.key === e.key ? S.ev.pts : 0}</b><i>${dhm(e.ends - Date.now())}</i></button>`);
+    { const xc = XP.chip(); if (xc) bits.push(xc); }
     if (S.lvl >= SP().unlockLevel && spinsLeft()) bits.push(`<button class="qChip spin" data-q="spin">${ART.uiIcon('ic_spin', '🎡')}<b>${spinsLeft()}</b></button>`);
     if (S.seen.scrap || pouch('scrap') || pouch('starcore')) bits.push(`<button class="qChip pouch" data-q="pouch">${ART.uiIcon('ic_pouch', ART.item('starcore'))}<b>${pouch('starcore')}</b><i>${pouch('scrap')} scrap</i></button>`);
     if (albumOpen()) bits.push(`<button class="qChip album${packsWaiting() ? ' ready' : ''}" data-q="album">${ART.uiIcon('ic_album', '⭐')}<b>${packsWaiting() ? '🎴' + packsWaiting() : albumCount() + '/' + albumTotal()}</b></button>`);
@@ -5233,6 +5275,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     host.dataset.h = html; host.innerHTML = html;
     host.querySelectorAll('[data-q]').forEach((b: any) => b.onclick = () => {
       const k = b.dataset.q;
+      if (k === 'xp') { sfx.tap(); domHand(null); XP.show(); return; }
       if (k === 'mile') { sfx.tap(); toast(`📦 Deliver <b>${mileGoal() - ((S.om && S.om.n) || 0)}</b> more contract${mileGoal() - ((S.om && S.om.n) || 0) === 1 ? '' : 's'} for ${((S.om && S.om.step) || 0) % 2 === 1 ? 'a free chest' : `+${CFG.milestone.energy} ⚡`}`); } else if (k === 'event') eventPop(); else if (k === 'spin') spinPop(); else if (k === 'pup') pupPop(); else if (k === 'store') storagePop(); else if (k === 'album') albumPop(); else if (k === 'pouch') starChart(); else { setView('lab'); labAccPop(); }
     });
   }
@@ -5979,14 +6022,28 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     setTimeout(() => { if (hintPair === cells) { hintPair = null; board.setHint(null); } }, ms);
   }
 
+  /** zoom a painted scene onto one point (fx, fy = fractions of the picture) */
+  function cropScene(el: HTMLElement) {
+    const src = el.dataset.src!, fx = +el.dataset.fx!, fy = +el.dataset.fy!, img = new Image();
+    img.onload = () => {
+      const box = el.clientWidth || 130, k = 3.4, iw = box * k, ih = iw * img.naturalHeight / img.naturalWidth;
+      el.style.backgroundImage = `url(${src})`;
+      el.style.backgroundSize = `${iw}px ${ih}px`;
+      el.style.backgroundPosition = `${Math.round(box / 2 - fx * iw)}px ${Math.round((el.clientHeight || box) / 2 - (fy - 0.05) * ih)}px`;
+    };
+    img.src = src;
+  }
   function heartPanel() {
     const w = W(), st = stage(), done = worldAwake(), r = CONFIG.bloom.reward;
     const onBoard = B().reduce((a: number, c: any) => a + (c && c.id ? bloomValue(c.id) : 0), 0);
     const pct = done ? 100 : clamp(fed() / bloomGoal() * 100, 0, 100);
-    const heartArt = ART.spriteUi(done || st > 0 ? 'camp_heart_on' : 'camp_heart_off') || ART.spriteUi('camp_heart_on');
+    const heartArt = ART.spriteUi(worldAwake() ? 'camp_heart_on' : 'camp_heart_off') || ART.spriteUi('camp_heart_on');
+    // a painted camp has its Heart drawn into the scene: show that very spot, so the popup and the map match
+    const A = sceneAnchors(S.world), scene = A.painted ? ((!labOpen() && ART.spriteScene(S.world + '_nolab')) || ART.spriteScene(S.world)) : '';
+    const hp = (A.heart || PAD_DEFAULT.heart) as number[];
     const ess = BLOOM().map((id, i) => `<span class="hEss">${ART.item(id)}<b>${Math.pow(2, i)}</b></span>`).join('<em>+</em>');
     pop('💗 ' + w.heart, `<div class="hStage${done ? ' awake' : ''}" style="--p:${pct}">
-        <div class="hRing"></div>${heartArt ? `<img class="hArt" src="${heartArt}" alt="">` : '💗'}
+        <div class="hRing"></div>${scene ? `<div class="hArt hCrop" data-src="${scene}" data-fx="${hp[0]}" data-fy="${hp[1]}"></div>` : heartArt ? `<img class="hArt" src="${heartArt}" alt="">` : '💗'}
         <div class="hNum">${done ? 'AWAKE' : `${fed()}<i>/${bloomGoal()}</i>`}</div></div>
       <div class="hLine">${done ? `${w.name} is awake and beating on its own. Thank you, star traveller!` : `Every world has a sleeping Heart. Wake it and the whole planet comes back to life — colour, music and rewards.`}</div>
       <div class="hHow"><b>How to wake it</b>
@@ -5997,6 +6054,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       <div class="hPath">${w.bloom.map((b: any, i: number) => `<div class="hNode${i < st ? ' done' : i === st ? ' now' : ''}"><i>${i < st ? '✓' : b.need}</i><b>${b.title}</b><em>+${r.coins} 🪙 · +${r.energy} ⚡</em></div>`).join('')}</div>
       <button class="big gold" id="feed2"${onBoard && !done ? '' : ' disabled'}>${done ? 'Fully awake ✨' : onBoard ? `Feed the Heart · ${onBoard} Bloom` : 'No Bloom essence on the board yet'}</button>`, 'heartsheet');
     const f = $('#feed2'); if (f) f.onclick = () => { closePop(); feedHeart(); };
+    const hc = document.querySelector<HTMLElement>('#popBody .hCrop'); if (hc) cropScene(hc);
   }
 
   function producerPanel(cell: number) {
@@ -6365,6 +6423,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
   /* ================================================================== LOOP */
   function tick() {
+    XP.tick();
     const now = Date.now();
     // energy regen
     const per = regenMs();
@@ -6548,7 +6607,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // a page opened from the map goes back to the map
     document.querySelectorAll<HTMLElement>('.scClose').forEach(b => b.onclick = () => { const back = fromMap && (view === 'book' || view === 'lab'); fromMap = false; setView(back ? 'map' : 'board'); });
     $('#btnHint').onclick = () => { showHint(true); lastAct = Date.now(); };
-    { const hi = document.querySelector('#btnHint .hintIc'); if (hi) hi.innerHTML = ART.uiIcon('ic_tips', '💡'); }
+    { const hi = document.querySelector('#btnHint .hintIc'); if (hi) hi.innerHTML = ART.uiIcon('ic_scan', '') || ART.uiIcon('ic_hint', '💡'); }
     $('#btnSnack').onclick = async () => {
       if (S.energy >= maxEnergy()) { toast('Energy is already full!'); return; }
       // once an ad network is wired up this becomes "watch to refill"; until then
@@ -6577,7 +6636,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         <div class="verLine" id="verLine">Galaxy Adventure ${SERVICES.app.build}</div>
         ${testerOn ? testerPanel() : ''}
         ${import.meta.env.DEV ? devPanel() : ''}`;
-      modal('pip', 'Settings', draw(), 'Close');
+      modal('player', 'Settings', draw(), 'Close');
       const bind = () => {
         const sb2 = $('#sndBtn'), mb = $('#musBtn'), tb = $('#tipBtn'), rb = $('#resetBtn');
         const redraw = () => { $('#mBody').innerHTML = draw(); bind(); save(); };
@@ -6648,7 +6707,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed, ecost,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
       fly: (w: string) => galaxyTap(w), view: (v: string) => setView(v),
-      curProject: () => curProject(), v9: { albumPop, openPack, albumGive, shareCard, alb, storeProducer, startPlacing, paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
+      curProject: () => curProject(), v9: { xp: XP, shopUnlockHint, setView, achPop, profilePop, heartPanel, albumPop, openPack, albumGive, shareCard, alb, storeProducer, startPlacing, paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
     };
     setInterval(tick, 500);
     setInterval(() => { if (!document.hidden) S.playMs = (S.playMs || 0) + 5000; }, 5000);

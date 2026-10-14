@@ -141,7 +141,7 @@ await page.locator('#enAd').click({ force: true });
 await page.waitForTimeout(3600);
 must(await page.evaluate(() => window.__game.state().energy) === 5, 'a skipped one does not');
 await page.evaluate(() => window.__game.v9.closePop());
-const g0 = await page.evaluate(() => { const s = window.__game.state(); s.lvl = Math.max(s.lvl, 8); window.__game.v9.services.mockControls.purchase = 'ask'; window.__game.view('shop'); return s.gems; });
+const g0 = await page.evaluate(() => { const s = window.__game.state(); s.lvl = Math.max(s.lvl, 8); s.shopSeen = 1; window.__game.v9.services.mockControls.purchase = 'ask'; window.__game.view('shop'); return s.gems; });
 await page.waitForTimeout(900);
 await page.locator('[data-iap="gems_s"]').click({ force: true }); await page.waitForTimeout(400);
 must(await page.locator('.mockSheet').count() === 1, 'buying opens the test purchase sheet');
