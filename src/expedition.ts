@@ -27,30 +27,43 @@ const C: Record<string, Chain> = {
   play: { key: 'play', name: 'Bouncy Playground', steps: [['bounceball', 'Bounce Ball'], ['bigspring', 'Big Spring'], ['ringswing', 'Ring Swing'], ['twistslide', 'Twisty Slide'], ['bouncycastle', 'Rocket Bouncer'], ['playdome', 'Play Dome']] },
   lantern: { key: 'lantern', name: 'Comet Lanterns', steps: [['paperlantern', 'Comet Lantern'], ['lanternstring', 'Lantern String'], ['flowerlantern', 'Bloom Lantern'], ['lanternarch', 'Lantern Arch'], ['lanternboat', 'Lantern Saucer'], ['skyfestival', 'Lantern Isle']] },
   books: { key: 'books', name: 'Star Library', steps: [['starpage', 'Star Page'], ['planetbook', 'Planet Book'], ['bookstack', 'Book Stack'], ['floattome', 'Floating Tome'], ['robobookshelf', 'Shelf Bot'], ['librarytower', 'Library Tower']] },
+  spooks: { key: 'spooks', name: 'Nebula Spooks', steps: [['glowwisp', 'Glow Wisp'], ['wisppair', 'Wisp Pair'], ['spookjar', 'Spook Jar'], ['moonlantern', 'Moon Rock Lantern'], ['hauntstation', 'Haunted Station'], ['spookking', 'Spook King']] },
+  fashion: { key: 'fashion', name: 'Alien Fashion', steps: [['starbutton', 'Star Button'], ['threadspool', 'Thread Spool'], ['antennahat', 'Antenna Hat'], ['glowgown', 'Glow Gown'], ['sewbot', 'Sewing Bot'], ['runwaydome', 'Runway Dome']] },
   art: { key: 'art', name: 'Art Club', steps: [['paintdrop', 'Rainbow Drop'], ['glowbrush', 'Glow Brush'], ['planetpalette', 'Planet Palette'], ['rocketeasel', 'Rocket Easel'], ['aliensculpt', 'Alien Statue'], ['artdome', 'Art Dome']] },
 };
 
-/* one expedition per calendar month, in this order (month 0 = January) */
+/* six expeditions; month m runs EXPEDITIONS[m % 6] (October is Nebula Spooks) */
 const EXPEDITIONS: Expedition[] = [
-  { id: 'starfall', name: 'Starfall Treasure Hunt', tag: 'Stars rain down on a pirate moon', hue: 45, host: 'glimmer',
-    producer: { name: 'Falling Star', art: 'fallingstar', kind: 'producer' }, chains: [C.stars, C.treasure],
-    blurb: 'A shower of falling stars hit a pirate moon. Tap the Falling Star, merge stars and treasure, and fill the requests!' },
+  { id: 'bounce', name: 'Bouncy Moon Park', tag: 'A playground in low gravity', hue: 160, host: 'gigi',
+    producer: { name: 'Toy Saucer', art: 'toysaucer', kind: 'producer' }, chains: [C.play, C.stars],
+    blurb: 'A playground opened on a low-gravity moon. Tap the Toy Saucer, merge toys and falling stars, and keep the kids bouncing.' },
+  { id: 'fashion', name: 'Alien Fashion Week', tag: 'The galaxy dresses up', hue: 300, host: 'luma',
+    producer: { name: 'Comet Easel', art: 'cometeasel', kind: 'producer' }, chains: [C.fashion, C.art],
+    blurb: 'Designers from every planet are in town. Tap the Comet Easel, merge outfits and art, and dress up the runway.' },
   { id: 'carnival', name: 'Sugar Moon Fair', tag: 'The candy fair floats into orbit', hue: 330, host: 'gigi',
-    producer: { name: 'Candy Cart', art: 'candycart', kind: 'producer' }, chains: [C.candy, C.art],
-    blurb: 'The Sugar Moon Fair is in orbit! Tap the Candy Cart for sweets and paints, merge them up and keep the visitors happy.' },
+    producer: { name: 'Paint Rover', art: 'paintrover', kind: 'producer' }, chains: [C.candy, C.art],
+    blurb: 'The Sugar Moon Fair is in orbit! Tap the Paint Rover for sweets and paints, merge them up and keep the visitors happy.' },
+  { id: 'spooks', name: 'Nebula Spooks', tag: 'Friendly ghosts drift out of the nebula', hue: 270, host: 'mumbo',
+    producer: { name: 'Lantern Stall', art: 'lanternstall', kind: 'producer' }, chains: [C.spooks, C.lantern],
+    blurb: 'Friendly ghosts drifted out of the nebula and they love lanterns. Tap the Lantern Stall, merge spooks and lanterns, and light their way home.' },
+  { id: 'starfall', name: 'Starfall Treasure Hunt', tag: 'Stars rain down on a pirate moon', hue: 45, host: 'glimmer',
+    producer: { name: 'Treasure Comet', art: 'treasurecomet', kind: 'producer' }, chains: [C.stars, C.treasure],
+    blurb: 'A treasure comet crashed on a pirate moon. Tap it, merge stars and treasure, and fill the requests!' },
   { id: 'lanterns', name: 'Lantern Library', tag: 'A floating library lit by comets', hue: 200, host: 'luma',
     producer: { name: 'Lantern Stall', art: 'lanternstall', kind: 'producer' }, chains: [C.lantern, C.books],
     blurb: 'A library drifts past, lit by comet lanterns. Tap the Lantern Stall, merge lanterns and books, and light it all up.' },
-  { id: 'bounce', name: 'Bouncy Moon Park', tag: 'A playground in low gravity', hue: 160, host: 'gigi',
-    producer: { name: 'Toy Saucer', art: 'ufo_freighter', kind: 'ui' }, chains: [C.play, C.treasure],
-    blurb: 'A playground opened on a low-gravity moon. Tap the Toy Saucer, merge toys and treasure, and keep the kids bouncing.' },
 ];
 
-/* the points track: ten rewards, the last one a medal */
+/* the points track: ten rewards, the last one a medal. Points come mostly from requests,
+   and visitors take a while to arrive, so the track lasts the whole month */
 const TRACK: [number, XpReward][] = [
-  [20, { energy: 10 }], [50, { coins: 150 }], [90, { pack: 'basic' }], [140, { gems: 5 }], [200, { energy: 20 }],
-  [270, { coins: 300 }], [350, { pack: 'gold' }], [440, { gems: 10 }], [540, { energy: 30, coins: 500 }], [650, { gems: 25 }],
+  [40, { energy: 10 }], [100, { coins: 150 }], [180, { pack: 'basic' }], [280, { gems: 5 }], [400, { energy: 20 }],
+  [550, { coins: 300 }], [720, { pack: 'gold' }], [920, { gems: 10 }], [1150, { energy: 30, coins: 500 }], [1400, { gems: 25 }],
 ];
+/** the producer holds this many taps and refills one every few minutes */
+const CHARGE_MAX = 30, CHARGE_MS = 3 * 60000;
+/** a visitor who leaves is replaced after this long */
+const VISIT_MS = 90000;
 const W = 6, H = 7, N = W * H, PROD_AT = 3 * W + 2;
 const VISITORS = ['glimmer', 'gigi', 'luma', 'mumbo', 'biscuit', 'marin', 'kelpa', 'halo', 'grubs', 'nix', 'oops', 'ember'];
 export const XP_UNLOCK = 5;
@@ -67,6 +80,7 @@ export function createExpedition(ctx: XpCtx) {
   const key = () => cur().id + '@' + monthKey();
   const open = () => ctx.level() >= XP_UNLOCK;
   const left = () => endsAt() - Date.now();
+  const mmss = (ms: number) => { const t = Math.max(0, Math.ceil(ms / 1000)); return Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0'); };
   const dhm = (ms: number) => { const m = Math.max(0, Math.floor(ms / 60000)), d = Math.floor(m / 1440), h = Math.floor(m / 60) % 24; return d ? `${d}d ${h}h` : `${h}h ${m % 60}m`; };
 
   /* ------------------------------------------------------------- items */
@@ -85,17 +99,24 @@ export function createExpedition(ctx: XpCtx) {
       b[PROD_AT] = 'P';
       const [a, c] = cur().chains;
       [[PROD_AT - 1, a.steps[0][0]], [PROD_AT + 1, c.steps[0][0]], [PROD_AT + W, a.steps[0][0]], [PROD_AT - W, c.steps[0][0]]].forEach(([i, id]) => { b[i as number] = id as string; });
-      ctx.S.xp = { key: k, pts: 0, got: 0, b, disc: { [a.steps[0][0]]: 1, [c.steps[0][0]]: 1 }, ord: [], ach: {}, intro: 0 };
+      ctx.S.xp = { key: k, pts: 0, got: 0, b, disc: { [a.steps[0][0]]: 1, [c.steps[0][0]]: 1 }, ord: [], ach: {}, intro: 0, ch: CHARGE_MAX, chAt: Date.now(), wait: [] };
       fillOrders();
     }
-    return ctx.S.xp;
+    const x = ctx.S.xp;
+    if (x.ch === undefined) { x.ch = CHARGE_MAX; x.chAt = Date.now(); x.wait = []; }
+    // the producer refills over time; visitors whose wait is over step up
+    if (x.ch < CHARGE_MAX) { const n = Math.floor((Date.now() - x.chAt) / CHARGE_MS); if (n > 0) { x.ch = Math.min(CHARGE_MAX, x.ch + n); x.chAt += n * CHARGE_MS; } }
+    else x.chAt = Date.now();
+    const due = x.wait.filter((t: number) => t <= Date.now()).length;
+    if (due) { x.wait = x.wait.filter((t: number) => t > Date.now()); fillOrders(); }
+    return x;
   }
 
   /* ------------------------------------------------------------- requests */
   function best(c: Chain) { const x = ctx.S.xp; let t = 1; c.steps.forEach(([id], k) => { if (x.disc[id]) t = Math.max(t, k + 1); }); return t; }
   function fillOrders() {
     const x = ctx.S.xp;
-    while (x.ord.length < 3) {
+    while (x.ord.length + (x.wait || []).length < 3) {
       const used = new Set(x.ord.map((o: any) => o.who));
       const pool = VISITORS.filter(v => !used.has(v)), who = pool[Math.floor(Math.random() * pool.length)];
       // no two visitors want the very same thing
@@ -158,8 +179,11 @@ export function createExpedition(ctx: XpCtx) {
     const x = ctx.S.xp;
     const to = nearestFree(PROD_AT);
     if (to < 0) { sfx.no(); ctx.toast('The expedition board is full — merge something first!'); return; }
+    if (x.ch < 1) { sfx.no(); say(`The <b>${cur().producer.name}</b> is recharging: next tap in <b>${mmss(CHARGE_MS - (Date.now() - x.chAt))}</b>.`); return; }
     if (ctx.S.energy < 1) { sfx.no(); ctx.toast('Out of energy — every tap costs <b>1 ⚡</b>.'); setTimeout(ctx.energyPop, 400); return; }
     ctx.S.energy -= 1; ctx.S.eAt = ctx.S.eAt || Date.now();
+    if (x.ch === CHARGE_MAX) x.chAt = Date.now();
+    x.ch--;
     const c = cur().chains[(x.taps = (x.taps || 0) + 1) % 2 === 0 ? 0 : 1];
     const id = c.steps[Math.random() < 0.22 ? 1 : 0][0];
     x.b[to] = id; const fresh = discover(id);
@@ -180,9 +204,11 @@ export function createExpedition(ctx: XpCtx) {
       x.b[from] = null; x.b[to] = next;
       const fresh = discover(next);
       sfx.merge(s.t + 1); ctx.haptic('medium');
-      addPts(s.t + 1);
+      // merging pays a little only from the third step up: requests are where the points are
+      const gain = Math.max(0, s.t - 1);
+      if (gain) addPts(gain);
       paintBoard(to, true);
-      say(fresh ? `New discovery: <b>${info(next).name}</b>! +${s.t + 1} points` : `<b>${info(next).name}</b> · +${s.t + 1} points`);
+      say((fresh ? `New discovery: <b>${info(next).name}</b>!` : `<b>${info(next).name}</b>`) + (gain ? ` +${gain} points` : ''));
       ctx.save(); return;
     }
     if (b === 'P') { paintBoard(); return; }
@@ -193,12 +219,12 @@ export function createExpedition(ctx: XpCtx) {
     const i = has(o.id); if (i < 0) return;
     const t = info(o.id).t;
     x.b[i] = null; x.ord.splice(k, 1);
-    const pts = 6 * t, coins = 15 * t;
+    const pts = 5 * t, coins = 10 * t;
     ctx.S.coins += coins; sfx.coin(); ctx.haptic('medium');
     addPts(pts);
     say(`Thank you! +${pts} points · +${coins} coins`);
     paintBoard(); paintOrders();
-    setTimeout(() => { if (!ctx.S.xp) return; fillOrders(); paintOrders(); ctx.save(); }, 900);
+    x.wait.push(Date.now() + VISIT_MS);       // the next visitor takes a while to arrive
     ctx.renderHUD(); ctx.save();
   }
 
@@ -218,18 +244,19 @@ export function createExpedition(ctx: XpCtx) {
     const want = new Set(x.ord.map((o: any) => o.id));
     g.innerHTML = x.b.map((v: string | null, i: number) => {
       const cls = 'xpC' + ((Math.floor(i / W) + i) % 2 ? ' alt' : '') + (v === 'P' ? ' prod' : '') + (i === sel ? ' sel' : '') + (i === pop ? (big ? ' merged' : ' dropped') : '') + (v && v !== 'P' && want.has(v) ? ' want' : '');
-      return `<div class="${cls}" data-i="${i}">${v === 'P' ? prodPic() + '<b class="xpBolt">⚡1</b>' : v ? pic(v) : ''}</div>`;
+      return `<div class="${cls}" data-i="${i}">${v === 'P' ? prodPic() + `<b class="xpBolt${x.ch ? '' : ' empty'}">${x.ch}/${CHARGE_MAX}</b>` : v ? pic(v) : ''}</div>`;
     }).join('');
     paintOrders();
   }
   function paintOrders() {
     const h = document.getElementById('xpOrd'); if (!h) return;
-    h.innerHTML = ctx.S.xp.ord.map((o: any, k: number) => {
+    const x = ctx.S.xp;
+    h.innerHTML = x.ord.map((o: any, k: number) => {
       const ok = has(o.id) >= 0;
       return `<div class="xpO${ok ? ' ok' : ''}"><span class="xpWho">${ART.char(o.who)}</span>
         <span class="xpWant">${pic(o.id)}</span><i>${info(o.id).name}</i>
-        <button class="xpGive" data-give="${k}"${ok ? '' : ' disabled'}>${ok ? 'Give' : `+${6 * info(o.id).t}`}</button></div>`;
-    }).join('');
+        <button class="xpGive" data-give="${k}"${ok ? '' : ' disabled'}>${ok ? 'Give' : `+${5 * info(o.id).t}`}</button></div>`;
+    }).join('') + (x.wait || []).map((t: number) => `<div class="xpO wait"><span class="xpWant">${ART.uiIcon('st_wait', '⏳')}</span><i>Next visitor</i><b class="xpWaitT" data-t="${t}">${mmss(t - Date.now())}</b></div>`).join('');
     h.querySelectorAll<HTMLElement>('[data-give]').forEach(b => b.onclick = () => give(+b.dataset.give!));
   }
   function paintTop() {
@@ -242,7 +269,7 @@ export function createExpedition(ctx: XpCtx) {
   }
   function paintEnergy() { const e = document.getElementById('xpEn'); if (e) e.textContent = String(ctx.S.energy); }
   function rwIcon(r: XpReward) {
-    if (r.pack) return ART.uiIcon(r.pack === 'gold' ? 'ic_album2' : 'ic_album', '🎴');
+    if (r.pack) return ART.uiIcon(r.pack === 'gold' ? 'pack_gold' : 'pack_basic', '🎴');
     if (r.gems) return ART.icon('gem');
     if (r.energy) return ART.icon('energy');
     return ART.icon('coin');
@@ -282,7 +309,7 @@ export function createExpedition(ctx: XpCtx) {
     if (kind === 'log') body = e.chains.map(c => `<div class="xpLogC"><b>${c.name}</b><div class="xpLogRow">${c.steps.map(([id, name]) =>
         `<span class="${x.disc[id] ? '' : 'unk'}">${pic(id)}<i>${x.disc[id] ? name : '???'}</i></span>`).join('')}</div></div>`).join('')
       + `<div class="xpNote">${allSteps().filter(s => x.disc[s.id]).length} / ${allSteps().length} discovered</div>`;
-    if (kind === 'goals') body = MEDALS().map(m => `<div class="xpMedal${x.ach[m.k] ? ' got' : ''}"><span>${x.ach[m.k] ? ART.uiIcon('medal_1', '🏅') : ART.uiIcon('medal_3', '🏅')}</span><div><b>${m.name}</b><i>${m.say}</i></div><em>${x.ach[m.k] ? '✓' : '+' + m.gems + ' ' + '💎'}</em></div>`).join('')
+    if (kind === 'goals') body = MEDALS().map(m => `<div class="xpMedal${x.ach[m.k] ? ' got' : ''}"><span>${ART.uiIcon(x.ach[m.k] ? 'medal_gold' : 'medal_silver', '🏅')}</span><div><b>${m.name}</b><i>${m.say}</i></div><em>${x.ach[m.k] ? '✓' : '+' + m.gems + ' ' + '💎'}</em></div>`).join('')
       + `<div class="xpTrackList">${TRACK.map(([n, r], k) => `<span class="${k < x.got ? 'got' : ''}">${rwIcon(r)}<i>${n}</i></span>`).join('')}</div>`
       + `<div class="xpNote">Medals from all expeditions: <b>${ctx.S.xpMedals || 0}</b></div>`;
     if (kind === 'help') body = `<div class="xpHelpArt">${prodPic()}</div><p>${e.blurb}</p>
@@ -313,7 +340,7 @@ export function createExpedition(ctx: XpCtx) {
       if (from < 0 || ev.pointerId !== pid) return;
       if (!ghost && Math.hypot(ev.clientX - sx, ev.clientY - sy) > 8) {
         const src = g.querySelector(`[data-i="${from}"]`) as HTMLElement;
-        ghost = document.createElement('div'); ghost.className = 'xpGhost'; ghost.innerHTML = src.innerHTML;
+        ghost = document.createElement('div'); ghost.className = 'xpGhost'; ghost.id = 'xpGhost'; ghost.innerHTML = src.innerHTML;
         document.body.appendChild(ghost); src.classList.add('lifted'); sfx.lift && sfx.lift();
       }
       if (ghost) { ghost.style.left = ev.clientX + 'px'; ghost.style.top = ev.clientY + 'px'; }
@@ -346,7 +373,15 @@ export function createExpedition(ctx: XpCtx) {
       const ready = x ? x.ord.some((o: any) => x.b.indexOf(o.id) >= 0) : true;
       return `<button class="qChip xp${ready ? ' ready' : ''}" data-q="xp">${prodPic()}<b>${x ? x.pts : 'NEW'}</b><i>${dhm(left())}</i></button>`;
     },
-    tick: () => { if (document.getElementById('xpScr')?.className === 'open') { paintEnergy(); const t = document.querySelector('#xpScr .xpTime'); if (t) t.innerHTML = `${ART.uiIcon('cl_timer', '⏳')} ${dhm(left())}`; } },
+    tick: () => {
+      if (document.getElementById('xpScr')?.className !== 'open' || document.getElementById('xpGhost')) return;
+      paintEnergy();
+      const t = document.querySelector('#xpScr .xpTime'); if (t) t.innerHTML = `${ART.uiIcon('cl_timer', '⏳')} ${dhm(left())}`;
+      const x = ctx.S.xp, was = x.ch + '|' + x.ord.length;
+      st();
+      if (x.ch + '|' + x.ord.length !== was) paintBoard();
+      document.querySelectorAll<HTMLElement>('.xpWaitT').forEach(e => { e.textContent = mmss(+e.dataset.t! - Date.now()); });
+    },
     pick: (n: number) => { force = n; },
     list: () => EXPEDITIONS.map(e => e.name),
     state: () => st(),

@@ -638,6 +638,9 @@ class PixiBoard {
       gsap.fromTo(s.art, { rotation: -0.25 }, { rotation: 0, duration: 0.45, ease: 'back.out(3)' });
       this.flash(to, tier);
       this.ringPulse(to, 0xffe9a0);
+      // a second, cyan holo ring a beat later: the space-tech echo of every merge
+      gsap.delayedCall(0.09, () => this.ringPulse(to, 0x8ff3ff));
+      if (tier >= 3) this.sparks(to, 4 + tier);
       this.stars(to, 5 + Math.min(tier, 8));
       this.burst(to, 0xffd45e, 6 + tier);
       if (tier >= 6) this.shake(0.25);
@@ -667,6 +670,19 @@ class PixiBoard {
       this.lTile.addChild(r);
       gsap.fromTo(r.scale, { x: 0.3, y: 0.3 }, { x: 1.3, y: 1.3, duration: 0.6, ease: 'power2.out' });
       gsap.to(r, { rotation: 0.6, alpha: 0, duration: 0.7, ease: 'power1.in', onComplete: () => r.destroy() });
+    }
+  }
+  /** thin energy streaks shooting out of a good merge */
+  sparks(i: number, n = 6) {
+    const p = this.center(i);
+    for (let k = 0; k < n; k++) {
+      const g = new Graphics(), an = (k / n) * Math.PI * 2 + Math.random() * 0.4, L = this.cell * (0.18 + Math.random() * 0.12);
+      g.moveTo(0, 0).lineTo(L, 0).stroke({ color: k % 2 ? 0x8ff3ff : 0xffffff, width: 2.5, alpha: 0.95, cap: 'round' });
+      g.rotation = an; g.position.set(p.x, p.y);
+      this.lFx.addChild(g);
+      const d = this.cell * (0.7 + Math.random() * 0.4);
+      gsap.to(g, { x: p.x + Math.cos(an) * d, y: p.y + Math.sin(an) * d, alpha: 0, duration: 0.42, ease: 'power3.out', onComplete: () => g.destroy() });
+      gsap.fromTo(g.scale, { x: 0.3 }, { x: 1.2, duration: 0.42, ease: 'power2.out' });
     }
   }
   /** little five-point stars thrown out of a merge */

@@ -730,7 +730,7 @@ await set(() => {
   const g = window.__game, s = g.state(), b = g.cells();
   s.stars = {};
   let n = 0;
-  for (let i = 0; i < b.length && n < 3; i++) if (!b[i]) { b[i] = { id: 'starcore' }; n++; }
+  for (let i = 0; i < b.length && n < 6; i++) if (!b[i]) { b[i] = { id: 'starcore' }; n++; }
   window.__board.sync(b);
 });
 await closeModal(); await tab('board');

@@ -1339,7 +1339,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // furthest from finishing, so the rocket always creeps forward.
     let id = (c.p === 'wreck' && !allParts() ? partPiece() : null) || rollDrop(p, plv(c));
     // no rocket yet, so no fuel either — an early crater is all star scrap
-    if (c.p === 'crater' && !rocketTime() && id === 'fuelore') id = Math.random() < 0.12 ? 'starcore' : 'scrap';
+    if (c.p === 'crater' && !rocketTime() && id === 'fuelore') id = Math.random() < 0.04 ? 'starcore' : 'scrap';
     // Power ×2: double energy, the drop comes one step up the chain
     if (boostOn() && p.mode === 'energy' && !c.tmp && nextOf(id) && !ITEMS[id].part) id = nextOf(id) as string;
     // Golden Touch: now and then the drop arrives one step up
@@ -1495,8 +1495,14 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       B()[spot] = mkProd('crater'); S.sawCrater = 1;
       const s2 = nearFree(spot); if (s2 >= 0) { B()[s2] = { id: 'scrap' }; gotItem('scrap'); }
       paintBoard(); prog('meteor', 1);
-      modal('bloop', 'Blorp! Hello!', 'That was not a meteor. That was me, Dr. Zonk. I parked badly.<br><b>Dig my crater</b> for Star Scrap!', 'Welcome?');
-      checkStory('met');
+      // one conversation, not a dialog with the whole backstory stacked behind it
+      const s1 = STORY.find((b: any) => b.id === 's1');
+      if (s1) S.story.s1 = 1;
+      setTimeout(() => talkScene([
+        ['bloop', 'Blorp! Hello! That was not a meteor. That was me, <b>Dr. Zonk</b>. I parked badly.'],
+        ...(s1 ? [['bloop', s1.text] as [string, string]] : []),
+        ['bloop', '<b>Dig my crater</b> for Star Scrap. Tap it!'],
+      ]), 900);
       renderHUD(); renderRocket(); save();
     }), 700);
   }
@@ -3118,8 +3124,11 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (!list.length) return '';
     const coin = ART.icon('coin');
     const strip = `<div class="mlJourney">${list.map((p: any, k: number) =>
-      `<i class="${k < done ? 'done' : k === done ? 'now' : ''}${p.launch ? ' launch' : ''}" title="${p.name}"></i>`).join('')}</div>`;
-    const head = `<div class="mlHead"><b>${W().name}</b><span>${done}/${list.length} chapters</span></div>${strip}`;
+      `<i class="${k < done ? 'done' : k === done ? 'now' : ''}${p.launch ? ' launch' : ''}" title="${p.name}">${p.launch ? `<img src="${ART.spriteUi('gal_rocket') || ART.spriteUi('rocket_3')}" alt="">` : ''}</i>`).join('')}</div>`;
+    // the rocket on the strip is the chapter where the next world opens: say so
+    const li = list.findIndex((p: any) => p.launch);
+    const note = li >= 0 && done <= li ? `<div class="mlNote"><img src="${ART.spriteUi('gal_rocket') || ART.spriteUi('rocket_3')}" alt=""> Chapter ${li + 1}: the rocket launches to a new world</div>` : '';
+    const head = `<div class="mlHead"><b>${W().name}</b><span>${done}/${list.length} chapters</span></div>${strip}${note}`;
     if (!cur) return `<div class="card mlMission">${head}<div class="noteLine">Every chapter here is done. This world is awake! ✨</div></div>`;
     const p = cur, ok = projReady(p);
     const need = p.needs.map(([id, q]: [string, number]) => {
@@ -3388,15 +3397,54 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // a story world opens the next only when it is fully restored
     return prevOpen(prev);
   };
+  /** hyperspace: stars stretch into streaks and speed up, the rocket shakes, the
+      destination planet grows out of the centre and the screen flashes white on arrival */
+  function warpFx(w: string, ms: number) {
+    const host = $('#warps'); host.innerHTML = '';
+    const cv = document.createElement('canvas'); cv.className = 'warpCv'; host.appendChild(cv);
+    const pl = document.createElement('img'); pl.className = 'warpPlanet'; pl.src = ART.spriteUi('planet_' + w) || ''; pl.alt = ''; host.appendChild(pl);
+    const fl = document.createElement('div'); fl.className = 'warpFlash'; host.appendChild(fl);
+    const dpr = Math.min(2, devicePixelRatio || 1), W2 = cv.width = host.clientWidth * dpr, H2 = cv.height = host.clientHeight * dpr;
+    const g = cv.getContext('2d')!, cx = W2 / 2, cy = H2 * 0.42;
+    const HUE: Record<string, number> = { earth: 190, luna: 220, cindra: 20, nerith: 175, vela: 280 };
+    const hue = HUE[w] ?? 200;
+    const stars = Array.from({ length: 260 }, () => ({ a: Math.random() * Math.PI * 2, d: Math.random() * 0.9 + 0.02, s: Math.random() * 0.6 + 0.4, c: Math.random() < 0.3 }));
+    const t0 = performance.now();
+    const frame = (now: number) => {
+      const t = Math.min(1, (now - t0) / ms);
+      if (!host.isConnected || !cv.isConnected) return;
+      // speed builds up, peaks at 70%, then brakes into arrival
+      const sp = t < 0.7 ? 0.004 + Math.pow(t / 0.7, 2.2) * 0.05 : 0.054 * (1 - (t - 0.7) / 0.3) + 0.004;
+      g.fillStyle = `rgba(6,8,30,${0.35 - sp * 2})`; g.fillRect(0, 0, W2, H2);
+      const R = Math.hypot(W2, H2) / 2;
+      for (const st of stars) {
+        const d0 = st.d; st.d += sp * st.s * (0.4 + st.d * 2);
+        if (st.d > 1.05) { st.d = Math.random() * 0.05 + 0.01; continue; }
+        const x0 = cx + Math.cos(st.a) * d0 * R, y0 = cy + Math.sin(st.a) * d0 * R;
+        const x1 = cx + Math.cos(st.a) * st.d * R, y1 = cy + Math.sin(st.a) * st.d * R;
+        g.strokeStyle = st.c ? `hsla(${hue},100%,75%,${0.5 + st.d * 0.5})` : `rgba(255,255,255,${0.35 + st.d * 0.65})`;
+        g.lineWidth = (0.8 + st.d * 2.6) * dpr; g.beginPath(); g.moveTo(x0, y0); g.lineTo(x1, y1); g.stroke();
+      }
+      // a soft nebula glow in the destination colour
+      const neb = g.createRadialGradient(cx, cy, 0, cx, cy, R * 0.6);
+      neb.addColorStop(0, `hsla(${hue},90%,60%,${0.05 + sp * 1.2})`); neb.addColorStop(1, 'transparent');
+      g.fillStyle = neb; g.fillRect(0, 0, W2, H2);
+      const pt = Math.max(0, (t - 0.45) / 0.55);
+      pl.style.transform = `translate(-50%,-50%) scale(${0.05 + Math.pow(pt, 2.4) * 1.6}) rotate(${pt * 25}deg)`;
+      pl.style.opacity = String(Math.min(1, pt * 3));
+      (host.parentElement as HTMLElement).style.setProperty('--shake', (sp * 60).toFixed(2) + 'px');
+      if (t < 1) requestAnimationFrame(frame); else fl.classList.add('go');
+    };
+    requestAnimationFrame(frame);
+  }
   function travelTo(w: string) {
     const free = visited(w);
     if (!free && (S.fuel < CONFIG.rocket.fuelToLaunch || !allParts())) return;
     if (!free) S.fuel -= CONFIG.rocket.fuelToLaunch;
-    const cut = $('#cut'); $('#cutRocket').innerHTML = ART.spriteUi('rocket_3') ? `<img class="rkImg" src="${ART.spriteUi('rocket_3')}">` : ART.rocket({ hull: 1, engine: 1, nav: 1, tank: 1 }, { flame: true });
+    const cut = $('#cut'); $('#cutRocket').innerHTML = ART.spriteUi('gal_rocket') ? `<img class="warpRocket" src="${ART.spriteUi('gal_rocket')}" alt="">` : ART.rocket({ hull: 1, engine: 1, nav: 1, tank: 1 }, { flame: true });
     $('#cutTitle').textContent = 'Blasting off!';
     $('#cutSub').textContent = 'Destination: ' + WORLDS[w].name;
-    const warpHost = $('#warps'); warpHost.innerHTML = '';
-    for (let i = 0; i < 22; i++) { const s = el('div', 'warp'); s.style.cssText = `left:${Math.random() * 100}%;height:${30 + Math.random() * 90}px;animation-delay:${-Math.random()}s`; warpHost.appendChild(s); }
+    warpFx(w, 3100);
     cut.classList.add('show'); sfx.launch();
     setTimeout(() => {
       if (!S.boards[w]) S.boards[w] = freshBoard(w);
@@ -3433,7 +3481,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           'Begin');
       }, 900);
       save();
-    }, 2100);
+    }, 2400);
   }
 
   /* ============================================================ THE STORY
@@ -3611,7 +3659,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (!document.getElementById('rwc')?.classList.contains('open')) rewardNext();
   }
   function rewardNext() {
-    const c = rwcQ.shift(); if (!c) return;
+    if (!rwcQ.length) return;
+    // one thing at a time: a reward card waits for the dialog or the story beat in front of it
+    if ($('#modal').classList.contains('open') || $('#talk').classList.contains('open') || $('#cut').classList.contains('show')) { setTimeout(rewardNext, 600); return; }
+    const c = rwcQ.shift()!;
     let el = document.getElementById('rwc');
     if (!el) { el = document.createElement('div'); el.id = 'rwc'; $('#app').appendChild(el); }
     const parts: string[] = [];
@@ -3632,7 +3683,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     ($('#rwcGo') as HTMLElement).onclick = () => {
       grant(c.r); confetti(); haptic('medium');
       el!.className = 'close';
-      setTimeout(() => { el!.className = ''; if (c.after) c.after(); rewardNext(); }, 320);
+      setTimeout(() => { el!.className = ''; if (c.after) c.after(); rewardNext(); setTimeout(nextModal, 300); }, 320);
     };
   }
   function grant(r: Reward) {
@@ -3683,7 +3734,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function talkScene(lines: [string, string][], done?: () => void) {
     if (!lines || !lines.length) { if (done) done(); return; }
     // a dialog is up: the scene starts once it is closed, never underneath it
-    if ($('#modal').classList.contains('open')) { setTimeout(() => talkScene(lines, done), 600); return; }
+    if ($('#modal').classList.contains('open') || document.getElementById('rwc')?.classList.contains('open')
+      || (popOpen() && Date.now() - lastPointer > 1500)) { setTimeout(() => talkScene(lines, done), 600); return; }
     if ($('#talk').classList.contains('open')) {
       // already talking: this conversation waits its turn
       talkQ = talkQ.concat(lines);
@@ -4473,7 +4525,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const res = got.map(id => { const isNew = !a.have[id]; a.have[id] = (a.have[id] || 0) + 1; const d = isNew ? 0 : DUST[stickerStars(id)]; a.dust += d; return { id, isNew, d }; });
     stat('stickers', n); save();
     // the reveal: cards flip one after the other
-    pop(`${kind === 'gold' ? '🌟 Golden pack' : '🎴 Sticker pack'}`, `<div class="packRow">${res.map((r, k) => `<div class="pkCard">
+    pop(`${kind === 'gold' ? ART.uiIcon('pack_gold', '🌟') + ' Golden pack' : ART.uiIcon('pack_basic', '🎴') + ' Sticker pack'}`, `<div class="packRow">${res.map((r, k) => `<div class="pkCard">
         <div class="pkBack" style="animation-delay:${0.25 + k * 0.35}s"></div><div class="pkFace s${stickerStars(r.id)}" style="animation-delay:${0.45 + k * 0.35}s">${stickerHtml(r.id)}<em>${'★'.repeat(stickerStars(r.id))}</em>${r.isNew ? '<b class="pkNew">NEW!</b>' : `<b class="pkDup">+${r.d} ✨ dust</b>`}</div></div>`).join('')}</div>
       <button class="big" id="pkGo">${packsWaiting() ? 'Next pack' : 'To the album'}</button>`, 'fun album');
     sfx.whoosh(); res.forEach((r, k) => setTimeout(() => { (r.isNew ? sfx.discover : sfx.pop)(); }, 450 + k * 350));
@@ -4506,12 +4558,12 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (!albumOpen()) { toast('The Star Album opens at level 4.'); return; }
     const a = alb(), sets = albumSets(), left = seasonEnds() - Date.now();
     const days = Math.max(0, Math.ceil(left / 86400000));
-    pop(`⭐ Star Album`, `<div class="albHead"><b>${seasonName()}</b><i>Season ${a.no + 1} · ends in ${days} day${days === 1 ? '' : 's'}</i>
+    pop(`${ART.uiIcon('album_book', '⭐')} Star Album`, `<div class="albHead"><b>${seasonName()}</b><i>Season ${a.no + 1} · ends in ${days} day${days === 1 ? '' : 's'}</i>
         <div class="albProg"><i style="width:${Math.round(albumCount() / Math.max(1, albumTotal()) * 100)}%"></i><em>${albumCount()} / ${albumTotal()} stickers</em></div></div>
       <div class="albPacks">
-        <button class="buyBtn" id="pkBasic" ${a.packs.basic ? '' : 'disabled'}>🎴 Open pack${a.packs.basic ? ' ×' + a.packs.basic : ''}</button>
-        <button class="buyBtn gold" id="pkGold" ${a.packs.gold ? '' : 'disabled'}>🌟 Golden${a.packs.gold ? ' ×' + a.packs.gold : ''}</button>
-        <span class="albDust">✨ <b>${a.dust}</b> dust</span></div>
+        <button class="buyBtn" id="pkBasic" ${a.packs.basic ? '' : 'disabled'}>${ART.uiIcon('pack_basic', '🎴')} Open pack${a.packs.basic ? ' ×' + a.packs.basic : ''}</button>
+        <button class="buyBtn gold" id="pkGold" ${a.packs.gold ? '' : 'disabled'}>${ART.uiIcon('pack_gold', '🌟')} Golden${a.packs.gold ? ' ×' + a.packs.gold : ''}</button>
+        <span class="albDust">${ART.uiIcon('star_dust', '✨')} <b>${a.dust}</b> dust</span></div>
       <div class="albSets">${sets.map((s, k) => {
         const n = s.ids.filter(id => a.have[id]).length, done = !!a.sets[s.key];
         return `<div class="albSet${done ? ' done' : ''}"><div class="albSetH"><b>${s.name}</b><i>${n}/${s.ids.length}</i><span>${done ? '✓ complete' : rewardText(setReward(k))}</span></div>
@@ -4581,26 +4633,44 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   /* ------------------------------------------------------- first visit to the shop
      The shop opening is a moment: a hand points at the button, and the first
      visit explains what is inside and hands over the free gift straight away. */
-  function domHand(target: HTMLElement | null, say = '') {
-    document.getElementById('domHand')?.remove();
+  /** a holographic frame that locks onto a button (it follows the button if the layout moves)
+      and a little holo tag that says why: used when something new opens */
+  let holoTimer = 0;
+  function domHand(target: HTMLElement | (() => HTMLElement | null) | null, say = '') {
+    document.getElementById('holoHi')?.remove(); clearInterval(holoTimer);
     if (!target) return;
-    const r = target.getBoundingClientRect(); if (!r.width) return;
-    const h = document.createElement('div'); h.id = 'domHand';
-    h.innerHTML = `<i class="dhRing"></i>${ART.spriteUi('hand') ? `<img class="dhHand" src="${ART.spriteUi('hand')}" alt="">` : '<b class="dhHand">👆</b>'}${say ? `<em class="dhSay">${say}</em>` : ''}`;
-    h.style.left = (r.left + r.width / 2) + 'px'; h.style.top = (r.top + r.height / 2) + 'px';
+    const find = typeof target === 'function' ? target : () => target;
+    const h = document.createElement('div'); h.id = 'holoHi';
+    h.innerHTML = `<i class="hhFrame"><b></b><b></b><b></b><b></b><em class="hhScan"></em></i>${say ? `<span class="hhTag">${say}</span>` : ''}`;
     document.body.appendChild(h);
-    setTimeout(() => { if (h.isConnected) h.remove(); }, 20000);
+    const place = () => {
+      const t = find();
+      if (!t || !t.isConnected) { h.style.display = 'none'; return; }
+      const r = t.getBoundingClientRect(); if (!r.width) { h.style.display = 'none'; return; }
+      h.style.display = '';
+      const pad = 5, fr = h.querySelector('.hhFrame') as HTMLElement;
+      fr.style.cssText = `left:${r.left - pad}px;top:${r.top - pad}px;width:${r.width + pad * 2}px;height:${r.height + pad * 2}px`;
+      const tag = h.querySelector('.hhTag') as HTMLElement | null;
+      if (tag) {
+        const tw = tag.offsetWidth, below = r.bottom + 10 + 30 < innerHeight;
+        tag.style.left = Math.max(8, Math.min(innerWidth - tw - 8, r.left + r.width / 2 - tw / 2)) + 'px';
+        tag.style.top = (below ? r.bottom + 10 : r.top - 40) + 'px';
+        tag.classList.toggle('up', !below);
+      }
+    };
+    place(); holoTimer = window.setInterval(() => { if (!h.isConnected) { clearInterval(holoTimer); return; } place(); }, 250);
+    setTimeout(() => { if (h.isConnected) { h.remove(); clearInterval(holoTimer); } }, 25000);
   }
   function shopUnlockHint() {
     if (dialogBusy() || popOpen()) { setTimeout(shopUnlockHint, 1500); return; }
     sfx.discover(); toast('🛒 The <b>Star Bazaar</b> is open!');
-    domHand($('#tabShop'), 'The shop is open!');
+    domHand(() => $('#tabShop'), 'The Star Bazaar is open!');
   }
   function xpUnlockHint() {
     if (dialogBusy() || popOpen()) { setTimeout(xpUnlockHint, 1500); return; }
     renderQuick();
     sfx.discover(); toast('🚀 <b>Star Expeditions</b> are open: a new event board every month!');
-    domHand(document.querySelector('.qChip.xp') as HTMLElement, 'New: Expedition!');
+    domHand(() => document.querySelector('.qChip.xp') as HTMLElement | null, 'New: Star Expedition!');
   }
   function shopWelcome() {
     const ready = giftReady();
@@ -4780,10 +4850,14 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   /* Just-in-time help: the first time something matters, the screen dims around
      it and one line explains it. Never more than one, never during a story or a
      dialog, and each one only ever once. */
+  /** anything on screen that a tip, a reward or a story beat must not land on top of */
+  let calmAt = 0;
+  const overlayUp = () => popOpen() || ['#modal', '#talk', '#mini', '#rwc', '#xpScr', '#skyChart'].some(q => { const e = document.querySelector(q); return !!e && (e.classList.contains('open')); }) || $('#cut').classList.contains('show');
   function coachTick() {
     if (jit || S.tipsOff) return;
     if (!S.tut || tutOn() || view !== 'board') return;
-    if (popOpen() || $('#modal').classList.contains('open') || $('#talk').classList.contains('open') || $('#mini').classList.contains('open')) return;
+    if (overlayUp()) { calmAt = Date.now(); return; }
+    if (Date.now() - calmAt < 6000) return;      // a breather after any dialog before a tip pops up
     if (Date.now() < coachT || Date.now() - lastAct < 900) return;
     const c = COACH.find(x => {
       if (S.coach[x.k] || !x.when()) return false;
@@ -5252,7 +5326,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     { const xc = XP.chip(); if (xc) bits.push(xc); }
     if (S.lvl >= SP().unlockLevel && spinsLeft()) bits.push(`<button class="qChip spin" data-q="spin">${ART.uiIcon('ic_spin', '🎡')}<b>${spinsLeft()}</b></button>`);
     if (S.seen.scrap || pouch('scrap') || pouch('starcore')) bits.push(`<button class="qChip pouch" data-q="pouch">${ART.uiIcon('ic_pouch', ART.item('starcore'))}<b>${pouch('starcore')}</b><i>${pouch('scrap')} scrap</i></button>`);
-    if (albumOpen()) bits.push(`<button class="qChip album${packsWaiting() ? ' ready' : ''}" data-q="album">${ART.uiIcon('ic_album', '⭐')}<b>${packsWaiting() ? '🎴' + packsWaiting() : albumCount() + '/' + albumTotal()}</b></button>`);
+    if (albumOpen()) bits.push(`<button class="qChip album${packsWaiting() ? ' ready' : ''}" data-q="album">${ART.uiIcon('album_book', ART.uiIcon('ic_album', '⭐'))}<b>${packsWaiting() ? '🎴' + packsWaiting() : albumCount() + '/' + albumTotal()}</b></button>`);
     if (stored().length) bits.push(`<button class="qChip store" data-q="store">${ART.uiIcon('ic_box', '📦')}<b>${stored().length}</b></button>`);
     if (petOn()) {
       // the pet says how it is at a glance: a gift waiting, hungry, or full
@@ -5535,16 +5609,16 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      in over the whole game, not in an afternoon. A constellation can only be
      traced once you have reached its world. Positions are on a 100 x 100 box. */
   const CONSTS: any[] = [
-    { id: 'plough', name: 'The Rocket', world: 'earth', cost: 3, perk: '+10% coins from every sale and contract', pts: [[23.8, 50.2], [49.6, 1.4], [55.1, 31.4], [77.7, 52.1], [78.7, 76.8], [50.4, 98.4], [50.2, 67.0], [21.3, 76.8], [23.8, 50.2]] },
-    { id: 'lantern', name: 'The Lantern', world: 'earth', cost: 5, perk: 'Every producer holds 20% more charges', pts: [[45.7, 29.3], [49.4, 1.2], [65.0, 27.1], [74.2, 45.1], [66.6, 59.6], [50.4, 98.0], [52.0, 67.0], [26.0, 49.8], [45.7, 29.3]] },
-    { id: 'seed', name: 'The Moon Pup', world: 'luna', cost: 7, perk: 'Producers recharge 20% faster', pts: [[8.6, 39.1], [21.1, 11.1], [50.4, 1.8], [53.3, 47.1], [87.7, 33.0], [92.6, 69.7], [68.2, 95.1], [32.8, 97.3], [26.8, 65.6], [8.6, 39.1]] },
-    { id: 'vault', name: 'The Vault', world: 'luna', cost: 9, perk: 'Every Bloom Essence you feed a Heart counts double', pts: [[14.1, 15.6], [49.4, 44.7], [48.0, 2.1], [81.2, 14.6], [95.5, 47.3], [84.8, 81.4], [52.5, 96.9], [18.6, 85.5], [7.2, 51.6], [14.1, 15.6]] },
-    { id: 'forge', name: 'The Anvil', world: 'cindra', cost: 12, reward: { gems: 25, item: 'bigchest' }, perk: 'A Treasure Chest and 25 gems', pts: [[29.1, 49.6], [15.8, 17.0], [55.5, 26.6], [96.3, 23.2], [77.3, 43.9], [77.5, 74.8], [45.9, 81.8], [13.7, 81.1], [29.1, 49.6]] },
+    { id: 'plough', name: 'The Rocket', world: 'earth', cost: 6, perk: '+10% coins from every sale and contract', pts: [[23.8, 50.2], [49.6, 1.4], [55.1, 31.4], [77.7, 52.1], [78.7, 76.8], [50.4, 98.4], [50.2, 67.0], [21.3, 76.8], [23.8, 50.2]] },
+    { id: 'lantern', name: 'The Lantern', world: 'earth', cost: 10, perk: 'Every producer holds 20% more charges', pts: [[45.7, 29.3], [49.4, 1.2], [65.0, 27.1], [74.2, 45.1], [66.6, 59.6], [50.4, 98.0], [52.0, 67.0], [26.0, 49.8], [45.7, 29.3]] },
+    { id: 'seed', name: 'The Moon Pup', world: 'luna', cost: 28, perk: 'Producers recharge 20% faster', pts: [[8.6, 39.1], [21.1, 11.1], [50.4, 1.8], [53.3, 47.1], [87.7, 33.0], [92.6, 69.7], [68.2, 95.1], [32.8, 97.3], [26.8, 65.6], [8.6, 39.1]] },
+    { id: 'vault', name: 'The Vault', world: 'luna', cost: 36, perk: 'Every Bloom Essence you feed a Heart counts double', pts: [[14.1, 15.6], [49.4, 44.7], [48.0, 2.1], [81.2, 14.6], [95.5, 47.3], [84.8, 81.4], [52.5, 96.9], [18.6, 85.5], [7.2, 51.6], [14.1, 15.6]] },
+    { id: 'forge', name: 'The Anvil', world: 'cindra', cost: 24, reward: { gems: 25, item: 'bigchest' }, perk: 'A Treasure Chest and 25 gems', pts: [[29.1, 49.6], [15.8, 17.0], [55.5, 26.6], [96.3, 23.2], [77.3, 43.9], [77.5, 74.8], [45.9, 81.8], [13.7, 81.1], [29.1, 49.6]] },
     { id: 'phoenix', name: 'The Firebird', world: 'cindra', cost: 14, reward: { gems: 30, energy: 60 }, perk: '30 gems and 60 energy', pts: [[11.3, 30.7], [19.7, 0.8], [51.8, 21.9], [80.1, 4.9], [89.3, 27.9], [67.2, 56.4], [82.0, 79.3], [62.1, 98.0], [49.2, 75.4], [26.8, 89.6], [31.1, 53.7], [11.3, 30.7]] },
-    { id: 'squid', name: 'The Kraken', world: 'nerith', cost: 16, reward: { gems: 35, item: 'bigchest' }, perk: 'A Treasure Chest and 35 gems', pts: [[15.8, 31.6], [42.6, 46.5], [47.7, 1.4], [64.8, 23.4], [87.9, 39.5], [68.6, 65.4], [82.2, 94.5], [42.4, 93.4], [33.6, 69.9], [9.8, 77.9], [12.1, 54.7], [15.8, 31.6]] },
+    { id: 'squid', name: 'The Kraken', world: 'nerith', cost: 32, reward: { gems: 35, item: 'bigchest' }, perk: 'A Treasure Chest and 35 gems', pts: [[15.8, 31.6], [42.6, 46.5], [47.7, 1.4], [64.8, 23.4], [87.9, 39.5], [68.6, 65.4], [82.2, 94.5], [42.4, 93.4], [33.6, 69.9], [9.8, 77.9], [12.1, 54.7], [15.8, 31.6]] },
     { id: 'shell', name: 'The Shell', world: 'nerith', cost: 18, reward: { gems: 40, energy: 80 }, perk: '40 gems and 80 energy', pts: [[42.2, 41.0], [48.0, 1.8], [71.3, 18.4], [82.0, 44.9], [88.5, 75.4], [66.6, 97.7], [53.5, 68.6], [30.9, 87.9], [7.0, 59.4], [42.2, 41.0]] },
-    { id: 'crown', name: 'The Crown', world: 'vela', cost: 22, reward: { gems: 60, item: 'bigchest' }, perk: 'A Treasure Chest and 60 gems', pts: [[4.5, 38.1], [32.2, 30.1], [49.6, 4.7], [71.3, 33.2], [96.7, 40.2], [87.7, 65.0], [60.9, 94.1], [21.5, 91.6], [43.0, 55.3], [12.3, 65.0], [4.5, 38.1]] },
-    { id: 'galaxy', name: 'The Galaxy', world: 'vela', cost: 30, reward: { gems: 100, item: 'bigchest', energy: 100 }, perk: '100 gems, 100 energy and a Treasure Chest', pts: [[6.6, 36.5], [28.1, 8.6], [49.6, 46.9], [63.1, 4.7], [86.1, 28.9], [91.2, 62.1], [65.8, 66.4], [71.1, 91.2], [35.7, 94.1], [29.7, 61.9], [7.0, 72.5], [6.6, 36.5]] },
+    { id: 'crown', name: 'The Crown', world: 'vela', cost: 44, reward: { gems: 60, item: 'bigchest' }, perk: 'A Treasure Chest and 60 gems', pts: [[4.5, 38.1], [32.2, 30.1], [49.6, 4.7], [71.3, 33.2], [96.7, 40.2], [87.7, 65.0], [60.9, 94.1], [21.5, 91.6], [43.0, 55.3], [12.3, 65.0], [4.5, 38.1]] },
+    { id: 'galaxy', name: 'The Galaxy', world: 'vela', cost: 60, reward: { gems: 100, item: 'bigchest', energy: 100 }, perk: '100 gems, 100 energy and a Treasure Chest', pts: [[6.6, 36.5], [28.1, 8.6], [49.6, 46.9], [63.1, 4.7], [86.1, 28.9], [91.2, 62.1], [65.8, 66.4], [71.1, 91.2], [35.7, 94.1], [29.7, 61.9], [7.0, 72.5], [6.6, 36.5]] },
   ];
   const lit = (id: string) => !!(typeof S !== 'undefined' && S && S.stars && S.stars[id]);
   const starPerk = (id: string) => lit(id);
@@ -5839,6 +5913,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       <div class="galScroll" id="galScroll"><div class="galPath" style="height:${H}px">
         <svg class="galSvg" viewBox="0 0 100 ${H}" preserveAspectRatio="none" style="height:${H}px">
           <path d="${path}" class="galRoute"/><path d="${lit}" class="galRoute lit"/></svg>
+        ${[0, 1, 2].map(k => `<i class="galComet" style="top:${80 + k * Math.round(H / 3)}px;left:-40px;animation-delay:${k * 3.1}s"></i>`).join('')}
         ${nodes}</div></div>
       <div class="galFoot">A new world costs <b>${CONFIG.rocket.fuelToLaunch} ⛽</b> · flying back is always free</div></div>`;
   }
@@ -6026,10 +6101,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function cropScene(el: HTMLElement) {
     const src = el.dataset.src!, fx = +el.dataset.fx!, fy = +el.dataset.fy!, img = new Image();
     img.onload = () => {
-      const box = el.clientWidth || 130, k = 3.4, iw = box * k, ih = iw * img.naturalHeight / img.naturalWidth;
+      const box = el.clientWidth || 130, k = 2.5, iw = box * k, ih = iw * img.naturalHeight / img.naturalWidth;
       el.style.backgroundImage = `url(${src})`;
       el.style.backgroundSize = `${iw}px ${ih}px`;
-      el.style.backgroundPosition = `${Math.round(box / 2 - fx * iw)}px ${Math.round((el.clientHeight || box) / 2 - (fy - 0.05) * ih)}px`;
+      el.style.backgroundPosition = `${Math.round(box / 2 - fx * iw)}px ${Math.round((el.clientHeight || box) / 2 - (fy - 0.105) * ih)}px`;
     };
     img.src = src;
   }
@@ -6281,7 +6356,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   type MItem = { face: string; title: string; body: string; btn?: string; after: (() => void) | null };
   const mQ: MItem[] = [];
   let mQueued: MItem | null = null;
-  const dialogBusy = () => $('#modal').classList.contains('open') || $('#talk').classList.contains('open');
+  const dialogBusy = () => $('#modal').classList.contains('open') || $('#talk').classList.contains('open') || !!document.getElementById('rwc')?.classList.contains('open');
   function modal(face: string, title: string, body: string, btn?: string) {
     // a dialog the player just asked for (a button inside the open one) replaces it;
     // one the game raised on its own waits in line
@@ -6707,7 +6782,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed, ecost,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
       fly: (w: string) => galaxyTap(w), view: (v: string) => setView(v),
-      curProject: () => curProject(), v9: { xp: XP, shopUnlockHint, setView, achPop, profilePop, heartPanel, albumPop, openPack, albumGive, shareCard, alb, storeProducer, startPlacing, paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
+      curProject: () => curProject(), v9: { xp: XP, shopUnlockHint, xpUnlockHint, setView, achPop, profilePop, heartPanel, albumPop, openPack, albumGive, shareCard, alb, storeProducer, startPlacing, paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
     };
     setInterval(tick, 500);
     setInterval(() => { if (!document.hidden) S.playMs = (S.playMs || 0) + 5000; }, 5000);

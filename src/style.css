@@ -3313,13 +3313,25 @@ html body .app .sideR .tools #btnX2 .ic{width:13px!important;height:13px!importa
 html body .app .sideR .tools #btnX2 b{font-size:10px;color:#fff;text-shadow:var(--hx-out)}
 @keyframes hxPulse{50%{filter:drop-shadow(0 0 5px #8ff3ff) brightness(1.2)}}
 @media (prefers-reduced-motion: reduce){html body .app .sideR .tools #btnHint .hintIc{animation:none}}
-/* v70: pointing hand for first-time guides (fixed to the screen, above everything) */
-#domHand{position:fixed;z-index:9999;pointer-events:none;width:0;height:0}
-#domHand .dhRing{position:absolute;left:-30px;top:-30px;width:60px;height:60px;border-radius:50%;border:3px solid #8ff3ff;box-shadow:0 0 14px #6fe3ff;animation:dhRing 1.2s ease-out infinite}
-#domHand .dhHand{position:absolute;left:4px;top:8px;width:46px;height:auto;font-size:34px;animation:dhTap 1.2s ease-in-out infinite;filter:drop-shadow(0 3px 4px rgba(0,0,0,.4))}
-#domHand .dhSay{position:absolute;right:20px;top:38px;white-space:nowrap;font-style:normal;font:400 15px/1 'Lilita One',Fredoka,sans-serif;color:#fff;background:linear-gradient(180deg,#2c63c9,#0e2565);padding:7px 12px;border-radius:12px;box-shadow:0 0 0 2px #6fe3ff,0 0 12px rgba(111,227,255,.7);text-shadow:0 2px 0 #06143d}
-@keyframes dhRing{from{transform:scale(.6);opacity:1}to{transform:scale(1.4);opacity:0}}
-@keyframes dhTap{50%{transform:translate(-6px,-8px)}}
+/* v71: holographic lock-on frame for first-time guides (replaces the pointing hand) */
+#holoHi{position:fixed;inset:0;z-index:9999;pointer-events:none}
+#holoHi .hhFrame{position:fixed;border-radius:14px;box-shadow:0 0 0 2px rgba(143,243,255,.95),0 0 16px 3px rgba(111,227,255,.75),inset 0 0 14px rgba(111,227,255,.55);
+  background:linear-gradient(180deg,rgba(111,227,255,.14),rgba(111,227,255,.02));overflow:hidden;animation:hhPulse 1.4s ease-in-out infinite}
+#holoHi .hhFrame b{position:absolute;width:12px;height:12px;border:3px solid #dffcff;filter:drop-shadow(0 0 4px #6fe3ff);animation:hhLock 1.4s ease-in-out infinite}
+#holoHi .hhFrame b:nth-child(1){left:-3px;top:-3px;border-right:0;border-bottom:0;border-radius:6px 0 0 0}
+#holoHi .hhFrame b:nth-child(2){right:-3px;top:-3px;border-left:0;border-bottom:0;border-radius:0 6px 0 0}
+#holoHi .hhFrame b:nth-child(3){left:-3px;bottom:-3px;border-right:0;border-top:0;border-radius:0 0 0 6px}
+#holoHi .hhFrame b:nth-child(4){right:-3px;bottom:-3px;border-left:0;border-top:0;border-radius:0 0 6px 0}
+#holoHi .hhScan{position:absolute;left:0;right:0;height:40%;top:-40%;background:linear-gradient(180deg,transparent,rgba(190,250,255,.55),transparent);animation:hhScan 1.6s linear infinite}
+#holoHi .hhTag{position:fixed;white-space:nowrap;font:400 14px/1 'Lilita One',Fredoka,sans-serif;letter-spacing:.03em;color:#e9fdff;padding:7px 12px 8px;border-radius:10px;
+  background:linear-gradient(180deg,rgba(28,70,160,.94),rgba(8,22,70,.94));box-shadow:0 0 0 1.5px #8ff3ff,0 0 12px rgba(111,227,255,.7);text-shadow:0 0 6px rgba(143,243,255,.9),0 2px 0 #06143d;animation:hhTag 1.4s ease-in-out infinite}
+#holoHi .hhTag::before{content:'';position:absolute;left:50%;top:-6px;margin-left:-6px;border:6px solid transparent;border-top:0;border-bottom-color:#8ff3ff}
+#holoHi .hhTag.up::before{top:auto;bottom:-6px;border:6px solid transparent;border-bottom:0;border-top-color:#8ff3ff}
+@keyframes hhPulse{50%{box-shadow:0 0 0 2px #dffcff,0 0 26px 6px rgba(111,227,255,.9),inset 0 0 18px rgba(111,227,255,.7)}}
+@keyframes hhLock{50%{transform:scale(1.25)}}
+@keyframes hhScan{to{top:100%}}
+@keyframes hhTag{50%{transform:translateY(-3px)}}
+@media (prefers-reduced-motion:reduce){#holoHi .hhFrame,#holoHi .hhFrame b,#holoHi .hhScan,#holoHi .hhTag{animation:none}}
 .shopGuide{display:flex;flex-direction:column;gap:7px;text-align:left;margin:4px 0 6px}
 .shopGuide>div{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:12px;background:rgba(255,255,255,.75);box-shadow:inset 0 0 0 1.5px rgba(111,200,255,.45)}
 .shopGuide span{flex:none;width:34px;height:34px;display:flex;align-items:center;justify-content:center}
@@ -3462,3 +3474,51 @@ html body .app .qChip{background:linear-gradient(180deg,rgba(28,58,140,.9),rgba(
   box-shadow:0 0 0 1.5px #6fe3ff,0 0 6px rgba(111,227,255,.4)!important}
 html body .app .qChip b,html body .app .qChip i{color:#fff!important;text-shadow:var(--hx-out)!important}
 html body .app .qChip.ready{box-shadow:0 0 0 2px #7dff9a,0 0 10px rgba(125,255,154,.7)!important}
+.xpBolt.empty{background:#7a1d2e;box-shadow:0 0 0 1px #ff8a9a}
+.xpO.wait{background:linear-gradient(180deg,rgba(220,230,255,.55),rgba(190,205,240,.5));justify-content:center;gap:2px}
+.xpO.wait .xpWant{width:40px;height:40px;opacity:.8}.xpO.wait .xpWant img{width:100%;height:100%}
+.xpWaitT{font:400 15px/1 'Lilita One',Fredoka,sans-serif;color:#1d2a5c}
+/* v71: the expedition gets a full-width tile in the left column, like Missions */
+html body .app .side .qChip.xp{width:62px!important;height:58px!important;flex-direction:column;justify-content:center;gap:0;padding:2px!important;border-radius:14px!important;order:-1;
+  background:linear-gradient(180deg,rgba(120,60,200,.95),rgba(40,16,100,.95))!important;box-shadow:0 0 0 2px #e3a8ff,0 0 12px rgba(214,140,255,.8)!important}
+html body .app .side .qChip.xp img{width:38px!important;height:38px!important;position:static!important}
+html body .app .side .qChip.xp b{position:absolute;top:-6px;right:-6px;min-width:20px;height:18px;line-height:18px;padding:0 4px;border-radius:9px;font-size:11px;background:#ff4f6e!important;box-shadow:0 0 0 1.5px #fff}
+html body .app .side .qChip.xp i{position:static!important;font-style:normal;font-size:10px;line-height:1;margin-top:1px;display:block!important}
+/* v71: the chapter strip reads as one bar; the rocket marks the launch chapter */
+html body .app .mlJourney{gap:0;padding:6px 10px;overflow:visible}
+html body .app .mlJourney i{border-radius:0;height:9px;position:relative;outline:0!important}
+html body .app .mlJourney i:first-child{border-radius:99px 0 0 99px}html body .app .mlJourney i:last-child{border-radius:0 99px 99px 0}
+html body .app .mlJourney i.now{flex:1;border-radius:2px;animation:none;box-shadow:0 0 8px #ffd34d,0 0 0 1.5px #fff}
+html body .app .mlJourney i.launch img{position:absolute;left:50%;top:50%;width:24px;height:24px;transform:translate(-50%,-55%) rotate(35deg);filter:drop-shadow(0 0 4px rgba(255,170,80,.9))}
+html body .app .mlNote{display:flex;align-items:center;gap:6px;margin:-4px 0 8px;font-size:11.5px;color:#4b5a8c}
+html body .app .mlNote img{width:18px;height:18px}
+/* v71: hyperspace travel */
+.cut{background:#06081e!important}
+#warps .warpCv{position:absolute;inset:0;width:100%;height:100%}
+#warps .warpPlanet{position:absolute;left:50%;top:42%;width:240px;height:240px;object-fit:contain;transform:translate(-50%,-50%) scale(.05);opacity:0;filter:drop-shadow(0 0 30px rgba(160,220,255,.8))}
+#warps .warpFlash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+#warps .warpFlash.go{animation:warpFlash .5s ease-out}
+@keyframes warpFlash{0%{opacity:0}25%{opacity:.95}100%{opacity:0}}
+.cut #cutRocket{position:relative;z-index:2;animation:cutShake .09s linear infinite}
+@keyframes cutShake{0%{transform:translate(0,0)}25%{transform:translate(calc(var(--shake,0px) * .1),calc(var(--shake,0px) * -.08))}50%{transform:translate(calc(var(--shake,0px) * -.1),calc(var(--shake,0px) * .06))}75%{transform:translate(calc(var(--shake,0px) * .06),calc(var(--shake,0px) * .1))}}
+.cut .cutT,.cut .cutS{position:relative;z-index:2}
+.cut .cutT{font-family:var(--hx-title)!important;font-weight:400!important;font-size:24px!important;text-shadow:var(--hx-out),0 0 14px rgba(111,227,255,.9)!important}
+@media (prefers-reduced-motion:reduce){.cut #cutRocket{animation:none}}
+.cut .warpRocket{width:170px;height:170px;object-fit:contain;transform:rotate(-42deg);filter:drop-shadow(0 0 18px rgba(255,190,90,.8))}
+/* v71: a living galaxy map: planets drift and turn their glow, the routes flow, comets cross */
+html body .app .gp .galArt{display:block;animation:gpFloat 5s ease-in-out infinite}
+html body .app .gp:nth-child(2n) .galArt{animation-duration:6.5s;animation-delay:-2s}
+html body .app .gp:nth-child(3n) .galArt{animation-duration:5.8s;animation-delay:-3.5s}
+html body .app .gp.here .galArt,html body .app .gp.go .galArt{filter:drop-shadow(0 0 14px var(--glow)) drop-shadow(0 0 4px var(--glow))}
+html body .app .gp .gpRing{animation:gpRing 3s ease-in-out infinite}
+@keyframes gpFloat{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-7px) rotate(2deg)}}
+@keyframes gpRing{50%{opacity:.55;transform:scale(1.08)}}
+html body .app .galRoute{animation:gpFlow 1.6s linear infinite}
+html body .app .galRoute.lit{stroke-dasharray:8 10;animation:gpFlow 1s linear infinite}
+@keyframes gpFlow{to{stroke-dashoffset:-28}}
+html body .app .galComet{position:absolute;width:120px;height:2px;border-radius:2px;pointer-events:none;z-index:0;
+  background:linear-gradient(90deg,transparent,rgba(190,240,255,.9),#fff);box-shadow:0 0 8px #bff3ff;opacity:0;animation:galComet 9s linear infinite}
+html body .app .galComet::after{content:'';position:absolute;right:-3px;top:-3px;width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 10px #fff,0 0 20px #8ff3ff}
+@keyframes galComet{0%{transform:translate(-160px,0) rotate(18deg);opacity:0}4%{opacity:1}14%{transform:translate(520px,170px) rotate(18deg);opacity:0}100%{opacity:0;transform:translate(520px,170px) rotate(18deg)}}
+@media (prefers-reduced-motion:reduce){html body .app .gp .galArt,html body .app .galRoute,html body .app .galComet,html body .app .gp .gpRing{animation:none}}
+@media (max-width:430px){html body .app .galTop>b{display:none}}

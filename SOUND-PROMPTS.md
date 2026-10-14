@@ -60,15 +60,24 @@ Tips:
 
 Character voices (`voice_<kind>_1…8.mp3`, 0.3 s each, 8 versions each): short alien gibberish syllables, cute, like Animal Crossing speech. Kinds: `chirp` (high bird-like alien), `deep` (low friendly giant), `dreamy` (soft airy), `gloop` (gooey slime), `mid` (normal cheerful alien), `robot` (little robot beeps), `squeak` (tiny squeaky creature).
 
-## Music (Suno Pro or Stable Audio)
+## Music: epic, not a song
 
-Each world has 3 tracks that rotate, plus an ambience bed. Ask for **instrumental, 2–3 minutes, seamless loop, no vocals**.
+The style you want is a heroic orchestral game score (like Age of War's menu music) with a space colour: big strings and brass, marching snare and taiko drums, plus a sci-fi synth arpeggio and a wordless choir. Always add **"instrumental, no vocals, no lyrics, seamless loop, game soundtrack"**.
+
+**Make it (commercial use OK):** Stable Audio 3.0 on stableaudio.com, 2–3 minute tracks. Suno also works in a paid month; use its *Instrumental* switch so it doesn't write a song.
 
 | File | Prompt |
 |---|---|
-| `music_earth_1…3.mp3` | calm cozy space ambient, soft synth pads, gentle marimba and kalimba, warm, slow, relaxing mobile game background, no drums |
-| `music_luna_1…3.mp3` | dreamy lunar ambient, slow airy pads, soft piano notes, sparkling chimes, tranquil, weightless |
-| `music_cindra_1…3.mp3` | warm volcanic world ambient, deep soft pads, gentle hand drums far away, glowing, calm |
-| `music_nerith_1…3.mp3` | underwater alien ocean ambient, slow watery synths, soft bubbles, whale-like pads, peaceful |
-| `music_vela_1…3.mp3` | floating sky islands ambient, light airy pads, soft flute and harp, breezy, hopeful |
+| `music_earth_1…3.mp3` | heroic orchestral adventure theme, bright strings and French horns, marching snare, light sci-fi synth arpeggio, hopeful and epic, 110 bpm, instrumental game soundtrack, seamless loop |
+| `music_luna_1…3.mp3` | majestic orchestral space theme, slow brass fanfare, wordless choir, shimmering synth pads, low taiko pulses, wonder and scale, instrumental, seamless loop |
+| `music_cindra_1…3.mp3` | epic war-drum orchestral theme for a volcanic planet, taiko and timpani, low brass ostinato, fiery string runs, sci-fi synth bass, determined, instrumental, seamless loop |
+| `music_nerith_1…3.mp3` | adventurous orchestral theme for an alien ocean world, flowing strings, harp, heroic horns, deep synth swells, mysterious and grand, instrumental, seamless loop |
+| `music_vela_1…3.mp3` | triumphant orchestral finale theme for floating sky islands, full orchestra, soaring strings, brass fanfare, choir, sparkling synth arpeggios, victorious, instrumental, seamless loop |
 | `amb_<world>.mp3` | quiet nature ambience of an alien planet, soft wind and distant gentle creature sounds, no music, loop (one per world: earth, luna, cindra, nerith, vela) |
+
+**Free, ready-made (CC0, no credit needed)** to try right away:
+- *Treasure Hunter* by TAD: simple heroic orchestral loop, closest to Age of War: https://opengameart.org/content/treasure-hunter
+- *Determined Pursuit* by Emma_MA: big epic orchestra loop (strong, better for events or a boss feel): https://opengameart.org/content/determined-pursuit-epic-orchestra-loop
+- The *CC0 Cinematic Music* collection (47 tracks; check each track's page says CC0): https://opengameart.org/content/cc0-cinematic-music
+
+Download one, save it as `music_earth_1.mp3` (and the others), put it in `src/audio`.
