@@ -3688,3 +3688,89 @@ html body #app .side .sideW.chapW,html body #app .side .sideW.tab{background:lin
 html body #app .side .sideW.tab.claim{box-shadow:0 0 0 2px #ffd75e,0 0 14px rgba(255,215,94,.7)!important}
 html body #app .side .sideW :is(b,i,span:not(.dot)){color:#eaf6ff!important;text-shadow:0 1px 0 rgba(0,0,0,.6)}
 html body #app .side .sideW .cwBar{background:rgba(2,10,36,.75)!important}
+
+/* =====================================================================
+   v75 "Space Hologram": not blue. Every panel is near-black space glass
+   with nebula light (magenta, violet, teal) bleeding through, a thin
+   iridescent rim (cyan > violet > pink > gold), star dust and a slow
+   light sweep, like a projection hanging in space.
+   ===================================================================== */
+:root{
+  --sh-glass:rgba(16,10,38,.90);
+  --sh-neb:radial-gradient(90% 60% at 0% 0%,rgba(190,70,255,.30),transparent 60%),radial-gradient(80% 60% at 100% 100%,rgba(30,220,200,.22),transparent 60%),radial-gradient(60% 40% at 100% 0%,rgba(255,90,170,.16),transparent 70%);
+  --sh-dust:radial-gradient(1.2px 1.2px at 12% 22%,rgba(255,255,255,.7),transparent),radial-gradient(1px 1px at 72% 14%,rgba(255,255,255,.6),transparent),radial-gradient(1.4px 1.4px at 38% 78%,rgba(255,255,255,.5),transparent),radial-gradient(1px 1px at 88% 62%,rgba(255,255,255,.6),transparent),radial-gradient(1px 1px at 22% 58%,rgba(255,255,255,.45),transparent),radial-gradient(1.2px 1.2px at 58% 42%,rgba(255,255,255,.4),transparent);
+  --sh-iri:conic-gradient(from 210deg,#6ff6ff,#a98bff,#ff7ad9,#ffd36e,#7dffc8,#6ff6ff);
+  --sh-card:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.03));
+  --sh-cardrim:inset 0 0 0 1px rgba(200,170,255,.30),inset 0 1px 0 rgba(255,255,255,.10);
+  --hg-ink:#f3eeff;--hg-dim:#c3b4e8;--hg-rim:#c8a8ff}
+/* panels */
+html body #app :is(.pop .popBox,.mBoxW,.screen:not(.scene),#rwc .rwcCard,.talk .tkBox,#xpPanel .xpPBox,.mini .miniBox){
+  background:var(--sh-dust) padding-box,var(--sh-neb) padding-box,linear-gradient(var(--sh-glass),var(--sh-glass)) padding-box,var(--sh-iri) border-box!important;
+  border:2px solid transparent!important;border-radius:24px!important;
+  box-shadow:0 0 22px rgba(170,110,255,.35),0 0 2px rgba(255,255,255,.4),0 20px 44px rgba(0,0,0,.6)!important}
+html body #app .pop .popBox::after,html body #app .mBoxW::after{display:none!important}
+html body #app :is(.pop .popBox,.mBoxW,.screen:not(.scene))::before{
+  background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.07) 45%,rgba(190,150,255,.10) 50%,transparent 60%) 0 0/250% 100%,repeating-linear-gradient(180deg,transparent 0 3px,rgba(200,170,255,.05) 3px 4px)!important;
+  opacity:1!important;animation:shSweep 7s linear infinite}
+@keyframes shSweep{from{background-position:120% 0,0 0}to{background-position:-130% 0,0 0}}
+@media (prefers-reduced-motion:reduce){html body #app :is(.pop .popBox,.mBoxW,.screen:not(.scene))::before{animation:none}}
+/* title banners: deep violet plate with an iridescent edge */
+html body #app :is(.popRibbon,.mBoxW .mTitle,.screen:not(.scene) .scTitle),#xpScr .xpTitle,#xpPanel .xpPT{
+  background:linear-gradient(180deg,#5a2bc4 0%,#33137e 55%,#1d0a4e 100%)!important;
+  box-shadow:inset 0 2px 0 rgba(255,200,255,.55),inset 0 -2px 0 rgba(120,255,240,.7),0 0 16px rgba(190,110,255,.6)!important;
+  text-shadow:0 2px 0 rgba(20,0,50,.9),0 0 10px rgba(255,170,255,.7)!important}
+/* inner cards and rows */
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene),.rwcCard,.xpPBox) :is(.card,.enRow,.sCard,.csNeed,.csSay,.hHow,.hNode,.albSet,.pfStat,.pfBadge,.resRow,.upRow,.rumour,.lxCard,.lxIt,.pCard,.pRow,.srcCard,.srcBox,.worldCard,.luCard,.npCard,.funCard,.constRow,.accBox,.msBox,.qBox,.rechargeBox,.labIntro,.pouchRow,.przRow,.lbRow,.lbBox,.evNode,.dayCell,.xpMedal,.xpLogRow span,.xpTrackList span,.shopGuide>div,.lbFeats span,.lbCost span,.questRow,.achCard,.petFood,.discIt,.chapLine,.infoBar,.optRow,.ttBox,.devBox,.csRew span,.mlCard,.wkFeat span,.sSec,.mlTile,.pNeed,.talkBtn,.oNeed,.clN,.aTile){
+  background:var(--sh-card)!important;box-shadow:var(--sh-cardrim)!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) :is(.albSlot,.bagSlot,.slot,.pickCell,.aTile.locked){background:rgba(0,0,0,.35)!important;box-shadow:inset 0 0 0 1px rgba(200,170,255,.22),inset 0 2px 6px rgba(0,0,0,.5)!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene),.rwcCard,.xpPBox) :is(.catBar,.achBar,.wkBar,.gpBar,.skBar,.skBar2,.qBar,.tBar,.albProg,.skLitBar,.pfXp,.cwBar,.dTrack,.chAll em){background:rgba(0,0,0,.5)!important;box-shadow:inset 0 0 0 1px rgba(200,170,255,.3),inset 0 2px 4px rgba(0,0,0,.6)!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) :is(.catBar>i,.achBar>em,.albProg>i,.pfXp>i,.skLitBar>i,.gpBar>i,.wkBar>i,.chAll em u){background:linear-gradient(90deg,#7dffc8,#6ff6ff,#c08bff)!important;box-shadow:0 0 8px rgba(160,130,255,.7)!important}
+html body #app .chRow{background:rgba(0,0,0,.45)!important;box-shadow:inset 0 0 0 1px rgba(200,170,255,.3)!important}
+html body #app .chRow i.done{background:linear-gradient(180deg,#a8fff0,#36d1c4 60%,#1a9c9a)!important;box-shadow:0 0 8px rgba(80,240,220,.6)!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene),.rwcCard,.xpPBox) .big.soft{background:rgba(190,150,255,.12)!important;box-shadow:inset 0 0 0 1.5px rgba(200,170,255,.8),0 0 10px rgba(190,140,255,.3)!important;color:#f3eeff!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) :is(.big,.buyBtn):disabled,html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) .big.off{background:rgba(255,255,255,.08)!important;box-shadow:inset 0 0 0 1px rgba(200,170,255,.3)!important;color:rgba(240,230,255,.55)!important}
+html body #app .mBoxW .face,html body #app .chHead2 .pFace,html body #app :is(.popBox,.mBoxW) .pfAv{background:radial-gradient(circle,rgba(200,140,255,.35),rgba(30,10,70,.8))!important;box-shadow:0 0 0 2px #c8a8ff,0 0 14px rgba(200,140,255,.6)!important}
+html body #app .pop,html body #app .modal,html body #app #rwc{background:radial-gradient(ellipse at 50% 40%,rgba(60,20,110,.40),rgba(4,2,16,.82))!important}
+/* the reward card: a round-cornered projection, the giver in a glowing ring */
+html body #app #rwc .rwcCard{padding:46px 18px 18px!important;max-width:320px}
+html body #app #rwc .rwcRib{font:400 20px/1.1 var(--hx-title)!important;color:#fff!important;text-shadow:0 2px 0 rgba(20,0,50,.9),0 0 12px rgba(255,170,255,.8)!important;background:none!important;box-shadow:none!important}
+html body #app #rwc .rwcWho{top:-44px!important;left:50%!important;transform:translateX(-50%)!important;width:84px!important;height:84px!important;border-radius:50%!important;background:radial-gradient(circle,rgba(255,210,120,.5),rgba(40,10,80,.9))!important;box-shadow:0 0 0 2px #ffd36e,0 0 20px rgba(255,200,100,.7)!important;overflow:hidden}
+/* HUD and side widgets: dark space glass, iridescent hairline */
+html body #app .hud .chip,html body #app .hud .lvlBox .xpwrap,html body #app .qChip,html body #app .side .sideW.chapW,html body #app .side .sideW.tab,html body #app .spotTag,html body #app :is(.labSt b,.labHint,.hostRow i,.sciChip),html body #app .ordEmpty{
+  background:linear-gradient(rgba(18,10,40,.86),rgba(18,10,40,.86)) padding-box,var(--sh-iri) border-box!important;border:1.5px solid transparent!important;
+  box-shadow:0 0 10px rgba(170,110,255,.35),0 2px 0 rgba(0,0,0,.35)!important}
+html body #app .side .sideW.tab.claim{box-shadow:0 0 0 2px #ffd36e,0 0 14px rgba(255,211,110,.7)!important}
+html body #app .hud .xpbar{background:rgba(0,0,0,.55)!important}
+html body #app .spotTag i,html body #app .labSt i{color:#ffd36e!important}
+/* expedition: violet space glass too */
+#xpScr .xpBar,#xpScr .xpSay,#xpScr .xpBoard,#xpScr .xpO{background:linear-gradient(rgba(18,10,40,.86),rgba(18,10,40,.86)) padding-box,var(--sh-iri) border-box!important;border:1.5px solid transparent;box-shadow:0 0 14px rgba(170,110,255,.35)!important}
+#xpScr .xpO.ok{box-shadow:0 0 0 2px #7dffa8,0 0 16px rgba(125,255,168,.6)!important}
+#xpScr .xpTabs button{background:linear-gradient(180deg,#5a2bc4,#2a0f6a)!important;box-shadow:0 0 0 1.5px #c8a8ff,0 3px 0 #14053a,inset 0 1.5px 0 rgba(255,200,255,.4)!important}
+#xpScr .xpWho{background:radial-gradient(circle,rgba(200,140,255,.5),rgba(30,10,70,.9))!important;box-shadow:0 0 0 2px #c8a8ff!important}
+/* v75: the board sits in a space-glass frame with an iridescent rim */
+html.ui-panel_board body #app #board::after,html body #app #board::after{border:3px solid transparent!important;border-radius:22px;
+  background:linear-gradient(transparent,transparent) padding-box,var(--sh-iri) border-box!important;
+  -webkit-mask:linear-gradient(#000 0 0) padding-box exclude,linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0) padding-box exclude,linear-gradient(#000 0 0);
+  box-shadow:0 0 16px rgba(170,110,255,.55),0 8px 18px rgba(10,0,40,.4)!important}
+html.ui-panel_board body #app #board::before,html body #app #board::before{background:rgba(22,12,48,.72)!important;border-radius:16px;box-shadow:inset 0 0 18px rgba(170,110,255,.35)}
+/* the item strip and the storage button under the board */
+html body #app .bbBar,html body #app .infoBar,html body #app .bbBtn:not(.galBtn),html body #app #bagBtn{background:linear-gradient(rgba(18,10,40,.86),rgba(18,10,40,.86)) padding-box,var(--sh-iri) border-box!important;border:1.5px solid transparent!important;box-shadow:0 0 10px rgba(170,110,255,.35)!important;color:#f3eeff!important}
+html body #app .sTab{background:rgba(255,255,255,.07)!important;box-shadow:inset 0 0 0 1px rgba(200,170,255,.35)!important;color:#f3eeff!important}
+html body #app .sTab.on{background:linear-gradient(180deg,#5a2bc4,#2a0f6a)!important;box-shadow:0 0 0 1.5px #ffd36e,0 0 10px rgba(255,211,110,.5)!important}
+html body #app #rwc .rwcLine{margin-top:8px!important}html body #app #rwc .rwcCard{min-height:0!important;height:auto!important}
+html body #app .bottomBar .chapLine{background:linear-gradient(rgba(18,10,40,.86),rgba(18,10,40,.86)) padding-box,var(--sh-iri) border-box!important;border:1.5px solid transparent!important;box-shadow:0 0 10px rgba(170,110,255,.35)!important}
+html body #app .bottomBar .chapLine .clN{background:rgba(255,255,255,.07)!important;box-shadow:inset 0 0 0 1px rgba(200,170,255,.3)!important;color:#f3eeff!important}
+html body #app .bottomBar .chapLine .clN.ok{box-shadow:inset 0 0 0 1.5px #7dffa8!important}
+html body #app .bottomBar .chapLine em,html body #app .bottomBar .chapLine b{color:#f3eeff!important}
+html body #app #rwc .rwcCard{aspect-ratio:auto!important;width:min(86vw,320px)!important;padding:56px 18px 20px!important;display:block!important}
+html body #app #rwc .rwcRow{margin:12px 0 14px}
+/* v75: the left column never runs into the board: small chips sit two to a row */
+html body #app .side .quick{display:grid!important;grid-template-columns:repeat(2,29px);gap:5px 4px;justify-content:center;width:62px}
+html body #app .side .quick .qChip.xp{grid-column:1 / -1;height:52px!important}
+html body #app .side .quick .qChip.xp img{width:32px!important;height:32px!important}
+html body #app .side .sideW{min-height:0!important;height:54px!important}
+html body #app .side .sideW .ti :is(img,.uiIc),html body #app .side .sideW>img{max-height:30px}
+html body #app .side .quick .qChip.xp{height:48px!important}
+html body #app .side{gap:5px!important}
+html body #app #rwc .rwcRib{position:static!important;transform:none!important;margin:0 0 4px!important;padding:0!important;width:auto!important;height:auto!important;white-space:normal!important}
+html body #app #rwc .rwcLine{position:static!important;font-size:13px}

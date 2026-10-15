@@ -1,5 +1,13 @@
 # Changelog
 
+- **v75 (0.75.0)**
+  - "Space Hologram" look replaces the flat blue: near-black glass with nebula light, an iridescent rim (cyan, violet, pink, gold), star dust and a slow light sweep. Violet title banners. The board frame, HUD, side widgets, item strip, camp labels, shop and expedition all match.
+  - Reward card: proper projection card, the giver in a glowing ring.
+  - Characters recut from the original sheet: Dr. Zonk, Biscuit, Mumbo and Pim are whole again (portraits too). Meadow Heart uses its own painted heart picture per world.
+  - Left column: small chips sit two to a row and the widgets are shorter, so a full column never runs into the board.
+  - Expeditions: the producer has 8 taps, then recharges fully in 90 minutes; request cards no longer flash on every tap.
+  - Camp: the Album / Games / Lab dots update the moment you collect.
+
 - **v74 (0.74.0)**
   - Hologram look everywhere: every popup, dialog, screen, card, reward card and talk box is dark holographic glass with a glowing cyan rim and light text; camp labels, side widgets and Lab labels match.
   - Medals and Star Challenge medals pay out the moment they are earned (no trip to the Mission Log).

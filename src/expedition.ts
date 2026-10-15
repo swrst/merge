@@ -61,7 +61,8 @@ const TRACK: [number, XpReward][] = [
   [550, { coins: 300 }], [720, { pack: 'gold' }], [920, { gems: 10 }], [1150, { energy: 30, coins: 500 }], [1400, { gems: 25 }],
 ];
 /** the producer holds this many taps and refills one every few minutes */
-const CHARGE_MAX = 30, CHARGE_MS = 3 * 60000;
+/** the producer holds 8 taps; once empty it recharges fully after 90 minutes */
+const CHARGE_MAX = 8, CHARGE_MS = 90 * 60000;
 /** a visitor who leaves is replaced after this long */
 const VISIT_MS = 90000;
 const W = 6, H = 7, N = W * H, PROD_AT = 3 * W + 2;
@@ -105,8 +106,8 @@ export function createExpedition(ctx: XpCtx) {
     const x = ctx.S.exped;
     if (x.ch === undefined) { x.ch = CHARGE_MAX; x.chAt = Date.now(); x.wait = []; }
     // the producer refills over time; visitors whose wait is over step up
-    if (x.ch < CHARGE_MAX) { const n = Math.floor((Date.now() - x.chAt) / CHARGE_MS); if (n > 0) { x.ch = Math.min(CHARGE_MAX, x.ch + n); x.chAt += n * CHARGE_MS; } }
-    else x.chAt = Date.now();
+    if (x.ch > CHARGE_MAX) x.ch = CHARGE_MAX;                      // older saves held 30
+    if (x.ch <= 0 && Date.now() - x.chAt >= CHARGE_MS) x.ch = CHARGE_MAX;   // a full refill once the wait is over
     const due = x.wait.filter((t: number) => t <= Date.now()).length;
     if (due) { x.wait = x.wait.filter((t: number) => t > Date.now()); fillOrders(); }
     return x;
@@ -182,8 +183,8 @@ export function createExpedition(ctx: XpCtx) {
     if (x.ch < 1) { sfx.no(); say(`The <b>${cur().producer.name}</b> is recharging: next tap in <b>${mmss(CHARGE_MS - (Date.now() - x.chAt))}</b>.`); return; }
     if (ctx.S.energy < 1) { sfx.no(); ctx.toast('Out of energy — every tap costs <b>1 ⚡</b>.'); setTimeout(ctx.energyPop, 400); return; }
     ctx.S.energy -= 1; ctx.S.eAt = ctx.S.eAt || Date.now();
-    if (x.ch === CHARGE_MAX) x.chAt = Date.now();
     x.ch--;
+    if (x.ch <= 0) x.chAt = Date.now();     // empty: the recharge clock starts now
     const c = cur().chains[(x.taps = (x.taps || 0) + 1) % 2 === 0 ? 0 : 1];
     const id = c.steps[Math.random() < 0.22 ? 1 : 0][0];
     x.b[to] = id; const fresh = discover(id);
@@ -244,19 +245,23 @@ export function createExpedition(ctx: XpCtx) {
     const want = new Set(x.ord.map((o: any) => o.id));
     g.innerHTML = x.b.map((v: string | null, i: number) => {
       const cls = 'xpC' + ((Math.floor(i / W) + i) % 2 ? ' alt' : '') + (v === 'P' ? ' prod' : '') + (i === sel ? ' sel' : '') + (i === pop ? (big ? ' merged' : ' dropped') : '') + (v && v !== 'P' && want.has(v) ? ' want' : '');
-      return `<div class="${cls}" data-i="${i}">${v === 'P' ? prodPic() + `<b class="xpBolt${x.ch ? '' : ' empty'}">${x.ch}/${CHARGE_MAX}</b>` : v ? pic(v) : ''}</div>`;
+      return `<div class="${cls}" data-i="${i}">${v === 'P' ? prodPic() + `<b class="xpBolt${x.ch ? '' : ' empty'}">${x.ch ? x.ch + '/' + CHARGE_MAX : mmss(CHARGE_MS - (Date.now() - x.chAt))}</b>` : v ? pic(v) : ''}</div>`;
     }).join('');
     paintOrders();
   }
   function paintOrders() {
     const h = document.getElementById('xpOrd'); if (!h) return;
     const x = ctx.S.exped;
-    h.innerHTML = x.ord.map((o: any, k: number) => {
+    const html = x.ord.map((o: any, k: number) => {
       const ok = has(o.id) >= 0;
       return `<div class="xpO${ok ? ' ok' : ''}"><span class="xpWho">${ART.char(o.who)}</span>
         <span class="xpWant">${pic(o.id)}</span><i>${info(o.id).name}</i>
         <button class="xpGive" data-give="${k}"${ok ? '' : ' disabled'}>${ok ? 'Give' : `<em>+${5 * info(o.id).t}</em> pts`}</button></div>`;
-    }).join('') + (x.wait || []).map((t: number) => `<div class="xpO wait"><span class="xpWant">${ART.uiIcon('empty_soon', ART.uiIcon('st_wait', '⏳'))}</span><i>Next visitor</i><b class="xpWaitT" data-t="${t}">${mmss(t - Date.now())}</b></div>`).join('');
+    }).join('') + (x.wait || []).map((t: number) => `<div class="xpO wait"><span class="xpWant">${ART.uiIcon('empty_soon', ART.uiIcon('st_wait', '⏳'))}</span><i>Next visitor</i><b class="xpWaitT" data-t="${t}"></b></div>`).join('');
+    // only rebuild when something changed: a rebuild replays the cards' pop-in, which flashed on every tap
+    if (h.dataset.h === html) return;
+    h.dataset.h = html; h.innerHTML = html;
+    h.querySelectorAll<HTMLElement>('.xpWaitT').forEach(e => { e.textContent = mmss(+e.dataset.t! - Date.now()); });
     h.querySelectorAll<HTMLElement>('[data-give]').forEach(b => b.onclick = () => give(+b.dataset.give!));
   }
   function paintTop() {
@@ -386,6 +391,7 @@ export function createExpedition(ctx: XpCtx) {
       st();
       if (x.ch + '|' + x.ord.length !== was) paintBoard();
       document.querySelectorAll<HTMLElement>('.xpWaitT').forEach(e => { e.textContent = mmss(+e.dataset.t! - Date.now()); });
+      if (!x.ch) { const bolt = document.querySelector('#xpScr .xpBolt'); if (bolt) bolt.textContent = mmss(CHARGE_MS - (Date.now() - x.chAt)); }
     },
     pick: (n: number) => { force = n; },
     list: () => EXPEDITIONS.map(e => e.name),

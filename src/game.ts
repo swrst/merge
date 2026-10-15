@@ -636,6 +636,13 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const per: Record<string, number> = { Rocket: 0, Book: 0, Shop: 0, Fun: 0, Lab: 0, World: 0 };
     list.forEach(c => { if (c.tab) per[c.tab] += c.n; });
     hubN = { book: per.Book, fun: per.Fun, lab: per.Lab };
+    // the camp's buttons are drawn once: keep their dots in step as things get collected
+    document.querySelectorAll<HTMLElement>('.hubBtn[data-hub]').forEach(btn => {
+      const n = hubN[btn.dataset.hub!] || 0; let d = btn.querySelector('.dot') as HTMLElement | null;
+      if (!n) { if (d) d.remove(); return; }
+      if (!d) { d = document.createElement('span'); d.className = 'dot'; btn.appendChild(d); }
+      d.textContent = n > 1 ? String(n) : '';
+    });
     { const gw = document.getElementById('tabRocket'); if (gw) gw.classList.toggle('claim', per.Rocket > 0); }
     // Album, games and the lab live on the map now, so the galaxy button carries their news
     per.World += per.Book + per.Fun + per.Lab;
@@ -5916,28 +5923,14 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     setTimeout(() => { if (hintPair === cells) { hintPair = null; board.setHint(null); } }, ms);
   }
 
-  /** zoom a painted scene onto one point (fx, fy = fractions of the picture) */
-  function cropScene(el: HTMLElement) {
-    const src = el.dataset.src!, fx = +el.dataset.fx!, fy = +el.dataset.fy!, img = new Image();
-    img.onload = () => {
-      const box = el.clientWidth || 130, k = 2.5, iw = box * k, ih = iw * img.naturalHeight / img.naturalWidth;
-      el.style.backgroundImage = `url(${src})`;
-      el.style.backgroundSize = `${iw}px ${ih}px`;
-      el.style.backgroundPosition = `${Math.round(box / 2 - fx * iw)}px ${Math.round((el.clientHeight || box) / 2 - (fy - 0.105) * ih)}px`;
-    };
-    img.src = src;
-  }
   function heartPanel() {
     const w = W(), st = stage(), done = worldAwake(), r = CONFIG.bloom.reward;
     const onBoard = B().reduce((a: number, c: any) => a + (c && c.id ? bloomValue(c.id) : 0), 0);
     const pct = done ? 100 : clamp(fed() / bloomGoal() * 100, 0, 100);
     const heartArt = ART.spriteUi(worldAwake() ? 'camp_heart_on' : 'camp_heart_off') || ART.spriteUi('camp_heart_on');
-    // a painted camp has its Heart drawn into the scene: show that very spot, so the popup and the map match
-    const A = sceneAnchors(S.world), scene = A.painted ? ((!labOpen() && ART.spriteScene(S.world + '_nolab')) || ART.spriteScene(S.world)) : '';
-    const hp = (A.heart || PAD_DEFAULT.heart) as number[];
     const ess = BLOOM().map((id, i) => `<span class="hEss">${ART.item(id)}<b>${Math.pow(2, i)}</b></span>`).join('<em>+</em>');
     pop('💗 ' + w.heart, `<div class="hStage${done ? ' awake' : ''}" style="--p:${pct}">
-        <div class="hRing"></div>${scene ? `<div class="hArt hCrop" data-src="${scene}" data-fx="${hp[0]}" data-fy="${hp[1]}"></div>` : heartArt ? `<img class="hArt" src="${heartArt}" alt="">` : '💗'}
+        <div class="hRing"></div>${ART.spriteUi('heart_' + S.world) ? `<img class="hArt hCrop" src="${ART.spriteUi('heart_' + S.world)}" alt="">` : heartArt ? `<img class="hArt" src="${heartArt}" alt="">` : '💗'}
         <div class="hNum">${done ? 'AWAKE' : `${fed()}<i>/${bloomGoal()}</i>`}</div></div>
       <div class="hLine">${done ? `${w.name} is awake and beating on its own. Thank you, star traveller!` : `Every world has a sleeping Heart. Wake it and the whole planet comes back to life — colour, music and rewards.`}</div>
       <div class="hHow"><b>How to wake it</b>
@@ -5948,7 +5941,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       <div class="hPath">${w.bloom.map((b: any, i: number) => `<div class="hNode${i < st ? ' done' : i === st ? ' now' : ''}"><i>${i < st ? '✓' : b.need}</i><b>${b.title}</b><em>+${r.coins} 🪙 · +${r.energy} ⚡</em></div>`).join('')}</div>
       <button class="big gold" id="feed2"${onBoard && !done ? '' : ' disabled'}>${done ? 'Fully awake ✨' : onBoard ? `Feed the Heart · ${onBoard} Bloom` : 'No Bloom essence on the board yet'}</button>`, 'heartsheet');
     const f = $('#feed2'); if (f) f.onclick = () => { closePop(); feedHeart(); };
-    const hc = document.querySelector<HTMLElement>('#popBody .hCrop'); if (hc) cropScene(hc);
   }
 
   function producerPanel(cell: number) {
@@ -6603,7 +6595,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed, ecost,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
       fly: (w: string) => galaxyTap(w), view: (v: string) => setView(v),
-      curProject: () => curProject(), v9: { labBuildPop, achOff: () => { achAutoOff = true; }, xp: XP, shopUnlockHint, xpUnlockHint, setView, achPop, profilePop, heartPanel, albumPop, openPack, albumGive, shareCard, alb, storeProducer, startPlacing, paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
+      curProject: () => curProject(), v9: { labBuildPop, rewardCard, achOff: () => { achAutoOff = true; }, xp: XP, shopUnlockHint, xpUnlockHint, setView, achPop, profilePop, heartPanel, albumPop, openPack, albumGive, shareCard, alb, storeProducer, startPlacing, paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
     };
     setInterval(tick, 500);
     setInterval(() => { if (!document.hidden) S.playMs = (S.playMs || 0) + 5000; }, 5000);
