@@ -996,7 +996,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
             ${!ok && src ? `<button class="csGo" data-src="${src.on ? src.i : -1}" data-k="${src.k}">${ART.producer(PRODS[src.k].art)}<span>${src.on ? 'Tap it' : 'Not here yet'}</span></button>` : ''}</div>
           <div class="csPath">${ids.map((x, n) => `<span class="csStep${inv[x] ? ' have' : ''}${x === nd.id ? ' goal' : ''}">${S.seen[x] || x === nd.id ? ART.item(x) : '?'}${inv[x] ? `<em>${inv[x]}</em>` : ''}</span>${n < ids.length - 1 ? '<i>›</i>' : ''}`).join('')}</div></div>`;
     };
-    const rew = `<div class="csRew"><span>${ART.icon('coin')}<b>${o.coins}</b></span><span>${ART.icon('star')}<b>${o.xp}</b></span>
+    const rew = `<div class="csRew"><span>${ART.icon('coin')}<b>${o.coins}</b></span>
       ${o.give ? `<span title="Gift">${ART.item(o.give)}<b>gift</b></span>` : ''}${o.nrg ? `<span>${ART.icon('energy')}<b>${o.nrg}</b></span>` : ''}</div>`;
     pop(ch.name, `<div class="csHead"><span class="csFig">${ART.figure(o.char)}</span><div class="csSay">“${o.say}”${rew}</div></div>
       ${o.needs.map(needRow).join('')}
@@ -1122,7 +1122,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       if (bonus.length) give = rnd(bonus);
     }
     // now and then someone pays in energy instead of a gift — Travel Town does this
-    const nrg = !give && Math.random() < 0.08 ? 3 + 3 * Math.floor(Math.random() * 3) : 0;
+    const nrg = !give && Math.random() < 0.04 ? 3 + 2 * Math.floor(Math.random() * 3) : 0;
     return {
       id: 'o' + (oid++), char, say, give, nrg,
       needs,
@@ -1178,7 +1178,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       b[i] = null; left--; sparkle(i, 8, '#ffe9a8');
     } });
     S.coins += o.coins;
-    if (cardXY) { flyCoins(cardXY, o.coins, 380); flyXp(cardXY, 480); }
+    if (cardXY) flyCoins(cardXY, o.coins, 380);
     const idx = S.orders.findIndex(x => x.id === id);
     S.orders.splice(idx, 1);
     S.lastProds = [...new Set(o.needs.map((nd: any) => prodOfChain(ITEMS[nd.id].chain)))];   // the next contract asks for something else
@@ -1199,7 +1199,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     befriend(o.char); stat('deliver');
     if (Math.random() < 0.22) setTimeout(() => albumGive('basic', 'from the contract'), 700);
     evPts(CFG.event.points.contract + CFG.event.points.perNeed * o.needs.length);
-    addXp(o.xp);
+    // contracts pay coins, not experience: XP comes from merging and from chapters.
+    // They still help the world itself grow (its board opens up as it does).
+    addWorldXp(o.xp); renderHUD();
     paintBoard(); tutFire('deliver');
     renderOrders(); renderHUD(); save();
   }
@@ -1395,7 +1397,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     board.animMerge(from, to, nx);
     const crown = CHAINS[ITEMS[nx].chain].items.slice(-1)[0] === nx && CHAINS[ITEMS[nx].chain].items.length > 2;
     if (crown) { sfx.crown(); haptic('medium'); } else { sfx.merge(ITEMS[nx].tier); haptic('light'); } floatText(to, ITEMS[nx].name, '#fff');
-    stat('merge'); addXp(CONFIG.xp.perMerge); prog('merge', 1); tally('merge'); tally('make:' + nx); tutFire('merge');
+    stat('merge'); addXp(CONFIG.xp.perMerge * Math.max(1, ITEMS[nx].tier - 1)); prog('merge', 1); tally('merge'); tally('make:' + nx); tutFire('merge');
     if (ITEMS[nx].tier >= 4) tally('tier4');
     if (ITEMS[nx].chain.startsWith('ev_')) evPts(ITEMS[nx].tier * 3, to);
     else if (ITEMS[nx].tier >= CFG.event.points.mergeFromTier) evPts(ITEMS[nx].tier - CFG.event.points.mergeFromTier + 1, to);
@@ -1678,6 +1680,22 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     toast('⛽ Bought <b>' + ITEMS[d.id].name + '</b>');
     renderShop(); renderHUD(); renderOrders(); save();
   }
+  /** building the Lab is a choice: say what it is and what it costs, then build on a press */
+  function labBuildPop() {
+    const bd = CONFIG.lab.build, have = countItem(bd.item), okC = S.coins >= bd.coins, okS = have >= bd.qty;
+    const art = ART.spriteUi('camp_lab') ? `<img class="lbArt" src="${ART.spriteUi('camp_lab')}" alt="">` : '';
+    pop(`${ART.uiIcon('ic_lab', '🔬')} Dr. Zonk's Lab`, `${art}
+      <div class="lbSay">Dr. Zonk can turn the old ruin into a working Lab.</div>
+      <div class="lbFeats">
+        <span>${ART.uiIcon('lab_fuse', '⚗️')}<b>Fusion</b><i>two items in, a rare one out</i></span>
+        <span>${ART.uiIcon('lab_recycle', '♻️')}<b>Recycler</b><i>spares become Science</i></span>
+        <span>${ART.uiIcon('lab_incubator', '🥚')}<b>Incubator</b><i>hatch a pet</i></span>
+        <span>${ART.uiIcon('lab_upgrades', '⬆')}<b>Upgrades</b><i>perks that last</i></span></div>
+      <div class="lbCost"><span class="${okC ? 'ok' : 'no'}">${ART.icon('coin')}<b>${kN(S.coins)} / ${bd.coins}</b></span>
+        <span class="${okS ? 'ok' : 'no'}">${ART.item(bd.item)}<b>${have} / ${bd.qty}</b></span></div>
+      <button class="big" id="lbGo"${okC && okS ? '' : ' disabled'}>${okC && okS ? 'Build the Lab' : okS ? 'Not enough coins yet' : 'Dig meteor craters for Star Scrap'}</button>`, 'holo labBuild');
+    const go = $('#lbGo'); if (go) go.onclick = () => { closePop(); buildLab(); };
+  }
   function buildLab() {
     const bd = CONFIG.lab.build;
     if (S.lab.built) return;
@@ -1885,7 +1903,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     host.querySelectorAll('[data-depot]').forEach((b: any) => b.onclick = () => buyDepot(+b.dataset.depot));
     host.querySelectorAll('[data-boost]').forEach((b: any) => b.onclick = () => buyBooster(b.dataset.boost));
     host.querySelectorAll('[data-forge]').forEach((b: any) => b.onclick = () => forgeUse(b.dataset.forge));
-    const bl = $('#btnBuildLab'); if (bl) bl.onclick = () => buildLab();
+    const bl = $('#btnBuildLab'); if (bl) bl.onclick = () => labBuildPop();
   }
 
   /* ============================================================ RESEARCH LAB
@@ -2292,7 +2310,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     S.ship = null; S.shipAt = Date.now() + CONFIG.ship.everyMs;
     sfx.big(); haptic('heavy'); confetti(); audio.duck(2, 0.2);
     toast('🛸 Hold full! The Grub Brothers pay <b>+' + sh.coins + '</b> coins and a booster!');
-    addXp(sh.xp);
+    addWorldXp(sh.xp);
     prog('ship', 1);
     paintBoard(); renderOrders(); renderHUD(); renderTools(); save();
   }
@@ -2858,14 +2876,15 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         ${at >= 0 ? `<button class="buyBtn green" data-upg="${at}" ${S.coins < price ? 'disabled' : ''}>⬆ ${price} 🪙</button>`
           : `<button class="buyBtn green" data-upst="${u.k}" ${S.coins < price ? 'disabled' : ''}>⬆ ${price} 🪙</button>`}</div>`;
     }).join('');
-    pop(`Ch. ${projDone() + 1} · ${p.name}`, `<div class="chHead"><span class="pFace">${ART.char(p.who)}</span>
-        ${p.talk ? '<button class="talkBtn" id="btnTalk" title="Replay the story">💬</button>' : ''}</div>
+    pop(`Chapter ${projDone() + 1}`, `<div class="chHead2"><span class="pFace">${ART.char(p.who)}</span>
+        <div class="chTx"><b>${p.name}</b><i>${CHARS[p.who] ? CHARS[p.who].name : ''} needs:</i></div>
+        ${p.talk ? `<button class="talkBtn" id="btnTalk" title="Replay the story">${ART.uiIcon('ic_feedback', '💬')}</button>` : ''}</div>
       <div class="pNeeds">${need}${p.coins ? `<span class="pNeed${S.coins >= p.coins ? ' ok' : ''}">${coin}<b>${p.coins}</b></span>` : ''}
         ${p.rocket ? `<span class="pNeed${allParts() ? ' ok' : ''}">🚀<b>${PART_KEYS.filter(k => S.parts[k]).length}/4</b></span>` : ''}
         <span class="pNeed${cHave() >= cNeed(p) ? ' ok' : ''}">${ART.uiIcon('ic_scroll', '📜')}<b>${Math.min(cHave(), cNeed(p))}/${cNeed(p)}</b></span></div>
       ${ups ? `<div class="upHead">Upgrade this one step first</div>${ups}` : ''}
       ${chapterPrize(p)}
-      <button class="big${ok ? '' : ' off'}" id="btnProject">${ok ? 'COMPLETE THE CHAPTER ✨' : 'Not yet'}</button>`, 'chapter');
+      <button class="big${ok ? '' : ' off'}" id="btnProject">${ok ? 'Complete the chapter ✨' : 'Gather everything above'}</button>`, 'chapter');
     const host = $('#popBody');
     host.querySelectorAll('.pNeed[data-need]').forEach((n: any) => n.onclick = () => { closePop(); chainPanel(n.dataset.need); });
     host.querySelectorAll('[data-upg]').forEach((b: any) => b.onclick = () => { upgradeProducer(+b.dataset.upg); chapterSheet(); });
@@ -4209,7 +4228,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      Travel Town's best small joy: every new thing you make leaves a present
      in the album. Bigger finds give more. */
   // coins come from contracts and events only; a discovery pays in XP and, for the big ones, energy
-  const discPay = (id: string) => ({ coins: 0, xp: ITEMS[id].tier * 3, energy: ITEMS[id].tier >= 3 ? ITEMS[id].tier - 1 : 0 });
+  const discPay = (id: string) => ({ coins: 0, xp: ITEMS[id].tier * 3, energy: ITEMS[id].tier >= 5 ? 2 : 0 });
   function discCard() {
     const d: string[] = S.disc || []; if (!d.length) return '';
     const tot = d.reduce((a, id) => { const p = discPay(id); a.c += p.coins; a.x += p.xp; a.e += p.energy; return a; }, { c: 0, x: 0, e: 0 });
@@ -4428,8 +4447,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     document.body.appendChild(h);
     const place = () => {
       const t = find();
-      if (!t || !t.isConnected) { h.style.display = 'none'; return; }
-      const r = t.getBoundingClientRect(); if (!r.width) { h.style.display = 'none'; return; }
+      // only over the main board, with nothing on top, and only when the button is really on screen
+      if (!t || !t.isConnected || view !== 'board' || overlayUp()) { h.style.display = 'none'; return; }
+      const r = t.getBoundingClientRect();
+      if (!r.width || r.left < 0 || r.top < 0 || r.right > innerWidth || r.bottom > innerHeight || getComputedStyle(t).visibility === 'hidden') { h.style.display = 'none'; return; }
       h.style.display = '';
       const pad = 5, fr = h.querySelector('.hhFrame') as HTMLElement;
       fr.style.cssText = `left:${r.left - pad}px;top:${r.top - pad}px;width:${r.width + pad * 2}px;height:${r.height + pad * 2}px`;
@@ -4441,8 +4462,11 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         tag.classList.toggle('up', !below);
       }
     };
-    place(); holoTimer = window.setInterval(() => { if (!h.isConnected) { clearInterval(holoTimer); return; } place(); }, 250);
-    setTimeout(() => { if (h.isConnected) { h.remove(); clearInterval(holoTimer); } }, 25000);
+    place();
+    // it waits (hidden) while another screen is open, and gives up after a while of being shown
+    let shown = 0;
+    const tick = () => { if (!h.isConnected) { clearInterval(holoTimer); return; } place(); if (h.style.display !== 'none' && (shown += 250) > 20000) { h.remove(); clearInterval(holoTimer); } };
+    clearInterval(holoTimer); holoTimer = window.setInterval(tick, 250);
   }
   function shopUnlockHint() {
     if (dialogBusy() || popOpen()) { setTimeout(shopUnlockHint, 1500); return; }
@@ -4536,16 +4560,29 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           ${max ? '' : `<span class="achBar"><em style="width:${Math.min(100, Math.round(v / need * 100))}%"></em></span>`}</div>
         ${max ? '<span class="achDone">✓</span>' : `<button class="buyBtn" data-ach="${a.id}"${ok ? '' : ' disabled'}>${ok ? 'Claim' : Math.min(v, need) + '/' + need}</button>`}</div>`;
     }).join('')}</div>`, 'spin');
-    document.querySelectorAll<HTMLElement>('[data-ach]').forEach(b => b.onclick = () => {
-      const a = ACH.find(x => x.id === b.dataset.ach)!; const t = achTier(a);
+    document.querySelectorAll<HTMLElement>('[data-ach]').forEach(b => b.onclick = () => achClaim(ACH.find(x => x.id === b.dataset.ach)!));
+  }
+  /** a medal pays out the moment it is earned: no trip to the Mission Log to collect it */
+  let achAt = Date.now() + 9000, achAutoOff = false;   // never in the first seconds: the welcome and daily gift come first
+  function achAuto() {
+    if (achAutoOff || Date.now() - achAt < 3000 || !S.tut || overlayUp() || document.getElementById('rwc')?.classList.contains('open')) return;
+    achAt = Date.now();
+    const a = ACH.find(x => { const t = achTier(x); return t < x.at.length && x.v() >= x.at[t]; });
+    if (a) { achClaim(a); return; }
+    // Star Challenge medals pay out the same way
+    if (S.wk && S.wk.pts) { const w = weekly(), i = WK_TIERS.findIndex((t, k) => w.pts >= t.pts && !w.got.includes(k)); if (i >= 0) wkClaim(i); }
+  }
+  function achClaim(a: any) {
+    {
+      const t = achTier(a);
       if (t >= a.at.length || a.v() < a.at[t]) return;
       S.ach = S.ach || {}; S.ach[a.id] = t + 1;
       // mirror it to Google Play Games / Game Center when the store ids are filled in
       { const sid = (SERVICES.games as any).achievements[a.id + '_' + (t + 1)]; games.unlock(sid || a.id + '_' + (t + 1)); }
-      const rw = achReward(t); save(); achPop(); renderHUD();
+      const rw = achReward(t); save(); if (popOpen() && document.querySelector('.achList')) achPop(); renderHUD();
       if (view === 'rocket') renderRocket();
-      rewardCard('glimmer', '🏆 ' + a.name, '<b>Captain Glimmer:</b> "MAGNIFICENT! A triumph — mostly mine, but yours too."', rw, () => { if (popOpen()) achPop(); if (view === 'rocket') renderRocket(); renderHUD(); });
-    });
+      rewardCard('glimmer', '🏆 ' + a.name + ' ' + '★'.repeat(t + 1), `Medal earned: <b>${a.d.replace('{n}', String(a.at[t])).replace('{s}', a.at[t] === 1 ? '' : 's')}</b>`, rw, () => { if (popOpen() && document.querySelector('.achList')) achPop(); if (view === 'rocket') renderRocket(); renderHUD(); });
+    }
   }
 
 
@@ -4574,7 +4611,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const w = weekly(); const before = w.pts; w.pts += n;
     games.submitScore('weekly', w.pts);
     const t = WK_TIERS.findIndex(x => before < x.pts && w.pts >= x.pts);
-    if (t >= 0) setTimeout(() => toast(`🏅 Star Challenge: <b>${['Bronze', 'Silver', 'Gold'][t]}</b> reached! Claim it in the Mission Log.`), 600);
+    if (t >= 0) setTimeout(() => toast(`🏅 Star Challenge: <b>${['Bronze', 'Silver', 'Gold'][t]}</b> reached!`), 600);
   }
   function weeklyTally(kind: string, n: number) {
     if (kind === 'merge') weeklyAdd(1 * n);
@@ -5817,7 +5854,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function campTap(kind: string) {
     sfx.tap();
     if (kind === 'rocket') { rocketPanel(); return; }
-    if (kind === 'lab') { if (labOpen()) setView('lab'); else if (labOffered()) buildLab(); else { sfx.no(); toast('An old, broken workshop. Someone clever could fix it up one day…'); } return; }
+    if (kind === 'lab') { if (labOpen()) setView('lab'); else if (labOffered()) labBuildPop(); else { sfx.no(); toast('An old, broken workshop. Someone clever could fix it up one day…'); } return; }
     if (kind === 'heart') { heartPanel(); return; }
     if (kind === 'next') { nextPlotPanel(); return; }
     if (kind[0] === 'p') producerPanel(+kind.slice(1));
@@ -6280,7 +6317,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
   /* ================================================================== LOOP */
   function tick() {
-    XP.tick();
+    XP.tick(); achAuto();
     const now = Date.now();
     // energy regen
     const per = regenMs();
@@ -6566,7 +6603,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed, ecost,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
       fly: (w: string) => galaxyTap(w), view: (v: string) => setView(v),
-      curProject: () => curProject(), v9: { xp: XP, shopUnlockHint, xpUnlockHint, setView, achPop, profilePop, heartPanel, albumPop, openPack, albumGive, shareCard, alb, storeProducer, startPlacing, paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
+      curProject: () => curProject(), v9: { labBuildPop, achOff: () => { achAutoOff = true; }, xp: XP, shopUnlockHint, xpUnlockHint, setView, achPop, profilePop, heartPanel, albumPop, openPack, albumGive, shareCard, alb, storeProducer, startPlacing, paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
     };
     setInterval(tick, 500);
     setInterval(() => { if (!document.hidden) S.playMs = (S.playMs || 0) + 5000; }, 5000);

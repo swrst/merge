@@ -17,7 +17,7 @@ export interface XpCtx {
 
 type Step = [id: string, name: string];
 interface Chain { key: string; name: string; steps: Step[] }
-interface Expedition { id: string; name: string; tag: string; producer: { name: string; art: string; kind: 'producer' | 'item' | 'ui' }; hue: number; host: string; chains: [Chain, Chain]; blurb: string }
+interface Expedition { id: string; world: string; name: string; tag: string; producer: { name: string; art: string; kind: 'producer' | 'item' | 'ui' }; hue: number; host: string; chains: [Chain, Chain]; blurb: string }
 
 /* ---------------------------------------------------------------- the chains */
 const C: Record<string, Chain> = {
@@ -34,22 +34,22 @@ const C: Record<string, Chain> = {
 
 /* six expeditions; month m runs EXPEDITIONS[m % 6] (October is Nebula Spooks) */
 const EXPEDITIONS: Expedition[] = [
-  { id: 'bounce', name: 'Bouncy Moon Park', tag: 'A playground in low gravity', hue: 160, host: 'gigi',
+  { id: 'bounce', world: 'luna', name: 'Bouncy Moon Park', tag: 'A playground in low gravity', hue: 160, host: 'gigi',
     producer: { name: 'Toy Saucer', art: 'toysaucer', kind: 'producer' }, chains: [C.play, C.stars],
     blurb: 'A playground opened on a low-gravity moon. Tap the Toy Saucer, merge toys and falling stars, and keep the kids bouncing.' },
-  { id: 'fashion', name: 'Alien Fashion Week', tag: 'The galaxy dresses up', hue: 300, host: 'luma',
+  { id: 'fashion', world: 'vela', name: 'Alien Fashion Week', tag: 'The galaxy dresses up', hue: 300, host: 'luma',
     producer: { name: 'Comet Easel', art: 'cometeasel', kind: 'producer' }, chains: [C.fashion, C.art],
     blurb: 'Designers from every planet are in town. Tap the Comet Easel, merge outfits and art, and dress up the runway.' },
-  { id: 'carnival', name: 'Sugar Moon Fair', tag: 'The candy fair floats into orbit', hue: 330, host: 'gigi',
+  { id: 'carnival', world: 'cindra', name: 'Sugar Moon Fair', tag: 'The candy fair floats into orbit', hue: 330, host: 'gigi',
     producer: { name: 'Paint Rover', art: 'paintrover', kind: 'producer' }, chains: [C.candy, C.art],
     blurb: 'The Sugar Moon Fair is in orbit! Tap the Paint Rover for sweets and paints, merge them up and keep the visitors happy.' },
-  { id: 'spooks', name: 'Nebula Spooks', tag: 'Friendly ghosts drift out of the nebula', hue: 270, host: 'mumbo',
+  { id: 'spooks', world: 'vela', name: 'Nebula Spooks', tag: 'Friendly ghosts drift out of the nebula', hue: 270, host: 'mumbo',
     producer: { name: 'Lantern Stall', art: 'lanternstall', kind: 'producer' }, chains: [C.spooks, C.lantern],
     blurb: 'Friendly ghosts drifted out of the nebula and they love lanterns. Tap the Lantern Stall, merge spooks and lanterns, and light their way home.' },
-  { id: 'starfall', name: 'Starfall Treasure Hunt', tag: 'Stars rain down on a pirate moon', hue: 45, host: 'glimmer',
+  { id: 'starfall', world: 'luna', name: 'Starfall Treasure Hunt', tag: 'Stars rain down on a pirate moon', hue: 45, host: 'glimmer',
     producer: { name: 'Treasure Comet', art: 'treasurecomet', kind: 'producer' }, chains: [C.stars, C.treasure],
     blurb: 'A treasure comet crashed on a pirate moon. Tap it, merge stars and treasure, and fill the requests!' },
-  { id: 'lanterns', name: 'Lantern Library', tag: 'A floating library lit by comets', hue: 200, host: 'luma',
+  { id: 'lanterns', world: 'nerith', name: 'Lantern Library', tag: 'A floating library lit by comets', hue: 200, host: 'luma',
     producer: { name: 'Lantern Stall', art: 'lanternstall', kind: 'producer' }, chains: [C.lantern, C.books],
     blurb: 'A library drifts past, lit by comet lanterns. Tap the Lantern Stall, merge lanterns and books, and light it all up.' },
 ];
@@ -255,7 +255,7 @@ export function createExpedition(ctx: XpCtx) {
       const ok = has(o.id) >= 0;
       return `<div class="xpO${ok ? ' ok' : ''}"><span class="xpWho">${ART.char(o.who)}</span>
         <span class="xpWant">${pic(o.id)}</span><i>${info(o.id).name}</i>
-        <button class="xpGive" data-give="${k}"${ok ? '' : ' disabled'}>${ok ? 'Give' : `+${5 * info(o.id).t}`}</button></div>`;
+        <button class="xpGive" data-give="${k}"${ok ? '' : ' disabled'}>${ok ? 'Give' : `<em>+${5 * info(o.id).t}</em> pts`}</button></div>`;
     }).join('') + (x.wait || []).map((t: number) => `<div class="xpO wait"><span class="xpWant">${ART.uiIcon('empty_soon', ART.uiIcon('st_wait', '⏳'))}</span><i>Next visitor</i><b class="xpWaitT" data-t="${t}">${mmss(t - Date.now())}</b></div>`).join('');
     h.querySelectorAll<HTMLElement>('[data-give]').forEach(b => b.onclick = () => give(+b.dataset.give!));
   }
@@ -283,6 +283,11 @@ export function createExpedition(ctx: XpCtx) {
     if (!el) { el = document.createElement('div'); el.id = 'xpScr'; document.getElementById('app')!.appendChild(el); }
     const e = cur();
     el.style.setProperty('--xh', String(e.hue));
+    // the board stands on a painted world: its scene behind, its own tiles under the items
+    const sc = ART.spriteScene(e.world), tA = ART.spriteUi('tile_light_' + e.world) || ART.spriteUi('tile_light'), tB = ART.spriteUi('tile_dark_' + e.world) || ART.spriteUi('tile_dark');
+    el.style.setProperty('--xpScene', sc ? `url(${sc})` : 'none');
+    el.style.setProperty('--xpTileA', tA ? `url(${tA})` : 'none');
+    el.style.setProperty('--xpTileB', tB ? `url(${tB})` : 'none');
     el.innerHTML = `<div class="xpSky"></div>
       <div class="xpHead"><div class="xpTitle">${e.name}</div><button class="xpX" id="xpClose" aria-label="Close">✕</button>
         <div class="xpSub"><span class="xpTime">${ART.uiIcon('cl_timer', '⏳')} ${dhm(left())}</span><span class="xpEnergy">${ART.icon('energy')}<b id="xpEn">${ctx.S.energy}</b></span></div></div>
@@ -334,7 +339,7 @@ export function createExpedition(ctx: XpCtx) {
       const c = (ev.target as HTMLElement).closest('.xpC') as HTMLElement | null; if (!c) return;
       from = +c.dataset.i!; sx = ev.clientX; sy = ev.clientY; pid = ev.pointerId;
       if (!ctx.S.exped.b[from]) { from = -1; return; }
-      g.setPointerCapture(pid);
+      try { g.setPointerCapture(pid); } catch { /* a synthetic or finished pointer */ }
     };
     g.onpointermove = (ev: PointerEvent) => {
       if (from < 0 || ev.pointerId !== pid) return;

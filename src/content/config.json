@@ -13,12 +13,12 @@
   "energy": {
     "base": 50,
     "perLevel": 2,
-    "regenMs": 100000,
+    "regenMs": 150000,
     "snack": {
       "amount": 15,
       "cooldownMs": 14400000
     },
-    "levelUp": 20
+    "levelUp": 10
   },
   "xp": {
     "base": 40,

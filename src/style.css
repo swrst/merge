@@ -3559,3 +3559,132 @@ html body .app .ordEmpty b{display:block;font:400 16px/1.1 'Lilita One',Fredoka,
 html body .app .ordEmpty i{font-style:normal;font-size:11.5px;opacity:.85}
 html body .app .gpNeed .uiIc{width:18px!important;height:18px!important;vertical-align:-4px}
 html body .app .privLink{display:block;text-align:center;font-size:12px;color:#4b5a8c;margin:6px 0 2px;text-decoration:underline}
+/* v74: the Lab build card */
+html body .app .labBuild .lbArt{display:block;width:150px;height:auto;margin:0 auto 4px;filter:drop-shadow(0 0 14px rgba(111,227,255,.6))}
+html body .app .lbSay{text-align:center;font-size:13px;margin-bottom:8px}
+html body .app .lbFeats{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+html body .app .lbFeats span{display:flex;flex-direction:column;align-items:center;text-align:center;padding:6px;border-radius:12px}
+html body .app .lbFeats .uiIc,html body .app .lbFeats img{width:34px!important;height:34px!important}
+html body .app .lbFeats b{font-size:12.5px}html body .app .lbFeats i{font-style:normal;font-size:10.5px;opacity:.8}
+html body .app .lbCost{display:flex;justify-content:center;gap:10px;margin-bottom:10px}
+html body .app .lbCost span{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:99px}
+html body .app .lbCost span img,html body .app .lbCost span svg{width:24px;height:24px}
+html body .app .lbCost .ok{box-shadow:inset 0 0 0 2px #4ee07a}html body .app .lbCost .no{box-shadow:inset 0 0 0 2px #ff7a8a}
+/* v74: Star Challenge medals pulse in place (the old pulse animated transform and threw them off the bar) */
+html body .app .wkMed.ok{animation:wkGlow 1.4s ease-in-out infinite}
+@keyframes wkGlow{0%,100%{box-shadow:0 0 0 2px #ffcb3d,0 0 6px rgba(255,203,61,.6)}50%{box-shadow:0 0 0 2px #ffe58a,0 0 16px rgba(255,203,61,1)}}
+html body .app .wkBar>i{transition:width .6s cubic-bezier(.3,1.2,.5,1)}
+
+/* =====================================================================
+   v74 "Hologram": every window, screen and card is a dark translucent
+   projection: deep navy glass, a cyan rim that glows, faint scanlines,
+   light text. One look for popups, dialogs, the Mission Log, the shop,
+   the album, achievements, chapters and reward cards.
+   ===================================================================== */
+:root{--hg-ink:#eaf6ff;--hg-dim:#a8c9ee;--hg-rim:#6fe3ff;--hg-gold:#ffd75e;--hg-green:#7dffa8;--hg-red:#ff8fa0;
+  --hg-panel:radial-gradient(120% 50% at 50% 0%,rgba(90,180,255,.28),transparent 60%),linear-gradient(180deg,rgba(20,52,118,.96),rgba(9,22,66,.97));
+  --hg-card:linear-gradient(180deg,rgba(110,180,255,.17),rgba(50,100,200,.10));
+  --hg-cardrim:inset 0 0 0 1px rgba(111,227,255,.38),inset 0 1px 0 rgba(190,240,255,.18)}
+/* the panels */
+html body #app .pop .popBox,html body #app .mBoxW,html body #app .screen:not(.scene),html body #app #rwc .rwcCard,html body #app .talk .tkBox,html body #app #xpPanel .xpPBox,html body #app .mini .miniBox{
+  background:var(--hg-panel)!important;border:0!important;border-image:none!important;color:var(--hg-ink)!important;
+  box-shadow:0 0 0 1.5px rgba(111,227,255,.9),0 0 24px rgba(111,227,255,.45),inset 0 0 34px rgba(111,227,255,.16),0 18px 40px rgba(0,0,0,.55)!important}
+html body #app .pop .popBox::before,html body #app .mBoxW::before,html body #app .screen:not(.scene)::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;opacity:.35;
+  background:repeating-linear-gradient(180deg,transparent 0 3px,rgba(111,227,255,.10) 3px 4px)}
+html body #app .pop .popBox>*,html body #app .mBoxW>*{position:relative;z-index:1}
+html body #app .pop .popBox .popRibbon,html body #app .mBoxW .mTitle{position:absolute;z-index:3}
+html body #app .pop .popBox .popX,html body #app .mBoxW .mX{position:absolute;z-index:4}
+/* all words inside light up */
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene),.rwcCard,.tkBox,.xpPBox,.miniBox) :is(p,span,b,i,em,small,div,li,h2,h3,h4,label,u,strong,a,td,th,section,header,article){color:inherit!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene),.rwcCard,.tkBox,.xpPBox,.miniBox) :is(i,small,.noteLine,.achDim,.wkHow,.chAll,.mlNote,.lbSay,.xpNote,.pfLv,.scSub){color:var(--hg-dim)!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene),.rwcCard,.tkBox,.xpPBox,.miniBox) :is(.big,.buyBtn,.sTab,.gpGo,.xpGive,.csGo,.skGo){color:#fff!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene),.rwcCard,.tkBox,.xpPBox) :is(.big,.buyBtn) *{color:inherit!important}
+/* accents keep their colour */
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene),.rwcCard) :is(.wkPts b,.enBig b,.rewardLine,.hNum,.pfStat b,.xpPts b,.cardTitle .pCount,.mlHead span){color:var(--hg-gold)!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) :is(.achDone,.ok b,.done b,.skDone){color:var(--hg-green)!important}
+/* cards and rows inside a panel: lighter glass on the dark glass */
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene),.rwcCard,.xpPBox) :is(.card,.enRow,.sCard,.csNeed,.csSay,.hHow,.hNode,.albSet,.pfStat,.pfAlb,.pfBadge,.resRow,.upRow,.rumour,.lxCard,.lxIt,.pCard,.pRow,.srcCard,.srcBox,.worldCard,.luCard,.npCard,.funCard,.constRow,.accBox,.msBox,.qBox,.rechargeBox,.labIntro,.pouchRow,.przRow,.lbRow,.lbBox,.evNode,.dayCell,.xpMedal,.xpLogRow span,.xpTrackList span,.shopGuide>div,.lbFeats span,.lbCost span,.questRow,.achCard,.petFood,.discIt,.chapLine,.infoBar,.optRow,.ttBox,.devBox,.csRew span,.mlCard,.wkFeat span,.sSec){
+  background:var(--hg-card)!important;box-shadow:var(--hg-cardrim)!important;border:0!important;border-image:none!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) :is(.enRow.ready,.ach.ready,.sCard.hot,.questRow.now,.albSet.done,.xpMedal.got,.hNode.done){
+  box-shadow:inset 0 0 0 1.5px var(--hg-green),0 0 12px rgba(125,255,168,.35)!important}
+/* empty sticker / item slots read as sockets */
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) :is(.albSlot,.bagSlot,.slot,.pickCell){background:rgba(4,14,44,.55)!important;box-shadow:inset 0 0 0 1px rgba(111,227,255,.28),inset 0 2px 6px rgba(0,0,0,.5)!important;border:0!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) .albSlot.got{background:var(--hg-card)!important;box-shadow:inset 0 0 0 1.5px var(--hg-gold)!important}
+/* progress tracks */
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene),.rwcCard,.xpPBox) :is(.catBar,.achBar,.wkBar,.gpBar,.skBar,.skBar2,.qBar,.tBar,.albProg,.skLitBar,.pfXp,.cwBar,.dTrack,.chAll em,.pupBars .catBar){
+  background:rgba(2,10,36,.75)!important;box-shadow:inset 0 0 0 1px rgba(111,227,255,.35),inset 0 2px 4px rgba(0,0,0,.6)!important;border:0!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) :is(.catBar>i,.achBar>em,.albProg>i,.pfXp>i,.skLitBar>i,.gpBar>i){background:linear-gradient(90deg,#33c3ea,#7dffa8)!important;box-shadow:0 0 8px rgba(111,227,255,.7)}
+/* chapter bars sit on their own darker strip */
+html body #app .chRow{background:rgba(2,10,36,.6)!important}
+/* soft buttons become outlined holo buttons */
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene),.rwcCard,.xpPBox) .big.soft{background:rgba(111,227,255,.12)!important;box-shadow:inset 0 0 0 1.5px var(--hg-rim),0 0 10px rgba(111,227,255,.3)!important;color:#dff7ff!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) :is(.big,.buyBtn):disabled{background:rgba(120,150,200,.25)!important;box-shadow:inset 0 0 0 1px rgba(160,190,230,.35)!important;color:rgba(220,235,255,.6)!important}
+/* text inputs */
+html body #app :is(.popBox,.mBoxW) :is(input,textarea,select){background:rgba(2,10,36,.7)!important;color:var(--hg-ink)!important;border:1px solid rgba(111,227,255,.5)!important}
+/* character portraits in dialogs sit in a glowing ring */
+html body #app .mBoxW .mFace,html body #app .rwcWho{filter:drop-shadow(0 0 10px rgba(111,227,255,.55))}
+/* the backdrop behind any panel */
+html body #app .pop,html body #app .modal,html body #app #rwc{background:radial-gradient(ellipse at 50% 40%,rgba(20,60,140,.45),rgba(2,6,24,.78))!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) :is(.mlTile,.pNeed,.talkBtn,.oNeed,.clN){background:var(--hg-card)!important;box-shadow:var(--hg-cardrim)!important;border:0!important;color:var(--hg-ink)!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) .mlTile.hot{box-shadow:inset 0 0 0 1.5px var(--hg-gold),0 0 12px rgba(255,215,94,.4)!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) .pNeed.ok,html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) .pNeed.done{box-shadow:inset 0 0 0 1.5px var(--hg-green)!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) .big.off{background:rgba(120,150,200,.22)!important;box-shadow:inset 0 0 0 1px rgba(160,190,230,.35)!important;color:rgba(220,235,255,.65)!important;text-shadow:none!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) .wkMed{background:#0b1a4a!important;box-shadow:0 0 0 2px rgba(111,227,255,.6)!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) .wkMed.ok{box-shadow:0 0 0 2px #ffcb3d,0 0 10px rgba(255,203,61,.8)!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) .wkMed.got{box-shadow:0 0 0 2px var(--hg-green)!important}
+html body #app .mBoxW .face{background:radial-gradient(circle at 50% 35%,rgba(120,210,255,.45),rgba(20,60,140,.6))!important;box-shadow:0 0 0 2px var(--hg-rim),0 0 14px rgba(111,227,255,.6)!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) .aTile{background:var(--hg-card)!important;box-shadow:var(--hg-cardrim)!important;border:0!important;color:var(--hg-ink)!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) .aTile.locked{background:rgba(4,14,44,.55)!important;box-shadow:inset 0 0 0 1px rgba(111,227,255,.22)!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) .aTile *{color:inherit!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) .aTile.locked :is(b,i,span){color:var(--hg-dim)!important}
+html body #app :is(.popBox,.mBoxW) .pfAv{background:radial-gradient(circle,rgba(120,210,255,.45),rgba(20,60,140,.6))!important;box-shadow:0 0 0 2px var(--hg-rim)!important}
+html body #app :is(.popBox,.mBoxW,.screen:not(.scene)) .big.blue{background:linear-gradient(180deg,#3d8ff0,#1a4fb0)!important;color:#fff!important;box-shadow:0 3px 0 #0c2d70,inset 0 1.5px 0 rgba(255,255,255,.45)!important;text-shadow:var(--hx-out)!important}
+html body #app :is(.popBox,.mBoxW) .pfAlb{background:linear-gradient(180deg,rgba(255,215,94,.22),rgba(255,170,40,.12))!important;box-shadow:inset 0 0 0 1.5px rgba(255,215,94,.7)!important}
+/* v74: Star Expeditions, redrawn: a painted world behind, painted tiles, holo cards */
+#xpScr .xpSky{background:linear-gradient(180deg,rgba(6,12,40,.55),rgba(6,12,40,.25) 30%,rgba(6,12,40,.6)),var(--xpScene) center/cover no-repeat,#0b1440!important;filter:saturate(1.1)}
+#xpScr .xpTitle{background:linear-gradient(180deg,#2c63c9,#0e2565);box-shadow:inset 0 2px 0 rgba(160,235,255,.75),inset 0 -2px 0 rgba(111,227,255,.9),0 0 14px rgba(111,227,255,.5);text-shadow:var(--hx-out),0 0 10px rgba(111,227,255,.8)}
+#xpScr .xpBar,#xpScr .xpSay{background:linear-gradient(180deg,rgba(20,52,118,.88),rgba(9,22,66,.9));box-shadow:0 0 0 1.5px rgba(111,227,255,.85),0 0 14px rgba(111,227,255,.35)}
+/* request cards: dark holo, the visitor peeking over the top */
+#xpScr .xpOrd{min-height:132px;padding-top:14px}
+#xpScr .xpO{background:linear-gradient(180deg,rgba(30,70,150,.92),rgba(10,26,74,.94));color:#eaf6ff;box-shadow:0 0 0 1.5px rgba(111,227,255,.8),0 0 12px rgba(111,227,255,.3);padding:20px 4px 7px;border-radius:16px;overflow:visible}
+#xpScr .xpO.ok{box-shadow:0 0 0 2px #7dffa8,0 0 16px rgba(125,255,168,.6)}
+#xpScr .xpWho{left:50%;top:-16px;transform:translateX(-50%);width:36px;height:36px;background:radial-gradient(circle,rgba(120,210,255,.5),rgba(20,60,140,.9));box-shadow:0 0 0 2px #6fe3ff}
+#xpScr .xpWant{width:50px;height:50px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5))}
+#xpScr .xpO>i{color:#eaf6ff;text-shadow:0 1px 0 rgba(0,0,0,.6)}
+#xpScr .xpGive{min-width:62px;font-size:12.5px}
+#xpScr .xpGive em{font-style:normal;color:#ffd75e}
+#xpScr .xpGive:disabled{background:rgba(120,150,200,.28);box-shadow:inset 0 0 0 1px rgba(160,190,230,.4);color:#cfe2ff}
+#xpScr .xpO.wait{background:rgba(9,22,66,.7);box-shadow:inset 0 0 0 1.5px rgba(111,227,255,.35);padding-top:8px}
+#xpScr .xpO.wait .xpWaitT{color:#ffd75e}
+/* the board: the same frame as the main board, painted tiles in a checker */
+#xpScr .xpBoard{padding:8px;border-radius:20px;background:linear-gradient(180deg,rgba(20,52,118,.82),rgba(9,22,66,.86));box-shadow:0 0 0 2px rgba(111,227,255,.9),0 0 22px rgba(111,227,255,.45),inset 0 0 18px rgba(111,227,255,.2)}
+#xpScr .xpGrid{gap:2px}
+#xpScr .xpC{border-radius:9px;background:var(--xpTileA) center/100% 100% no-repeat,rgba(190,215,255,.3)}
+#xpScr .xpC.alt{background:var(--xpTileB) center/100% 100% no-repeat,rgba(190,215,255,.2)}
+#xpScr .xpC.prod{background:radial-gradient(circle,rgba(255,230,140,.55),transparent 70%),var(--xpTileA) center/100% 100% no-repeat;box-shadow:inset 0 0 0 2px #ffd75e,0 0 10px rgba(255,215,94,.6)}
+#xpScr .xpC>img{width:90%;height:90%}
+#xpScr .xpC.want::after{background:#7dffa8;box-shadow:0 0 0 1.5px #fff,0 0 6px #7dffa8}
+#xpScr .xpTabs button{background:linear-gradient(180deg,rgba(40,100,210,.95),rgba(14,40,110,.95));box-shadow:0 0 0 1.5px rgba(111,227,255,.8),0 3px 0 #061a4d,inset 0 1.5px 0 rgba(255,255,255,.35)}
+/* v74: chapter sheet header: the one asking, the chapter's name, the story button lined up */
+html body #app .chHead2{display:flex;align-items:center;gap:10px;margin:2px 4px 10px}
+html body #app .chHead2 .pFace{flex:none;width:62px;height:62px;border-radius:50%;overflow:hidden;background:radial-gradient(circle,rgba(120,210,255,.45),rgba(20,60,140,.7));box-shadow:0 0 0 2px var(--hg-rim),0 0 12px rgba(111,227,255,.5)}
+html body #app .chHead2 .pFace :is(img,svg){width:100%;height:100%;object-fit:cover}
+html body #app .chHead2 .chTx{flex:1;min-width:0;display:flex;flex-direction:column}
+html body #app .chHead2 .chTx b{font:400 18px/1.15 var(--hx-title);letter-spacing:.02em;text-shadow:var(--hx-out)}
+html body #app .chHead2 .chTx i{font-style:normal;font-size:12px}
+html body #app .chHead2 .talkBtn{flex:none;width:40px;height:40px;border-radius:50%;padding:0;display:flex;align-items:center;justify-content:center}
+html body #app .chHead2 .talkBtn :is(img,.uiIc){width:24px!important;height:24px!important}
+html body #app .chapter .pNeeds{justify-content:center;gap:6px}
+/* v74: camp labels are small holo tags */
+html body #app .spotTag{background:linear-gradient(180deg,rgba(28,70,160,.92),rgba(8,22,70,.92))!important;box-shadow:0 0 0 1.5px rgba(111,227,255,.85),0 0 8px rgba(111,227,255,.4)!important;border:0!important;color:#eaf6ff!important}
+html body #app .spotTag b{color:#fff!important;text-shadow:0 1px 0 rgba(0,0,0,.6)}
+html body #app .spotTag i{color:#ffd75e!important}
+/* v74: the last light pieces go holo: side widgets, lab labels and hint, wheel host bubble, chips */
+html body #app :is(.labSt b,.labHint,.hostRow i,.sciChip,.hostFace,.cwFace){background:linear-gradient(180deg,rgba(28,70,160,.94),rgba(8,22,70,.94))!important;color:#eaf6ff!important;box-shadow:0 0 0 1.5px rgba(111,227,255,.85),0 0 8px rgba(111,227,255,.35)!important;border:0!important}
+html body #app .labSt b{border-radius:99px!important;padding:3px 10px!important}
+html body #app .labSt i{color:#ffd75e!important;text-shadow:0 1px 2px rgba(0,0,0,.9)!important}
+html body #app .labHint b{color:#ffd75e!important}
+html body #app .side .sideW.chapW,html body #app .side .sideW.tab{background:linear-gradient(180deg,rgba(28,70,160,.94),rgba(8,22,70,.94))!important;box-shadow:0 0 0 1.5px rgba(111,227,255,.85),0 0 10px rgba(111,227,255,.4)!important;border:0!important}
+html body #app .side .sideW.tab.claim{box-shadow:0 0 0 2px #ffd75e,0 0 14px rgba(255,215,94,.7)!important}
+html body #app .side .sideW :is(b,i,span:not(.dot)){color:#eaf6ff!important;text-shadow:0 1px 0 rgba(0,0,0,.6)}
+html body #app .side .sideW .cwBar{background:rgba(2,10,36,.75)!important}

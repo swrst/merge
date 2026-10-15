@@ -24,6 +24,7 @@ page.on('pageerror', e => errors.push('pageerror: ' + e.message));
 await page.goto(URL);
 // boot rasterises every item (500+) before the first frame; software GL needs the headroom
 await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 45000 });
+await page.evaluate(() => window.__game.v9.achOff());
 
 const S = () => page.evaluate(() => JSON.parse(JSON.stringify(window.__game.state())));
 // A test that pokes state directly has to ask for a repaint; the game itself
@@ -135,7 +136,7 @@ if (await page.locator('#tSkip').isVisible().catch(() => false)) {
 await page.waitForTimeout(700); await closeModal();
 // just-in-time tips dim the screen and would eat these scripted clicks; this
 // run checks the systems, so the tips count as seen (ux-check covers them)
-await page.evaluate(() => { const s = window.__game.state(); s.tipsOff = 1; window.__game.v9.jitOff(); });
+await page.evaluate(() => { const s = window.__game.state(); s.tipsOff = 1; window.__game.v9.jitOff(); window.__game.v9.achOff(); });
 
 /* ------------------------------------------------------------------ curve */
 head('XP curve is a real climb');
@@ -477,6 +478,7 @@ await set(() => { const s = window.__game.state(); s.daily = { key: 0, day: 0 };
 await page.reload();
 // boot rasterises every item (500+) before the first frame; software GL needs the headroom
 await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 45000 });
+await page.evaluate(() => window.__game.v9.achOff());
 await page.waitForTimeout(2600);
 const dayCells = await page.locator('#modal.open .dayCell').count();
 if (dayCells !== 7) console.log('   [daily] modal title is now: ' + (await page.textContent('#mTitle')) + ' | cells ' + dayCells);

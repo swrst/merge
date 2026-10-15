@@ -1,5 +1,15 @@
 # Changelog
 
+- **v74 (0.74.0)**
+  - Hologram look everywhere: every popup, dialog, screen, card, reward card and talk box is dark holographic glass with a glowing cyan rim and light text; camp labels, side widgets and Lab labels match.
+  - Medals and Star Challenge medals pay out the moment they are earned (no trip to the Mission Log).
+  - Contracts no longer give XP (coins only); XP comes from merging (more for higher steps) and chapters. Energy refills slower (2.5 min) and level-ups top up less.
+  - Star Challenge medals glow in place instead of jumping off the bar.
+  - The "new feature" highlight only shows over the main board, never on top of another screen.
+  - Building the Lab opens a card with what it does and what it costs; nothing is spent by a stray tap.
+  - Star Expeditions redrawn: each one stands on a painted world with its own tiles; holo request cards.
+  - Chapter sheet header: the one asking, the chapter name and the story button in one row.
+
 - **v73 (0.73.0): production prep**
   - Clean-up: removed the discarded reserve chains and their art, the finished catalogue plans, old prompt scripts, compiled Python files and about 250 lines of dead game code. Docs rewritten into `docs/` (release guide, services, development, game, privacy policy).
   - App id is now `dev.artursolak.galaxyadventure`.
