@@ -58,6 +58,11 @@ export async function setupChrome() {
       const modal = document.querySelector('#modal.open') as HTMLElement | null;
       if (modal) { (document.querySelector('#mBtn') as HTMLElement)?.click(); return; }
       if (document.querySelector('#pop.open')) { (document.querySelector('#popX') as HTMLElement)?.click(); return; }
+      // the expedition board: its info panel first, then the board itself
+      const xpP = document.querySelector('#xpPanel #xpPClose') as HTMLElement | null;
+      if (xpP) { xpP.click(); return; }
+      if (document.querySelector('#xpScr.open')) { (document.querySelector('#xpClose') as HTMLElement)?.click(); return; }
+      if (document.querySelector('#skyChart.open')) { (document.querySelector('#skBack') as HTMLElement)?.click(); return; }
       if (document.querySelector('#mini.open')) { (document.querySelector('#miniClose') as HTMLElement)?.click(); return; }
       const tray = document.querySelector('.tray.open') as HTMLElement | null;
       if (tray) { (document.querySelector('#bagClose') as HTMLElement)?.click(); return; }

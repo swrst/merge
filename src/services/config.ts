@@ -6,23 +6,27 @@
  *
  * Going live is filling in this file (see SERVICES.md), not editing game code. */
 export type Mode = 'mock' | 'live' | 'auto';
+import VERSION from '../../version.json';
+
+/** true in the store build (`npm run build:release`): no tester tools, real ads */
+export const RELEASE = import.meta.env.VITE_RELEASE === '1';
 
 export const SERVICES = {
   /** the app's identity in both stores — must match capacitor.config.ts appId */
   app: {
-    androidPackage: 'dev.artursolak.mergerocket',
+    androidPackage: 'dev.artursolak.galaxyadventure',
     iosAppStoreId: '',                  // ← numeric id from App Store Connect, once the app record exists
     privacyUrl: '',                     // ← your privacy policy page (required by both stores)
     supportEmail: '',                   // ← where "Send feedback" goes; empty = feedback is copied to the clipboard
     /** shown in Settings and stamped on every feedback report */
-    build: '0.72 test',
+    build: VERSION.name + (RELEASE ? '' : ' test'),     // version.json is the one place the version lives
     /** test builds: tap the version line 5× in Settings for the tester tools */
-    testerTools: true,
+    testerTools: !RELEASE,
   },
 
   ads: {
     mode: 'auto' as Mode,
-    testing: true,                      // ← false for the store build (Google test units until then)
+    testing: !RELEASE,                  // test ads everywhere except the store build
     units: {
       // Google's public TEST rewarded units — replace with your own from admob.google.com
       rewardedAndroid: 'ca-app-pub-3940256099942544/5224354917',
@@ -62,6 +66,7 @@ export const SERVICES = {
   /** local notifications (energy full, daily gift) — no server needed */
   notify: { mode: 'auto' as Mode },
 
-  /** analytics: a mock that keeps the last events in memory until a provider is chosen */
-  analytics: { mode: 'mock' as Mode },
+  /** Firebase Analytics + Crashlytics. Set firebase: true once android/app/google-services.json
+      is in place (docs/ANDROID-RELEASE.md step 5); until then events stay in memory. */
+  analytics: { mode: 'auto' as Mode, firebase: false },
 };

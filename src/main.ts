@@ -7,7 +7,7 @@ import './style.css';
 import { ART } from './art';
 import { startGame } from './game';
 import { hydrateSave, startSaveMirror, setupChrome } from './native';
-import { initServices } from './services';
+import { initServices, analytics } from './services';
 
 function paintHudIcons() {
   ['icCoin', 'shopCoinIc', 'labCoinIc'].forEach(id => {
@@ -59,8 +59,8 @@ function bootFailed(err: any) {
     location.reload();
   };
 }
-window.addEventListener('error', e => bootFailed(e.error || e.message));
-window.addEventListener('unhandledrejection', e => bootFailed((e as any).reason));
+window.addEventListener('error', e => { analytics.error(e.error || e.message, 'window'); bootFailed(e.error || e.message); });
+window.addEventListener('unhandledrejection', e => { analytics.error((e as any).reason, 'promise'); bootFailed((e as any).reason); });
 if (import.meta.env.PROD) setTimeout(() => bootFailed('Loading is taking too long.'), 45000);
 
 async function main() {
@@ -71,7 +71,7 @@ async function main() {
     startSaveMirror();
     initServices();
     await startGame();
-  } catch (err) { console.error(err); bootFailed(err); }
+  } catch (err) { console.error(err); analytics.error(err, 'boot'); bootFailed(err); }
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', () => { main(); });

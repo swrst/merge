@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'dev.artursolak.mergerocket',
+  appId: 'dev.artursolak.galaxyadventure',
   appName: 'Galaxy Adventure',
   webDir: 'dist',
   android: {

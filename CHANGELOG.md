@@ -1,5 +1,20 @@
 # Changelog
 
+- **v73 (0.73.0): production prep**
+  - Clean-up: removed the discarded reserve chains and their art, the finished catalogue plans, old prompt scripts, compiled Python files and about 250 lines of dead game code. Docs rewritten into `docs/` (release guide, services, development, game, privacy policy).
+  - App id is now `dev.artursolak.galaxyadventure`.
+  - One version for everything in `version.json` (`npm run version:bump`); Android reads it.
+  - Store build (`npm run build:release`): no tester tools, real ads. Release signing from `android/keystore.properties`, `build-release.bat` makes the `.aab`.
+  - Firebase Analytics + Crashlytics (switch on with `google-services.json`), more events, screen views, user properties, JavaScript errors as non-fatal crash reports.
+  - Local notifications, Play in-app review and in-app updates plugins installed; no exact-alarm permission.
+  - Android back button closes the expedition board and the star chart; privacy policy link in Settings.
+  - Current icon and splash sources in `resources/`; Play Store screenshots in `resources/store/screenshots/`.
+- **v72**: NaN XP fixed (and repaired in old saves); board safety net (no more stuck items); chapter bars back; galaxy meteor; smoother popups; unused UI art put to work.
+- **v71**: 31 producers, album, scanner and expedition art; portraits recropped; holographic highlight for new features; harder expeditions (six monthly), costlier constellations, rarer meteors; one dialog at a time; hyperspace travel; living galaxy map.
+- **v70**: Star Expeditions; first-time shop guide; "Holo Command" theme and bundled fonts; ribbons always fit.
+- **v64–v69**: storage for producers, pets with perks, profile card, Star Album seasons, 1000-item catalogue, 220 chapters, fixes for older saves and a boot error screen.
+- **v39–v63**: worlds two to five painted, the Lab, events, side games, contracts and pacing reworks (see git history).
+
 - **v38**
   - Painted brand art for Galaxy Adventure: logo on the loading screen, a new loading screen, app icon (Android, iOS, web), and a Play Store feature graphic and icon in resources/store.
   - Space UI kit:

@@ -4,7 +4,6 @@ dist-standalone/
 
 # build byproducts
 GalaxyAdventure.html
-artifact-body.html
 
 # native build output
 android/.gradle/
@@ -29,5 +28,14 @@ Thumbs.db
 # iOS build output
 ios/App/Pods/
 ios/App/App.xcworkspace/xcuserdata/
-MergeRocket.html
-GloopGalaxy.html
+
+# release secrets: never commit these (back them up somewhere safe instead)
+android/keystore.properties
+*.jks
+*.keystore
+android/app/google-services.json
+ios/App/App/GoogleService-Info.plist
+
+# store builds
+*.aab
+/GalaxyAdventure-*.apk

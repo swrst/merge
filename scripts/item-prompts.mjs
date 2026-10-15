@@ -1,60 +1,46 @@
-/* Writes art/guides/ART-PROMPTS-ITEMS.md: one SIMPLE-icon sheet prompt per
-   chain, for redrawing the whole catalogue in a clean, readable style.
+/* Writes art/guides/ART-PROMPTS-ITEMS.md: a ChatGPT sheet prompt for every chain
+   and producer that has no painted sprite yet (nothing, once the catalogue is
+   drawn), followed by art/guides/prompts-extra.md for one-off UI art.
    Order = the order a player meets the chains (world, then unlock level).
-     node scripts/item-prompts.mjs */
-import { readFileSync, writeFileSync } from 'node:fs';
-import { REDO, CREATURES } from './content/alien-redo.mjs';
+     npm run art:prompts */
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+
 const chains = JSON.parse(readFileSync('src/content/chains.json', 'utf8'));
 const items = JSON.parse(readFileSync('src/content/items.json', 'utf8'));
+const prods = JSON.parse(readFileSync('src/content/producers.json', 'utf8'));
 const notes = JSON.parse(readFileSync('art/notes.json', 'utf8')).items || {};
 const WORLDS = ['earth', 'luna', 'cindra', 'nerith', 'vela', 'any'];
 const WNAME = { earth: 'Sunny Meadow', luna: 'Crater Camp', cindra: 'Ember Hollow', nerith: 'Tidal Shallows', vela: 'Aurora Reach', any: 'Everywhere (events, lab, junk)' };
-const SKIP = new Set(['scrap', 'relic', 'bloom', 'chest', 'rainbow']);
-/* sheets already redrawn and in the game */
-const DONE = new Set(["aquarium", "arcade", "artclub", "aurorac", "bakery", "balloonc", "basalt", "bath", "berry", "bloom", "bots", "bottles", "bounce", "brews", "bubblegum", "bubbletunes", "chest", "chime", "clay", "cloth", "cloudc", "cloudsheep", "comet", "cometboards", "copper", "coralc", "cosmicart", "crystal", "deeptech", "dinos", "dish", "dragons", "dust", "emberfruit", "engine", "ev_candy", "ev_lantern", "ev_star", "farmbots", "feather", "fireworks", "fishc", "floatisles", "flower", "forge", "fuel", "gadgets", "garden", "glassw", "glow", "gnomes", "golems", "grass", "harbour", "hats", "helium", "holograms", "honey", "hotsprings", "hull", "ice", "icecream", "iron", "jelly", "junk", "karts", "kelp", "kingdom", "kite", "kites", "lantern", "lanterns", "laundry", "lavaarmor", "lavasurf", "library", "lightsails", "lumin", "lunamoth", "magma", "mail", "manta", "meteorite", "mining", "moon", "moonbase", "moonmelon", "moonpup", "mush", "music", "nav", "nebula", "obsid", "parts", "pastry", "pearlc", "pets", "pettoys", "phoenix", "picnic", "pizza", "planets", "playground", "pond", "potion", "prismv", "racers", "relic", "rescue", "robopets", "rover", "rubyc", "salamander", "salon", "salt", "satellite", "science", "seagarden", "seaglass", "seaponies", "shellc", "shellphones", "shipyard", "shroom", "silver", "skyfort", "skyfruit", "skynest", "skytrains", "skywhales", "snail", "snapplants", "snapshots", "spice", "squid", "star", "starc", "starflower", "stargarden", "stargaze", "starling", "starmaps", "starpost", "station", "steam", "stone", "sulfur", "sunkn", "sweets", "tank", "tea", "thermal", "tidal", "tide", "timemachine", "toys", "treasure", "turtle", "urchin", "veggie", "visitor", "volcsnacks", "water", "weather", "wild", "wind", "wood", "wormhole", "yardsale", "zerog"]);
-const simple = d => {
-  let w = (d || '').replace(/\s*\([^)]*\)/g, '').split(/,| with | on a | in a | under | over | that | which | full of | covered in | topped | stamped | tied | overflowing /)[0].trim().split(' ');
-  while (w.length > 2 && /(ed|ing)$/.test(w[w.length - 1])) w.pop();
-  return w.join(' ').replace(/\b(purple|lilac|violet|plum)\s*/gi, '');
-};
-const list = Object.entries(Array.isArray(chains) ? Object.fromEntries(chains.map(c => [c.id, c])) : chains)
-  .filter(([k, c]) => !SKIP.has(k) && !DONE.has(k) && WORLDS.includes(c.world) && (c.items || []).length >= 3)
+const painted = (dir, id) => ['webp', 'png'].some(x => existsSync(`src/sprites/${dir}/${id}.${x}`));
+
+/* a short "what to draw" from the item's note: the first clause */
+const simple = d => (d || '').replace(/\s*\([^)]*\)/g, '').split(/,| with | that | which /)[0].trim();
+
+const missing = Object.entries(chains)
+  .filter(([, c]) => WORLDS.includes(c.world) && c.items.some(id => !painted('items', id)))
   .sort((a, b) => WORLDS.indexOf(a[1].world) - WORLDS.indexOf(b[1].world) || a[1].unlock - b[1].unlock);
-let out = `# Galaxy Adventure: catalogue sheets
+
+let out = `# Galaxy Adventure: catalogue sheets still to draw
 
 Send the SETUP from ART-PROMPTS.md first, with STYLE-REFERENCE.png. Then one block per message (ChatGPT makes one image per message).
 
 `;
 let n = 0, cur = '';
-for (const [k, c] of list) {
+for (const [k, c] of missing) {
   if (c.world !== cur) { cur = c.world; out += `\n## ${WNAME[cur]}\n\n`; }
   const ids = c.items, cols = ids.length > 6 ? 4 : 3, rows = Math.ceil(ids.length / cols), empty = cols * rows - ids.length;
   n++;
-  const redo = REDO[k];
-  if (redo && redo[1].length !== ids.length) throw new Error(`REDO ${k}: ${redo[1].length} steps, chain has ${ids.length}`);
-  const head = `Sheet ${n}: ${redo ? redo[0] : c.name}. One image: a grid of ${cols}×${rows}${empty ? ` with the last ${empty > 1 ? empty + ' cells' : 'cell'} empty` : ''}, one object per cell, left to right:`;
-  const lines = ids.map((id, i) => `${i + 1}. ${redo ? redo[1][i] : simple(notes[id]) || items[id]?.name}`).join('\n');
-  out += `**${n}. sheet_${k}**\n\n\`\`\`\n${head}${CREATURES.has(k) ? ' (alien critters)' : ''}\n${lines}\n\`\`\`\n\n`;
+  out += `**${n}. sheet_${k}** (${c.name})\n\n\`\`\`\nOne image: a grid of ${cols}×${rows}${empty ? ` with the last ${empty > 1 ? empty + ' cells' : 'cell'} empty` : ''}, one object per cell, left to right:\n`
+    + ids.map((id, i) => `${i + 1}. ${simple(notes[id]) || items[id].name}`).join('\n') + '\n```\n\n';
 }
-/* producers: every one, redrawn to match the new items, 16 to a sheet */
-const PRODS = JSON.parse(readFileSync('src/content/producers.json', 'utf8'));
-const plist = (Array.isArray(PRODS) ? PRODS : Object.entries(PRODS).map(([id, v]) => ({ id, ...v })))
-  .filter(p => !['wreck', 'crater'].includes(p.id));
-const wOf = p => { const d = (p.drops || [])[0]; const it = items[d]; const ch = it && chains[it.chain]; return ch ? ch.world : 'any'; };
-const pw = {}; plist.forEach(p => (pw[wOf(p)] = pw[wOf(p)] || []).push(p));
-/* every producer was redrawn in v43; flip this to print the producer sheets again */
-const PRODS_DONE = true;
-if (!PRODS_DONE) out += `\n## Producers (every producer redrawn to match the new items)\n\n`;
-let pk = 0;
-for (const w of PRODS_DONE ? [] : WORLDS) {
-  const ps = pw[w] || [];
-  for (let i = 0; i < ps.length; i += 16) {
-    const part = ps.slice(i, i + 16), cols = 4, rows = Math.ceil(part.length / cols), empty = cols * rows - part.length;
-    pk++;
-    out += `**P-${pk}. sheet_producers_${w}${ps.length > 16 ? '_' + (i / 16 + 1) : ''}**\n\n\`\`\`\nProducers for ${WNAME[w]}. One image: a grid of ${cols}×${rows}${empty ? ` with the last ${empty > 1 ? empty + ' cells' : 'cell'} empty` : ''}, one object per cell, each standing on its own small plain round mound, left to right:\n`
-      + part.map((p, k) => `${k + 1}. ${p.name}: the place or machine that makes ${items[p.drops[0]] ? items[p.drops[0]].name.toLowerCase().replace(/(x|s|sh|ch)$/, '$1e') + 's' : 'things'}`).join('\n') + '\n```\n\n';
-  }
+
+const prodList = Object.entries(prods).filter(([id, p]) => !painted('producers', p.art || id));
+if (prodList.length) {
+  out += `\n## Producers still to draw\n\n\`\`\`\nOne image: a grid of 4×${Math.ceil(prodList.length / 4)}, one producer per cell, each standing on its own small round patch of ground, left to right:\n`
+    + prodList.map(([, p], i) => `${i + 1}. ${p.name}: ${p.desc || 'the place that makes ' + (items[p.drops?.[0]]?.name || 'things')}`).join('\n') + '\n```\n\n';
 }
+if (!n && !prodList.length) out += 'Every item and producer in the game has its painted art.\n\n';
+
 out += readFileSync('art/guides/prompts-extra.md', 'utf8');
 writeFileSync('art/guides/ART-PROMPTS-ITEMS.md', out);
-console.log('ART-PROMPTS-ITEMS.md:', n, 'sheets');
+console.log('ART-PROMPTS-ITEMS.md:', n, 'chain sheets,', prodList.length, 'producers missing art');

@@ -1,8 +1,0 @@
-# reserve chain | producer id | Producer Name | what to draw
-farmbots|botdock|Farm Bot Dock|a charging dock with little farm robots plugged in
-snapplants|snapbed|Snap Plant Bed|a raised bed of toothy alien plants snapping at the air
-starpost|postbeacon|Post Beacon|a tall blinking mail beacon with a parcel chute
-arcade|arcadepod|Arcade Pod|a round arcade pod with glowing buttons and a screen
-zerog|arcadepod|Arcade Pod|
-snapshots|photobot|Photo Bot|a little robot with a big camera lens for a face
-bubbletunes|bubblestage|Bubble Stage|a small stage blowing musical bubbles

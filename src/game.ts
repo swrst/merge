@@ -67,10 +67,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     ((S.store && S.store[S.world]) || []).forEach((x: any) => add(x.p));
     return [...here].filter(c => CHAINS[c]);
   };
-  const lockedChains = (w?: string) => {
-    const live = liveChains(w);
-    return WORLDS[w || S.world].chains.filter(c => live.indexOf(c) < 0);
-  };
   /** every producer standing in this world is at max level */
   const allMaxed = () => {
     const on = B().filter((c: any) => c && c.p && PRODS[c.p].mode !== 'once');
@@ -739,7 +735,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     board.setWanted([...used]);
   }
   function curMission() { return MISSIONS.find(m => (S.mp[m.id] || 0) < m.need); }
-  function readyParts() { return !allParts() && Object.keys(S.parts).some(k => !S.parts[k]); }
   const allParts = () => S.parts.hull && S.parts.engine && S.parts.nav && S.parts.tank;
   /* The rocket is the end of the Meadow, not the middle of it. Dr. Zonk lands
      early (chapter 4) but his ship only turns up after Stargazing Night, when
@@ -1026,16 +1021,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     });
     if (cells.length) { setView('board'); pointAt([...new Set(cells)].slice(0, 10)); }
   }
-  function findFor(o: any) {
-    const need = o.needs.find(nd => countItem(nd.id) < nd.qty) || o.needs[0];
-    const b = B(); let at = -1;
-    for (let i = 0; i < N; i++) if (b[i] && b[i].id === need.id) { at = i; break; }
-    if (at >= 0) { hintPair = [at]; board.setHint(hintPair); setTimeout(() => { hintPair = null; board.setHint(null); }, 1800); toast('Here it is! ' + ITEMS[need.id].name); }
-    else {
-      const src = sourceHint(need.id);
-      toast('Need <b>' + ITEMS[need.id].name + '</b> — ' + src);
-    }
-  }
   function sourceHint(id: string) {
     const d = ITEMS[id], ids = CHAINS[d.chain].items, base = ids[0];
     if (d.chain === 'relic') return 'invent it in the 🔬 Lab';
@@ -1240,7 +1225,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     }
   }
   function onLevel() {
-    analytics.track('level_up', { level: S.lvl });
+    analytics.track('level_up', { level: S.lvl, world: S.world });
+    analytics.user({ level: S.lvl });
     games.submitScore('level', S.lvl);
     addGems(CFG.gems.perLevel + (S.lvl % 5 === 0 ? CFG.gems.everyFiveLevels : 0));
     // a level is a treat, not a free refill: a top-up that never overfills
@@ -1323,7 +1309,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     } else if (p.mode === 'battery') {
       if (!c.ch) { sfx.no(); offerRecharge(i); return; }
       // every tap costs energy, battery or not: energy is the pace of the game
-      if (S.energy < 1) { sfx.no(); bumpChip('#chipEnergy'); toast(`Out of energy — every tap costs <b>1 ⚡</b>.`); setTimeout(energyPop, 500); return; }
+      if (S.energy < 1) { sfx.no(); bumpChip('#chipEnergy'); toast(`Out of energy — every tap costs <b>1 ⚡</b>.`); analytics.track('out_of_energy', { level: S.lvl }); setTimeout(energyPop, 500); return; }
       S.energy -= 1; S.eAt = S.eAt || Date.now(); bumpChip('#chipEnergy'); floatText(i, '-1 ⚡', '#9be8ff');
       if (petRefund() && Math.random() < petRefund()) { S.energy += 1; setTimeout(() => floatText(i, '🐾 free tap!', '#9be8ff'), 350); }
       const cap = capOf(p, plv(c));
@@ -1583,6 +1569,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   /* ============================================================== SCREENS */
   const SCREENS = ['shop', 'lab', 'rocket', 'book', 'map'];
   function setView(v: string) {
+    analytics.screen(v);
     setTimeout(() => document.querySelectorAll<HTMLElement>('.screen.open .scTitle').forEach(fitRibbon), 80);
     if (v !== 'board') { hideInfo(); sel = null; board.setSelected(null); }   // the item bar belongs to the board
     if (v === 'fun') { if (view !== 'board') setView('board'); funPop(); return; }
@@ -1630,7 +1617,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     return S.shop.stock;
   }
   const supplyPrice = (id: string) => Math.max(12, Math.round(ITEMS[id].sell * SHOP.supplyPriceMultiplier));
-  const shopNews = () => shopOpen() && (S.shop.at > (S.shop.seenAt || 0) || S.shop.gift !== dayKey(new Date()));
 
   function buySupply(k: number) {
     const st = shopStock()[k];
@@ -1771,8 +1757,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   /* ------------------------------------------------ shop: gift, energy, chests */
   const today = () => dayKey(new Date());
   const giftReady = () => S.shop.gift !== today();
-  const refillsToday = () => (S.shop.refill && S.shop.refill.day === today() ? S.shop.refill.n : 0);
-  const refillPrice = () => CFG.shop2.energyRefill.base + CFG.shop2.energyRefill.step * refillsToday();
   function claimGift() {
     if (!giftReady()) { sfx.no(); toast('Come back tomorrow for the next gift!'); return; }
     S.shop.gift = today();
@@ -1780,16 +1764,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     save(); renderShop();
     rewardCard('blorb', 'Daily delivery!', '<b>Postie Blorb:</b> "Parcel! Sign here. Any leg. Phew."',
       { item: 'chest', energy: CFG.shop2.freeGiftEnergy }, () => renderShop());
-  }
-  function buyRefill() {
-    const price = refillPrice();
-    if (S.coins < price) { sfx.no(); toast('Not enough coins — that costs ' + price + '.'); return; }
-    spend(price);
-    S.shop.refill = { day: today(), n: refillsToday() + 1 };
-    S.energy += CFG.shop2.energyRefill.amount; bumpChip('#chipEnergy');
-    sfx.boost(); haptic('light');
-    toast(`⚡ +${CFG.shop2.energyRefill.amount} energy!`);
-    renderShop(); renderHUD(); save();
   }
   function buyChest(id: string) {
     const price = CFG.shop2.chestGems[id];
@@ -1917,202 +1891,22 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   /* ============================================================ RESEARCH LAB
      Two samples off the board plus a pile of coins. Guess a pair right and the
      recipe is yours forever; guess wrong and you are out the bench fee. */
-  function recipeFor(a: string, b: string) {
-    return RECIPES.filter(r =>
-      (r.inputs[0] === a && r.inputs[1] === b) || (r.inputs[0] === b && r.inputs[1] === a))[0] || null;
-  }
-  function pruneSlots() {
-    const inv = inventory(), s = S.lab.slots;
-    for (let k = 0; k < 2; k++) if (s[k] && !(inv[s[k]] > 0)) s[k] = null;
-    if (s[0] && s[0] === s[1] && (inv[s[0]] || 0) < 2) s[1] = null;
-  }
   function consumeOne(id: string) {
     if (POUCH.includes(id) && pouch(id) > 0) { S.wal[id]--; return; }
     const b = B();
     for (let i = 0; i < N; i++) if (b[i] && b[i].id === id) { b[i] = null; sparkle(i, 8, '#cfe4ff'); return; }
   }
-  function giveClue() {
-    const blind = RECIPES.filter(r => !S.lab.disc[r.id] && !S.lab.clue[r.id]);
-    if (!blind.length) return null;
-    const r = rnd(blind); S.lab.clue[r.id] = 1;
-    return r;
-  }
-  function pickForSlot(k: number) {
-    const inv = inventory(), other = S.lab.slots[1 - k];
-    const ids = Object.keys(inv).filter(id => id !== other || inv[id] >= 2);
-    if (!ids.length) { sfx.no(); toast('Nothing on your board to study!'); return; }
-    ids.sort((a, b) => ITEMS[a].sell - ITEMS[b].sell);
-    modal('bloop', 'Pick a sample', `Anything on your board can go under the microscope.
-      <div class="pickGrid">${ids.map(id =>
-      `<button class="pickCell" data-pick="${id}">${ART.item(id)}<b>x${inv[id]}</b></button>`).join('')}</div>`, 'Cancel');
-    setTimeout(() => {
-      document.querySelectorAll<HTMLElement>('[data-pick]').forEach(btn => btn.onclick = () => {
-        S.lab.slots[k] = btn.dataset.pick;
-        $('#modal').classList.remove('open'); sfx.tap(); renderLab(); save();
-      });
-    }, 30);
-  }
-  function doResearch() {
-    pruneSlots();
-    const a = S.lab.slots[0], b = S.lab.slots[1];
-    if (!a || !b) { sfx.no(); toast('Put a sample in both slots first!'); return; }
-    const r = recipeFor(a, b);
-    const knew = !!(r && S.lab.disc[r.id]);
-    const cost = knew ? r!.coins : CONFIG.lab.failFee;
-    if (S.coins < cost) { sfx.no(); toast('That run costs ' + cost + ' coins — sell some spares!'); return; }
-    if (!freeCells().length) { sfx.no(); toast('Leave one tile free for the result!'); return; }
-    spend(cost);
-    if (!r) {
-      S.lab.tries = (S.lab.tries || 0) + 1;
-      sfx.no(); shake(); haptic('light');
-      const clue = (S.lab.tries % CONFIG.lab.clueEvery === 0) ? giveClue() : null;
-      toast('💨 Pfft — those two do not react.' + (clue ? ' But Dr. Zonk spotted a clue!' : ''));
-      renderLab(); renderHUD(); save(); return;
-    }
-    consumeOne(a); consumeOne(b);
-    const at = giveItem(r.result);
-    S.lab.disc[r.id] = 1; S.lab.made = (S.lab.made || 0) + 1;
-    S.lab.slots = [null, null];
-    sfx.discover(); haptic('heavy'); confetti();
-    if (at >= 0) { sparkle(at, 24, '#ffe9a8'); floatText(at, ITEMS[r.result].name, '#fff'); }
-    addXp(4 + ITEMS[r.result].tier * 3);
-    prog('research', 1);
-    toast((knew ? '✨ ' : '🎉 DISCOVERY! ') + '<b>' + ITEMS[r.result].name + '</b> created!');
-    if (!knew) setTimeout(() => modal('bloop', 'A new recipe!',
-      `<b>${ITEMS[r.inputs[0]].name}</b> + <b>${ITEMS[r.inputs[1]].name}</b> makes a <b>${ITEMS[r.result].name}</b>! It is in your lab book now — you can brew it again any time for ${r.coins} coins.`,
-      'Science!'), 700);
-    renderLab(); renderHUD(); renderOrders(); paintBoard(); save();
-  }
-  function buyRecipe(id: string) {
-    const r = RECIPES.filter(x => x.id === id)[0]; if (!r || S.lab.disc[id]) return;
-    const price = Math.round(r.coins * 1.5);
-    if (S.coins < price) { sfx.no(); toast('Dr. Zonk wants ' + price + ' coins for that hint.'); return; }
-    spend(price); S.lab.disc[id] = 1;
-    sfx.coin();
-    toast('📘 Recipe bought: <b>' + ITEMS[r.result].name + '</b>');
-    renderLab(); renderHUD(); save();
-  }
   /* ================================================================= THE LAB
      A room, not a form. The bench slots sit on the painted counter, the book
      lives on the shelf, and the rumours are a pop-up — the same way the camp
      works, so the two painted screens feel like the same game. */
-  const LAB_PAD_DEFAULT = {
-    a: [0.255, 0.545], b: [0.435, 0.552], out: [0.645, 0.545],
-    book: [0.275, 0.325], scope: [0.90, 0.50],
-  };
   /** a painted scene carries its own plinth positions (sprites/scenes/anchors.json);
    *  the built-in backdrop keeps the defaults it was measured for */
   const sceneAnchors = (k: string): any => (ART.spriteScene(k) && (SCENE_ANCHORS as any)[k]) || {};
-  const labPad = () => ({ ...LAB_PAD_DEFAULT, ...sceneAnchors('lab') });
   /* an empty bench socket, drawn rather than typed, so it reads on any backdrop */
-  const SOCKET = `<svg viewBox="0 0 100 100" class="art"><circle cx="50" cy="52" r="34" fill="#ffffff" opacity=".5"/>
-    <circle cx="50" cy="52" r="34" fill="none" stroke="#6b5236" stroke-width="4" stroke-dasharray="9 8" opacity=".55"/>
-    <path d="M50 38 v28 M36 52 h28" stroke="#6b5236" stroke-width="6" stroke-linecap="round" opacity=".6"/></svg>`;
-  const SOCKET_Q = `<svg viewBox="0 0 100 100" class="art"><circle cx="50" cy="52" r="34" fill="#c7a8ff" opacity=".35"/>
-    <circle cx="50" cy="52" r="34" fill="none" stroke="#7b4fd6" stroke-width="4" opacity=".6"/>
-    <text x="50" y="68" text-anchor="middle" font-size="42" font-weight="800" fill="#7b4fd6" opacity=".8">?</text></svg>`;
-  function labSpot(kind: string, pad: number[], art: string, label: string, sub: string, cls = '') {
-    return `<button class="spot ${cls}" data-lab="${kind}" data-fx="${pad[0]}" data-fy="${pad[1]}">
-      <span class="spotArt">${art}</span>
-      <span class="spotTag"><b>${label}</b>${sub ? `<i>${sub}</i>` : ''}</span></button>`;
-  }
-  function renderFusion() {
-    const host = $('#labBody'); if (!host) return;
-    pruneSlots();
-    const a = S.lab.slots[0], b = S.lab.slots[1];
-    const r = a && b ? recipeFor(a, b) : null;
-    const knew = !!(r && S.lab.disc[r.id]);
-    const ready = !!(a && b);
-    const cost = knew ? r!.coins : CONFIG.lab.failFee;
-    const known = RECIPES.filter(r2 => S.lab.disc[r2.id]);
-    const blind = RECIPES.filter(r2 => !S.lab.disc[r2.id]);
 
-    host.innerHTML = `<div class="sceneWrap lab">
-      <div class="sceneBlur"></div><div class="sceneImg"></div><div class="sceneVig"></div>
-      <div class="sceneBtns"><button class="sceneBtn" data-labpop="book">📘</button>
-        ${blind.length ? `<button class="sceneBtn" data-labpop="rumours">❓</button>` : ''}</div>
-      ${labSpot('s0', labPad().a, a ? ART.item(a) : SOCKET,
-        a ? ITEMS[a].name : 'Sample A', a ? 'tap to swap' : 'tap to load', a ? 'filled' : 'empty')}
-      ${labSpot('s1', labPad().b, b ? ART.item(b) : SOCKET,
-        b ? ITEMS[b].name : 'Sample B', b ? 'tap to swap' : 'tap to load', b ? 'filled' : 'empty')}
-      ${labSpot('out', labPad().out, knew ? ART.item(r!.result) : SOCKET_Q,
-        knew ? ITEMS[r!.result].name : 'Result', knew ? 'known recipe' : 'unknown', knew ? 'ready' : 'empty')}
-      ${labSpot('book', labPad().book, ART.icon('blueprint'), 'Lab book', known.length + '/' + RECIPES.length)}
-      <div class="labBar">
-        ${a || b ? '<button class="labClear" id="btnClearSlots">Empty</button>' : ''}
-        <button class="big${knew ? '' : ' blue'}" id="btnResearch" ${ready ? '' : 'disabled'}>${ready
-        ? (knew ? `BREW · ${cost} 🪙` : `EXPERIMENT · ${cost} 🪙`)
-        : 'Load two samples'}</button>
-      </div>
-    </div>`;
-    placeSpots('#labBody');
-    host.querySelectorAll('[data-lab]').forEach((e: any) => e.onclick = () => {
-      const k = e.dataset.lab;
-      if (k === 's0') pickForSlot(0);
-      else if (k === 's1') pickForSlot(1);
-      else if (k === 'book') labBook();
-      else if (!ready) { sfx.no(); toast('Load two samples first.'); }
-    });
-    host.querySelectorAll('[data-labpop]').forEach((e: any) => e.onclick = () =>
-      e.dataset.labpop === 'book' ? labBook() : labRumours());
-    const rb = $('#btnResearch'); if (rb) rb.onclick = doResearch;
-    const cb = $('#btnClearSlots');
-    if (cb) cb.onclick = () => { S.lab.slots = [null, null]; sfx.pop(); renderLab(); save(); };
-  }
-
-  function labBook() {
-    const known = RECIPES.filter(r2 => S.lab.disc[r2.id]);
-    const coin = ART.icon('coin');
-    modal('bloop', 'Lab book',
-      `<div class="noteLine" style="margin-top:0">${known.length}/${RECIPES.length} recipes written down.</div>
-       <div class="questList">${known.length ? known.map(r2 => {
-        const poor = S.coins < r2.coins;
-        return `<div class="rumour known">
-          <div class="rLine">
-            <div class="rMini">${ART.item(r2.inputs[0])}</div><div class="rArrow">+</div>
-            <div class="rMini">${ART.item(r2.inputs[1])}</div><div class="rArrow">➜</div>
-            <div class="rMini">${ART.item(r2.result)}</div>
-            <div style="flex:1"></div>
-            <button class="buyBtn" data-load="${r2.id}" ${poor ? 'disabled' : ''}>${coin}${r2.coins}</button>
-          </div></div>`;
-      }).join('') : '<div class="noteLine">Nothing yet. Put two odd things on the bench and press EXPERIMENT.</div>'}</div>`,
-      'Close');
-    setTimeout(() => document.querySelectorAll('[data-load]').forEach((e: any) =>
-      e.onclick = () => { closeModal(); loadKnown(e.dataset.load); }), 30);
-  }
   /** put a known recipe's two ingredients straight onto the bench */
-  function loadKnown(id: string) {
-    const r2 = RECIPES.find(x => x.id === id); if (!r2) return;
-    const missing = r2.inputs.filter(x => countItem(x) < 1);
-    if (missing.length) {
-      sfx.no();
-      toast('You need ' + missing.map(x => `<b>${ITEMS[x].name}</b>`).join(' and ') + ' on the board.');
-      return;
-    }
-    S.lab.slots = [r2.inputs[0], r2.inputs[1]];
-    sfx.pop(); renderLab(); save();
-  }
 
-  function labRumours() {
-    const blind = RECIPES.filter(r2 => !S.lab.disc[r2.id]);
-    const coin = ART.icon('coin');
-    modal('nix', 'Rumours',
-      `<div class="questList">${blind.map(r2 => {
-        const clue = S.lab.clue[r2.id];
-        const price = Math.round(r2.coins * 1.5);
-        return `<div class="rumour">
-          <div class="rNote">“${r2.note}”</div>
-          <div class="rLine">
-            <div class="rMini">${clue ? ART.item(r2.inputs[0]) : '?'}</div><div class="rArrow">+</div>
-            <div class="rMini">?</div><div class="rArrow">➜</div><div class="rMini">?</div>
-            <div style="flex:1"></div>
-            <button class="buyBtn" data-learn="${r2.id}" ${S.coins < price ? 'disabled' : ''}>${coin}${price}</button>
-          </div>${clue ? `<div class="rClue">First ingredient: <b>${ITEMS[r2.inputs[0]].name}</b></div>` : ''}</div>`;
-      }).join('')}</div>
-      <div class="noteLine">Buy a rumour and Dr. Zonk writes the whole recipe down for you.</div>`, 'Close');
-    setTimeout(() => document.querySelectorAll('[data-learn]').forEach((e: any) =>
-      e.onclick = () => { closeModal(); buyRecipe(e.dataset.learn); }), 30);
-  }
   /* ============================================================ VAULT TAB
      What used to be the Rocket tab. The rocket itself now lives in your camp,
      where you can see it being built, so this is the progression drawer: the
@@ -2242,13 +2036,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
   /** every world in the content, in order, plus a teaser for what comes next */
   const WORLD_ORDER = ['earth', 'luna', 'cindra', 'nerith', 'vela'];
-  const WORLD_BLURB: Record<string, string> = {
-    earth: 'Home world · wood, rocks & berries',
-    luna: 'Luna · moon rocks & glow gardens',
-    cindra: 'Cindra · magma, ash and forges',
-    nerith: 'Nerith · a drowned world of reefs',
-    vela: 'Vela · no ground, only light',
-  };
 
 
   /* ============================================================ STORAGE BAG
@@ -2616,7 +2403,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
   const upCost = (p: any, lv: number) => Math.round(upBase(p) * Math.pow(2.1, lv - 1) / 10) * 10;
   /** how long a producer at max level keeps going before it goes to seed */
-  const RETIRE_AT = 45;
 
   /** out of charges — offer the impatient player a way through, for energy */
   function offerRecharge(i: number) {
@@ -2672,29 +2458,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   /* A producer at max level does not last forever: it gives what it has and then
      goes to seed, and something else takes root in its place. Keeps a late board
      from settling into the same four taps for good. */
-  function retireTick(i: number) {
-    const c = B()[i]; if (!c || !c.p) return;
-    c.spent = (c.spent || 0) + 1;
-    const left = RETIRE_AT - c.spent;
-    if (left === 10 || left === 3) floatText(i, left + ' left', '#ffb8a0');
-    if (left > 0) return;
-    const old = PRODS[c.p];
-    // prefer something this world has unlocked that is not already on the board
-    const here = B().filter((x: any) => x && x.p).map((x: any) => x.p);
-    const pool = (W().grow || []).filter(g => wlv() >= g.atLevel).map(g => g.producer)
-      .concat(W().start.map(s2 => s2.producer))
-      .filter(k => here.indexOf(k) < 0);
-    const next = pool.length ? rnd(pool) : null;
-    const payout = 400 * PMAX;
-    S.coins += payout; bumpChip('#chipCoins');
-    B()[i] = next ? mkProd(next) : mkProd(c.p);
-    sfx.discover(); sparkle(i, 24, '#8fe86d'); paintBoard(); renderHUD(); save();
-    setTimeout(() => modal(W().folks[0] || 'bloop', old.name + ' has gone to seed',
-      `It gave everything it had. ${next
-        ? `A <b>${PRODS[next].name}</b> has taken root in its place.`
-        : `A young <b>${old.name}</b> is already coming up in its place.`}`
-      + `<div class="rewardLine">+${payout} 🪙 from the last harvest</div>`, 'Lovely'), 500);
-  }
 
   /** producers that appear as you level, listed per world in worlds.json */
   /** the world level the next producer waits for */
@@ -3019,6 +2782,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     albumGive(projDone() % 5 === 0 ? 'gold' : 'basic', 'for the chapter');
     weeklyAdd(25);
     analytics.track('chapter_built', { world: S.world, chapter: projDone(), level: S.lvl });
+    analytics.user({ chapter: S.world + '_' + projDone() });
     // ask for a rating once, right after a win, never in the first minutes
     if (!S.reviewAsked && S.world === 'earth' && projDone() >= SERVICES.store.askReviewAfterChapter) { S.reviewAsked = 1; setTimeout(() => store.requestReview(), 4000); }
     S.cSince = S.cSince || {}; S.cSince[S.world] = 0;
@@ -3338,7 +3102,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     { p: 'shellbed', from: 'nerith' }, { p: 'kelpbed', from: 'nerith' },
     { p: 'cloudbank', from: 'vela' }, { p: 'auroraloom', from: 'vela' },
   ];
-  const visiting = () => !!(S.vis && S.vis.w === S.world && Date.now() < S.vis.until);
   function visitorTick(now: number) {
     const v = S.vis;
     // a producer the story promised, waiting for a free tile
@@ -3456,6 +3219,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     requestAnimationFrame(frame);
   }
   function travelTo(w: string) {
+    analytics.track('world_travel', { to: w, from: S.world, first: visited(w) ? 0 : 1 });
     const free = visited(w);
     if (!free && (S.fuel < CONFIG.rocket.fuelToLaunch || !allParts())) return;
     if (!free) S.fuel -= CONFIG.rocket.fuelToLaunch;
@@ -4536,6 +4300,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     return (c.length ? c : all)[Math.floor(Math.random() * (c.length || all.length))];
   }
   function openPack(kind: 'basic' | 'gold') {
+    analytics.track('album_pack', { kind });
     const a = alb(); if (!a.packs[kind]) return;
     a.packs[kind]--;
     const n = kind === 'gold' ? 4 : 3;
@@ -5367,7 +5132,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     host.dataset.h = html; host.innerHTML = html;
     host.querySelectorAll('[data-q]').forEach((b: any) => b.onclick = () => {
       const k = b.dataset.q;
-      if (k === 'xp') { sfx.tap(); domHand(null); XP.show(); return; }
+      if (k === 'xp') { sfx.tap(); domHand(null); analytics.track('expedition_open', {}); analytics.screen('expedition'); XP.show(); return; }
       if (k === 'mile') { sfx.tap(); toast(`📦 Deliver <b>${mileGoal() - ((S.om && S.om.n) || 0)}</b> more contract${mileGoal() - ((S.om && S.om.n) || 0) === 1 ? '' : 's'} for ${((S.om && S.om.step) || 0) % 2 === 1 ? 'a free chest' : `+${CFG.milestone.energy} ⚡`}`); } else if (k === 'event') eventPop(); else if (k === 'spin') spinPop(); else if (k === 'pup') pupPop(); else if (k === 'store') storagePop(); else if (k === 'album') albumPop(); else if (k === 'pouch') starChart(); else { setView('lab'); labAccPop(); }
     });
   }
@@ -6025,7 +5790,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       if (k === 'dig') playDig(); else if (k === 'brew') playBrew(); else playMarket();
     }), 30);
   }
-  function starsPanel() { starChart(); }
 
   function galaxyTap(k: string) {
     if (k === S.world) { worldTab = 'camp'; sfx.tap(); renderWorldScreen(); return; }
@@ -6647,6 +6411,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       if (problems.length) console.error('[content]\n' + problems.join('\n'));
     }
     S = load();
+    analytics.user({ level: S.lvl, world: S.world, chapter: S.world + '_' + ((S.proj && S.proj[S.world]) || 0) });
     const away = welcomeBack();
     // a save that names a world it never built a board for would land on nothing
     if (!WORLDS[S.world]) S.world = CONFIG.start.world;
@@ -6725,6 +6490,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           ${row('tipBtn', ART.uiIcon('ic_tips', '💡'), 'Tips', !S.tipsOff)}
         </div>
         <button class="big soft" id="fbBtn">${ART.uiIcon('ic_feedback', '✉️')} Send feedback</button>
+        ${SERVICES.app.privacyUrl ? `<a class="privLink" href="${SERVICES.app.privacyUrl}" target="_blank" rel="noopener">Privacy policy</a>` : ''}
         <button class="optDanger" id="resetBtn">${ART.uiIcon('ic_restart', '')} Start a new game</button>
         <div class="verLine" id="verLine">Galaxy Adventure ${SERVICES.app.build}</div>
         ${testerOn ? testerPanel() : ''}
@@ -6809,6 +6575,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     window.addEventListener('mr:save', () => goingAway());
     document.addEventListener('visibilitychange', () => { if (document.hidden) goingAway(); });
     store.init(toast);
+    // a newer version on Google Play: say so once per session, gently
+    setTimeout(() => store.checkUpdate().then(up => { if (up) toast('🚀 A new version of Galaxy Adventure is out. Update it on Google Play!'); }), 8000);
 
     $('#tNext').onclick = () => { sfx.tap(); tutNext(); };
     $('#tSkip').onclick = () => { sfx.tap(); tutEnd(); toast('Intro skipped.'); };

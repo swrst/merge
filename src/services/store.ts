@@ -5,7 +5,7 @@
  *   openStorePage: the game's own page, for "rate us" or an update.
  *   checkUpdate:   Play In-App Updates via @capawesome/capacitor-app-update (Android only). */
 import { SERVICES } from './config';
-import { platform, plugin, useLive } from './platform';
+import { platform, useLive } from './platform';
 import { analytics } from './analytics';
 
 export type StoreMsg = (text: string) => void;
@@ -21,14 +21,17 @@ export const store = {
   },
   async requestReview() {
     analytics.track('review_prompt');
-    const p = plugin<any>('InAppReview');
-    if (useLive(SERVICES.store.mode, !!p) && p) { try { await p.requestReview(); return; } catch { } }
+    if (useLive(SERVICES.store.mode)) {
+      try { const { InAppReview } = await import('@capacitor-community/in-app-review'); await InAppReview.requestReview(); return; } catch { }
+    }
     say('⭐ (test) The store\'s "rate this game" sheet would open here.');
   },
   openStorePage() { window.open(this.pageUrl(), '_blank'); },
   async checkUpdate(): Promise<boolean> {
-    const p = plugin<any>('AppUpdate');
-    if (!(useLive(SERVICES.store.mode, !!p) && p)) return false;
-    try { const r = await p.getAppUpdateInfo(); return r && r.updateAvailability === 2; } catch { return false; }
+    if (!useLive(SERVICES.store.mode) || platform() !== 'android') return false;
+    try {
+      const { AppUpdate, AppUpdateAvailability } = await import('@capawesome/capacitor-app-update');
+      const r = await AppUpdate.getAppUpdateInfo(); return r.updateAvailability === AppUpdateAvailability.UPDATE_AVAILABLE;
+    } catch { return false; }
   },
 };

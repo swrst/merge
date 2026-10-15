@@ -1,7 +1,7 @@
 {
   "name": "galaxy-adventure",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.73.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -15,9 +15,13 @@
     "apk": "npm run build && cap sync android && cd android && ./gradlew assembleDebug",
     "ios": "npm run build && cap sync ios && cap open ios",
     "content": "node scripts/gen-content.mjs",
-    "art": "node scripts/art-list.mjs",
     "art:manifest": "node scripts/art-manifest.mjs",
-    "art:optimize": "python3 scripts/art-optimize.py"
+    "art:optimize": "python3 scripts/art-optimize.py",
+    "art:prompts": "node scripts/item-prompts.mjs",
+    "build:release": "npm run content && vite build --mode release",
+    "version:bump": "node scripts/version-bump.mjs",
+    "aab": "npm run build:release && cap sync android && cd android && ./gradlew bundleRelease",
+    "apk:release": "npm run build:release && cap sync android && cd android && ./gradlew assembleRelease"
   },
   "devDependencies": {
     "@capacitor/assets": "^3.0.5",
@@ -27,18 +31,24 @@
   },
   "dependencies": {
     "@capacitor-community/admob": "^8.1.0",
+    "@capacitor-community/in-app-review": "^8.0.0",
+    "@capacitor-firebase/analytics": "^8.5.2",
+    "@capacitor-firebase/crashlytics": "^8.5.2",
     "@capacitor/android": "^8.5.2",
     "@capacitor/app": "^8.1.1",
     "@capacitor/core": "^8.5.2",
     "@capacitor/filesystem": "^8.1.4",
     "@capacitor/haptics": "^8.0.2",
     "@capacitor/ios": "^8.5.2",
+    "@capacitor/local-notifications": "^8.3.1",
     "@capacitor/preferences": "^8.0.1",
     "@capacitor/share": "^8.0.2",
     "@capacitor/status-bar": "^8.0.3",
+    "@capawesome/capacitor-app-update": "^8.1.0",
     "@fontsource/fredoka": "^5.3.0",
     "@fontsource/lilita-one": "^5.3.0",
     "@revenuecat/purchases-capacitor": "^13.7.0",
+    "firebase": "^12.19.0",
     "gsap": "^3.15.0",
     "pixi.js": "^8.21.0"
   }
