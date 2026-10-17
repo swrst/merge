@@ -1,3 +1,4 @@
+import { getUITheme } from './themes/theme';
 /* ART - all game graphics as inline SVG. Soft-3D casual mobile style:
    gradient volume + rim highlight + contact shadow, no flat web-ish icons.
 
@@ -1128,6 +1129,11 @@ export const ART = (function () {
     charFull: (k: string) => SPRITE.char[k + '_full']
       ? `<svg viewBox="0 0 100 100" class="face"><image href="${SPRITE.char[k + '_full']}" x="0" y="0" width="100" height="100"/></svg>` : charArt(k),
     /** a painted UI icon as an <img>, or the fallback text (an emoji) */
-    uiIcon: (k: string, fb: string) => SPRITE.ui[k] ? `<img class="uiIc" src="${SPRITE.ui[k]}" alt="">` : fb,
+    uiIcon: (k: string, fb: string) => {
+      const alternate: Record<string, string> = { ic_galaxy: 'oh_galaxy', ic_galaxy_btn: 'oh_galaxy', ic_lab: 'oh_lab', ic_goals: 'oh_missions', gal_starchart: 'oh_stars', gal_rocket: 'oh_camp' };
+      const classic = SPRITE.ui[k], orbital = SPRITE.ui[alternate[k]];
+      if (!classic) return fb;
+      return `<img class="uiIc" src="${getUITheme() === 'orbital' && orbital ? orbital : classic}"${orbital ? ` data-classic-src="${classic}" data-orbital-src="${orbital}"` : ''} alt="" draggable="false">`;
+    },
   };
 })();

@@ -1,3 +1,4 @@
+import { getUITheme } from './themes/theme';
 /* Pixi-rendered merge board.
    The game logic never touches sprites: it calls sync()/anim*() and reads cell
    geometry. Art comes from the existing SVG set, rasterised once into textures. */
@@ -121,6 +122,7 @@ class PixiBoard {
     this.app.stage.on('pointerupoutside', this.up);
     this.app.renderer.on('resize', () => this.layout());
     if ('ResizeObserver' in window) new ResizeObserver(() => this.layout()).observe(host);
+    window.addEventListener('ga:theme', () => this.layout());
     this.ready = true;
     this.layout();
     if (import.meta.env.DEV) { (window as any).__board = this; (window as any).gsap = gsap; }   // test hooks, dev builds only
@@ -183,7 +185,7 @@ class PixiBoard {
     add('coin', ART.iconSvg('coin'), ART.spriteUi('icon_coin') || undefined);
     // shared tiles, plus each world's own set when it has been painted (tile_light_luna …)
     const tiles = ['tile_light', 'tile_dark', 'tile_locked'];
-    [...tiles, 'bubble_film', 'seal_bubble', 'seal_crack', 'meteor', 'ic_star_tag', ...Object.keys(THEME).flatMap(w => tiles.map(t => t + '_' + w))].forEach(k => {
+    [...tiles, 'oh_tile_light', 'oh_tile_dark', 'oh_tile_locked', 'bubble_film', 'seal_bubble', 'seal_crack', 'meteor', 'ic_star_tag', ...Object.keys(THEME).flatMap(w => tiles.map(t => t + '_' + w))].forEach(k => {
       const url = ART.spriteUi(k); if (url) add('ui:' + k, '', url);
     });
     await Promise.all(jobs);
@@ -330,9 +332,10 @@ class PixiBoard {
     const art = this.tileArt[i];
     const kind = locked ? 'tile_locked' : dark ? 'tile_dark' : 'tile_light';
     // locked tiles are a dark space-station hatch, drawn here (no crystals)
-    const paint = locked ? undefined : (this.tex['ui:' + kind + '_' + this.theme] || this.tex['ui:' + kind]
+    const orbital = getUITheme() === 'orbital';
+    const paint = orbital && this.tex['ui:oh_' + kind] ? this.tex['ui:oh_' + kind] : locked ? undefined : (this.tex['ui:' + kind + '_' + this.theme] || this.tex['ui:' + kind]
       || this.tex['ui:tile_light_' + this.theme] || this.tex['ui:tile_light']);
-    if (locked) {
+    if (locked && !paint) {
       if (art) art.visible = false;
       g.roundRect(p.x + 1.5, p.y + 1.5, c - 3, c - 3, R).fill({ color: dark ? 0x26306a : 0x2d3a7c }).stroke({ color: 0x6fd8ff, width: 2, alpha: 0.7 });
       g.roundRect(p.x + c * 0.12, p.y + c * 0.12, c * 0.76, c * 0.76, R * 0.7).stroke({ color: 0xffffff, width: 1.2, alpha: 0.12 });

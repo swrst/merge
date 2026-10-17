@@ -1,3 +1,4 @@
+import { getUITheme, setUITheme } from './themes/theme';
 /* GALAXY ADVENTURE - core game loop. Earth -> rebuild a rocket -> new worlds. */
 import { ART } from './art';
 // the painted backdrops the camp and the lab stand on
@@ -6517,6 +6518,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           ${row('sndBtn', ART.uiIcon(S.sound ? 'ic_sound' : 'ic_mute', '🔊'), 'Sound effects', !!S.sound)}
           ${row('musBtn', ART.uiIcon(S.music ? 'ic_music' : 'ic_nomusic', '🎵'), 'Music', !!S.music)}
           ${row('tipBtn', ART.uiIcon('ic_tips', '💡'), 'Tips', !S.tipsOff)}
+          ${row('themeBtn', ART.uiIcon('oh_projector', '🛸'), 'Orbital Holo UI', getUITheme() === 'orbital')}
+          <p class="themeNote">Switch off to use the original Space Hologram design.</p>
         </div>
         <button class="big soft" id="fbBtn">${ART.uiIcon('ic_feedback', '✉️')} Send feedback</button>
         ${SERVICES.app.privacyUrl ? `<a class="privLink" href="${SERVICES.app.privacyUrl}" target="_blank" rel="noopener">Privacy policy</a>` : ''}
@@ -6527,7 +6530,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       modal('player', 'Settings', draw(), 'Close');
       const bind = () => {
         const sb2 = $('#sndBtn'), mb = $('#musBtn'), tb = $('#tipBtn'), rb = $('#resetBtn');
-        const redraw = () => { $('#mBody').innerHTML = draw(); bind(); save(); };
+        const redraw = (saveGame = true) => { $('#mBody').innerHTML = draw(); bind(); if (saveGame) save(); };
+        const themeBtn = $('#themeBtn');
+        if (themeBtn) { themeBtn.setAttribute('aria-pressed', String(getUITheme() === 'orbital')); themeBtn.onclick = () => { setUITheme(getUITheme() === 'orbital' ? 'classic' : 'orbital'); redraw(false); }; }
         if (sb2) sb2.onclick = () => { S.sound = S.sound ? 0 : 1; audio.setSfx(!!S.sound); if (S.sound) sfx.tap(); redraw(); };
         if (mb) mb.onclick = () => { S.music = S.music ? 0 : 1; audio.setMusic(!!S.music); redraw(); };
         if (tb) tb.onclick = () => { S.tipsOff = S.tipsOff ? 0 : 1; if (S.tipsOff) coachOff(); else S.coach = {}; redraw(); };

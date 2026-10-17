@@ -1,0 +1,33 @@
+name: Orbital UI review
+on:
+  push:
+    branches: [codex/orbital-holo-ui]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+      - run: npm install --no-save --package-lock=false playwright@1.58.2
+      - run: npx playwright install --with-deps chromium
+      - name: Capture screens and verify theme switching
+        run: |
+          npm run dev -- --host 127.0.0.1 > /tmp/galaxy-vite.log 2>&1 &
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:5173/ > /dev/null && break; sleep 1; done
+          node scripts/orbital-ui-review.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: orbital-ui-review
+          path: ui-review/
+          retention-days: 14
