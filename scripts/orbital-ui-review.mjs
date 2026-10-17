@@ -63,16 +63,23 @@ try {
     await page.locator('#xpPClose').click();
   }
   await clear(); await page.locator('#btnGear').click(); await shot('24-settings');
-  const balance = await page.evaluate(() => { const s=window.__game.state();return [s.coins,s.gems,s.lvl,JSON.stringify(s.boards)]; });
-  await page.locator('#themeBtn').click();
+  async function switchTheme() {
+    const result = await page.evaluate(() => {
+      const snapshot = () => { const s=window.__game.state();return JSON.stringify([s.coins,s.gems,s.lvl,s.boards]); };
+      const before = snapshot(), saved = localStorage.getItem('mergeRocket_v2');
+      document.querySelector('#themeBtn').click();
+      return { before, after: snapshot(), saved, savedAfter: localStorage.getItem('mergeRocket_v2') };
+    });
+    assert.equal(result.after,result.before,'theme switch preserves inventory and balances');
+    assert.equal(result.savedAfter,result.saved,'theme switch leaves the game save untouched');
+  }
+  await switchTheme();
   assert.equal(await page.locator('html').getAttribute('data-ui-theme'),'classic');
   await shot('25-classic-preserved');
   await page.reload(); await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 90000 });
   assert.equal(await page.locator('html').getAttribute('data-ui-theme'),'classic');
-  await clear(); await page.locator('#btnGear').click(); await page.locator('#themeBtn').click();
+  await clear(); await page.locator('#btnGear').click(); await switchTheme();
   assert.equal(await page.locator('html').getAttribute('data-ui-theme'),'orbital');
-  const after = await page.evaluate(() => { const s=window.__game.state();return [s.coins,s.gems,s.lvl,JSON.stringify(s.boards)]; });
-  assert.deepEqual(after,balance,'theme selection preserves inventory and balances');
   await clear(); await shot('26-orbital-restored');
   await page.setViewportSize({width:360,height:740});
   await page.evaluate(()=>window.__game.view('rocket'));await shot('27-small-missions');
