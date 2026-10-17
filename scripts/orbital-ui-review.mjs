@@ -64,6 +64,7 @@ try {
   }
   await clear(); await page.locator('#btnGear').click(); await shot('24-settings');
   async function switchTheme() {
+    await page.waitForFunction(() => typeof document.querySelector('#themeBtn')?.onclick === 'function');
     const result = await page.evaluate(() => {
       const snapshot = () => { const s=window.__game.state();return JSON.stringify([s.coins,s.gems,s.lvl,s.boards]); };
       const before = snapshot(), saved = localStorage.getItem('mergeRocket_v2');
