@@ -57,7 +57,7 @@ try {
   for (const [n,t] of [['18-lab-upgrades','research'],['19-lab-time-boost','acc']]) {
     await clear(); await page.evaluate(t => window.__game.v9.labTab(t), t); await shot(n);
   }
-  await clear(); await page.evaluate(() => window.__game.v9.xp.show()); await shot('20-expedition');
+  await clear(); await page.evaluate(() => window.__game.v9.xp.show()); await page.waitForTimeout(500); if (await page.locator('#xpPClose').isVisible()) await page.locator('#xpPClose').click(); await shot('20-expedition');
   for (const [id,name] of [['xpLog','21-expedition-log'],['xpGoals','22-expedition-medals'],['xpHelp','23-expedition-help']]) {
     await page.locator('#'+id).click(); await shot(name);
     await page.locator('#xpPClose').click();

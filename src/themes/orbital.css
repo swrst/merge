@@ -179,3 +179,8 @@ html[data-ui-theme="orbital"] body #app#app .gpCard {background:var(--oh-dark)!i
 html[data-ui-theme="orbital"] body #app#app .gp.here .gpCard {background:var(--oh-panel)!important;color:var(--oh-ink)!important}
 html[data-ui-theme="orbital"] body #app#app .gpCard :is(b,i,span) {color:inherit!important;text-shadow:none!important}
 html[data-ui-theme="orbital"] body #app#app .galStars2>img {content:var(--ui-oh_stars)}
+/* Legacy image-only controls hide their text; restore the live close glyph. */
+html[data-ui-theme="orbital"] body #app#app :is(.popX,.mX,.scClose,.xBtn,#xpClose,#xpPClose,.miniClose) {font-size:22px!important;line-height:30px!important;font-family:Arial,sans-serif!important;text-indent:0!important}
+html[data-ui-theme="orbital"] body #app#app .adB {background:var(--oh-dark)!important;color:#f1fff9!important;border:1px solid var(--oh-gold)!important;box-shadow:0 3px 0 #143b4633!important;text-shadow:none!important}
+html[data-ui-theme="orbital"] body #app#app .adB * {color:inherit!important;text-shadow:none!important}
+html[data-ui-theme="orbital"] body #app#app .adB:disabled {background:#d1dcda!important;color:#536b6b!important;border-color:#a9bbba!important}
