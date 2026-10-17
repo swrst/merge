@@ -31,7 +31,10 @@ try {
   }
   async function shot(name) {
     await page.waitForTimeout(450);
-    await page.evaluate(() => Promise.all([...document.images].map(i => i.complete ? null : new Promise(r => { i.onload = i.onerror = r; }))));
+    await page.evaluate(() => Promise.race([
+      Promise.all([...document.images].filter(i => i.getBoundingClientRect().width && i.getBoundingClientRect().height).map(i => i.complete ? null : new Promise(r => { i.addEventListener('load', r, { once: true }); i.addEventListener('error', r, { once: true }); }))),
+      new Promise(r => setTimeout(r, 5000)),
+    ]));
     await page.screenshot({ path: `ui-review/${name}.png` });
     const info = await page.evaluate(() => ({
       theme: document.documentElement.dataset.uiTheme,
