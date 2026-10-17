@@ -39,3 +39,6 @@ ios/App/App/GoogleService-Info.plist
 # store builds
 *.aab
 /GalaxyAdventure-*.apk
+
+# Automated UI review output
+ui-review/
