@@ -6530,9 +6530,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       modal('player', 'Settings', draw(), 'Close');
       const bind = () => {
         const sb2 = $('#sndBtn'), mb = $('#musBtn'), tb = $('#tipBtn'), rb = $('#resetBtn');
-        const redraw = () => { $('#mBody').innerHTML = draw(); bind(); save(); };
+        const redraw = (saveGame = true) => { $('#mBody').innerHTML = draw(); bind(); if (saveGame) save(); };
         const themeBtn = $('#themeBtn');
-        if (themeBtn) { themeBtn.setAttribute('aria-pressed', String(getUITheme() === 'orbital')); themeBtn.onclick = () => { setUITheme(getUITheme() === 'orbital' ? 'classic' : 'orbital'); redraw(); }; }
+        if (themeBtn) { themeBtn.setAttribute('aria-pressed', String(getUITheme() === 'orbital')); themeBtn.onclick = () => { setUITheme(getUITheme() === 'orbital' ? 'classic' : 'orbital'); redraw(false); }; }
         if (sb2) sb2.onclick = () => { S.sound = S.sound ? 0 : 1; audio.setSfx(!!S.sound); if (S.sound) sfx.tap(); redraw(); };
         if (mb) mb.onclick = () => { S.music = S.music ? 0 : 1; audio.setMusic(!!S.music); redraw(); };
         if (tb) tb.onclick = () => { S.tipsOff = S.tipsOff ? 0 : 1; if (S.tipsOff) coachOff(); else S.coach = {}; redraw(); };
