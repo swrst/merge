@@ -1,5 +1,8 @@
 # Changelog
 
+- **v77 (0.77.0)**
+  - Swapping two energy producers no longer leaves a giant bare ⚡ on them: the cost pill is redrawn properly.
+
 - **v76 (0.76.0)**
   - Swapping or merging two producers: the upgrade arrow and cost badges no longer show under the art or on the empty tile while dragging.
   - Text readable everywhere: any leftover pale card or dark text in popups, screens and cards is turned into dark glass with light text (Recycler, Fun & Games and the rest).

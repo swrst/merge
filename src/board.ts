@@ -530,7 +530,7 @@ class PixiBoard {
     });
     s.art = s.timer = undefined; s.badge = undefined; s.ring = undefined;
     s.bar = undefined; s.barW = undefined; s.barFrac = undefined;
-    s.aura = undefined; s.spin = undefined; s.cost = undefined; s.clock = undefined;
+    s.aura = undefined; s.spin = undefined; s.cost = undefined; s.costW = undefined; s.clock = undefined;
     s.readyRing = null; s.hinting = false; s.unseal = null; s.seal = null;
   }
   /** Re-seat everything on tile `i` after the grid has moved or resized.
