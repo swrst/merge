@@ -1,5 +1,14 @@
 # Changelog
 
+- **v78 (0.78.0)**
+  - Story: Aurora Reach no longer ends at chapter 15 of 30. Chapter 15 is now "The Vault Opens" and the real finale is chapter 30. The second half of every other world has proper chapter endings instead of "X appears nearby / Y rests".
+  - Chapter asks that made no sense now say why (2 Fluffwings to light the tunnels, 3 Gas Bubbles to float the ore up…), across 60 later chapters.
+  - No humans or Earth things in the text: no boy, man, girl, children, telly, fingers, birds, fish, twigs or berries.
+  - Catalogue: 7 items shared a name with an item in another chain. Renamed: Planet Box, Grow Tower, Power Cell, Solar Wings, Lift Drone, Jelly Cloud, Puffling. "3 Sea Glasss" typo fixed.
+  - Content check: a chapter can no longer ask for something whose producer has already retired.
+  - Events: the top of an event chain is the event's treasure (+30 points), and finishing the whole track gives a grand prize card with 25 gems. The Bloom Festival token is Bloom Sparks, not petals.
+  - Tutorial says "Meteor Chip", not "twig".
+
 - **v77 (0.77.0)**
   - Swapping two energy producers no longer leaves a giant bare ⚡ on them: the cost pill is redrawn properly.
 

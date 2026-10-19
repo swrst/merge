@@ -312,7 +312,7 @@
       "teaparty"
     ],
     "asks": [
-      "Fizz at four. Earth time. Whatever that is.",
+      "Fizz at four. Meadow time. Whatever that is.",
       "Guests from orbit!",
       "Something bubbly, please."
     ]
@@ -450,7 +450,7 @@
     "asks": [
       "Will it rain tomorrow?",
       "Rain for the hydro beds.",
-      "Clouds for the kids."
+      "Clouds for the little ones."
     ]
   },
   "ev_star": {
@@ -1132,7 +1132,7 @@
     "asks": [
       "Regrowing the reef.",
       "Coral for the garden.",
-      "The fish need a home."
+      "The swimmers need a home."
     ]
   },
   "fishc": {
@@ -1447,7 +1447,7 @@
     "asks": [
       "The bells are out of tune.",
       "Music for the festival.",
-      "Chimes call the birds home."
+      "Chimes call the flyers home."
     ]
   },
   "prismv": {
@@ -1464,7 +1464,7 @@
     ],
     "asks": [
       "Splitting the light.",
-      "A rainbow for the kids.",
+      "A rainbow for the little ones.",
       "Light for the array."
     ]
   },
@@ -1481,7 +1481,7 @@
       "skyroc"
     ],
     "asks": [
-      "A nest for the sky birds.",
+      "A nest for the sky flyers.",
       "The roc is back!"
     ]
   },
@@ -1637,7 +1637,7 @@
     "asks": [
       "Too hot on the hill!",
       "Dessert time!",
-      "A cone for the kids."
+      "A cone for the little ones."
     ]
   },
   "starmaps": {

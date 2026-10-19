@@ -29,7 +29,7 @@ export const MORE = {
     ],
     [
      "grandma",
-     "3 Robo Pups and 3 Rocket Whistles, please."
+     "3 Robo Pups to dig round the sprout and 3 Rocket Whistles to call everyone over, please."
     ]
    ],
    "text": "A Star Seed Vault, humming with glowing seeds. Nana is already talking to them."
@@ -57,7 +57,7 @@ export const MORE = {
     ],
     [
      "grandma",
-     "2 Curly Sprouts and 3 Sleepy Clouds, please."
+     "2 Curly Sprouts to plant beside it and 3 Sleepy Clouds to keep them all watered, please."
     ]
    ],
    "text": "The first star sprouts are up and glowing. Zib says they glow brighter when you talk to them."
@@ -91,7 +91,7 @@ export const MORE = {
     ],
     [
      "gigi",
-     "3 Star Kites and 3 Star Gears, please."
+     "3 Star Kites to paint on and 3 Star Gears to build the easels, please."
     ]
    ],
    "text": "A Paint Pod lands in the Meadow, dripping colour. The Scrap Hull is finally picked clean. Thanks, old hull!"
@@ -119,7 +119,7 @@ export const MORE = {
     ],
     [
      "gigi",
-     "2 Star Brushes and 3 Peeking Eggs, please."
+     "2 Star Brushes and 3 Peeking Eggs, please. The eggs are my models. They sit very still."
     ]
    ],
    "text": "The first paintings hang in the square. One of them is of Ember. He insists it's flattering."
@@ -154,7 +154,7 @@ export const MORE = {
     ],
     [
      "bloop",
-     "3 Rocket Whistles and 3 Sleepy Clouds, please."
+     "3 Rocket Whistles for the steam valves and 3 Sleepy Clouds to cool things down, please."
     ]
    ],
    "text": "The Tinker Shed rattles to life. The Busker Bot plays its one chord a final time and retires. Bravo, little bot!"
@@ -210,10 +210,10 @@ export const MORE = {
     ],
     [
      "pip",
-     "A Holo Sign and 2 Comet Kites, please."
+     "A Holo Sign for the show and 2 Comet Kites to fly the light up high, please."
     ]
    ],
-   "text": "The whole Meadow watched a hologram whale swim across the sky. Nana cried a little."
+   "text": "The whole Meadow watched a hologram comet swim across the sky. Nana cried a little."
   },
   {
    "id": "e78",
@@ -244,7 +244,7 @@ export const MORE = {
     ],
     [
      "biscuit",
-     "2 Laser Pointers and 2 Bloblings, please."
+     "2 Laser Pointers to measure heads and 2 Bloblings to model the hats, please."
     ]
    ],
    "text": "The Mayor tried on every hat. Twice. The Pet Egg Nest goes quiet and rests. Sleep well, nest!"
@@ -272,7 +272,7 @@ export const MORE = {
     ],
     [
      "biscuit",
-     "A Star Top Hat and 2 Curly Sprouts, please."
+     "A Star Top Hat and 2 Curly Sprouts for the brim, please."
     ]
    ],
    "text": "The Mayor has a hat at last. He wears it to bed. The town council meets in it."
@@ -311,7 +311,7 @@ export const MORE = {
     ],
     [
      "bloop",
-     "2 Bubble Bonnets, 2 Star Brushes and 2 Curly Sprouts, please."
+     "2 Bubble Bonnets for safety, 2 Star Brushes for samples and 2 Curly Sprouts to study, please."
     ]
    ],
    "text": "The Lab Cart rolls up the hill. The Weather Balloon floats away for a well-earned rest. Bye, balloon!"
@@ -339,7 +339,7 @@ export const MORE = {
     ],
     [
      "bloop",
-     "A Star Microscope and 2 Star Brushes, please."
+     "A Star Microscope and 2 Star Brushes, please. One to look, two to stir."
     ]
    ],
    "text": "Three experiments, two explosions, one very surprised Ember. Science!"
@@ -377,7 +377,7 @@ export const MORE = {
     ],
     [
      "timmy",
-     "2 Beaker Sets, 2 Laser Pointers and 2 Holo Pets, please."
+     "2 Beaker Sets for water bowls, 2 Laser Pointers to chase and 2 Holo Pets to play with, please."
     ]
    ],
    "text": "A Pet Toy Box tumbles out of the sky, full of squeaky things. The Star Seed Vault closes for a long sleep."
@@ -409,7 +409,7 @@ export const MORE = {
     ],
     [
      "grandma",
-     "A Pet Tunnel, 2 Beaker Sets and 2 Bubble Bonnets, please."
+     "A Pet Tunnel, 2 Beaker Sets of treats and 2 Bubble Bonnets for parade hats, please."
     ]
    ],
    "text": "Squeaks everywhere. Blobbo got three toys and hid them in the Mayor's new hat."
@@ -447,7 +447,7 @@ export const MORE = {
     ],
     [
      "mumbo",
-     "2 Comet Tugs, 2 Star Brushes and 2 Laser Pointers, please."
+     "2 Comet Tugs to stretch it, 2 Star Brushes to colour it and 2 Laser Pointers to set it, please."
     ]
    ],
    "text": "A Gum Machine pops up by the kitchen. The Paint Pod dries out. Thanks for the colour!"
@@ -480,7 +480,7 @@ export const MORE = {
     ],
     [
      "timmy",
-     "A Gum Jar, 2 Comet Tugs and 2 Bubble Bonnets, please."
+     "A Gum Jar, 2 Comet Tugs and 2 Bubble Bonnets, please. Safety first."
     ]
    ],
    "text": "The biggest gum bubble in Meadow history. It popped over the town hall. The Mayor is sticky."
@@ -518,7 +518,7 @@ export const MORE = {
     ],
     [
      "grandma",
-     "A Gum Jar, a Pet Tunnel and a Holo Sign, please."
+     "A Gum Jar to oil the bots, a Pet Tunnel for their garage and a Holo Sign that says NO PETS, please."
     ]
    ],
    "text": "A Farm Bot Dock buzzes into the field. The Tinker Shed has made its last gadget. Rest, little shed."
@@ -550,7 +550,7 @@ export const MORE = {
     ],
     [
      "grandma",
-     "A Tractor Bot, a Gum Jar and a Star Microscope, please."
+     "A Tractor Bot, a Gum Jar and a Star Microscope, please. The microscope is for the weeds. Know your enemy."
     ]
    ],
    "text": "A whole field weeded by lunchtime. Nana made tea for the robots. They pretended to drink it."
@@ -588,7 +588,7 @@ export const MORE = {
     ],
     [
      "timmy",
-     "A Harvest Bot, a Gum Jar and a Pet Tunnel, please."
+     "A Harvest Bot, a Gum Jar to stick their pots down and a Pet Tunnel to hide in, please."
     ]
    ],
    "text": "A Snap Plant Bed sprouts teeth by the fence. The Hat Stand is out of hats, so it takes a bow."
@@ -620,10 +620,10 @@ export const MORE = {
     ],
     [
      "pip",
-     "A Triple Snapper, a Harvest Bot and a Star Microscope, please."
+     "A Triple Snapper, a Harvest Bot to hold the spoons and a Star Microscope to watch from far away, please."
     ]
    ],
-   "text": "Everyone kept their fingers. The snap plants are full and humming. That's a good sign, right?"
+   "text": "Everyone kept their tentacles. The snap plants are full and humming. That's a good sign, right?"
   },
   {
    "id": "e90",
@@ -659,7 +659,7 @@ export const MORE = {
     ],
     [
      "blorb",
-     "A Walking Plant, a Harvest Bot and a Gum Jar, please."
+     "A Walking Plant to carry the bag, a Harvest Bot to sort the letters and a Gum Jar to seal them, please."
     ]
    ],
    "text": "A Post Beacon blinks over the Meadow. The Lab Cart rolls back to its shed. Thanks for the science!"
@@ -691,7 +691,7 @@ export const MORE = {
     ],
     [
      "blorb",
-     "A Post Rocket, a Walking Plant and a Harvest Bot, please."
+     "A Post Rocket, a Walking Plant and a Harvest Bot, please. Many hands. And leaves."
     ]
    ],
    "text": "The parcel was a clock from Rokk. It ticks politely. Everyone got their mail."
@@ -729,7 +729,7 @@ export const MORE = {
     ],
     [
      "timmy",
-     "A Post Drone, a Walking Plant and a Gum Jar, please."
+     "A Post Drone for the prizes, a Walking Plant in goal and a Gum Jar of snacks, please."
     ]
    ],
    "text": "An Arcade Pod glows by the square. The Pet Toy Box is empty. The pets say thank you."
@@ -799,7 +799,7 @@ export const MORE = {
     ],
     [
      "gigi",
-     "A Rocket Trophy, a Pocket Console and a Post Drone, please."
+     "A Rocket Trophy to pose with, a Pocket Console for the flash and a Post Drone to fly the camera, please."
     ]
    ],
    "text": "A Photo Bot flashes away by the gallery. The Gum Machine runs out of gum. Pop!"
@@ -870,7 +870,7 @@ export const MORE = {
     ],
     [
      "pim",
-     "A Camera Drone, a Rocket Trophy and an Arcade Cabinet, please."
+     "A Camera Drone to film it, a Rocket Trophy for the winner and an Arcade Cabinet for the beats, please."
     ]
    ],
    "text": "A Bubble Stage blows musical bubbles over the pond. The Farm Bot Dock powers down. Good bots!"
@@ -1032,10 +1032,10 @@ export const MORE = {
     ],
     [
      "rokk",
-     "3 Cup Bots and 3 Rover Wheels, please."
+     "3 CUP BOTS TO CARRY. 3 ROVER WHEELS FOR THE CRANE. PLEASE."
     ]
    ],
-   "text": "A Base Yard rises at the edge of the crater."
+   "text": "A Base Yard rises at the crater's edge, crane and all. Rokk has named the crane. It is called Rokk Two."
   },
   {
    "id": "l17",
@@ -1066,7 +1066,7 @@ export const MORE = {
      "2 Airlock Hatches and 3 Silver Nuggets, please."
     ]
    ],
-   "text": "The first habitat module stands on the Moon. A Moth Pod appears nearby."
+   "text": "The first hab module stands on the Moon, and its door does not squeak. Rokk opened it forty times to check. In the dark, a Moth Pod flutters awake."
   },
   {
    "id": "l18",
@@ -1097,10 +1097,10 @@ export const MORE = {
     ],
     [
      "zib",
-     "2 Fluffwings and 3 Gas Bubbles, please."
+     "2 Fluffwings to light the tunnels and 3 Gas Bubbles to float the ore up, please!"
     ]
    ],
-   "text": "An Ore Vein cracks open nearby. The Silver Seam has given all it can and rests."
+   "text": "An Ore Vein cracks open, blue and glowing. The Silver Seam is tapped out and goes quiet. Kix has already put a price on everything."
   },
   {
    "id": "l19",
@@ -1131,7 +1131,7 @@ export const MORE = {
      "A Mining Bot and 2 Comet Cores, please."
     ]
    ],
-   "text": "The drills hum all day. A Critter Burrow appears nearby."
+   "text": "The drill team drills. Kix supervises from a deckchair. Under all the noise, a Critter Burrow pops open and something squeaks back."
   },
   {
    "id": "l20",
@@ -1163,10 +1163,10 @@ export const MORE = {
     ],
     [
      "oops",
-     "A Hopper and 2 Parcel Pods, please."
+     "A Hopper to stir and 2 Parcel Pods of ingredients, please. I foresee a mess."
     ]
    ],
-   "text": "A Bubble Cauldron starts gurgling. The Comet Trail has given all it can and rests."
+   "text": "A Bubble Cauldron gurgles to life in Madame Oops's tent. The Comet Trail has dropped its last dust and drifts away."
   },
   {
    "id": "l21",
@@ -1194,10 +1194,10 @@ export const MORE = {
     ],
     [
      "oops",
-     "A Brew Rack and 2 Mini Dishes, please."
+     "A Brew Rack and 2 Mini Dishes to serve it in, please."
     ]
    ],
-   "text": "Everybody glowed for an hour. An Algae Pods appears nearby."
+   "text": "Everybody glowed for an hour. Rokk glowed for three and refuses to discuss it. Fresh Algae Pods sprout by the dome."
   },
   {
    "id": "l22",
@@ -1232,10 +1232,10 @@ export const MORE = {
     ],
     [
      "nix",
-     "An Algae Crate, 2 Brew Trios and 2 Wheel Axles, please."
+     "An Algae Crate to feed it, 2 Brew Trios to calm it and 2 Wheel Axles for a fence round it, please."
     ]
    ],
-   "text": "A Swirl Rift spins open behind the ridge. The Helium Vent has given all it can and rests."
+   "text": "A Swirl Rift spins open behind the ridge, humming the same note as the Deep Space Ear. The Helium Vent sighs out its last gas."
   },
   {
    "id": "l23",
@@ -1267,10 +1267,10 @@ export const MORE = {
     ],
     [
      "nix",
-     "A Wormhole Ring, a Big Fluffwing and a Hopper, please."
+     "A Wormhole Ring, a Big Fluffwing to fly through first and a Hopper to follow it, please."
     ]
    ],
-   "text": "The gate opened onto a field of stars. An Impact Crater appears nearby."
+   "text": "The gate opens onto a field of strange stars. Nix stepped through, waved, and stepped back. Then: BOOM. A fresh Impact Crater, right next to camp."
   },
   {
    "id": "l24",
@@ -1308,7 +1308,7 @@ export const MORE = {
      "A Star Geode, a Radar Dish and a Digger Bot, please."
     ]
    ],
-   "text": "A Rescue Hut with a flashing light. The Relay Mast has given all it can and rests."
+   "text": "A Rescue Hut with a flashing light, and Captain Glimmer posing on the roof. The Relay Mast sends its last signal. Then the radio crackles: somebody is stuck."
   },
   {
    "id": "l25",
@@ -1344,7 +1344,7 @@ export const MORE = {
      "A Rescue Rover, a Pallasite and a Hab Module, please."
     ]
    ],
-   "text": "The drill bot was rescued. The Moth Pod has given all it can and rests."
+   "text": "A drill bot, rescued from the bottom of a crater. It beeps 'thank you' every five minutes. The Moth Pod has fluttered its last and rests."
   },
   {
    "id": "l26",
@@ -1379,10 +1379,10 @@ export const MORE = {
     ],
     [
      "luma",
-     "An Algae Crate, a Rescue Pod and a Mining Bot, please."
+     "An Algae Crate to land on, a Rescue Pod just in case and a Mining Bot to dig the pit, please."
     ]
    ],
-   "text": "A Bounce Pad springs up in the moon dust. The Critter Burrow has given all it can and rests."
+   "text": "A Bounce Pad springs up in the moon dust. Moonbeam bounced once, very seriously. The Critter Burrow is quiet now: the critters moved into the hab."
   },
   {
    "id": "l27",
@@ -1414,7 +1414,7 @@ export const MORE = {
      "A Moon Jumper, a Swirl Gate and a Little Rover, please."
     ]
    ],
-   "text": "Moonbeam jumped higher than anyone. She smiled. Rokk wrote it down."
+   "text": "Moonbeam jumped higher than anyone and smiled, for real. Rokk wrote it down. Then Captain Glimmer announced a race."
   },
   {
    "id": "l28",
@@ -1449,10 +1449,10 @@ export const MORE = {
     ],
     [
      "glimmer",
-     "A Moon Jumper, a Cauldron Bot and a set of Twin Habs, please."
+     "A Moon Jumper to wave the flag, a Cauldron Bot for the pit crew and a set of Twin Habs for the stands, please."
     ]
    ],
-   "text": "A Kart Garage revs up. The Rover Scrapyard has given all it can and rests."
+   "text": "A Kart Garage revs up on the crater rim. The Rover Scrapyard gives its last bolts to the karts and rests."
   },
   {
    "id": "l29",
@@ -1484,10 +1484,10 @@ export const MORE = {
     ],
     [
      "zib",
-     "A Race Ramp, an Algae Dome and a Mining Rig, please."
+     "A Race Ramp, an Algae Dome for the fans and a Mining Rig to fix the track, please."
     ]
    ],
-   "text": "Kix won. The Algae Pods has given all it can and rests."
+   "text": "Kix won. Kix also crashed. Kix calls it 'winning twice'. The Algae Pods have given all they can and rest."
   },
   {
    "id": "l30",
@@ -1513,7 +1513,7 @@ export const MORE = {
    "talk": [
     [
      "bloop",
-     "Look. Domes, lights, people. When I crashed here it was dark and empty. Now it's a city. Blorp."
+     "Look. Domes, lights, friends. When I crashed here it was dark and empty. Now it's a city. Blorp."
     ],
     [
      "bloop",
@@ -1550,10 +1550,10 @@ export const MORE = {
     ],
     [
      "ember",
-     "3 Sparklers and 3 Flame Blobs, please."
+     "3 Sparklers to keep it warm and 3 Flame Blobs to keep it company, please."
     ]
    ],
-   "text": "A Dragon Roost glows on the ridge."
+   "text": "A Dragon Roost glows on the ridge, and the egg in Fizz's arms glows back. It is definitely moving now."
   },
   {
    "id": "c17",
@@ -1581,10 +1581,10 @@ export const MORE = {
     ],
     [
      "ember",
-     "2 Hatchlings and 3 Copper Nuggets, please."
+     "2 Hatchlings for friends and 3 Copper Nuggets, please. It eats copper. Apparently."
     ]
    ],
-   "text": "Fizz has a baby dragon now. An Ash Nest appears nearby."
+   "text": "Fizz has a baby dragon. It sneezes sparks and sleeps in his hat. An Ash Nest smoulders nearby: there are more eggs."
   },
   {
    "id": "c18",
@@ -1615,10 +1615,10 @@ export const MORE = {
     ],
     [
      "vulk",
-     "2 Flamelets and 3 Steam Buckets, please."
+     "2 FLAMELETS FOR THE FORGE. 3 STEAM BUCKETS TO COOL THE METAL. PLEASE."
     ]
    ],
-   "text": "An Armor Anvil rings through the hollow. The Copper Seam has given all it can and rests."
+   "text": "An Armor Anvil rings through the hollow. The Copper Seam gives its last copper to the cause. CLANG."
   },
   {
    "id": "c19",
@@ -1646,10 +1646,10 @@ export const MORE = {
     ],
     [
      "vulk",
-     "A Lava Shield and 2 Volcano Snails, please."
+     "A LAVA SHIELD. 2 VOLCANO SNAILS: THEIR SHELLS MAKE THE BEST HELMETS. PLEASE."
     ]
    ],
-   "text": "Everyone has armor. A Ruby Vein appears nearby."
+   "text": "Armor for everyone, even the baby dragon. It ate its helmet. A Ruby Vein glints in the fresh-cut rock."
   },
   {
    "id": "c20",
@@ -1681,10 +1681,10 @@ export const MORE = {
     ],
     [
      "rokk",
-     "A Ruby Ring and 2 Pressure Valves, please."
+     "A RUBY RING FOR THEIR EYES. 2 PRESSURE VALVES TO WAKE THEM UP. PLEASE."
     ]
    ],
-   "text": "A Golem Pit hums with old runes. The Basalt Cliff has given all it can and rests."
+   "text": "A Golem Pit hums with old runes, and a pebble waves at Rokk. The Basalt Cliff has given all its stone and rests."
   },
   {
    "id": "c21",
@@ -1712,10 +1712,10 @@ export const MORE = {
     ],
     [
      "rokk",
-     "A Lava Golem and 2 Sulfur Clusters, please."
+     "A LAVA GOLEM TO LEAD THEM. 2 SULFUR CLUSTERS TO SNACK ON. PLEASE."
     ]
    ],
-   "text": "The golems carried everything Vulk asked for. A Fire Gel Spring appears nearby."
+   "text": "The golems carried everything Vulk asked for, and one thing he didn't: Rokk. A Fire Gel Spring bubbles up again."
   },
   {
    "id": "c22",
@@ -1753,7 +1753,7 @@ export const MORE = {
      "A Gel Crate, 2 Stone Pools and 2 Pressure Valves, please."
     ]
    ],
-   "text": "A Heat Well gurgles over a lava vent. The Sulfur Spring has given all it can and rests."
+   "text": "A Heat Well gurgles over a lava vent. The Sulfur Spring gives off its last stink. Nobody is sad about that."
   },
   {
    "id": "c23",
@@ -1785,10 +1785,10 @@ export const MORE = {
     ],
     [
      "zib",
-     "A Geo Core, a Ruby Ring and a Lava Critter, please."
+     "A Geo Core, a Ruby Ring for Kix's medal and a Lava Critter to keep it all running, please!"
     ]
    ],
-   "text": "Every lamp in Ember Hollow is lit by the lava itself. A Lava Vent Stump appears nearby."
+   "text": "Every lamp in Ember Hollow is lit by the lava itself. Kix got a medal, made of lava. He dropped it. A Lava Vent Stump starts to glow."
   },
   {
    "id": "c24",
@@ -1823,10 +1823,10 @@ export const MORE = {
     ],
     [
      "grubs",
-     "A Lamp Stand, a Smoky Snail and a Baby Dragon, please."
+     "A Lamp Stand to read the menu, a Smoky Snail for a chimney and a Baby Dragon to light the oven, please."
     ]
    ],
-   "text": "A Lava Oven fires up by the steam vents. The Warm Nest has given all it can and rests."
+   "text": "A Lava Oven fires up by the steam vents. The Warm Nest is empty: the critters moved next to the oven. It's warmer."
   },
   {
    "id": "c25",
@@ -1859,10 +1859,10 @@ export const MORE = {
     ],
     [
      "grubs",
-     "A Fire Grill, a Lava Golem and a Gel Crate, please."
+     "A Fire Grill, a Lava Golem at the door and a Gel Crate of hot sauce, please."
     ]
    ],
-   "text": "The Volcano Diner is open. The Ash Nest has given all it can and rests."
+   "text": "The Volcano Diner is open. Two brothers, one menu, two prices. The Ash Nest is empty: every egg has hatched."
   },
   {
    "id": "c26",
@@ -1897,10 +1897,10 @@ export const MORE = {
     ],
     [
      "glimmer",
-     "A Big Lava Lamp, a Heat Tower and a Hot Pot, please."
+     "A Big Lava Lamp for the beach, a Heat Tower to make the waves and a Hot Pot for after, please."
     ]
    ],
-   "text": "A Surf Shack appears on the lava shore. The Ruby Vein has given all it can and rests."
+   "text": "A Surf Shack appears on the lava shore. The Ruby Vein is mined out. Captain Glimmer waxes his board. With lava."
   },
   {
    "id": "c27",
@@ -1929,10 +1929,10 @@ export const MORE = {
     ],
     [
      "glimmer",
-     "A Lava Wave, a Lava Shield and a Heat Tower, please."
+     "A Lava Wave, a Lava Shield as a spare board and a Heat Tower for bigger waves, please."
     ]
    ],
-   "text": "Glimmer is a little bit melted, but very proud. The golems gave him a ten."
+   "text": "Glimmer is a little bit melted, but very proud. The golems held up score cards: ten, ten, and a rock."
   },
   {
    "id": "c28",
@@ -1964,10 +1964,10 @@ export const MORE = {
     ],
     [
      "ember",
-     "A Lava Wave, an Armor Suit and a Steam Engine, please."
+     "A Lava Wave to practise on, an Armor Suit for me and a Steam Engine for extra push, please."
     ]
    ],
-   "text": "Fizz flew for three seconds. The Fire Gel Spring has given all it can and rests."
+   "text": "Fizz flew for three whole seconds. He is calling it a record. The Fire Gel Spring has given all it can and rests."
   },
   {
    "id": "c29",
@@ -2002,7 +2002,7 @@ export const MORE = {
      "A Crystal Golem, a Young Dragon and a Lamp Stand, please."
     ]
    ],
-   "text": "Fireworks, dragons, golems and lava surfing. The Lava Vent Stump has given all it can and rests."
+   "text": "Fireworks, dragons, golems and lava surfing. Vulk danced. Once. Nobody will ever speak of it. The Lava Vent Stump rests."
   },
   {
    "id": "c30",
@@ -2065,10 +2065,10 @@ export const MORE = {
     ],
     [
      "marin",
-     "3 Crystal Cubes and 3 Hull Pieces, please."
+     "3 Crystal Cubes to prop up the stones and 3 Hull Pieces to dig with, please."
     ]
    ],
-   "text": "A Sunken Ruin rises from the shallows, bubbles rising from its arch."
+   "text": "A Sunken Ruin rises from the shallows, bubbles rising from its arch. Brine takes off his cap. Brine never takes off his cap."
   },
   {
    "id": "n17",
@@ -2096,10 +2096,10 @@ export const MORE = {
     ],
     [
      "marin",
-     "2 Coin Piles and 3 Sea Glasss, please."
+     "2 Coin Piles and 3 pieces of Sea Glass for the display cases, please."
     ]
    ],
-   "text": "Brine has started a little museum in his harbour office. A Squid Reef appears nearby."
+   "text": "Brine has opened a little museum in his harbour office. Every relic has a label; some have two. Out on the reef, a Squid Reef starts to wiggle."
   },
   {
    "id": "n18",
@@ -2130,10 +2130,10 @@ export const MORE = {
     ],
     [
      "kelpa",
-     "2 Tentacle Pals and 3 Float Rings, please."
+     "2 Tentacle Pals to do the planting and 3 Float Rings to mark the beds, please."
     ]
    ],
-   "text": "An Anemone Bed blooms on the rocks. The Crystal Pan has given all it can and rests."
+   "text": "An Anemone Bed blooms on the rocks. The Crystal Pan has given its last salt and dries in the sun."
   },
   {
    "id": "n19",
@@ -2164,7 +2164,7 @@ export const MORE = {
      "A Sea Bloom and 2 Float Jellies, please."
     ]
    ],
-   "text": "The shallows glow at night like a carpet of stars. A Nesting Beach appears nearby."
+   "text": "The shallows glow at night like a carpet of stars. Further up the sand, a Nesting Beach starts to wobble."
   },
   {
    "id": "n20",
@@ -2196,10 +2196,10 @@ export const MORE = {
     ],
     [
      "sirra",
-     "An Island Shell and 2 Fin Boats, please."
+     "An Island Shell for a stable and 2 Fin Boats to follow the hoofbeats, please."
     ]
    ],
-   "text": "A Pony Reef appears, full of spiral shell eggs. The Saucer Wreck has given all it can and rests."
+   "text": "A Pony Reef appears, full of spiral shell eggs. The Saucer Wreck gives up its last bolt and settles into the sand."
   },
   {
    "id": "n21",
@@ -2227,10 +2227,10 @@ export const MORE = {
     ],
     [
      "sirra",
-     "A Racing Pony and 2 Lantern Critters, please."
+     "A Racing Pony and 2 Lantern Critters to light the course, please."
     ]
    ],
-   "text": "The fastest foal won a shell crown. An Urchin Rock appears nearby."
+   "text": "The fastest foal won a shell crown and wore it upside down. A spiky Urchin Rock rolls up to watch."
   },
   {
    "id": "n22",
@@ -2265,10 +2265,10 @@ export const MORE = {
     ],
     [
      "bloop",
-     "A Spike Crown, 2 Fin Boats and 2 Tentacle Pals, please."
+     "A Spike Crown for an antenna, 2 Fin Boats and 2 Tentacle Pals to dive with me, please. Blorp."
     ]
    ],
-   "text": "A Sonar Buoy bobs above the dark water. The Glass Beach has given all it can and rests."
+   "text": "A Sonar Buoy bobs above the dark water, pinging. Something pings back. The Glass Beach has given its last glass."
   },
   {
    "id": "n23",
@@ -2303,7 +2303,7 @@ export const MORE = {
      "A Deep Lab, an Island Shell and an Abyss Orb, please."
     ]
    ],
-   "text": "The deep lab is built. A Manta Deep appears nearby."
+   "text": "The Deep Lab is built. Dr. Zonk has not come up for two days. Below it, the gliders gather in a Manta Deep."
   },
   {
    "id": "n24",
@@ -2338,10 +2338,10 @@ export const MORE = {
     ],
     [
      "blorb",
-     "A Sky Glider, a Racing Pony and a Tractor Hook, please."
+     "A Sky Glider and a Racing Pony to tow it out, and a Tractor Hook to anchor it. Sign here."
     ]
    ],
-   "text": "A Wave Generator bobs on the waves. The Light Vent has given all it can and rests."
+   "text": "A Wave Generator bobs on the waves. Blorb signed for it with three fins. The Light Vent is dim now: its jellies moved to the generator."
   },
   {
    "id": "n25",
@@ -2374,10 +2374,10 @@ export const MORE = {
     ],
     [
      "blorb",
-     "A Wave Plant, a Sea Idol and a Star Glider, please."
+     "A Wave Plant, a Sea Idol for the town square and a Star Glider to light the sky, please."
     ]
    ],
-   "text": "A floating city glows on the tide. The Squid Reef has given all it can and rests."
+   "text": "A floating city glows on the tide. Blorb delivered forty parcels by moonlight. The Squid Reef rests."
   },
   {
    "id": "n26",
@@ -2412,10 +2412,10 @@ export const MORE = {
     ],
     [
      "oops",
-     "A Sea Bloom, a Turbine Pair and a Spike Crown, please."
+     "A Sea Bloom, a Turbine Pair to pull the bottles in and a Spike Crown to pop the corks, please."
     ]
    ],
-   "text": "A Bottle Beach glitters with glass. The Nesting Beach has given all it can and rests."
+   "text": "A Bottle Beach glitters with glass. The Nesting Beach is empty: every shellkin swam out to sea."
   },
   {
    "id": "n27",
@@ -2482,10 +2482,10 @@ export const MORE = {
     ],
     [
      "blorb",
-     "A Bottle Tower, a Helm Console and a Champion Sub, please."
+     "A Bottle Tower for the wires, a Helm Console to dial with and a Champion Sub to lay the cable, please."
     ]
    ],
-   "text": "A Shell Exchange hums on the rocks. The Urchin Rock has given all it can and rests."
+   "text": "A Shell Exchange hums on the rocks. The Urchin Rock rolls back out to sea. The very first call is a wrong number."
   },
   {
    "id": "n29",
@@ -2517,10 +2517,10 @@ export const MORE = {
     ],
     [
      "marin",
-     "A Shell Tower, a Sky Glider and a Relic Chest, please."
+     "A Shell Tower, a Sky Glider to carry the signal and a Relic Chest for the call log, please."
     ]
    ],
-   "text": "The whole galaxy is a little closer now. The Manta Deep has given all it can and rests."
+   "text": "Nana called again. Then Vulk. Then Moonbeam. The whole galaxy is a little closer now. The Manta Deep rests."
   },
   {
    "id": "n30",
@@ -2583,10 +2583,10 @@ export const MORE = {
     ],
     [
      "wren",
-     "3 Solar Panels and 3 Hatch Windows, please."
+     "3 Solar Wings and 3 Hatch Windows, please."
     ]
    ],
-   "text": "A Dry Dock floats up beside the clouds."
+   "text": "A Dry Dock floats up beside the clouds, full of old ship parts the seeds woke up. Wren is already drawing plans."
   },
   {
    "id": "v17",
@@ -2614,10 +2614,10 @@ export const MORE = {
     ],
     [
      "wren",
-     "2 Cockpits and 3 Light Beams, please."
+     "2 Cockpits and 3 Light Beams for the engines, please."
     ]
    ],
-   "text": "The first star fighters zip between the clouds. A Drone Pad appears nearby."
+   "text": "The first star fighters zip between the clouds. Then the deep song again, closer now. A Drone Pad lands on the next cloud over."
   },
   {
    "id": "v18",
@@ -2648,10 +2648,10 @@ export const MORE = {
     ],
     [
      "halo",
-     "2 Drones and 3 Balloon Envelopes, please."
+     "2 Drones to follow the song and 3 Balloon Envelopes to float up beside them, please."
     ]
    ],
-   "text": "A Whale Cloud drifts over the Reach. The Prism Stand has given all it can and rests."
+   "text": "A Whale Cloud drifts over the Reach. That was the song! The Prism Stand has bent its last light and rests."
   },
   {
    "id": "v19",
@@ -2679,10 +2679,10 @@ export const MORE = {
     ],
     [
      "halo",
-     "A Star Whale and 2 Mini Planets, please."
+     "A Star Whale to mind the calf and 2 Mini Planets for it to play with, please."
     ]
    ],
-   "text": "The calves play in the aurora. A Sky Nest appears nearby."
+   "text": "The calves play in the aurora. A Sky Nest drifts past, full of fluff and very small eyes."
   },
   {
    "id": "v20",
@@ -2714,10 +2714,10 @@ export const MORE = {
     ],
     [
      "zephyr",
-     "A Sky Egg and 2 Nebula Jars, please."
+     "A Sky Egg for the first nest and 2 Nebula Jars to weigh the isles down, please."
     ]
    ],
-   "text": "An Isle Anchor holds a little island in place. The Silk Loom has given all it can and rests."
+   "text": "An Isle Anchor holds a little island in place. The Silk Loom has woven its last thread."
   },
   {
    "id": "v21",
@@ -2748,7 +2748,7 @@ export const MORE = {
      "A Waterfall Isle and 2 Cloud Nests, please."
     ]
    ],
-   "text": "Zephyr hopped across six islands. A Star Bed appears nearby."
+   "text": "Zephyr hopped across six islands and fell off the seventh. Luckily it is clouds all the way down. A Star Bed twinkles on the biggest isle."
   },
   {
    "id": "v22",
@@ -2783,10 +2783,10 @@ export const MORE = {
     ],
     [
      "luma",
-     "An Orb Pot, 2 Cockpits and 2 Nebula Jars, please."
+     "An Orb Pot of light, 2 Cockpits and 2 Nebula Jars to colour the sails, please."
     ]
    ],
-   "text": "A Sail Loom weaves glowing cloth. The Nebula Pool has given all it can and rests."
+   "text": "A Sail Loom weaves glowing cloth. The Nebula Pool has poured out its last colour."
   },
   {
    "id": "v23",
@@ -2818,10 +2818,10 @@ export const MORE = {
     ],
     [
      "luma",
-     "A Sail Regatta, a Star Whale and an Orb Pot, please."
+     "A Sail Regatta, a Star Whale to lead the race and an Orb Pot for the prize, please."
     ]
    ],
-   "text": "Every sail caught the light at once. A Star Den appears nearby."
+   "text": "Every sail caught the light at once. Moonbeam watched from the Moon and said it looked lovely. A Star Den glows by the finish line."
   },
   {
    "id": "v24",
@@ -2856,10 +2856,10 @@ export const MORE = {
     ],
     [
      "glimmer",
-     "A Comet Critter, a Comm Satellite and a Room Module, please."
+     "A Comet Critter to ride, a Comm Satellite to film it and a Room Module for the medics, please."
     ]
    ],
-   "text": "A Comet Ramp curls through the sky. The Gravity Well has given all it can and rests."
+   "text": "A Comet Ramp curls through the sky. The Gravity Well lets go of its last pull, and everything floats a bit more."
   },
   {
    "id": "v25",
@@ -2892,10 +2892,10 @@ export const MORE = {
     ],
     [
      "glimmer",
-     "A Comet Loop, a Waterfall Isle and a Nebula Kitten, please."
+     "A Comet Loop, a Waterfall Isle to land in and a Nebula Kitten to cheer, please."
     ]
    ],
-   "text": "Glimmer did a double. The Sky Nest has given all it can and rests."
+   "text": "Glimmer did a double. He says it was a triple. The Sky Nest is empty: the fluff has learned to fly."
   },
   {
    "id": "v26",
@@ -2930,10 +2930,10 @@ export const MORE = {
     ],
     [
      "blorb",
-     "A Sail Ship, a Board Pair and a Cargo Drone, please."
+     "A Sail Ship, a Board Pair and a Lift Drone to lay the rails, please."
     ]
    ],
-   "text": "A Sky Platform appears with a little sign: 'Trains, soon'. The Star Bed has given all it can and rests."
+   "text": "A Sky Platform appears with a little sign: 'Trains, soon'. The Star Bed has given its last starlight."
   },
   {
    "id": "v27",
@@ -2962,7 +2962,7 @@ export const MORE = {
     ],
     [
      "blorb",
-     "A Star Express, a Comm Satellite and a Room Module, please."
+     "A Star Express, a Comm Satellite for the timetable and a Room Module for the ticket office, please."
     ]
    ],
    "text": "The sky trains run on time. Blorb cried. Happy tears. With all six eyes."
@@ -3000,7 +3000,7 @@ export const MORE = {
      "A Star Express, a Whale Pod and a Drone Swarm, please."
     ]
    ],
-   "text": "The fleet flies in formation over the Reach, lights blinking in time. The Drone Pad has given all it can and rests."
+   "text": "The fleet flies in formation over the Reach, lights blinking in time. The Drone Pad rests. Far past the map, something blinks back."
   },
   {
    "id": "v29",
@@ -3035,7 +3035,7 @@ export const MORE = {
      "A Sail Regatta, a set of Twin Isles and a Star Fighter, please."
     ]
    ],
-   "text": "Whales, ships, trains and islands moved together across the aurora. The Star Den has given all it can and rests."
+   "text": "Whales, ships, trains and islands move together across the aurora. The Star Den rests. Dr. Zonk can't stop staring past the edge of the map."
   },
   {
    "id": "v30",
@@ -3064,11 +3064,15 @@ export const MORE = {
      "A dock for every ship we built! Big enough for the whole galaxy to visit! Up we go!"
     ],
     [
+     "bloop",
+     "Blorp. Every world is lit. But look: past the map, something keeps blinking at us. Blinking is how my people say hello."
+    ],
+    [
      "wren",
      "A Comet Loop, a Star Express and a Whale Pod, please."
     ]
    ],
-   "text": "The Starship Dock shines over the clouds. Aurora Reach is wide awake, and full of friends."
+   "text": "Five worlds, all lit. The Vault is empty and the galaxy is full. And past the edge of the map, the blinking is getting closer… To be continued."
   }
  ]
 };

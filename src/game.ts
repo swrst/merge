@@ -1406,7 +1406,12 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (crown) { sfx.crown(); haptic('medium'); } else { sfx.merge(ITEMS[nx].tier); haptic('light'); } floatText(to, ITEMS[nx].name, '#fff');
     stat('merge'); addXp(CONFIG.xp.perMerge * Math.max(1, ITEMS[nx].tier - 1)); prog('merge', 1); tally('merge'); tally('make:' + nx); tutFire('merge');
     if (ITEMS[nx].tier >= 4) tally('tier4');
-    if (ITEMS[nx].chain.startsWith('ev_')) evPts(ITEMS[nx].tier * 3, to);
+    if (ITEMS[nx].chain.startsWith('ev_')) {
+      // the top of an event chain is the event's treasure: a big bonus on top of the tier points
+      const evc = CHAINS[ITEMS[nx].chain].items, top = evc[evc.length - 1] === nx;
+      evPts(ITEMS[nx].tier * 3 + (top ? 30 : 0), to);
+      if (top) setTimeout(() => toast(`🏆 Event treasure! <b>${ITEMS[nx].name}</b> gives <b>+30</b> bonus points.`), 700);
+    }
     else if (ITEMS[nx].tier >= CFG.event.points.mergeFromTier) evPts(ITEMS[nx].tier - CFG.event.points.mergeFromTier + 1, to);
     if (!crown) maybeBubble(nx, to);
     lunaBounce(a.id, to);
@@ -3908,8 +3913,14 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const tr = EV().track;
     while (S.ev.got < tr.length && S.ev.pts >= tr[S.ev.got][0]) {
       const r = tr[S.ev.got][1]; S.ev.got++;
-      grant(r);
-      toast(`${e.theme.icon} Event reward: <b>${rewardText(r)}</b>`);
+      if (S.ev.got === tr.length) {
+        // the last step of the track is the grand prize: it gets the full reward card
+        S.evWins = (S.evWins || 0) + 1;
+        rewardCard(e.theme.who, '🏆 ' + e.theme.name + ' complete!', `You filled the whole event track. That is ${S.evWins} event${S.evWins > 1 ? 's' : ''} finished so far.`, r);
+      } else {
+        grant(r);
+        toast(`${e.theme.icon} Event reward: <b>${rewardText(r)}</b>`);
+      }
     }
     renderQuick();
   }
@@ -6022,7 +6033,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   const TUT: TutStep[] = [
     { id: 'tap', who: 'pip', say: "Hi! Tap the <b>Meteor Heap</b>.", at: () => cellWith(c => c.p === 'tree'), on: 'spawn' },
     { id: 'tap2', who: 'pip', say: "Once more!", at: () => cellWith(c => c.p === 'tree'), on: 'spawn' },
-    { id: 'merge', who: 'pip', say: "<b>Drag</b> one twig onto the other.", at: () => cellsWith(c => c.id === 'twig'), on: 'merge' },
+    { id: 'merge', who: 'pip', say: "<b>Drag</b> one <b>Meteor Chip</b> onto the other.", at: () => cellsWith(c => c.id === 'twig'), on: 'merge' },
     { id: 'energy', who: 'pip', say: "Taps cost <b>⚡ energy</b>. It refills by itself.", at: () => '#chipEnergy' },
     {
       id: 'deliver', who: 'pip', say: "<b>Tap</b> to give it!",

@@ -24,7 +24,7 @@ await page.addInitScript(() => {
   const real = Date.now.bind(Date); (window).__warp = 0;
   Date.now = () => real() + (window).__warp;
 });
-await page.goto(URL);
+await page.goto(URL, { waitUntil: 'domcontentloaded', timeout: 90000 });
 await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 60000 });
 await page.waitForTimeout(1500);
 if (await page.locator('#tSkip').isVisible().catch(() => false)) await page.click('#tSkip');
@@ -39,6 +39,10 @@ const step = () => page.evaluate(() => {
   const g = window.__game, S = g.state(), b = g.cells(), bd = window.__board;
   const open = (sel) => !!document.querySelector(sel);
   if (open('#talk.open')) { document.querySelector('#talk').click(); return 'talk'; }
+  // reward cards (medals, gifts) and the new-producer card wait for Collect / Place
+  if (open('#rwc.open')) { const c = document.querySelector('#rwcGo'); if (c) c.click(); return 'reward'; }
+  if (open('#npw.open')) { const c = document.querySelector('#npGo'); if (c) c.click(); return 'newproducer'; }
+  if (open('#xpScr.open')) { const c = document.querySelector('#xpScr button'); if (c) c.click(); else document.querySelector('#xpScr').click(); return 'levelup'; }
   if (open('#modal.open')) { document.querySelector('#mBtn').click(); return 'modal:' + document.querySelector('#mTitle').textContent; }
   if (open('#pop.open')) { g.v9.closePop(); return 'closepop'; }
   if (open('#mini.open')) { const c = document.querySelector('#miniClose'); if (c) c.click(); return 'closemini'; }

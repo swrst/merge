@@ -965,7 +965,7 @@
     }
   },
   "giantpumpkin": {
-    "name": "Hydro Tower",
+    "name": "Grow Tower",
     "chain": "veggie",
     "tier": 7,
     "sell": 430,
@@ -1451,7 +1451,7 @@
     }
   },
   "picnicbasket": {
-    "name": "Cargo Crate",
+    "name": "Planet Box",
     "chain": "picnic",
     "tier": 3,
     "sell": 13,
@@ -6005,7 +6005,7 @@
     }
   },
   "skybud": {
-    "name": "Jelly Blob",
+    "name": "Jelly Cloud",
     "chain": "skyfruit",
     "tier": 2,
     "sell": 5,
@@ -6210,7 +6210,7 @@
     }
   },
   "skydown": {
-    "name": "Cloud Puff",
+    "name": "Puffling",
     "chain": "skynest",
     "tier": 1,
     "sell": 2,
@@ -6463,7 +6463,7 @@
     }
   },
   "solarcell": {
-    "name": "Solar Cell",
+    "name": "Power Cell",
     "chain": "satellite",
     "tier": 1,
     "sell": 2,
@@ -6473,7 +6473,7 @@
     }
   },
   "solarpanel": {
-    "name": "Solar Panel",
+    "name": "Solar Wings",
     "chain": "satellite",
     "tier": 2,
     "sell": 5,
@@ -6822,7 +6822,7 @@
     }
   },
   "dragonkite": {
-    "name": "Cargo Drone",
+    "name": "Lift Drone",
     "chain": "kite",
     "tier": 4,
     "sell": 32,

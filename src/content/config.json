@@ -432,9 +432,9 @@
         "id": "bloom",
         "name": "Bloom Festival",
         "icon": "🌸",
-        "token": "Petals",
+        "token": "Bloom Sparks",
         "who": "gigi",
-        "blurb": "Every big merge and every contract scatters petals."
+        "blurb": "Every big merge and every contract shakes loose Bloom Sparks."
       },
       {
         "id": "carnival",
@@ -523,7 +523,8 @@
         620,
         {
           "coins": 600,
-          "spin": 2
+          "spin": 2,
+          "gems": 25
         }
       ]
     ]

@@ -167,6 +167,8 @@ Object.entries(PROJECTS).forEach(([w, list]) => {
     pr.needs.forEach(([id]) => { const c = items[id] && items[id].chain; if (c && !can.has(c) && chains[c].world !== 'ship') errs.push(`story ${w}/${pr.id} needs "${id}" but nothing makes ${c} yet`); });
     (pr.talk || []).forEach(([who]) => { if (!CHARACTERS[who]) errs.push(`story ${pr.id} talk uses unknown "${who}"`); });
     [].concat(pr.unlock || []).forEach(u => have.add(u));
+    // a retired producer is gone from the board: later chapters cannot lean on it
+    [].concat(pr.retire || []).forEach(u => have.delete(u));
     guest = pr.temp ? pr.temp.p : null;
     if (pr.event === 'meteor') meteor = true;
   });
