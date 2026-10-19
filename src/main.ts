@@ -5,6 +5,7 @@ import '@fontsource/fredoka/latin-700.css';
 import '@fontsource/lilita-one/latin-400.css';
 import './style.css';
 import './themes/orbital.css';
+import './themes/buddy.css';
 import './themes/theme';
 import { ART } from './art';
 import { startGame } from './game';

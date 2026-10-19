@@ -330,9 +330,18 @@ class PixiBoard {
     const dark = ((i % this.cols) + ((i / this.cols) | 0)) % 2 === 1;
     g.clear();
     const art = this.tileArt[i];
+    if (getUITheme() === 'buddy') {
+      if (art) art.visible = false;
+      // Aqua pads remain translucent so the planet colors can show through.
+      g.roundRect(p.x+2,p.y+2,c-4,c-4,R).fill({color:locked?0x27495c:dark?0x52c9c1:0x8ae7d8,alpha:locked?.58:.28}).stroke({color:locked?0x89afbc:0xbaffef,width:1.2,alpha:.75});
+      if(!locked) g.roundRect(p.x+5,p.y+4,c-10,c*.16,R*.5).fill({color:0xeafffa,alpha:.1});
+      if(this.wanted.has(i)) g.roundRect(p.x+2,p.y+2,c-4,c-4,R).stroke({color:0xffa04a,width:3});
+      if(r) g.roundRect(p.x+2,p.y+2,c-4,c-4,R).stroke({color:r===3?0xffbd66:r===2?0xb1a3f4:0x82cddd,width:2});
+      return;
+    }
     const kind = locked ? 'tile_locked' : dark ? 'tile_dark' : 'tile_light';
     // locked tiles are a dark space-station hatch, drawn here (no crystals)
-    const orbital = getUITheme() === 'orbital';
+    const orbital = false; // legacy Orbital assets remain archived
     const paint = orbital && this.tex['ui:oh_' + kind] ? this.tex['ui:oh_' + kind] : locked ? undefined : (this.tex['ui:' + kind + '_' + this.theme] || this.tex['ui:' + kind]
       || this.tex['ui:tile_light_' + this.theme] || this.tex['ui:tile_light']);
     if (locked && !paint) {

@@ -47,6 +47,15 @@ try {
     console.log('Captured', name);
   }
   await clear(); await shot('01-board');
+  await page.evaluate(() => { const g=window.__game,s=g.state(),b=g.cells();s.orders[0].needs=[{id:'twig',qty:1}];const i=b.findIndex(c=>!c);if(i>=0)b[i]={id:'twig'};g.hud(); });
+  await shot('01b-ready-contract');
+  const ready=page.locator('.order.ready .oTick').first();
+  const style=await ready.evaluate(e=>({filter:getComputedStyle(e).filter,radius:getComputedStyle(e).borderRadius,glyph:getComputedStyle(e,'::after').content}));
+  assert.equal(style.filter,'none');assert.equal(style.radius,'50%');assert.ok(style.glyph.includes('✓'));
+  const xp=await page.locator('.hud .lvlBox .xpwrap').evaluate(e=>({background:getComputedStyle(e).backgroundColor,shadow:getComputedStyle(e).boxShadow}));
+  assert.equal(xp.background,'rgba(0, 0, 0, 0)');assert.equal(xp.shadow,'none');
+  const coins=await page.evaluate(()=>window.__game.state().coins);await ready.click();assert.ok(await page.evaluate(()=>window.__game.state().coins)>coins);
+
   for (const [v,n] of [['rocket','02-missions'],['shop','03-shop'],['book','04-collection'],['map','05-camp'],['lab','07-lab']]) {
     await clear(); await page.evaluate(v => window.__game.view(v), v); await shot(n);
     if (v === 'map') { await page.locator('[data-pop="galaxy"]').click(); await shot('06-galaxy'); }
@@ -80,11 +89,13 @@ try {
   await page.reload(); await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 90000 });
   assert.equal(await page.locator('html').getAttribute('data-ui-theme'),'classic');
   await clear(); await page.locator('#btnGear').click(); await switchTheme();
-  assert.equal(await page.locator('html').getAttribute('data-ui-theme'),'orbital');
-  await clear(); await shot('26-orbital-restored');
+  assert.equal(await page.locator('html').getAttribute('data-ui-theme'),'buddy');
+  await clear(); await shot('26-buddy-restored');
   await page.setViewportSize({width:360,height:740});
   await page.evaluate(()=>window.__game.view('rocket'));await shot('27-small-missions');
   await clear();await page.locator('#btnGear').click();await shot('28-small-settings');
+  await clear(); await page.evaluate(()=>window.__game.view('map')); await page.locator('[data-pop="galaxy"]').click(); await shot('29-small-galaxy');
+  await clear(); await page.evaluate(()=>window.__game.v9.starChart()); await shot('30-small-star-chart');
   assert.equal(errors.length,0,errors.join('\n'));
 } finally {
   await writeFile('ui-review/report.json',JSON.stringify({errors,checks},null,2));

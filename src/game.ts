@@ -868,7 +868,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           return `<div class="oNeed${have >= nd.qty ? ' done' : ''}" data-need="${nd.id}">${ART.item(nd.id)}<b>${have}/${nd.qty}</b></div>`;
         }).join('')}</div>
          <div class="oPay"><span>${ART.icon('coin')}${o.coins}</span>${o.give ? `<span class="gift">${ART.item(o.give)}</span>` : ''}${o.nrg ? `<span>${ART.icon('energy')}${o.nrg}</span>` : ''}</div>
-         ${ready ? `<button class="btnDeliver on oTick" title="Give">${ART.uiIcon('ic_tick', '✔')}</button>` : ''}`;
+         ${ready ? `<button class="btnDeliver on oTick" title="Give" aria-label="Give contract items">${ART.uiIcon('ic_tick', '✔')}</button>` : ''}`;
       const tick = card.querySelector('.btnDeliver') as HTMLElement | null;
       if (tick) tick.onclick = (ev: Event) => { ev.stopPropagation(); deliver(o.id); };
       // tapping the thing they want explains where it comes from, which is the
@@ -5456,6 +5456,14 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   const constById = (id: string) => CONSTS.find(x => x.id === id);
   const constState = (c: any) => lit(c.id) ? 'lit' : !visited(c.world) ? 'locked' : countItem('starcore') >= c.cost ? 'ready' : 'open';
   function constSvg(c: any, cls = '') {
+    if (getUITheme() === 'buddy') {
+      const ratio=lit(c.id)?1:Math.min(1,countItem('starcore')/c.cost);
+      const points=c.pts.slice(0,-1);
+      const outline=c.id==='plough' ? '<path d="M50 4C29 20 25 46 30 66L50 79 70 66C75 46 71 20 50 4ZM30 53L14 75 30 68M70 53L86 75 70 68M41 78L40 96 50 88 60 96 59 78"/><circle cx="50" cy="34" r="10"/>' : c.id==='lantern' ? '<path d="M39 20V12Q50 0 61 12V20M30 24Q50 17 70 24L78 35 73 79Q50 91 27 79L22 35Z M22 35Q50 44 78 35M27 79Q50 70 73 79M40 42L39 73M60 42L61 73"/>' : '';
+      const lines=c.pts.slice(1).map((p:number[],i:number)=>`<line x1="${c.pts[i][0]}" y1="${c.pts[i][1]}" x2="${p[0]}" y2="${p[1]}"/>`).join('');
+      const stars=points.map((p:number[],i:number)=>`<path class="ppStar${i<Math.ceil(points.length*ratio)?' filled':''}" d="M0-5.5 1.7-1.8 5.5-1.4 2.7 1.4 3.4 5.1 0 3.3-3.4 5.1-2.7 1.4-5.5-1.4-1.7-1.8Z" transform="translate(${p[0]} ${p[1]})"/>`).join('');
+      return `<svg viewBox="-10 -10 120 120" class="cSvg ppConst ${cls}"><g class="ppOutline">${outline}</g><g class="ppLinks">${lines}</g>${stars}</svg>`;
+    }
     const segs = c.pts.slice(1).map((p: number[], i: number) => { const q = c.pts[i]; return `<line x1="${q[0]}" y1="${q[1]}" x2="${p[0]}" y2="${p[1]}"/>`; }).join('');
     const dots = c.pts.map((p: number[], i: number) => `<circle cx="${p[0]}" cy="${p[1]}" r="${i % 3 ? 3 : 4.2}" style="animation-delay:${(i * 0.37) % 2.2}s"/>`).join('');
     const art = ART.spriteUi('const_' + c.id);
@@ -5505,7 +5513,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       const two = CONSTS.filter(c => c.world === w).map((c, k) => {
         const st = constState(c);
         return `<button class="gc gc-${st} ${k ? 'r' : 'l'}" data-const="${c.id}">${constArt(c)}${constSvg(c)}
-          <b>${st === 'locked' ? '???' : c.name}</b>${st === 'ready' ? '<i class="gcTag">✨ Light me!</i>' : st === 'open' ? `<i class="gcCnt">${ART.item('starcore')} ${Math.min(countItem('starcore'), c.cost)}/${c.cost}</i>` : st === 'lit' ? '<i class="gcLit">✦ lit</i>' : ''}</button>`;
+          <b>${st === 'locked' ? '???' : c.name}</b>${st === 'ready' ? '<i class="gcTag">✨ Light me!</i>' : st === 'open' ? `<i class="gcCnt">${ART.item('starcore')} ${Math.min(countItem('starcore'), c.cost)}/${c.cost}</i>` : st === 'lit' ? '<i class="gcLit">✦ lit</i>' : ''}${getUITheme() === 'buddy' ? `<span class="ppConstBar" role="progressbar" aria-label="${c.name}" aria-valuemin="0" aria-valuemax="${c.cost}" aria-valuenow="${lit(c.id)?c.cost:Math.min(countItem('starcore'),c.cost)}"><span style="width:${lit(c.id)?100:Math.min(100,countItem('starcore')/c.cost*100)}%"></span></span>` : ''}</button>`;
       }).join('');
       return `<div class="skRow${visited(w) ? '' : ' far'}"><div class="skWorld">${ART.uiIcon('planet_' + w, '🪐')}<span>Seen from <b>${WORLDS[w].name}</b></span></div><div class="skPair">${two}</div></div>`;
     }).join('');
@@ -5515,7 +5523,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         <span class="skPouch2"><img src="${ART.spriteUi('starcore_ui')}" alt=""><b>${countItem('starcore')}</b></span><button class="skHelp" id="skHelp">?</button></div>
       <div class="skLit2"><i style="width:${Math.round(n / CONSTS.length * 100)}%"></i><span>${n}/${CONSTS.length} constellations lit</span></div>
       <div class="skScroll2" id="skScroll">${rows}<div class="skEnd">More skies wait beyond Aurora Reach…</div></div>
-      <div class="skDock"><button class="skFuser${pouch('scrap') >= 3 ? ' on' : ''}" id="skFuse"><img src="${ART.spriteUi('sk_fuser')}" alt=""></button>
+      <div class="skDock"><button class="skFuser${pouch('scrap') >= 3 ? ' on' : ''}" id="skFuse" aria-label="Fuse star fragments"><img src="${ART.spriteUi('sk_fuser')}" alt=""></button>
         <div class="skDockTxt"><b>Star Fuser</b><i>${ART.spriteUi('starscrap_ui') ? `<img src="${ART.spriteUi('starscrap_ui')}" alt="">` : ''} ${pouch('scrap')} scrap · 3 make 1 Star Core</i></div>
         <button class="skFuseGo" id="skFuseGo" ${pouch('scrap') < 3 ? 'disabled' : ''}>Fuse</button></div>`;
     el.className = 'open';
@@ -5697,8 +5705,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function galaxyHTML() {
     const fuelOk = S.fuel >= CONFIG.rocket.fuelToLaunch;
     // one more stop than there are worlds: the path runs on to a planet nobody has charted yet
-    const n = WORLD_ORDER.length + 1, H = GAL_TOP + (n - 1) * GAL_STEP + 150;
-    const pt = (i: number) => ({ x: i % 2 ? 70 : 30, y: GAL_TOP + (n - 1 - i) * GAL_STEP + 55 });
+    const step = getUITheme() === 'buddy' ? 240 : GAL_STEP;
+    const n = WORLD_ORDER.length + 1, H = GAL_TOP + (n - 1) * step + 150;
+    const pt = (i: number) => ({ x: i % 2 ? 70 : 30, y: GAL_TOP + (n - 1 - i) * step + 55 });
     let path = '', lit = '';
     for (let i = 1; i < n; i++) {
       const a = pt(i - 1), c = pt(i), my = (a.y + c.y) / 2;
@@ -5722,7 +5731,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
             : can ? `<button class="gpGo launch" data-world="${k}">LAUNCH 🚀</button>`
               : `<span class="gpNeed">${allParts() ? `Needs ⛽ ${S.fuel}/${CONFIG.rocket.fuelToLaunch} fuel` : 'Finish the rocket first'}</span>`;
       return `<div class="gp gp-${k} ${state} side-${side}" style="left:${p.x}%;top:${p.y}px;--glow:${GAL[k] ? GAL[k].glow : '#fff'}">
-        <button class="gpPlanet" data-world="${k}"><span class="gpRing"></span>
+        <button class="gpPlanet" data-world="${k}" aria-label="${ww.name}${here ? ' — current world' : state === 'locked' ? ' — locked' : ' — travel details'}"><span class="gpRing"></span>
           <span class="galArt">${ART.uiIcon('planet_' + k, ART.planet(ww.planet))}</span>
           ${here ? `<span class="gpRocket">${ART.uiIcon('gal_rocket', ART.uiIcon('rocket_pad', '🚀'))}</span>` : ''}${state === 'locked' ? `<span class="gpLock">${ART.uiIcon('gal_lock', '🔒')}</span>` : ''}
           ${reached && worldAwake(k) ? '<span class="galBloom">🌱</span>' : ''}</button>
@@ -6518,7 +6527,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           ${row('sndBtn', ART.uiIcon(S.sound ? 'ic_sound' : 'ic_mute', '🔊'), 'Sound effects', !!S.sound)}
           ${row('musBtn', ART.uiIcon(S.music ? 'ic_music' : 'ic_nomusic', '🎵'), 'Music', !!S.music)}
           ${row('tipBtn', ART.uiIcon('ic_tips', '💡'), 'Tips', !S.tipsOff)}
-          ${row('themeBtn', ART.uiIcon('oh_projector', '🛸'), 'Orbital Holo UI', getUITheme() === 'orbital')}
+          ${row('themeBtn', ART.uiIcon('pp_buddy', '🛸'), 'Pocket Buddy UI', getUITheme() === 'buddy')}
           <p class="themeNote">Switch off to use the original Space Hologram design.</p>
         </div>
         <button class="big soft" id="fbBtn">${ART.uiIcon('ic_feedback', '✉️')} Send feedback</button>
@@ -6532,7 +6541,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         const sb2 = $('#sndBtn'), mb = $('#musBtn'), tb = $('#tipBtn'), rb = $('#resetBtn');
         const redraw = (saveGame = true) => { $('#mBody').innerHTML = draw(); bind(); if (saveGame) save(); };
         const themeBtn = $('#themeBtn');
-        if (themeBtn) { themeBtn.setAttribute('aria-pressed', String(getUITheme() === 'orbital')); themeBtn.onclick = () => { setUITheme(getUITheme() === 'orbital' ? 'classic' : 'orbital'); redraw(false); }; }
+        if (themeBtn) { themeBtn.setAttribute('aria-pressed', String(getUITheme() === 'buddy')); themeBtn.onclick = () => { setUITheme(getUITheme() === 'buddy' ? 'classic' : 'buddy'); redraw(false); }; }
         if (sb2) sb2.onclick = () => { S.sound = S.sound ? 0 : 1; audio.setSfx(!!S.sound); if (S.sound) sfx.tap(); redraw(); };
         if (mb) mb.onclick = () => { S.music = S.music ? 0 : 1; audio.setMusic(!!S.music); redraw(); };
         if (tb) tb.onclick = () => { S.tipsOff = S.tipsOff ? 0 : 1; if (S.tipsOff) coachOff(); else S.coach = {}; redraw(); };
