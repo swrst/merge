@@ -39,7 +39,7 @@ export const SERVICES = {
 
   iap: {
     mode: 'auto' as Mode,
-    revenueCatKeys: { android: '', ios: '' },   // ← "goog_…" / "appl_…" public SDK keys
+    revenueCatKeys: { android: 'goog_GyFsCXwLUcsTfQgpFUSUYTZtjzQ', ios: '' },   // ← "goog_…" / "appl_…" public SDK keys
   },
 
   /** Play Games Services / Game Center: sign-in, leaderboards, achievements, cloud save */
