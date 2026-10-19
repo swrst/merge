@@ -26,6 +26,12 @@ export async function hydrateSave() {
   } catch (e) { /* first run, or storage blocked */ }
 }
 
+/** forget the phone's copy too (Start a new game), or the next launch brings it back */
+export async function clearNativeSave() {
+  if (!isNative) return;
+  try { await Preferences.remove({ key: SAVE_KEY }); } catch (e) { /* ignore */ }
+}
+
 export function startSaveMirror() {
   if (!isNative) return;
   let last = '';

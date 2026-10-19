@@ -21,9 +21,9 @@ const page = await browser.newPage({ viewport: { width: 440, height: 900 } });
 const IGNORE = /ERR_TUNNEL_CONNECTION_FAILED|fonts\.googleapis|ERR_NAME_NOT_RESOLVED/;
 page.on('console', m => { if (m.type() === 'error' && !IGNORE.test(m.text())) errors.push(m.text()); });
 page.on('pageerror', e => errors.push('pageerror: ' + e.message));
-await page.goto(URL);
+await page.goto(URL, { waitUntil: 'domcontentloaded', timeout: 90000 });
 // boot rasterises every item (500+) before the first frame; software GL needs the headroom
-await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 45000 });
+await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 90000 });
 await page.evaluate(() => window.__game.v9.achOff());
 
 const S = () => page.evaluate(() => JSON.parse(JSON.stringify(window.__game.state())));
@@ -475,11 +475,11 @@ head('Daily rewards');
 // clear it in memory: the game now saves when the tab hides, so a reload would
 // otherwise write the live state straight back over a localStorage edit
 await set(() => { const s = window.__game.state(); s.daily = { key: 0, day: 0 }; });
-await page.reload();
+await page.reload({ waitUntil: 'domcontentloaded', timeout: 90000 });
 // boot rasterises every item (500+) before the first frame; software GL needs the headroom
-await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 45000 });
+await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 90000 });
 await page.evaluate(() => window.__game.v9.achOff());
-await page.waitForTimeout(2600);
+await page.waitForSelector('#modal.open .dayCell', { timeout: 12000 }).catch(() => {});
 const dayCells = await page.locator('#modal.open .dayCell').count();
 if (dayCells !== 7) console.log('   [daily] modal title is now: ' + (await page.textContent('#mTitle')) + ' | cells ' + dayCells);
 must(dayCells === 7, 'a 7-day calendar greets you');
@@ -496,12 +496,12 @@ await set(() => {
   s.orders = []; s.ship = null; s.bag = []; s.up.bag = 0;
   window.__board.sync(b);
 });
-await page.waitForTimeout(1600);
+await page.waitForSelector('#modal.open', { timeout: 10000 }).catch(() => {});
 must(await page.locator('#modal.open').count() === 1, 'Bloop turns up when the board is stuck');
 before = (await S()).coins;
 // a producer the earlier steps unlocked may still be waiting to be placed
 for (let k = 0; k < 4 && await page.locator('#npw.open #npGo').count(); k++) { await page.click('#npGo'); await page.waitForTimeout(1300); }
-await page.click('#mBtn'); await page.waitForTimeout(800);
+await page.click('#mBtn', { force: true }); await page.waitForTimeout(800);
 after = await S();
 must(after.boards.earth.some(c => !c), 'the rescue freed tiles');
 must(after.coins > before, `and paid for the clutter (${before} -> ${after.coins})`);
@@ -785,8 +785,8 @@ head('An old save survives the rewrite');
   const old = await ctx.newPage();
   const oldErrs = [];
   old.on('pageerror', e => oldErrs.push(e.message));
-  await old.goto(URL);
-  await old.waitForFunction(() => window.__game, null, { timeout: 45000 });
+  await old.goto(URL, { waitUntil: 'domcontentloaded', timeout: 90000 });
+  await old.waitForFunction(() => window.__game, null, { timeout: 90000 });
   await old.waitForTimeout(2000);
   const m = await old.evaluate(() => {
     const g = window.__game, st = g.state(), b = g.cells();
@@ -972,8 +972,8 @@ head('The guided intro');
   const t2 = await ctx2.newPage();
   const tErrs = [];
   t2.on('pageerror', e => tErrs.push(e.message));
-  await t2.goto(URL);
-  await t2.waitForFunction(() => window.__game, null, { timeout: 45000 });
+  await t2.goto(URL, { waitUntil: 'domcontentloaded', timeout: 90000 });
+  await t2.waitForFunction(() => window.__game, null, { timeout: 90000 });
   await t2.waitForTimeout(2600);
   must(await t2.locator('#tut.on').count() === 1, 'a fresh save opens straight into the intro');
   must(await t2.locator('#modal.open').count() === 0, 'and nothing else pops over it');

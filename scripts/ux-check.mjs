@@ -17,7 +17,7 @@ const IGNORE = /ERR_TUNNEL_CONNECTION_FAILED|fonts\.googleapis|ERR_NAME_NOT_RESO
 page.on('console', m => { if (m.type() === 'error' && !IGNORE.test(m.text())) errors.push(m.text()); });
 page.on('pageerror', e => errors.push('pageerror: ' + e.message));
 await page.addInitScript(() => localStorage.clear());
-await page.goto(URL);
+await page.goto(URL, { waitUntil: 'domcontentloaded', timeout: 90000 });
 await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 45000 });
 await page.waitForTimeout(1500);
 if (await page.locator('#tSkip').isVisible().catch(() => false)) await page.click('#tSkip');

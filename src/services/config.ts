@@ -5,6 +5,7 @@
  *   'auto'  live on a phone when the ids/keys below are filled in, mock otherwise
  *
  * Going live is filling in this file (see SERVICES.md), not editing game code. */
+declare const __HAS_FIREBASE__: boolean;
 export type Mode = 'mock' | 'live' | 'auto';
 import VERSION from '../../version.json';
 
@@ -16,8 +17,8 @@ export const SERVICES = {
   app: {
     androidPackage: 'dev.artursolak.galaxyadventure',
     iosAppStoreId: '',                  // ← numeric id from App Store Connect, once the app record exists
-    privacyUrl: '',                     // ← your privacy policy page (required by both stores)
-    supportEmail: '',                   // ← where "Send feedback" goes; empty = feedback is copied to the clipboard
+    privacyUrl: 'https://galaxy-adventure-8545b.web.app/privacy-policy',   // site/ on Firebase Hosting: npm run site
+    supportEmail: 'artursolakdev@gmail.com',   // ← where "Send feedback" goes; empty = feedback is copied to the clipboard
     /** shown in Settings and stamped on every feedback report */
     build: VERSION.name + (RELEASE ? '' : ' test'),     // version.json is the one place the version lives
     /** test builds: tap the version line 5× in Settings for the tester tools */
@@ -28,8 +29,8 @@ export const SERVICES = {
     mode: 'auto' as Mode,
     testing: !RELEASE,                  // test ads everywhere except the store build
     units: {
-      // Google's public TEST rewarded units — replace with your own from admob.google.com
-      rewardedAndroid: 'ca-app-pub-3940256099942544/5224354917',
+      // Android: Galaxy Adventure "Rewarded". iOS: still Google's test unit. Test builds always show test ads (ads.testing).
+      rewardedAndroid: 'ca-app-pub-9488333769711990/3791200991',
       rewardediOS: 'ca-app-pub-3940256099942544/1712485313',
     },
     /** the mock video length, ms */
@@ -38,12 +39,15 @@ export const SERVICES = {
 
   iap: {
     mode: 'auto' as Mode,
-    revenueCatKeys: { android: '', ios: '' },   // ← "goog_…" / "appl_…" public SDK keys
+    revenueCatKeys: { android: 'goog_GyFsCXwLUcsTfQgpFUSUYTZtjzQ', ios: '' },   // ← "goog_…" / "appl_…" public SDK keys
   },
 
   /** Play Games Services / Game Center: sign-in, leaderboards, achievements, cloud save */
   games: {
-    mode: 'mock' as Mode,
+    /* 'auto': on a phone it uses Play Games once the project id is in
+       android/app/src/main/res/values/strings.xml (until then the plugin says
+       "not configured" and nothing happens); in the browser, the mock. */
+    mode: 'auto' as Mode,
     leaderboards: { level: '', events: '', weekly: '' },     // ← leaderboard ids from Play Console / App Store Connect
     /* store achievements: the in-game id (<achievement>_<star>, e.g. merge_1) → the id
        Play Console / App Store Connect gives it. Empty = only unlocked in the game.
@@ -66,7 +70,7 @@ export const SERVICES = {
   /** local notifications (energy full, daily gift) — no server needed */
   notify: { mode: 'auto' as Mode },
 
-  /** Firebase Analytics + Crashlytics. Set firebase: true once android/app/google-services.json
+  /** Firebase Analytics + Crashlytics. On by itself once android/app/google-services.json
       is in place (docs/ANDROID-RELEASE.md step 5); until then events stay in memory. */
-  analytics: { mode: 'auto' as Mode, firebase: false },
+  analytics: { mode: 'auto' as Mode, firebase: __HAS_FIREBASE__ },
 };

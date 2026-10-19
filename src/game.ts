@@ -6,7 +6,7 @@ import SCENE_ANCHORS from './sprites/scenes/anchors.json';
 import { haptic } from './native';
 import { board } from './board';
 import { ads, iap, PRODUCTS, analytics, store, notify, games, mockControls, SERVICES } from './services';
-import { isNative } from './native';
+import { isNative, clearNativeSave } from './native';
 import { audio } from './audio';
 import { shareImage } from './services/share';
 import { createExpedition, XP_UNLOCK } from './expedition';
@@ -106,7 +106,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   const vaultLv = (id: string) => (typeof S !== 'undefined' && S && S.vault && S.vault[id]) || 0;
   const coinMult = () => 1 + vaultLv('rich') * 0.15 + (starPerk('plough') ? 0.1 : 0) + petCoins();
   const xpMult = () => 1 + vaultLv('wise') * 0.25;
-  const regenMs = () => Math.round(CONFIG.energy.regenMs / (1 + vaultLv('brisk') * 0.2 + res('solar') * 0.12 + petRegen()));
+  // new players refill faster: the first levels are where an empty bar makes people quit
+  const regenMs = () => Math.round(CONFIG.energy.regenMs * ((typeof S !== 'undefined' && S && S.lvl < (CONFIG.energy.rookieLevels || 0)) ? (CONFIG.energy.rookieMult || 1) : 1)
+    / (1 + vaultLv('brisk') * 0.2 + res('solar') * 0.12 + petRegen()));
   const meteorScale = () => 1 - vaultLv('comet') * 0.3;
   const shopOpen = () => S.lvl >= CONFIG.unlocks.shopAtLevel;
   /* The lab is a building, not a level reward: it stays invisible until Dr. Zonk
@@ -257,7 +259,61 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     } catch (e) { }
     return fresh();
   }
-  function save() { S.seenAt = Date.now(); try { localStorage.setItem(SAVE, JSON.stringify(S)); } catch (e) { } }
+  /** true while a save is being swapped (restoring from the cloud, starting over): nothing may write over it */
+  let saveBlocked = false;
+  function save() { if (saveBlocked) return; S.seenAt = Date.now(); try { localStorage.setItem(SAVE, JSON.stringify(S)); } catch (e) { } }
+
+  /* ------------------------------------------------------------ cloud save
+     Signed in to Google Play Games, the save is backed up to the player's
+     account: on a new phone (or after a reinstall) the game offers to carry
+     on from it. The further-along save is the one that is offered. */
+  const progressOf = (s: any) => {
+    let ch = 0; Object.values((s && s.proj) || {}).forEach((b: any) => { ch += +b || 0; });
+    return ((s && s.lvl) || 1) * 1000 + ch * 10;
+  };
+  let cloudAt = 0;
+  function cloudPush(force = false) {
+    if (!games.signedIn || saveBlocked) return;
+    if (!force && Date.now() - cloudAt < 60000) return;
+    // a further-along Google Play save the player chose not to load stays safe until this game passes it
+    if (S.cloudDeclined && progressOf(S) < S.cloudDeclined) return;
+    cloudAt = Date.now();
+    games.cloudSave(JSON.stringify(S), `Level ${S.lvl} · ${W().name}`);
+  }
+  async function cloudBoot(interactive = false) {
+    if (!games.signedIn && !(await games.signIn(!interactive))) return;
+    let fresh = false;
+    try { fresh = localStorage.getItem('mergeRocket_fresh') === '1'; localStorage.removeItem('mergeRocket_fresh'); } catch { }
+    const c = await games.cloudLoad();
+    let cs: any = null; try { cs = c && JSON.parse(c.json); } catch { cs = null; }
+    if (cs && !fresh && progressOf(cs) > progressOf(S) && progressOf(cs) !== S.cloudDeclined) {
+      // asked from Settings: that dialog steps aside so the offer shows at once
+      if (interactive && $('#modal').classList.contains('open')) { closeModal(); setTimeout(() => offerCloud(cs, c!.json, c!.at || cs.seenAt || 0), 350); }
+      else offerCloud(cs, c!.json, c!.at || cs.seenAt || 0);
+      return;
+    }
+    cloudPush(true);
+    if (interactive) toast(`☁️ Signed in as <b>${games.player}</b>. Your progress is backed up.`);
+  }
+  function offerCloud(cs: any, json: string, at: number) {
+    const wn = (WORLDS[cs.world] && WORLDS[cs.world].name) || '';
+    const when = at ? new Date(at).toLocaleDateString() : '';
+    modal('bloop', 'Your Google Play save', `Blorp! Your Google Play account has a save that is further along:
+      <div class="rewardLine"><b>Level ${cs.lvl || 1}</b>${wn ? ' · ' + wn : ''}${when ? ' · saved ' + when : ''}</div>
+      This phone is at level ${S.lvl}. Carry on from the Google Play save?
+      <button class="big" id="cloudUse">Continue my Google Play save</button>
+      <div class="noteLine">If you keep this phone's game, the Google Play save is kept too, until this game gets further.</div>`, "Keep this phone's game");
+    setAfter(() => { S.cloudDeclined = progressOf(cs); save(); });
+    setTimeout(() => {
+      const b = $('#cloudUse'); if (!b) return;
+      b.onclick = () => {
+        saveBlocked = true;
+        try { localStorage.setItem(SAVE, json); } catch { }
+        analytics.track('cloud_restore', { lvl: cs.lvl || 1 });
+        location.reload();
+      };
+    }, 30);
+  }
   /* The app is going to the background: save, back the save up to the player's
      account, and leave a couple of friendly reminders on the phone. */
   /* Coming back after a while: say what happened while you were gone, so the
@@ -287,7 +343,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
   function goingAway() {
     save();
-    try { games.cloudSave(JSON.stringify(S)); } catch { }
+    try { cloudPush(true); } catch { }
     const notes: { id: number; at: number; title: string; body: string }[] = [];
     const missing = maxEnergy() - S.energy;
     if (missing > 5) notes.push({ id: 1, at: Date.now() + missing * regenMs(), title: 'Energy is full! ⚡', body: 'Your producers are ready to tap again.' });
@@ -1407,7 +1463,12 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (crown) { sfx.crown(); haptic('medium'); } else { sfx.merge(ITEMS[nx].tier); haptic('light'); } floatText(to, ITEMS[nx].name, '#fff');
     stat('merge'); addXp(CONFIG.xp.perMerge * Math.max(1, ITEMS[nx].tier - 1)); prog('merge', 1); tally('merge'); tally('make:' + nx); tutFire('merge');
     if (ITEMS[nx].tier >= 4) tally('tier4');
-    if (ITEMS[nx].chain.startsWith('ev_')) evPts(ITEMS[nx].tier * 3, to);
+    if (ITEMS[nx].chain.startsWith('ev_')) {
+      // the top of an event chain is the event's treasure: a big bonus on top of the tier points
+      const evc = CHAINS[ITEMS[nx].chain].items, top = evc[evc.length - 1] === nx;
+      evPts(ITEMS[nx].tier * 3 + (top ? 30 : 0), to);
+      if (top) setTimeout(() => toast(`🏆 Event treasure! <b>${ITEMS[nx].name}</b> gives <b>+30</b> bonus points.`), 700);
+    }
     else if (ITEMS[nx].tier >= CFG.event.points.mergeFromTier) evPts(ITEMS[nx].tier - CFG.event.points.mergeFromTier + 1, to);
     if (!crown) maybeBubble(nx, to);
     lunaBounce(a.id, to);
@@ -1782,6 +1843,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
   /* ------------------------------------------------ shop: gift, energy, chests */
   const today = () => dayKey(new Date());
+  /** coins buy a little energy too: a few snacks a day, each one dearer than the last */
+  const coinSnackN = () => (S.csnack && S.csnack.day === today() ? S.csnack.n : 0);
+  const coinSnackPrice = () => CFG.shop2.coinSnack.price * Math.pow(2, coinSnackN());
   const giftReady = () => S.shop.gift !== today();
   function claimGift() {
     if (!giftReady()) { sfx.no(); toast('Come back tomorrow for the next gift!'); return; }
@@ -1824,6 +1888,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         + card(ART.uiIcon('ic_album', '🌟'), 'Golden pack', '4 stickers, one is 3★ or better', `<button class="buyBtn gem" data-pack="gold" ${S.gems < 20 ? 'disabled' : ''}>${ART.icon('gem')}20</button>`) : '')
       + card(ART.uiIcon('lab_energy', ART.icon('energy')), 'Energy refill', `+${CFG.gems.refill.energy} ⚡ right now`,
         `<button class="buyBtn gem" data-refill="1" ${S.gems < CFG.gems.refill.gems ? 'disabled' : ''}>${ART.icon('gem')}${CFG.gems.refill.gems}</button>`)
+      + (() => { const n = coinSnackN(), left = CFG.shop2.coinSnack.perDay - n, pr = coinSnackPrice();
+        return card(ART.uiIcon('lab_energy', ART.icon('energy')), 'Energy snack', `+${CFG.shop2.coinSnack.energy} ⚡ for coins · ${left} left today`,
+          left > 0 ? `<button class="buyBtn" data-csnack="1" ${S.coins < pr ? 'disabled' : ''}>${coin}${pr}</button>` : `<button class="buyBtn" disabled>Tomorrow</button>`); })()
       + `</div><div class="noteLine">${ART.uiIcon('offer_timer', '🔄')} The free gift resets every day</div></div>`;
 
     html += `<div id="sh-gems">${gemsShop()}</div>`;
@@ -1903,6 +1970,13 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     { const gr = $('#gemRefill'); if (gr) gr.onclick = () => { gemRefill(); renderShop(); }; }
     if (shopTab === 'gems') setTimeout(() => { const sec = $('#sh-gems'); if (sec) host.scrollTo({ top: sec.offsetTop - 50 }); }, 50);
     host.querySelectorAll('[data-refill]').forEach((b: any) => b.onclick = () => { gemRefill(); renderShop(); });
+    host.querySelectorAll('[data-csnack]').forEach((b: any) => b.onclick = () => {
+      const pr = coinSnackPrice();
+      if (coinSnackN() >= CFG.shop2.coinSnack.perDay || S.coins < pr) { sfx.no(); return; }
+      spend(pr); S.csnack = { day: today(), n: coinSnackN() + 1 };
+      S.energy += CFG.shop2.coinSnack.energy; bumpChip('#chipEnergy'); sfx.collect();
+      toast(`⚡ <b>+${CFG.shop2.coinSnack.energy} energy</b>`); renderHUD(); renderShop(); save();
+    });
     host.querySelectorAll('[data-chestbuy]').forEach((b: any) => b.onclick = () => buyChest(b.dataset.chestbuy));
     host.querySelectorAll('[data-buy]').forEach((b: any) => b.onclick = () => buySupply(+b.dataset.buy));
     host.querySelectorAll('[data-pack]').forEach((b: any) => b.onclick = () => { const kd = b.dataset.pack as 'basic' | 'gold'; if (!spendGems(kd === 'gold' ? 20 : 8, 'pack')) return; const a = alb(); a.packs[kd] = (a.packs[kd] || 0) + 1; save(); renderShop(); openPack(kd); });
@@ -2054,7 +2128,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         // a finished chain is a collectable: a medal on its tile and a reward, once
         (S.cclaim = S.cclaim || {})[ck] = 1; save(); renderBook();
         rewardCard(ART.item(ch.items[ch.items.length - 1]), `${ch.name} complete!`, 'Every step of this chain is in your collection. It gets a medal on its tile.',
-          { coins: 40 * ch.items.length, gems: 3 + Math.floor(ch.items.length / 2), energy: 10 });
+          { coins: 40 * ch.items.length, gems: 1 + Math.floor(ch.items.length / 4), energy: 10 });
         return;
       }
       sfx.tap(); chainPanel(known.length ? known[known.length - 1] : ch.items[0]);
@@ -2826,6 +2900,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     addGems(p.launch ? 10 : CFG.gems.perChapter);
     if (p.lab && !S.lab.built) S.lab.offered = 1;
     evPts(CFG.event.points.chapter);
+    setTimeout(() => cloudPush(true), 1500);   // a finished chapter is worth backing up at once
     const next = curProject();
     const what = p.unlock ? `<div class="noteLine">🌱 New: <b>${unlocksOf(p).map((u: string) => PRODS[u].name).join(', ')}</b>. ${unlocksOf(p).length > 1 ? 'They stay' : 'It stays'} for the next few chapters.</div>`
       : p.temp ? `<div class="noteLine">⏳ A <b>${PRODS[p.temp.p].name}</b> is visiting: ${p.temp.taps} free taps for ${p.temp.mins} minutes.</div>` : '';
@@ -3909,8 +3984,14 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const tr = EV().track;
     while (S.ev.got < tr.length && S.ev.pts >= tr[S.ev.got][0]) {
       const r = tr[S.ev.got][1]; S.ev.got++;
-      grant(r);
-      toast(`${e.theme.icon} Event reward: <b>${rewardText(r)}</b>`);
+      if (S.ev.got === tr.length) {
+        // the last step of the track is the grand prize: it gets the full reward card
+        S.evWins = (S.evWins || 0) + 1;
+        rewardCard(e.theme.who, '🏆 ' + e.theme.name + ' complete!', `You filled the whole event track. That is ${S.evWins} event${S.evWins > 1 ? 's' : ''} finished so far.`, r);
+      } else {
+        grant(r);
+        toast(`${e.theme.icon} Event reward: <b>${rewardText(r)}</b>`);
+      }
     }
     renderQuick();
   }
@@ -4491,7 +4572,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const ready = giftReady();
     modal('player', 'The Star Bazaar', `<div class="shopGuide">
       <div><span>${ART.uiIcon('chest_closed', '🎁')}</span><p><b>A free gift every day</b>: a Supply Chest and energy.</p></div>
-      <div><span>${ART.uiIcon('lab_energy', '⚡')}</span><p><b>Energy refills</b> when you run low.</p></div>
+      <div><span>${ART.uiIcon('lab_energy', '⚡')}</span><p><b>Energy</b> when you run low: refills for gems, snacks for coins.</p></div>
       <div><span>${ART.uiIcon('ic_album', '🎴')}</span><p><b>Sticker packs</b> for your Star Album.</p></div>
       <div><span>${ART.uiIcon('sec_up', '⭐')}</span><p><b>Upgrades</b> that last forever: more storage, more energy, more contracts.</p></div></div>`,
       ready ? 'Claim my free gift' : 'Got it');
@@ -4559,7 +4640,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   ];
   const achTier = (a: any) => (S.ach && S.ach[a.id]) || 0;
   const achReady = () => ACH.filter(a => achTier(a) < a.at.length && a.v() >= a.at[achTier(a)]).length;
-  const achReward = (t: number): Reward => t === 0 ? { coins: 60, energy: 5, gems: 3 } : t === 1 ? { coins: 150, energy: 10, gems: 6 } : t === 2 ? { coins: 400, spin: 1, gems: 12 } : t === 3 ? { coins: 900, spin: 2, gems: 25 } : { coins: 2000, spin: 3, gems: 40 };
+  const achReward = (t: number): Reward => t === 0 ? { coins: 60, energy: 5, gems: 1 } : t === 1 ? { coins: 150, energy: 10, gems: 3 } : t === 2 ? { coins: 400, spin: 1, gems: 6 } : t === 3 ? { coins: 900, spin: 2, gems: 12 } : { coins: 2000, spin: 3, gems: 20 };
   function achPop() {
     pop(`${ART.uiIcon('ic_trophy', '🏆')} Achievements`, `<div class="achList">${ACH.map(a => {
       const t = achTier(a), max = t >= a.at.length, need = a.at[Math.min(t, a.at.length - 1)], v = a.v(), ok = !max && v >= need;
@@ -6032,7 +6113,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   const TUT: TutStep[] = [
     { id: 'tap', who: 'pip', say: "Hi! Tap the <b>Meteor Heap</b>.", at: () => cellWith(c => c.p === 'tree'), on: 'spawn' },
     { id: 'tap2', who: 'pip', say: "Once more!", at: () => cellWith(c => c.p === 'tree'), on: 'spawn' },
-    { id: 'merge', who: 'pip', say: "<b>Drag</b> one twig onto the other.", at: () => cellsWith(c => c.id === 'twig'), on: 'merge' },
+    { id: 'merge', who: 'pip', say: "<b>Drag</b> one <b>Meteor Chip</b> onto the other.", at: () => cellsWith(c => c.id === 'twig'), on: 'merge' },
     { id: 'energy', who: 'pip', say: "Taps cost <b>⚡ energy</b>. It refills by itself.", at: () => '#chipEnergy' },
     {
       id: 'deliver', who: 'pip', say: "<b>Tap</b> to give it!",
@@ -6530,6 +6611,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           ${row('themeBtn', ART.uiIcon('pp_buddy', '🛸'), 'Pocket Buddy UI', getUITheme() === 'buddy')}
           <p class="themeNote">Switch off to use the original Space Hologram design.</p>
         </div>
+        ${games.live ? (games.signedIn
+          ? `<div class="optNote">☁️ Progress backed up to Google Play Games${games.player ? ' (' + games.player + ')' : ''}</div>`
+          : `<button class="big soft" id="gpgBtn">☁️ Back up progress with Google Play Games</button>`) : ''}
         <button class="big soft" id="fbBtn">${ART.uiIcon('ic_feedback', '✉️')} Send feedback</button>
         ${SERVICES.app.privacyUrl ? `<a class="privLink" href="${SERVICES.app.privacyUrl}" target="_blank" rel="noopener">Privacy policy</a>` : ''}
         <button class="optDanger" id="resetBtn">${ART.uiIcon('ic_restart', '')} Start a new game</button>
@@ -6550,11 +6634,12 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           if (k === 'ad') { const o = ['complete', 'skip', 'nofill'] as const; mockControls.ad = o[(o.indexOf(mockControls.ad) + 1) % o.length]; }
           if (k === 'buy') { const o = ['ask', 'success', 'cancel', 'error'] as const; mockControls.purchase = o[(o.indexOf(mockControls.purchase) + 1) % o.length]; }
           if (k === 'review') { closeModal(); store.requestReview(); return; }
-          if (k === 'signin') await games.signIn();
+          if (k === 'signin') { await games.signIn(); await cloudBoot(true); }
           if (k === 'away') goingAway();
           redraw();
         });
         const fb = $('#fbBtn'); if (fb) fb.onclick = () => { closeModal(); setTimeout(feedbackPop, 500); };
+        const gp = $('#gpgBtn'); if (gp) gp.onclick = async () => { await cloudBoot(true); if (games.signedIn) redraw(); };
         const vl = $('#verLine'); let taps = 0;
         if (vl) vl.onclick = () => { if (SERVICES.app.testerTools && ++taps >= 5) { testerOn = true; redraw(); toast('🧪 Tester tools on'); } };
         document.querySelectorAll<HTMLElement>('[data-tt]').forEach(b => b.onclick = () => {
@@ -6569,7 +6654,12 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         });
         if (rb) rb.onclick = () => {
           // a whole save is one tap from gone: ask first
-          if (rb.dataset.sure) { localStorage.removeItem(SAVE); location.reload(); return; }
+          if (rb.dataset.sure) {
+            saveBlocked = true;
+            try { localStorage.removeItem(SAVE); localStorage.setItem('mergeRocket_fresh', '1'); } catch { }
+            clearNativeSave().finally(() => location.reload());
+            return;
+          }
           rb.dataset.sure = '1'; rb.textContent = 'Tap again to erase everything'; rb.classList.add('sure');
           setTimeout(() => { if (document.body.contains(rb)) { delete rb.dataset.sure; rb.textContent = 'Start a new game'; rb.classList.remove('sure'); } }, 3500);
         };
@@ -6609,11 +6699,13 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed, ecost,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
       fly: (w: string) => galaxyTap(w), view: (v: string) => setView(v),
-      curProject: () => curProject(), v9: { labBuildPop, rewardCard, achOff: () => { achAutoOff = true; }, xp: XP, shopUnlockHint, xpUnlockHint, setView, achPop, profilePop, heartPanel, albumPop, openPack, albumGive, shareCard, alb, storeProducer, startPlacing, paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
+      curProject: () => curProject(), v9: { labStation, labBuildPop, rewardCard, achOff: () => { achAutoOff = true; }, xp: XP, shopUnlockHint, xpUnlockHint, setView, achPop, profilePop, heartPanel, albumPop, openPack, albumGive, shareCard, alb, storeProducer, startPlacing, paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
     };
     setInterval(tick, 500);
     setInterval(() => { if (!document.hidden) S.playMs = (S.playMs || 0) + 5000; }, 5000);
     setInterval(save, 8000);
+    setTimeout(() => cloudBoot(), 2500);
+    setInterval(() => cloudPush(), 5 * 60000);
     // the shell asks for a save when the app goes to the background
     window.addEventListener('mr:save', () => goingAway());
     document.addEventListener('visibilitychange', () => { if (document.hidden) goingAway(); });

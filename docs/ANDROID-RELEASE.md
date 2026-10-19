@@ -51,9 +51,13 @@ Google re-signs the app with its own key (Play App Signing); you sign uploads wi
 
 In a terminal in the repo (Android Studio's Java has `keytool`):
 
-```bat
-"%ProgramFiles%\Android\Android Studio\jbr\bin\keytool" -genkeypair -v -keystore android\upload-key.jks -alias upload -keyalg RSA -keysize 2048 -validity 10000
+PowerShell:
+
+```powershell
+& "$env:ProgramFiles\Android\Android Studio\jbr\bin\keytool.exe" -genkeypair -v -keystore android\upload-key.jks -alias upload -keyalg RSA -keysize 2048 -validity 10000
 ```
+
+(Command Prompt: `"%ProgramFiles%\Android\Android Studio\jbr\bin\keytool" -genkeypair ...` with the same arguments.)
 
 Answer the questions (your name, city, country `PL`) and choose a strong password. Then create **`android/keystore.properties`**:
 
@@ -88,7 +92,7 @@ To try a signed release on your own phone first: `npm run apk:release` (or in An
 2. In the project → **Add app** → Android → package name `dev.artursolak.galaxyadventure` → nickname *Galaxy Adventure Android* → you can skip the SHA-1.
 3. **Download `google-services.json`** and put it at **`android/app/google-services.json`** (gitignored).
 4. Skip the "add SDK" steps: (code) the Gradle plugins and the `@capacitor-firebase/analytics` + `@capacitor-firebase/crashlytics` packages are already in the project, and only switch on when that file exists.
-5. In `src/services/config.ts` set **`analytics: { mode: 'auto', firebase: true }`**.
+5. Nothing to switch on: the build notices the file and turns Firebase on by itself.
 6. Build and run on your phone. In Firebase → **Crashlytics**, the dashboard activates after the first launch. In **Analytics → DebugView** you see events live if you turn on debug mode for the device:
    `adb shell setprop debug.firebase.analytics.app dev.artursolak.galaxyadventure`
 
@@ -100,12 +104,11 @@ Useful Firebase reports once players arrive: **Retention** (day 1 / day 7), a **
 
 ## 6. Privacy policy (required)
 
-1. Open `docs/privacy-policy.html`, replace **`YOUR NAME / BUSINESS`, `YOUR EMAIL` and the date**.
-2. Host it somewhere public. Easiest options:
-   - **Firebase Hosting** (you have the project): `npm i -g firebase-tools`, `firebase login`, `firebase init hosting` (public folder `docs`), `firebase deploy` → `https://<project>.web.app/privacy-policy.html`.
-   - Or **Google Sites**: paste the text into a new site and publish.
-   - Or GitHub Pages if the repo is public.
-3. Put the URL in `src/services/config.ts` → `app.privacyUrl` (the game shows a "Privacy policy" link in Settings), and an email in `app.supportEmail` (Send feedback then opens an email).
+The page lives in `site/` (`privacy-policy.html`, plus a small `index.html`) and is hosted on Firebase Hosting in the Firebase project.
+
+1. Once: `npm run site:login` (opens the browser, sign in with the Google account that owns Firebase).
+2. After any change to `site/`: `npm run site`.
+3. URL: **https://galaxy-adventure-8545b.web.app/privacy-policy** (already in `app.privacyUrl`; the game links to it from Settings). Put the same URL in Play Console → App content → Privacy policy.
 
 ---
 
@@ -141,6 +144,21 @@ The products the game sells (`src/services/iap.ts`), all **one-time (consumable)
 4. RevenueCat → new project → **Add app → Play Store** → package `dev.artursolak.galaxyadventure` → follow its guide to give RevenueCat a **Google Cloud service account** with Play access (it takes a few hours to start working).
 5. RevenueCat → **Products** → import the products. Then **API keys** → copy the **public Android key** (`goog_…`) into `src/services/config.ts` → `iap.revenueCatKeys.android`.
 6. Play Console → **Settings → License testing**: add your Gmail and your testers. They can buy for free with test cards.
+
+---
+
+## 8b. Play Games Services (sign-in and cloud save)
+
+Do this after the first build is in Internal testing (Play needs the app signing key first).
+
+1. Play Console → your app → **Grow users → Play Games Services → Setup and management → Configuration** → *No, my game doesn't use Google APIs* → Create.
+2. **Credentials → Add credential → Android**: it offers to create the OAuth client in Google Cloud. Package `dev.artursolak.galaxyadventure`, and the **SHA-1 of the app signing key** (Play Console → Test and release → App integrity → App signing). Add a second Android credential with your **upload key** SHA-1 too, so builds you install yourself can sign in:
+   `& "$env:ProgramFiles\Android\Android Studio\jbr\bin\keytool.exe" -list -v -keystore android\upload-key.jks -alias upload`
+3. **Properties**: turn **Saved games ON**.
+4. Copy the **project id** (the number under the game's name on the Configuration page) into `android/app/src/main/res/values/strings.xml` → `game_services_project_id`. Until it is there, Play Games stays off.
+5. **Testers**: add your Gmail and your testers' (while Play Games is unpublished, only testers can sign in). **Publish** the Play Games configuration when the game goes to production.
+
+(code) `GameServicesPlugin.java` + `src/services/games.ts`: automatic sign-in, cloud save, leaderboards and achievements. Leaderboard / achievement ids, once created in Play Console, go in `src/services/config.ts` → `games`.
 
 ---
 

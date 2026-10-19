@@ -11,6 +11,7 @@ import { ART } from './art';
 import { startGame } from './game';
 import { hydrateSave, startSaveMirror, setupChrome } from './native';
 import { initServices, analytics } from './services';
+import { startHoloFix } from './holofix';
 
 function paintHudIcons() {
   ['icCoin', 'shopCoinIc', 'labCoinIc'].forEach(id => {
@@ -74,6 +75,7 @@ async function main() {
     startSaveMirror();
     initServices();
     await startGame();
+    startHoloFix();
   } catch (err) { console.error(err); analytics.error(err, 'boot'); bootFailed(err); }
 }
 

@@ -34,8 +34,8 @@
       "berries"
     ],
     "mode": "battery",
-    "cap": 10,
-    "every": 360000
+    "cap": 12,
+    "every": 200000
   },
   "well": {
     "name": "Moonwater Well",
@@ -91,8 +91,8 @@
       "ground": "bark"
     },
     "mode": "battery",
-    "cap": 10,
-    "every": 360000
+    "cap": 12,
+    "every": 225000
   },
   "mosslog": {
     "name": "Eyeshroom Log",

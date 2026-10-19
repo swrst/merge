@@ -1,5 +1,36 @@
 # Changelog
 
+- **v80 (0.80.0)**
+  - Cloud save with Google Play Games: automatic sign-in, the save is backed up to the player's Google account (after chapters, every few minutes, when the app goes to the background). On a new phone or after a reinstall the game offers to continue from it. Settings shows the backup status or a button to turn it on. Off until the Play Games project id is in strings.xml (docs/ANDROID-RELEASE.md step 8b).
+  - Fix: "Start a new game" on a phone really starts over (the phone's backup copy used to bring the old save back).
+  - Privacy policy and the Play Console answers mention Play Games.
+  - The privacy policy and a small game page are hosted on Firebase (`npm run site`).
+
+- **v79 (0.79.0)**
+  - Fewer free gems: medals pay 1 / 3 / 6 / 12 / 20 gems (was 3 / 6 / 12 / 25 / 40), a finished chain 1 + length/4 (was 3 + length/2), a level 2 (was 3). Gems stay worth buying.
+  - Energy: a level-up gives +20 (was +10), and until level 10 energy refills every 2 minutes (then every 2.5).
+  - Coins buy energy: an Energy Snack in today's deals, +20 energy, 3 a day at 200 / 400 / 800 coins.
+  - Meadow chapters 3–20 cost 1.5× the coins, easing back to normal by chapter 31, so coins mean something early.
+  - Snack Cart: 12 charges every 40 minutes (was 10 an hour); Buzzbot Hive 12 every 45 minutes. Chapter 3 no longer stalls on snacks.
+
+- **v78 (0.78.0)**
+  - Story: Aurora Reach no longer ends at chapter 15 of 30. Chapter 15 is now "The Vault Opens" and the real finale is chapter 30. The second half of every other world has proper chapter endings instead of "X appears nearby / Y rests".
+  - Chapter asks that made no sense now say why (2 Fluffwings to light the tunnels, 3 Gas Bubbles to float the ore up…), across 60 later chapters.
+  - No humans or Earth things in the text: no boy, man, girl, children, telly, fingers, birds, fish, twigs or berries.
+  - Catalogue: 7 items shared a name with an item in another chain. Renamed: Planet Box, Grow Tower, Power Cell, Solar Wings, Lift Drone, Jelly Cloud, Puffling. "3 Sea Glasss" typo fixed.
+  - Content check: a chapter can no longer ask for something whose producer has already retired.
+  - Events: the top of an event chain is the event's treasure (+30 points), and finishing the whole track gives a grand prize card with 25 gems. The Bloom Festival token is Bloom Sparks, not petals.
+  - Tutorial says "Meteor Chip", not "twig".
+
+- **v77 (0.77.0)**
+  - Swapping two energy producers no longer leaves a giant bare ⚡ on them: the cost pill is redrawn properly.
+
+- **v76 (0.76.0)**
+  - Swapping or merging two producers: the upgrade arrow and cost badges no longer show under the art or on the empty tile while dragging.
+  - Text readable everywhere: any leftover pale card or dark text in popups, screens and cards is turned into dark glass with light text (Recycler, Fun & Games and the rest).
+  - XP bar: no more square frame around it; the rim follows the pill shape.
+  - Firebase (Analytics + Crashlytics) turns on by itself once `android/app/google-services.json` is in place.
+
 - **v75 (0.75.0)**
   - "Space Hologram" look replaces the flat blue: near-black glass with nebula light, an iridescent rim (cyan, violet, pink, gold), star dust and a slow light sweep. Violet title banners. The board frame, HUD, side widgets, item strip, camp labels, shop and expedition all match.
   - Reward card: proper projection card, the giver in a glowing ring.

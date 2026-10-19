@@ -117,7 +117,7 @@ export interface ShopDef {
 export interface Config {
   board: { cols: number; rows: number; starterItems: number; maxProducers?: number };
   start: { coins: number; energy: number; world: string };
-  energy: { base: number; perLevel: number; regenMs: number; snack: { amount: number; cooldownMs: number }; levelUp?: number };
+  energy: { base: number; perLevel: number; regenMs: number; snack: { amount: number; cooldownMs: number }; levelUp?: number; rookieLevels?: number; rookieMult?: number };
   /** level curve: base + (l-1)·perLevel + growth·(l-1)² */
   xp: { base: number; perLevel: number; growth: number; perMerge: number; orderBase: number };
   orders: {

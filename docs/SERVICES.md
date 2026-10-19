@@ -24,20 +24,24 @@ Which face runs is set in **`src/services/config.ts`**:
 | `analytics.ts` | Firebase Analytics + Crashlytics (`@capacitor-firebase/*`) | last 200 events in memory, console in dev | events, screens, user properties, non-fatal errors |
 | `notify.ts` | `@capacitor/local-notifications` | list of what would be scheduled | "energy is full", "daily gift waiting" (scheduled when the app goes to the background) |
 | `store.ts` | Play In-App Review (`@capacitor-community/in-app-review`), Play In-App Updates (`@capawesome/capacitor-app-update`) | a toast | one review ask after Meadow chapter 5; "a new version is out" toast |
-| `games.ts` | a `GameServices` plugin (not installed yet) | local player, scores, achievements, cloud save in localStorage | Play Games sign-in, leaderboards, achievements (later) |
+| `games.ts` | Play Games Services v2 (`GameServicesPlugin.java` in the Android project) | local player, scores, achievements, cloud save in localStorage | automatic sign-in, **cloud save** (offered on a new phone or after a reinstall), leaderboards, achievements |
 | `share.ts` | Capacitor Share + Filesystem | Web Share or a download | the album / profile brag card |
 
 ## Going live
 
 | Service | What to fill in | Where |
 |---|---|---|
-| Firebase | `android/app/google-services.json`, then `analytics.firebase: true` | docs/ANDROID-RELEASE.md step 5 |
+| Firebase | `android/app/google-services.json` (Firebase turns on by itself) | docs/ANDROID-RELEASE.md step 5 |
 | AdMob | app id in `AndroidManifest.xml`, rewarded unit in `ads.units.rewardedAndroid` | step 7 |
 | Purchases | product ids in Play Console, RevenueCat Android key in `iap.revenueCatKeys.android` | step 8 |
 | App identity | `app.privacyUrl`, `app.supportEmail` | step 6 |
-| Play Games (optional, later) | a games-services plugin, leaderboard and achievement ids in `games` | — |
+| Play Games | project id in `android/app/src/main/res/values/strings.xml`; leaderboard and achievement ids in `games` (optional) | docs/ANDROID-RELEASE.md step 8b |
 
 Nothing else in the game changes when a service goes live.
+
+## Cloud save
+
+Signed in to Play Games (automatic on most phones, or Settings → *Back up progress with Google Play Games*), the save goes to the player's Google account: a minute after changes at most every 5 minutes, after every chapter and whenever the app goes to the background. At launch, if the account's save is further along (level and chapters) than the one on the phone, the game offers to continue from it. Turning that down keeps the cloud save safe until the phone's game passes it. *Start a new game* clears the phone's copy and does not offer the cloud save straight back.
 
 ## Analytics events
 

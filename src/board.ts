@@ -542,7 +542,7 @@ class PixiBoard {
     });
     s.art = s.timer = undefined; s.badge = undefined; s.ring = undefined;
     s.bar = undefined; s.barW = undefined; s.barFrac = undefined;
-    s.aura = undefined; s.spin = undefined; s.cost = undefined; s.clock = undefined;
+    s.aura = undefined; s.spin = undefined; s.cost = undefined; s.costW = undefined; s.clock = undefined;
     s.readyRing = null; s.hinting = false; s.unseal = null; s.seal = null;
   }
   /** Re-seat everything on tile `i` after the grid has moved or resized.
@@ -604,6 +604,22 @@ class PixiBoard {
       repeat: -1, yoyo: true, ease: 'sine.inOut', delay: Math.random(),
     });
   }
+  /** a tile's badges (cost, charge bar, upgrade arrow, clock) always sit on top of its picture;
+      after a swap the picture is re-made last and used to bury them */
+  private raiseBadges(i: number) {
+    const s = this.slots[i] as any; if (!s || !s.art || s.art.destroyed) return;
+    const ai = this.lItem.getChildIndex(s.art);
+    for (const k of ['badge', 'bar', 'cost', 'clock', 'timer']) {
+      const o = s[k]; if (!o || o.destroyed || o.parent !== this.lItem) continue;
+      if (this.lItem.getChildIndex(o) < ai) this.lItem.addChild(o);
+      o.visible = true;
+    }
+  }
+  /** while a tile's picture is being dragged, its badges stay hidden instead of sitting on the empty tile */
+  private hideBadges(i: number, hide: boolean) {
+    const s = this.slots[i] as any; if (!s) return;
+    for (const k of ['badge', 'bar', 'cost', 'clock', 'ring', 'readyRing']) { const o = s[k]; if (o && !o.destroyed) o.visible = !hide; }
+  }
   /** safety net: anything resting off its tile with nothing moving it glides home */
   private reconcile() {
     if (this.drag && this.drag.moved) return;
@@ -616,6 +632,7 @@ class PixiBoard {
       const k = this.keyOf(cells[i]);
       if (s.key !== k) { this.fill(i, cells[i], k); this.drawTile(i); }
     }
+    for (let i = 0; i < this.slots.length; i++) this.raiseBadges(i);
     const owned = new Set(this.slots.map((s: any) => s.art));
     [...this.lDrag.children].forEach((c: any) => { if (!owned.has(c) && !gsap.isTweening(c) && !gsap.isTweening(c.scale)) c.destroy(); });
     this.slots.forEach((s: any, i) => {
@@ -1141,6 +1158,7 @@ class PixiBoard {
       // lift the halo off the empty tile with it
       const slot = this.slots[d.i] as any;
       [slot.aura, slot.spin].forEach((o: any) => { if (o) o.visible = false; });
+      this.hideBadges(d.i, true);
       this.showMatches(d.i);
       this.hooks.onLift?.(d.i);
     }
@@ -1168,6 +1186,7 @@ class PixiBoard {
     if (!d.sprite || d.sprite.destroyed || this.slots[d.i].art !== d.sprite) { this.drag = d; this.abortDrag(); return; }
     const slot = this.slots[d.i] as any;
     [slot.aura, slot.spin].forEach((o: any) => { if (o && !o.destroyed) o.visible = true; });
+    this.hideBadges(d.i, false);
     const t = this.target(d.i, e.global.x, e.global.y);
     const to = t.to, kind = to >= 0 && to !== d.i ? t.kind : null;
     const home = this.center(d.i);
@@ -1196,6 +1215,7 @@ class PixiBoard {
     const d = this.drag; this.drag = null;
     this.clearDropHighlight(); this.hideMatches();
     if (d && d.sprite && !d.sprite.destroyed && d.sprite.parent === this.lDrag && this.slots[d.i].art !== d.sprite) d.sprite.destroy();
+    if (d) this.hideBadges(d.i, false);
     if (d) { const s = this.slots[d.i]; if (s.art && !s.art.destroyed) { this.lItem.addChild(s.art); this.settle(d.i); } }
   }
   /** where the last drag was let go, so a move can glide from there */
@@ -1292,6 +1312,8 @@ class PixiBoard {
   swapLand(a: number, b: number) {
     this.land(b);
     this.land(a, this.center(b));
+    this.raiseBadges(a); this.raiseBadges(b);
+    gsap.delayedCall(0.45, () => { this.raiseBadges(a); this.raiseBadges(b); });
   }
   /** the page position of the last drop, for effects drawn in the DOM */
   pointToClient(x: number, y: number) {

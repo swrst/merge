@@ -24,13 +24,16 @@ await page.addInitScript(() => {
   const real = Date.now.bind(Date); (window).__warp = 0;
   Date.now = () => real() + (window).__warp;
 });
-await page.goto(URL);
+await page.goto(URL, { waitUntil: 'domcontentloaded', timeout: 90000 });
 await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 60000 });
 await page.waitForTimeout(1500);
 if (await page.locator('#tSkip').isVisible().catch(() => false)) await page.click('#tSkip');
 await page.evaluate(() => { window.__game.state().tipsOff = 1; window.__game.v9.jitOff();
   // trace where coins come from (by caller line)
   const S = window.__game.state(); let v = S.coins; window.__coinSrc = {};
+  // and gems, by the chain of functions that paid them
+  let gv = S.gems || 0; window.__gemSrc = {};
+  Object.defineProperty(S, 'gems', { configurable: true, enumerable: true, get: () => gv, set: (n) => { const d = n - gv; if (d > 0) { const k = (new Error().stack || '').split('\n').slice(2, 6).map(l => (l.match(/at ([\w.$]+) /) || [])[1] || '?').join('<'); window.__gemSrc[k] = (window.__gemSrc[k] || 0) + d; } gv = n; } });
   Object.defineProperty(S, 'coins', { configurable: true, enumerable: true, get: () => v, set: (n) => { const d = n - v; if (d > 0) { const ln = (new Error().stack || '').split('\n')[2] || '?'; const k = ln.replace(/.*\/src\//, '').replace(/\?[^:]*/, '').trim(); window.__coinSrc[k] = (window.__coinSrc[k] || 0) + d; } v = n; } });
 });
 
@@ -39,6 +42,10 @@ const step = () => page.evaluate(() => {
   const g = window.__game, S = g.state(), b = g.cells(), bd = window.__board;
   const open = (sel) => !!document.querySelector(sel);
   if (open('#talk.open')) { document.querySelector('#talk').click(); return 'talk'; }
+  // reward cards (medals, gifts) and the new-producer card wait for Collect / Place
+  if (open('#rwc.open')) { const c = document.querySelector('#rwcGo'); if (c) c.click(); return 'reward'; }
+  if (open('#npw.open')) { const c = document.querySelector('#npGo'); if (c) c.click(); return 'newproducer'; }
+  if (open('#xpScr.open')) { const c = document.querySelector('#xpScr button'); if (c) c.click(); else document.querySelector('#xpScr').click(); return 'levelup'; }
   if (open('#modal.open')) { document.querySelector('#mBtn').click(); return 'modal:' + document.querySelector('#mTitle').textContent; }
   if (open('#pop.open')) { g.v9.closePop(); return 'closepop'; }
   if (open('#mini.open')) { const c = document.querySelector('#miniClose'); if (c) c.click(); return 'closemini'; }
@@ -121,6 +128,7 @@ const t0 = Date.now();
 const snap = async () => page.evaluate(() => { const S = window.__game.state(); return { coins: S.coins, energy: S.energy, lvl: S.lvl, proj: S.proj[S.world] || 0, free: window.__game.cells().filter(c => !c).length, orders: S.orders.length, gems: S.gems }; });
 let stall = 0;
 while (Date.now() - t0 < (+process.env.BOTMIN || 25) * 60 * 1000) {
+  if (actions % 150 === 149) log.push('gem sources ' + JSON.stringify(await page.evaluate(() => window.__gemSrc).catch(() => ({}))));
   if (actions % 150 === 149) log.push('coin sources ' + JSON.stringify(await page.evaluate(() => window.__coinSrc).catch(() => ({}))));
   const a = await step(); actions++;
   if (a === 'wait' || a === 'fullstuck') {

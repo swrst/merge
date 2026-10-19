@@ -16,7 +16,7 @@ export const WORLDS = [
       { need: 6, title: 'The Meadow Stirs', text: 'Seeds you never planted push up overnight. The Vault is answering.' },
       { need: 10, title: 'Full Bloom', text: 'The meadow is awake. One world down — and the sky is full of dark ones.' },
     ],
-    intro: 'Everything grew from here once. Then the Bloom went quiet and the world forgot how. You still remember. Start small: a twig, a pebble, a berry.',
+    intro: 'Everything grew from here once. Then the Bloom went quiet and the world forgot how. You still remember. Start small: a meteor chip, a star pebble, a star cookie.',
   },
   {
     key: 'luna', name: 'Crater Camp', subtitle: 'Luna', planet: 'luna',
@@ -49,7 +49,7 @@ export const WORLDS = [
     heart: 'Shallow Heart',
     bloom: [
       { need: 4, title: 'The Water Clears', text: 'Silt settles. For the first time in centuries you can see the reef floor.' },
-      { need: 8, title: 'Reefs Return', text: 'Coral climbing the old ruins, fish following it up. Pearl will not stop humming.' },
+      { need: 8, title: 'Reefs Return', text: 'Coral climbing the old ruins, swimmers following it up. Pearl will not stop humming.' },
       { need: 12, title: 'Nerith Alive', text: 'A whole drowned world, breathing again through its gills.' },
     ],
     intro: 'Nerith drowned slowly and politely. The cities are still down there under the shallows, full of shells and nothing else. Wake the reef and the rest follows.',
