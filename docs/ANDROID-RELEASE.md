@@ -51,9 +51,13 @@ Google re-signs the app with its own key (Play App Signing); you sign uploads wi
 
 In a terminal in the repo (Android Studio's Java has `keytool`):
 
-```bat
-"%ProgramFiles%\Android\Android Studio\jbr\bin\keytool" -genkeypair -v -keystore android\upload-key.jks -alias upload -keyalg RSA -keysize 2048 -validity 10000
+PowerShell:
+
+```powershell
+& "$env:ProgramFiles\Android\Android Studio\jbr\bin\keytool.exe" -genkeypair -v -keystore android\upload-key.jks -alias upload -keyalg RSA -keysize 2048 -validity 10000
 ```
+
+(Command Prompt: `"%ProgramFiles%\Android\Android Studio\jbr\bin\keytool" -genkeypair ...` with the same arguments.)
 
 Answer the questions (your name, city, country `PL`) and choose a strong password. Then create **`android/keystore.properties`**:
 
