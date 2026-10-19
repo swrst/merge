@@ -42,3 +42,4 @@ ios/App/App/GoogleService-Info.plist
 
 # Automated UI review output
 ui-review/
+.firebase/
