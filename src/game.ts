@@ -5,7 +5,7 @@ import SCENE_ANCHORS from './sprites/scenes/anchors.json';
 import { haptic } from './native';
 import { board } from './board';
 import { ads, iap, PRODUCTS, analytics, store, notify, games, mockControls, SERVICES } from './services';
-import { isNative } from './native';
+import { isNative, clearNativeSave } from './native';
 import { audio } from './audio';
 import { shareImage } from './services/share';
 import { createExpedition, XP_UNLOCK } from './expedition';
@@ -258,7 +258,61 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     } catch (e) { }
     return fresh();
   }
-  function save() { S.seenAt = Date.now(); try { localStorage.setItem(SAVE, JSON.stringify(S)); } catch (e) { } }
+  /** true while a save is being swapped (restoring from the cloud, starting over): nothing may write over it */
+  let saveBlocked = false;
+  function save() { if (saveBlocked) return; S.seenAt = Date.now(); try { localStorage.setItem(SAVE, JSON.stringify(S)); } catch (e) { } }
+
+  /* ------------------------------------------------------------ cloud save
+     Signed in to Google Play Games, the save is backed up to the player's
+     account: on a new phone (or after a reinstall) the game offers to carry
+     on from it. The further-along save is the one that is offered. */
+  const progressOf = (s: any) => {
+    let ch = 0; Object.values((s && s.proj) || {}).forEach((b: any) => { ch += +b || 0; });
+    return ((s && s.lvl) || 1) * 1000 + ch * 10;
+  };
+  let cloudAt = 0;
+  function cloudPush(force = false) {
+    if (!games.signedIn || saveBlocked) return;
+    if (!force && Date.now() - cloudAt < 60000) return;
+    // a further-along Google Play save the player chose not to load stays safe until this game passes it
+    if (S.cloudDeclined && progressOf(S) < S.cloudDeclined) return;
+    cloudAt = Date.now();
+    games.cloudSave(JSON.stringify(S), `Level ${S.lvl} · ${W().name}`);
+  }
+  async function cloudBoot(interactive = false) {
+    if (!games.signedIn && !(await games.signIn(!interactive))) return;
+    let fresh = false;
+    try { fresh = localStorage.getItem('mergeRocket_fresh') === '1'; localStorage.removeItem('mergeRocket_fresh'); } catch { }
+    const c = await games.cloudLoad();
+    let cs: any = null; try { cs = c && JSON.parse(c.json); } catch { cs = null; }
+    if (cs && !fresh && progressOf(cs) > progressOf(S) && progressOf(cs) !== S.cloudDeclined) {
+      // asked from Settings: that dialog steps aside so the offer shows at once
+      if (interactive && $('#modal').classList.contains('open')) { closeModal(); setTimeout(() => offerCloud(cs, c!.json, c!.at || cs.seenAt || 0), 350); }
+      else offerCloud(cs, c!.json, c!.at || cs.seenAt || 0);
+      return;
+    }
+    cloudPush(true);
+    if (interactive) toast(`☁️ Signed in as <b>${games.player}</b>. Your progress is backed up.`);
+  }
+  function offerCloud(cs: any, json: string, at: number) {
+    const wn = (WORLDS[cs.world] && WORLDS[cs.world].name) || '';
+    const when = at ? new Date(at).toLocaleDateString() : '';
+    modal('bloop', 'Your Google Play save', `Blorp! Your Google Play account has a save that is further along:
+      <div class="rewardLine"><b>Level ${cs.lvl || 1}</b>${wn ? ' · ' + wn : ''}${when ? ' · saved ' + when : ''}</div>
+      This phone is at level ${S.lvl}. Carry on from the Google Play save?
+      <button class="big" id="cloudUse">Continue my Google Play save</button>
+      <div class="noteLine">If you keep this phone's game, the Google Play save is kept too, until this game gets further.</div>`, "Keep this phone's game");
+    setAfter(() => { S.cloudDeclined = progressOf(cs); save(); });
+    setTimeout(() => {
+      const b = $('#cloudUse'); if (!b) return;
+      b.onclick = () => {
+        saveBlocked = true;
+        try { localStorage.setItem(SAVE, json); } catch { }
+        analytics.track('cloud_restore', { lvl: cs.lvl || 1 });
+        location.reload();
+      };
+    }, 30);
+  }
   /* The app is going to the background: save, back the save up to the player's
      account, and leave a couple of friendly reminders on the phone. */
   /* Coming back after a while: say what happened while you were gone, so the
@@ -288,7 +342,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
   function goingAway() {
     save();
-    try { games.cloudSave(JSON.stringify(S)); } catch { }
+    try { cloudPush(true); } catch { }
     const notes: { id: number; at: number; title: string; body: string }[] = [];
     const missing = maxEnergy() - S.energy;
     if (missing > 5) notes.push({ id: 1, at: Date.now() + missing * regenMs(), title: 'Energy is full! ⚡', body: 'Your producers are ready to tap again.' });
@@ -2845,6 +2899,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     addGems(p.launch ? 10 : CFG.gems.perChapter);
     if (p.lab && !S.lab.built) S.lab.offered = 1;
     evPts(CFG.event.points.chapter);
+    setTimeout(() => cloudPush(true), 1500);   // a finished chapter is worth backing up at once
     const next = curProject();
     const what = p.unlock ? `<div class="noteLine">🌱 New: <b>${unlocksOf(p).map((u: string) => PRODS[u].name).join(', ')}</b>. ${unlocksOf(p).length > 1 ? 'They stay' : 'It stays'} for the next few chapters.</div>`
       : p.temp ? `<div class="noteLine">⏳ A <b>${PRODS[p.temp.p].name}</b> is visiting: ${p.temp.taps} free taps for ${p.temp.mins} minutes.</div>` : '';
@@ -6544,6 +6599,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           ${row('musBtn', ART.uiIcon(S.music ? 'ic_music' : 'ic_nomusic', '🎵'), 'Music', !!S.music)}
           ${row('tipBtn', ART.uiIcon('ic_tips', '💡'), 'Tips', !S.tipsOff)}
         </div>
+        ${games.live ? (games.signedIn
+          ? `<div class="optNote">☁️ Progress backed up to Google Play Games${games.player ? ' (' + games.player + ')' : ''}</div>`
+          : `<button class="big soft" id="gpgBtn">☁️ Back up progress with Google Play Games</button>`) : ''}
         <button class="big soft" id="fbBtn">${ART.uiIcon('ic_feedback', '✉️')} Send feedback</button>
         ${SERVICES.app.privacyUrl ? `<a class="privLink" href="${SERVICES.app.privacyUrl}" target="_blank" rel="noopener">Privacy policy</a>` : ''}
         <button class="optDanger" id="resetBtn">${ART.uiIcon('ic_restart', '')} Start a new game</button>
@@ -6562,11 +6620,12 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           if (k === 'ad') { const o = ['complete', 'skip', 'nofill'] as const; mockControls.ad = o[(o.indexOf(mockControls.ad) + 1) % o.length]; }
           if (k === 'buy') { const o = ['ask', 'success', 'cancel', 'error'] as const; mockControls.purchase = o[(o.indexOf(mockControls.purchase) + 1) % o.length]; }
           if (k === 'review') { closeModal(); store.requestReview(); return; }
-          if (k === 'signin') await games.signIn();
+          if (k === 'signin') { await games.signIn(); await cloudBoot(true); }
           if (k === 'away') goingAway();
           redraw();
         });
         const fb = $('#fbBtn'); if (fb) fb.onclick = () => { closeModal(); setTimeout(feedbackPop, 500); };
+        const gp = $('#gpgBtn'); if (gp) gp.onclick = async () => { await cloudBoot(true); if (games.signedIn) redraw(); };
         const vl = $('#verLine'); let taps = 0;
         if (vl) vl.onclick = () => { if (SERVICES.app.testerTools && ++taps >= 5) { testerOn = true; redraw(); toast('🧪 Tester tools on'); } };
         document.querySelectorAll<HTMLElement>('[data-tt]').forEach(b => b.onclick = () => {
@@ -6581,7 +6640,12 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         });
         if (rb) rb.onclick = () => {
           // a whole save is one tap from gone: ask first
-          if (rb.dataset.sure) { localStorage.removeItem(SAVE); location.reload(); return; }
+          if (rb.dataset.sure) {
+            saveBlocked = true;
+            try { localStorage.removeItem(SAVE); localStorage.setItem('mergeRocket_fresh', '1'); } catch { }
+            clearNativeSave().finally(() => location.reload());
+            return;
+          }
           rb.dataset.sure = '1'; rb.textContent = 'Tap again to erase everything'; rb.classList.add('sure');
           setTimeout(() => { if (document.body.contains(rb)) { delete rb.dataset.sure; rb.textContent = 'Start a new game'; rb.classList.remove('sure'); } }, 3500);
         };
@@ -6626,6 +6690,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     setInterval(tick, 500);
     setInterval(() => { if (!document.hidden) S.playMs = (S.playMs || 0) + 5000; }, 5000);
     setInterval(save, 8000);
+    setTimeout(() => cloudBoot(), 2500);
+    setInterval(() => cloudPush(), 5 * 60000);
     // the shell asks for a save when the app goes to the background
     window.addEventListener('mr:save', () => goingAway());
     document.addEventListener('visibilitychange', () => { if (document.hidden) goingAway(); });

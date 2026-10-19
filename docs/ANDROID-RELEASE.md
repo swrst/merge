@@ -147,6 +147,21 @@ The products the game sells (`src/services/iap.ts`), all **one-time (consumable)
 
 ---
 
+## 8b. Play Games Services (sign-in and cloud save)
+
+Do this after the first build is in Internal testing (Play needs the app signing key first).
+
+1. Play Console → your app → **Grow users → Play Games Services → Setup and management → Configuration** → *No, my game doesn't use Google APIs* → Create.
+2. **Credentials → Add credential → Android**: it offers to create the OAuth client in Google Cloud. Package `dev.artursolak.galaxyadventure`, and the **SHA-1 of the app signing key** (Play Console → Test and release → App integrity → App signing). Add a second Android credential with your **upload key** SHA-1 too, so builds you install yourself can sign in:
+   `& "$env:ProgramFiles\Android\Android Studio\jbr\bin\keytool.exe" -list -v -keystore android\upload-key.jks -alias upload`
+3. **Properties**: turn **Saved games ON**.
+4. Copy the **project id** (the number under the game's name on the Configuration page) into `android/app/src/main/res/values/strings.xml` → `game_services_project_id`. Until it is there, Play Games stays off.
+5. **Testers**: add your Gmail and your testers' (while Play Games is unpublished, only testers can sign in). **Publish** the Play Games configuration when the game goes to production.
+
+(code) `GameServicesPlugin.java` + `src/services/games.ts`: automatic sign-in, cloud save, leaderboards and achievements. Leaderboard / achievement ids, once created in Play Console, go in `src/services/config.ts` → `games`.
+
+---
+
 ## 9. Store listing
 
 Play Console → **Create app** → name *Galaxy Adventure*, default language English (add Polish later), **Game**, **Free**, accept the declarations. Then, under **Grow → Store presence → Main store listing**:

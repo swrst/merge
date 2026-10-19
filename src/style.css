@@ -3779,3 +3779,5 @@ html body #app .hfCard{background:var(--sh-card)!important;box-shadow:var(--sh-c
 html body #app .hfInk{color:#f3eeff!important;text-shadow:0 1px 0 rgba(0,0,0,.5)}
 html body #app .hud .lvlBox .xpwrap{border-radius:0 99px 99px 0!important;overflow:hidden!important;background:linear-gradient(rgba(18,10,40,.9),rgba(18,10,40,.9)) padding-box,var(--sh-iri) border-box!important;border:1.5px solid transparent!important;border-left:0!important;box-shadow:0 0 10px rgba(170,110,255,.35)!important}
 html body #app .hud .lvlBox .xpbar{border-radius:0 99px 99px 0!important;box-shadow:none!important}
+/* Settings: cloud save status line */
+html body #app .optNote{margin:8px 0 2px;padding:9px 12px;border-radius:14px;background:rgba(120,255,190,.10);border:1px solid rgba(120,255,190,.35);color:#c9ffe6;font-size:.86rem;text-align:center}

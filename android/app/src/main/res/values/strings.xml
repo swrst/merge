@@ -4,4 +4,7 @@
     <string name="title_activity_main">Galaxy Adventure</string>
     <string name="package_name">dev.artursolak.galaxyadventure</string>
     <string name="custom_url_scheme">dev.artursolak.galaxyadventure</string>
+    <!-- Play Games Services project id: Play Console → Play Games Services → Configuration (the number under the game's name).
+         While it is 0000000000, Play Games stays off and the game only keeps its local save. -->
+    <string name="game_services_project_id" translatable="false">0000000000</string>
 </resources>

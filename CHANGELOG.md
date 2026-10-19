@@ -1,5 +1,11 @@
 # Changelog
 
+- **v80 (0.80.0)**
+  - Cloud save with Google Play Games: automatic sign-in, the save is backed up to the player's Google account (after chapters, every few minutes, when the app goes to the background). On a new phone or after a reinstall the game offers to continue from it. Settings shows the backup status or a button to turn it on. Off until the Play Games project id is in strings.xml (docs/ANDROID-RELEASE.md step 8b).
+  - Fix: "Start a new game" on a phone really starts over (the phone's backup copy used to bring the old save back).
+  - Privacy policy and the Play Console answers mention Play Games.
+  - The privacy policy and a small game page are hosted on Firebase (`npm run site`).
+
 - **v79 (0.79.0)**
   - Fewer free gems: medals pay 1 / 3 / 6 / 12 / 20 gems (was 3 / 6 / 12 / 25 / 40), a finished chain 1 + length/4 (was 3 + length/2), a level 2 (was 3). Gems stay worth buying.
   - Energy: a level-up gives +20 (was +10), and until level 10 energy refills every 2 minutes (then every 2.5).

@@ -44,7 +44,10 @@ export const SERVICES = {
 
   /** Play Games Services / Game Center: sign-in, leaderboards, achievements, cloud save */
   games: {
-    mode: 'mock' as Mode,
+    /* 'auto': on a phone it uses Play Games once the project id is in
+       android/app/src/main/res/values/strings.xml (until then the plugin says
+       "not configured" and nothing happens); in the browser, the mock. */
+    mode: 'auto' as Mode,
     leaderboards: { level: '', events: '', weekly: '' },     // ← leaderboard ids from Play Console / App Store Connect
     /* store achievements: the in-game id (<achievement>_<star>, e.g. merge_1) → the id
        Play Console / App Store Connect gives it. Empty = only unlocked in the game.

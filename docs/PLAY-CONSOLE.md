@@ -6,7 +6,7 @@ What to pick in each section, matching what the game actually does and what the 
 
 **Privacy policy**: `https://galaxy-adventure-8545b.web.app/privacy-policy`
 
-**App access (sign-in details)**: *All functionality is available without any special access.* There are no accounts.
+**App access (sign-in details)**: *All functionality is available without any special access.* There are no accounts; Play Games sign-in is automatic and nothing is locked behind it.
 
 **Ads**: *Yes, my app contains ads* (AdMob rewarded videos, only when the player chooses one).
 
@@ -29,6 +29,7 @@ What to pick in each section, matching what the game actually does and what the 
 | Type | Collected | Shared | Why | Who |
 |---|---|---|---|---|
 | Location → Approximate location (from IP) | Yes | Yes | Advertising, Analytics, Fraud prevention | AdMob, Firebase |
+| Personal info → User IDs (Play Games player ID) | Yes | No | App functionality | Google Play Games Services |
 | Financial info → Purchase history | Yes | No | App functionality | Google Play Billing, RevenueCat |
 | App activity → App interactions | Yes | Yes | Analytics, Advertising | Firebase, AdMob |
 | App info and performance → Crash logs, Diagnostics | Yes | No | Analytics, App functionality | Crashlytics |

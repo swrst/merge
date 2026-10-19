@@ -9,6 +9,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <!-- Play Games Services (sign-in, cloud save): the id lives in res/values/strings.xml -->
+        <meta-data
+            android:name="com.google.android.gms.games.APP_ID"
+            android:value="@string/game_services_project_id"/>
+
         <!-- AdMob app id (Galaxy Adventure, Android). Test builds still show test ads (config.ts ads.testing). -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
