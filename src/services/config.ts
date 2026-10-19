@@ -29,8 +29,8 @@ export const SERVICES = {
     mode: 'auto' as Mode,
     testing: !RELEASE,                  // test ads everywhere except the store build
     units: {
-      // Google's public TEST rewarded units — replace with your own from admob.google.com
-      rewardedAndroid: 'ca-app-pub-3940256099942544/5224354917',
+      // Android: Galaxy Adventure "Rewarded". iOS: still Google's test unit. Test builds always show test ads (ads.testing).
+      rewardedAndroid: 'ca-app-pub-9488333769711990/3791200991',
       rewardediOS: 'ca-app-pub-3940256099942544/1712485313',
     },
     /** the mock video length, ms */
