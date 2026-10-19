@@ -98,6 +98,7 @@ try {
   await page.evaluate(()=>window.__game.view('rocket'));await shot('27-small-missions');
   await clear();await page.locator('#btnGear').click();await shot('28-small-settings');
   await clear(); await page.evaluate(()=>window.__game.view('map')); await page.locator('[data-pop="galaxy"]').click(); await shot('29-small-galaxy');
+  assert.equal(await page.locator('.galTop>b').isVisible(),true,'Galaxy title remains visible on phones');
   await clear(); await page.evaluate(()=>window.__game.v9.starChart()); await shot('30-small-star-chart');
   assert.equal(errors.length,0,errors.join('\n'));
 } finally {
