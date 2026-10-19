@@ -31,7 +31,7 @@ build-release.bat        # Windows: Play Store bundle -> GalaxyAdventure-<versio
 | [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) | code map, content pipeline, art pipeline, tests, phone builds |
 | [docs/GAME.md](docs/GAME.md) | what is in the game, system by system |
 | [docs/SOUND-PROMPTS.md](docs/SOUND-PROMPTS.md) | how to make and drop in new sounds and music |
-| [docs/privacy-policy.html](docs/privacy-policy.html) | privacy policy page to host (Play needs a public URL) |
+| [site/](site/) | the public web page and privacy policy, on Firebase Hosting (`npm run site`) |
 | [art/CATALOGUE.md](art/CATALOGUE.md) | every chain and producer, generated |
 | [CHANGELOG.md](CHANGELOG.md) | what changed, version by version |
 

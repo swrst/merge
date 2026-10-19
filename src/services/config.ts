@@ -17,7 +17,7 @@ export const SERVICES = {
   app: {
     androidPackage: 'dev.artursolak.galaxyadventure',
     iosAppStoreId: '',                  // ← numeric id from App Store Connect, once the app record exists
-    privacyUrl: '',                     // ← your privacy policy page (required by both stores)
+    privacyUrl: 'https://galaxy-adventure-8545b.web.app/privacy-policy',   // site/ on Firebase Hosting: npm run site
     supportEmail: 'artursolakdev@gmail.com',   // ← where "Send feedback" goes; empty = feedback is copied to the clipboard
     /** shown in Settings and stamped on every feedback report */
     build: VERSION.name + (RELEASE ? '' : ' test'),     // version.json is the one place the version lives

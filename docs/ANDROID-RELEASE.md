@@ -100,12 +100,11 @@ Useful Firebase reports once players arrive: **Retention** (day 1 / day 7), a **
 
 ## 6. Privacy policy (required)
 
-1. Open `docs/privacy-policy.html`, replace **`YOUR NAME / BUSINESS`, `YOUR EMAIL` and the date**.
-2. Host it somewhere public. Easiest options:
-   - **Firebase Hosting** (you have the project): `npm i -g firebase-tools`, `firebase login`, `firebase init hosting` (public folder `docs`), `firebase deploy` → `https://<project>.web.app/privacy-policy.html`.
-   - Or **Google Sites**: paste the text into a new site and publish.
-   - Or GitHub Pages if the repo is public.
-3. Put the URL in `src/services/config.ts` → `app.privacyUrl` (the game shows a "Privacy policy" link in Settings), and an email in `app.supportEmail` (Send feedback then opens an email).
+The page lives in `site/` (`privacy-policy.html`, plus a small `index.html`) and is hosted on Firebase Hosting in the Firebase project.
+
+1. Once: `npm run site:login` (opens the browser, sign in with the Google account that owns Firebase).
+2. After any change to `site/`: `npm run site`.
+3. URL: **https://galaxy-adventure-8545b.web.app/privacy-policy** (already in `app.privacyUrl`; the game links to it from Settings). Put the same URL in Play Console → App content → Privacy policy.
 
 ---
 
