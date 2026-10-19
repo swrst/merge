@@ -38,10 +38,12 @@ try {
     await page.screenshot({ path: `ui-review/${name}.png` });
     const info = await page.evaluate(() => ({
       theme: document.documentElement.dataset.uiTheme,
+      popupOpacity: document.querySelector('.pop.open .popBox') ? getComputedStyle(document.querySelector('.pop.open .popBox')).opacity : null,
       bodyOverflow: document.body.scrollWidth > innerWidth + 1,
       brokenImages: [...document.images].filter(i => i.getBoundingClientRect().width && i.getBoundingClientRect().height && i.complete && !i.naturalWidth).map(i => i.getAttribute('src')),
     }));
     checks.push({ name, ...info });
+    if(info.theme==='buddy' && info.popupOpacity!==null) assert.equal(info.popupOpacity,'1', `${name}: popup text must remain opaque`);
     assert.equal(info.bodyOverflow, false, `${name}: horizontal page overflow`);
     assert.equal(info.brokenImages.length, 0, `${name}: broken visible image`);
     console.log('Captured', name);
@@ -87,6 +89,7 @@ try {
   assert.equal(await page.locator('html').getAttribute('data-ui-theme'),'classic');
   await shot('25-classic-preserved');
   await page.reload(); await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 90000 });
+  await page.evaluate(()=>{window.__game.v9.achOff();window.__game.v9.jitOff();});
   assert.equal(await page.locator('html').getAttribute('data-ui-theme'),'classic');
   await clear(); await page.locator('#btnGear').click(); await switchTheme();
   assert.equal(await page.locator('html').getAttribute('data-ui-theme'),'buddy');
