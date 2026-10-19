@@ -332,9 +332,17 @@ class PixiBoard {
     const art = this.tileArt[i];
     if (getUITheme() === 'buddy') {
       if (art) art.visible = false;
-      // Aqua pads remain translucent so the planet colors can show through.
-      g.roundRect(p.x+2,p.y+2,c-4,c-4,R).fill({color:locked?0x27495c:dark?0x52c9c1:0x8ae7d8,alpha:locked?.58:.28}).stroke({color:locked?0x89afbc:0xbaffef,width:1.2,alpha:.75});
-      if(!locked) g.roundRect(p.x+5,p.y+4,c-10,c*.16,R*.5).fill({color:0xeafffa,alpha:.1});
+      // light aqua glass pads (Scout Beacon look): see-through, a white top highlight and a soft lower edge
+      const x0 = p.x + 2, y0 = p.y + 2, w0 = c - 4;
+      if (locked) {
+        g.roundRect(x0, y0, w0, w0, R).fill({ color: 0x3d5f70, alpha: .62 }).stroke({ color: 0xa9c8d2, width: 1.4, alpha: .8 });
+        g.roundRect(x0 + 3, y0 + 3, w0 - 6, w0 * .2, R * .6).fill({ color: 0xffffff, alpha: .08 });
+      } else {
+        g.roundRect(x0, y0, w0, w0, R).fill({ color: dark ? 0x7fe3d8 : 0xb2f5ec, alpha: dark ? .30 : .36 });
+        g.roundRect(x0, y0 + w0 * .78, w0, w0 * .22, R).fill({ color: 0x1f8f8f, alpha: .16 });          // lower edge
+        g.roundRect(x0 + 4, y0 + 3, w0 - 8, w0 * .2, R * .55).fill({ color: 0xffffff, alpha: .22 });       // top highlight
+        g.roundRect(x0, y0, w0, w0, R).stroke({ color: 0xe6fffb, width: 1.5, alpha: .85 });
+      }
       if(this.wanted.has(i)) g.roundRect(p.x+2,p.y+2,c-4,c-4,R).stroke({color:0xffa04a,width:3});
       if(r) g.roundRect(p.x+2,p.y+2,c-4,c-4,R).stroke({color:r===3?0xffbd66:r===2?0xb1a3f4:0x82cddd,width:2});
       return;

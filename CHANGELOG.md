@@ -1,5 +1,11 @@
 # Changelog
 
+- **v81 (0.81.0)**
+  - New look from the art branch (codex/orbital-holo-ui): "Pocket Buddy", aqua panels, orange actions, a constellation Star Chart, see-through aqua board. The old Space Hologram look stays one switch away in Settings.
+  - Popups are projected by the floating companion: it hovers under the open panel, a beam with two light rays runs from its antenna to the panel's edge, and the panel prints upward out of the light. Light, see-through aqua glass with scanlines and corner brackets.
+  - Board tiles are light aqua glass pads with a highlight and a soft lower edge.
+  - Fixes on the new look: white text on light panels (chapter name, medal title, Energy refill) is dark again; the shop title fits on one line instead of covering the tabs; secondary buttons stay aqua.
+
 - **v80 (0.80.0)**
   - Cloud save with Google Play Games: automatic sign-in, the save is backed up to the player's Google account (after chapters, every few minutes, when the app goes to the background). On a new phone or after a reinstall the game offers to continue from it. Settings shows the backup status or a button to turn it on. Off until the Play Games project id is in strings.xml (docs/ANDROID-RELEASE.md step 8b).
   - Fix: "Start a new game" on a phone really starts over (the phone's backup copy used to bring the old save back).

@@ -6,9 +6,11 @@ import '@fontsource/lilita-one/latin-400.css';
 import './style.css';
 import './themes/orbital.css';
 import './themes/buddy.css';
+import './themes/projector.css';
 import './themes/theme';
 import { ART } from './art';
 import { startGame } from './game';
+import { startProjector } from './themes/projector';
 import { hydrateSave, startSaveMirror, setupChrome } from './native';
 import { initServices, analytics } from './services';
 import { startHoloFix } from './holofix';
@@ -76,6 +78,7 @@ async function main() {
     initServices();
     await startGame();
     startHoloFix();
+    startProjector(ART.spriteUi('pp_buddy') || '');
   } catch (err) { console.error(err); analytics.error(err, 'boot'); bootFailed(err); }
 }
 

@@ -36,4 +36,4 @@ The rocket is rebuilt from four parts found in Dr. Zonk's wreck, fuelled with or
 Rewarded videos only (the player chooses: energy, double rewards, skips); in-app purchases for gems, coins, energy, a starter pack and an ad-free pass. No forced ads.
 
 ## Look and feel
-Art: painted in ChatGPT in one style (chunky, glossy, bright, readable on a small tile). UI: "Holo Command": holographic glass panels with cyan rims, angled navy banners, Lilita One titles with an outline (Clash of Clans-like), Fredoka body text.
+Art: painted in ChatGPT in one style (chunky, glossy, bright, readable on a small tile). UI: "Pocket Buddy": light aqua holo panels projected by a floating companion robot (src/themes/), orange primary buttons, aqua glass board tiles, Lilita One titles, Fredoka body text. The older Space Hologram look stays available in Settings.
