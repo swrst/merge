@@ -5,6 +5,7 @@
  *   'auto'  live on a phone when the ids/keys below are filled in, mock otherwise
  *
  * Going live is filling in this file (see SERVICES.md), not editing game code. */
+declare const __HAS_FIREBASE__: boolean;
 export type Mode = 'mock' | 'live' | 'auto';
 import VERSION from '../../version.json';
 
@@ -66,7 +67,7 @@ export const SERVICES = {
   /** local notifications (energy full, daily gift) — no server needed */
   notify: { mode: 'auto' as Mode },
 
-  /** Firebase Analytics + Crashlytics. Set firebase: true once android/app/google-services.json
+  /** Firebase Analytics + Crashlytics. On by itself once android/app/google-services.json
       is in place (docs/ANDROID-RELEASE.md step 5); until then events stay in memory. */
-  analytics: { mode: 'auto' as Mode, firebase: false },
+  analytics: { mode: 'auto' as Mode, firebase: __HAS_FIREBASE__ },
 };

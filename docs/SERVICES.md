@@ -31,7 +31,7 @@ Which face runs is set in **`src/services/config.ts`**:
 
 | Service | What to fill in | Where |
 |---|---|---|
-| Firebase | `android/app/google-services.json`, then `analytics.firebase: true` | docs/ANDROID-RELEASE.md step 5 |
+| Firebase | `android/app/google-services.json` (Firebase turns on by itself) | docs/ANDROID-RELEASE.md step 5 |
 | AdMob | app id in `AndroidManifest.xml`, rewarded unit in `ads.units.rewardedAndroid` | step 7 |
 | Purchases | product ids in Play Console, RevenueCat Android key in `iap.revenueCatKeys.android` | step 8 |
 | App identity | `app.privacyUrl`, `app.supportEmail` | step 6 |

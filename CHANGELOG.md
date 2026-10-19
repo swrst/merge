@@ -1,5 +1,11 @@
 # Changelog
 
+- **v76 (0.76.0)**
+  - Swapping or merging two producers: the upgrade arrow and cost badges no longer show under the art or on the empty tile while dragging.
+  - Text readable everywhere: any leftover pale card or dark text in popups, screens and cards is turned into dark glass with light text (Recycler, Fun & Games and the rest).
+  - XP bar: no more square frame around it; the rim follows the pill shape.
+  - Firebase (Analytics + Crashlytics) turns on by itself once `android/app/google-services.json` is in place.
+
 - **v75 (0.75.0)**
   - "Space Hologram" look replaces the flat blue: near-black glass with nebula light, an iridescent rim (cyan, violet, pink, gold), star dust and a slow light sweep. Violet title banners. The board frame, HUD, side widgets, item strip, camp labels, shop and expedition all match.
   - Reward card: proper projection card, the giver in a glowing ring.

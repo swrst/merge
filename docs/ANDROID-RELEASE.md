@@ -88,7 +88,7 @@ To try a signed release on your own phone first: `npm run apk:release` (or in An
 2. In the project → **Add app** → Android → package name `dev.artursolak.galaxyadventure` → nickname *Galaxy Adventure Android* → you can skip the SHA-1.
 3. **Download `google-services.json`** and put it at **`android/app/google-services.json`** (gitignored).
 4. Skip the "add SDK" steps: (code) the Gradle plugins and the `@capacitor-firebase/analytics` + `@capacitor-firebase/crashlytics` packages are already in the project, and only switch on when that file exists.
-5. In `src/services/config.ts` set **`analytics: { mode: 'auto', firebase: true }`**.
+5. Nothing to switch on: the build notices the file and turns Firebase on by itself.
 6. Build and run on your phone. In Firebase → **Crashlytics**, the dashboard activates after the first launch. In **Analytics → DebugView** you see events live if you turn on debug mode for the device:
    `adb shell setprop debug.firebase.analytics.app dev.artursolak.galaxyadventure`
 

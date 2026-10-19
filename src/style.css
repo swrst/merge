@@ -3774,3 +3774,8 @@ html body #app .side .quick .qChip.xp{height:48px!important}
 html body #app .side{gap:5px!important}
 html body #app #rwc .rwcRib{position:static!important;transform:none!important;margin:0 0 4px!important;padding:0!important;width:auto!important;height:auto!important;white-space:normal!important}
 html body #app #rwc .rwcLine{position:static!important;font-size:13px}
+/* v76: what the holo pass (src/holofix.ts) flags: old pale cards become glass, dark words become light */
+html body #app .hfCard{background:var(--sh-card)!important;box-shadow:var(--sh-cardrim)!important;border-color:rgba(200,170,255,.3)!important;opacity:1}
+html body #app .hfInk{color:#f3eeff!important;text-shadow:0 1px 0 rgba(0,0,0,.5)}
+html body #app .hud .lvlBox .xpwrap{border-radius:0 99px 99px 0!important;overflow:hidden!important;background:linear-gradient(rgba(18,10,40,.9),rgba(18,10,40,.9)) padding-box,var(--sh-iri) border-box!important;border:1.5px solid transparent!important;border-left:0!important;box-shadow:0 0 10px rgba(170,110,255,.35)!important}
+html body #app .hud .lvlBox .xpbar{border-radius:0 99px 99px 0!important;box-shadow:none!important}
