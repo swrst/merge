@@ -1,5 +1,12 @@
 # Changelog
 
+- **v79 (0.79.0)**
+  - Fewer free gems: medals pay 1 / 3 / 6 / 12 / 20 gems (was 3 / 6 / 12 / 25 / 40), a finished chain 1 + length/4 (was 3 + length/2), a level 2 (was 3). Gems stay worth buying.
+  - Energy: a level-up gives +20 (was +10), and until level 10 energy refills every 2 minutes (then every 2.5).
+  - Coins buy energy: an Energy Snack in today's deals, +20 energy, 3 a day at 200 / 400 / 800 coins.
+  - Meadow chapters 3–20 cost 1.5× the coins, easing back to normal by chapter 31, so coins mean something early.
+  - Snack Cart: 12 charges every 40 minutes (was 10 an hour); Buzzbot Hive 12 every 45 minutes. Chapter 3 no longer stalls on snacks.
+
 - **v78 (0.78.0)**
   - Story: Aurora Reach no longer ends at chapter 15 of 30. Chapter 15 is now "The Vault Opens" and the real finale is chapter 30. The second half of every other world has proper chapter endings instead of "X appears nearby / Y rests".
   - Chapter asks that made no sense now say why (2 Fluffwings to light the tunnels, 3 Gas Bubbles to float the ore up…), across 60 later chapters.

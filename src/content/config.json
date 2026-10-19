@@ -18,7 +18,9 @@
       "amount": 15,
       "cooldownMs": 14400000
     },
-    "levelUp": 10
+    "levelUp": 20,
+    "rookieLevels": 10,
+    "rookieMult": 0.8
   },
   "xp": {
     "base": 40,
@@ -412,6 +414,11 @@
     "chestGems": {
       "chest": 12,
       "bigchest": 35
+    },
+    "coinSnack": {
+      "energy": 20,
+      "price": 200,
+      "perDay": 3
     }
   },
   "event": {
@@ -695,7 +702,7 @@
   },
   "gems": {
     "start": 0,
-    "perLevel": 3,
+    "perLevel": 2,
     "everyFiveLevels": 5,
     "perChapter": 2,
     "refill": {

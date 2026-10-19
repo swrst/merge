@@ -23,11 +23,11 @@ export const PRODUCERS = [
   /* ---------------------------------------------------------- Sunny Meadow */
   ['earth', 1, 'tree|Meteor Heap|tree|nrg:1|twig twig twig branch|a big friendly round-crowned tree with a thick trunk, a few twigs at its roots'],
   ['earth', 2, 'rocks|Starstone Pile|rocks|nrg:1|pebble pebble pebble rock|a heap of rounded grey boulders with a pickaxe leaning on it'],
-  ['earth', 2, 'bush|Snack Cart|bush|bat:10/60|berry berry berry berry berries|a round leafy bush dotted with red berries'],
+  ['earth', 2, 'bush|Snack Cart|bush|bat:12/40|berry berry berry berry berries|a round leafy bush dotted with red berries'],
   ['earth', 2, 'well|Moonwater Well|well|nrg:1|dew dew dew dew puddle|a round stone well with a little wooden roof and a bucket'],
   ['earth', 3, 'meadow|Solar Farm|meadow|nrg:1|grass grass grass grass hay|a small patch of tall golden meadow grass with a hay fork stuck in it'],
   ['earth', 3, 'flowerbed|Light Stall|flowerbed|nrg:1|bulbseed bulbseed bulbseed bulbseed sprig|a raised wooden flower bed full of pink and yellow flowers'],
-  ['earth', 4, 'hive|Buzzbot Hive|honey:honey/bark|bat:10/60|nectar nectar nectar honeydrop|a wild honeycomb hive hanging from a stump, bees buzzing round it'],
+  ['earth', 4, 'hive|Buzzbot Hive|honey:honey/bark|bat:12/45|nectar nectar nectar honeydrop|a wild honeycomb hive hanging from a stump, bees buzzing round it'],
   ['earth', 4, 'mosslog|Eyeshroom Log|log:moss/moss|nrg:1|caplet caplet caplet caplet toadstool|a fallen mossy log with little mushrooms growing on it'],
   ['earth', 5, 'cottonpatch|Suit Loom|cottonpatch|nrg:1|fibre fibre fibre fibre thread|a low cotton bush with fluffy white bolls'],
   ['earth', 5, 'nestbox|Jet Wreck|nestbox|nrg:1|down down mapscrap down plume|a wooden bird box on a post with a round hole'],

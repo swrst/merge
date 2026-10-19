@@ -105,7 +105,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   const vaultLv = (id: string) => (typeof S !== 'undefined' && S && S.vault && S.vault[id]) || 0;
   const coinMult = () => 1 + vaultLv('rich') * 0.15 + (starPerk('plough') ? 0.1 : 0) + petCoins();
   const xpMult = () => 1 + vaultLv('wise') * 0.25;
-  const regenMs = () => Math.round(CONFIG.energy.regenMs / (1 + vaultLv('brisk') * 0.2 + res('solar') * 0.12 + petRegen()));
+  // new players refill faster: the first levels are where an empty bar makes people quit
+  const regenMs = () => Math.round(CONFIG.energy.regenMs * ((typeof S !== 'undefined' && S && S.lvl < (CONFIG.energy.rookieLevels || 0)) ? (CONFIG.energy.rookieMult || 1) : 1)
+    / (1 + vaultLv('brisk') * 0.2 + res('solar') * 0.12 + petRegen()));
   const meteorScale = () => 1 - vaultLv('comet') * 0.3;
   const shopOpen = () => S.lvl >= CONFIG.unlocks.shopAtLevel;
   /* The lab is a building, not a level reward: it stays invisible until Dr. Zonk
@@ -1786,6 +1788,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
   /* ------------------------------------------------ shop: gift, energy, chests */
   const today = () => dayKey(new Date());
+  /** coins buy a little energy too: a few snacks a day, each one dearer than the last */
+  const coinSnackN = () => (S.csnack && S.csnack.day === today() ? S.csnack.n : 0);
+  const coinSnackPrice = () => CFG.shop2.coinSnack.price * Math.pow(2, coinSnackN());
   const giftReady = () => S.shop.gift !== today();
   function claimGift() {
     if (!giftReady()) { sfx.no(); toast('Come back tomorrow for the next gift!'); return; }
@@ -1828,6 +1833,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         + card(ART.uiIcon('ic_album', '🌟'), 'Golden pack', '4 stickers, one is 3★ or better', `<button class="buyBtn gem" data-pack="gold" ${S.gems < 20 ? 'disabled' : ''}>${ART.icon('gem')}20</button>`) : '')
       + card(ART.uiIcon('lab_energy', ART.icon('energy')), 'Energy refill', `+${CFG.gems.refill.energy} ⚡ right now`,
         `<button class="buyBtn gem" data-refill="1" ${S.gems < CFG.gems.refill.gems ? 'disabled' : ''}>${ART.icon('gem')}${CFG.gems.refill.gems}</button>`)
+      + (() => { const n = coinSnackN(), left = CFG.shop2.coinSnack.perDay - n, pr = coinSnackPrice();
+        return card(ART.uiIcon('lab_energy', ART.icon('energy')), 'Energy snack', `+${CFG.shop2.coinSnack.energy} ⚡ for coins · ${left} left today`,
+          left > 0 ? `<button class="buyBtn" data-csnack="1" ${S.coins < pr ? 'disabled' : ''}>${coin}${pr}</button>` : `<button class="buyBtn" disabled>Tomorrow</button>`); })()
       + `</div><div class="noteLine">${ART.uiIcon('offer_timer', '🔄')} The free gift resets every day</div></div>`;
 
     html += `<div id="sh-gems">${gemsShop()}</div>`;
@@ -1907,6 +1915,13 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     { const gr = $('#gemRefill'); if (gr) gr.onclick = () => { gemRefill(); renderShop(); }; }
     if (shopTab === 'gems') setTimeout(() => { const sec = $('#sh-gems'); if (sec) host.scrollTo({ top: sec.offsetTop - 50 }); }, 50);
     host.querySelectorAll('[data-refill]').forEach((b: any) => b.onclick = () => { gemRefill(); renderShop(); });
+    host.querySelectorAll('[data-csnack]').forEach((b: any) => b.onclick = () => {
+      const pr = coinSnackPrice();
+      if (coinSnackN() >= CFG.shop2.coinSnack.perDay || S.coins < pr) { sfx.no(); return; }
+      spend(pr); S.csnack = { day: today(), n: coinSnackN() + 1 };
+      S.energy += CFG.shop2.coinSnack.energy; bumpChip('#chipEnergy'); sfx.collect();
+      toast(`⚡ <b>+${CFG.shop2.coinSnack.energy} energy</b>`); renderHUD(); renderShop(); save();
+    });
     host.querySelectorAll('[data-chestbuy]').forEach((b: any) => b.onclick = () => buyChest(b.dataset.chestbuy));
     host.querySelectorAll('[data-buy]').forEach((b: any) => b.onclick = () => buySupply(+b.dataset.buy));
     host.querySelectorAll('[data-pack]').forEach((b: any) => b.onclick = () => { const kd = b.dataset.pack as 'basic' | 'gold'; if (!spendGems(kd === 'gold' ? 20 : 8, 'pack')) return; const a = alb(); a.packs[kd] = (a.packs[kd] || 0) + 1; save(); renderShop(); openPack(kd); });
@@ -2058,7 +2073,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         // a finished chain is a collectable: a medal on its tile and a reward, once
         (S.cclaim = S.cclaim || {})[ck] = 1; save(); renderBook();
         rewardCard(ART.item(ch.items[ch.items.length - 1]), `${ch.name} complete!`, 'Every step of this chain is in your collection. It gets a medal on its tile.',
-          { coins: 40 * ch.items.length, gems: 3 + Math.floor(ch.items.length / 2), energy: 10 });
+          { coins: 40 * ch.items.length, gems: 1 + Math.floor(ch.items.length / 4), energy: 10 });
         return;
       }
       sfx.tap(); chainPanel(known.length ? known[known.length - 1] : ch.items[0]);
@@ -4501,7 +4516,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const ready = giftReady();
     modal('player', 'The Star Bazaar', `<div class="shopGuide">
       <div><span>${ART.uiIcon('chest_closed', '🎁')}</span><p><b>A free gift every day</b>: a Supply Chest and energy.</p></div>
-      <div><span>${ART.uiIcon('lab_energy', '⚡')}</span><p><b>Energy refills</b> when you run low.</p></div>
+      <div><span>${ART.uiIcon('lab_energy', '⚡')}</span><p><b>Energy</b> when you run low: refills for gems, snacks for coins.</p></div>
       <div><span>${ART.uiIcon('ic_album', '🎴')}</span><p><b>Sticker packs</b> for your Star Album.</p></div>
       <div><span>${ART.uiIcon('sec_up', '⭐')}</span><p><b>Upgrades</b> that last forever: more storage, more energy, more contracts.</p></div></div>`,
       ready ? 'Claim my free gift' : 'Got it');
@@ -4569,7 +4584,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   ];
   const achTier = (a: any) => (S.ach && S.ach[a.id]) || 0;
   const achReady = () => ACH.filter(a => achTier(a) < a.at.length && a.v() >= a.at[achTier(a)]).length;
-  const achReward = (t: number): Reward => t === 0 ? { coins: 60, energy: 5, gems: 3 } : t === 1 ? { coins: 150, energy: 10, gems: 6 } : t === 2 ? { coins: 400, spin: 1, gems: 12 } : t === 3 ? { coins: 900, spin: 2, gems: 25 } : { coins: 2000, spin: 3, gems: 40 };
+  const achReward = (t: number): Reward => t === 0 ? { coins: 60, energy: 5, gems: 1 } : t === 1 ? { coins: 150, energy: 10, gems: 3 } : t === 2 ? { coins: 400, spin: 1, gems: 6 } : t === 3 ? { coins: 900, spin: 2, gems: 12 } : { coins: 2000, spin: 3, gems: 20 };
   function achPop() {
     pop(`${ART.uiIcon('ic_trophy', '🏆')} Achievements`, `<div class="achList">${ACH.map(a => {
       const t = achTier(a), max = t >= a.at.length, need = a.at[Math.min(t, a.at.length - 1)], v = a.v(), ok = !max && v >= need;
