@@ -1,5 +1,10 @@
 # Changelog
 
+- **v82 (0.82.0)**
+  - The UI is now drawn with the painted Orbital kit (art/ui/orbital-holo/sheets), not CSS imitations: popups are the mint holo panel with gold corners, full screens the pearl panel, titles the pearl capsule, buttons the amber / pearl / mint / slate capsules, tabs petrol and pearl, HUD counters and the chapter strip the dark dock capsule, cards the pearl tile frame, side buttons the petrol panel.
+  - Board: painted pearl and mint tiles, crater tiles for locked ones, and the gold-edged tile for anything a contract wants.
+  - The projector is the painted drone; the beam comes out of its eye. Missions, Galaxy, Lab and Star Chart buttons use the painted icons.
+
 - **v81 (0.81.0)**
   - New look from the art branch (codex/orbital-holo-ui): "Pocket Buddy", aqua panels, orange actions, a constellation Star Chart, see-through aqua board. The old Space Hologram look stays one switch away in Settings.
   - Popups are projected by the floating companion: it hovers under the open panel, a beam with two light rays runs from its antenna to the panel's edge, and the panel prints upward out of the light. Light, see-through aqua glass with scanlines and corner brackets.

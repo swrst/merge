@@ -1,0 +1,110 @@
+/* Orbital kit: the ChatGPT-painted UI sheets in art/ui/orbital-holo/sheets, cut
+   into src/sprites/ui/oh_*.webp, used as real nine-slice frames (the corners
+   keep their gold, gems and emitters; the middles stretch). This is the look of
+   the default theme ("buddy"); Settings switches back to the old one.
+   Loaded last; six #app outrank buddy.css (4) and projector.css (5). */
+html[data-ui-theme="buddy"]{
+  --kit-ink:#12414a; --kit-ink2:#3f6870;
+  --kit-holo:url(../sprites/ui/oh_panel_holo.webp);
+  --kit-pearl:url(../sprites/ui/oh_panel.webp);
+  --kit-dark:url(../sprites/ui/oh_panel_dark.webp);
+  --kit-card:url(../sprites/ui/oh_card.webp);
+  --kit-title:url(../sprites/ui/oh_title.webp);
+  --kit-dock:url(../sprites/ui/oh_dock.webp);
+  --kit-btn:url(../sprites/ui/oh_button_primary.webp);
+  --kit-btn2:url(../sprites/ui/oh_button_secondary.webp);
+  --kit-btn3:url(../sprites/ui/oh_button_success.webp);
+  --kit-btn0:url(../sprites/ui/oh_button_disabled.webp);
+  --kit-tab1:url(../sprites/ui/oh_tab_on.webp);
+  --kit-tab0:url(../sprites/ui/oh_tab_off.webp);
+  --kit-slot:url(../sprites/ui/oh_slot.webp);
+}
+
+/* ---------------------------------------------------------------- panels */
+/* projected popups: the mint holo panel */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard){
+  background:none!important;border-style:solid!important;border-width:24px!important;border-radius:0!important;
+  border-image:var(--kit-holo) 76 fill / 24px / 0 stretch!important;
+  box-shadow:none!important;filter:drop-shadow(0 0 16px rgba(110,255,220,.55)) drop-shadow(0 12px 18px rgba(0,30,40,.35));
+  padding:10px 6px 6px!important;color:var(--kit-ink)!important}
+/* the holo panel is already lit: only a whisper of scanlines on top */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard)::before{
+  inset:-10px!important;left:-10px!important;top:-10px!important;right:-10px!important;bottom:-10px!important;border-radius:14px!important;
+  background:repeating-linear-gradient(0deg,rgba(40,190,170,.05) 0 1px,transparent 1px 4px)!important}
+/* full screens (shop, lab, missions…): the pearl panel */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app .screen:not(.scene){
+  background:none!important;border-style:solid!important;border-width:24px!important;border-radius:0!important;
+  border-image:var(--kit-pearl) 76 fill / 24px / 0 stretch!important;box-shadow:none!important;
+  filter:drop-shadow(0 10px 18px rgba(0,30,40,.35));color:var(--kit-ink)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app .screen:not(.scene)::before,
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app .screen:not(.scene)::after{display:none!important}
+
+/* ---------------------------------------------------------------- titles */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app :is(.popRibbon,.mTitle,.miniTitle,.screen:not(.scene) .scTitle,.xpPT){
+  background:none!important;border-style:solid!important;border-width:12px 30px!important;border-radius:0!important;
+  border-image:var(--kit-title) 46 92 fill / 12px 30px / 0 stretch!important;box-shadow:none!important;
+  color:var(--kit-ink)!important;text-shadow:0 1px 0 rgba(255,255,255,.8)!important;padding:1px 4px!important;
+  font-family:"Lilita One",Fredoka,sans-serif!important;font-size:17px!important;line-height:1.15!important;filter:drop-shadow(0 3px 4px rgba(0,30,40,.3));
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:calc(100% - 74px)!important;width:auto!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app :is(.popRibbon,.mTitle,.miniTitle,.screen:not(.scene) .scTitle) *{color:var(--kit-ink)!important}
+
+/* ---------------------------------------------------------------- buttons */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app :is(.big,.buyBtn,.csGo,.skGo,.gpGo,.skFuseGo,.xpGive){
+  background:none!important;border-style:solid!important;border-width:13px 20px!important;border-radius:0!important;
+  border-image:var(--kit-btn) 64 80 fill / 13px 20px / 0 stretch!important;box-shadow:none!important;
+  color:#fff!important;text-shadow:0 1px 0 #a24d14,0 0 3px rgba(150,60,10,.55)!important;padding:2px 6px!important;min-height:44px;
+  filter:drop-shadow(0 3px 2px rgba(120,60,10,.35));font-family:Fredoka,sans-serif!important;font-weight:700!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app :is(.big,.buyBtn,.csGo,.skGo,.gpGo,.skFuseGo,.xpGive) *{color:#fff!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app :is(.big,.buyBtn):active{transform:translateY(2px) scale(.98);filter:none}
+/* secondary: pearl */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app :is(.big.soft,.big.blue,.big.alt,.buyBtn.soft,.sellBtn,.tSkip){
+  border-image:var(--kit-btn2) 64 80 fill / 13px 20px / 0 stretch!important;color:var(--kit-ink)!important;text-shadow:0 1px 0 #fff!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app :is(.big.soft,.big.blue,.big.alt,.buyBtn.soft,.sellBtn,.tSkip) *{color:var(--kit-ink)!important}
+/* free / claim / done: mint */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app :is(.buyBtn.green,.big.green,.btnDeliver){
+  border-image:var(--kit-btn3) 64 80 fill / 13px 20px / 0 stretch!important;color:#0d4a3a!important;text-shadow:0 1px 0 rgba(255,255,255,.7)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app :is(.buyBtn.green,.big.green) *{color:#0d4a3a!important}
+/* not yet: slate */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app :is(.big,.buyBtn)[disabled],
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app :is(.big,.buyBtn).off{
+  border-image:var(--kit-btn0) 64 80 fill / 13px 20px / 0 stretch!important;color:#e9eef0!important;text-shadow:0 1px 0 #4a5257!important;filter:none;opacity:1!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app :is(.big,.buyBtn)[disabled] *,
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app :is(.big,.buyBtn).off *{color:#e9eef0!important}
+
+/* ---------------------------------------------------------------- tabs */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app :is(.sTab,.labTabs>button,.mlTabs>button,.achTabs>button,.tabsRow>button){
+  background:none!important;border-style:solid!important;border-width:11px 16px!important;border-radius:0!important;
+  border-image:var(--kit-tab0) 64 80 fill / 11px 16px / 0 stretch!important;box-shadow:none!important;
+  color:var(--kit-ink)!important;text-shadow:0 1px 0 #fff!important;padding:0 4px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app :is(.sTab.on,.labTabs>button.on,.mlTabs>button.on,.achTabs>button.on,.tabsRow>button.on){
+  border-image:var(--kit-tab1) 64 80 fill / 11px 16px / 0 stretch!important;color:#f2fffb!important;text-shadow:0 1px 1px #06222a!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app :is(.sTab,.sTab.on) *{color:inherit!important}
+
+/* ---------------------------------------------------------------- cards inside panels */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app :is(.sCard,.card,.questRow,.achCard,.enRow,.lxCard,.pfStat,.dayCell,.csNeed,.chHead2,.optRow,.pCard,.srcCard,.funCard,.mlCard,.mlTile){
+  background:none!important;border-style:solid!important;border-width:12px!important;border-radius:0!important;
+  border-image:url(../sprites/ui/oh_tile_light.webp) 64 fill / 12px / 0 stretch!important;box-shadow:none!important;color:var(--kit-ink)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app :is(.albSlot,.bagSlot,.slot,.traySlots>button,.pickCell){
+  background:none!important;border-style:solid!important;border-width:10px!important;border-radius:0!important;
+  border-image:var(--kit-slot) 70 fill / 10px / 0 stretch!important;box-shadow:none!important}
+
+/* ---------------------------------------------------------------- HUD and dock */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app .hud .chip{
+  background:none!important;border-style:solid!important;border-width:6px 11px!important;border-radius:0!important;
+  border-image:var(--kit-dock) 46 92 fill / 6px 11px / 0 stretch!important;box-shadow:none!important;filter:drop-shadow(0 2px 3px rgba(0,25,35,.4));padding:0 2px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app .hud .chip :is(b,span,i,#energy,#coins,#gems){color:#f2fffb!important;text-shadow:0 1px 1px #04161c!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app .side .sideW{
+  background:none!important;border-style:solid!important;border-width:10px!important;border-radius:0!important;
+  border-image:var(--kit-dark) 76 fill / 8px / 0 stretch!important;border-width:8px!important;box-shadow:none!important;filter:drop-shadow(0 3px 4px rgba(0,25,35,.4))}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app .side .sideW :is(i,b,span:not(.dot)){color:#f2fffb!important;text-shadow:0 1px 1px #04161c!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app .bottomBar .chapLine{
+  background:none!important;border-style:solid!important;border-width:5px 16px!important;border-radius:0!important;
+  border-image:var(--kit-dock) 46 92 fill / 5px 16px / 0 stretch!important;box-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app .bottomBar .chapLine *{color:#f2fffb!important}
+/* the painted nav icons are pictures, not glyphs: give them room */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app img.ohIc{object-fit:contain;filter:drop-shadow(0 2px 2px rgba(0,25,35,.35))}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app #galIc img.ohIc{width:100%!important;height:100%!important;transform:scale(1.15)}
+/* screen titles size to their words */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app .screen:not(.scene) .scTitle{width:max-content!important;max-width:calc(100vw - 120px)!important;min-width:0!important}
+/* reward card: room under the giver's portrait for the title */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app .rwcCard{padding-top:46px!important}

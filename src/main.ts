@@ -7,6 +7,7 @@ import './style.css';
 import './themes/orbital.css';
 import './themes/buddy.css';
 import './themes/projector.css';
+import './themes/kit.css';
 import './themes/theme';
 import { ART } from './art';
 import { startGame } from './game';
@@ -78,7 +79,7 @@ async function main() {
     initServices();
     await startGame();
     startHoloFix();
-    startProjector(ART.spriteUi('pp_buddy') || '');
+    startProjector(ART.spriteUi('oh_projector') || ART.spriteUi('pp_buddy') || '');
   } catch (err) { console.error(err); analytics.error(err, 'boot'); bootFailed(err); }
 }
 

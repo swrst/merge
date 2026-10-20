@@ -39,13 +39,13 @@ function place() {
   if (!bw || !bh) { el.classList.remove('on'); return; }
   const bx = x, by = y + bh;
   const room = ov.height - by;                                     // space under the panel
-  const size = Math.max(52, Math.min(78, room - 18));
+  const size = Math.max(60, Math.min(92, room - 18));
   // the companion hovers under the panel's left third; tight on space, it tucks against the corner
   const cx = Math.max(size / 2 + 6, Math.min(ov.width - size / 2 - 6, bx + bw * 0.2));
   const cy = room > size + 30 ? by + Math.min(room - size / 2 - 10, 24 + size / 2 + 26) : by + size * 0.15;
   bot.style.cssText = `left:${cx - size / 2}px;top:${cy - size / 2}px;width:${size}px;height:${size}px`;
   el.classList.toggle('tight', room <= size + 30);
-  const lx = cx + size * 0.02, ly = cy - size * 0.46;              // the antenna tip
+  const lx = cx + size * 0.14, ly = cy - size * 0.06;              // the drone's eye (the sprite is mirrored to face the panel)
   const ax = bx + bw * 0.05, bxr = bx + bw * 0.62, ty = by - 3;    // where the light lands
   svg.setAttribute('viewBox', `0 0 ${ov.width} ${ov.height}`);
   svg.querySelector('.hpCone')!.setAttribute('points', `${lx},${ly} ${ax},${ty} ${bxr},${ty}`);

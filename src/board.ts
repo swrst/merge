@@ -185,7 +185,7 @@ class PixiBoard {
     add('coin', ART.iconSvg('coin'), ART.spriteUi('icon_coin') || undefined);
     // shared tiles, plus each world's own set when it has been painted (tile_light_luna …)
     const tiles = ['tile_light', 'tile_dark', 'tile_locked'];
-    [...tiles, 'oh_tile_light', 'oh_tile_dark', 'oh_tile_locked', 'bubble_film', 'seal_bubble', 'seal_crack', 'meteor', 'ic_star_tag', ...Object.keys(THEME).flatMap(w => tiles.map(t => t + '_' + w))].forEach(k => {
+    [...tiles, 'oh_tile_light', 'oh_tile_dark', 'oh_tile_locked', 'oh_tile_reward', 'bubble_film', 'seal_bubble', 'seal_crack', 'meteor', 'ic_star_tag', ...Object.keys(THEME).flatMap(w => tiles.map(t => t + '_' + w))].forEach(k => {
       const url = ART.spriteUi(k); if (url) add('ui:' + k, '', url);
     });
     await Promise.all(jobs);
@@ -331,21 +331,16 @@ class PixiBoard {
     g.clear();
     const art = this.tileArt[i];
     if (getUITheme() === 'buddy') {
-      if (art) art.visible = false;
-      // light aqua glass pads (Scout Beacon look): see-through, a white top highlight and a soft lower edge
-      const x0 = p.x + 2, y0 = p.y + 2, w0 = c - 4;
-      if (locked) {
-        g.roundRect(x0, y0, w0, w0, R).fill({ color: 0x3d5f70, alpha: .62 }).stroke({ color: 0xa9c8d2, width: 1.4, alpha: .8 });
-        g.roundRect(x0 + 3, y0 + 3, w0 - 6, w0 * .2, R * .6).fill({ color: 0xffffff, alpha: .08 });
-      } else {
-        g.roundRect(x0, y0, w0, w0, R).fill({ color: dark ? 0x7fe3d8 : 0xb2f5ec, alpha: dark ? .30 : .36 });
-        g.roundRect(x0, y0 + w0 * .78, w0, w0 * .22, R).fill({ color: 0x1f8f8f, alpha: .16 });          // lower edge
-        g.roundRect(x0 + 4, y0 + 3, w0 - 8, w0 * .2, R * .55).fill({ color: 0xffffff, alpha: .22 });       // top highlight
-        g.roundRect(x0, y0, w0, w0, R).stroke({ color: 0xe6fffb, width: 1.5, alpha: .85 });
+      // the painted Orbital board kit: pearl and mint pads in a checkerboard, a crater
+      // pad for locked tiles, the gold-edged pad for what a contract wants
+      const want = this.wanted.has(i) && !locked;
+      const tex = this.tex[want ? 'ui:oh_tile_reward' : locked ? 'ui:oh_tile_locked' : dark ? 'ui:oh_tile_dark' : 'ui:oh_tile_light'];
+      if (tex && art) {
+        art.visible = true; art.texture = tex; art.position.set(p.x + 1, p.y + 1); art.width = c - 2; art.height = c - 2;
+        if (this.slots[i] && this.slots[i].key.startsWith('u')) g.roundRect(p.x + 4, p.y + 4, c - 8, c - 8, R).fill({ color: 0x7cc8ff, alpha: 0.3 });
+        if (r) g.roundRect(p.x + 3, p.y + 3, c - 6, c - 6, R).stroke({ color: r === 3 ? 0xffb02e : r === 2 ? 0xb58cff : 0x6fd0e8, alpha: .8, width: r === 3 ? 3 : 2 });
+        return;
       }
-      if(this.wanted.has(i)) g.roundRect(p.x+2,p.y+2,c-4,c-4,R).stroke({color:0xffa04a,width:3});
-      if(r) g.roundRect(p.x+2,p.y+2,c-4,c-4,R).stroke({color:r===3?0xffbd66:r===2?0xb1a3f4:0x82cddd,width:2});
-      return;
     }
     const kind = locked ? 'tile_locked' : dark ? 'tile_dark' : 'tile_light';
     // locked tiles are a dark space-station hatch, drawn here (no crystals)
