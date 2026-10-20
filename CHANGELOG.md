@@ -1,5 +1,14 @@
 # Changelog
 
+- **v85 (0.85.0)**
+  - The companion projects the full screens too (shop, Mission Log, Collection): it sits in the lower corner and casts its light up across them.
+  - The old violet glass is gone from the HUD counters, XP bar, side buttons, quick chips, storage button and bottom bar: deep teal hologram glass now (painted tile for the side buttons).
+  - Board tiles: frosted white and aqua glass in a checkerboard, drawn larger so the rims meet. Sealed items are clearly visible inside a lighter bubble, with a small padlock on the corner.
+  - Ready contracts: green hologram card with a dark green rim and green glow, needs in a green-rimmed card, painted tick.
+  - Galaxy and Star Chart buttons are back to their own size and look (the popup buttons no longer leak there).
+  - Collection readable: chain tiles are glass cards with dark text, locked ones a dimmed card with a padlock.
+  - Less aqua: neutral dark dim behind popups, white frosted tiles on the board.
+
 - **v84 (0.84.0)**
   - The hologram look is only on popups, frames and the board. HUD, XP bar, side buttons, bottom bar, Galaxy button, nav icons, galaxy map and Star Chart are back to the classic art.
   - Each kind of popup has its own frame: character talk (square panel), general popups (header-strip panel), rewards (orange-rimmed card), small prompts (banner), energy (frosted card), quests (mission tablet), chapter card (square panel), Fun & Games and profile (tall panel), daily gift (calendar card with the star arc), shop (glowing offer card), Mission Log (tablet).

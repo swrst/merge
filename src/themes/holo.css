@@ -52,66 +52,65 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popRibbon,.mT
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #rwc .rwcCard .rwcRib.rwcRib{max-width:calc(100% - 10px)!important;margin:0 auto 6px!important;display:block;font-size:15px!important}
 
 /* ============================================================ buttons */
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big,.buyBtn,.csGo,.skGo,.gpGo,.skFuseGo,.xpGive){
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.big,.buyBtn,.csGo,.skGo,.gpGo,.skFuseGo,.xpGive){
   background:none!important;border-style:solid!important;border-width:14px 17px!important;border-radius:0!important;
   border-image:var(--h-orange) 80 95 fill / 14px 17px / 0 stretch!important;box-shadow:none!important;
   color:#fff!important;text-shadow:0 1px 0 #a4480f,0 0 3px rgba(140,50,0,.5)!important;padding:1px 6px!important;min-height:44px;
   filter:drop-shadow(0 3px 2px rgba(110,50,0,.3));font-family:Fredoka,sans-serif!important;font-weight:700!important;letter-spacing:0!important;font-size:max(15px,1em)!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big,.buyBtn) img:is(.emo,.uiIc){width:20px!important;height:20px!important;vertical-align:-4px}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big,.buyBtn,.csGo,.skGo,.gpGo,.skFuseGo,.xpGive) *{color:#fff!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big,.buyBtn):active{transform:translateY(2px) scale(.98)}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big.soft,.big.blue,.big.alt,.buyBtn.soft,.sellBtn,.tSkip,.galBack){
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.big,.buyBtn,.csGo,.skGo,.gpGo,.skFuseGo,.xpGive) *{color:#fff!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.big,.buyBtn):active{transform:translateY(2px) scale(.98)}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.big.soft,.big.blue,.big.alt,.buyBtn.soft,.sellBtn,.tSkip){
   border-image:var(--h-aqua) 80 95 fill / 14px 17px / 0 stretch!important;color:var(--h-ink)!important;text-shadow:0 1px 0 rgba(255,255,255,.7)!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big.soft,.big.blue,.big.alt,.buyBtn.soft,.sellBtn,.tSkip,.galBack) *{color:var(--h-ink)!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.buyBtn.green,.big.green){
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.big.soft,.big.blue,.big.alt,.buyBtn.soft,.sellBtn,.tSkip) *{color:var(--h-ink)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.buyBtn.green,.big.green){
   border-image:var(--h-green) 80 95 fill / 14px 17px / 0 stretch!important;color:#fff!important;text-shadow:0 1px 0 #2b6b12!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.buyBtn.gem,.big.gem){
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.buyBtn.gem,.big.gem){
   border-image:var(--h-violet) 80 95 fill / 14px 17px / 0 stretch!important;color:#fff!important;text-shadow:0 1px 0 #4b1f8f!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big,.buyBtn)[disabled],
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big,.buyBtn).off{
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.big,.buyBtn)[disabled],
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.big,.buyBtn).off{
   border-image:var(--h-grey) 80 95 fill / 14px 17px / 0 stretch!important;color:#f3f6f7!important;text-shadow:0 1px 0 #555c61!important;filter:none;opacity:1!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big,.buyBtn)[disabled] *,
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big,.buyBtn).off *{color:#f3f6f7!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.big,.buyBtn)[disabled] *,
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.big,.buyBtn).off *{color:#f3f6f7!important}
 /* round buttons: close, info, back */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popX,.mX,.scClose,.xBtn,#xpClose,#xpPClose,.miniClose,#infoClose,#bagClose){
   background:var(--h-close) center/contain no-repeat!important;border:0!important;border-radius:50%!important;box-shadow:none!important;
   color:transparent!important;text-shadow:none!important;font-size:0!important;width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;
   filter:drop-shadow(0 2px 2px rgba(80,0,0,.35))}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.skHelp,.infoBtn,.helpBtn,.btnHelp){
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.skHelp,.infoBtn,.helpBtn,.btnHelp){
   background:var(--h-info) center/contain no-repeat!important;border:0!important;box-shadow:none!important;color:transparent!important;font-size:0!important;width:34px!important;height:34px!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .galBack::before{content:"";display:inline-block;width:20px;height:20px;margin:-4px 4px -5px -6px;background:var(--h-back) center/contain no-repeat}
 
 /* ============================================================ tabs, bars, timers */
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.sTab,.labTabs>button,.mlTabs>button,.achTabs>button,.tabsRow>button){
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.sTab,.labTabs>button,.mlTabs>button,.achTabs>button,.tabsRow>button){
   background:none!important;border-style:solid!important;border-width:11px 14px!important;border-radius:0!important;
   border-image:var(--h-tab0) 70 85 fill / 11px 14px / 0 stretch!important;box-shadow:none!important;color:var(--h-ink)!important;text-shadow:0 1px 0 #fff!important;padding:0 4px!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.sTab.on,.labTabs>button.on,.mlTabs>button.on,.achTabs>button.on,.tabsRow>button.on){
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.sTab.on,.labTabs>button.on,.mlTabs>button.on,.achTabs>button.on,.tabsRow>button.on){
   border-image:var(--h-tab1) 80 95 fill / 11px 14px / 0 stretch!important;color:#f0fffc!important;text-shadow:0 1px 1px #04222a!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.sTab,.sTab.on) *{color:inherit!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.catBar,.achBar,.wkBar,.gpBar,.skBar,.skBar2,.qBar,.tBar,.albProg,.skLitBar,.skLit2,.pfXp,.cwBar){
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.sTab,.sTab.on) *{color:inherit!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.catBar,.achBar,.wkBar,.gpBar,.skBar,.skBar2,.qBar,.tBar,.albProg,.skLitBar,.skLit2,.pfXp,.cwBar){
   background:none!important;border-style:solid!important;border-width:4px 8px!important;border-radius:0!important;
   border-image:var(--h-bar) 40 50 fill / 4px 8px / 0 stretch!important;box-shadow:none!important;overflow:visible!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.catBar>i,.achBar>em,.albProg>i,.pfXp>i,.skLitBar>i,.skLit2>i,.gpBar>i,.wkBar>i){
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.catBar>i,.achBar>em,.albProg>i,.pfXp>i,.skLitBar>i,.skLit2>i,.gpBar>i,.wkBar>i){
   background:var(--h-fill) left center/100% 100% no-repeat!important;box-shadow:none!important;border-radius:6px!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.evTime,.timerPill,.offTimer){
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.evTime,.timerPill,.offTimer){
   background:none!important;border-style:solid!important;border-width:4px 8px 4px 16px!important;border-radius:0!important;
   border-image:var(--h-timer) 45 60 45 120 fill / 4px 8px 4px 16px / 0 stretch!important;box-shadow:none!important;color:var(--h-light)!important}
 
 /* ============================================================ cards, slots, tags, dots */
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.card,.questRow,.achCard,.enRow,.lxCard,.pfStat,.csNeed,.chHead2,.optRow,.pCard,.srcCard,.funCard,.mlCard,.mlTile,.pfAlb,.albSet,.resRow,.upRow,.evNode,.lbRow,.przRow,.constRow,.accBox,.rechargeBox,.labIntro){
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.card,.questRow,.achCard,.enRow,.lxCard,.pfStat,.csNeed,.chHead2,.optRow,.pCard,.srcCard,.funCard,.mlCard,.mlTile,.pfAlb,.albSet,.resRow,.upRow,.evNode,.lbRow,.przRow,.constRow,.accBox,.rechargeBox,.labIntro){
   background:none!important;border-style:solid!important;border-width:11px!important;border-radius:0!important;
   border-image:var(--h-card) 64 fill / 11px / 0 stretch!important;box-shadow:none!important;color:var(--h-ink)!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.enRow.ready,.questRow.now,.ach.ready,.achCard.ready,.mlTile.hot,.albSet.done,.funCard.hot){border-image:var(--h-card1) 64 fill / 11px / 0 stretch!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.locked,.lock,.far,.gc-locked).card,
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.mlTile,.funCard,.questRow).locked{border-image:var(--h-cardx) 64 fill / 11px / 0 stretch!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.albSlot,.bagSlot,.slot,.traySlots>button,.pickCell,.lxSp,.lxIt){
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.enRow.ready,.questRow.now,.ach.ready,.achCard.ready,.mlTile.hot,.albSet.done,.funCard.hot){border-image:var(--h-card1) 64 fill / 11px / 0 stretch!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.locked,.lock,.far,.gc-locked).card,
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.mlTile,.funCard,.questRow).locked{border-image:var(--h-cardx) 64 fill / 11px / 0 stretch!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.albSlot,.bagSlot,.slot,.traySlots>button,.pickCell,.lxSp,.lxIt){
   background:none!important;border-style:solid!important;border-width:9px!important;border-radius:0!important;
   border-image:var(--h-slot) 64 fill / 9px / 0 stretch!important;box-shadow:none!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .dot{background:var(--h-badge) center/contain no-repeat!important;border:0!important;box-shadow:none!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.gTag,.sTag,.tag,.badgeNew,.cardTag){
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) .dot{background:var(--h-badge) center/contain no-repeat!important;border:0!important;box-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.gTag,.sTag,.tag,.badgeNew,.cardTag){
   background:none!important;border-style:solid!important;border-width:5px 11px 5px 9px!important;border-radius:0!important;
   border-image:var(--h-ribbon) 40 70 40 60 fill / 5px 11px 5px 9px / 0 stretch!important;box-shadow:none!important;color:#fff!important;text-shadow:0 1px 0 #a4480f!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .gBurst{background:url(../sprites/ui/hq_sale.webp) center/contain no-repeat!important;border:0!important;box-shadow:none!important;color:#fff!important;text-shadow:0 1px 1px #8a1d12!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) .gBurst{background:url(../sprites/ui/hq_sale.webp) center/contain no-repeat!important;border:0!important;box-shadow:none!important;color:#fff!important;text-shadow:0 1px 1px #8a1d12!important}
 
 /* ============================================================ shop */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .sCard{
@@ -181,7 +180,6 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #orders .order .oC
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #orders .order .oNeeds{
   background:none!important;border-style:solid!important;border-width:9px!important;border-radius:0!important;
   border-image:var(--h-card) 64 fill / 9px / 0 stretch!important;box-shadow:none!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #orders .order.ready :is(.oCard,.oNeeds){border-image:url(../sprites/ui/ho_card_ready.webp) 70 fill / 9px / 0 stretch!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #orders .btnDeliver{background:url(../sprites/ui/ho_tick.webp) center/contain no-repeat!important;border:0!important;border-image:none!important;box-shadow:none!important;color:transparent!important;font-size:0!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #orders .btnDeliver *{opacity:0}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #pop.csheet .csHead{border-style:solid;border-width:16px 12px;border-image:url(../sprites/ui/ho_card.webp) 90 50 fill / 16px 12px / 0 stretch}
@@ -217,7 +215,7 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #levelup .luBot{po
 html:not([data-ui-theme="buddy"]) :is(.luBadge,.luPods,.luBot,.luConf){display:none}
 
 /* ============================================================ new producer */
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #npw{background:radial-gradient(120% 80% at 30% 85%,rgba(40,120,130,.38),rgba(4,22,32,.62))!important;backdrop-filter:blur(2.5px)}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #npw{background:radial-gradient(120% 80% at 30% 85%,rgba(30,40,70,.40),rgba(6,10,26,.66))!important;backdrop-filter:blur(2.5px)}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #npw .npCard{padding:36px 10px 10px!important;width:min(84vw,310px)!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #npw .npTag{top:-20px!important;max-width:none!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #npw .npTag::before{content:"";display:inline-block;width:24px;height:24px;margin:-6px 4px -6px 0;background:url(../sprites/ui/hn_unlock.webp) center/contain no-repeat;vertical-align:middle}
@@ -255,7 +253,6 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan .cfTxt.ban 
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan .cfStars{width:130px!important;height:88px!important;margin-bottom:-26px!important;position:relative;z-index:1}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan .cfStampImg{width:118px!important;margin-top:-34px;position:relative;z-index:2}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan .cfStage{width:170px;height:170px}
-html[data-ui-theme="buddy"] .galBack .gbA{display:none}
 
 /* ============================================================ a frame of its own for each kind of popup */
 /* a character speaking (modal): the plain square panel with orange corners (the base rule) */
@@ -280,6 +277,40 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #sc-shop{borde
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #sc-rocket{border-width:18px 22px!important;border-image:url(../sprites/ui/hm_tablet.webp) 50 64 fill / 18px 22px / 0 stretch!important}
 
 /* words on the light glass: dark ink (the classic look under it writes in white and pastels) */
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.coachBub) :is(p,span,b,i,em,small,div,li,strong,label,u,h1,h2,h3,h4):not(button *,.big *,.buyBtn *,.gTag,.gTag *,.dot,.pfDot,.enBig b,.enBig i,.npTag *,.mTitle *,.popRibbon *,.rwcRib *,.scTitle *,.miniTitle *,.sTab *,.cfTxt *){
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.coachBub) :is(p,span,b,i,em,small,div,li,strong,label,u,h1,h2,h3,h4):not(.big *,.buyBtn *,.csGo *,.skGo *,.gpGo *,.xpGive *,.skFuseGo *,.sellBtn *,.tSkip *,.btnDeliver *,.gTag,.gTag *,.dot,.pfDot,.enBig b,.enBig i,.npTag *,.mTitle *,.popRibbon *,.rwcRib *,.scTitle *,.miniTitle *,.sTab *,.cfTxt *){
   color:var(--h-ink)!important;text-shadow:none!important;-webkit-text-stroke:0!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard) :is(i,small,em,.noteLine,.sub):not(button *,.big *,.buyBtn *,.enBig i,.gTag *){color:var(--h-ink2)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard) :is(i,small,em,.noteLine,.sub):not(.sellBtn *,.big *,.buyBtn *,.enBig i,.gTag *){color:var(--h-ink2)!important}
+
+/* ============================================================ HUD, side buttons, bottom bar: deep teal hologram glass instead of the old violet */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.hud .chip,.hud .lvlBox .xpwrap,.spotTag,.labSt b,.labHint,.hostRow i,.sciChip,.ordEmpty,.bbBar,#bagBtn,.bottomBar .chapLine,#xpScr .xpBar,#xpScr .xpSay,#xpScr .xpBoard,#xpScr .xpO){
+  background:linear-gradient(180deg,rgba(14,64,78,.9),rgba(5,34,46,.93)) padding-box,linear-gradient(180deg,#a8fbff,#2ea9b8) border-box!important;
+  border:1.5px solid transparent!important;box-shadow:0 0 10px rgba(80,230,225,.32),inset 0 1px 0 rgba(200,255,250,.25),0 2px 0 rgba(0,0,0,.3)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .hud .lvlBox .xpwrap{border-left:0!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .hud .xpbar{background:rgba(0,20,28,.6)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .hud .xpbar i{background:linear-gradient(90deg,#4fe3d0,#a6ff8c)!important;box-shadow:0 0 6px rgba(120,255,200,.7)!important}
+/* side buttons, quick chips, the storage button: the painted deep teal tile */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.side .sideW.chapW,.side .sideW.tab,.side .qChip,#btnStore){
+  background:none!important;border-style:solid!important;border-width:8px!important;border-color:transparent!important;
+  border-image:url(../sprites/ui/hu_tile.webp) 54 fill / 8px / 0 stretch!important;box-shadow:none!important;filter:drop-shadow(0 0 6px rgba(80,230,225,.35)) drop-shadow(0 2px 2px rgba(0,0,0,.35))}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .side .qChip{border-width:5px!important;border-image-width:5px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .side .sideW.tab.claim{filter:drop-shadow(0 0 4px #ffd36e) drop-shadow(0 0 10px rgba(255,211,110,.7))}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.side .sideW,.side .qChip,.bottomBar .chapLine) :is(i,b,span:not(.dot),em){color:#e9fffd!important;text-shadow:0 1px 1px #02161c!important}
+
+/* ============================================================ contracts: ready = green hologram */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #orders .order.ready{
+  background:linear-gradient(180deg,rgba(170,255,200,.34),rgba(40,200,120,.22)) padding-box,linear-gradient(180deg,#29c96f,#0a6534) border-box!important;
+  background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.08) 0 1px,transparent 1px 4px),linear-gradient(180deg,rgba(170,255,200,.34),rgba(40,200,120,.22)),linear-gradient(180deg,#29c96f,#0a6534)!important;
+  background-origin:padding-box,padding-box,border-box!important;background-clip:padding-box,padding-box,border-box!important;
+  border:3px solid transparent!important;border-radius:16px!important;box-shadow:0 0 14px rgba(70,230,140,.65),inset 0 0 12px rgba(160,255,200,.4)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #orders .order.ready :is(.oCard,.oNeeds){border-image:none!important;border:2px solid #1f9e5a!important;border-radius:12px!important;background:linear-gradient(180deg,rgba(235,255,240,.85),rgba(190,250,215,.75))!important;box-shadow:0 0 8px rgba(70,230,140,.6),inset 0 1px 0 #fff!important;animation:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #orders .order .oTick{background:url(../sprites/ui/ho_tick.webp) center/contain no-repeat!important;border:0!important;box-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #orders .order .oTick>*{opacity:0}
+
+/* ============================================================ Collection */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #sc-book .aTile{
+  background:none!important;border-style:solid!important;border-width:10px!important;border-radius:0!important;
+  border-image:var(--h-card) 64 fill / 10px / 0 stretch!important;box-shadow:none!important;opacity:1!important;filter:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #sc-book .aTile.locked{border-image:var(--h-cardx) 64 fill / 10px / 0 stretch!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #sc-book .aTile *{color:var(--h-ink)!important;text-shadow:none!important;opacity:1!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #sc-book .aTile.locked *{color:#35585e!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #sc-book .aTile.locked :is(img,svg){opacity:.5!important}

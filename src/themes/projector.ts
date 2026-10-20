@@ -13,7 +13,8 @@ let el: HTMLDivElement | null = null, svg: SVGSVGElement | null = null, bot: HTM
 let openBox: Element | null = null, ro: ResizeObserver | null = null, raf = 0;
 let poseOf: (ov: Element, box: Element) => string = () => '';
 let idleSrc = '';
-let mode: 'pop' | 'toast' | 'bar' = 'pop';
+let mode: 'pop' | 'screen' | 'toast' | 'bar' = 'pop';
+const SCREENS = ['#sc-shop', '#sc-rocket', '#sc-book'];
 
 function build(src: string) {
   el = document.createElement('div'); el.id = 'holoProj'; el.setAttribute('aria-hidden', 'true');
@@ -46,18 +47,22 @@ function place() {
   if (!bw || !bh) { el.classList.remove('on'); return; }
   const bx = x, by = y + bh;
   const room = ov.height - by;                                     // space under the panel
-  const size = mode === 'pop' ? Math.max(60, Math.min(92, room - 18)) : 58;
+  const size = mode === 'pop' || mode === 'screen' ? Math.max(60, Math.min(92, room - 18)) : 58;
   // the companion hovers under the panel's left third; tight on space, it tucks against the corner.
   // A board message (toast) or the item bar: it floats at the bar's left end, just below it
   let cx = Math.max(size / 2 + 6, Math.min(ov.width - size / 2 - 6, bx + bw * 0.2));
   let cy = room > size + 30 ? by + Math.min(room - size / 2 - 10, 24 + size / 2 + 26) : by + size * 0.15;
-  if (mode !== 'pop') { cx = Math.max(size / 2 + 2, bx + size * 0.42); cy = by - bh / 2 + size * 0.18; }
+  if (mode === 'screen') { cx = Math.max(size / 2 + 4, bx + size * 0.55); cy = Math.min(by, ov.height) - size * 0.62; }
+  if (mode === 'toast' || mode === 'bar') { cx = Math.max(size / 2 + 2, bx + size * 0.42); cy = by - bh / 2 + size * 0.18; }
   bot.style.cssText = `left:${cx - size / 2}px;top:${cy - size / 2}px;width:${size}px;height:${size}px`;
-  el.classList.toggle('tight', room <= size + 30 || mode !== 'pop');
-  el.classList.toggle('small', mode !== 'pop');
+  const small = mode === 'toast' || mode === 'bar';
+  el.classList.toggle('tight', room <= size + 30 || small);
+  el.classList.toggle('small', small);
   const lx = cx + size * 0.14, ly = cy - size * 0.06;              // the drone's eye (the sprite is mirrored to face the panel)
-  const ax = mode === 'pop' ? bx + bw * 0.05 : cx + size * 0.4, bxr = mode === 'pop' ? bx + bw * 0.62 : bx + bw * 0.55;
-  const ty = mode === 'pop' ? by - 3 : by - bh + 3;                // where the light lands: the panel's bottom edge, or a bar's top edge from inside
+  let ax = !small ? bx + bw * 0.05 : cx + size * 0.4, bxr = !small ? bx + bw * 0.62 : bx + bw * 0.55;
+  let ty = !small ? by - 3 : by - bh + 3;                // where the light lands: the panel's bottom edge, or a bar's top edge from inside
+  // a full screen: the companion sits in its lower corner and casts the light up across it
+  if (mode === 'screen') { ax = cx + size * 0.2; bxr = cx + size * 2.6; ty = cy - size * 1.5; }
   svg.setAttribute('viewBox', `0 0 ${ov.width} ${ov.height}`);
   svg.querySelector('.hpCone')!.setAttribute('points', `${lx},${ly} ${ax},${ty} ${bxr},${ty}`);
   const m = (ax + bxr) / 2, hw = (bxr - ax) * 0.22;                 // a brighter core down the middle
@@ -87,7 +92,9 @@ function update() {
   if (!found && getUITheme() === 'buddy') {
     // nothing open: the companion projects the board's messages and the item bar instead
     const app = document.getElementById('app'), t = document.getElementById('toast'), bar = document.getElementById('infoBar');
-    if (app && t && t.classList.contains('show') && t.textContent) { found = [app, t]; m = 'toast'; }
+    const sc = SCREENS.map(q => document.querySelector(q)).find(n => n && n.classList.contains('open'));
+    if (app && sc) { found = [app, sc]; m = 'screen'; }
+    else if (app && t && t.classList.contains('show') && t.textContent) { found = [app, t]; m = 'toast'; }
     else if (app && bar && bar.classList.contains('on') && getComputedStyle(bar).display !== 'none') { found = [app, bar]; m = 'bar'; }
   }
   if (!found) {
@@ -104,6 +111,7 @@ function update() {
   el.classList.toggle('onApp', mode !== 'pop');
   el.classList.remove('on'); void el.offsetWidth;                // restart the beam animation
   box.classList.remove('hpIn'); void (box as HTMLElement).offsetWidth;
+  if (mode === 'screen') { const im = bot?.querySelector('img'); const w = poseOf(ov, box) || idleSrc; if (im && im.getAttribute('src') !== w) im.setAttribute('src', w); el.classList.add('on'); ro?.disconnect(); ro = new ResizeObserver(() => place()); ro.observe(box); follow(600); return; }
   if (mode !== 'pop') { const im = bot?.querySelector('img'); if (im && im.getAttribute('src') !== idleSrc) im.setAttribute('src', idleSrc); box.classList.add('hpBar'); el.classList.add('on'); ro?.disconnect(); ro = new ResizeObserver(() => place()); ro.observe(box); follow(500); return; }
   box.classList.add('hpProjected', 'hpIn');
   // the companion's face suits the moment: happy for rewards, surprised for a new find, sleepy when energy runs out
@@ -128,7 +136,7 @@ export function startProjector(src: string, pose?: (ov: Element, box: Element) =
     update();                                                      // it may have opened in the same moment it appeared
   }).observe(app, { childList: true });
   OVERLAYS.forEach(([o]) => { const n = document.querySelector(o) as any; if (n) n.__hp = 1; });
-  ['toast', 'infoBar'].forEach(id => { const n = document.getElementById(id); if (n) mo.observe(n, { attributes: true, attributeFilter: ['class', 'style'], childList: true }); });
+  ['toast', 'infoBar', 'sc-shop', 'sc-rocket', 'sc-book'].forEach(id => { const n = document.getElementById(id); if (n) mo.observe(n, { attributes: true, attributeFilter: ['class', 'style'], childList: true }); });
   window.addEventListener('resize', () => follow(200));
   window.addEventListener('ga:theme', () => update());
   update();

@@ -4,7 +4,7 @@
    Loaded after buddy.css; #app is repeated to outrank the older skins. */
 
 /* the dim behind a projection is lighter: the world stays visible around it */
-html[data-ui-theme="buddy"] body #app#app#app#app#app :is(#pop,#modal,#rwc,#mini).open{background:radial-gradient(120% 80% at 30% 85%,rgba(40,120,130,.38),rgba(4,22,32,.62))!important;backdrop-filter:blur(2.5px)}
+html[data-ui-theme="buddy"] body #app#app#app#app#app :is(#pop,#modal,#rwc,#mini).open{background:radial-gradient(120% 80% at 30% 85%,rgba(30,40,70,.40),rgba(6,10,26,.66))!important;backdrop-filter:blur(2.5px)}
 
 /* the companion picture inside panels gives way to the real projector */
 html[data-ui-theme="buddy"] body #app#app#app#app#app :is(.popBox,.mBoxW,.xpPBox,.miniBox,.rwcCard).hpProjected::after{display:none!important}

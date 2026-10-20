@@ -185,7 +185,7 @@ class PixiBoard {
     add('coin', ART.iconSvg('coin'), ART.spriteUi('icon_coin') || undefined);
     // shared tiles, plus each world's own set when it has been painted (tile_light_luna …)
     const tiles = ['tile_light', 'tile_dark', 'tile_locked'];
-    [...tiles, 'ho_tile', 'ho_tile2', 'hs_locked', 'hs_wanted', 'hs_selected', 'hs_sparkle', 'hs_shadow', 'bubble_film', 'seal_bubble', 'seal_crack', 'meteor', 'ic_star_tag', ...Object.keys(THEME).flatMap(w => tiles.map(t => t + '_' + w))].forEach(k => {
+    [...tiles, 'ho_tile', 'ho_tile2', 'hs_locked', 'hs_wanted', 'hm_locked', 'hc_card', 'hs_selected', 'hs_sparkle', 'hs_shadow', 'bubble_film', 'seal_bubble', 'seal_crack', 'meteor', 'ic_star_tag', ...Object.keys(THEME).flatMap(w => tiles.map(t => t + '_' + w))].forEach(k => {
       const url = ART.spriteUi(k); if (url) add('ui:' + k, '', url);
     });
     await Promise.all(jobs);
@@ -334,10 +334,12 @@ class PixiBoard {
       // the hologram board kit: light and deeper aqua glass in a checkerboard, a
       // padlocked grey-teal tile when locked, the orange-framed tile for what a contract wants
       const want = this.wanted.has(i) && !locked;
-      const tex = this.tex[want ? 'ui:hs_wanted' : locked ? 'ui:hs_locked' : dark ? 'ui:ho_tile2' : 'ui:ho_tile'];
+      const tex = this.tex[want ? 'ui:hs_wanted' : locked ? 'ui:hs_locked' : dark ? 'ui:ho_tile' : 'ui:hc_card'] || this.tex['ui:ho_tile'];
       if (tex && art) {
-        art.visible = true; art.texture = tex; art.position.set(p.x + 1, p.y + 1); art.width = c - 2; art.height = c - 2;
-        art.alpha = want || locked ? 1 : dark ? 0.8 : 0.9;          // see-through glass: the world shows under the board
+        // frosted white and aqua glass in a checkerboard, drawn a touch larger than the cell so the rims meet
+        const o = c * 0.05;
+        art.visible = true; art.texture = tex; art.position.set(p.x - o, p.y - o); art.width = c + o * 2; art.height = c + o * 2;
+        art.alpha = want || locked ? 1 : dark ? 0.82 : 0.9;
         if (this.slots[i] && this.slots[i].key.startsWith('u')) g.roundRect(p.x + 4, p.y + 4, c - 8, c - 8, R).fill({ color: 0x7cc8ff, alpha: 0.3 });
         if (r) g.roundRect(p.x + 3, p.y + 3, c - 6, c - 6, R).stroke({ color: r === 3 ? 0xffb02e : r === 2 ? 0xb58cff : 0x6fd0e8, alpha: .8, width: r === 3 ? 3 : 2 });
         return;
@@ -414,13 +416,17 @@ class PixiBoard {
     if (!c) return;
     if (c.f) {
       // a sealed tile: the item sits inside, dimmed, waiting for its twin
-      s.art = this.sprite('i:' + c.f, i, 0.6); (s as any).sealedItem = true;
-      s.art.alpha = 0.55; (s.art as any).tint = 0xdfe6ff;   // ghostly inside the glass until it is opened
+      s.art = this.sprite('i:' + c.f, i, 0.72); (s as any).sealedItem = true;
+      s.art.alpha = 0.9; (s.art as any).tint = 0xeef4ff;   // clearly visible inside the glass, just a touch cooler until it is opened
       const p = this.center(i), g = new Graphics(), r = this.cell * 0.15;
       if (this.tex['ui:seal_bubble']) {
         // painted glass bubble over the tile (it carries its own little padlock)
         const b = new Sprite(this.tex['ui:seal_bubble']); b.anchor.set(0.5); b.width = b.height = this.cell * 1.0;
-        b.alpha = 1; b.position.set(p.x, p.y); this.lItem.addChild(b); (s as any).seal = b; s.timer = undefined;
+        b.alpha = 0.6; b.position.set(p.x, p.y); this.lItem.addChild(b); (s as any).seal = b; s.timer = undefined;
+        if (this.tex['ui:hm_locked']) {   // a little padlock on the corner says "sealed" without hiding the item
+          const lk = new Sprite(this.tex['ui:hm_locked']); lk.anchor.set(0.5); lk.width = lk.height = this.cell * 0.3;
+          lk.position.set(p.x + this.cell * 0.32, p.y + this.cell * 0.32); this.lItem.addChild(lk); s.timer = lk as any;
+        }
         return;
       }
       g.circle(0, 0, r).fill({ color: 0x2a3f8f }).stroke({ color: 0xffffff, width: 2 });
@@ -585,10 +591,10 @@ class PixiBoard {
     if (s.art.parent !== this.lItem) this.lItem.addChild(s.art);
     gsap.killTweensOf(s.art);
     gsap.killTweensOf(s.art.scale);
-    const scale = s.key.startsWith('p') ? 1.02 : s.key.startsWith('b') ? 0.82 : s.key.startsWith('f') ? 0.6 : s.key.startsWith('u') ? 0.58 : 1.0;
+    const scale = s.key.startsWith('p') ? 1.02 : s.key.startsWith('b') ? 0.82 : s.key.startsWith('f') ? 0.72 : s.key.startsWith('u') ? 0.58 : 1.0;
     s.art.position.set(p.x, p.y);
     s.art.width = s.art.height = this.cell * scale;
-    s.art.alpha = s.key.startsWith('f') ? ((s as any).unseal ? 0.85 : 0.55) : 1;
+    s.art.alpha = s.key.startsWith('f') ? 0.9 : 1;
     s.art.rotation = 0;
     if (!s.key.startsWith('b')) this.idleBob(i);
   }
@@ -680,7 +686,7 @@ class PixiBoard {
   }
   private spriteScale(i: number) {
     const s = this.slots[i];
-    const scale = s.key.startsWith('p') ? 1.02 : s.key.startsWith('b') ? 0.82 : s.key.startsWith('f') ? 0.6 : s.key.startsWith('u') ? 0.58 : 1.0;
+    const scale = s.key.startsWith('p') ? 1.02 : s.key.startsWith('b') ? 0.82 : s.key.startsWith('f') ? 0.72 : s.key.startsWith('u') ? 0.58 : 1.0;
     return (this.cell * scale) / TEX;
   }
   /** producer squash when used */
@@ -1032,8 +1038,8 @@ class PixiBoard {
       const p = this.center(i); s.unseal.position.set(p.x, p.y);
     } else if (!on && s.unseal) {
       gsap.killTweensOf(s.unseal); s.unseal.destroy(); s.unseal = null;
-      s.art.tint = 0xdfe6ff; s.art.alpha = 0.55;
-      if (s.seal && this.tex['ui:seal_bubble']) { s.seal.texture = this.tex['ui:seal_bubble']; s.seal.alpha = 1; }
+      s.art.tint = 0xeef4ff; s.art.alpha = 0.9;
+      if (s.seal && this.tex['ui:seal_bubble']) { s.seal.texture = this.tex['ui:seal_bubble']; s.seal.alpha = 0.6; }
       if (s.idle) s.idle.kill(); const sc = this.spriteScale(i); s.art.scale.set(sc, sc); this.idleBob(i);
     }
   }
