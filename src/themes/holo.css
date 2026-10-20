@@ -88,10 +88,10 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.sTab,.labTabs
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.sTab.on,.labTabs>button.on,.mlTabs>button.on,.achTabs>button.on,.tabsRow>button.on){
   border-image:var(--h-tab1) 80 95 fill / 11px 14px / 0 stretch!important;color:#f0fffc!important;text-shadow:0 1px 1px #04222a!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.sTab,.sTab.on) *{color:inherit!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.catBar,.achBar,.wkBar,.gpBar,.skBar,.skBar2,.qBar,.tBar,.albProg,.skLitBar,.skLit2,.pfXp,.cwBar,.hud .xpbar,.ppConstBar){
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.catBar,.achBar,.wkBar,.gpBar,.skBar,.skBar2,.qBar,.tBar,.albProg,.skLitBar,.skLit2,.pfXp,.cwBar){
   background:none!important;border-style:solid!important;border-width:4px 8px!important;border-radius:0!important;
   border-image:var(--h-bar) 40 50 fill / 4px 8px / 0 stretch!important;box-shadow:none!important;overflow:visible!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.catBar>i,.achBar>em,.albProg>i,.pfXp>i,.skLitBar>i,.skLit2>i,.gpBar>i,.wkBar>i,.hud .xpbar i,.ppConstBar>span){
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.catBar>i,.achBar>em,.albProg>i,.pfXp>i,.skLitBar>i,.skLit2>i,.gpBar>i,.wkBar>i){
   background:var(--h-fill) left center/100% 100% no-repeat!important;box-shadow:none!important;border-radius:6px!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.evTime,.timerPill,.offTimer){
   background:none!important;border-style:solid!important;border-width:4px 8px 4px 16px!important;border-radius:0!important;
@@ -123,27 +123,7 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .sCard .buyBtn:not
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .sCard .buyBtn:not(.gem):not(.green):not([disabled]):not(.off){position:relative;overflow:visible!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .sCard .buyBtn:not(.gem):not(.green):not([disabled]):not(.off)>:first-child{position:absolute;left:-24px;top:50%;margin-top:-11px;width:22px!important;height:22px!important}
 
-/* ============================================================ HUD, dock, side */
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .hud .chip{
-  background:none!important;border-style:solid!important;border-width:4px 18px 4px 24px!important;border-radius:0!important;
-  border-image:var(--h-chip) 50 120 50 175 fill / 4px 18px 4px 24px / 0 stretch!important;box-shadow:none!important;padding:0!important;
-  filter:drop-shadow(0 2px 3px rgba(0,25,35,.4))}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .hud .chip>span:first-child{margin-left:-20px!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .hud .chip :is(b,span,i,#energy,#coins,#gems){color:var(--h-light)!important;text-shadow:0 1px 1px #031a20!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .hud :is(.iconBtn,.hudShop){background:var(--h-rbtn) center/contain no-repeat!important;border:0!important;box-shadow:none!important;border-radius:50%!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .hud .lvlBox .avatar::after{content:"";position:absolute;inset:-7px;background:var(--h-ring) center/contain no-repeat;pointer-events:none}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .hud .lvlBox .avatar{position:relative;overflow:visible!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .side :is(.sideW,.qChip){
-  background:none!important;border-style:solid!important;border-width:9px!important;border-radius:0!important;
-  border-image:var(--h-tile) 50 fill / 9px / 0 stretch!important;box-shadow:none!important;filter:drop-shadow(0 3px 4px rgba(0,25,35,.4))}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .side :is(.sideW,.qChip) :is(i,b,span:not(.dot)){color:var(--h-light)!important;text-shadow:0 1px 1px #031a20!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .bottomBar .chapLine{
-  background:none!important;border-style:solid!important;border-width:6px 15px!important;border-radius:0!important;
-  border-image:var(--h-dock) 46 80 fill / 6px 15px / 0 stretch!important;box-shadow:none!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .bottomBar .chapLine *{color:var(--h-ink)!important;text-shadow:0 1px 0 rgba(255,255,255,.6)!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #btnStore{background:var(--h-rbtn) center/contain no-repeat!important;border:0!important;box-shadow:none!important;border-radius:50%!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #tabMap{background:var(--h-rbig) center/contain no-repeat!important;border:0!important;box-shadow:none!important;border-radius:50%!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #tabMap .galLbl{color:#fff!important;text-shadow:0 1px 1px #7a3307!important}
+/* ============================================================ item bar, board messages, tips (the HUD, side buttons, dock and Galaxy button keep the classic look) */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .infoBar{
   background:none!important;border-style:solid!important;border-width:12px 22px!important;border-radius:0!important;
   border-image:var(--h-banner) 56 70 fill / 12px 22px / 0 stretch!important;box-shadow:none!important;color:var(--h-ink)!important}
@@ -207,7 +187,7 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #orders .btnDelive
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #pop.csheet .csHead{border-style:solid;border-width:16px 12px;border-image:url(../sprites/ui/ho_card.webp) 90 50 fill / 16px 12px / 0 stretch}
 
 /* ============================================================ board */
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #board::before{background:rgba(8,50,62,.38)!important;backdrop-filter:blur(3px);border-radius:18px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #board::before{background:rgba(215,255,250,.16)!important;backdrop-filter:blur(2px);border-radius:18px!important;box-shadow:none!important;border:0!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #board::after{
   background:none!important;border-style:solid!important;border-width:20px!important;border-radius:0!important;
   border-image:url(../sprites/ui/ho_board.webp) 70 / 20px / 6px stretch!important;box-shadow:none!important;mask:none!important;-webkit-mask:none!important}
@@ -276,3 +256,30 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan .cfStars{wi
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan .cfStampImg{width:118px!important;margin-top:-34px;position:relative;z-index:2}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan .cfStage{width:170px;height:170px}
 html[data-ui-theme="buddy"] .galBack .gbA{display:none}
+
+/* ============================================================ a frame of its own for each kind of popup */
+/* a character speaking (modal): the plain square panel with orange corners (the base rule) */
+/* generic popups: the panel with the darker header strip */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #pop .popBox{border-width:30px 18px 18px!important;border-image:var(--h-head) 84 56 56 fill / 30px 18px 18px / 0 stretch!important}
+/* rewards: the orange-rimmed glass card */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #rwc .rwcCard{border-width:18px!important;border-image:var(--h-card1) 70 fill / 18px / 0 stretch!important}
+/* little prompts: the wide banner */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #mini .miniBox{border-width:14px 22px!important;border-image:var(--h-banner) 56 70 fill / 14px 22px / 0 stretch!important}
+/* energy: frosted white glass */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #pop .popBox:has(.enBig){border-width:16px!important;border-image:var(--h-card) 64 fill / 16px / 0 stretch!important}
+/* quests and tasks: the mission tablet */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #pop .popBox:has(.questRow){border-width:16px 20px!important;border-image:url(../sprites/ui/hm_tablet.webp) 50 64 fill / 16px 20px / 0 stretch!important}
+/* the chapter card: the square panel */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #pop .popBox:has(.chHead2){border-width:20px!important;border-image:var(--h-panel) 64 fill / 20px / 0 stretch!important}
+/* fun and games, profile: the tall panel */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #pop .popBox:has(.funCard,.pfStat){border-width:22px!important;border-image:var(--h-tall) 50 fill / 22px / 0 stretch!important}
+/* daily gift: the calendar card with the arc of stars */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #modal .mBoxW:has(.dayGrid){border-width:56px 16px 16px!important;border-image:url(../sprites/ui/hk_day7.webp) 128 46 46 fill / 56px 16px 16px / 0 stretch!important;padding-top:4px!important}
+/* the shop screen: the glowing offer card; the Mission Log: the tablet */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #sc-shop{border-width:18px!important;border-image:url(../sprites/ui/hq_offer_best.webp) 60 fill / 18px / 0 stretch!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #sc-rocket{border-width:18px 22px!important;border-image:url(../sprites/ui/hm_tablet.webp) 50 64 fill / 18px 22px / 0 stretch!important}
+
+/* words on the light glass: dark ink (the classic look under it writes in white and pastels) */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.coachBub) :is(p,span,b,i,em,small,div,li,strong,label,u,h1,h2,h3,h4):not(button *,.big *,.buyBtn *,.gTag,.gTag *,.dot,.pfDot,.enBig b,.enBig i,.npTag *,.mTitle *,.popRibbon *,.rwcRib *,.scTitle *,.miniTitle *,.sTab *,.cfTxt *){
+  color:var(--h-ink)!important;text-shadow:none!important;-webkit-text-stroke:0!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard) :is(i,small,em,.noteLine,.sub):not(button *,.big *,.buyBtn *,.enBig i,.gTag *){color:var(--h-ink2)!important}

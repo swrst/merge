@@ -1,5 +1,11 @@
 # Changelog
 
+- **v84 (0.84.0)**
+  - The hologram look is only on popups, frames and the board. HUD, XP bar, side buttons, bottom bar, Galaxy button, nav icons, galaxy map and Star Chart are back to the classic art.
+  - Each kind of popup has its own frame: character talk (square panel), general popups (header-strip panel), rewards (orange-rimmed card), small prompts (banner), energy (frosted card), quests (mission tablet), chapter card (square panel), Fun & Games and profile (tall panel), daily gift (calendar card with the star arc), shop (glowing offer card), Mission Log (tablet).
+  - The companion also projects board messages and the item bar: it floats at their left end with its beam.
+  - Lighter, more see-through board glass; dark ink for all text on the light panels.
+
 - **v83 (0.83.0)**
   - Whole UI redrawn with the new ChatGPT hologram sheets (art/ui/holo/sheets, 105 pieces): projected aqua glass panels, title plates, orange / aqua / green / violet / grey capsule buttons, round close, back and info buttons, tabs, bars, HUD counters, cards, slots, tags, badges, dock, notices, tooltip.
   - The projector companion is the new white drone and changes face: happy for rewards, surprised for a new producer, sleepy on the energy popup, projecting on chapter and contract sheets, thinking on tips.

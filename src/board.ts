@@ -337,7 +337,7 @@ class PixiBoard {
       const tex = this.tex[want ? 'ui:hs_wanted' : locked ? 'ui:hs_locked' : dark ? 'ui:ho_tile2' : 'ui:ho_tile'];
       if (tex && art) {
         art.visible = true; art.texture = tex; art.position.set(p.x + 1, p.y + 1); art.width = c - 2; art.height = c - 2;
-        art.alpha = want || locked ? 1 : dark ? 0.62 : 0.78;          // see-through glass: the world shows under the board
+        art.alpha = want || locked ? 1 : dark ? 0.8 : 0.9;          // see-through glass: the world shows under the board
         if (this.slots[i] && this.slots[i].key.startsWith('u')) g.roundRect(p.x + 4, p.y + 4, c - 8, c - 8, R).fill({ color: 0x7cc8ff, alpha: 0.3 });
         if (r) g.roundRect(p.x + 3, p.y + 3, c - 6, c - 6, R).stroke({ color: r === 3 ? 0xffb02e : r === 2 ? 0xb58cff : 0x6fd0e8, alpha: .8, width: r === 3 ? 3 : 2 });
         return;

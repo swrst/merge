@@ -77,3 +77,9 @@ html[data-ui-theme="buddy"] #holoProj.on{display:block}
 
 /* screen titles: one line, sized to the words (an older rule fixed them at 150px and they wrapped over the tabs) */
 html[data-ui-theme="buddy"] body #app#app#app#app#app .screen:not(.scene) .scTitle{width:auto!important;max-width:calc(100% - 96px)!important;white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis;font-size:18px!important;padding:7px 16px!important}
+
+/* nothing open: the companion floats at the left end of a board message or the item bar */
+#holoProj.onApp{z-index:152}
+#holoProj.small .hpCone{opacity:.55}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(#toast,#infoBar).hpBar{padding-left:54px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #toast.hpBar{min-width:min(300px,84vw)!important;text-align:left}

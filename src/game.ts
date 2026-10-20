@@ -5543,7 +5543,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   const constById = (id: string) => CONSTS.find(x => x.id === id);
   const constState = (c: any) => lit(c.id) ? 'lit' : !visited(c.world) ? 'locked' : countItem('starcore') >= c.cost ? 'ready' : 'open';
   function constSvg(c: any, cls = '') {
-    if (getUITheme() === 'buddy') {
+    if (false) {
       const ratio=lit(c.id)?1:Math.min(1,countItem('starcore')/c.cost);
       const points=c.pts.slice(0,-1);
       const outline=c.id==='plough' ? '<path d="M50 4C29 20 25 46 30 66L50 79 70 66C75 46 71 20 50 4ZM30 53L14 75 30 68M70 53L86 75 70 68M41 78L40 96 50 88 60 96 59 78"/><circle cx="50" cy="34" r="10"/>' : c.id==='lantern' ? '<path d="M39 20V12Q50 0 61 12V20M30 24Q50 17 70 24L78 35 73 79Q50 91 27 79L22 35Z M22 35Q50 44 78 35M27 79Q50 70 73 79M40 42L39 73M60 42L61 73"/>' : '';
@@ -5600,7 +5600,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       const two = CONSTS.filter(c => c.world === w).map((c, k) => {
         const st = constState(c);
         return `<button class="gc gc-${st} ${k ? 'r' : 'l'}" data-const="${c.id}">${constArt(c)}${constSvg(c)}
-          <b>${st === 'locked' ? '???' : c.name}</b>${st === 'ready' ? '<i class="gcTag">✨ Light me!</i>' : st === 'open' ? `<i class="gcCnt">${ART.item('starcore')} ${Math.min(countItem('starcore'), c.cost)}/${c.cost}</i>` : st === 'lit' ? '<i class="gcLit">✦ lit</i>' : ''}${getUITheme() === 'buddy' ? `<span class="ppConstBar" role="progressbar" aria-label="${c.name}" aria-valuemin="0" aria-valuemax="${c.cost}" aria-valuenow="${lit(c.id)?c.cost:Math.min(countItem('starcore'),c.cost)}"><span style="width:${lit(c.id)?100:Math.min(100,countItem('starcore')/c.cost*100)}%"></span></span>` : ''}</button>`;
+          <b>${st === 'locked' ? '???' : c.name}</b>${st === 'ready' ? '<i class="gcTag">✨ Light me!</i>' : st === 'open' ? `<i class="gcCnt">${ART.item('starcore')} ${Math.min(countItem('starcore'), c.cost)}/${c.cost}</i>` : st === 'lit' ? '<i class="gcLit">✦ lit</i>' : ''}${false ? `<span class="ppConstBar" role="progressbar" aria-label="${c.name}" aria-valuemin="0" aria-valuemax="${c.cost}" aria-valuenow="${lit(c.id)?c.cost:Math.min(countItem('starcore'),c.cost)}"><span style="width:${lit(c.id)?100:Math.min(100,countItem('starcore')/c.cost*100)}%"></span></span>` : ''}</button>`;
       }).join('');
       return `<div class="skRow${visited(w) ? '' : ' far'}"><div class="skWorld">${ART.uiIcon('planet_' + w, '🪐')}<span>Seen from <b>${WORLDS[w].name}</b></span></div><div class="skPair">${two}</div></div>`;
     }).join('');
@@ -5792,7 +5792,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function galaxyHTML() {
     const fuelOk = S.fuel >= CONFIG.rocket.fuelToLaunch;
     // one more stop than there are worlds: the path runs on to a planet nobody has charted yet
-    const step = getUITheme() === 'buddy' ? 240 : GAL_STEP;
+    const step = GAL_STEP;
     const n = WORLD_ORDER.length + 1, H = GAL_TOP + (n - 1) * step + 150;
     const pt = (i: number) => ({ x: i % 2 ? 70 : 30, y: GAL_TOP + (n - 1 - i) * step + 55 });
     let path = '', lit = '';

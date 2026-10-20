@@ -4,8 +4,6 @@ import '@fontsource/fredoka/latin-600.css';
 import '@fontsource/fredoka/latin-700.css';
 import '@fontsource/lilita-one/latin-400.css';
 import './style.css';
-import './themes/orbital.css';
-import './themes/buddy.css';
 import './themes/projector.css';
 import './themes/holo.css';
 import './themes/theme';

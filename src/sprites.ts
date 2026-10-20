@@ -49,16 +49,10 @@ export const SPRITE = {
    lookup in the game picks it up without touching each call. Off in the
    classic look (Settings), which reloads the game. */
 export const HOLO_ALIAS: Record<string, string> = {
-  icon_star: 'hl_star', ic_trophy: 'hx_trophy', gem_s: 'hq_gems', coin_s: 'hq_coins',
-  ic_album: 'ic2_album', ic_album2: 'ic2_album', album_book: 'ic2_album',
-  ic_galaxy: 'ic2_planet', ic_galaxy_btn: 'ic2_planet', ic_globe: 'ic2_planet',
-  ic_lab: 'ic2_lab', ic_microscope: 'ic2_lab',
-  ic_goals: 'ic2_missions', ic_scroll: 'ic2_missions', ic_chapter: 'ic2_missions',
-  gal_starchart: 'ic2_stars', ic_shop: 'ic2_shop', ic_cart: 'ic2_shop', ic_box: 'ic2_storage',
-  ic_gift: 'hk_gift', chest_opening: 'hx_capsule', complete_stamp: 'hx_seal', victory_banner: 'hx_banner',
-  rocket_pad: 'ic2_camp', st_lock: 'hm_locked', st_check: 'hm_done', st_plus: 'hb_plus', st_cross: 'hb_close',
-  btn_info: 'hb_info', seal_bubble: 'hs_sealed', ic_sound: 'ic2_sound', ic_music: 'ic2_music',
-  ic_gear: 'ic2_settings', ic_games: 'ic2_games', pp_buddy: 'bot_idle', oh_projector: 'bot_idle',
+  // only art that lives inside popups, rewards and the board: the HUD, side buttons, dock and nav icons keep their own
+  gem_s: 'hq_gems', coin_s: 'hq_coins',
+  chest_opening: 'hx_capsule', complete_stamp: 'hx_seal', victory_banner: 'hx_banner', seal_bubble: 'hs_sealed',
+  ic_sound: 'ic2_sound', ic_music: 'ic2_music', ic_games: 'ic2_games', pp_buddy: 'bot_idle', oh_projector: 'bot_idle',
 };
 export const holoOn = (() => { try { return localStorage.getItem('galaxyAdventure.uiTheme') !== 'classic'; } catch { return true; } })();
 if (holoOn) Object.entries(HOLO_ALIAS).forEach(([k, v]) => { if (SPRITE.ui[v]) SPRITE.ui[k] = SPRITE.ui[v]; });
