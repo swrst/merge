@@ -47,30 +47,44 @@ function place() {
   if (!bw || !bh) { el.classList.remove('on'); return; }
   const bx = x, by = y + bh;
   const room = ov.height - by;                                     // space under the panel
-  const size = mode === 'pop' || mode === 'screen' ? Math.max(60, Math.min(92, room - 18)) : 58;
-  // the companion hovers under the panel's left third; tight on space, it tucks against the corner.
-  // A board message (toast) or the item bar: it floats at the bar's left end, just below it
-  let cx = Math.max(size / 2 + 6, Math.min(ov.width - size / 2 - 6, bx + bw * 0.2));
-  let cy = room > size + 30 ? by + Math.min(room - size / 2 - 10, 24 + size / 2 + 26) : by + size * 0.15;
-  if (mode === 'screen') { cx = Math.max(size / 2 + 4, bx + size * 0.55); cy = Math.min(by, ov.height) - size * 0.62; }
-  if (mode === 'toast' || mode === 'bar') { cx = Math.max(size / 2 + 2, bx + size * 0.42); cy = by - bh / 2 + size * 0.18; }
-  bot.style.cssText = `left:${cx - size / 2}px;top:${cy - size / 2}px;width:${size}px;height:${size}px`;
   const small = mode === 'toast' || mode === 'bar';
-  el.classList.toggle('tight', room <= size + 30 || small);
+  const size = small ? 56 : Math.max(60, Math.min(92, room - 14));
+  // landing line of the light: two points on the edge of the panel facing the companion
+  let p1x: number, p1y: number, p2x: number, p2y: number, cx: number, cy: number;
+  const barEl = document.getElementById('infoBar');
+  const barUp = mode === 'toast' && barEl && barEl.classList.contains('on') && getComputedStyle(barEl).display !== 'none';
+  if (mode === 'bar') {
+    // the item bar sits low: the companion floats beside its left end (where the storage button was) and lights it from the side
+    cx = Math.max(size / 2 + 2, bx - size / 2 - 4); cy = by - bh / 2 + size * 0.12;
+    p1x = bx + 2; p1y = by - bh + 5; p2x = bx + 2; p2y = by - 5;
+  } else if (barUp) {
+    // a message while the item bar is up: the companion stays in its spot beside the bar and lights the message from there
+    const hr = host.getBoundingClientRect(), r = barEl!.getBoundingClientRect();
+    const bl = r.left - hr.left, bt = r.top - hr.top;
+    cx = Math.max(size / 2 + 2, bl - size / 2 - 4); cy = bt + r.height / 2 + size * 0.12;
+    p1x = bx + bw * 0.06; p2x = bx + bw * 0.5; p1y = p2y = by - 3;
+  } else if (mode === 'screen') {
+    // a full screen leaves no room below: the companion sits in its lower corner and casts the light up across it
+    cx = Math.max(size / 2 + 4, bx + size * 0.55); cy = Math.min(by, ov.height) - size * 0.62;
+    p1x = cx + size * 0.2; p2x = cx + size * 2.6; p1y = p2y = cy - size * 1.5;
+  } else {
+    // popups and board messages: always BELOW the panel, under its left third, light up onto the bottom edge
+    cx = Math.max(size / 2 + 6, Math.min(ov.width - size / 2 - 6, bx + bw * 0.22));
+    cy = by + Math.max(size / 2 + 2, Math.min(room - size / 2 - 6, size / 2 + 34));
+    p1x = bx + bw * 0.06; p2x = bx + bw * 0.62; p1y = p2y = by - 3;
+  }
+  bot.style.cssText = `left:${cx - size / 2}px;top:${cy - size / 2}px;width:${size}px;height:${size}px`;
+  el.classList.toggle('tight', false);
   el.classList.toggle('small', small);
   const lx = cx + size * 0.14, ly = cy - size * 0.06;              // the drone's eye (the sprite is mirrored to face the panel)
-  let ax = !small ? bx + bw * 0.05 : cx + size * 0.4, bxr = !small ? bx + bw * 0.62 : bx + bw * 0.55;
-  let ty = !small ? by - 3 : by - bh + 3;                // where the light lands: the panel's bottom edge, or a bar's top edge from inside
-  // a full screen: the companion sits in its lower corner and casts the light up across it
-  if (mode === 'screen') { ax = cx + size * 0.2; bxr = cx + size * 2.6; ty = cy - size * 1.5; }
   svg.setAttribute('viewBox', `0 0 ${ov.width} ${ov.height}`);
-  svg.querySelector('.hpCone')!.setAttribute('points', `${lx},${ly} ${ax},${ty} ${bxr},${ty}`);
-  const m = (ax + bxr) / 2, hw = (bxr - ax) * 0.22;                 // a brighter core down the middle
-  svg.querySelector('.hpCore')!.setAttribute('points', `${lx},${ly} ${m - hw},${ty} ${m + hw},${ty}`);
+  svg.querySelector('.hpCone')!.setAttribute('points', `${lx},${ly} ${p1x},${p1y} ${p2x},${p2y}`);
+  const mx = (p1x + p2x) / 2, my = (p1y + p2y) / 2, hx = (p2x - p1x) * 0.22, hy = (p2y - p1y) * 0.22;   // a brighter core down the middle
+  svg.querySelector('.hpCore')!.setAttribute('points', `${lx},${ly} ${mx - hx},${my - hy} ${mx + hx},${my + hy}`);
   const set = (q: string, x1: number, y1: number, x2: number, y2: number) => {
     const l = svg!.querySelector(q)!; l.setAttribute('x1', String(x1)); l.setAttribute('y1', String(y1)); l.setAttribute('x2', String(x2)); l.setAttribute('y2', String(y2));
   };
-  set('.hpRay.a', lx, ly, ax, ty); set('.hpRay.b', lx, ly, bxr, ty); set('.hpLand', ax, ty, bxr, ty);
+  set('.hpRay.a', lx, ly, p1x, p1y); set('.hpRay.b', lx, ly, p2x, p2y); set('.hpLand', p1x, p1y, p2x, p2y);
   el.style.setProperty('--lx', lx + 'px'); el.style.setProperty('--ly', ly + 'px');
 }
 
@@ -103,6 +117,7 @@ function update() {
   }
   const [ov, box] = found;
   if (box === openBox && m !== mode) { mode = m; place(); }
+  if (m === 'toast' && openBox === box) place();
   mode = m;
   if (box === openBox && el.parentElement === ov) return;
   if (openBox) openBox.classList.remove('hpProjected', 'hpBar');
@@ -111,11 +126,11 @@ function update() {
   el.classList.toggle('onApp', mode !== 'pop');
   el.classList.remove('on'); void el.offsetWidth;                // restart the beam animation
   box.classList.remove('hpIn'); void (box as HTMLElement).offsetWidth;
-  if (mode === 'screen') { const im = bot?.querySelector('img'); const w = poseOf(ov, box) || idleSrc; if (im && im.getAttribute('src') !== w) im.setAttribute('src', w); el.classList.add('on'); ro?.disconnect(); ro = new ResizeObserver(() => place()); ro.observe(box); follow(600); return; }
-  if (mode !== 'pop') { const im = bot?.querySelector('img'); if (im && im.getAttribute('src') !== idleSrc) im.setAttribute('src', idleSrc); box.classList.add('hpBar'); el.classList.add('on'); ro?.disconnect(); ro = new ResizeObserver(() => place()); ro.observe(box); follow(500); return; }
+  if (mode === 'screen') { const im = bot?.querySelector('img'); const w = poseOf(ov, box) || idleSrc; if (im && im.getAttribute('src') !== w) im.setAttribute('src', w); bot?.classList.toggle('noMirror', w.includes('bot_project')); el.classList.add('on'); ro?.disconnect(); ro = new ResizeObserver(() => place()); ro.observe(box); follow(600); return; }
+  if (mode !== 'pop') { const im = bot?.querySelector('img'); if (im && im.getAttribute('src') !== idleSrc) im.setAttribute('src', idleSrc); bot?.classList.remove('noMirror'); box.classList.add('hpBar'); el.classList.add('on'); ro?.disconnect(); ro = new ResizeObserver(() => place()); ro.observe(box); follow(500); return; }
   box.classList.add('hpProjected', 'hpIn');
   // the companion's face suits the moment: happy for rewards, surprised for a new find, sleepy when energy runs out
-  const img = bot?.querySelector('img'); if (img) { const want = poseOf(ov, box) || idleSrc; if (img.getAttribute('src') !== want) img.setAttribute('src', want); }
+  const img = bot?.querySelector('img'); if (img) { const want = poseOf(ov, box) || idleSrc; if (img.getAttribute('src') !== want) img.setAttribute('src', want); bot?.classList.toggle('noMirror', want.includes('bot_project')); }
   // the print-in must never leave a panel half-drawn (a paused or throttled animation): done after 0.6 s regardless
   const done = box; setTimeout(() => done.classList.remove('hpIn'), 600);
   el.classList.add('on');

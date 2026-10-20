@@ -79,7 +79,7 @@ async function main() {
     startHoloFix();
     startProjector(ART.spriteUi('bot_idle') || ART.spriteUi('pp_buddy') || '', (ov, box) => {
       const k = ov.id === 'rwc' ? 'bot_happy' : ov.id === 'npw' ? 'bot_surprised'
-        : ov.classList.contains('csheet') || box.querySelector('.chHead2') ? 'bot_project' : box.querySelector('.enBig') ? 'bot_sleep' : box.querySelector('.cfStamp,.hint,.tipBox') ? 'bot_think' : '';
+        : box.querySelector('.enBig') ? 'bot_sleep' : box.querySelector('.hint,.tipBox') ? 'bot_think' : '';
       return k ? ART.spriteUi(k) : '';
     });
   } catch (err) { console.error(err); analytics.error(err, 'boot'); bootFailed(err); }

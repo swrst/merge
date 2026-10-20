@@ -81,5 +81,11 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app .screen:not(.scene) .scTit
 /* nothing open: the companion floats at the left end of a board message or the item bar */
 #holoProj.onApp{z-index:152}
 #holoProj.small .hpCone{opacity:.55}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(#toast,#infoBar).hpBar{padding-left:54px!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #toast.hpBar{min-width:min(300px,84vw)!important;text-align:left}
+
+/* the item bar: the companion takes the storage button's place beside it while it shows */
+html[data-ui-theme="buddy"] body #app .bottomBar:has(.infoBar.on.hpBar) #btnStore{visibility:hidden}
+/* room under every popup for the companion that projects it */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(#pop,#modal,#rwc,#mini).open,
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #npw.open{padding-bottom:max(108px,calc(env(safe-area-inset-bottom,0px) + 108px))!important}
+#holoProj .hpBot.noMirror img{transform:none}
+#holoProj .hpBot.noMirror .hpLens{left:36%}

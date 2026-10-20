@@ -182,7 +182,6 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #orders .order .oN
   border-image:var(--h-card) 64 fill / 9px / 0 stretch!important;box-shadow:none!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #orders .btnDeliver{background:url(../sprites/ui/ho_tick.webp) center/contain no-repeat!important;border:0!important;border-image:none!important;box-shadow:none!important;color:transparent!important;font-size:0!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #orders .btnDeliver *{opacity:0}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #pop.csheet .csHead{border-style:solid;border-width:16px 12px;border-image:url(../sprites/ui/ho_card.webp) 90 50 fill / 16px 12px / 0 stretch}
 
 /* ============================================================ board */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #board::before{background:rgba(215,255,250,.16)!important;backdrop-filter:blur(2px);border-radius:18px!important;box-shadow:none!important;border:0!important}
@@ -314,3 +313,26 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #sc-book .aTile.lo
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #sc-book .aTile *{color:var(--h-ink)!important;text-shadow:none!important;opacity:1!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #sc-book .aTile.locked *{color:#35585e!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #sc-book .aTile.locked :is(img,svg){opacity:.5!important}
+
+/* ============================================================ contract sheet: clean frosted cards */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #pop .popBox :is(.csHead,.csNeed){
+  background:none!important;border-style:solid!important;border-width:10px!important;border-radius:0!important;
+  border-image:var(--h-card) 64 fill / 10px / 0 stretch!important;box-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #pop .popBox :is(.csHead,.csTop,.csSay,.csFig)::before,
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #pop .popBox :is(.csHead,.csTop,.csSay,.csFig)::after{display:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #pop .popBox :is(.csTop,.csSay){background:none!important;border:0!important;border-image:none!important;box-shadow:none!important}
+
+/* ============================================================ BUILD: impossible to miss */
+@keyframes hBuild{0%,100%{filter:drop-shadow(0 0 4px #e8ff6a) drop-shadow(0 0 10px rgba(150,255,80,.75));transform:scale(1)}50%{filter:drop-shadow(0 0 8px #fff27a) drop-shadow(0 0 18px rgba(170,255,90,.95));transform:scale(1.05)}}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(#btnQuests.ready,#chapLine.ready){
+  border-image:none!important;border:2.5px solid #fff7a8!important;border-radius:14px!important;
+  background:linear-gradient(180deg,#e9ff6b,#62d63a)!important;animation:hBuild 1.1s ease-in-out infinite}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(#btnQuests.ready,#chapLine.ready) :is(b,i,em,span:not(.dot)){color:#11420f!important;text-shadow:0 1px 0 rgba(255,255,255,.7)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .side .sideW.chapW.ready .cwT{font-size:15px!important;font-weight:800!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #ribbon .rbGo{background:linear-gradient(180deg,#f4ff7a,#58d13a)!important;color:#11420f!important;text-shadow:0 1px 0 rgba(255,255,255,.7)!important;
+  border:2px solid #fffbd0!important;border-radius:99px!important;font-weight:800!important;font-size:16px!important;padding:6px 16px!important;animation:hBuild 1.1s ease-in-out infinite;box-shadow:0 3px 0 #2c8a1c!important}
+
+/* ============================================================ ready contract: a big tick you can't miss */
+@keyframes hTick{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #orders .order .oTick{width:46px!important;height:46px!important;right:-8px!important;bottom:-10px!important;border-radius:50%!important;
+  filter:drop-shadow(0 0 0 #fff) drop-shadow(0 0 6px rgba(120,255,160,.9)) drop-shadow(0 2px 2px rgba(0,0,0,.4));animation:hTick .9s ease-in-out infinite;z-index:4}
