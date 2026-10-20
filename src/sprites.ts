@@ -52,7 +52,7 @@ export const HOLO_ALIAS: Record<string, string> = {
   // only art that lives inside popups, rewards and the board: the HUD, side buttons, dock and nav icons keep their own
   gem_s: 'hq_gems', coin_s: 'hq_coins',
   chest_opening: 'hx_capsule', complete_stamp: 'hx_seal', victory_banner: 'hx_banner', seal_bubble: 'hs_sealed',
-  ic_sound: 'ic2_sound', ic_music: 'ic2_music', ic_games: 'ic2_games', pp_buddy: 'bot_idle', oh_projector: 'bot_idle',
+  ic_sound: 'ic2_sound', ic_music: 'ic2_music', ic_games: 'ic2_games',
 };
 export const holoOn = (() => { try { return localStorage.getItem('galaxyAdventure.uiTheme') !== 'classic'; } catch { return true; } })();
 if (holoOn) Object.entries(HOLO_ALIAS).forEach(([k, v]) => { if (SPRITE.ui[v]) SPRITE.ui[k] = SPRITE.ui[v]; });

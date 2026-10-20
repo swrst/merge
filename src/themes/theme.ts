@@ -7,9 +7,6 @@ export function getUITheme(): UITheme {
 export function setUITheme(theme: UITheme) {
   document.documentElement.dataset.uiTheme = theme;
   try { localStorage.setItem(KEY, theme); } catch { /* session preference still works */ }
-  document.querySelectorAll<HTMLImageElement>('img[data-orbital-src]').forEach(img => {
-    img.src = (theme === 'buddy' ? img.dataset.orbitalSrc : img.dataset.classicSrc)!;
-  });
   window.dispatchEvent(new CustomEvent('ga:theme'));
 }
 let initial: UITheme = 'buddy';

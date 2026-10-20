@@ -1,7 +1,7 @@
 /* Pocket Buddy: popups are holograms projected by the floating companion
    (src/themes/projector.ts). Light, see-through aqua glass with scanlines and
    corner brackets, dark ink for reading, the beam and the companion beneath.
-   Loaded after buddy.css; #app is repeated to outrank the older skins. */
+   #app is repeated to outrank the older skins. */
 
 /* the dim behind a projection is lighter: the world stays visible around it */
 html[data-ui-theme="buddy"] body #app#app#app#app#app :is(#pop,#modal,#rwc,#mini).open{background:radial-gradient(120% 80% at 30% 85%,rgba(30,40,70,.40),rgba(6,10,26,.66))!important;backdrop-filter:blur(2.5px)}
@@ -33,13 +33,11 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app :is(.popBox,.mBoxW,.miniBo
   background-repeat:no-repeat!important}
 
 /* the panel prints upward out of the beam */
-html[data-ui-theme="buddy"] body #app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard).hpIn{animation:hpPrint .42s cubic-bezier(.2,.9,.25,1.15) both!important;transform-origin:20% 100%}
+html[data-ui-theme="buddy"] body #app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard).hpIn{animation:hpPrint .32s cubic-bezier(.2,.9,.3,1) both!important;transform-origin:20% 100%}
 @keyframes hpPrint{
-  0%{opacity:0;transform:translateY(26px) scale(.35,.04);filter:brightness(2.4) saturate(.4)}
-  45%{opacity:.85;transform:translateY(6px) scale(.98,.55);filter:brightness(1.7)}
-  70%{opacity:1;transform:translateY(0) scale(1.01,1.03);filter:brightness(1.15)}
-  82%{opacity:.86}
-  100%{opacity:1;transform:none;filter:none}}
+  0%{opacity:0;transform:translateY(22px) scale(.6,.08)}
+  55%{opacity:1;transform:translateY(4px) scale(1,.9)}
+  100%{opacity:1;transform:none}}
 @keyframes hpScan{from{background-position:0 0,0 0}to{background-position:0 0,0 40px}}
 
 /* buttons: warm primary, aqua glass secondary */
@@ -91,3 +89,5 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #npw.open{padd
 #holoProj .hpBot.noMirror .hpLens{left:36%}
 /* full screens (shop, Mission Log, Collection) end higher, leaving the companion room to project them from below */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .screen:not(.scene){bottom:calc(var(--dockH,62px) + 10px + 96px + env(safe-area-inset-bottom,0px))!important}
+/* once printed in, a projected panel keeps still: the panel's own older open animation must not replay when hpIn comes off (that was the blink) */
+html[data-ui-theme="buddy"] body #app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard).hpProjected:not(.hpIn){animation:none!important}

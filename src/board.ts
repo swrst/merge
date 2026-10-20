@@ -185,7 +185,9 @@ class PixiBoard {
     add('coin', ART.iconSvg('coin'), ART.spriteUi('icon_coin') || undefined);
     // shared tiles, plus each world's own set when it has been painted (tile_light_luna …)
     const tiles = ['tile_light', 'tile_dark', 'tile_locked'];
-    [...tiles, 'ho_tile', 'ho_tile2', 'hs_locked', 'hs_wanted', 'hm_locked', 'hc_card', 'hs_selected', 'hs_sparkle', 'hs_shadow', 'bubble_film', 'seal_bubble', 'seal_crack', 'meteor', 'ic_star_tag', ...Object.keys(THEME).flatMap(w => tiles.map(t => t + '_' + w))].forEach(k => {
+    const holo = getUITheme() === 'buddy';
+    // the hologram look paints every world with the same glass kit; the classic look needs each world's own tiles
+    [...tiles, 'ho_tile', 'ho_tile2', 'hs_locked', 'hs_wanted', 'hm_locked', 'hc_card', 'hs_selected', 'hs_sparkle', 'hs_shadow', 'bubble_film', 'seal_bubble', 'seal_crack', 'meteor', 'ic_star_tag', ...(holo ? [] : Object.keys(THEME).flatMap(w => tiles.map(t => t + '_' + w)))].forEach(k => {
       const url = ART.spriteUi(k); if (url) add('ui:' + k, '', url);
     });
     await Promise.all(jobs);
@@ -347,8 +349,7 @@ class PixiBoard {
     }
     const kind = locked ? 'tile_locked' : dark ? 'tile_dark' : 'tile_light';
     // locked tiles are a dark space-station hatch, drawn here (no crystals)
-    const orbital = false; // legacy Orbital assets remain archived
-    const paint = orbital && this.tex['ui:oh_' + kind] ? this.tex['ui:oh_' + kind] : locked ? undefined : (this.tex['ui:' + kind + '_' + this.theme] || this.tex['ui:' + kind]
+    const paint = locked ? undefined : (this.tex['ui:' + kind + '_' + this.theme] || this.tex['ui:' + kind]
       || this.tex['ui:tile_light_' + this.theme] || this.tex['ui:tile_light']);
     if (locked && !paint) {
       if (art) art.visible = false;
@@ -579,6 +580,7 @@ class PixiBoard {
       s.timer.position.set(p.x, p.y);
     } else if ((s as any).seal && s.key.startsWith('f')) {
       (s as any).seal.position.set(p.x, p.y); (s as any).seal.width = (s as any).seal.height = this.cell;
+      if (s.timer && !(s.timer as any).destroyed) { s.timer.position.set(p.x + this.cell * 0.32, p.y + this.cell * 0.32); (s.timer as any).width = (s.timer as any).height = this.cell * 0.3; }
     } else if (s.timer && s.key.startsWith('f')) {
       s.timer.position.set(p.x + this.cell * 0.3, p.y + this.cell * 0.3);
     } else if (s.timer) {

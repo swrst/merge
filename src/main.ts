@@ -10,6 +10,7 @@ import './themes/theme';
 import { ART } from './art';
 import { startGame } from './game';
 import { startProjector } from './themes/projector';
+import { getUITheme } from './themes/theme';
 import { hydrateSave, startSaveMirror, setupChrome } from './native';
 import { initServices, analytics } from './services';
 import { startHoloFix } from './holofix';
@@ -76,8 +77,9 @@ async function main() {
     startSaveMirror();
     initServices();
     await startGame();
-    startHoloFix();
-    startProjector(ART.spriteUi('bot_idle') || ART.spriteUi('pp_buddy') || '', (ov, box) => {
+    // the classic look needs its text pass; the hologram look sets its ink in CSS (holo.css)
+    if (getUITheme() === 'classic') startHoloFix();
+    startProjector(ART.spriteUi('bot_idle'), (ov, box) => {
       const k = ov.id === 'rwc' ? 'bot_happy' : ov.id === 'npw' ? 'bot_surprised'
         : box.querySelector('.enBig') ? 'bot_sleep' : box.querySelector('.hint,.tipBox') ? 'bot_think' : '';
       return k ? ART.spriteUi(k) : '';

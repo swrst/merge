@@ -1,5 +1,13 @@
 # Changelog
 
+- **v88 (0.88.0)**
+  - Faster start: before the first frame only the art on screen loads (board, storage, contracts, chapter, one merge step ahead); the rest of this world loads while idle, other worlds when you fly there. In a test boot: 599 requests / 8.2 MB down to 211 / 3.9 MB, start time about halved.
+  - Lighter app: Android splash images converted to WebP (about 25 MB down to 2.4 MB); 286 UI pictures converted to WebP and sized for how big they are shown; 37 unused UI pictures deleted.
+  - Popups no longer blink: the old open animation replayed after the projector's print-in; now one short, smooth print-in.
+  - The hologram look no longer runs the old text-colour pass after every change (the colours are in CSS now).
+  - Removed: the art branch's Orbital and Pocket Buddy kits and themes, their review scripts, dead code for the old constellation and shop rows.
+  - New Play Store screenshots (1080×1920) in resources/store/screenshots.
+
 - **v87 (0.87.0)**
   - Full screens (Collection, Mission Log, shop) end higher, and the companion projects them from below like every popup.
   - Fix: a rare console error from the warp effect's nebula colour.

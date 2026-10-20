@@ -569,14 +569,25 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       onLift: () => { sfx.lift(); haptic('light'); hideInfo(); },
       onHover: (kind) => { if (kind === 'merge') { sfx.hover(); haptic('light'); } },
     });
-    // Rasterising every item before the first frame grows with the catalogue
-    // (500+ now). Wait only for the world you are standing in, plus the shared
-    // and rocket chains that can land anywhere; the rest loads behind it.
+    // Before the first frame, load only what is on screen now: the items on the
+    // board, in storage and asked for by contracts and the chapter, one merge step
+    // beyond each, and what the producers on the board drop. Everything else
+    // loads behind it while the game is idle (and anything missing is fetched on demand).
+    const need = new Set<string>();
+    const add = (id?: string) => { if (id && ITEMS[id]) { need.add(id); const n = nextOf(id); if (n) need.add(n as string); } };
+    const prodArts = new Set<string>(['scrapwreck', 'crater']);
+    B().forEach((c: any) => {
+      if (!c) return; add(c.id); add(c.f); add(c.bub);
+      if (c.p && PRODS[c.p]) { prodArts.add(PRODS[c.p].art); (PRODS[c.p].drops || []).forEach((d: string) => add(d)); }
+    });
+    stored().forEach((x: any) => { add(x.id); if (x.p && PRODS[x.p]) prodArts.add(PRODS[x.p].art); });
+    S.orders.forEach((o: any) => o.needs.forEach((nd: any) => add(nd.id)));
+    { const pj = curProject(); if (pj) pj.needs.forEach(([id]: [string, number]) => add(id)); }
+    await board.preload([...need], PRODUCER_ARTS.filter(a => prodArts.has(a)));
+    // behind it: just this world's items and producers (plus the shared chains); other worlds load when you fly there
     const here = (id: string) => [S.world, 'any', 'ship'].indexOf(CHAINS[ITEMS[id].chain].world) >= 0;
-    const prodHere = new Set([...WORLDS[S.world].start, ...(WORLDS[S.world].grow || [])]
-      .map(x => PRODS[x.producer].art).concat(['scrapwreck', 'crater']));
-    await board.preload(ITEM_IDS.filter(here), PRODUCER_ARTS.filter(a => prodHere.has(a)));
-    board.preloadIdle(ITEM_IDS, PRODUCER_ARTS).then(() => { board.unstale(); paintBoard(); });
+    const prodHere = new Set([...WORLDS[S.world].start, ...(WORLDS[S.world].grow || [])].map(x => PRODS[x.producer].art));
+    board.preloadIdle(ITEM_IDS.filter(here), PRODUCER_ARTS.filter(a => prodHere.has(a) || prodArts.has(a))).then(() => { board.unstale(); paintBoard(); });
     board.setTheme(S.world);
   }
 
@@ -1929,12 +1940,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
               <span class="${S.coins >= bd.coins ? 'ok' : ''}">${coin}${bd.coins}</span></div></div>
           <button class="buyBtn green" id="btnBuildLab">BUILD</button></div>`;
       }
-      if (false) r += DEPOT.map((d, k) => `<div class="shopRow"><div class="sArt">${ART.item(d.id)}</div>
-          <div class="sInfo"><div class="sName">${ITEMS[d.id].name}</div><div class="sDesc">${d.note}</div></div>
-          <button class="buyBtn green" data-depot="${k}" ${S.coins < depotPrice(d) ? 'disabled' : ''}>${coin}${depotPrice(d)}</button></div>`).join('');
-      if (false) r += SHOP.crates.map(c => `<div class="shopRow"><div class="sArt">${ART.icon(c.icon)}</div>
-          <div class="sInfo"><div class="sName">${c.name}</div><div class="sDesc">${c.desc}</div></div>
-          <button class="buyBtn green" data-crate="${c.id}" ${S.coins < c.price ? 'disabled' : ''}>${coin}${c.price}</button></div>`).join('');
       if (S.seen.scrap) r += `<div class="pouchRow">Star Pouch: ${ART.item('scrap')}<b>${pouch('scrap')}</b> Scrap · ${ART.item('starcore')}<b>${pouch('starcore')}</b> Cores</div>`;
       if (S.seen.scrap) r += CONFIG.forge.map(f => {
         const ok = countItem(f.item) >= f.qty;
@@ -5543,14 +5548,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   const constById = (id: string) => CONSTS.find(x => x.id === id);
   const constState = (c: any) => lit(c.id) ? 'lit' : !visited(c.world) ? 'locked' : countItem('starcore') >= c.cost ? 'ready' : 'open';
   function constSvg(c: any, cls = '') {
-    if (false) {
-      const ratio=lit(c.id)?1:Math.min(1,countItem('starcore')/c.cost);
-      const points=c.pts.slice(0,-1);
-      const outline=c.id==='plough' ? '<path d="M50 4C29 20 25 46 30 66L50 79 70 66C75 46 71 20 50 4ZM30 53L14 75 30 68M70 53L86 75 70 68M41 78L40 96 50 88 60 96 59 78"/><circle cx="50" cy="34" r="10"/>' : c.id==='lantern' ? '<path d="M39 20V12Q50 0 61 12V20M30 24Q50 17 70 24L78 35 73 79Q50 91 27 79L22 35Z M22 35Q50 44 78 35M27 79Q50 70 73 79M40 42L39 73M60 42L61 73"/>' : '';
-      const lines=c.pts.slice(1).map((p:number[],i:number)=>`<line x1="${c.pts[i][0]}" y1="${c.pts[i][1]}" x2="${p[0]}" y2="${p[1]}"/>`).join('');
-      const stars=points.map((p:number[],i:number)=>`<path class="ppStar${i<Math.ceil(points.length*ratio)?' filled':''}" d="M0-5.5 1.7-1.8 5.5-1.4 2.7 1.4 3.4 5.1 0 3.3-3.4 5.1-2.7 1.4-5.5-1.4-1.7-1.8Z" transform="translate(${p[0]} ${p[1]})"/>`).join('');
-      return `<svg viewBox="-10 -10 120 120" class="cSvg ppConst ${cls}"><g class="ppOutline">${outline}</g><g class="ppLinks">${lines}</g>${stars}</svg>`;
-    }
     const segs = c.pts.slice(1).map((p: number[], i: number) => { const q = c.pts[i]; return `<line x1="${q[0]}" y1="${q[1]}" x2="${p[0]}" y2="${p[1]}"/>`; }).join('');
     const dots = c.pts.map((p: number[], i: number) => `<circle cx="${p[0]}" cy="${p[1]}" r="${i % 3 ? 3 : 4.2}" style="animation-delay:${(i * 0.37) % 2.2}s"/>`).join('');
     const art = ART.spriteUi('const_' + c.id);
@@ -5600,7 +5597,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       const two = CONSTS.filter(c => c.world === w).map((c, k) => {
         const st = constState(c);
         return `<button class="gc gc-${st} ${k ? 'r' : 'l'}" data-const="${c.id}">${constArt(c)}${constSvg(c)}
-          <b>${st === 'locked' ? '???' : c.name}</b>${st === 'ready' ? '<i class="gcTag">✨ Light me!</i>' : st === 'open' ? `<i class="gcCnt">${ART.item('starcore')} ${Math.min(countItem('starcore'), c.cost)}/${c.cost}</i>` : st === 'lit' ? '<i class="gcLit">✦ lit</i>' : ''}${false ? `<span class="ppConstBar" role="progressbar" aria-label="${c.name}" aria-valuemin="0" aria-valuemax="${c.cost}" aria-valuenow="${lit(c.id)?c.cost:Math.min(countItem('starcore'),c.cost)}"><span style="width:${lit(c.id)?100:Math.min(100,countItem('starcore')/c.cost*100)}%"></span></span>` : ''}</button>`;
+          <b>${st === 'locked' ? '???' : c.name}</b>${st === 'ready' ? '<i class="gcTag">✨ Light me!</i>' : st === 'open' ? `<i class="gcCnt">${ART.item('starcore')} ${Math.min(countItem('starcore'), c.cost)}/${c.cost}</i>` : st === 'lit' ? '<i class="gcLit">✦ lit</i>' : ''}}</button>`;
       }).join('');
       return `<div class="skRow${visited(w) ? '' : ' far'}"><div class="skWorld">${ART.uiIcon('planet_' + w, '🪐')}<span>Seen from <b>${WORLDS[w].name}</b></span></div><div class="skPair">${two}</div></div>`;
     }).join('');
@@ -6614,7 +6611,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           ${row('sndBtn', ART.uiIcon(S.sound ? 'ic_sound' : 'ic_mute', '🔊'), 'Sound effects', !!S.sound)}
           ${row('musBtn', ART.uiIcon(S.music ? 'ic_music' : 'ic_nomusic', '🎵'), 'Music', !!S.music)}
           ${row('tipBtn', ART.uiIcon('ic_tips', '💡'), 'Tips', !S.tipsOff)}
-          ${row('themeBtn', ART.uiIcon('pp_buddy', '🛸'), 'Hologram UI', getUITheme() === 'buddy')}
+          ${row('themeBtn', ART.uiIcon('bot_idle', '🛸'), 'Hologram UI', getUITheme() === 'buddy')}
           <p class="themeNote">Switch off to use the original Space Hologram design.</p>
         </div>
         ${games.live ? (games.signedIn
