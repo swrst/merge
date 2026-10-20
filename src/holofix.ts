@@ -69,6 +69,7 @@ function darkFill(cs: CSSStyleDeclaration) {
     const solid = cols.filter(c => c.a > 0.5);
     if (solid.length && solid.reduce((t, c) => t + lum(c.r, c.g, c.b), 0) / solid.length < 0.3) return true;
   }
+  if ((cs.borderImageSource || '').includes('url(')) return true;   // a painted nine-slice frame (the hologram kit): leave it
   return !!(bi && bi.includes('url('));          // painted art behind it: leave it
 }
 /** the light Pocket Buddy panels: light words left over from the dark looks become dark ink */

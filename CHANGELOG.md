@@ -1,5 +1,14 @@
 # Changelog
 
+- **v83 (0.83.0)**
+  - Whole UI redrawn with the new ChatGPT hologram sheets (art/ui/holo/sheets, 105 pieces): projected aqua glass panels, title plates, orange / aqua / green / violet / grey capsule buttons, round close, back and info buttons, tabs, bars, HUD counters, cards, slots, tags, badges, dock, notices, tooltip.
+  - The projector companion is the new white drone and changes face: happy for rewards, surprised for a new producer, sleepy on the energy popup, projecting on chapter and contract sheets, thinking on tips.
+  - Level up rebuilt: star badge with the level number, ribbon, spinning rays, confetti, reward pods, happy companion.
+  - Chapter complete: hologram seal, ribbon banner, three stars, fireworks, trophy on a world's last chapter. New producer: projector platform, light column, hex frame, floor glow, unlock tag.
+  - Talking scenes: hologram speech panel, name plate, pad under the speaker, next chevron. Mission Log: tablet, chapter nodes, medals, quest rows. Daily gift: calendar cells (today, claimed, day 7) and the streak flame. Shop: offer cards, best-value card, coin price tag, sale burst, gem and coin trays.
+  - Board: see-through glass checkerboard, padlocked tiles, orange-framed wanted tiles, hologram board frame, painted selection frame, sparkle ring on merges, drag shadow. Tutorial pointer arrow.
+  - All icons swapped for the hologram set (settings, storage, missions, planet, lab, shop, album, games, camp, stars, sound, music).
+
 - **v82 (0.82.0)**
   - The UI is now drawn with the painted Orbital kit (art/ui/orbital-holo/sheets), not CSS imitations: popups are the mint holo panel with gold corners, full screens the pearl panel, titles the pearl capsule, buttons the amber / pearl / mint / slate capsules, tabs petrol and pearl, HUD counters and the chapter strip the dark dock capsule, cards the pearl tile frame, side buttons the petrol panel.
   - Board: painted pearl and mint tiles, crater tiles for locked ones, and the gold-edged tile for anything a contract wants.

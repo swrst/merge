@@ -1,0 +1,278 @@
+/* Hologram projector UI: the ChatGPT-painted sheets in art/ui/holo/sheets, cut
+   into src/sprites/ui/(hp|hb|ht|hc|hd|hl|hx|hn|hm|hk|ho|hs|hu|hq|bot|ic2)_*.webp.
+   Frames are nine-slices (corners kept, middles stretched). This is the default
+   look ("buddy" theme); Settings → Hologram UI off brings the classic one back.
+   Loaded last: seven #app outrank every older skin. */
+html[data-ui-theme="buddy"]{
+  --h-ink:#0f3b44; --h-ink2:#3d6a72; --h-light:#effffc;
+  --h-panel:url(../sprites/ui/hp_panel.webp); --h-tall:url(../sprites/ui/hp_panel_tall.webp);
+  --h-banner:url(../sprites/ui/hp_banner.webp); --h-title:url(../sprites/ui/hp_title.webp);
+  --h-head:url(../sprites/ui/hp_panel_head.webp); --h-tip:url(../sprites/ui/hp_tip.webp);
+  --h-orange:url(../sprites/ui/hb_orange.webp); --h-aqua:url(../sprites/ui/hb_aqua.webp); --h-green:url(../sprites/ui/hb_green.webp);
+  --h-grey:url(../sprites/ui/hb_grey.webp); --h-violet:url(../sprites/ui/hb_violet.webp);
+  --h-close:url(../sprites/ui/hb_close.webp); --h-back:url(../sprites/ui/hb_back.webp); --h-info:url(../sprites/ui/hb_info.webp); --h-plus:url(../sprites/ui/hb_plus.webp);
+  --h-tab1:url(../sprites/ui/ht_tab_on.webp); --h-tab0:url(../sprites/ui/ht_tab_off.webp);
+  --h-bar:url(../sprites/ui/ht_bar.webp); --h-fill:url(../sprites/ui/ht_fill.webp); --h-chip:url(../sprites/ui/ht_chip.webp); --h-timer:url(../sprites/ui/ht_timer.webp);
+  --h-card:url(../sprites/ui/hc_card.webp); --h-card1:url(../sprites/ui/hc_card_on.webp); --h-cardx:url(../sprites/ui/hc_card_lock.webp);
+  --h-slot:url(../sprites/ui/hc_slot.webp); --h-badge:url(../sprites/ui/hc_badge.webp); --h-ribbon:url(../sprites/ui/hc_ribbon.webp);
+  --h-dock:url(../sprites/ui/hu_dock.webp); --h-rbtn:url(../sprites/ui/hu_btn.webp); --h-rbig:url(../sprites/ui/hu_btn_big.webp);
+  --h-tile:url(../sprites/ui/hu_tile.webp); --h-notice:url(../sprites/ui/hu_notice.webp); --h-ring:url(../sprites/ui/hu_ring.webp);
+}
+/* shorthand for "this selector, inside the hologram look" */
+
+/* ============================================================ panels */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard){
+  background:none!important;border-style:solid!important;border-width:20px!important;border-radius:0!important;
+  border-image:var(--h-panel) 64 fill / 20px / 0 stretch!important;box-shadow:none!important;
+  filter:drop-shadow(0 0 14px rgba(90,255,230,.45)) drop-shadow(0 12px 16px rgba(0,30,40,.35));
+  padding:12px 8px 8px!important;color:var(--h-ink)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard)::before{display:none!important}
+/* full screens: the panel with the header strip */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .screen:not(.scene){
+  background:none!important;border-style:solid!important;border-width:30px 18px 18px!important;border-radius:0!important;
+  border-image:var(--h-head) 84 56 56 fill / 30px 18px 18px / 0 stretch!important;box-shadow:none!important;
+  filter:drop-shadow(0 10px 18px rgba(0,30,40,.35));color:var(--h-ink)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .screen:not(.scene)::before,
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .screen:not(.scene)::after{display:none!important}
+/* new producer card: the tall panel */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #npw .npCard{
+  background:none!important;border-style:solid!important;border-width:22px!important;border-radius:0!important;
+  border-image:var(--h-tall) 50 fill / 22px / 0 stretch!important;box-shadow:none!important;color:var(--h-ink)!important;
+  filter:drop-shadow(0 0 16px rgba(90,255,230,.5))}
+
+/* ============================================================ titles */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popRibbon,.mTitle,.miniTitle,.screen:not(.scene) .scTitle,.xpPT,.npTag,.rwcRib){
+  background:none!important;border-style:solid!important;border-width:12px 28px!important;border-radius:0!important;
+  border-image:var(--h-title) 50 95 fill / 12px 28px / 0 stretch!important;box-shadow:none!important;clip-path:none!important;
+  color:var(--h-ink)!important;text-shadow:0 1px 0 rgba(255,255,255,.75)!important;padding:1px 4px!important;
+  font-family:"Lilita One",Fredoka,sans-serif!important;font-size:clamp(13px,4.2vw,17px)!important;line-height:1.15!important;letter-spacing:0!important;
+  white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:calc(100% - 70px)!important;width:max-content!important;min-width:0!important;
+  filter:drop-shadow(0 3px 4px rgba(0,30,40,.3))}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popRibbon,.mTitle,.miniTitle,.screen:not(.scene) .scTitle,.npTag,.rwcRib) *{color:var(--h-ink)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #rwc .rwcCard .rwcRib.rwcRib{max-width:calc(100% - 10px)!important;margin:0 auto 6px!important;display:block;font-size:15px!important}
+
+/* ============================================================ buttons */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big,.buyBtn,.csGo,.skGo,.gpGo,.skFuseGo,.xpGive){
+  background:none!important;border-style:solid!important;border-width:14px 17px!important;border-radius:0!important;
+  border-image:var(--h-orange) 80 95 fill / 14px 17px / 0 stretch!important;box-shadow:none!important;
+  color:#fff!important;text-shadow:0 1px 0 #a4480f,0 0 3px rgba(140,50,0,.5)!important;padding:1px 6px!important;min-height:44px;
+  filter:drop-shadow(0 3px 2px rgba(110,50,0,.3));font-family:Fredoka,sans-serif!important;font-weight:700!important;letter-spacing:0!important;font-size:max(15px,1em)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big,.buyBtn) img:is(.emo,.uiIc){width:20px!important;height:20px!important;vertical-align:-4px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big,.buyBtn,.csGo,.skGo,.gpGo,.skFuseGo,.xpGive) *{color:#fff!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big,.buyBtn):active{transform:translateY(2px) scale(.98)}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big.soft,.big.blue,.big.alt,.buyBtn.soft,.sellBtn,.tSkip,.galBack){
+  border-image:var(--h-aqua) 80 95 fill / 14px 17px / 0 stretch!important;color:var(--h-ink)!important;text-shadow:0 1px 0 rgba(255,255,255,.7)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big.soft,.big.blue,.big.alt,.buyBtn.soft,.sellBtn,.tSkip,.galBack) *{color:var(--h-ink)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.buyBtn.green,.big.green){
+  border-image:var(--h-green) 80 95 fill / 14px 17px / 0 stretch!important;color:#fff!important;text-shadow:0 1px 0 #2b6b12!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.buyBtn.gem,.big.gem){
+  border-image:var(--h-violet) 80 95 fill / 14px 17px / 0 stretch!important;color:#fff!important;text-shadow:0 1px 0 #4b1f8f!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big,.buyBtn)[disabled],
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big,.buyBtn).off{
+  border-image:var(--h-grey) 80 95 fill / 14px 17px / 0 stretch!important;color:#f3f6f7!important;text-shadow:0 1px 0 #555c61!important;filter:none;opacity:1!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big,.buyBtn)[disabled] *,
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big,.buyBtn).off *{color:#f3f6f7!important}
+/* round buttons: close, info, back */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popX,.mX,.scClose,.xBtn,#xpClose,#xpPClose,.miniClose,#infoClose,#bagClose){
+  background:var(--h-close) center/contain no-repeat!important;border:0!important;border-radius:50%!important;box-shadow:none!important;
+  color:transparent!important;text-shadow:none!important;font-size:0!important;width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;
+  filter:drop-shadow(0 2px 2px rgba(80,0,0,.35))}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.skHelp,.infoBtn,.helpBtn,.btnHelp){
+  background:var(--h-info) center/contain no-repeat!important;border:0!important;box-shadow:none!important;color:transparent!important;font-size:0!important;width:34px!important;height:34px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .galBack::before{content:"";display:inline-block;width:20px;height:20px;margin:-4px 4px -5px -6px;background:var(--h-back) center/contain no-repeat}
+
+/* ============================================================ tabs, bars, timers */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.sTab,.labTabs>button,.mlTabs>button,.achTabs>button,.tabsRow>button){
+  background:none!important;border-style:solid!important;border-width:11px 14px!important;border-radius:0!important;
+  border-image:var(--h-tab0) 70 85 fill / 11px 14px / 0 stretch!important;box-shadow:none!important;color:var(--h-ink)!important;text-shadow:0 1px 0 #fff!important;padding:0 4px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.sTab.on,.labTabs>button.on,.mlTabs>button.on,.achTabs>button.on,.tabsRow>button.on){
+  border-image:var(--h-tab1) 80 95 fill / 11px 14px / 0 stretch!important;color:#f0fffc!important;text-shadow:0 1px 1px #04222a!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.sTab,.sTab.on) *{color:inherit!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.catBar,.achBar,.wkBar,.gpBar,.skBar,.skBar2,.qBar,.tBar,.albProg,.skLitBar,.skLit2,.pfXp,.cwBar,.hud .xpbar,.ppConstBar){
+  background:none!important;border-style:solid!important;border-width:4px 8px!important;border-radius:0!important;
+  border-image:var(--h-bar) 40 50 fill / 4px 8px / 0 stretch!important;box-shadow:none!important;overflow:visible!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.catBar>i,.achBar>em,.albProg>i,.pfXp>i,.skLitBar>i,.skLit2>i,.gpBar>i,.wkBar>i,.hud .xpbar i,.ppConstBar>span){
+  background:var(--h-fill) left center/100% 100% no-repeat!important;box-shadow:none!important;border-radius:6px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.evTime,.timerPill,.offTimer){
+  background:none!important;border-style:solid!important;border-width:4px 8px 4px 16px!important;border-radius:0!important;
+  border-image:var(--h-timer) 45 60 45 120 fill / 4px 8px 4px 16px / 0 stretch!important;box-shadow:none!important;color:var(--h-light)!important}
+
+/* ============================================================ cards, slots, tags, dots */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.card,.questRow,.achCard,.enRow,.lxCard,.pfStat,.csNeed,.chHead2,.optRow,.pCard,.srcCard,.funCard,.mlCard,.mlTile,.pfAlb,.albSet,.resRow,.upRow,.evNode,.lbRow,.przRow,.constRow,.accBox,.rechargeBox,.labIntro){
+  background:none!important;border-style:solid!important;border-width:11px!important;border-radius:0!important;
+  border-image:var(--h-card) 64 fill / 11px / 0 stretch!important;box-shadow:none!important;color:var(--h-ink)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.enRow.ready,.questRow.now,.ach.ready,.achCard.ready,.mlTile.hot,.albSet.done,.funCard.hot){border-image:var(--h-card1) 64 fill / 11px / 0 stretch!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.locked,.lock,.far,.gc-locked).card,
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.mlTile,.funCard,.questRow).locked{border-image:var(--h-cardx) 64 fill / 11px / 0 stretch!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.albSlot,.bagSlot,.slot,.traySlots>button,.pickCell,.lxSp,.lxIt){
+  background:none!important;border-style:solid!important;border-width:9px!important;border-radius:0!important;
+  border-image:var(--h-slot) 64 fill / 9px / 0 stretch!important;box-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .dot{background:var(--h-badge) center/contain no-repeat!important;border:0!important;box-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.gTag,.sTag,.tag,.badgeNew,.cardTag){
+  background:none!important;border-style:solid!important;border-width:5px 11px 5px 9px!important;border-radius:0!important;
+  border-image:var(--h-ribbon) 40 70 40 60 fill / 5px 11px 5px 9px / 0 stretch!important;box-shadow:none!important;color:#fff!important;text-shadow:0 1px 0 #a4480f!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .gBurst{background:url(../sprites/ui/hq_sale.webp) center/contain no-repeat!important;border:0!important;box-shadow:none!important;color:#fff!important;text-shadow:0 1px 1px #8a1d12!important}
+
+/* ============================================================ shop */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .sCard{
+  background:none!important;border-style:solid!important;border-width:14px!important;border-radius:0!important;
+  border-image:url(../sprites/ui/hq_offer.webp) 60 fill / 14px / 0 stretch!important;box-shadow:none!important;color:var(--h-ink)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .sCard.hot{border-image:url(../sprites/ui/hq_offer_best.webp) 60 fill / 14px / 0 stretch!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .sCard .buyBtn:not(.gem):not(.green):not([disabled]):not(.off){
+  border-width:9px 14px 9px 30px!important;border-image:url(../sprites/ui/hq_price.webp) 60 80 60 150 fill / 9px 14px 9px 30px / 0 stretch!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .sCard .buyBtn:not(.gem):not(.green):not([disabled]):not(.off){position:relative;overflow:visible!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .sCard .buyBtn:not(.gem):not(.green):not([disabled]):not(.off)>:first-child{position:absolute;left:-24px;top:50%;margin-top:-11px;width:22px!important;height:22px!important}
+
+/* ============================================================ HUD, dock, side */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .hud .chip{
+  background:none!important;border-style:solid!important;border-width:4px 18px 4px 24px!important;border-radius:0!important;
+  border-image:var(--h-chip) 50 120 50 175 fill / 4px 18px 4px 24px / 0 stretch!important;box-shadow:none!important;padding:0!important;
+  filter:drop-shadow(0 2px 3px rgba(0,25,35,.4))}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .hud .chip>span:first-child{margin-left:-20px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .hud .chip :is(b,span,i,#energy,#coins,#gems){color:var(--h-light)!important;text-shadow:0 1px 1px #031a20!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .hud :is(.iconBtn,.hudShop){background:var(--h-rbtn) center/contain no-repeat!important;border:0!important;box-shadow:none!important;border-radius:50%!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .hud .lvlBox .avatar::after{content:"";position:absolute;inset:-7px;background:var(--h-ring) center/contain no-repeat;pointer-events:none}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .hud .lvlBox .avatar{position:relative;overflow:visible!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .side :is(.sideW,.qChip){
+  background:none!important;border-style:solid!important;border-width:9px!important;border-radius:0!important;
+  border-image:var(--h-tile) 50 fill / 9px / 0 stretch!important;box-shadow:none!important;filter:drop-shadow(0 3px 4px rgba(0,25,35,.4))}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .side :is(.sideW,.qChip) :is(i,b,span:not(.dot)){color:var(--h-light)!important;text-shadow:0 1px 1px #031a20!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .bottomBar .chapLine{
+  background:none!important;border-style:solid!important;border-width:6px 15px!important;border-radius:0!important;
+  border-image:var(--h-dock) 46 80 fill / 6px 15px / 0 stretch!important;box-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .bottomBar .chapLine *{color:var(--h-ink)!important;text-shadow:0 1px 0 rgba(255,255,255,.6)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #btnStore{background:var(--h-rbtn) center/contain no-repeat!important;border:0!important;box-shadow:none!important;border-radius:50%!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #tabMap{background:var(--h-rbig) center/contain no-repeat!important;border:0!important;box-shadow:none!important;border-radius:50%!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #tabMap .galLbl{color:#fff!important;text-shadow:0 1px 1px #7a3307!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .infoBar{
+  background:none!important;border-style:solid!important;border-width:12px 22px!important;border-radius:0!important;
+  border-image:var(--h-banner) 56 70 fill / 12px 22px / 0 stretch!important;box-shadow:none!important;color:var(--h-ink)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #toast{
+  background:none!important;border-style:solid!important;border-width:9px 16px 9px 14px!important;border-radius:0!important;
+  border-image:var(--h-notice) 40 80 40 60 fill / 9px 16px 9px 14px / 0 stretch!important;box-shadow:none!important;color:var(--h-light)!important;text-shadow:0 1px 1px #031a20!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #toast *{color:var(--h-light)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .coachBub{
+  background:var(--h-tip) center/100% 100% no-repeat!important;border:0!important;border-radius:0!important;box-shadow:none!important;
+  color:var(--h-ink)!important;padding:12px 16px 26px!important;filter:drop-shadow(0 0 10px rgba(90,255,230,.45))}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .coachBub *{color:var(--h-ink)!important}
+
+/* ============================================================ talking scenes */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .talk .tkBox{
+  background:none!important;border-style:solid!important;border-width:16px 16px 14px 30px!important;border-radius:0!important;
+  border-image:url(../sprites/ui/hd_speech.webp) 60 60 50 110 fill / 16px 16px 14px 30px / 0 stretch!important;box-shadow:none!important;
+  color:var(--h-ink)!important;filter:drop-shadow(0 0 14px rgba(90,255,230,.45)) drop-shadow(0 8px 12px rgba(0,30,40,.3))}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .talk .tkBox *{color:var(--h-ink)!important;text-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .talk .tkName{
+  background:none!important;border-style:solid!important;border-width:8px 14px!important;border-radius:0!important;
+  border-image:url(../sprites/ui/hd_name.webp) 45 70 fill / 8px 14px / 0 stretch!important;box-shadow:none!important;
+  color:var(--h-light)!important;text-shadow:0 1px 1px #031a20!important;padding:0 4px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .talk .tkMore{font-size:0!important;color:transparent!important;width:34px;height:22px;background:url(../sprites/ui/hd_next.webp) center/contain no-repeat!important;animation:hdNext 1s ease-in-out infinite}
+@keyframes hdNext{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .talk .tkFace{background:url(../sprites/ui/hd_pad.webp) center bottom/78% auto no-repeat!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #modal .face{position:relative}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #modal .face::after{content:"";position:absolute;inset:-8%;background:url(../sprites/ui/hd_ring.webp) center/contain no-repeat;pointer-events:none}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .talkBtn{background:url(../sprites/ui/hd_bubble.webp) center/contain no-repeat!important;border:0!important;box-shadow:none!important}
+
+/* ============================================================ rewards */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .rwcCard{padding-top:46px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.rwcIt .rwcArt,.luRw .rwcArt){background:url(../sprites/ui/hl_pod.webp) center/contain no-repeat!important;padding:10px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(#rwc .rwcRays,#chFan .cfRays,#npw .rwcRays){background:url(../sprites/ui/hl_rays.webp) center/min(110vw,620px) no-repeat!important;opacity:.85;animation:hRay 14s linear infinite!important;mask:none!important;-webkit-mask:none!important}
+@keyframes hRay{to{transform:rotate(360deg)}}
+
+/* ============================================================ daily calendar */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .dayCell{background:url(../sprites/ui/hk_day.webp) center/100% 100% no-repeat!important;border:0!important;box-shadow:none!important;color:var(--h-ink)!important;padding-top:16px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .dayCell.today{background-image:url(../sprites/ui/hk_today.webp)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .dayCell.done{background-image:url(../sprites/ui/hk_claimed.webp)!important;opacity:.95}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .dayCell.done>:not(.dn){opacity:.35}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .dayCell:last-child{background-image:url(../sprites/ui/hk_day7.webp)!important;grid-column:span 2}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .hFlame{display:inline-block;width:22px;height:26px;vertical-align:-6px;background:url(../sprites/ui/hk_flame.webp) center/contain no-repeat}
+
+/* ============================================================ Mission Log */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .questRow{border-width:8px 10px 8px 26px!important;border-image:url(../sprites/ui/hm_row.webp) 40 50 40 100 fill / 8px 10px 8px 26px / 0 stretch!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .questRow.done{filter:saturate(.8)}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.chStep,.chBars>i,.chBars>b,.chBars>span){background:url(../sprites/ui/hm_locked.webp) center/contain no-repeat!important;border:0!important;box-shadow:none!important;color:transparent!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.chStep.done,.chBars>.done){background-image:url(../sprites/ui/hm_done.webp)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.chStep.now,.chStep.cur,.chBars>.now,.chBars>.cur){background-image:url(../sprites/ui/hm_now.webp)!important;color:#fff!important;text-shadow:0 1px 1px #7a3307!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.achCard .achIc,.enRow.ach .enIc,.xpMedal){background:url(../sprites/ui/hm_medal.webp) center/contain no-repeat!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.mlHead,.chHead2){border-image:url(../sprites/ui/hm_tablet.webp) 50 70 fill / 11px 15px / 0 stretch!important;border-width:11px 15px!important}
+
+/* ============================================================ contracts */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #orders .order .oCard,
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #orders .order .oNeeds{
+  background:none!important;border-style:solid!important;border-width:9px!important;border-radius:0!important;
+  border-image:var(--h-card) 64 fill / 9px / 0 stretch!important;box-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #orders .order.ready :is(.oCard,.oNeeds){border-image:url(../sprites/ui/ho_card_ready.webp) 70 fill / 9px / 0 stretch!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #orders .btnDeliver{background:url(../sprites/ui/ho_tick.webp) center/contain no-repeat!important;border:0!important;border-image:none!important;box-shadow:none!important;color:transparent!important;font-size:0!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #orders .btnDeliver *{opacity:0}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #pop.csheet .csHead{border-style:solid;border-width:16px 12px;border-image:url(../sprites/ui/ho_card.webp) 90 50 fill / 16px 12px / 0 stretch}
+
+/* ============================================================ board */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #board::before{background:rgba(8,50,62,.38)!important;backdrop-filter:blur(3px);border-radius:18px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #board::after{
+  background:none!important;border-style:solid!important;border-width:20px!important;border-radius:0!important;
+  border-image:url(../sprites/ui/ho_board.webp) 70 / 20px / 6px stretch!important;box-shadow:none!important;mask:none!important;-webkit-mask:none!important}
+
+/* ============================================================ icons */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app img.uiIc{object-fit:contain}
+
+/* ============================================================ level up */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #levelup{background:radial-gradient(60% 45% at 50% 48%,rgba(30,120,130,.45),rgba(4,22,32,0) 70%)}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #levelup .luRays{width:560px;height:560px;margin:-300px 0 0 -280px;background:url(../sprites/ui/hl_rays.webp) center/contain no-repeat!important;opacity:.9;animation:hRay 12s linear infinite!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #levelup .luConf{position:absolute;left:50%;top:44%;width:420px;height:420px;margin:-210px 0 0 -210px;background:url(../sprites/ui/hl_confetti.webp) center/contain no-repeat;animation:luConf 2.4s ease-out both}
+@keyframes luConf{0%{transform:scale(.3);opacity:0}25%{transform:scale(1.05);opacity:1}100%{transform:scale(1.25) translateY(30px);opacity:.2}}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #levelup .luCard{background:none!important;border:0!important;box-shadow:none!important;border-image:none!important;width:300px!important;height:auto!important;min-width:0!important;padding:0!important;display:flex!important;flex-direction:column;align-items:center;filter:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #levelup .luBadge{width:170px;height:170px;background:url(../sprites/ui/hl_badge.webp) center/contain no-repeat;display:flex;align-items:center;justify-content:center;animation:luPop .6s cubic-bezier(.2,1.6,.4,1) both;filter:drop-shadow(0 0 18px rgba(120,255,235,.7))}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #levelup .luBadge b{font:400 58px/1 "Lilita One",Fredoka,sans-serif;color:#fff;text-shadow:0 3px 0 #0d6c76,0 0 10px rgba(0,80,90,.6);margin-top:6px}
+@keyframes luPop{0%{transform:scale(.2) rotate(-25deg);opacity:0}100%{transform:none;opacity:1}}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #levelup .luT{position:relative!important;left:auto!important;right:auto!important;top:auto!important;transform:none!important;margin:-22px 0 0!important;width:300px;height:76px;line-height:70px!important;
+  background:url(../sprites/ui/hl_ribbon.webp) center/contain no-repeat!important;font:400 28px/70px "Lilita One",Fredoka,sans-serif!important;color:#fff!important;text-shadow:0 2px 0 #a4480f,0 0 4px rgba(140,50,0,.5)!important;text-align:center;animation:luPop .5s .15s cubic-bezier(.2,1.6,.4,1) both}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #levelup .luS{display:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #levelup .luPods{display:flex;gap:14px;margin-top:4px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #levelup .luPods span{width:78px;height:78px;background:url(../sprites/ui/hl_pod.webp) center/contain no-repeat;display:flex;flex-direction:column;align-items:center;justify-content:center;animation:luPop .45s cubic-bezier(.2,1.6,.4,1) both}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #levelup .luPods span:nth-child(1){animation-delay:.35s}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #levelup .luPods span:nth-child(2){animation-delay:.5s}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #levelup .luPods img.emo{width:30px;height:30px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #levelup .luPods b{font:700 15px/1 Fredoka,sans-serif;color:#0f3b44;text-shadow:0 1px 0 #fff}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #levelup .luBot{position:absolute;left:calc(50% - 175px);top:calc(50% + 60px);width:84px;height:84px;background:url(../sprites/ui/bot_happy.webp) center/contain no-repeat;animation:hpBob 2.8s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,30,40,.45))}
+html:not([data-ui-theme="buddy"]) :is(.luBadge,.luPods,.luBot,.luConf){display:none}
+
+/* ============================================================ new producer */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #npw{background:radial-gradient(120% 80% at 30% 85%,rgba(40,120,130,.38),rgba(4,22,32,.62))!important;backdrop-filter:blur(2.5px)}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #npw .npCard{padding:36px 10px 10px!important;width:min(84vw,310px)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #npw .npTag{top:-20px!important;max-width:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #npw .npTag::before{content:"";display:inline-block;width:24px;height:24px;margin:-6px 4px -6px 0;background:url(../sprites/ui/hn_unlock.webp) center/contain no-repeat;vertical-align:middle}
+html[data-ui-theme="buddy"] .npStage{position:relative;width:200px;height:190px;margin:0 auto}
+html[data-ui-theme="buddy"] .npStage>i{position:absolute;left:50%;pointer-events:none}
+html[data-ui-theme="buddy"] .npStage .npBeam{bottom:30px;width:110px;height:180px;margin-left:-55px;background:url(../sprites/ui/hn_beam.webp) center bottom/100% 100% no-repeat;opacity:.75;animation:npBeam 2.2s ease-in-out infinite}
+@keyframes npBeam{0%,100%{opacity:.55}50%{opacity:.9}}
+html[data-ui-theme="buddy"] .npStage .npPlat{bottom:0;width:190px;height:70px;margin-left:-95px;background:url(../sprites/ui/hn_platform.webp) center/contain no-repeat}
+html[data-ui-theme="buddy"] .npStage .npGlow{bottom:24px;width:140px;height:40px;margin-left:-70px;background:url(../sprites/ui/hn_glow.webp) center/100% 100% no-repeat}
+html[data-ui-theme="buddy"] .npStage .npHex{top:4px;width:150px;height:150px;margin-left:-75px;background:url(../sprites/ui/hn_hex.webp) center/contain no-repeat;animation:npHex 6s linear infinite;opacity:.9}
+@keyframes npHex{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+html[data-ui-theme="buddy"] .npStage .npArt{position:absolute!important;left:50%;top:22px;width:116px!important;height:116px!important;margin:0 0 0 -58px!important;z-index:1}
+html:not([data-ui-theme="buddy"]) .npStage>i{display:none}
+html:not([data-ui-theme="buddy"]) .npStage{display:contents}
+
+/* ============================================================ chapter fanfare */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan{background:radial-gradient(70% 55% at 50% 42%,rgba(30,120,130,.6),rgba(4,22,32,.88))!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan .cfRing{background:url(../sprites/ui/hn_platform.webp) center 78%/90% auto no-repeat!important;border:0!important;box-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan .cfFw{position:absolute;width:150px;height:150px;background:url(../sprites/ui/hx_fireworks.webp) center/contain no-repeat;animation:cfFw 1.6s ease-out infinite;pointer-events:none}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan .cfFw.a{left:4%;top:9%}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan .cfFw.b{right:4%;top:16%;animation-delay:.7s;transform:scaleX(-1)}
+@keyframes cfFw{0%{opacity:0;scale:.3}30%{opacity:1;scale:1}100%{opacity:0;scale:1.2}}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan .cfStars{display:block;width:170px;height:62px;margin-bottom:-14px;background:url(../sprites/ui/hx_stars.webp) center/contain no-repeat;animation:luPop .5s 1.1s cubic-bezier(.2,1.6,.4,1) both}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan .cfTrophy{position:absolute;right:8%;bottom:20%;width:100px;height:110px;background:url(../sprites/ui/hx_trophy.webp) center/contain no-repeat;animation:luPop .6s 1.4s cubic-bezier(.2,1.6,.4,1) both}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan :is(.cfTxt,.cfNext,.cfTxt *,.cfNext *){color:#fff!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan .cfNext{background:none!important;border-style:solid!important;border-width:9px 16px 9px 14px!important;border-radius:0!important;border-image:var(--h-notice) 40 80 40 60 fill / 9px 16px 9px 14px / 0 stretch!important;padding:2px 6px}
+
+/* ============================================================ tutorial pointer and coach */
+#holoHi .hhArrow{position:fixed;width:40px;height:46px;display:none}
+html[data-ui-theme="buddy"] #holoHi .hhArrow{display:block;background:url(../sprites/ui/hn_arrow.webp) center/contain no-repeat;animation:hhArr .9s ease-in-out infinite;filter:drop-shadow(0 0 6px rgba(255,160,60,.7))}
+@keyframes hhArr{0%,100%{transform:translateY(-4px)}50%{transform:translateY(5px)}}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .coachFace:empty{display:inline-block;width:46px;height:46px;background:url(../sprites/ui/bot_think.webp) center/contain no-repeat}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan .cfTxt.ban{aspect-ratio:2.02!important;width:min(320px,86vw)!important;padding:4% 19% 17%!important;justify-content:center}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan .cfTxt.ban b{font-size:clamp(14px,4.6vw,19px)!important;text-shadow:0 2px 0 #04313a!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan .cfStars{width:130px!important;height:88px!important;margin-bottom:-26px!important;position:relative;z-index:1}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan .cfStampImg{width:118px!important;margin-top:-34px;position:relative;z-index:2}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan .cfStage{width:170px;height:170px}
+html[data-ui-theme="buddy"] .galBack .gbA{display:none}

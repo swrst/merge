@@ -7,10 +7,12 @@
    above that overlay's dim backdrop and under the panel itself. */
 import { getUITheme } from './theme';
 
-const OVERLAYS: [string, string][] = [['#rwc', '.rwcCard'], ['#modal', '.mBoxW'], ['#mini', '.miniBox'], ['#pop', '.popBox']];
+const OVERLAYS: [string, string][] = [['#npw', '.npCard'], ['#rwc', '.rwcCard'], ['#modal', '.mBoxW'], ['#mini', '.miniBox'], ['#pop', '.popBox']];
 const NS = 'http://www.w3.org/2000/svg';
 let el: HTMLDivElement | null = null, svg: SVGSVGElement | null = null, bot: HTMLDivElement | null = null;
 let openBox: Element | null = null, ro: ResizeObserver | null = null, raf = 0;
+let poseOf: (ov: Element, box: Element) => string = () => '';
+let idleSrc = '';
 
 function build(src: string) {
   el = document.createElement('div'); el.id = 'holoProj'; el.setAttribute('aria-hidden', 'true');
@@ -84,6 +86,8 @@ function update() {
   el.classList.remove('on'); void el.offsetWidth;                // restart the beam animation
   box.classList.remove('hpIn'); void (box as HTMLElement).offsetWidth;
   box.classList.add('hpProjected', 'hpIn');
+  // the companion's face suits the moment: happy for rewards, surprised for a new find, sleepy when energy runs out
+  const img = bot?.querySelector('img'); if (img) { const want = poseOf(ov, box) || idleSrc; if (img.getAttribute('src') !== want) img.setAttribute('src', want); }
   // the print-in must never leave a panel half-drawn (a paused or throttled animation): done after 0.6 s regardless
   const done = box; setTimeout(() => done.classList.remove('hpIn'), 600);
   el.classList.add('on');
@@ -91,8 +95,9 @@ function update() {
   follow(700);
 }
 
-export function startProjector(src: string) {
+export function startProjector(src: string, pose?: (ov: Element, box: Element) => string) {
   if (!src) return;
+  idleSrc = src; if (pose) poseOf = pose;
   build(src);
   const mo = new MutationObserver(() => update());
   OVERLAYS.forEach(([o]) => { const n = document.querySelector(o); if (n) mo.observe(n, { attributes: true, attributeFilter: ['class'], childList: true }); });

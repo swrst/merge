@@ -1129,13 +1129,6 @@ export const ART = (function () {
     charFull: (k: string) => SPRITE.char[k + '_full']
       ? `<svg viewBox="0 0 100 100" class="face"><image href="${SPRITE.char[k + '_full']}" x="0" y="0" width="100" height="100"/></svg>` : charArt(k),
     /** a painted UI icon as an <img>, or the fallback text (an emoji) */
-    uiIcon: (k: string, fb: string) => {
-      // the painted Orbital kit (art/ui/orbital-holo) replaces these icons in the default look
-      const alternate: Record<string, string> = { ic_goals: 'oh_missions', ic_galaxy_btn: 'oh_galaxy', ic_galaxy: 'oh_galaxy', ic_lab: 'oh_lab', gal_starchart: 'oh_stars', ic_pal: 'oh_projector' };
-      const classic = SPRITE.ui[k], orbital = SPRITE.ui[alternate[k]];
-      if (!classic && !orbital) return fb;
-      if (!classic) return getUITheme() === 'buddy' ? `<img class="uiIc ohIc" src="${orbital}" alt="" draggable="false">` : fb;
-      return `<img class="uiIc${orbital ? ' ohIc' : ''}" src="${getUITheme() === 'buddy' && orbital ? orbital : classic}"${orbital ? ` data-classic-src="${classic}" data-orbital-src="${orbital}"` : ''} alt="" draggable="false">`;
-    },
+    uiIcon: (k: string, fb: string) => SPRITE.ui[k] ? `<img class="uiIc" src="${SPRITE.ui[k]}" alt="" draggable="false">` : fb,
   };
 })();

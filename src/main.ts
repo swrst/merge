@@ -7,7 +7,7 @@ import './style.css';
 import './themes/orbital.css';
 import './themes/buddy.css';
 import './themes/projector.css';
-import './themes/kit.css';
+import './themes/holo.css';
 import './themes/theme';
 import { ART } from './art';
 import { startGame } from './game';
@@ -79,7 +79,11 @@ async function main() {
     initServices();
     await startGame();
     startHoloFix();
-    startProjector(ART.spriteUi('oh_projector') || ART.spriteUi('pp_buddy') || '');
+    startProjector(ART.spriteUi('bot_idle') || ART.spriteUi('pp_buddy') || '', (ov, box) => {
+      const k = ov.id === 'rwc' ? 'bot_happy' : ov.id === 'npw' ? 'bot_surprised'
+        : ov.classList.contains('csheet') || box.querySelector('.chHead2') ? 'bot_project' : box.querySelector('.enBig') ? 'bot_sleep' : box.querySelector('.cfStamp,.hint,.tipBox') ? 'bot_think' : '';
+      return k ? ART.spriteUi(k) : '';
+    });
   } catch (err) { console.error(err); analytics.error(err, 'boot'); bootFailed(err); }
 }
 

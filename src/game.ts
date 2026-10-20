@@ -1325,9 +1325,11 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     sfx.big(); haptic('medium'); confetti();
     const lu = $('#levelup');
     $('#luTxt').textContent = 'LEVEL ' + S.lvl + '!';
+    $('#luNum').textContent = String(S.lvl);
     $('#luSub').textContent = `+${CONFIG.energy.levelUp || 20} energy • +${CFG.gems.perLevel} 💎`;
+    $('#luPods').innerHTML = `<span>⚡<b>+${CONFIG.energy.levelUp || 20}</b></span><span>💎<b>+${CFG.gems.perLevel}</b></span>`;
     lu.classList.remove('show'); void lu.offsetWidth; lu.classList.add('show');
-    setTimeout(() => lu.classList.remove('show'), 2100);
+    setTimeout(() => lu.classList.remove('show'), 2400);
     // on a story world Dr. Zonk arrives with a chapter (Mend the Old Well), not a level
     if (S.lvl >= CONFIG.meteor.firstAtLevel && !S.met && !scripted('earth')) setTimeout(meteorStory, 1800);
   }
@@ -2318,7 +2320,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     dailyReward(r);
     sfx.coin(); confetti();
     modal('player', 'Welcome back!',
-      `Day <b>${S.daily.day}</b> of your streak — here is <b>${r.label}</b>!
+      `<i class="hFlame"></i>Day <b>${S.daily.day}</b> of your streak — here is <b>${r.label}</b>!
        <div class="dayGrid">${list.map((x: any, k: number) => `
          <div class="dayCell${k + 1 < S.daily.day ? ' done' : ''}${k + 1 === S.daily.day ? ' today' : ''}">
            <div class="dn">Day ${k + 1}</div>${rewardArt(x)}<b>${x.label}</b></div>`).join('')}</div>`,
@@ -2758,7 +2760,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (!el) { el = document.createElement('div'); el.id = 'npw'; $('#app').appendChild(el); }
     const p = PRODS[r.k], drops = [...new Set(p.drops as string[])].slice(0, 3);
     el.innerHTML = `<div class="rwcRays"></div><div class="npCard"><div class="npTag">${r.title}</div>
-      <div class="npArt" id="npArt">${ART.producer(p.art)}</div><b class="npName">${p.name}</b>
+      <div class="npStage"><i class="npBeam"></i><i class="npPlat"></i><i class="npGlow"></i><i class="npHex"></i><div class="npArt" id="npArt">${ART.producer(p.art)}</div></div><b class="npName">${p.name}</b>
       <div class="npLine">${r.line}</div>
       <div class="npDrops">${drops.map(d => `<span>${ART.item(d)}</span>`).join('<i>·</i>')}</div>
       <button class="big" id="npGo">Place it!</button></div>`;
@@ -2930,6 +2932,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const strip = chapterBars(list, n - 1, true).replace('class="chBars"', 'class="chBars cfStrip"');
     el.innerHTML = `<div class="cfRays"></div>
       <div class="cfStage"><div class="cfRing"></div><span class="cfFace">${ART.char(p.who)}</span>${items}</div>
+      <i class="cfFw a"></i><i class="cfFw b"></i>${next ? '' : '<i class="cfTrophy"></i>'}<i class="cfStars"></i>
       <div class="cfTxt${ART.spriteUi('victory_banner') ? ' ban' : ''}"><i>Chapter ${n}</i><b>${p.name}</b></div>
       ${ART.spriteUi('complete_stamp') ? `<img class="cfStampImg" src="${ART.spriteUi('complete_stamp')}" alt="Complete">` : '<div class="cfStamp">COMPLETE!</div>'}
       ${strip}
@@ -4532,7 +4535,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (!target) return;
     const find = typeof target === 'function' ? target : () => target;
     const h = document.createElement('div'); h.id = 'holoHi';
-    h.innerHTML = `<i class="hhFrame"><b></b><b></b><b></b><b></b><em class="hhScan"></em></i>${say ? `<span class="hhTag">${say}</span>` : ''}`;
+    h.innerHTML = `<i class="hhArrow"></i><i class="hhFrame"><b></b><b></b><b></b><b></b><em class="hhScan"></em></i>${say ? `<span class="hhTag">${say}</span>` : ''}`;
     document.body.appendChild(h);
     const place = () => {
       const t = find();
@@ -4550,6 +4553,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         tag.style.top = (below ? r.bottom + 10 : r.top - 40) + 'px';
         tag.classList.toggle('up', !below);
       }
+      const ar = h.querySelector('.hhArrow') as HTMLElement;
+      const up = r.top - pad - 50 > 0 && (!tag || tag.classList.contains('up') === false);
+      ar.style.cssText = up ? `left:${r.left + r.width / 2 - 20}px;top:${r.top - pad - 50}px` : 'display:none';
     };
     place();
     // it waits (hidden) while another screen is open, and gives up after a while of being shown
@@ -5600,7 +5606,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     }).join('');
     const n = CONSTS.filter(c => lit(c.id)).length;
     el.innerHTML = `<div class="skBgArt"></div><div class="skNeb"></div>
-      <div class="skTop2"><button class="galBack" id="skBack">↩ Galaxy</button><b>Star Chart</b>
+      <div class="skTop2"><button class="galBack" id="skBack"><span class="gbA">↩ </span>Galaxy</button><b>Star Chart</b>
         <span class="skPouch2"><img src="${ART.spriteUi('starcore_ui')}" alt=""><b>${countItem('starcore')}</b></span><button class="skHelp" id="skHelp">?</button></div>
       <div class="skLit2"><i style="width:${Math.round(n / CONSTS.length * 100)}%"></i><span>${n}/${CONSTS.length} constellations lit</span></div>
       <div class="skScroll2" id="skScroll">${rows}<div class="skEnd">More skies wait beyond Aurora Reach…</div></div>
@@ -5826,7 +5832,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         <div class="gpCard"><b>Uncharted world</b><i>Somewhere past Aurora Reach</i><span class="gpNeed">${ART.uiIcon('empty_soon', '🔭')} Coming soon</span></div></div>`;
     })();
     return `<div class="gal2"><div class="galSky"></div>
-      <div class="galTop"><button class="galBack" data-pop="camp">↩ Camp</button><button class="galStars2 inTop${CONSTS.some(c => constState(c) === 'ready') ? ' ready' : ''}" data-pop="stars"><img src="${ART.spriteUi('gal_starchart')}" alt=""><b>Star Chart</b><i>${CONSTS.filter(c => S.stars && S.stars[c.id]).length}/${CONSTS.length} lit</i></button><b>Galaxy</b><span class="galFuel">⛽ ${S.fuel}/${CONFIG.rocket.fuelToLaunch}</span></div>
+      <div class="galTop"><button class="galBack" data-pop="camp"><span class="gbA">↩ </span>Camp</button><button class="galStars2 inTop${CONSTS.some(c => constState(c) === 'ready') ? ' ready' : ''}" data-pop="stars"><img src="${ART.spriteUi('gal_starchart')}" alt=""><b>Star Chart</b><i>${CONSTS.filter(c => S.stars && S.stars[c.id]).length}/${CONSTS.length} lit</i></button><b>Galaxy</b><span class="galFuel">⛽ ${S.fuel}/${CONFIG.rocket.fuelToLaunch}</span></div>
 
       <div class="galScroll" id="galScroll"><div class="galPath" style="height:${H}px">
         <svg class="galSvg" viewBox="0 0 100 ${H}" preserveAspectRatio="none" style="height:${H}px">
@@ -6495,7 +6501,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   const EMO: Record<string, string> = {
     '🪙': 'icon_coin', '💎': 'icon_gem', '⚡': 'icon_energy', '🧪': 'icon_flask', '🔒': 'st_lock', '⏳': 'st_wait', '✅': 'st_check', '❗': 'st_alert', '💤': 'st_sleep',
     '📜': 'ic_scroll', '🎁': 'ic_gift', '🏆': 'ic_trophy', '📦': 'ic_box', '🎡': 'ic_spin', '🔬': 'ic_microscope', '🛒': 'ic_shop',
-    '🎪': 'ic_tent', '📖': 'ic_album2', '🗺️': 'ic_map2', '🗺': 'ic_map2', '🔑': 'ic_key', '🔔': 'cl_bell', '🌌': 'ic_galaxy', '💡': 'ic_hint', '⬆': 'ic_up', '🧺': 'ic_pouch', '✉️': 'ic_feedback', '📅': 'ic_calendar', '🍪': 'ic_cookie', '🧲': 'icon_magnet', '🔊': 'ic_sound', '🎵': 'ic_music', '💾': 'ic_saved', '➡️': 'ic_nextch', '🛸': 'ic_galaxy', '❌': 'st_cross', '➕': 'st_plus', '🎯': 'sec_quest', '🏗️': 'sec_build', '🔨': 'sec_build', '🛍️': 'ic_cart', '🌱': 'ic_grow', '⚗️': 'ic_experiment',
+    '🎪': 'ic_tent', '📖': 'ic_album2', '🗺️': 'ic_map2', '🗺': 'ic_map2', '🔑': 'ic_key', '🔔': 'cl_bell', '🌌': 'ic_galaxy', '💡': 'ic_hint', '⬆': 'ic_up', '🧺': 'ic_pouch', '✉️': 'ic_feedback', '📅': 'ic_calendar', '🍪': 'ic_cookie', '🧲': 'icon_magnet', '🔊': 'ic_sound', '🎵': 'ic_music', '⚙️': 'ic_gear', '🎮': 'ic_games', '💾': 'ic_saved', '➡️': 'ic_nextch', '🛸': 'ic_galaxy', '❌': 'st_cross', '➕': 'st_plus', '🎯': 'sec_quest', '🏗️': 'sec_build', '🔨': 'sec_build', '🛍️': 'ic_cart', '🌱': 'ic_grow', '⚗️': 'ic_experiment',
   };
   const EMO_RE = new RegExp(Object.keys(EMO).filter(k => ART.spriteUi(EMO[k])).sort((a, b) => b.length - a.length).join('|'), 'g');
   function paintEmoji(root: Node) {
@@ -6608,7 +6614,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           ${row('sndBtn', ART.uiIcon(S.sound ? 'ic_sound' : 'ic_mute', '🔊'), 'Sound effects', !!S.sound)}
           ${row('musBtn', ART.uiIcon(S.music ? 'ic_music' : 'ic_nomusic', '🎵'), 'Music', !!S.music)}
           ${row('tipBtn', ART.uiIcon('ic_tips', '💡'), 'Tips', !S.tipsOff)}
-          ${row('themeBtn', ART.uiIcon('pp_buddy', '🛸'), 'Pocket Buddy UI', getUITheme() === 'buddy')}
+          ${row('themeBtn', ART.uiIcon('pp_buddy', '🛸'), 'Hologram UI', getUITheme() === 'buddy')}
           <p class="themeNote">Switch off to use the original Space Hologram design.</p>
         </div>
         ${games.live ? (games.signedIn
@@ -6625,7 +6631,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         const sb2 = $('#sndBtn'), mb = $('#musBtn'), tb = $('#tipBtn'), rb = $('#resetBtn');
         const redraw = (saveGame = true) => { $('#mBody').innerHTML = draw(); bind(); if (saveGame) save(); };
         const themeBtn = $('#themeBtn');
-        if (themeBtn) { themeBtn.setAttribute('aria-pressed', String(getUITheme() === 'buddy')); themeBtn.onclick = () => { setUITheme(getUITheme() === 'buddy' ? 'classic' : 'buddy'); redraw(false); }; }
+        if (themeBtn) { themeBtn.setAttribute('aria-pressed', String(getUITheme() === 'buddy')); themeBtn.onclick = () => { setUITheme(getUITheme() === 'buddy' ? 'classic' : 'buddy'); save(); setTimeout(() => location.reload(), 150); }; }
         if (sb2) sb2.onclick = () => { S.sound = S.sound ? 0 : 1; audio.setSfx(!!S.sound); if (S.sound) sfx.tap(); redraw(); };
         if (mb) mb.onclick = () => { S.music = S.music ? 0 : 1; audio.setMusic(!!S.music); redraw(); };
         if (tb) tb.onclick = () => { S.tipsOff = S.tipsOff ? 0 : 1; if (S.tipsOff) coachOff(); else S.coach = {}; redraw(); };
@@ -6699,7 +6705,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed, ecost,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
       fly: (w: string) => galaxyTap(w), view: (v: string) => setView(v),
-      curProject: () => curProject(), v9: { labStation, labBuildPop, rewardCard, achOff: () => { achAutoOff = true; }, xp: XP, shopUnlockHint, xpUnlockHint, setView, achPop, profilePop, heartPanel, albumPop, openPack, albumGive, shareCard, alb, storeProducer, startPlacing, paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
+      curProject: () => curProject(), v9: { levelBanner, checkDaily, labStation, labBuildPop, rewardCard, achOff: () => { achAutoOff = true; }, xp: XP, shopUnlockHint, xpUnlockHint, setView, achPop, profilePop, heartPanel, albumPop, openPack, albumGive, shareCard, alb, storeProducer, startPlacing, paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
     };
     setInterval(tick, 500);
     setInterval(() => { if (!document.hidden) S.playMs = (S.playMs || 0) + 5000; }, 5000);

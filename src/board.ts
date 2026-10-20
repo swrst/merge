@@ -185,7 +185,7 @@ class PixiBoard {
     add('coin', ART.iconSvg('coin'), ART.spriteUi('icon_coin') || undefined);
     // shared tiles, plus each world's own set when it has been painted (tile_light_luna …)
     const tiles = ['tile_light', 'tile_dark', 'tile_locked'];
-    [...tiles, 'oh_tile_light', 'oh_tile_dark', 'oh_tile_locked', 'oh_tile_reward', 'bubble_film', 'seal_bubble', 'seal_crack', 'meteor', 'ic_star_tag', ...Object.keys(THEME).flatMap(w => tiles.map(t => t + '_' + w))].forEach(k => {
+    [...tiles, 'ho_tile', 'ho_tile2', 'hs_locked', 'hs_wanted', 'hs_selected', 'hs_sparkle', 'hs_shadow', 'bubble_film', 'seal_bubble', 'seal_crack', 'meteor', 'ic_star_tag', ...Object.keys(THEME).flatMap(w => tiles.map(t => t + '_' + w))].forEach(k => {
       const url = ART.spriteUi(k); if (url) add('ui:' + k, '', url);
     });
     await Promise.all(jobs);
@@ -331,12 +331,13 @@ class PixiBoard {
     g.clear();
     const art = this.tileArt[i];
     if (getUITheme() === 'buddy') {
-      // the painted Orbital board kit: pearl and mint pads in a checkerboard, a crater
-      // pad for locked tiles, the gold-edged pad for what a contract wants
+      // the hologram board kit: light and deeper aqua glass in a checkerboard, a
+      // padlocked grey-teal tile when locked, the orange-framed tile for what a contract wants
       const want = this.wanted.has(i) && !locked;
-      const tex = this.tex[want ? 'ui:oh_tile_reward' : locked ? 'ui:oh_tile_locked' : dark ? 'ui:oh_tile_dark' : 'ui:oh_tile_light'];
+      const tex = this.tex[want ? 'ui:hs_wanted' : locked ? 'ui:hs_locked' : dark ? 'ui:ho_tile2' : 'ui:ho_tile'];
       if (tex && art) {
         art.visible = true; art.texture = tex; art.position.set(p.x + 1, p.y + 1); art.width = c - 2; art.height = c - 2;
+        art.alpha = want || locked ? 1 : dark ? 0.62 : 0.78;          // see-through glass: the world shows under the board
         if (this.slots[i] && this.slots[i].key.startsWith('u')) g.roundRect(p.x + 4, p.y + 4, c - 8, c - 8, R).fill({ color: 0x7cc8ff, alpha: 0.3 });
         if (r) g.roundRect(p.x + 3, p.y + 3, c - 6, c - 6, R).stroke({ color: r === 3 ? 0xffb02e : r === 2 ? 0xb58cff : 0x6fd0e8, alpha: .8, width: r === 3 ? 3 : 2 });
         return;
@@ -357,7 +358,7 @@ class PixiBoard {
       if (this.wanted.has(i)) g.roundRect(p.x + 2, p.y + 2, c - 4, c - 4, R).stroke({ color: 0xffd75e, width: 3, alpha: 1 });
       return;
     }
-    if (art) art.visible = !!paint;
+    if (art) { art.visible = !!paint; art.alpha = 1; }
     if (paint && art) {
       // a painted tile carries its own light and shade; only the rarity frame is drawn over it
       art.texture = paint; art.position.set(p.x, p.y); art.width = c; art.height = c;
@@ -819,6 +820,15 @@ class PixiBoard {
   /** expanding ring, used for merges and installs */
   ringPulse(i: number, color: number) {
     const p = this.center(i);
+    const tx = getUITheme() === 'buddy' ? this.tex['ui:hs_sparkle'] : undefined;
+    if (tx) {
+      const sp = new Sprite(tx); sp.anchor.set(0.5); sp.width = sp.height = this.cell * 0.9; sp.position.set(p.x, p.y);
+      this.lFx.addChild(sp);
+      const k = sp.scale.x;
+      gsap.to(sp.scale, { x: k * 1.9, y: k * 1.9, duration: 0.55, ease: 'power2.out' });
+      gsap.to(sp, { rotation: 0.6, alpha: 0, duration: 0.55, ease: 'power1.in', onComplete: () => sp.destroy() });
+      return;
+    }
     const g = new Graphics();
     g.circle(0, 0, this.cell * 0.34).stroke({ color, width: 4, alpha: 0.95 });
     g.position.set(p.x, p.y);
@@ -898,7 +908,12 @@ class PixiBoard {
   setSelected(i: number | null) {
     this.slots.forEach((s, k) => {
       const on = k === i;
-      if (on && !s.ring && s.art) {
+      if (on && !s.ring && s.art && getUITheme() === 'buddy' && this.tex['ui:hs_selected']) {
+        const p = this.center(k), sp = new Sprite(this.tex['ui:hs_selected']);
+        sp.anchor.set(0.5); sp.width = sp.height = this.cell * 1.06; sp.position.set(p.x, p.y);
+        this.lFx.addChild(sp); s.ring = sp as any;
+        gsap.fromTo(sp, { alpha: 0.4 }, { alpha: 1, duration: 0.18 });
+      } else if (on && !s.ring && s.art) {
         const p = this.center(k), g = new Graphics();
         g.roundRect(-this.cell / 2, -this.cell / 2, this.cell, this.cell, this.cell * 0.24)
           .stroke({ color: 0xffcb3d, width: 4 });
@@ -1155,6 +1170,11 @@ class PixiBoard {
       d.sprite = s.art;
       if (s.idle) { s.idle.kill(); s.idle = undefined; }
       gsap.killTweensOf(d.sprite); gsap.killTweensOf(d.sprite.scale);
+      if (getUITheme() === 'buddy' && this.tex['ui:hs_shadow']) {
+        const sh = new Sprite(this.tex['ui:hs_shadow']); sh.anchor.set(0.5); sh.alpha = 0.55;
+        sh.width = this.cell * 0.8; sh.height = this.cell * 0.8 * (sh.texture.height / sh.texture.width);
+        this.lDrag.addChild(sh); d.shadow = sh;
+      }
       this.lDrag.addChild(d.sprite);
       const sc = this.spriteScale(d.i);
       gsap.to(d.sprite.scale, { x: sc * 1.22, y: sc * 1.22, duration: 0.16, ease: 'back.out(2.4)' });
@@ -1170,6 +1190,7 @@ class PixiBoard {
     // the item rides a little above the finger, so the finger never hides it,
     // and leans into the direction it is being pulled
     d.sprite.position.set(e.global.x, e.global.y - this.cell * 0.32);
+    if (d.shadow && !d.shadow.destroyed) d.shadow.position.set(e.global.x, e.global.y + this.cell * 0.2);
     d.vx = d.vx * 0.6 + (e.global.x - d.lx) * 0.4; d.lx = e.global.x;
     const lean = Math.max(-0.28, Math.min(0.28, d.vx * 0.025));
     gsap.to(d.sprite, { rotation: lean, duration: 0.18, overwrite: 'auto' });
@@ -1183,6 +1204,7 @@ class PixiBoard {
   private up = (e: any) => {
     const d = this.drag; this.drag = null;
     if (!d) return;
+    if (d.shadow && !d.shadow.destroyed) d.shadow.destroy();
     this.clearDropHighlight();
     this.hideMatches();
     if (!d.moved) { this.hooks.onTap(d.i); return; }
@@ -1216,6 +1238,7 @@ class PixiBoard {
   /** the dragged sprite was replaced under the finger: put whatever is in its slot back home */
   private abortDrag() {
     const d = this.drag; this.drag = null;
+    if (d && d.shadow && !d.shadow.destroyed) d.shadow.destroy();
     this.clearDropHighlight(); this.hideMatches();
     if (d && d.sprite && !d.sprite.destroyed && d.sprite.parent === this.lDrag && this.slots[d.i].art !== d.sprite) d.sprite.destroy();
     if (d) this.hideBadges(d.i, false);
