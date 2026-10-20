@@ -3313,7 +3313,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       }
       // a soft nebula glow in the destination colour
       const neb = g.createRadialGradient(cx, cy, 0, cx, cy, R * 0.6);
-      neb.addColorStop(0, `hsla(${hue},90%,60%,${0.05 + sp * 1.2})`); neb.addColorStop(1, 'transparent');
+      neb.addColorStop(0, `hsla(${Number.isFinite(hue) ? hue : 190},90%,60%,${Number.isFinite(sp) ? 0.05 + sp * 1.2 : 0.05})`); neb.addColorStop(1, 'transparent');
       g.fillStyle = neb; g.fillRect(0, 0, W2, H2);
       const pt = Math.max(0, (t - 0.45) / 0.55);
       pl.style.transform = `translate(-50%,-50%) scale(${0.05 + Math.pow(pt, 2.4) * 1.6}) rotate(${pt * 25}deg)`;

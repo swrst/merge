@@ -39,16 +39,16 @@ function place() {
   let x = 0, y = 0;
   for (let n: HTMLElement | null = pb; n && n !== host; n = n.offsetParent as HTMLElement | null) { x += n.offsetLeft; y += n.offsetTop; if (!n.offsetParent) break; }
   const ov = { width: host.clientWidth, height: host.clientHeight };
-  const bw = pb.offsetWidth, bh = pb.offsetHeight;
+  let bw = pb.offsetWidth, bh = pb.offsetHeight;
   if (mode !== 'pop') {                                            // a toast is centred with a transform: measure where it really is
     const hr = host.getBoundingClientRect(), r = pb.getBoundingClientRect(), k = hr.width / (host.clientWidth || hr.width) || 1;
-    x = (r.left - hr.left) / k; y = (r.top - hr.top) / k;
+    x = (r.left - hr.left) / k; y = (r.top - hr.top) / k; bw = r.width / k; bh = r.height / k;
   }
   if (!bw || !bh) { el.classList.remove('on'); return; }
   const bx = x, by = y + bh;
   const room = ov.height - by;                                     // space under the panel
   const small = mode === 'toast' || mode === 'bar';
-  const size = small ? 56 : Math.max(60, Math.min(92, room - 14));
+  const size = small ? 56 : mode === 'screen' ? 68 : Math.max(60, Math.min(92, room - 14));
   // landing line of the light: two points on the edge of the panel facing the companion
   let p1x: number, p1y: number, p2x: number, p2y: number, cx: number, cy: number;
   const barEl = document.getElementById('infoBar');
@@ -63,14 +63,10 @@ function place() {
     const bl = r.left - hr.left, bt = r.top - hr.top;
     cx = Math.max(size / 2 + 2, bl - size / 2 - 4); cy = bt + r.height / 2 + size * 0.12;
     p1x = bx + bw * 0.06; p2x = bx + bw * 0.5; p1y = p2y = by - 3;
-  } else if (mode === 'screen') {
-    // a full screen leaves no room below: the companion sits in its lower corner and casts the light up across it
-    cx = Math.max(size / 2 + 4, bx + size * 0.55); cy = Math.min(by, ov.height) - size * 0.62;
-    p1x = cx + size * 0.2; p2x = cx + size * 2.6; p1y = p2y = cy - size * 1.5;
   } else {
-    // popups and board messages: always BELOW the panel, under its left third, light up onto the bottom edge
+    // popups, full screens and board messages: always BELOW the panel, under its left third, light up onto the bottom edge
     cx = Math.max(size / 2 + 6, Math.min(ov.width - size / 2 - 6, bx + bw * 0.22));
-    cy = by + Math.max(size / 2 + 2, Math.min(room - size / 2 - 6, size / 2 + 34));
+    cy = by + Math.max(size / 2 + 2, Math.min(room - size / 2 - 6, size / 2 + (mode === 'screen' ? 12 : 34)));
     p1x = bx + bw * 0.06; p2x = bx + bw * 0.62; p1y = p2y = by - 3;
   }
   bot.style.cssText = `left:${cx - size / 2}px;top:${cy - size / 2}px;width:${size}px;height:${size}px`;

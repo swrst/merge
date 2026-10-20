@@ -89,3 +89,5 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(#pop,#moda
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #npw.open{padding-bottom:max(108px,calc(env(safe-area-inset-bottom,0px) + 108px))!important}
 #holoProj .hpBot.noMirror img{transform:none}
 #holoProj .hpBot.noMirror .hpLens{left:36%}
+/* full screens (shop, Mission Log, Collection) end higher, leaving the companion room to project them from below */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .screen:not(.scene){bottom:calc(var(--dockH,62px) + 10px + 96px + env(safe-area-inset-bottom,0px))!important}

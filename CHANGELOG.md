@@ -1,5 +1,9 @@
 # Changelog
 
+- **v87 (0.87.0)**
+  - Full screens (Collection, Mission Log, shop) end higher, and the companion projects them from below like every popup.
+  - Fix: a rare console error from the warp effect's nebula colour.
+
 - **v86 (0.86.0)**
   - The companion always projects from below: every popup leaves room under it, the companion floats under the panel's left third and the light lands on the panel's bottom edge. It never sits on top of a panel any more.
   - Item bar: the companion takes the storage button's spot beside the bar and lights it from the side; a board message while the bar is up is lit from that same spot. Board messages alone: lit from below.
