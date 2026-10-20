@@ -323,16 +323,43 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #pop .popBox :is(.
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #pop .popBox :is(.csTop,.csSay){background:none!important;border:0!important;border-image:none!important;box-shadow:none!important}
 
 /* ============================================================ BUILD: impossible to miss */
-@keyframes hBuild{0%,100%{filter:drop-shadow(0 0 4px #e8ff6a) drop-shadow(0 0 10px rgba(150,255,80,.75));transform:scale(1)}50%{filter:drop-shadow(0 0 8px #fff27a) drop-shadow(0 0 18px rgba(170,255,90,.95));transform:scale(1.05)}}
+@keyframes hBuild{0%,100%{filter:drop-shadow(0 0 4px #9dff6a) drop-shadow(0 0 10px rgba(110,255,120,.7));transform:scale(1)}50%{filter:drop-shadow(0 0 7px #d6ff8a) drop-shadow(0 0 16px rgba(120,255,130,.95));transform:scale(1.05)}}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(#btnQuests.ready,#chapLine.ready){
-  border-image:none!important;border:2.5px solid #fff7a8!important;border-radius:14px!important;
-  background:linear-gradient(180deg,#e9ff6b,#62d63a)!important;animation:hBuild 1.1s ease-in-out infinite}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(#btnQuests.ready,#chapLine.ready) :is(b,i,em,span:not(.dot)){color:#11420f!important;text-shadow:0 1px 0 rgba(255,255,255,.7)!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .side .sideW.chapW.ready .cwT{font-size:15px!important;font-weight:800!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #ribbon .rbGo{background:linear-gradient(180deg,#f4ff7a,#58d13a)!important;color:#11420f!important;text-shadow:0 1px 0 rgba(255,255,255,.7)!important;
-  border:2px solid #fffbd0!important;border-radius:99px!important;font-weight:800!important;font-size:16px!important;padding:6px 16px!important;animation:hBuild 1.1s ease-in-out infinite;box-shadow:0 3px 0 #2c8a1c!important}
+  border-image:none!important;border:2px solid #b8ff7a!important;border-radius:14px!important;
+  background:linear-gradient(180deg,#3fd46a,#128a3f)!important;animation:hBuild 1.1s ease-in-out infinite}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(#btnQuests.ready,#chapLine.ready) :is(b,i,em,span:not(.dot)){color:#fff!important;text-shadow:0 1px 0 #0b5a26,0 0 3px rgba(0,60,20,.6)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .side .sideW.chapW.ready .cwT{font-size:15px!important;font-weight:800!important;letter-spacing:.02em}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #ribbon .rbGo{background:linear-gradient(180deg,#3fd46a,#128a3f)!important;color:#fff!important;text-shadow:0 1px 0 #0b5a26!important;
+  border:2px solid #b8ff7a!important;border-radius:99px!important;font-weight:800!important;font-size:16px!important;padding:6px 16px!important;animation:hBuild 1.1s ease-in-out infinite;box-shadow:0 3px 0 #0b5a26!important}
 
 /* ============================================================ ready contract: a big tick you can't miss */
 @keyframes hTick{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #orders .order .oTick{width:46px!important;height:46px!important;right:-8px!important;bottom:-10px!important;border-radius:50%!important;
   filter:drop-shadow(0 0 0 #fff) drop-shadow(0 0 6px rgba(120,255,160,.9)) drop-shadow(0 2px 2px rgba(0,0,0,.4));animation:hTick .9s ease-in-out infinite;z-index:4}
+
+/* ============================================================ readable words on the dark glass pieces and inside bars */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.spotTag,.labSt b,.labHint,.hostRow i,.sciChip,.ordEmpty,.hostRow i *,.spotTag *,.labHint *,.ordEmpty *){color:#effffd!important;text-shadow:0 1px 1px #02161c!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.pfXp,.albProg,.catBar,.achBar,.gpBar,.wkBar,.skLitBar,.cwBar) :is(em,b,span,u){color:#fff!important;font-weight:800!important;text-shadow:0 1px 0 #02161c,0 0 3px #02161c,0 0 2px #02161c!important;-webkit-text-stroke:0!important;position:relative;z-index:1}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #profilePop input,html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .popBox input{background:rgba(255,255,255,.75)!important;color:var(--h-ink)!important;border:1.5px solid #6fd6d0!important;border-radius:10px!important;text-shadow:none!important}
+
+/* ============================================================ the chapter strip: clear chips */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .bottomBar .chapLine .clN{background:rgba(255,255,255,.14)!important;border:1.5px solid rgba(160,250,245,.55)!important;border-radius:12px!important;min-width:40px!important;height:48px!important;padding:2px 4px!important;box-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .bottomBar .chapLine .clN :is(.art,.ic,.uiIc,img,svg){width:30px!important;height:30px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .bottomBar .chapLine .clN em{font-size:12px!important;font-weight:800!important;color:#fff!important;text-shadow:0 1px 0 #02161c,0 0 3px #02161c!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .bottomBar .chapLine .clN.ok{background:rgba(70,220,120,.28)!important;border-color:#8dff9e!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .bottomBar .chapLine .clN.ok em{color:#d8ffd0!important}
+
+/* ============================================================ tips from a character: hologram banner */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #tipBub{
+  background:none!important;border-style:solid!important;border-width:12px 22px!important;border-radius:0!important;
+  border-image:var(--h-banner) 56 70 fill / 12px 22px / 0 stretch!important;box-shadow:none!important;padding:0 26px 0 0!important;
+  filter:drop-shadow(0 0 10px rgba(90,255,230,.4)) drop-shadow(0 6px 10px rgba(0,30,40,.35))}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #tipBub .tbTxt,html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #tipBub .tbTxt *{color:var(--h-ink)!important;text-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #tipBub .tbTxt i{color:#c45a12!important;font-style:normal;font-weight:800}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #tipBub .tbTxt b{color:#0b6e73!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #tipBub .tbFace{background:url(../sprites/ui/hd_ring.webp) center/contain no-repeat!important;box-shadow:none!important;border-radius:50%}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #tipBub .tbX{background:var(--h-close) center/contain no-repeat!important;border:0!important;color:transparent!important;font-size:0!important;width:30px!important;height:30px!important;box-shadow:none!important}
+
+/* ============================================================ board messages sit above the companion, and above a tip */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #toast{bottom:calc(var(--dockH,62px) + 84px + env(safe-area-inset-bottom,0px))!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app:has(#tipBub.on) #toast{bottom:calc(var(--dockH,62px) + 170px + env(safe-area-inset-bottom,0px))!important}

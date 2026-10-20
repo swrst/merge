@@ -1,5 +1,12 @@
 # Changelog
 
+- **v89 (0.89.0)**
+  - Contracts icon: the clipboard with ticks (instead of the small red scroll) in the bottom strip, chapter card and Mission Log.
+  - Bottom strip chips: bigger icons, white bold numbers, green when done.
+  - Readable text: XP bar, album and other bar labels in white with an outline; the Cosmic Wheel and other dark speech chips have light text; the captain name field is light.
+  - Character tips (the old violet bar) are a hologram banner now; board messages sit higher so the companion fits under them, and move up when a tip is showing.
+  - BUILD: green glass with white words and a lime glow (no more black on lime).
+
 - **v88 (0.88.0)**
   - Faster start: before the first frame only the art on screen loads (board, storage, contracts, chapter, one merge step ahead); the rest of this world loads while idle, other worlds when you fly there. In a test boot: 599 requests / 8.2 MB down to 211 / 3.9 MB, start time about halved.
   - Lighter app: Android splash images converted to WebP (about 25 MB down to 2.4 MB); 286 UI pictures converted to WebP and sized for how big they are shown; 37 unused UI pictures deleted.

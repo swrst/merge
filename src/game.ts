@@ -790,7 +790,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       line.innerHTML = `<b class="clT">${ready ? 'BUILD!' : 'Ch. ' + (projDone() + 1)}</b>`
         + pj.needs.map(([id, q]: [string, number]) => { const h = Math.min(q, countItem(id)); return `<span class="clN${h >= q ? ' ok' : ''}">${ART.item(id)}<em>${h}/${q}</em></span>`; }).join('')
         + (pj.coins ? `<span class="clN${S.coins >= pj.coins ? ' ok' : ''}">${ART.icon('coin')}<em>${pj.coins >= 1000 ? (pj.coins / 1000).toFixed(1) + 'k' : pj.coins}</em></span>` : '')
-        + `<span class="clN${cHave() >= cNeed(pj) ? ' ok' : ''}">${ART.uiIcon('ic_scroll', '📜')}<em>${Math.min(cHave(), cNeed(pj))}/${cNeed(pj)}</em></span>`
+        + `<span class="clN${cHave() >= cNeed(pj) ? ' ok' : ''}">${ART.uiIcon('cl_tasks', '📋')}<em>${Math.min(cHave(), cNeed(pj))}/${cNeed(pj)}</em></span>`
         + (ups.length ? `<span class="clN up">⬆<em>${ups.length}</em></span>` : '')
         + (pj.rocket ? `<span class="clN${allParts() ? ' ok' : ''}">🚀<em>${PART_KEYS.filter(k => S.parts[k]).length}/4</em></span>` : '');
     }
@@ -2972,7 +2972,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         ${p.talk ? `<button class="talkBtn" id="btnTalk" title="Replay the story">${ART.uiIcon('ic_feedback', '💬')}</button>` : ''}</div>
       <div class="pNeeds">${need}${p.coins ? `<span class="pNeed${S.coins >= p.coins ? ' ok' : ''}">${coin}<b>${p.coins}</b></span>` : ''}
         ${p.rocket ? `<span class="pNeed${allParts() ? ' ok' : ''}">🚀<b>${PART_KEYS.filter(k => S.parts[k]).length}/4</b></span>` : ''}
-        <span class="pNeed${cHave() >= cNeed(p) ? ' ok' : ''}">${ART.uiIcon('ic_scroll', '📜')}<b>${Math.min(cHave(), cNeed(p))}/${cNeed(p)}</b></span></div>
+        <span class="pNeed${cHave() >= cNeed(p) ? ' ok' : ''}">${ART.uiIcon('cl_tasks', '📋')}<b>${Math.min(cHave(), cNeed(p))}/${cNeed(p)}</b></span></div>
       ${ups ? `<div class="upHead">Upgrade this one step first</div>${ups}` : ''}
       ${chapterPrize(p)}
       <button class="big${ok ? '' : ' off'}" id="btnProject">${ok ? 'Complete the chapter ✨' : 'Gather everything above'}</button>`, 'chapter');
@@ -3034,7 +3034,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         ${p.talk ? '<button class="talkBtn" id="btnTalk" title="Replay the story">💬</button>' : ''}</div>
       <div class="pNeeds">${need}${p.coins ? `<span class="pNeed${S.coins >= p.coins ? ' ok' : ''}">${coin}<b>${kN(p.coins)}</b></span>` : ''}
         ${p.rocket ? `<span class="pNeed${allParts() ? ' ok' : ''}">🚀<b>${PART_KEYS.filter(k => S.parts[k]).length}/4</b></span>` : ''}
-        <span class="pNeed${cHave() >= cNeed(p) ? ' ok' : ''}" title="Contracts filled since the last chapter">${ART.uiIcon('ic_scroll', '📜')}<b>${Math.min(cHave(), cNeed(p))}/${cNeed(p)}</b></span></div>
+        <span class="pNeed${cHave() >= cNeed(p) ? ' ok' : ''}" title="Contracts filled since the last chapter">${ART.uiIcon('cl_tasks', '📋')}<b>${Math.min(cHave(), cNeed(p))}/${cNeed(p)}</b></span></div>
       ${upNeeds(p).map(u => `<div class="mlUp">${ART.producer(PRODS[u.k].art)}<span>Upgrade <b>${PRODS[u.k].name}</b> to level ${u.lv + 1} — tap it on the board</span></div>`).join('')}
       ${chapterPrize(p)}
       <button class="big${ok ? '' : ' off'}" id="btnProject">${ok ? 'COMPLETE THE CHAPTER ✨' : 'Gather everything above'}</button>
