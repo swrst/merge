@@ -37,6 +37,8 @@ android {
     buildTypes {
         release {
             if (keystorePropsFile.exists()) signingConfig signingConfigs.release
+            // native symbols go inside the .aab, so Play can read native crash reports
+            ndk { debugSymbolLevel 'SYMBOL_TABLE' }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
