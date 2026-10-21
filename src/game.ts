@@ -123,7 +123,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
   function freshBoard(world: string) {
     const w = WORLDS[world], b = new Array(N).fill(null);
-    for (const k in w.locks) if (w.locks[k] > 1) b[k] = { b: w.locks[k] };
+    // overgrown tiles open with YOUR level: in a new world they count from the level you arrive at
+    const base = S && S.lvl ? S.lvl - 1 : 0;
+    for (const k in w.locks) if (w.locks[k] > 1) b[k] = { b: w.locks[k] + base };
     w.start.forEach(s => { b[s.cell] = mkProd(s.producer); });
     // a few starter items so the board isn't bare
     const open = w.chains.filter(c => (CHAINS[c].unlock || 1) <= 1);
@@ -352,6 +354,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     notify.schedule(notes);
   }
   const B = () => S.boards[S.world];
+  /** a chapter is being celebrated: level-ups, medals and reveals wait their turn */
+  let celebrating = false;
+  const fxBusy = () => celebrating || !!document.getElementById('chFan')?.classList.contains('open') || !!document.getElementById('levelup')?.classList.contains('show');
   const W = () => WORLDS[S.world];
 
   /* ================================================================ AUDIO */
@@ -1301,7 +1306,14 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       onWorldLevel();
     }
   }
+  /** overgrown tiles whose level you have reached open up */
+  function openFog() {
+    const b = B(); let n = 0;
+    for (let i = 0; i < N; i++) if (b[i] && b[i].b && S.lvl >= b[i].b) { b[i] = null; n++; setTimeout(() => sparkle(i, 14, '#e6ff9a'), 300); }
+    if (n) { paintBoard(); setTimeout(() => toast(`🔓 ${n} tile${n > 1 ? 's' : ''} opened at level ${S.lvl}!`), 2400); }
+  }
   function onLevel() {
+    openFog();
     analytics.track('level_up', { level: S.lvl, world: S.world });
     analytics.user({ level: S.lvl });
     games.submitScore('level', S.lvl);
@@ -1314,8 +1326,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
   /** the good bit: a world level is what actually hands you new things to merge */
   function onWorldLevel() {
-    const lv = wlv(), b = B(), locks = W().locks;
-    for (const k in locks) if (locks[k] <= lv && b[k] && b[k].b) b[k] = null;
+    const b = B();
     const opened: string[] = [];         // chains come from producers now, not levels
     paintBoard();
     if (opened.length) {
@@ -1333,6 +1344,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     renderHUD();
   }
   function levelBanner() {
+    if (celebrating || document.getElementById('chFan')?.classList.contains('open')) { setTimeout(levelBanner, 900); return; }
     sfx.big(); haptic('medium'); confetti();
     const lu = $('#levelup');
     $('#luTxt').textContent = 'LEVEL ' + S.lvl + '!';
@@ -1646,7 +1658,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       return;
     }
     hintPair = p; board.setHint(hintPair); if (manual) sfx.tap();
-    if (manual || view === 'board') toast(manual ? '💡 These two match!' : '💡 These two match — drag one onto the other!');
+    if (manual) toast('💡 These two match!');
     setTimeout(() => { hintPair = null; board.setHint(null); }, 2400);
   }
 
@@ -2760,7 +2772,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function revealNext() {
     const r = revealQ.shift(); if (!r) return;
     // wait for any dialog or story scene to finish first
-    if (dialogBusy() || $('#talk').classList.contains('open') || document.getElementById('rwc')?.classList.contains('open')) { revealQ.unshift(r); setTimeout(revealNext, 700); return; }
+    if (fxBusy() || dialogBusy() || $('#talk').classList.contains('open') || document.getElementById('rwc')?.classList.contains('open')) { revealQ.unshift(r); setTimeout(revealNext, 700); return; }
     let el = document.getElementById('npw');
     if (!el) { el = document.createElement('div'); el.id = 'npw'; $('#app').appendChild(el); }
     const p = PRODS[r.k], drops = [...new Set(p.drops as string[])].slice(0, 3);
@@ -2790,7 +2802,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
 
   /** plant a producer the story has just given you, and say so */
-  function plantProducer(k: string) {
+  function plantProducer(k: string, quiet = false) {
     const b = B(); if (b.some(c => c && c.p === k) || stored().some((s: any) => s.p === k)) return;
     if (prodCount() >= capProd()) {
       // the story just handed you this one, so it goes on the board: the producer
@@ -2807,7 +2819,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       stored().push({ ...old }); b2[out] = mkProd(k);
       if (plots().indexOf(k) < 0) plots().push(k);
       S.pendingPlant = null; paintBoard(); renderQuick(); save();
-      producerReveal(k, out, 'New producer!', `Tap it on your board to get its items. The <b>${PRODS[old.p].name}</b> moved to storage (📦 above the board) to make room — swap it back any time.`);
+      if (quiet) { board.bump(out); sparkle(out, 26, '#e6ff9a'); sfx.build(); toast(`🌱 <b>${PRODS[k].name}</b> is on your board · ${PRODS[old.p].name} went to storage`); }
+      else producerReveal(k, out, 'New producer!', `Tap it on your board to get its items. The <b>${PRODS[old.p].name}</b> moved to storage (📦 above the board) to make room — swap it back any time.`);
       return;
     }
     const g = (W().grow || []).find(x => x.producer === k);
@@ -2818,7 +2831,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (plots().indexOf(k) < 0) plots().push(k);
     S.pendingPlant = null;
     paintBoard();
-    producerReveal(k, i, 'New producer!', `Tap it on your board to get its items.`);
+    if (quiet) { board.bump(i); sparkle(i, 26, '#e6ff9a'); sfx.build(); }
+    else producerReveal(k, i, 'New producer!', `Tap it on your board to get its items.`);
   }
   /** the story is done with these: they leave the board (and storage) with a
    *  thank-you, and nobody asks for their things any more */
@@ -2883,6 +2897,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (cHave() < cNeed(p)) short.push(`<b>${cNeed(p) - cHave()}</b> more contract${cNeed(p) - cHave() > 1 ? 's' : ''}`);
     upNeeds(p).forEach(u => short.push(`<b>${PRODS[u.k].name}</b> upgraded to level ${u.lv + 1}`));
     if (short.length) { sfx.no(); toast('Still need ' + short.join(', ') + '.'); return; }
+    celebrating = true;   // level-ups, medals and reveals wait until the chapter's moment is over
     p.needs.forEach(([id, q]: [string, number]) => { for (let k = 0; k < q; k++) consumeOne(id); });
     spend(p.coins);
     S.proj[S.world] = projDone() + 1;
@@ -2900,10 +2915,15 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     tally('project');
     const nextW = WORLD_ORDER[WORLD_ORDER.indexOf(S.world) + 1];
     if (p.retire) retireProducers(p.retire);
-    unlocksOf(p).forEach((u, n) => setTimeout(() => plantProducer(u), 900 + n * 300));
-    if (p.temp) setTimeout(() => spawnGuest(p.temp, p.who), 900);
-    if (p.event === 'meteor' && !S.met) setTimeout(meteorStory, 3200);
-    if (S.world === 'earth' && projDone() >= ROCKET_AFTER && !S.wreck && !allParts()) setTimeout(wreckStory, 3600);
+    // one thing at a time: the fanfare, one summary card, then whatever the chapter opened
+    const afterAll = () => {
+      celebrating = false;
+      unlocksOf(p).forEach((u, n) => setTimeout(() => plantProducer(u, true), 300 + n * 300));   // already shown on the summary card
+      if (p.temp) setTimeout(() => spawnGuest(p.temp, p.who), 300);
+      if (p.event === 'meteor' && !S.met) setTimeout(meteorStory, 900);
+      else if (S.world === 'earth' && projDone() >= ROCKET_AFTER && !S.wreck && !allParts()) setTimeout(wreckStory, 900);
+      else setTimeout(() => chapterIntro(), 900);
+    };
     addGems(p.launch ? 10 : CFG.gems.perChapter);
     if (p.lab && !S.lab.built) S.lab.offered = 1;
     evPts(CFG.event.points.chapter);
@@ -2914,12 +2934,14 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const labLine = p.lab ? `<div class="noteLine">🔬 Dr. Zonk drew up plans for a <b>Lab</b>. Build it in the camp: ${CONFIG.lab.build.coins} coins and ${CONFIG.lab.build.qty} Star Scrap.</div>` : '';
     setView('board');
     const reward = () => {
-      if (!storyBeat(p) && !what && !labLine && !worldDone()) { toast(`✅ <b>${p.name}</b> · +${p.xp} XP${gift ? ' · 🎁 ' + gift : ''}`); setTimeout(() => chapterIntro(), 900); return; }
+      // one clear card: what you got, what is new, what is next
+      const pods = `<div class="csumRow"><span>⭐<b>+${p.xp}</b><i>XP</i></span><span>💎<b>+${p.launch ? 10 : CFG.gems.perChapter}</b><i>gems</i></span>${gift ? `<span>🎁<b>1</b><i>${gift}</i></span>` : ''}</div>`;
+      const news = unlocksOf(p).map((u: string) => `<div class="csumNew"><span class="csumArt">${ART.producer(PRODS[u].art)}</span><div><i>New producer</i><b>${PRODS[u].name}</b></div></div>`).join('');
       modal(p.who, '✅ ' + p.name,
-        `<div class="mSay">${p.text}</div><div class="rewardLine">+${p.xp} XP${gift ? ' · 🎁 ' + gift : ''}</div>` + what + labLine
+        (storyBeat(p) ? `<div class="mSay">${p.text}</div>` : '') + pods + news + labLine
         + (worldDone() && nextW ? `<div class="noteLine">🚀 ${W().name} is restored! <b>${WORLDS[nextW].name}</b> is now open in the Galaxy.</div>`
-          : ''), 'Wonderful');
-      setAfter(() => chapterIntro());
+          : next ? `<div class="csumNext">Next · <b>${next.name}</b></div>` : ''), 'Great!');
+      setAfter(afterAll);
     };
     chapterFanfare(p, () => reward());
     paintBoard(); renderRocket(); renderHUD(); renderOrders(); save();
@@ -3340,7 +3362,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     warpFx(w, 3100);
     cut.classList.add('show'); sfx.launch();
     setTimeout(() => {
-      if (!S.boards[w]) S.boards[w] = freshBoard(w);
+      if (!S.boards[w]) S.boards[w] = freshBoard(w); setTimeout(openFog, 4000);
       S.world = w; S.unlocked[w] = 1; (S.been = S.been || {})[w] = 1; sel = null;
       // you arrive standing in the new camp, not looking at the star chart
       worldTab = 'camp';
@@ -3553,7 +3575,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function rewardNext() {
     if (!rwcQ.length) return;
     // one thing at a time: a reward card waits for the dialog or the story beat in front of it
-    if ($('#modal').classList.contains('open') || $('#talk').classList.contains('open') || $('#cut').classList.contains('show')) { setTimeout(rewardNext, 600); return; }
+    if (fxBusy() || $('#modal').classList.contains('open') || $('#talk').classList.contains('open') || $('#cut').classList.contains('show')) { setTimeout(rewardNext, 600); return; }
     const c = rwcQ.shift()!;
     let el = document.getElementById('rwc');
     if (!el) { el = document.createElement('div'); el.id = 'rwc'; $('#app').appendChild(el); }
@@ -4896,7 +4918,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       if (k === 'event') { eventPop(); return; }
       if (k === 'spin') { spinPop(); return; }
       closePop();
-      if (k === 'stars') { closePop(); starChart(); return; }
+      if (k === 'stars') { closePop(); worldTab = 'galaxy'; setView('map'); renderWorldScreen(); return; }   // the Star Chart lives in the Galaxy
       if (k === 'bingo') { bingoPop(); return; }
       if (k === 'pairs') playPairs(); else if (k === 'dig') playDig(); else if (k === 'brew') playBrew(); else playMarket();
     });
@@ -5294,7 +5316,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     host.querySelectorAll('[data-q]').forEach((b: any) => b.onclick = () => {
       const k = b.dataset.q;
       if (k === 'xp') { sfx.tap(); domHand(null); analytics.track('expedition_open', {}); analytics.screen('expedition'); XP.show(); return; }
-      if (k === 'mile') { sfx.tap(); toast(`📦 Deliver <b>${mileGoal() - ((S.om && S.om.n) || 0)}</b> more contract${mileGoal() - ((S.om && S.om.n) || 0) === 1 ? '' : 's'} for ${((S.om && S.om.step) || 0) % 2 === 1 ? 'a free chest' : `+${CFG.milestone.energy} ⚡`}`); } else if (k === 'event') eventPop(); else if (k === 'spin') spinPop(); else if (k === 'pup') pupPop(); else if (k === 'store') storagePop(); else if (k === 'album') albumPop(); else if (k === 'pouch') starChart(); else { setView('lab'); labAccPop(); }
+      if (k === 'mile') { sfx.tap(); toast(`📦 Deliver <b>${mileGoal() - ((S.om && S.om.n) || 0)}</b> more contract${mileGoal() - ((S.om && S.om.n) || 0) === 1 ? '' : 's'} for ${((S.om && S.om.step) || 0) % 2 === 1 ? 'a free chest' : `+${CFG.milestone.energy} ⚡`}`); } else if (k === 'event') eventPop(); else if (k === 'spin') spinPop(); else if (k === 'pup') pupPop(); else if (k === 'store') storagePop(); else if (k === 'album') albumPop(); else if (k === 'pouch') { worldTab = 'galaxy'; setView('map'); renderWorldScreen(); } else { setView('lab'); labAccPop(); }
     });
   }
 
@@ -6374,7 +6396,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (c.b) {
       // this is the *world* level, not your own — every world starts at 1, and
       // saying "Level 3" to someone who is account level 7 reads like a bug
-      toast(`Overgrown — it clears at <b>${W().name} level ${c.b}</b> (you are on ${wlv()}). Fill contracts here to raise it.`);
+      toast(`🔒 Opens at <b>level ${c.b}</b> — you are level ${S.lvl}.`);
       return;
     }
     if (c.bub) { pick(null); hideInfo(); tapBubble(i); return; }
@@ -6413,6 +6435,14 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     return best;
   }
   function hideInfo() { $('#infoBar').classList.remove('on', 'undo'); }
+  // left alone for five seconds, the item bar steps aside and the chapter strip comes back
+  let infoSeen = 0;
+  setInterval(() => {
+    const bar = document.getElementById('infoBar'); if (!bar) return;
+    if (!bar.classList.contains('on') || bar.classList.contains('undo')) { infoSeen = 0; return; }
+    if (!infoSeen) infoSeen = Date.now();
+    if (Date.now() - Math.max(infoSeen, lastPointer) > 5000) { hideInfo(); sel = null; board.setSelected(null); infoSeen = 0; }
+  }, 500);
   /** sold something by mistake? a few seconds to take it back */
   let undoT: any = 0;
   function showUndo(sold: { i: number; id: string; coins: number; w: string }) {
@@ -6781,7 +6811,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       setTimeout(tutStart, 700);
     } else {
       $('#tut').style.display = 'none';
-      setTimeout(checkDaily, 1200);
+      setTimeout(checkDaily, 1200); setTimeout(openFog, 1500);
       if (away) setTimeout(() => toast(away), 3200);
       setTimeout(() => checkStory(), 1800);
     }

@@ -51,18 +51,10 @@ function place() {
   const size = small ? 56 : mode === 'screen' ? 68 : Math.max(60, Math.min(92, room - 14));
   // landing line of the light: two points on the edge of the panel facing the companion
   let p1x: number, p1y: number, p2x: number, p2y: number, cx: number, cy: number;
-  const barEl = document.getElementById('infoBar');
-  const barUp = mode === 'toast' && barEl && barEl.classList.contains('on') && getComputedStyle(barEl).display !== 'none';
   if (mode === 'bar') {
     // the item bar sits low: the companion floats beside its left end (where the storage button was) and lights it from the side
     cx = Math.max(size / 2 + 2, bx - size / 2 - 4); cy = by - bh / 2 + size * 0.12;
     p1x = bx + 2; p1y = by - bh + 5; p2x = bx + 2; p2y = by - 5;
-  } else if (barUp) {
-    // a message while the item bar is up: the companion stays in its spot beside the bar and lights the message from there
-    const hr = host.getBoundingClientRect(), r = barEl!.getBoundingClientRect();
-    const bl = r.left - hr.left, bt = r.top - hr.top;
-    cx = Math.max(size / 2 + 2, bl - size / 2 - 4); cy = bt + r.height / 2 + size * 0.12;
-    p1x = bx + bw * 0.06; p2x = bx + bw * 0.5; p1y = p2y = by - 3;
   } else {
     // popups, full screens and board messages: always BELOW the panel, under its left third, light up onto the bottom edge
     cx = Math.max(size / 2 + 6, Math.min(ov.width - size / 2 - 6, bx + bw * 0.22));

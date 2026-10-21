@@ -97,10 +97,19 @@ class PixiBoard {
     this.app = new Application();
     await this.app.init({
       resizeTo: host, backgroundAlpha: 0, antialias: true,
-      resolution: Math.min((window.devicePixelRatio || 1) * ((window as any).__zk || 1), 3.5), autoDensity: true,
+      resolution: Math.min((window.devicePixelRatio || 1) * ((window as any).__zk || 1), 2.5), autoDensity: true,
     });
     host.appendChild(this.app.canvas);
     this.app.canvas.style.touchAction = 'none';
+    /* A phone can take the GPU away from the page (a heavy screen, the app in the
+       background): the board would stay blank white. Ask for it back, and if it
+       does not come back cleanly, reload the game (the save is already on disk). */
+    let lostT: any = 0;
+    this.app.canvas.addEventListener('webglcontextlost', (e: Event) => {
+      e.preventDefault();
+      clearTimeout(lostT); lostT = setTimeout(() => location.reload(), 2500);
+    });
+    this.app.canvas.addEventListener('webglcontextrestored', () => { clearTimeout(lostT); setTimeout(() => location.reload(), 200); });
     this.root.addChild(this.lTile, this.lItem, this.lFx, this.lDrag);
     this.app.stage.addChild(this.root);
 
@@ -991,9 +1000,12 @@ class PixiBoard {
     if (this.drag) return;
     this.slots.forEach((s: any, k) => {
       if (!s.key || !s.key.startsWith('f') || !s.seal || s.seal.destroyed || s.unseal) return;
-      const sc = s.seal.scale.x;
-      gsap.to(s.seal.scale, { x: sc * 1.08, y: sc * 1.08, duration: 0.22, yoyo: true, repeat: 1, ease: 'sine.inOut', delay: (k % 6) * 0.05 });
-      gsap.to(s.seal, { alpha: 0.75, duration: 0.22, yoyo: true, repeat: 1, delay: (k % 6) * 0.05, onComplete: () => { if (!s.seal.destroyed) s.seal.alpha = 0.45; } });
+      const seal = s.seal, base = seal.scale.x, st = { t: 0 };
+      // a proxy is tweened, so a bubble that pops mid-shimmer is never touched after it is gone
+      gsap.to(st, { t: 1, duration: 0.44, delay: (k % 6) * 0.05, ease: 'sine.inOut', onUpdate: () => {
+        if (seal.destroyed || s.seal !== seal) return;
+        const w = Math.sin(st.t * Math.PI); seal.scale.set(base * (1 + 0.08 * w)); seal.alpha = 0.45 + 0.3 * w;
+      } });
     });
   }
   setHint(list: number[] | null) {

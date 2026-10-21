@@ -1,5 +1,15 @@
 # Changelog
 
+- **v93 (0.93.0)**
+  - Finishing a chapter is one thing at a time: fanfare → one summary card (XP, gems, gift, the new producer, what is next) → level-up → medals → story. New producers from a chapter are planted quietly (they were on the card); level-ups, reward cards and reveals wait their turn.
+  - Locked (overgrown) tiles open with your own level, not the world level; a toast says how many opened. Tapping one says the level it needs.
+  - The Star Chart opens only from the Galaxy (side chip and Fun list now take you there).
+  - Board messages are projected from below again (no beam from the side).
+  - The item bar goes back to the chapter strip after 5 seconds without a touch.
+  - Popups: brighter lime instead of olive, slightly larger text and spacing; Daily Log chest numbers are readable pills; the Mission Log frame is the clean header panel.
+  - Hints: no automatic "these two match" message; only when you press the hint button.
+  - Blank white board after the shop: if the phone takes the graphics away, the game now reloads itself instead of staying white; the board uses less graphics memory.
+
 - **v92 (0.92.0)**
   - Less green: the HUD counters, XP bar, Ch. and Missions buttons, side chips, storage button, bottom bar, messages and contract cards are white glass with dark text (ready contracts and BUILD keep their green).
   - Whiter popups and lighter board tiles.

@@ -273,7 +273,6 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #pop .popBox:h
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #modal .mBoxW:has(.dayGrid){border-width:56px 16px 16px!important;border-image:url(../sprites/ui/hk_day7.webp) 128 46 46 fill / 56px 16px 16px / 0 stretch!important;padding-top:4px!important}
 /* the shop screen: the glowing offer card; the Mission Log: the tablet */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #sc-shop{border-width:18px!important;border-image:url(../sprites/ui/hq_offer_best.webp) 60 fill / 18px / 0 stretch!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #sc-rocket{border-width:18px 22px!important;border-image:url(../sprites/ui/hm_tablet.webp) 50 64 fill / 18px 22px / 0 stretch!important}
 
 /* words on the light glass: dark ink (the classic look under it writes in white and pastels) */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.coachBub) :is(p,span,b,i,em,small,div,li,strong,label,u,h1,h2,h3,h4):not(.big *,.buyBtn *,.csGo *,.skGo *,.gpGo *,.xpGive *,.skFuseGo *,.sellBtn *,.tSkip *,.btnDeliver *,.gTag,.gTag *,.dot,.pfDot,.enBig b,.enBig i,.npTag *,.mTitle *,.popRibbon *,.rwcRib *,.scTitle *,.miniTitle *,.sTab *,.cfTxt *){
@@ -458,3 +457,27 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .bottomBar .ch
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #orders .order:not(.ready) :is(.oCard,.oNeeds){border-image:none!important;border:1.5px solid #d3ddcc!important;border-radius:12px!important;background:linear-gradient(180deg,#ffffff,#f0f4ee)!important;box-shadow:0 2px 6px rgba(20,40,20,.2)!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #toast{border-image:none!important;border:1.5px solid #d3ddcc!important;border-radius:16px!important;background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(238,244,236,.94))!important;box-shadow:0 0 14px rgba(170,255,90,.35),0 4px 12px rgba(20,40,20,.25)!important;padding:10px 16px!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #toast,html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #toast *{color:#24331f!important;text-shadow:none!important}
+
+/* ============================================================ chapter summary card */
+.csumRow{display:flex;justify-content:center;gap:10px;margin:8px 0 6px}
+.csumRow span{display:flex;flex-direction:column;align-items:center;min-width:64px;padding:6px 8px;border-radius:14px;background:#f3f8ee;border:1.5px solid #d8e6cc}
+.csumRow span img.emo{width:28px;height:28px}
+.csumRow b{font:800 16px/1.1 Fredoka,sans-serif;color:#24331f}
+.csumRow i{font-style:normal;font-size:11px;color:#4d5f44;max-width:80px;text-align:center;line-height:1.1}
+.csumNew{display:flex;align-items:center;gap:10px;margin:6px auto;padding:6px 12px;border-radius:14px;background:linear-gradient(180deg,#fbffe9,#eefbd3);border:1.5px solid #bfe58a;max-width:260px}
+.csumNew .csumArt{width:52px;height:52px;flex:none}
+.csumNew .csumArt>*{width:100%;height:100%}
+.csumNew i{display:block;font-style:normal;font-size:11px;color:#5b7a2e;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.csumNew b{display:block;font:800 16px Fredoka,sans-serif;color:#24331f}
+.csumNext{margin-top:8px;font-size:13px;color:#4d5f44}
+
+/* ============================================================ popups: calmer, easier to read */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.popBody,.mBody,.miniBody,.scBody:not(#mapBody):not(#labBody)){font-size:14px!important;line-height:1.38!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.popBody,.mBody,.scBody) .noteLine{font-size:12.5px!important;line-height:1.35!important;margin:8px 4px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.popBody,.mBody,.scBody) .cardTitle{font:800 15px/1.2 Fredoka,sans-serif!important;margin-bottom:6px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.popBody,.scBody) :is(.card,.questRow,.achCard,.enRow,.resRow,.upRow){margin-bottom:8px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .mBody .mSay{font-size:15px!important;line-height:1.4!important;margin:4px 2px 8px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.popBody,.mBody,.scBody) :is(.big,.buyBtn){margin-top:6px}
+/* daily log: the chest marks are readable pills */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .dChest i{display:inline-block;background:#fff!important;color:#24331f!important;border:1.5px solid #cfe0bf;border-radius:99px;padding:1px 7px!important;font:800 11px/1.3 Fredoka,sans-serif!important;font-style:normal!important;text-shadow:none!important;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .dChest.ready i{background:#ff9a3d!important;color:#fff!important;border-color:#fff}
