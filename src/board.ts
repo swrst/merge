@@ -117,6 +117,8 @@ class PixiBoard {
     this.app.stage.hitArea = this.app.screen;
     this.app.stage.on('pointerdown', this.down);
     setInterval(() => { try { this.reconcile(); } catch { /* never let the safety net throw */ } }, 700);
+    // once in a while a locked item gives a little shimmer, so it reads as "something to free"
+    setInterval(() => { try { this.pulseSealed(); } catch { /* decoration only */ } }, 9000);
     this.app.stage.on('pointermove', this.move);
     this.app.stage.on('pointerup', this.up);
     this.app.stage.on('pointerupoutside', this.up);
@@ -985,6 +987,15 @@ class PixiBoard {
       tg.position.set(p.x + this.cell - r * 0.7, p.y + r * 0.7);
     });
   }
+  private pulseSealed() {
+    if (this.drag) return;
+    this.slots.forEach((s: any, k) => {
+      if (!s.key || !s.key.startsWith('f') || !s.seal || s.seal.destroyed || s.unseal) return;
+      const sc = s.seal.scale.x;
+      gsap.to(s.seal.scale, { x: sc * 1.08, y: sc * 1.08, duration: 0.22, yoyo: true, repeat: 1, ease: 'sine.inOut', delay: (k % 6) * 0.05 });
+      gsap.to(s.seal, { alpha: 0.75, duration: 0.22, yoyo: true, repeat: 1, delay: (k % 6) * 0.05, onComplete: () => { if (!s.seal.destroyed) s.seal.alpha = 0.45; } });
+    });
+  }
   setHint(list: number[] | null) {
     this.slots.forEach((s, k) => {
       const on = !!list && list.indexOf(k) >= 0;
@@ -996,17 +1007,10 @@ class PixiBoard {
           const sc = this.spriteScale(k);
           s.idle = gsap.to(s.art.scale, { x: sc * 1.16, y: sc * 1.16, duration: 0.34, repeat: -1, yoyo: true, ease: 'sine.inOut' });
           this.ringPulse(k, 0xffcb3d);
-          // the hinted pair blinks inside a bright frame so it can't be missed
-          const tx = this.tex['ui:hs_selected'];
-          if (tx && !(s as any).hintGlow) {
-            const p = this.center(k), g = new Sprite(tx); g.anchor.set(0.5); g.width = g.height = this.cell * 1.08; g.position.set(p.x, p.y);
-            this.lFx.addChild(g); (s as any).hintGlow = g;
-            gsap.fromTo(g, { alpha: 1 }, { alpha: 0.15, duration: 0.32, repeat: -1, yoyo: true, ease: 'sine.inOut' });
-          }
         }
       } else if ((s as any).hinting) {
         (s as any).hinting = false;
-        const hg = (s as any).hintGlow; if (hg) { gsap.killTweensOf(hg); hg.destroy(); (s as any).hintGlow = null; }
+
         if (s.idle) s.idle.kill();
         const sc = this.spriteScale(k);
         gsap.to(s.art.scale, { x: sc, y: sc, duration: 0.2, onComplete: () => this.idleBob(k) });

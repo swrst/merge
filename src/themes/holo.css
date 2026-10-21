@@ -438,3 +438,23 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #tut .tRing{border
 /* the hint button answers the tap */
 #btnHint.flash{animation:hintFlash .9s ease-out}
 @keyframes hintFlash{0%{transform:scale(1);filter:brightness(1)}20%{transform:scale(1.25);filter:brightness(1.8) drop-shadow(0 0 10px #d6ff6a)}60%{transform:scale(.95);filter:brightness(1.3)}100%{transform:scale(1);filter:none}}
+
+/* ============================================================ white glass for the HUD, side buttons, bottom bar and storage (less green) */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.hud .chip,.hud .lvlBox .xpwrap,.side .sideW.chapW:not(.ready),.side .sideW.tab,.side .qChip,#btnStore,.bottomBar .chapLine:not(.ready),.spotTag,.labHint,.hostRow i,.ordEmpty,.bbBar,#bagBtn){
+  background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(238,244,236,.9))!important;
+  border:1.5px solid #d3ddcc!important;border-image:none!important;border-radius:14px!important;
+  box-shadow:0 2px 6px rgba(20,40,20,.22),inset 0 1px 0 #fff!important;filter:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.hud .chip,.hud .lvlBox .xpwrap){border-radius:99px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .hud .lvlBox .xpwrap{border-radius:0 99px 99px 0!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.hud .chip,.hud .chip *,.hud .xplabel,.hud .xplabel *,.side .sideW:not(.ready) :is(i,b,em,span:not(.dot)),.side .qChip :is(i,b,em,span:not(.dot)),.bottomBar .chapLine:not(.ready) :is(b,em,i,span),.spotTag,.spotTag *,.labHint,.labHint *,.hostRow i,.hostRow i *,.ordEmpty,.ordEmpty *){
+  color:#24331f!important;text-shadow:0 1px 0 #fff!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .hud .xpbar{background:#dfe6da!important;box-shadow:inset 0 1px 2px rgba(0,0,0,.18)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .hud .xpbar i{background:linear-gradient(90deg,#8ad84f,#c6f06a)!important;box-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .bottomBar .chapLine .clN{background:#f4f7f1!important;border:1.5px solid #d3ddcc!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .bottomBar .chapLine .clN em{color:#24331f!important;text-shadow:0 1px 0 #fff!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .bottomBar .chapLine .clN.ok{background:#e4f8d6!important;border-color:#9fd977!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .bottomBar .chapLine .clN.ok em{color:#2d6a12!important}
+/* contracts: plain white cards (ready ones keep their green) */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #orders .order:not(.ready) :is(.oCard,.oNeeds){border-image:none!important;border:1.5px solid #d3ddcc!important;border-radius:12px!important;background:linear-gradient(180deg,#ffffff,#f0f4ee)!important;box-shadow:0 2px 6px rgba(20,40,20,.2)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #toast{border-image:none!important;border:1.5px solid #d3ddcc!important;border-radius:16px!important;background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(238,244,236,.94))!important;box-shadow:0 0 14px rgba(170,255,90,.35),0 4px 12px rgba(20,40,20,.25)!important;padding:10px 16px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #toast,html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #toast *{color:#24331f!important;text-shadow:none!important}

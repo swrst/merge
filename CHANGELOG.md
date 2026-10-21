@@ -1,5 +1,10 @@
 # Changelog
 
+- **v92 (0.92.0)**
+  - Less green: the HUD counters, XP bar, Ch. and Missions buttons, side chips, storage button, bottom bar, messages and contract cards are white glass with dark text (ready contracts and BUILD keep their green).
+  - Whiter popups and lighter board tiles.
+  - Hints: no more blinking frames (they could stay behind after a merge); the pair just pulses. Locked items give a small shimmer every few seconds instead.
+
 - **v91 (0.91.0)**
   - New colour: white glass with lime rims and glows (all hologram pieces recoloured from the ChatGPT art; dark pieces deep green; beam, text ink and glows to match). Board tiles pale white and soft lime.
   - Guide: no pointing hand, just a glowing frame and a line of words. New steps: what a locked item is and how to free it (merge its twin onto it), and the hint button (the next merge blinks).
