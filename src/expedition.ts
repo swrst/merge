@@ -322,10 +322,9 @@ export function createExpedition(ctx: XpCtx) {
     if (kind === 'goals') body = MEDALS().map(m => `<div class="xpMedal${x.ach[m.k] ? ' got' : ''}"><span>${ART.uiIcon(x.ach[m.k] ? 'medal_gold' : 'medal_silver', '🏅')}</span><div><b>${m.name}</b><i>${m.say}</i></div><em>${x.ach[m.k] ? '✓' : '+' + m.gems + ' ' + '💎'}</em></div>`).join('')
       + `<div class="xpTrackList">${TRACK.map(([n, r], k) => `<span class="${k < x.got ? 'got' : ''}">${rwIcon(r)}<i>${n}</i></span>`).join('')}</div>`
       + `<div class="xpNote">Medals from all expeditions: <b>${ctx.S.xpMedals || 0}</b></div>`;
-    if (kind === 'help') body = `<div class="xpHelpArt">${prodPic()}</div><p>${e.blurb}</p>
-      <ol class="xpSteps"><li>Tap the <b>${e.producer.name}</b> (1 ⚡ a tap).</li><li>Drag two of the same together to merge them up.</li>
-      <li>Fill the <b>requests</b> at the top for big points.</li><li>Points unlock rewards and the medal at <b>${TRACK[TRACK.length - 1][0]}</b>.</li></ol>
-      <div class="xpNote">A new expedition lands every month. This one ends in <b>${dhm(left())}</b>.</div>`;
+    if (kind === 'help') body = `<div class="xpHelpArt">${prodPic()}</div>
+      <div class="xpIcons"><span>👆<b>Tap</b></span><span>🔀<b>Merge</b></span><span>📦<b>Fill requests</b></span><span>🏅<b>Win prizes</b></span></div>
+      <div class="xpNote">Ends in <b>${dhm(left())}</b></div>`;
     const title = kind === 'log' ? 'Expedition Log' : kind === 'goals' ? 'Medals & Rewards' : e.name;
     p.innerHTML = `<div class="xpPBox"><div class="xpPT">${title}</div><button class="xpX" id="xpPClose">✕</button><div class="xpPB">${body}</div>
       <button class="big" id="xpPOk">${kind === 'help' ? "Let's go!" : 'Close'}</button></div>`;

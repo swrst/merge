@@ -1,5 +1,18 @@
 # Changelog
 
+- **v94 (0.94.0)**
+  - Fix: tapping an item no longer hides it (the selection frame was drawn on top of it; it sits under the item now).
+  - Lab unlock: the chapter card shows the Lab with its price and a "Go to the Lab" button that takes you to its build sheet.
+  - Collection chain card: no more padlock backgrounds behind unlocked steps.
+  - Expeditions: the help is four icons (Tap, Merge, Fill requests, Win prizes) and the end date.
+  - Cosmic Wheel: smaller icons with a glow, the gem slice shows its number, energy slices give less (3 / 6 / 15).
+  - Constellations: slower, smoother lighting (soft star pops, longer line draws, gentler rays); they need 60% more Star Cores.
+  - Star Pebble is green now (it looked too much like the Moonwater Well items).
+  - Retired producers can be bought back in the Star Bazaar ("Old producers"), so every chain can still be finished; the chain card says so.
+  - Power ×2: drops 1–3 steps higher (not always one), a spotlight explains it the first time, the button glows orange while it is on.
+  - Lab pickers (Recycler, Grow, Fusion): white cards with readable counts.
+  - The Collection button's dot: unopened sticker packs now show at the top of the Collection with a button to open them.
+
 - **v93 (0.93.0)**
   - Finishing a chapter is one thing at a time: fanfare → one summary card (XP, gems, gift, the new producer, what is next) → level-up → medals → story. New producers from a chapter are planted quietly (they were on the card); level-ups, reward cards and reveals wait their turn.
   - Locked (overgrown) tiles open with your own level, not the world level; a toast says how many opened. Tapping one says the level it needs.

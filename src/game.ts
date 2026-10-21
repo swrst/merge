@@ -1017,7 +1017,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       + `<div class="recList">${recs.map(r => `<span class="recRow">${ART.item(r.inputs[0])}<b>+</b>${ART.item(r.inputs[1])}<b>→</b>${ART.item(r.result)}</span>`).join('')}</div>`
       + (labOpen() ? '' : `<i>The Lab opens after Meadow chapter 5.</i>`)
       : d.chain === 'bloom' ? `Bloom Essence comes from finishing a merge chain for the first time.`
-        : src ? `Start with <b>${ITEMS[ch.items[0]].name}</b> from the <b>${PRODS[src.k].name}</b>${src.on ? ' on your board' : ' — you do not have one here yet'}, then merge two of each into the next.`
+        : src ? `Start with <b>${ITEMS[ch.items[0]].name}</b> from the <b>${PRODS[src.k].name}</b>${src.on ? ' on your board' : (S.retired && (S.retired[S.world] || []).includes(src.k)) ? ' — buy it back in the <b>Star Bazaar</b>' : ' — you do not have one here yet'}, then merge two of each into the next.`
           : `Merge two of the one before it. ${ITEMS[ch.items[0]].name} is the bottom of this chain.`;
     // what it is for: who wants it right now, and what it can be spent on
     const uses: string[] = [];
@@ -1425,7 +1425,11 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // no rocket yet, so no fuel either — an early crater is all star scrap
     if (c.p === 'crater' && !rocketTime() && id === 'fuelore') id = Math.random() < 0.04 ? 'starcore' : 'scrap';
     // Power ×2: double energy, the drop comes one step up the chain
-    if (boostOn() && p.mode === 'energy' && !c.tmp && nextOf(id) && !ITEMS[id].part) id = nextOf(id) as string;
+    if (boostOn() && p.mode === 'energy' && !c.tmp && nextOf(id) && !ITEMS[id].part) {
+      // Power ×2: always at least one step up, often two, now and then three
+      const r = Math.random(), steps = r < 0.12 ? 3 : r < 0.45 ? 2 : 1;
+      for (let k = 0; k < steps && nextOf(id) && !ITEMS[nextOf(id) as string].part; k++) id = nextOf(id) as string;
+    }
     // Golden Touch: now and then the drop arrives one step up
     if (res('golden') && Math.random() < res('golden') * 0.03 && nextOf(id) && !ITEMS[id].part) { id = nextOf(id) as string; setTimeout(() => floatText(spot, '✨ Golden!', '#ffe07a'), 300); }
     if (petLucky() && Math.random() < petLucky() && nextOf(id) && !ITEMS[id].part) { id = nextOf(id) as string; setTimeout(() => floatText(spot, '🐾 Lucky paws!', '#ffe07a'), 300); }
@@ -1891,6 +1895,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   let shopTab = 'deals';
   /** the daily gift picture: the supply chest with its energy bonus pinned on, same on both gift cards */
   const giftArt = () => `<span class="giftArt">${ART.spriteUi('chest_closed') ? ART.uiIcon('chest_closed', '') : ART.item('chest')}<span class="giftNrg">${ART.icon('energy')}+${CFG.shop2.freeGiftEnergy}</span></span>`;
+  const oldPrice = (k: string) => 250 + 50 * Math.max(0, PRODS[k].drops.length - 1);
   function renderShop() {
     const host = $('#shopBody'); if (!host) return;
     $('#shopCoins').textContent = S.coins;
@@ -1925,6 +1930,13 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         `${CFG.chest[id].items} things from this world${CFG.chest[id].coins ? ' + ' + CFG.chest[id].coins + ' coins' : ''}`,
         `<button class="buyBtn gem" data-chestbuy="${id}" ${S.gems < CFG.shop2.chestGems[id] ? 'disabled' : ''}>${ART.icon('gem')}${CFG.shop2.chestGems[id]}</button>`)).join('')
       + `</div><div class="noteLine">Two Supply Chests merge into a Treasure Chest.</div></div>`;
+
+    // retired producers come back here, so every chain stays completable
+    const olds = (S.retired && S.retired[S.world] || []).filter((k: string) => PRODS[k] && !B().some((c: any) => c && c.p === k) && !stored().some((x: any) => x.p === k));
+    if (olds.length) html += `<div class="sSec" id="sh-old"><div class="sSecT">${ART.uiIcon('sec_build', '🏗️')} Old producers</div><div class="shopGrid">`
+      + olds.map((k: string) => card(ART.producer(PRODS[k].art), PRODS[k].name, 'Back on your board, to finish its chain',
+        `<button class="buyBtn" data-oldp="${k}" ${S.coins < oldPrice(k) ? 'disabled' : ''}>${coin}${oldPrice(k)}</button>`)).join('')
+      + `</div></div>`;
 
     html += `<div class="sSec" id="sh-boost"><div class="sSecT">${ART.uiIcon('sec_boost', '✨')} Boosters</div><div class="shopGrid">`
       + SHOP.boosters.map(bo => card(ART.icon(bo.icon) + (boostN(bo.id) ? `<span class="stock">x${boostN(bo.id)}</span>` : ''), bo.name, bo.desc,
@@ -1972,6 +1984,13 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       const sec = $('#sh-' + shopTab); if (sec) host.scrollTo({ top: sec.offsetTop - 50, behavior: 'smooth' });
     });
     host.querySelectorAll('[data-gift]').forEach((b: any) => b.onclick = claimGift);
+    host.querySelectorAll('[data-oldp]').forEach((b: any) => b.onclick = () => {
+      const k = b.dataset.oldp, pr = oldPrice(k);
+      if (S.coins < pr) { sfx.no(); return; }
+      if (!freeCells().length) { sfx.no(); toast('Make room on the board first.'); return; }
+      spend(pr); S.retired[S.world] = S.retired[S.world].filter((x: string) => x !== k);
+      setView('board'); setTimeout(() => plantProducer(k, true), 300); toast(`🌱 <b>${PRODS[k].name}</b> is back on your board!`); save();
+    });
     host.querySelectorAll('[data-giftad]').forEach((b: any) => b.onclick = () => watchAd('gift', () => { S.giftAd2 = today(); save(); renderShop();
       rewardCard('blorb', 'Double delivery!', '<b>Postie Blorb:</b> "Another one? Fine. Sign again. Different leg."',
         { item: 'chest', energy: CFG.shop2.freeGiftEnergy }, () => renderShop()); }));
@@ -2129,7 +2148,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       if (w === 'ship') return rocketTime();
       return w === 'any' && CHAINS[k].items.some(id => S.seen[id]);
     });
-    host.innerHTML = discCard() +
+    // sticker packs are news on this button too: open them from here
+    const pk = albumOpen() ? packsWaiting() : 0;
+    host.innerHTML = (pk ? `<div class="card packNote"><div class="cardTitle">${ART.uiIcon('ic_album', '🎴')} ${pk} sticker pack${pk > 1 ? 's' : ''} to open</div><button class="big" id="bkPacks">Open in the Star Album</button></div>` : '') + discCard() +
       `<div class="card"><div class="cardTitle">${ART.uiIcon('sec_collection', '🗂️')} Collection <span class="pCount">${found}/${total}</span></div>
         <div class="catBar"><i style="width:${Math.round(found / total * 100)}%"></i></div>
         <div class="noteLine">Everything you have ever made is kept here. Tap a chain to see all its steps and where it starts.</div></div>
@@ -2139,6 +2160,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       <div class="aGrid">${here.map(k => tile(k, awake.indexOf(k) < 0 && !CHAINS[k].items.some(id => S.seen[id]) ? CHAINS[k].unlock : 0)).join('')}</div>
       ${shared.length ? `<div class="sSecT" style="margin-top:12px">✨ Everywhere</div><div class="aGrid">${shared.map(k => tile(k)).join('')}</div>` : ''}`;
     const cd = $('#claimDisc'); if (cd) cd.onclick = () => claimDisc();
+    const bp = $('#bkPacks'); if (bp) bp.onclick = () => { sfx.tap(); albumPop(); };
     const cda = $('#claimDiscAd'); if (cda) cda.onclick = () => watchAd('disc', () => claimDisc(2));
     host.querySelectorAll('[data-aw]').forEach((b: any) => b.onclick = () => { albumWorld = b.dataset.aw; sfx.tap(); renderBook(); });
     host.querySelectorAll('[data-chain]').forEach((b: any) => b.onclick = () => {
@@ -2931,17 +2953,18 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const next = curProject();
     const what = p.unlock ? `<div class="noteLine">🌱 New: <b>${unlocksOf(p).map((u: string) => PRODS[u].name).join(', ')}</b>. ${unlocksOf(p).length > 1 ? 'They stay' : 'It stays'} for the next few chapters.</div>`
       : p.temp ? `<div class="noteLine">⏳ A <b>${PRODS[p.temp.p].name}</b> is visiting: ${p.temp.taps} free taps for ${p.temp.mins} minutes.</div>` : '';
-    const labLine = p.lab ? `<div class="noteLine">🔬 Dr. Zonk drew up plans for a <b>Lab</b>. Build it in the camp: ${CONFIG.lab.build.coins} coins and ${CONFIG.lab.build.qty} Star Scrap.</div>` : '';
+    const labLine = p.lab ? `<div class="csumNew lab"><span class="csumArt">${ART.spriteUi('camp_lab') ? `<img src="${ART.spriteUi('camp_lab')}" alt="">` : '🔬'}</span><div><i>Unlocked</i><b>Dr. Zonk's Lab</b><em>${ART.icon('coin')} ${CONFIG.lab.build.coins} · ${ART.item('scrap')} ${CONFIG.lab.build.qty}</em></div></div>` : '';
     setView('board');
     const reward = () => {
       // one clear card: what you got, what is new, what is next
       const pods = `<div class="csumRow"><span>⭐<b>+${p.xp}</b><i>XP</i></span><span>💎<b>+${p.launch ? 10 : CFG.gems.perChapter}</b><i>gems</i></span>${gift ? `<span>🎁<b>1</b><i>${gift}</i></span>` : ''}</div>`;
       const news = unlocksOf(p).map((u: string) => `<div class="csumNew"><span class="csumArt">${ART.producer(PRODS[u].art)}</span><div><i>New producer</i><b>${PRODS[u].name}</b></div></div>`).join('');
       modal(p.who, '✅ ' + p.name,
-        (storyBeat(p) ? `<div class="mSay">${p.text}</div>` : '') + pods + news + labLine
+        (storyBeat(p) && !p.lab ? `<div class="mSay">${p.text}</div>` : '') + pods + news + labLine
         + (worldDone() && nextW ? `<div class="noteLine">🚀 ${W().name} is restored! <b>${WORLDS[nextW].name}</b> is now open in the Galaxy.</div>`
-          : next ? `<div class="csumNext">Next · <b>${next.name}</b></div>` : ''), 'Great!');
-      setAfter(afterAll);
+          : next ? `<div class="csumNext">Next · <b>${next.name}</b></div>` : ''), p.lab ? '🔬 Go to the Lab' : 'Great!');
+      // the Lab card takes you straight to its build sheet in the camp
+      setAfter(p.lab ? () => { afterAll(); worldTab = 'camp'; setView('map'); setTimeout(labBuildPop, 500); } : afterAll);
     };
     chapterFanfare(p, () => reward());
     paintBoard(); renderRocket(); renderHUD(); renderOrders(); save();
@@ -4092,7 +4115,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const grad = seg.map((_s: any, k: number) => `${SPACE[k % SPACE.length]} ${k * a}deg ${(k + 1) * a}deg`).join(',');
     return `<div class="wheelWrap space"><div class="wheelPin">${ART.uiIcon('wheel_pin', '▼')}</div>
       <div class="wheel" id="wheel" style="--wheelbg:conic-gradient(${grad})">
-        ${seg.map((s: any, k: number) => `<div class="wSeg" style="transform:rotate(${k * a + a / 2}deg)"><span>${rewardIcon(s.r)}<b>${s.r.energy || s.r.coins || ''}</b></span></div>`).join('')}
+        ${seg.map((s: any, k: number) => `<div class="wSeg" style="transform:rotate(${k * a + a / 2}deg)"><span>${rewardIcon(s.r)}<b>${s.r.energy || s.r.coins || s.r.gems || ''}</b></span></div>`).join('')}
       </div><div class="wHub">${ART.uiIcon('wheel_hub', '🎡')}</div></div>`;
   }
   function spinPop() {
@@ -4805,6 +4828,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   const COACH: Coach[] = [
     { k: 'contract', at: '#orders .order.ready', say: '<b>Tap</b> to give it!', when: () => !!document.querySelector('#orders .order.ready'), on: 'deliver' },
     { k: 'map', at: '#tabMap', say: 'Your <b>camp</b>: the Lab, Album, games and the way to the Galaxy.', when: () => projDone('earth') >= 2 },
+    { k: 'x2b', at: '#btnX2', say: '<b>Power ×2</b><br>Double energy per tap, drops <b>1–3 steps higher</b>.', when: () => S.lvl >= BOOST_LV && !!document.getElementById('btnX2') },
     { k: 'chapter', at: '#btnQuests', say: '<b>Tap to build</b> the chapter!', when: () => projReady(curProject()) },
     { k: 'chest', at: firstCell(c => !!c.id && isChest(c.id)), say: 'A <b>chest</b>! Tap it to open it.', when: () => B().some((c: any) => c && c.id && isChest(c.id)) },
     { k: 'wreck', at: firstCell(c => c.p === 'wreck'), say: 'Tap the <b>wreck</b> for rocket parts.', when: () => B().some((c: any) => c && c.p === 'wreck') },
@@ -4864,7 +4888,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     { k: 'stars', who: 'bloop', say: 'Star Scrap from craters fuses into <b>Star Cores</b>. Light a constellation in the Galaxy for a perk in every world.', when: () => !!(S.seen.scrap || pouch('scrap')) },
     { k: 'heart', who: 'grandma', say: 'Finishing a chain for the first time earns a <b>Bloom Spark</b>. Feed it to the Meadow Heart on the map!', when: () => projDone() >= 3 },
     { k: 'magnet', who: 'pip', say: 'Stuck? The <b>Star Magnet</b> pulls every matching pair together at once.', when: () => boostN('wand') > 0 },
-    { k: 'x2', who: 'biscuit', say: 'Energy to spare? Switch on <b>⚡×2</b>: every tap costs double but drops one step higher.', when: () => S.lvl >= BOOST_LV },
+    { k: 'x2', who: 'biscuit', say: 'Energy to spare? Switch on <b>⚡×2</b>: every tap costs double but drops 1–3 steps higher.', when: () => S.lvl >= BOOST_LV },
     { k: 'wheel', who: 'oops', say: 'The <b>Cosmic Wheel</b> has a free spin every day. Destiny insists.', when: () => S.lvl >= SP().unlockLevel && spinsLeft() > 0 },
     { k: 'pet', who: 'bloop', say: 'Your <b>pet</b> fetches gifts on its own. Feed it spare items to help it grow and evolve!', when: () => petOn() },
     { k: 'daily', who: 'biscuit', say: 'The <b>Daily Log</b> in the Mission Log fills chests just for playing. Vote Marin!', when: () => projDone() >= 2 },
@@ -4998,7 +5022,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       t.insertBefore(b, t.firstChild);
       b.onclick = () => {
         S.boost2 = S.boost2 ? 0 : 1; sfx.tap(); haptic('light'); renderBoost(); save();
-        toast(S.boost2 ? '⚡×2 on: taps cost double energy, drops arrive <b>one step higher</b>.' : '⚡×2 off.');
+        toast(S.boost2 ? '⚡×2 ON · double energy per tap · drops 1–3 steps higher' : '⚡×2 off');
       };
     }
     b.classList.toggle('on', !!S.boost2);
@@ -5575,16 +5599,16 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      in over the whole game, not in an afternoon. A constellation can only be
      traced once you have reached its world. Positions are on a 100 x 100 box. */
   const CONSTS: any[] = [
-    { id: 'plough', name: 'The Rocket', world: 'earth', cost: 6, perk: '+10% coins from every sale and contract', pts: [[23.8, 50.2], [49.6, 1.4], [55.1, 31.4], [77.7, 52.1], [78.7, 76.8], [50.4, 98.4], [50.2, 67.0], [21.3, 76.8], [23.8, 50.2]] },
-    { id: 'lantern', name: 'The Lantern', world: 'earth', cost: 10, perk: 'Every producer holds 20% more charges', pts: [[45.7, 29.3], [49.4, 1.2], [65.0, 27.1], [74.2, 45.1], [66.6, 59.6], [50.4, 98.0], [52.0, 67.0], [26.0, 49.8], [45.7, 29.3]] },
-    { id: 'seed', name: 'The Moon Pup', world: 'luna', cost: 28, perk: 'Producers recharge 20% faster', pts: [[8.6, 39.1], [21.1, 11.1], [50.4, 1.8], [53.3, 47.1], [87.7, 33.0], [92.6, 69.7], [68.2, 95.1], [32.8, 97.3], [26.8, 65.6], [8.6, 39.1]] },
-    { id: 'vault', name: 'The Vault', world: 'luna', cost: 36, perk: 'Every Bloom Essence you feed a Heart counts double', pts: [[14.1, 15.6], [49.4, 44.7], [48.0, 2.1], [81.2, 14.6], [95.5, 47.3], [84.8, 81.4], [52.5, 96.9], [18.6, 85.5], [7.2, 51.6], [14.1, 15.6]] },
-    { id: 'forge', name: 'The Anvil', world: 'cindra', cost: 24, reward: { gems: 25, item: 'bigchest' }, perk: 'A Treasure Chest and 25 gems', pts: [[29.1, 49.6], [15.8, 17.0], [55.5, 26.6], [96.3, 23.2], [77.3, 43.9], [77.5, 74.8], [45.9, 81.8], [13.7, 81.1], [29.1, 49.6]] },
-    { id: 'phoenix', name: 'The Firebird', world: 'cindra', cost: 14, reward: { gems: 30, energy: 60 }, perk: '30 gems and 60 energy', pts: [[11.3, 30.7], [19.7, 0.8], [51.8, 21.9], [80.1, 4.9], [89.3, 27.9], [67.2, 56.4], [82.0, 79.3], [62.1, 98.0], [49.2, 75.4], [26.8, 89.6], [31.1, 53.7], [11.3, 30.7]] },
-    { id: 'squid', name: 'The Kraken', world: 'nerith', cost: 32, reward: { gems: 35, item: 'bigchest' }, perk: 'A Treasure Chest and 35 gems', pts: [[15.8, 31.6], [42.6, 46.5], [47.7, 1.4], [64.8, 23.4], [87.9, 39.5], [68.6, 65.4], [82.2, 94.5], [42.4, 93.4], [33.6, 69.9], [9.8, 77.9], [12.1, 54.7], [15.8, 31.6]] },
-    { id: 'shell', name: 'The Shell', world: 'nerith', cost: 18, reward: { gems: 40, energy: 80 }, perk: '40 gems and 80 energy', pts: [[42.2, 41.0], [48.0, 1.8], [71.3, 18.4], [82.0, 44.9], [88.5, 75.4], [66.6, 97.7], [53.5, 68.6], [30.9, 87.9], [7.0, 59.4], [42.2, 41.0]] },
-    { id: 'crown', name: 'The Crown', world: 'vela', cost: 44, reward: { gems: 60, item: 'bigchest' }, perk: 'A Treasure Chest and 60 gems', pts: [[4.5, 38.1], [32.2, 30.1], [49.6, 4.7], [71.3, 33.2], [96.7, 40.2], [87.7, 65.0], [60.9, 94.1], [21.5, 91.6], [43.0, 55.3], [12.3, 65.0], [4.5, 38.1]] },
-    { id: 'galaxy', name: 'The Galaxy', world: 'vela', cost: 60, reward: { gems: 100, item: 'bigchest', energy: 100 }, perk: '100 gems, 100 energy and a Treasure Chest', pts: [[6.6, 36.5], [28.1, 8.6], [49.6, 46.9], [63.1, 4.7], [86.1, 28.9], [91.2, 62.1], [65.8, 66.4], [71.1, 91.2], [35.7, 94.1], [29.7, 61.9], [7.0, 72.5], [6.6, 36.5]] },
+    { id: 'plough', name: 'The Rocket', world: 'earth', cost: 10, perk: '+10% coins from every sale and contract', pts: [[23.8, 50.2], [49.6, 1.4], [55.1, 31.4], [77.7, 52.1], [78.7, 76.8], [50.4, 98.4], [50.2, 67.0], [21.3, 76.8], [23.8, 50.2]] },
+    { id: 'lantern', name: 'The Lantern', world: 'earth', cost: 16, perk: 'Every producer holds 20% more charges', pts: [[45.7, 29.3], [49.4, 1.2], [65.0, 27.1], [74.2, 45.1], [66.6, 59.6], [50.4, 98.0], [52.0, 67.0], [26.0, 49.8], [45.7, 29.3]] },
+    { id: 'seed', name: 'The Moon Pup', world: 'luna', cost: 45, perk: 'Producers recharge 20% faster', pts: [[8.6, 39.1], [21.1, 11.1], [50.4, 1.8], [53.3, 47.1], [87.7, 33.0], [92.6, 69.7], [68.2, 95.1], [32.8, 97.3], [26.8, 65.6], [8.6, 39.1]] },
+    { id: 'vault', name: 'The Vault', world: 'luna', cost: 58, perk: 'Every Bloom Essence you feed a Heart counts double', pts: [[14.1, 15.6], [49.4, 44.7], [48.0, 2.1], [81.2, 14.6], [95.5, 47.3], [84.8, 81.4], [52.5, 96.9], [18.6, 85.5], [7.2, 51.6], [14.1, 15.6]] },
+    { id: 'forge', name: 'The Anvil', world: 'cindra', cost: 38, reward: { gems: 25, item: 'bigchest' }, perk: 'A Treasure Chest and 25 gems', pts: [[29.1, 49.6], [15.8, 17.0], [55.5, 26.6], [96.3, 23.2], [77.3, 43.9], [77.5, 74.8], [45.9, 81.8], [13.7, 81.1], [29.1, 49.6]] },
+    { id: 'phoenix', name: 'The Firebird', world: 'cindra', cost: 22, reward: { gems: 30, energy: 60 }, perk: '30 gems and 60 energy', pts: [[11.3, 30.7], [19.7, 0.8], [51.8, 21.9], [80.1, 4.9], [89.3, 27.9], [67.2, 56.4], [82.0, 79.3], [62.1, 98.0], [49.2, 75.4], [26.8, 89.6], [31.1, 53.7], [11.3, 30.7]] },
+    { id: 'squid', name: 'The Kraken', world: 'nerith', cost: 51, reward: { gems: 35, item: 'bigchest' }, perk: 'A Treasure Chest and 35 gems', pts: [[15.8, 31.6], [42.6, 46.5], [47.7, 1.4], [64.8, 23.4], [87.9, 39.5], [68.6, 65.4], [82.2, 94.5], [42.4, 93.4], [33.6, 69.9], [9.8, 77.9], [12.1, 54.7], [15.8, 31.6]] },
+    { id: 'shell', name: 'The Shell', world: 'nerith', cost: 29, reward: { gems: 40, energy: 80 }, perk: '40 gems and 80 energy', pts: [[42.2, 41.0], [48.0, 1.8], [71.3, 18.4], [82.0, 44.9], [88.5, 75.4], [66.6, 97.7], [53.5, 68.6], [30.9, 87.9], [7.0, 59.4], [42.2, 41.0]] },
+    { id: 'crown', name: 'The Crown', world: 'vela', cost: 70, reward: { gems: 60, item: 'bigchest' }, perk: 'A Treasure Chest and 60 gems', pts: [[4.5, 38.1], [32.2, 30.1], [49.6, 4.7], [71.3, 33.2], [96.7, 40.2], [87.7, 65.0], [60.9, 94.1], [21.5, 91.6], [43.0, 55.3], [12.3, 65.0], [4.5, 38.1]] },
+    { id: 'galaxy', name: 'The Galaxy', world: 'vela', cost: 96, reward: { gems: 100, item: 'bigchest', energy: 100 }, perk: '100 gems, 100 energy and a Treasure Chest', pts: [[6.6, 36.5], [28.1, 8.6], [49.6, 46.9], [63.1, 4.7], [86.1, 28.9], [91.2, 62.1], [65.8, 66.4], [71.1, 91.2], [35.7, 94.1], [29.7, 61.9], [7.0, 72.5], [6.6, 36.5]] },
   ];
   const lit = (id: string) => !!(typeof S !== 'undefined' && S && S.stars && S.stars[id]);
   const starPerk = (id: string) => lit(id);
@@ -5694,7 +5718,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     closePop();
     let fx = document.getElementById('skFx');
     if (!fx) { fx = document.createElement('div'); fx.id = 'skFx'; $('#app').appendChild(fx); }
-    const T = 0.24;
+    const T = 0.42;   // unhurried: each star settles before the next line draws
     const segs = c.pts.slice(1).map((p: number[], i: number) => { const q = c.pts[i]; return `<line class="skSeg" x1="${q[0]}" y1="${q[1]}" x2="${p[0]}" y2="${p[1]}" style="animation-delay:${0.3 + i * T}s"/>`; }).join('');
     const dots = c.pts.map((p: number[], i: number) => `<circle class="skStar" cx="${p[0]}" cy="${p[1]}" r="3.6" style="animation-delay:${i * T}s"/>`).join('');
     const end = c.pts.length * T;
@@ -5713,7 +5737,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       const svg = $('#fxSvg') as HTMLElement;
       if (spot && svg) {
         const a = svg.getBoundingClientRect(), t = spot.querySelector('svg')!.getBoundingClientRect();
-        svg.style.transition = 'transform .7s cubic-bezier(.5,0,.3,1)';
+        svg.style.transition = 'transform 1s cubic-bezier(.45,0,.2,1)';
         svg.style.transform = `translate(${t.left + t.width / 2 - (a.left + a.width / 2)}px, ${t.top + t.height / 2 - (a.top + a.height / 2)}px) scale(${t.width / a.width})`;
       }
       fx!.classList.add('out');
@@ -5726,7 +5750,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         if (r.energy) S.energy += r.energy;
         save(); renderHUD();
         setTimeout(() => rewardCard(`<img class="rwcChest" src="${ART.spriteUi('sk_badge')}" alt="">`, `${c.name} is lit!`, c.reward ? 'The sky hands you a gift.' : `${c.perk}. For good, in every world.`, c.reward ? r : { energy: 10 }), 700);
-      }, 750);
+      }, 1050);
     }, (end + 2.4) * 1000);
   }
 

@@ -3788,3 +3788,18 @@ html body #app .optNote{margin:8px 0 2px;padding:9px 12px;border-radius:14px;bac
 .campGal .cgLbl{margin-top:-8px;font:800 12px/1 Fredoka,sans-serif;font-style:normal;color:#fff;background:#2a1f6a;border:1.5px solid #c9b8ff;border-radius:99px;padding:3px 9px;text-shadow:0 1px 0 #120a33}
 .campGal:active{transform:scale(.95)}
 @keyframes cgBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.xpIcons{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 4px}
+.xpIcons span{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 4px;border-radius:14px;background:rgba(255,255,255,.12);font-size:26px}
+.xpIcons b{font:800 13px Fredoka,sans-serif;color:#fff}
+/* constellation lighting: softer, slower, no bounce */
+#skFx .skSeg{animation:skDrawSeg .6s cubic-bezier(.4,0,.2,1) forwards!important}
+#skFx .skStar{animation:skPopSoft .55s cubic-bezier(.25,.8,.3,1) forwards!important}
+@keyframes skPopSoft{0%{opacity:0;transform:scale(.2)}60%{opacity:1;transform:scale(1.25)}100%{opacity:1;transform:scale(1)}}
+#skFx .fxSky{animation:fxIn .7s ease-out both!important}
+#skFx.flash .fxRays{animation:fxRaysSoft 4s cubic-bezier(.3,0,.3,1) forwards!important}
+@keyframes fxRaysSoft{0%{opacity:0;transform:rotate(0) scale(.9)}25%{opacity:.75}100%{opacity:.55;transform:rotate(40deg) scale(1)}}
+#skFx.flash .skBig{animation:skFlashSoft 1.6s ease-out!important}
+@keyframes skFlashSoft{0%{filter:brightness(1)}30%{filter:brightness(1.6) drop-shadow(0 0 18px #ffe07a)}100%{filter:brightness(1)}}
+#skFx .fxLit,#skFx .fxPerk{animation:fxRise .7s cubic-bezier(.25,.8,.3,1) forwards!important}
+@keyframes fxRise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+#skFx.out .fxSky,#skFx.out .fxRays,#skFx.out .fxName,#skFx.out .fxLit,#skFx.out .fxPerk{transition:opacity .9s ease!important}

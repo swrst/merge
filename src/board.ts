@@ -930,7 +930,7 @@ class PixiBoard {
       if (on && !s.ring && s.art && getUITheme() === 'buddy' && this.tex['ui:hs_selected']) {
         const p = this.center(k), sp = new Sprite(this.tex['ui:hs_selected']);
         sp.anchor.set(0.5); sp.width = sp.height = this.cell * 1.06; sp.position.set(p.x, p.y);
-        this.lFx.addChild(sp); s.ring = sp as any;
+        this.lTile.addChild(sp); s.ring = sp as any;   // under the item: the frame is a painted tile
         gsap.fromTo(sp, { alpha: 0.4 }, { alpha: 1, duration: 0.18 });
       } else if (on && !s.ring && s.art) {
         const p = this.center(k), g = new Graphics();

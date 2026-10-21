@@ -169,9 +169,9 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .hFlame{display:in
 /* ============================================================ Mission Log */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .questRow{border-width:8px 10px 8px 26px!important;border-image:url(../sprites/ui/hm_row.webp) 40 50 40 100 fill / 8px 10px 8px 26px / 0 stretch!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .questRow.done{filter:saturate(.8)}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.chStep,.chBars>i,.chBars>b,.chBars>span){background:url(../sprites/ui/hm_locked.webp) center/contain no-repeat!important;border:0!important;box-shadow:none!important;color:transparent!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.chStep.done,.chBars>.done){background-image:url(../sprites/ui/hm_done.webp)!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.chStep.now,.chStep.cur,.chBars>.now,.chBars>.cur){background-image:url(../sprites/ui/hm_now.webp)!important;color:#fff!important;text-shadow:0 1px 1px #7a3307!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.chBars>i,.chBars>b,.chBars>span){background:url(../sprites/ui/hm_locked.webp) center/contain no-repeat!important;border:0!important;box-shadow:none!important;color:transparent!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.chBars>.done){background-image:url(../sprites/ui/hm_done.webp)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.chBars>.now,.chBars>.cur){background-image:url(../sprites/ui/hm_now.webp)!important;color:#fff!important;text-shadow:0 1px 1px #7a3307!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.achCard .achIc,.enRow.ach .enIc,.xpMedal){background:url(../sprites/ui/hm_medal.webp) center/contain no-repeat!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.mlHead,.chHead2){border-image:url(../sprites/ui/hm_tablet.webp) 50 70 fill / 11px 15px / 0 stretch!important;border-width:11px 15px!important}
 
@@ -417,7 +417,7 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.achCard i
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.funCard.locked,.achCard.locked,.enRow.locked){opacity:1!important}
 /* numbers on the wheel and on the Mission Log chapter markers */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(#wheel,.wheelWrap,.spinWheel,.wheel) :is(b,span,i){color:#fff!important;text-shadow:0 1px 0 #1b0a40,0 0 3px #1b0a40!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.chStep,.chBars>*) :is(b,i,span){color:#fff!important;text-shadow:0 1px 0 #0c1b07,0 0 3px #0c1b07!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.chBars>*) :is(b,i,span){color:#fff!important;text-shadow:0 1px 0 #0c1b07,0 0 3px #0c1b07!important}
 /* HUD: the level number, the red counters, the side chips */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .hud #lvl{text-shadow:0 1px 0 #0c1b07,0 0 3px #0c1b07,0 0 2px #0c1b07!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .dot{text-shadow:0 1px 0 #6a0f0f,0 0 2px #6a0f0f!important;font-weight:800!important}
@@ -481,3 +481,22 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.popBody,.
 /* daily log: the chest marks are readable pills */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .dChest i{display:inline-block;background:#fff!important;color:#24331f!important;border:1.5px solid #cfe0bf;border-radius:99px;padding:1px 7px!important;font:800 11px/1.3 Fredoka,sans-serif!important;font-style:normal!important;text-shadow:none!important;box-shadow:0 1px 3px rgba(0,0,0,.2)}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .dChest.ready i{background:#ff9a3d!important;color:#fff!important;border-color:#fff}
+.csumNew em{display:flex;align-items:center;gap:4px;font-style:normal;font:700 12px Fredoka,sans-serif;color:#4d5f44;margin-top:2px}
+.csumNew em :is(img,svg,.ic,.art){width:16px!important;height:16px!important}
+.csumNew.lab .csumArt img{width:52px;height:52px;object-fit:contain}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .wSeg span :is(svg,img,.art,.ic,.uiIc){width:26px!important;height:26px!important;filter:drop-shadow(0 0 3px rgba(255,255,255,.85)) drop-shadow(0 1px 1px rgba(0,0,0,.5))}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .wSeg span{top:26px!important}
+/* Power ×2: obvious when it is on */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #btnX2.on{background:linear-gradient(180deg,#ffd76a,#ff9a2e)!important;border:2px solid #fff!important;box-shadow:0 0 12px rgba(255,170,40,.9)!important;animation:x2On 1.4s ease-in-out infinite}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #btnX2.on b{color:#fff!important;text-shadow:0 1px 0 #a4480f!important}
+@keyframes x2On{0%,100%{box-shadow:0 0 8px rgba(255,170,40,.7)}50%{box-shadow:0 0 18px rgba(255,190,60,1)}}
+
+/* ============================================================ Lab pickers: clean white cards, readable tags */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.pickCell,.lxSp,.lxIt){
+  border-image:none!important;border:1.5px solid #d3e3c4!important;border-radius:14px!important;
+  background:linear-gradient(180deg,#ffffff,#f1f6ec)!important;box-shadow:0 2px 5px rgba(20,40,20,.15)!important;position:relative}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.pickCell,.lxSp) :is(b,em){
+  background:#2f6b1a!important;color:#fff!important;text-shadow:none!important;border-radius:99px!important;padding:1px 6px!important;font:800 11px/1.3 Fredoka,sans-serif!important;opacity:1!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .lxSp b{position:absolute;top:3px;left:3px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .lxIt .lxQ{color:#6f8a5e!important;text-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.pickCell,.lxSp,.lxIt) :is(img,svg){opacity:1!important;filter:none!important}
