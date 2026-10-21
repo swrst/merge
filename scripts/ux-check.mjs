@@ -174,7 +174,7 @@ console.log('\n12. Power x2 and the Moon Pup');
 const bx = await page.evaluate(() => {
   const g = window.__game, s = g.state(), b = s.boards[s.world];
   for (let i = 0; i < b.length; i++) if (b[i] && !b[i].b) b[i] = null;
-  b[10] = { p: 'tree' }; s.lvl = 9; s.boost2 = 1; s.pinfo = Object.assign(s.pinfo || {}, { tree: 1 }); s.energy = 20; window.__board.sync(b); g.hud();
+  b[10] = { p: 'tree' }; s.lvl = 15; s.boost2 = 1; s.pinfo = Object.assign(s.pinfo || {}, { tree: 1 }); s.energy = 20; window.__board.sync(b); g.hud();
   return 10;
 });
 await page.waitForTimeout(600);

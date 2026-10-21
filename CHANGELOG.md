@@ -1,5 +1,14 @@
 # Changelog
 
+- **v97 (0.97.0)**
+  - Side chips (contracts to chest, album, wheel, event): the count sits centred under the icon in a small white pill sized to the text.
+  - Mission Log: smaller Star Challenge points and readable medal marks; Daily Log redone (slim track, small OPEN tag on a ready chest, each task a little card with its own bar and a points pill, green when done).
+  - Collection: new discoveries sit in a highlighted orange card with bigger items; chains to claim glow orange with a "Claim!" pill.
+  - Crater Dig: moon-rock tiles you crack open, finds sit centred in a clean white socket (no more grass).
+  - Retiring: a producer leaves when its chain is complete or, at the latest, four chapters after its farewell; while it waits, contracts often ask for its higher steps.
+  - Contracts: 1 thing (most often), 2, 3 sometimes, 4 rarely; now and then one asks a step higher than usual.
+  - Features open bit by bit: Star Album at level 6, Cosmic Wheel 7, Bingo 8, Expeditions 10, events 12, Power ×2 at 15 — and ×2 is gentler (one step up; two steps 18%, three 4%).
+
 - **v96 (0.96.0)**
   - Star Freighter: its contract sheet shows the freighter and is called "Star Freighter" (no more Grub Brothers face).
   - Side chips: smaller numbers on the contracts milestone and album chips; the Star Chart chip is gone from the main screen.

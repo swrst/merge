@@ -67,7 +67,7 @@ const CHARGE_MAX = 8, CHARGE_MS = 90 * 60000;
 const VISIT_MS = 90000;
 const W = 6, H = 7, N = W * H, PROD_AT = 3 * W + 2;
 const VISITORS = ['glimmer', 'gigi', 'luma', 'mumbo', 'biscuit', 'marin', 'kelpa', 'halo', 'grubs', 'nix', 'oops', 'ember'];
-export const XP_UNLOCK = 5;
+export const XP_UNLOCK = 10;
 
 export function createExpedition(ctx: XpCtx) {
   const { ART, sfx } = ctx;

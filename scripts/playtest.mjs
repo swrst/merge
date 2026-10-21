@@ -1104,7 +1104,7 @@ must(!s.acc && s.boards.earth.some(c => c && c.id === 'lumber'), 'and hands back
 await tab('board');
 
 head('Lucky Wheel, events and Alien Pairs');
-await set(() => { const s = window.__game.state(); s.lvl = 6; s.spin = { day: 0, tok: 0 }; s.coins = 1000; s.energy = 0; });
+await set(() => { const s = window.__game.state(); s.lvl = 12; s.spin = { day: 0, tok: 0 }; s.coins = 1000; s.energy = 0; });
 await page.evaluate(() => window.__game.v9.spinPop()); await page.waitForTimeout(400);
 before = await S();
 await page.evaluate(() => document.querySelector('#spinGo').click()); await page.waitForTimeout(4600);

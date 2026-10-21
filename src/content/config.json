@@ -422,7 +422,7 @@
     }
   },
   "event": {
-    "unlockLevel": 9,
+    "unlockLevel": 12,
     "cycleH": 96,
     "activeH": 72,
     "epoch": 1767571200000,
@@ -537,7 +537,7 @@
     ]
   },
   "spin": {
-    "unlockLevel": 5,
+    "unlockLevel": 7,
     "segments": [
       {
         "r": {

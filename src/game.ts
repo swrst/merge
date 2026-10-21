@@ -1176,8 +1176,13 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const open2 = freeOpen.length ? freeOpen : open;
     const theirs = open2.filter(c => (CHARS[char].likes || []).indexOf(c) >= 0);
     const chains = theirs.length ? theirs : open2;
-    let chain = rnd(chains);
+    // a producer on its farewell tour gets asked for its higher steps, so its chain gets finished
+    const farewell = ((S.retireLater && S.retireLater[S.world]) || []).flatMap((k: string) => PRODS[k] ? PRODS[k].drops.map((d: string) => ITEMS[d].chain) : []).filter((c: string) => open.includes(c));
+    let chain = farewell.length && Math.random() < 0.4 ? rnd(farewell) : rnd(chains);
+    // now and then a customer wants something a step higher than usual
+    const stretch = !early && (Math.random() < 0.18 || farewell.includes(chain)) ? 1 : 0;
     let pick = itemFrom(chain);
+    if (stretch) { const top = Math.min(CHAINS[chain].items.length - 1, reach(chain) + 1); pick = CHAINS[chain].items[Math.max(0, top - 1)]; }
     // the odd special request: a relic. Never a rocket piece or star scrap —
     // those get used up elsewhere, and a contract for one could wait forever.
     if (S.seen.relic1 && Math.random() < 0.08) { pick = 'relic1'; chain = 'relic'; }
@@ -1185,8 +1190,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const needs = [{ id: pick, qty: d.tier >= 4 ? 1 : d.tier === 3 ? (Math.random() < 0.35 ? 2 : 1) : 2 }];
     // more things from other chains the same person cares about (or any awake one)
     const pool = chains.length > 1 ? chains : open2;
-    const extra = early ? 0 : pd < 15 ? (Math.random() < 0.35 ? 1 : 0) : (Math.random() < Math.min(0.6, 0.3 + S.lvl * 0.02) ? 1 : 0)
-      + (S.lvl >= 14 && Math.random() < 0.15 ? 1 : 0);
+    // how many different things: mostly one or two, sometimes three, rarely four
+    const roll = Math.random();
+    const extra = early ? (roll < 0.25 ? 1 : 0) : pd < 15 ? (roll < 0.45 ? 0 : roll < 0.9 ? 1 : 2)
+      : (roll < 0.4 ? 0 : roll < 0.78 ? 1 : roll < 0.97 ? 2 : 3);
     for (let k = 0; k < extra; k++) {
       const left = pool.filter(c => c !== chain && !needs.some(nd => ITEMS[nd.id].chain === c));
       if (!left.length) break;
@@ -1434,7 +1441,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // Power ×2: double energy, the drop comes one step up the chain
     if (boostOn() && p.mode === 'energy' && !c.tmp && nextOf(id) && !ITEMS[id].part) {
       // Power ×2: always at least one step up, often two, now and then three
-      const r = Math.random(), steps = r < 0.12 ? 3 : r < 0.45 ? 2 : 1;
+      const r = Math.random(), steps = r < 0.04 ? 3 : r < 0.22 ? 2 : 1;
       for (let k = 0; k < steps && nextOf(id) && !ITEMS[nextOf(id) as string].part; k++) id = nextOf(id) as string;
     }
     // Golden Touch: now and then the drop arrives one step up
@@ -2853,11 +2860,14 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   /** a producer only leaves once every step of its chains is in your collection */
   const prodChainsDone = (k: string) => PRODS[k].drops.every((d: string) => CHAINS[ITEMS[d].chain].items.every(id => S.seen[id]));
   function retireProducers(keysIn: string[], quiet = false) {
-    S.retireLater = S.retireLater || {};
+    S.retireLater = S.retireLater || {}; S.retireDue = S.retireDue || {};
     const later = new Set<string>(S.retireLater[S.world] || []);
-    const keys = keysIn.filter(k => PRODS[k] && prodChainsDone(k));
-    keysIn.filter(k => PRODS[k] && !prodChainsDone(k)).forEach(k => later.add(k));
-    keys.forEach(k => later.delete(k));
+    // a producer stays until its chain is complete, or at most four chapters past its farewell
+    const due = (k: string) => { if (S.retireDue[k] === undefined) S.retireDue[k] = projDone(); return projDone() >= S.retireDue[k] + 4; };
+    const ready = (k: string) => prodChainsDone(k) || due(k);
+    const keys = keysIn.filter(k => PRODS[k] && ready(k));
+    keysIn.filter(k => PRODS[k] && !ready(k)).forEach(k => later.add(k));
+    keys.forEach(k => { later.delete(k); delete S.retireDue[k]; });
     S.retireLater[S.world] = [...later];
     if (!keys.length) { save(); return; }
     const b = B(); let coins = 0; const names: string[] = [];
@@ -2937,7 +2947,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     sfx.build(); haptic('heavy'); confetti();
     tally('project');
     const nextW = WORLD_ORDER[WORLD_ORDER.indexOf(S.world) + 1];
-    if (p.retire) retireProducers(p.retire);
+    retireProducers([...(p.retire || []), ...((S.retireLater && S.retireLater[S.world]) || [])]);
     // one thing at a time: the fanfare, one summary card, then whatever the chapter opened
     const afterAll = () => {
       celebrating = false;
@@ -4468,7 +4478,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
   const albumCount = () => { const a = alb(); return albumSets().reduce((n, s) => n + s.ids.filter(id => a.have[id]).length, 0); };
   const albumTotal = () => albumSets().reduce((n, s) => n + s.ids.length, 0);
-  const albumOpen = () => S.lvl >= 4;
+  const albumOpen = () => S.lvl >= 6;
   const packsWaiting = () => { const p = alb().packs; return (p.basic || 0) + (p.gold || 0); };
   /** a pack lands in the album, opened from there */
   function albumGive(kind: 'basic' | 'gold', why = '') {
@@ -4855,7 +4865,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   const COACH: Coach[] = [
     { k: 'contract', at: '#orders .order.ready', say: '<b>Tap</b> to give it!', when: () => !!document.querySelector('#orders .order.ready'), on: 'deliver' },
     { k: 'map', at: '#tabMap', say: 'Your <b>camp</b>: the Lab, Album, games and the way to the Galaxy.', when: () => projDone('earth') >= 2 },
-    { k: 'x2b', at: '#btnX2', say: '<b>Power ×2</b><br>Double energy per tap, drops <b>1–3 steps higher</b>.', when: () => S.lvl >= BOOST_LV && !!document.getElementById('btnX2') },
+    { k: 'x2b', at: '#btnX2', say: '<b>Power ×2</b><br>Double energy per tap, drops <b>a step higher</b>, sometimes more.', when: () => S.lvl >= BOOST_LV && !!document.getElementById('btnX2') },
     { k: 'chapter', at: '#btnQuests', say: '<b>Tap to build</b> the chapter!', when: () => projReady(curProject()) },
     { k: 'chest', at: firstCell(c => !!c.id && isChest(c.id)), say: 'A <b>chest</b>! Tap it to open it.', when: () => B().some((c: any) => c && c.id && isChest(c.id)) },
     { k: 'wreck', at: firstCell(c => c.p === 'wreck'), say: 'Tap the <b>wreck</b> for rocket parts.', when: () => B().some((c: any) => c && c.p === 'wreck') },
@@ -4915,7 +4925,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     { k: 'stars', who: 'bloop', say: 'Star Scrap from craters fuses into <b>Star Cores</b>. Light a constellation in the Galaxy for a perk in every world.', when: () => !!(S.seen.scrap || pouch('scrap')) },
     { k: 'heart', who: 'grandma', say: 'Finishing a chain for the first time earns a <b>Bloom Spark</b>. Feed it to the Meadow Heart on the map!', when: () => projDone() >= 3 },
     { k: 'magnet', who: 'pip', say: 'Stuck? The <b>Star Magnet</b> pulls every matching pair together at once.', when: () => boostN('wand') > 0 },
-    { k: 'x2', who: 'biscuit', say: 'Energy to spare? Switch on <b>⚡×2</b>: every tap costs double but drops 1–3 steps higher.', when: () => S.lvl >= BOOST_LV },
+    { k: 'x2', who: 'biscuit', say: 'Energy to spare? Switch on <b>⚡×2</b>: every tap costs double but drops a step higher.', when: () => S.lvl >= BOOST_LV },
     { k: 'wheel', who: 'oops', say: 'The <b>Cosmic Wheel</b> has a free spin every day. Destiny insists.', when: () => S.lvl >= SP().unlockLevel && spinsLeft() > 0 },
     { k: 'pet', who: 'bloop', say: 'Your <b>pet</b> fetches gifts on its own. Feed it spare items to help it grow and evolve!', when: () => petOn() },
     { k: 'daily', who: 'biscuit', say: 'The <b>Daily Log</b> in the Mission Log fills chests just for playing. Vote Marin!', when: () => projDone() >= 2 },
@@ -4961,7 +4971,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       ${card('dig', '⛏️', 'Crater Dig', cd('dig'), S.met ? '' : '🔒 After the meteor')}
       ${card('brew', '⚗️', 'Fuel Brewing', cd('brew'), rocketTime() ? '' : (S.met ? '🔒 When the ship turns up' : '🔒 After the meteor'))}
       ${card('market', '🛍️', 'Alien Market', cd('market'), S.met ? '' : '🔒 After the meteor')}
-      ${card('bingo', '🧩', 'Clean-up Bingo', bingoSub(), lockLv(4), bingoReady() > 0)}
+      ${card('bingo', '🧩', 'Clean-up Bingo', bingoSub(), lockLv(8), bingoReady() > 0)}
     </div>`, 'fun');
     document.querySelectorAll<HTMLElement>('[data-fun]').forEach(b => b.onclick = () => {
       if (b.classList.contains('locked')) { sfx.no(); toast('Not yet — ' + b.querySelector('i')!.textContent); return; }
@@ -4996,8 +5006,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     }
     return S.bingo;
   }
-  const bingoReady = () => { if (S.lvl < 4) return 0; const bg = bingo(); return bg.cells.filter((id: string, k: number) => !bg.done[k] && countItem(id) > 0).length; };
-  const bingoSub = () => { if (S.lvl < 4) return ''; const bg = bingo(); const n = bg.done.filter(Boolean).length; return bingoReady() ? bingoReady() + ' to hand in!' : n + '/9 · new card weekly'; };
+  const bingoReady = () => { if (S.lvl < 8) return 0; const bg = bingo(); return bg.cells.filter((id: string, k: number) => !bg.done[k] && countItem(id) > 0).length; };
+  const bingoSub = () => { if (S.lvl < 8) return ''; const bg = bingo(); const n = bg.done.filter(Boolean).length; return bingoReady() ? bingoReady() + ' to hand in!' : n + '/9 · new card weekly'; };
   function bingoPop() {
     const bg = bingo();
     const lineDone = (l: number[]) => l.every(k => bg.done[k]);
@@ -5038,7 +5048,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   /* --------------------------------------------------------- Power ×2
      The Travel Town trick for players with energy to burn: every tap costs
      double and every drop arrives one step higher. A switch, remembered. */
-  const BOOST_LV = 8;
+  const BOOST_LV = 15;
   const boostOn = () => !!S.boost2 && S.lvl >= BOOST_LV;
   function renderBoost() {
     const t = $('#tools'); if (!t) return;
@@ -5049,7 +5059,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       t.insertBefore(b, t.firstChild);
       b.onclick = () => {
         S.boost2 = S.boost2 ? 0 : 1; sfx.tap(); haptic('light'); renderBoost(); save();
-        toast(S.boost2 ? '⚡×2 ON · double energy per tap · drops 1–3 steps higher' : '⚡×2 off');
+        toast(S.boost2 ? '⚡×2 ON · double energy per tap · drops a step higher' : '⚡×2 off');
       };
     }
     b.classList.toggle('on', !!S.boost2);
@@ -5466,7 +5476,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const st = miniState;
     $('#miniBody').innerHTML = `<div class="digGrid">${st.cells.map((c: any, i: number) =>
       `<button class="digCell${c.open ? ' open' : ''}${c.open && c.kind === 'cavein' ? ' bad' : ''}" data-d="${i}"${c.open || st.done ? ' disabled' : ''}>`
-      + (c.open ? (c.kind === 'cavein' ? ART.uiIcon('dig_rubble', '💥') : c.kind === 'coins' ? ART.icon('coin') : ART.item(c.id)) : ART.uiIcon('dig_grass', '')) + '</button>').join('')}</div>`;
+      + (c.open ? (c.kind === 'cavein' ? ART.uiIcon('dig_rubble', '💥') : c.kind === 'coins' ? ART.icon('coin') : ART.item(c.id)) : '<i class="digRock"></i>') + '</button>').join('')}</div>`;
     const total = st.bank.reduce((a: number, r: any) => a + (r.coins || 0), 0);
     $('#miniFoot').innerHTML = st.done
       ? `<button class="big" id="digOut">Collect</button>`
