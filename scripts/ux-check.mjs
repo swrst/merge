@@ -167,7 +167,7 @@ must(await page.locator('#pop.open, .screen.open, #modal.open, #talk.open').coun
 await page.evaluate(() => { const s = window.__game.state(); document.querySelectorAll('#modal,#talk').forEach(e => e.classList.remove('open')); s.proj.earth = window.__prevProj; s.world = window.__prevWorld; window.__game.hud(); });
 await page.waitForTimeout(3500); await shoo(); await page.evaluate(() => { document.querySelectorAll('#modal,#talk').forEach(e => e.classList.remove('open')); window.__game.v9.closePop(); }); await shoo();
 await page.evaluate(() => { window.__game.v9.closePop(); window.__game.view('board'); }); await page.waitForTimeout(400);
-const snd = await page.evaluate(async () => { const out = []; for (const n of ['open', 'close', 'tab', 'unlock', 'ready', 'collect', 'blip1', 'amb_earth', 'music_earth_1']) { const r = await fetch('/src/audio/' + n + '.ogg'); if (!r.ok) out.push(n); } return out; });
+const snd = await page.evaluate(async () => { const out = []; for (const n of ['open', 'close', 'tab', 'unlock', 'ready', 'collect', 'blip1', 'music_earth', 'music_luna']) { const r = await fetch('/src/audio/' + n + '.ogg'); if (!r.ok) out.push(n); } return out; });
 must(snd.length === 0, 'new ui sounds, voices and music phrases exist' + (snd.length ? ' (missing ' + snd + ')' : ''));
 
 console.log('\n12. Power x2 and the Moon Pup');

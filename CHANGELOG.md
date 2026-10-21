@@ -1,5 +1,8 @@
 # Changelog
 
+- **v98 (0.98.0)**
+  - New background music for Sunny Meadow and Crater Camp (one calm track each, made into a seamless loop with a 4-second crossfade and levelled to sit under the sound effects). The old phrase sets and ambience for those two worlds are removed.
+
 - **v97 (0.97.0)**
   - Side chips (contracts to chest, album, wheel, event): the count sits centred under the icon in a small white pill sized to the text.
   - Mission Log: smaller Star Challenge points and readable medal marks; Daily Log redone (slim track, small OPEN tag on a ready chest, each task a little card with its own bar and a points pill, green when done).
