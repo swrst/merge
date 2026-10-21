@@ -20,8 +20,8 @@ function build(src: string) {
   el = document.createElement('div'); el.id = 'holoProj'; el.setAttribute('aria-hidden', 'true');
   svg = document.createElementNS(NS, 'svg') as SVGSVGElement; svg.classList.add('hpBeam');
   svg.innerHTML = `<defs>
-      <linearGradient id="hpFill" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#e6fffb" stop-opacity=".95"/><stop offset=".5" stop-color="#9ffff2" stop-opacity=".6"/><stop offset="1" stop-color="#8ffff0" stop-opacity=".42"/></linearGradient>
-      <linearGradient id="hpRay" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset="1" stop-color="#b8fff3" stop-opacity=".25"/></linearGradient>
+      <linearGradient id="hpFill" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#e6fffb" stop-opacity=".95"/><stop offset=".5" stop-color="#eeffdd" stop-opacity=".6"/><stop offset="1" stop-color="#e8ffd0" stop-opacity=".42"/></linearGradient>
+      <linearGradient id="hpRay" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ffffff" stop-opacity=".95"/><stop offset="1" stop-color="#f6ffec" stop-opacity=".25"/></linearGradient>
     </defs>
     <polygon class="hpCone" fill="url(#hpFill)"/><polygon class="hpCore" fill="url(#hpFill)"/>
     <line class="hpRay a" stroke="url(#hpRay)"/><line class="hpRay b" stroke="url(#hpRay)"/>

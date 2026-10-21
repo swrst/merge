@@ -417,15 +417,15 @@ class PixiBoard {
     if (!c) return;
     if (c.f) {
       // a sealed tile: the item sits inside, dimmed, waiting for its twin
-      s.art = this.sprite('i:' + c.f, i, 0.72); (s as any).sealedItem = true;
-      s.art.alpha = 0.9; (s.art as any).tint = 0xeef4ff;   // clearly visible inside the glass, just a touch cooler until it is opened
+      s.art = this.sprite('i:' + c.f, i, 0.8); (s as any).sealedItem = true;
+      s.art.alpha = 1; (s.art as any).tint = 0xffffff;   // clearly visible inside the glass, just a touch cooler until it is opened
       const p = this.center(i), g = new Graphics(), r = this.cell * 0.15;
       if (this.tex['ui:seal_bubble']) {
         // painted glass bubble over the tile (it carries its own little padlock)
         const b = new Sprite(this.tex['ui:seal_bubble']); b.anchor.set(0.5); b.width = b.height = this.cell * 1.0;
-        b.alpha = 0.6; b.position.set(p.x, p.y); this.lItem.addChild(b); (s as any).seal = b; s.timer = undefined;
+        b.alpha = 0.45; b.position.set(p.x, p.y); this.lItem.addChild(b); (s as any).seal = b; s.timer = undefined;
         if (this.tex['ui:hm_locked']) {   // a little padlock on the corner says "sealed" without hiding the item
-          const lk = new Sprite(this.tex['ui:hm_locked']); lk.anchor.set(0.5); lk.width = lk.height = this.cell * 0.3;
+          const lk = new Sprite(this.tex['ui:hm_locked']); lk.anchor.set(0.5); lk.width = lk.height = this.cell * 0.36;
           lk.position.set(p.x + this.cell * 0.32, p.y + this.cell * 0.32); this.lItem.addChild(lk); s.timer = lk as any;
         }
         return;
@@ -548,10 +548,10 @@ class PixiBoard {
     const s = this.slots[i] as any;
     if (s.pending) { s.pending.kill(); s.pending = undefined; }
     if (s.idle) { s.idle.kill(); s.idle = undefined; }
-    [s.art, s.timer, s.badge, s.bar, s.cost, s.ring, s.readyRing, s.aura, s.spin, s.clock, s.unseal, s.seal].forEach((o: any) => {
+    [s.art, s.timer, s.badge, s.bar, s.cost, s.ring, s.readyRing, s.aura, s.spin, s.clock, s.unseal, s.seal, s.hintGlow].forEach((o: any) => {
       if (o) { gsap.killTweensOf(o); gsap.killTweensOf(o.scale); o.destroy({ children: true }); }
     });
-    s.art = s.timer = undefined; s.badge = undefined; s.ring = undefined;
+    s.art = s.timer = undefined; s.badge = undefined; s.ring = undefined; s.hintGlow = null;
     s.bar = undefined; s.barW = undefined; s.barFrac = undefined;
     s.aura = undefined; s.spin = undefined; s.cost = undefined; s.costW = undefined; s.clock = undefined;
     s.readyRing = null; s.hinting = false; s.unseal = null; s.seal = null;
@@ -580,7 +580,7 @@ class PixiBoard {
       s.timer.position.set(p.x, p.y);
     } else if ((s as any).seal && s.key.startsWith('f')) {
       (s as any).seal.position.set(p.x, p.y); (s as any).seal.width = (s as any).seal.height = this.cell;
-      if (s.timer && !(s.timer as any).destroyed) { s.timer.position.set(p.x + this.cell * 0.32, p.y + this.cell * 0.32); (s.timer as any).width = (s.timer as any).height = this.cell * 0.3; }
+      if (s.timer && !(s.timer as any).destroyed) { s.timer.position.set(p.x + this.cell * 0.32, p.y + this.cell * 0.32); (s.timer as any).width = (s.timer as any).height = this.cell * 0.36; }
     } else if (s.timer && s.key.startsWith('f')) {
       s.timer.position.set(p.x + this.cell * 0.3, p.y + this.cell * 0.3);
     } else if (s.timer) {
@@ -593,10 +593,10 @@ class PixiBoard {
     if (s.art.parent !== this.lItem) this.lItem.addChild(s.art);
     gsap.killTweensOf(s.art);
     gsap.killTweensOf(s.art.scale);
-    const scale = s.key.startsWith('p') ? 1.02 : s.key.startsWith('b') ? 0.82 : s.key.startsWith('f') ? 0.72 : s.key.startsWith('u') ? 0.58 : 1.0;
+    const scale = s.key.startsWith('p') ? 1.02 : s.key.startsWith('b') ? 0.82 : s.key.startsWith('f') ? 0.8 : s.key.startsWith('u') ? 0.58 : 1.0;
     s.art.position.set(p.x, p.y);
     s.art.width = s.art.height = this.cell * scale;
-    s.art.alpha = s.key.startsWith('f') ? 0.9 : 1;
+    s.art.alpha = 1;
     s.art.rotation = 0;
     if (!s.key.startsWith('b')) this.idleBob(i);
   }
@@ -688,7 +688,7 @@ class PixiBoard {
   }
   private spriteScale(i: number) {
     const s = this.slots[i];
-    const scale = s.key.startsWith('p') ? 1.02 : s.key.startsWith('b') ? 0.82 : s.key.startsWith('f') ? 0.72 : s.key.startsWith('u') ? 0.58 : 1.0;
+    const scale = s.key.startsWith('p') ? 1.02 : s.key.startsWith('b') ? 0.82 : s.key.startsWith('f') ? 0.8 : s.key.startsWith('u') ? 0.58 : 1.0;
     return (this.cell * scale) / TEX;
   }
   /** producer squash when used */
@@ -996,9 +996,17 @@ class PixiBoard {
           const sc = this.spriteScale(k);
           s.idle = gsap.to(s.art.scale, { x: sc * 1.16, y: sc * 1.16, duration: 0.34, repeat: -1, yoyo: true, ease: 'sine.inOut' });
           this.ringPulse(k, 0xffcb3d);
+          // the hinted pair blinks inside a bright frame so it can't be missed
+          const tx = this.tex['ui:hs_selected'];
+          if (tx && !(s as any).hintGlow) {
+            const p = this.center(k), g = new Sprite(tx); g.anchor.set(0.5); g.width = g.height = this.cell * 1.08; g.position.set(p.x, p.y);
+            this.lFx.addChild(g); (s as any).hintGlow = g;
+            gsap.fromTo(g, { alpha: 1 }, { alpha: 0.15, duration: 0.32, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+          }
         }
       } else if ((s as any).hinting) {
         (s as any).hinting = false;
+        const hg = (s as any).hintGlow; if (hg) { gsap.killTweensOf(hg); hg.destroy(); (s as any).hintGlow = null; }
         if (s.idle) s.idle.kill();
         const sc = this.spriteScale(k);
         gsap.to(s.art.scale, { x: sc, y: sc, duration: 0.2, onComplete: () => this.idleBob(k) });
@@ -1040,8 +1048,8 @@ class PixiBoard {
       const p = this.center(i); s.unseal.position.set(p.x, p.y);
     } else if (!on && s.unseal) {
       gsap.killTweensOf(s.unseal); s.unseal.destroy(); s.unseal = null;
-      s.art.tint = 0xeef4ff; s.art.alpha = 0.9;
-      if (s.seal && this.tex['ui:seal_bubble']) { s.seal.texture = this.tex['ui:seal_bubble']; s.seal.alpha = 0.6; }
+      s.art.tint = 0xffffff; s.art.alpha = 1;
+      if (s.seal && this.tex['ui:seal_bubble']) { s.seal.texture = this.tex['ui:seal_bubble']; s.seal.alpha = 0.45; }
       if (s.idle) s.idle.kill(); const sc = this.spriteScale(i); s.art.scale.set(sc, sc); this.idleBob(i);
     }
   }

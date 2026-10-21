@@ -1646,7 +1646,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       return;
     }
     hintPair = p; board.setHint(hintPair); if (manual) sfx.tap();
-    toast('💡 These two match — drag one onto the other, or double-tap it!');
+    if (manual || view === 'board') toast(manual ? '💡 These two match!' : '💡 These two match — drag one onto the other!');
     setTimeout(() => { hintPair = null; board.setHint(null); }, 2400);
   }
 
@@ -5594,7 +5594,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function starHelp() {
     const n = CONSTS.filter(c => lit(c.id)).length;
     pop('✨ Star Chart', `${flowHTML()}
-      <div class="skExplain">Every world has two constellations in its sky. Fill one with <b>Star Cores</b> and it lights up for good: a perk that works in every world, or a big gift.</div>
+      <div class="skExplain">Fill a constellation with <b>Star Cores</b>: it lights up for good and gives a perk in every world.</div>
       ${fuseBtn()}
       <div class="skLitBar"><i style="width:${Math.round(n / CONSTS.length * 100)}%"></i><span>${n}/${CONSTS.length} constellations lit</span></div>`, 'starsheet');
     const f = $('#skFuseH'); if (f) f.onclick = () => { if (fuseScrap()) { starHelp(); skyPage(); } };
@@ -5632,7 +5632,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       <div class="skLit2"><i style="width:${Math.round(n / CONSTS.length * 100)}%"></i><span>${n}/${CONSTS.length} constellations lit</span></div>
       <div class="skScroll2" id="skScroll">${rows}<div class="skEnd">More skies wait beyond Aurora Reach…</div></div>
       <div class="skDock"><button class="skFuser${pouch('scrap') >= 3 ? ' on' : ''}" id="skFuse" aria-label="Fuse star fragments"><img src="${ART.spriteUi('sk_fuser')}" alt=""></button>
-        <div class="skDockTxt"><b>Star Fuser</b><i>${ART.spriteUi('starscrap_ui') ? `<img src="${ART.spriteUi('starscrap_ui')}" alt="">` : ''} ${pouch('scrap')} scrap · 3 make 1 Star Core</i></div>
+        <div class="skDockTxt"><b>Star Fuser</b><i>${ART.spriteUi('starscrap_ui') ? `<img src="${ART.spriteUi('starscrap_ui')}" alt="">` : ''} ${pouch('scrap')}/3 → 1 Star Core</i></div>
         <button class="skFuseGo" id="skFuseGo" ${pouch('scrap') < 3 ? 'disabled' : ''}>Fuse</button></div>`;
     el.className = 'open';
     ($('#skBack') as HTMLElement).onclick = () => { sfx.close(); el!.className = ''; renderWorldScreen(); };
@@ -5657,11 +5657,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     };
     if (!S.story.stars) {
       S.story.stars = 1; save();
-      talkScene([
-        ['bloop', 'Blorp! The Star Chart. Every dot up there is a sleeping constellation — and every one of them owes us a favour.'],
-        ['bloop', 'Dig meteor craters for <b>Star Scrap</b>. Feed three to the <b>Star Fuser</b> down there and out pops a glowing <b>Star Core</b>.'],
-        ['bloop', 'Give a constellation enough Star Cores and it lights up for good — a perk in every world. Start with <b>The Rocket</b>!'],
-      ], go);
+      // the first visit shows how it works in pictures, not a conversation
+      starHelp(); setTimeout(go, 0);
     } else go();
   }
   /* Lighting one: the sky dims, the constellation fills the screen, its stars
@@ -5790,7 +5787,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     return `<div class="sceneWrap camp${P ? ' painted' : ''}">
       <div class="sceneBlur"></div><div class="sceneImg"></div><div class="sceneVig"></div>
       <div class="sceneName">${w.name}<i>lv ${wlv()}</i></div>
-      <button class="starMapBtn" data-pop="galaxy"><span>${ART.uiIcon('ic_galaxy', '🌌')}</span><b>Galaxy</b></button>
+      <button class="campGal" data-pop="galaxy" aria-label="Galaxy"><span class="cgIc">${ART.uiIcon('ic_galaxy_btn', '🌌')}</span><i class="cgLbl">Galaxy</i></button>
       <div class="campRail">
         ${hubBtn('book', 'ic_chapter', '📖', 'Album')}
         ${hubBtn('fun', 'ic_fun', '🎪', 'Games')}
@@ -6155,11 +6152,19 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       id: 'tap', who: 'pip', say: "Hi, I'm <b>Zib</b>!<br><b>Tap</b> the Meteor Heap", at: () => cellWith(c => c.p === 'tree'), on: 'spawn', need: 2,
       when: () => { const cp = curProject(); if (cp && cp.talk) S.talked[cp.id] = 1; return true; },
     },
-    { id: 'merge', say: '<b>Drag</b> one onto the other', at: () => nearPair(c => c.id === 'twig'), on: 'merge' },
+    { id: 'merge', say: '<b>Drag</b> one Meteor Chip<br>onto the other', at: () => nearPair(c => c.id === 'twig'), on: 'merge' },
     {
       id: 'deliver', say: '<b>Tap</b> to deliver it!',
       at: () => '#orders .order.ready', on: 'deliver',
       when: () => S.orders.some((o: any) => o.needs.every((nd: any) => countItem(nd.id) >= nd.qty)),
+    },
+    {
+      id: 'sealed', say: '<b>Locked item!</b><br>Merge its twin onto it to free it.', at: () => cellWith(c => !!c.f),
+      when: () => B().some((c: any) => c && c.f),
+    },
+    {
+      id: 'hint', say: 'Stuck? Tap here:<br>the next merge <b>blinks</b>.', at: () => '#btnHint',
+      when: () => { const h = document.getElementById('btnHint'); return !!h && !!h.offsetParent; },
     },
     { id: 'story', say: 'Bring what the <b>chapter</b> needs,<br>then <b>Build</b>!', at: () => '#btnQuests' },
   ];
@@ -6638,10 +6643,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     { const bs = $('#bootScr'); if (bs) { bs.classList.add('gone'); setTimeout(() => bs.remove(), 600); } }
     if (S.tut) setTimeout(() => { if (!$('#modal').classList.contains('open') && !tutOn()) chapterIntro(); }, 2200);
 
-    document.querySelectorAll<HTMLElement>('.tab').forEach(t => t.onclick = () => { if (t.id === 'tabMap') worldTab = 'galaxy'; setView(t.dataset.v as string); });
+    document.querySelectorAll<HTMLElement>('.tab').forEach(t => t.onclick = () => { if (t.id === 'tabMap') worldTab = 'camp'; setView(t.dataset.v as string); });
     // a page opened from the map goes back to the map
     document.querySelectorAll<HTMLElement>('.scClose').forEach(b => b.onclick = () => { const back = fromMap && (view === 'book' || view === 'lab'); fromMap = false; setView(back ? 'map' : 'board'); });
-    $('#btnHint').onclick = () => { showHint(true); lastAct = Date.now(); };
+    $('#btnHint').onclick = () => { const h = $('#btnHint'); h.classList.remove('flash'); void (h as HTMLElement).offsetWidth; h.classList.add('flash'); showHint(true); lastAct = Date.now(); };
     { const hi = document.querySelector('#btnHint .hintIc'); if (hi) hi.innerHTML = ART.uiIcon('ic_scan', '') || ART.uiIcon('ic_hint', '💡'); }
     $('#btnSnack').onclick = async () => {
       if (S.energy >= maxEnergy()) { toast('Energy is already full!'); return; }

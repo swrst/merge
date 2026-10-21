@@ -12,22 +12,22 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app :is(.popBox,.mBoxW,.xpPBox
 /* the panel: projected glass */
 html[data-ui-theme="buddy"] body #app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard).hpProjected{
   position:relative;z-index:2;
-  background:linear-gradient(180deg,rgba(222,255,250,.80),rgba(170,244,232,.72))!important;
+  background:linear-gradient(180deg,rgba(253,255,251,.80),rgba(235,246,224,.72))!important;
   backdrop-filter:blur(12px) saturate(1.3);-webkit-backdrop-filter:blur(12px) saturate(1.3);
-  border:1.5px solid rgba(160,255,240,.95)!important;border-radius:22px!important;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.55),inset 0 -18px 30px rgba(80,220,210,.18),0 0 26px rgba(90,255,230,.50),0 16px 34px rgba(0,36,48,.38)!important;
-  color:#12414a!important}
+  border:1.5px solid rgba(238,255,221,.95)!important;border-radius:22px!important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.55),inset 0 -18px 30px rgba(180,223,137,.18),0 0 26px rgba(204,255,154,.50),0 16px 34px rgba(18,46,9,.38)!important;
+  color:#26461c!important}
 /* scanlines and a top sheen */
 html[data-ui-theme="buddy"] body #app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard).hpProjected::before{
   content:""!important;display:block!important;position:absolute!important;inset:0!important;left:0!important;top:0!important;right:0!important;bottom:0!important;width:auto!important;height:auto!important;margin:0!important;border:0!important;transform:none!important;opacity:1!important;border-radius:inherit!important;pointer-events:none;z-index:-1!important;
-  background:linear-gradient(180deg,rgba(255,255,255,.45),rgba(255,255,255,0) 22%),repeating-linear-gradient(0deg,rgba(40,170,170,.07) 0 1px,transparent 1px 4px)!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.45),rgba(255,255,255,0) 22%),repeating-linear-gradient(0deg,rgba(126,175,78,.07) 0 1px,transparent 1px 4px)!important;
   animation:hpScan 5s linear infinite!important;mix-blend-mode:normal}
 /* corner brackets */
 html[data-ui-theme="buddy"] body #app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard).hpProjected{
   background-image:
     linear-gradient(#f2fffc,#f2fffc),linear-gradient(#f2fffc,#f2fffc),linear-gradient(#f2fffc,#f2fffc),linear-gradient(#f2fffc,#f2fffc),
     linear-gradient(#f2fffc,#f2fffc),linear-gradient(#f2fffc,#f2fffc),linear-gradient(#f2fffc,#f2fffc),linear-gradient(#f2fffc,#f2fffc),
-    linear-gradient(180deg,rgba(222,255,250,.80),rgba(170,244,232,.72))!important;
+    linear-gradient(180deg,rgba(253,255,251,.80),rgba(235,246,224,.72))!important;
   background-size:16px 2px,2px 16px,16px 2px,2px 16px,16px 2px,2px 16px,16px 2px,2px 16px,100% 100%!important;
   background-position:9px 9px,9px 9px,calc(100% - 9px) 9px,calc(100% - 9px) 9px,9px calc(100% - 9px),9px calc(100% - 9px),calc(100% - 9px) calc(100% - 9px),calc(100% - 9px) calc(100% - 9px),0 0!important;
   background-repeat:no-repeat!important}
@@ -43,27 +43,27 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app :is(.popBox,.mBoxW,.miniBo
 /* buttons: warm primary, aqua glass secondary */
 html[data-ui-theme="buddy"] body #app#app#app#app#app .hpProjected :is(.big,.buyBtn,.csGo,.skGo,.gpGo,.mBtnX){background:linear-gradient(#ffb36b,#ff7c3f)!important;color:#fff!important;border:1px solid #d7612f!important;box-shadow:0 3px 0 #b8512a,inset 0 2px 0 rgba(255,255,255,.55),0 0 14px rgba(255,150,80,.35)!important;text-shadow:0 1px 1px rgba(120,40,10,.45)!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app .hpProjected :is(.big,.buyBtn,.csGo,.skGo,.gpGo,.mBtnX) *{color:#fff!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app .hpProjected :is(.big.soft,.big.blue,.big.alt,.buyBtn.soft,.sellBtn){background:linear-gradient(rgba(240,255,252,.75),rgba(190,246,236,.65))!important;color:#12414a!important;border:1.5px solid rgba(110,230,215,.95)!important;box-shadow:0 2px 0 rgba(60,160,150,.55),inset 0 1px 0 #fff!important;text-shadow:none!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app .hpProjected :is(.big.soft,.big.blue,.big.alt,.buyBtn.soft,.sellBtn) *{color:#12414a!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app .hpProjected :is(.big.soft,.big.blue,.big.alt,.buyBtn.soft,.sellBtn){background:linear-gradient(rgba(240,255,252,.75),rgba(242,248,236,.65))!important;color:#26461c!important;border:1.5px solid rgba(203,233,173,.95)!important;box-shadow:0 2px 0 rgba(138,169,106,.55),inset 0 1px 0 #fff!important;text-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app .hpProjected :is(.big.soft,.big.blue,.big.alt,.buyBtn.soft,.sellBtn) *{color:#26461c!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app .hpProjected :is(.big,.buyBtn)[disabled],
-html[data-ui-theme="buddy"] body #app#app#app#app#app .hpProjected :is(.big,.buyBtn).off{background:linear-gradient(#d5e6e3,#b9d0cc)!important;color:#5b7a7d!important;border-color:#9fbcb7!important;box-shadow:0 2px 0 #91aaa6!important;text-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app .hpProjected :is(.big,.buyBtn).off{background:linear-gradient(#d5e6e3,#b9d0cc)!important;color:#8f958a!important;border-color:#c8cac6!important;box-shadow:0 2px 0 #babcb8!important;text-shadow:none!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app .hpProjected :is(.big,.buyBtn)[disabled] *,
-html[data-ui-theme="buddy"] body #app#app#app#app#app .hpProjected :is(.big,.buyBtn).off *{color:#5b7a7d!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app .hpProjected :is(.big,.buyBtn).off *{color:#8f958a!important}
 /* cards inside: frosted, a touch see-through */
-html[data-ui-theme="buddy"] body #app#app#app#app#app .hpProjected :is(.card,.enRow,.sCard,.csNeed,.pNeed,.questRow,.achCard,.optRow,.chHead2,.lxCard,.resRow,.upRow,.pfStat,.dayCell,.evNode){background:linear-gradient(rgba(255,255,255,.62),rgba(225,250,246,.52))!important;border:1px solid rgba(140,225,212,.85)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.8)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app .hpProjected :is(.card,.enRow,.sCard,.csNeed,.pNeed,.questRow,.achCard,.optRow,.chHead2,.lxCard,.resRow,.upRow,.pfStat,.dayCell,.evNode){background:linear-gradient(rgba(255,255,255,.62),rgba(225,250,246,.52))!important;border:1px solid rgba(214,230,199,.85)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.8)!important}
 
 /* the projector */
 #holoProj{position:absolute;inset:0;pointer-events:none;z-index:1;display:none}
 html[data-ui-theme="buddy"] #holoProj.on{display:block}
 #holoProj .hpBeam{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-#holoProj .hpCone{filter:blur(2px) drop-shadow(0 0 8px rgba(120,255,235,.6));transform-origin:var(--lx) var(--ly);animation:hpBeam .38s ease-out both,hpFlicker 3.2s 0.6s infinite}
+#holoProj .hpCone{filter:blur(2px) drop-shadow(0 0 8px rgba(221,255,187,.6));transform-origin:var(--lx) var(--ly);animation:hpBeam .38s ease-out both,hpFlicker 3.2s 0.6s infinite}
 #holoProj .hpCore{opacity:.7;filter:blur(3px);transform-origin:var(--lx) var(--ly);animation:hpBeam .38s ease-out both}
-#holoProj .hpRay{stroke-width:2.2;stroke-linecap:round;filter:drop-shadow(0 0 4px #8fffee);transform-origin:var(--lx) var(--ly);animation:hpBeam .32s ease-out both}
-#holoProj .hpLand{stroke:#eafffb;stroke-width:3;stroke-linecap:round;opacity:.85;filter:drop-shadow(0 0 6px #7fffe9) drop-shadow(0 0 2px #fff);animation:hpLand .5s .15s ease-out both}
-#holoProj .hpBot{position:absolute;animation:hpBob 2.8s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(0,30,40,.45))}
+#holoProj .hpRay{stroke-width:2.2;stroke-linecap:round;filter:drop-shadow(0 0 4px #e8ffd0);transform-origin:var(--lx) var(--ly);animation:hpBeam .32s ease-out both}
+#holoProj .hpLand{stroke:#eafffb;stroke-width:3;stroke-linecap:round;opacity:.85;filter:drop-shadow(0 0 6px #e0ffc2) drop-shadow(0 0 2px #fff);animation:hpLand .5s .15s ease-out both}
+#holoProj .hpBot{position:absolute;animation:hpBob 2.8s ease-in-out infinite;filter:drop-shadow(0 6px 10px rgba(15,38,8,.45))}
 #holoProj .hpBot img{width:100%;height:100%;object-fit:contain;display:block;transform:scaleX(-1)}
-#holoProj .hpLens{position:absolute;left:64%;top:44%;width:26%;height:26%;margin:-13% 0 0 -13%;border-radius:50%;background:radial-gradient(#fff,#9ffff0 45%,rgba(120,255,235,0) 70%);animation:hpGlow 1.6s ease-in-out infinite}
-#holoProj.tight .hpBot{filter:drop-shadow(0 4px 8px rgba(0,30,40,.5))}
+#holoProj .hpLens{position:absolute;left:64%;top:44%;width:26%;height:26%;margin:-13% 0 0 -13%;border-radius:50%;background:radial-gradient(#fff,#eeffdd 45%,rgba(221,255,187,0) 70%);animation:hpGlow 1.6s ease-in-out infinite}
+#holoProj.tight .hpBot{filter:drop-shadow(0 4px 8px rgba(15,38,8,.5))}
 @keyframes hpBeam{from{opacity:0;transform:scale(.05)}to{opacity:1;transform:none}}
 @keyframes hpLand{from{opacity:0;stroke-width:0}to{opacity:.85;stroke-width:3}}
 @keyframes hpFlicker{0%,100%{opacity:1}46%{opacity:.82}48%{opacity:1}51%{opacity:.9}}

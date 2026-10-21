@@ -1,5 +1,13 @@
 # Changelog
 
+- **v91 (0.91.0)**
+  - New colour: white glass with lime rims and glows (all hologram pieces recoloured from the ChatGPT art; dark pieces deep green; beam, text ink and glows to match). Board tiles pale white and soft lime.
+  - Guide: no pointing hand, just a glowing frame and a line of words. New steps: what a locked item is and how to free it (merge its twin onto it), and the hint button (the next merge blinks).
+  - Locked items are clearly visible: full-colour item under a lighter bubble, bigger padlock.
+  - Hint: the button flashes when tapped and the matching pair blinks inside a bright frame.
+  - The Camp button opens the camp; the camp has the round planet Galaxy button again.
+  - Star Chart: the first visit shows how it works in pictures (dig craters → Star Scrap → Star Core → light a constellation) instead of a three-line conversation; shorter texts.
+
 - **v90 (0.90.0)**
   - New first-run guide, hands-on and short: Zib says hi and asks you to tap the Meteor Heap (twice), the companion shows a hand dragging one Meteor Chip onto the other, then "Tap to deliver" on a contract that asks for exactly that Hot Meteor, then the chapter button. One line per step, a hologram bubble, a lighter dim.
   - Fewer character popups: a chapter opens with a conversation only for a new face, every tenth chapter, a world finale or a big moment (Lab, meteor); the rest keep their lines behind the 💬. Chapter endings show the fanfare and a short note unless something new opens. Friendship level-ups are a toast with the gift.
