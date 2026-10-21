@@ -123,7 +123,7 @@ must(await page.locator('#pop.open.csheet .csNeed').count() >= 1, 'tapping a con
 await page.evaluate(() => window.__game.v9.closePop()); await page.waitForTimeout(400);
 
 console.log('\n9. Just-in-time tips');
-await page.evaluate(() => { const s = window.__game.state(); s.coach = {}; s.tipsOff = 0; const b = s.boards[s.world]; for (let i = 0; i < b.length; i++) if (b[i] && !b[i].b) b[i] = null; b[20] = { id: 'chest' }; s.orders = []; window.__board.sync(b); window.__game.hud(); });
+await page.evaluate(() => { const s = window.__game.state(); s.coach = {}; s.tipsOff = 0; const b = s.boards[s.world]; for (let i = 0; i < b.length; i++) if (b[i] && !b[i].b) b[i] = null; b[20] = { id: 'chest' }; s.orders = []; window.__board.sync(b); window.__game.hud(); window.__game.v9.coachNow(); });
 await page.waitForFunction(() => window.__game.v9.jitOn(), null, { timeout: 8000 }).catch(() => {});
 must(await page.evaluate(() => window.__game.v9.jitOn()), 'a tip lights up the first chest');
 await page.mouse.click(10, 500); await page.waitForTimeout(500);

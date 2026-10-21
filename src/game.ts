@@ -652,7 +652,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     $('#tabMap').classList.toggle('locked', false);
     $('#tabShop').classList.toggle('locked', !shopOpen());
     $('#tabLab').classList.toggle('hide', !labOpen());
-    { const gi = $('#galIc'); if (gi && gi.dataset.w !== S.world) { gi.dataset.w = S.world; gi.innerHTML = ART.uiIcon('ic_galaxy_btn', ART.uiIcon('planet_' + S.world, ART.planet(W().planet))); } }
+    { const gi = $('#galIc'); if (gi && gi.dataset.w !== S.world) { gi.dataset.w = S.world; gi.innerHTML = ART.uiIcon('ic_camp', ART.uiIcon('rocket_pad', ART.planet(W().planet))); } }   // the camp first; the Galaxy is a button inside it
     { const h = document.querySelector('.hud') as HTMLElement; if (h) app.style.setProperty('--hudH', h.offsetHeight + 'px'); }
     renderStrip();
     claimWatch();
@@ -2914,6 +2914,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const labLine = p.lab ? `<div class="noteLine">🔬 Dr. Zonk drew up plans for a <b>Lab</b>. Build it in the camp: ${CONFIG.lab.build.coins} coins and ${CONFIG.lab.build.qty} Star Scrap.</div>` : '';
     setView('board');
     const reward = () => {
+      if (!storyBeat(p) && !what && !labLine && !worldDone()) { toast(`✅ <b>${p.name}</b> · +${p.xp} XP${gift ? ' · 🎁 ' + gift : ''}`); setTimeout(() => chapterIntro(), 900); return; }
       modal(p.who, '✅ ' + p.name,
         `<div class="mSay">${p.text}</div><div class="rewardLine">+${p.xp} XP${gift ? ' · 🎁 ' + gift : ''}</div>` + what + labLine
         + (worldDone() && nextW ? `<div class="noteLine">🚀 ${W().name} is restored! <b>${WORLDS[nextW].name}</b> is now open in the Galaxy.</div>`
@@ -3515,8 +3516,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const now = frLv(c);
     if (now <= before) return;
     const gift = FR_GIFT[now - 1];
-    setTimeout(() => talkScene([[c, `❤️ <b>Friendship level ${now}!</b> ${FR_SAY[now - 1]}`], [c, `Here — a little thank-you: <b>${rewardText(gift)}</b>.`]],
-      () => { grant(gift); confetti(); renderOrders(); }), 900);
+    setTimeout(() => { grant(gift); confetti(); renderOrders(); toast(`❤️ ${CHARS[c] ? CHARS[c].name : ''} · friendship level ${now}! +${rewardText(gift)}`); }, 900);
   }
 
   /* ------------------------------------------------------------- rewards */
@@ -3658,10 +3658,20 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (/!{2}|\?!|haha|oops|whoa|boing/i.test(text) && Math.random() < 0.5) setTimeout(sfx.boing, 420);
   }
   /** play the current chapter's opening conversation (once, unless asked) */
+  /* A chapter only opens with a conversation when it matters: a new face, every
+     tenth chapter, a world's finale or a big moment (the Lab, a meteor). The rest
+     keep their lines behind the 💬 on the chapter card. */
+  function storyBeat(p: any) {
+    if (!p) return false;
+    const list = projList(), i = list.indexOf(p);
+    if (i <= 0 || p.launch || p.lab || p.event || (i + 1) % 10 === 0) return true;
+    return !list.slice(0, i).some((q: any) => q.who === p.who);
+  }
   function chapterIntro(force = false) {
     const cp = curProject();
     if (!cp || !cp.talk) return false;
     if (S.talked[cp.id] && !force) return false;
+    if (!force && !storyBeat(cp)) { S.talked[cp.id] = 1; save(); return false; }
     S.talked[cp.id] = 1; save();
     talkScene(cp.talk);
     return true;
@@ -3924,6 +3934,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     </div>`;
     placeSpots('#labBody');
     host.querySelectorAll('[data-st]').forEach((e: any) => e.onclick = () => labStation(e.dataset.st));
+    const li = $('#labInfo'); if (li) li.onclick = () => { sfx.tap(); labHelp(); };
     if (popOpen() && $('#pop').classList.contains('labres')) labResPop(true);
     if (popOpen() && $('#pop').classList.contains('labacc')) labAccPop(true);
     if (popOpen() && $('#pop').classList.contains('labstill')) stillPop(true);
@@ -3934,6 +3945,18 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         ['bloop', 'Spare things from your board go in the Recycler — that makes Science.'],
         ['bloop', 'Spend it at the bench on Experiments (two things in, a treasure out), on Grow (one item, one step up), or on the shelf for Upgrades that last forever.']], () => { }), 400);
     }
+  }
+  /** the Lab in a few lines: what makes Science, and what each station does with it */
+  function labHelp() {
+    const row = (ic: string, emo: string, t: string, d: string) => `<div class="lhRow"><span class="lhIc">${ART.uiIcon(ic, emo)}</span><div><b>${t}</b><i>${d}</i></div></div>`;
+    pop('🔬 How the Lab works', `<div class="lhList">
+      ${row('lab_recycle', '♻️', 'Recycler', 'Spare items → 🧪 Science')}
+      ${row('lab_fuse', '⚗️', 'Fusion', 'Two items in, a rare one out')}
+      ${row('lab_time', '⏫', 'Time Boost', 'One item grows a step')}
+      ${row('lab_energy', '🔋', 'Condenser', 'Free ⚡ energy over time')}
+      ${row('lab_incubator', '🥚', 'Incubator', 'Hatch a pet helper')}
+      ${row('lab_upgrades', '🔬', 'Upgrades', 'Spend 🧪 on perks that last forever')}
+    </div>`, 'labhelp');
   }
   function labResPop(quiet = false) {
     const html = `<div class="labIntro">Recycle spare items on the board (tap one, then 🧪) to earn Science.</div>
@@ -4759,7 +4782,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   const firstCell = (fn: (c: any) => boolean) => () => { const b = B(); for (let i = 0; i < N; i++) if (b[i] && fn(b[i])) return i; return null; };
   const COACH: Coach[] = [
     { k: 'contract', at: '#orders .order.ready', say: '<b>Tap</b> to give it!', when: () => !!document.querySelector('#orders .order.ready'), on: 'deliver' },
-    { k: 'map', at: '#tabMap', say: 'Your <b>map</b>: upgrades, Album, Lab and games.', when: () => projDone('earth') >= 2 },
+    { k: 'map', at: '#tabMap', say: 'Your <b>camp</b>: the Lab, Album, games and the way to the Galaxy.', when: () => projDone('earth') >= 2 },
     { k: 'chapter', at: '#btnQuests', say: '<b>Tap to build</b> the chapter!', when: () => projReady(curProject()) },
     { k: 'chest', at: firstCell(c => !!c.id && isChest(c.id)), say: 'A <b>chest</b>! Tap it to open it.', when: () => B().some((c: any) => c && c.id && isChest(c.id)) },
     { k: 'wreck', at: firstCell(c => c.p === 'wreck'), say: 'Tap the <b>wreck</b> for rocket parts.', when: () => B().some((c: any) => c && c.p === 'wreck') },
@@ -4784,7 +4807,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       return typeof x.at === 'string' ? !!document.querySelector(x.at) : x.at() !== null;
     });
     if (!c) return;
-    coachOn = c.k; S.coach[c.k] = 1; coachT = Date.now() + 120000; save();
+    coachOn = c.k; S.coach[c.k] = 1; coachT = Date.now() + 300000; save();
     jit = { id: 'jit:' + c.k, who: 'player', say: c.say, on: c.on, at: typeof c.at === 'string' ? (() => c.at as string) : c.at };
     tutShow(); sfx.tap();
     // a tip never traps the player: tapping the dark area closes it, and it
@@ -4797,7 +4820,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     }, 700);
   }
   function jitEnd() {
-    jit = null; coachOn = null; coachT = Date.now() + 6000;
+    jit = null; coachOn = null; coachT = Math.max(coachT, Date.now() + 90000);   // a dismissed hint never makes room for the next one at once
     $('#tut').classList.remove('on');
     setTimeout(() => { if (!tutOn()) $('#tut').style.display = 'none'; }, 300);
     clearInterval(tutTimer); tutTimer = 0;
@@ -4829,15 +4852,16 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     { k: 'energyfree', who: 'pip', say: 'Out of energy? Energy comes back on its own — and the daily gift in the shop is free.', when: () => S.energy < 10 },
     { k: 'retire', who: 'grandma', say: 'Starters <b>retire</b> as the story moves on, and new ones arrive. Use them while they are here!', when: () => projDone() >= 6 },
   ];
-  let tipAt = 0, lastTip = '';
+  let tipAt = 0, lastTip = '', tipsShown = 0;
   function tipTick() {
     const now = Date.now();
-    if (!tipAt) { tipAt = now + 150000; return; }
+    if (!tipAt) { tipAt = now + 600000; return; }
+    if (tipsShown >= 3) return;                  // at most three rolling tips a session
     if (S.tipsOff || now < tipAt || !S.tut || tutOn() || jit || view !== 'board') return;
     if (popOpen() || $('#modal').classList.contains('open') || $('#talk').classList.contains('open') || now - lastAct < 4000) return;
     S.tipN = S.tipN || {};
     const pool = TIPS.filter(t => t.k !== lastTip && (S.tipN[t.k] || 0) < 2 && t.when());
-    tipAt = now + 210000 + Math.random() * 90000;
+    tipAt = now + 720000 + Math.random() * 360000; tipsShown++;
     if (!pool.length) return;
     const t = pool.sort((a, b) => (S.tipN[a.k] || 0) - (S.tipN[b.k] || 0))[0];
     S.tipN[t.k] = (S.tipN[t.k] || 0) + 1; lastTip = t.k; save();
@@ -6111,30 +6135,46 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     for (let i = 0; i < N && out.length < max; i++) if (b[i] && fn(b[i])) out.push(i);
     return out.length ? out : null;
   };
+  /** the two matching cells closest together, so the spotlight frames just them */
+  const nearPair = (fn: (c: any) => boolean) => {
+    const b = B(), hits: number[] = [];
+    for (let i = 0; i < N; i++) if (b[i] && fn(b[i])) hits.push(i);
+    if (hits.length < 2) return null;
+    const cols = board.cols || 6; let best: number[] = [hits[0], hits[1]], bd = 1e9;
+    for (let x = 0; x < hits.length; x++) for (let y = x + 1; y < hits.length; y++) {
+      const d = Math.abs(hits[x] % cols - hits[y] % cols) + Math.abs(((hits[x] / cols) | 0) - ((hits[y] / cols) | 0));
+      if (d < bd) { bd = d; best = [hits[x], hits[y]]; }
+    }
+    return best;
+  };
   /* Short and hands-on: every step but the last is something you DO. The
      rest of the game is introduced by coach() hints as each part opens. */
   const TUT: TutStep[] = [
-    { id: 'tap', who: 'pip', say: "Hi! Tap the <b>Meteor Heap</b>.", at: () => cellWith(c => c.p === 'tree'), on: 'spawn' },
-    { id: 'tap2', who: 'pip', say: "Once more!", at: () => cellWith(c => c.p === 'tree'), on: 'spawn' },
-    { id: 'merge', who: 'pip', say: "<b>Drag</b> one <b>Meteor Chip</b> onto the other.", at: () => cellsWith(c => c.id === 'twig'), on: 'merge' },
-    { id: 'energy', who: 'pip', say: "Taps cost <b>⚡ energy</b>. It refills by itself.", at: () => '#chipEnergy' },
+    // Zib says hello in the same breath as the first thing to do; the rest is the companion showing you how
     {
-      id: 'deliver', who: 'pip', say: "<b>Tap</b> to give it!",
+      id: 'tap', who: 'pip', say: "Hi, I'm <b>Zib</b>!<br><b>Tap</b> the Meteor Heap", at: () => cellWith(c => c.p === 'tree'), on: 'spawn', need: 2,
+      when: () => { const cp = curProject(); if (cp && cp.talk) S.talked[cp.id] = 1; return true; },
+    },
+    { id: 'merge', say: '<b>Drag</b> one onto the other', at: () => nearPair(c => c.id === 'twig'), on: 'merge' },
+    {
+      id: 'deliver', say: '<b>Tap</b> to deliver it!',
       at: () => '#orders .order.ready', on: 'deliver',
       when: () => S.orders.some((o: any) => o.needs.every((nd: any) => countItem(nd.id) >= nd.qty)),
     },
-    { id: 'coins', who: 'pip', say: "Customers pay <b>coins</b>.", at: () => '#chipCoins' },
-    { id: 'story', who: 'pip', say: "Your <b>chapter</b>. Tap it to see what it needs.", at: () => '#btnQuests' },
+    { id: 'story', say: 'Bring what the <b>chapter</b> needs,<br>then <b>Build</b>!', at: () => '#btnQuests' },
   ];
   /* a one-off spotlight the game raises when a feature first matters (see COACH) */
   let jit: TutStep | null = null;
   const curStep = (): TutStep | null => jit || (tutAt >= 0 && tutAt < TUT.length ? TUT[tutAt] : null);
 
-  let tutAt = -1, tutHave = 0, tutTimer: any = 0;
+  let tutAt = -1, tutHave = 0, tutTimer: any = 0, tutMissing = 0;
   const tutOn = () => (tutAt >= 0 && tutAt < TUT.length) || !!jit;
 
   function tutStart() {
     if (S.tut) return;
+    // the first contract asks for exactly what the guide teaches you to make: one Hot Meteor
+    const hot = nextOf('twig');
+    if (hot && S.orders[0] && !S.tallies?.deliver) { S.orders[0].needs = [{ id: hot as string, qty: 1 }]; renderOrders(); }
     tutAt = -1; tutNext();
   }
   function tutNext() {
@@ -6149,10 +6189,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     tutAt = -1;
     S.tut = 1; save();
     analytics.track('tutorial_end', { during: wasOn ? 1 : 0 });
-    coachT = Date.now() + 8000;          // a breather before the first just-in-time tip
+    coachT = Date.now() + 45000;         // a breather before the first just-in-time hint
+    S.coach.contract = 1;               // the guide just taught delivering
     // the daily calendar and the story beats queue up behind the intro rather
     // than popping a modal over the one button you were told to press
-    if (wasOn) setTimeout(() => chapterIntro(), 600);
     $('#tut').classList.remove('on');
     setTimeout(() => { if (!tutOn()) $('#tut').style.display = 'none'; }, 300);
     clearInterval(tutTimer); tutTimer = 0;
@@ -6186,7 +6226,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     host.style.display = '';
     void host.offsetWidth;
     host.classList.add('on');
-    $('#tFace').innerHTML = ART.char(st.who || 'pip');
+    $('#tFace').innerHTML = !st.who && ART.spriteUi('bot_idle') ? `<img src="${ART.spriteUi('bot_idle')}" alt="">` : ART.char(st.who || 'pip');
     if (ART.spriteUi('hand')) $('#tHand').innerHTML = `<img src="${ART.spriteUi('hand')}" alt="">`;
     $('#tSay').innerHTML = st.say;
     { const plain = String(st.say).replace(/<[^>]+>/g, ''); sfx.voice(st.who || 'pip', clamp(Math.round(plain.length / 26), 2, 4), /\?\s*$/.test(plain)); }
@@ -6210,7 +6250,11 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // a step that waits for an action on something that is not on screen would
     // lock the game behind the dark overlay: skip it instead
     const st = curStep();
+    if (r) tutMissing = 0;
+    // the board and the contracts redraw a moment after an action: give the target a second to appear
+    if (!r && st && st.on && st.at && !jit && (tutMissing = tutMissing || Date.now()) && Date.now() - tutMissing < 1500) return;
     if (!r && st && st.on && st.at) {
+      tutMissing = 0;
       if (jit) { jitEnd(); return; }
       if (view === 'board' && !$('#modal').classList.contains('open') && !$('#talk').classList.contains('open')) { setTimeout(tutNext, 0); return; }
     }
@@ -6234,6 +6278,15 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     hand.style.opacity = '1';
     hand.style.left = (x + w / 2) + 'px';
     hand.style.top = (y + h + 4) + 'px';
+    // a merge step shows the gesture itself: the hand drags from one twin to the other
+    const tg = st && st.at ? st.at() : null;
+    if (st && st.on === 'merge' && Array.isArray(tg) && tg.length >= 2) {
+      const cv = $('#board canvas').getBoundingClientRect(), ap = $('#app').getBoundingClientRect(), k = zk();
+      const a = board.center(tg[0]), c2 = board.center(tg[1]);
+      const ax = (cv.left - ap.left) / k + a.x, ay = (cv.top - ap.top) / k + a.y, bx2 = (cv.left - ap.left) / k + c2.x, by2 = (cv.top - ap.top) / k + c2.y;
+      hand.classList.add('drag'); hand.style.left = ax + 'px'; hand.style.top = ay + 'px';
+      hand.style.setProperty('--dx', (bx2 - ax) + 'px'); hand.style.setProperty('--dy', (by2 - ay) + 'px');
+    } else hand.classList.remove('drag');
     // put the bubble on whichever side has room
     // sit the bubble wherever there is more room, and never on top of the target
     const bub = $('#tBubble');
@@ -6251,7 +6304,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (jit) { if (st.on === ev) setTimeout(jitEnd, 300); return; }
     if (st.on !== ev) return;
     tutHave++;
-    if (tutHave >= (st.need || 1)) setTimeout(tutNext, 420);
+    if (tutHave < (st.need || 1)) { $('#tSay').innerHTML = '<b>Again!</b>'; return; }
+    setTimeout(tutNext, 420);
   }
 
   /* ================================================================ MODALS */
@@ -6702,7 +6756,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed, ecost,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
       fly: (w: string) => galaxyTap(w), view: (v: string) => setView(v),
-      curProject: () => curProject(), v9: { levelBanner, checkDaily, labStation, labBuildPop, rewardCard, achOff: () => { achAutoOff = true; }, xp: XP, shopUnlockHint, xpUnlockHint, setView, achPop, profilePop, heartPanel, albumPop, openPack, albumGive, shareCard, alb, storeProducer, startPlacing, paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
+      curProject: () => curProject(), v9: { levelBanner, checkDaily, labStation, labBuildPop, rewardCard, achOff: () => { achAutoOff = true; }, xp: XP, shopUnlockHint, xpUnlockHint, setView, achPop, profilePop, heartPanel, albumPop, openPack, albumGive, shareCard, alb, storeProducer, startPlacing, paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), coachNow: () => { coachT = 0; calmAt = 0; }, tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
     };
     setInterval(tick, 500);
     setInterval(() => { if (!document.hidden) S.playMs = (S.playMs || 0) + 5000; }, 5000);

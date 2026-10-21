@@ -1,5 +1,14 @@
 # Changelog
 
+- **v90 (0.90.0)**
+  - New first-run guide, hands-on and short: Zib says hi and asks you to tap the Meteor Heap (twice), the companion shows a hand dragging one Meteor Chip onto the other, then "Tap to deliver" on a contract that asks for exactly that Hot Meteor, then the chapter button. One line per step, a hologram bubble, a lighter dim.
+  - Fewer character popups: a chapter opens with a conversation only for a new face, every tenth chapter, a world finale or a big moment (Lab, meteor); the rest keep their lines behind the 💬. Chapter endings show the fanfare and a short note unless something new opens. Friendship level-ups are a toast with the gift.
+  - Fewer tips: rolling tips start after 10 minutes, come every 12 to 18 minutes and at most three a session; a dismissed hint waits at least 90 seconds before the next, a shown one 5 minutes.
+  - Bottom-right button is now Camp (rocket on its pad); the Galaxy is the button inside the camp.
+  - Lab: the ? button is back, with a six-line guide to the stations.
+  - Reward pods: the item sits centred in the glass dome.
+  - Readability pass, measured on every screen: outlined white words on every capsule button, light marks in dark sockets (album slots, fusion), daily-gift day labels, the energy number, wheel numbers, Mission Log chapter numbers, HUD level and badges, a soft white halo behind dark text on the glass.
+
 - **v89 (0.89.0)**
   - Contracts icon: the clipboard with ticks (instead of the small red scroll) in the bottom strip, chapter card and Mission Log.
   - Bottom strip chips: bigger icons, white bold numbers, green when done.
