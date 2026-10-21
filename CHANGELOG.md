@@ -1,5 +1,9 @@
 # Changelog
 
+- **v99 (0.99.0)**
+  - Contracts share the work between producers: the chain asked for least lately is picked most often, open contracts never ask for the same item (and avoid the same chain), and the pull toward retiring producers is gentler. In a test at chapter 10 with seven producers, asks spread evenly across all their chains.
+  - Every contract you could fill right now shows as ready, even when two want the same item; you choose which one gets it and the other updates at once.
+
 - **v98 (0.98.0)**
   - New background music for Sunny Meadow and Crater Camp (one calm track each, made into a seamless loop with a 4-second crossfade and levelled to sit under the sound effects). The old phrase sets and ambience for those two worlds are removed.
 

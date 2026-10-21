@@ -933,8 +933,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const claim: Record<string, number> = {};
     const held = (id: string) => Math.max(0, (stock[id] || 0) - (claim[id] || 0));
     S.orders.forEach(o => {
-      const ready = o.needs.every(nd => held(nd.id) >= nd.qty);
-      if (ready) o.needs.forEach(nd => { claim[nd.id] = (claim[nd.id] || 0) + nd.qty; });
+      // every card you could fill right now lights up; you pick which one gets the item,
+      // and the others update the moment it is gone
+      const ready = o.needs.every(nd => (stock[nd.id] || 0) >= nd.qty);
+      void held; void claim;
       const card = el('div', 'order' + ((o as any).vis ? ' visitor' : '') + (ready ? ' ready' : '') + (newIds && newIds.indexOf(o.id) >= 0 ? ' newin' : ''));
       card.dataset.oid = o.id;
       const ch = CHARS[o.char];
@@ -942,7 +944,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       card.innerHTML =
         `<div class="oFig">${ART.standing(o.char) || ART.figure(o.char)}</div>
          <div class="oNeeds">${o.needs.map(nd => {
-          const have = Math.min(ready ? nd.qty : held(nd.id), nd.qty);
+          const have = Math.min(stock[nd.id] || 0, nd.qty);
           return `<div class="oNeed${have >= nd.qty ? ' done' : ''}" data-need="${nd.id}">${ART.item(nd.id)}<b>${have}/${nd.qty}</b></div>`;
         }).join('')}</div>
          <div class="oPay"><span>${ART.icon('coin')}${o.coins}</span>${o.give ? `<span class="gift">${ART.item(o.give)}</span>` : ''}${o.nrg ? `<span>${ART.icon('energy')}${o.nrg}</span>` : ''}</div>
@@ -1177,8 +1179,11 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const theirs = open2.filter(c => (CHARS[char].likes || []).indexOf(c) >= 0);
     const chains = theirs.length ? theirs : open2;
     // a producer on its farewell tour gets asked for its higher steps, so its chain gets finished
-    const farewell = ((S.retireLater && S.retireLater[S.world]) || []).flatMap((k: string) => PRODS[k] ? PRODS[k].drops.map((d: string) => ITEMS[d].chain) : []).filter((c: string) => open.includes(c));
-    let chain = farewell.length && Math.random() < 0.4 ? rnd(farewell) : rnd(chains);
+    const farewell = ((S.retireLater && S.retireLater[S.world]) || []).flatMap((k: string) => PRODS[k] ? PRODS[k].drops.map((d: string) => ITEMS[d].chain) : []).filter((c: string) => open2.includes(c));
+    // the chain asked for least lately wins more often, so five producers share the work
+    S.askN = S.askN || {};
+    const fair = (list: string[]) => { const m = Math.min(...list.map(c => S.askN[c] || 0)); const low = list.filter(c => (S.askN[c] || 0) <= m + 1); return rnd(low); };
+    let chain = farewell.length && Math.random() < 0.2 ? rnd(farewell) : fair(chains);
     // now and then a customer wants something a step higher than usual
     const stretch = !early && (Math.random() < 0.18 || farewell.includes(chain)) ? 1 : 0;
     let pick = itemFrom(chain);
@@ -1197,10 +1202,11 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     for (let k = 0; k < extra; k++) {
       const left = pool.filter(c => c !== chain && !needs.some(nd => ITEMS[nd.id].chain === c));
       if (!left.length) break;
-      const other = rnd(left);
+      const other = fair(left);
       const p2 = itemFrom(other, Math.max(2, reach(other) - 1));
       if (p2 && !needs.some(nd => nd.id === p2)) needs.push({ id: p2, qty: 1 });
     }
+    needs.forEach(nd => { const c = ITEMS[nd.id].chain; S.askN[c] = (S.askN[c] || 0) + 1; });
     const asks = CHAINS[chain].asks;
     const said = S.orders.map(o => o.say);
     const fresh = (asks || []).filter(x => said.indexOf(x) < 0);
@@ -1240,6 +1246,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     while (S.orders.length < want && guard++ < 40) {
       const o = rollOrder();
       if (S.orders.some(x => x.char === o.char) && guard < 30) continue;
+      // never two open contracts for the same thing, and not the same chain as each other early on
+      const ids = new Set(S.orders.flatMap((x: any) => x.needs.map((nd: any) => nd.id)));
+      const chs = new Set(S.orders.flatMap((x: any) => x.needs.map((nd: any) => ITEMS[nd.id].chain)));
+      if (guard < 35 && o.needs.some((nd: any) => ids.has(nd.id) || (guard < 20 && chs.has(ITEMS[nd.id].chain)))) continue;
       S.orders.push(o);
     }
   }
