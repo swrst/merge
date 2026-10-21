@@ -504,3 +504,14 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.pickCell,
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .side .qChip.xp b{background:linear-gradient(180deg,#ffb257,#ff7a1f)!important;color:#fff!important;text-shadow:0 1px 0 #a4480f!important;font-size:9px!important;height:15px!important;line-height:15px!important;min-width:0!important;padding:0 5px!important;top:-5px!important;right:-5px!important;box-shadow:0 0 0 1.5px #fff!important}
 /* the numbers on contract cards a touch smaller */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #orders .order :is(.oNeed b,.oRew b,.oCoin b,.oNeeds b){font-size:10.5px!important}
+/* side chips: small numbers */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .side .qChip:is(.mile,.album) b{font-size:8.5px!important;letter-spacing:-.02em;line-height:1!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .side .qChip:is(.mile,.album) i{font-size:7.5px!important}
+
+/* ============================================================ Star Album: stickers you have are clear, missing ones are a soft outline */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .albSlot{border-image:none!important;border:1.5px dashed #c9dbb7!important;border-radius:9px!important;background:rgba(255,255,255,.45)!important;box-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .albSlot i{color:#a9bd98!important;text-shadow:none!important;font-size:12px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .albSlot.got{border:1.5px solid #9fd977!important;background:#fff!important;box-shadow:0 1px 4px rgba(20,60,10,.25)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .albSlot.got :is(img,svg,.art){width:100%!important;height:100%!important;opacity:1!important;filter:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .albSlot u{color:#e0a000!important;text-shadow:0 0 2px #fff,0 0 2px #fff!important;font-size:7px!important;bottom:-5px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .albSlot em{background:#ff7a1f!important;color:#fff!important;text-shadow:none!important}

@@ -1,5 +1,13 @@
 # Changelog
 
+- **v96 (0.96.0)**
+  - Star Freighter: its contract sheet shows the freighter and is called "Star Freighter" (no more Grub Brothers face).
+  - Side chips: smaller numbers on the contracts milestone and album chips; the Star Chart chip is gone from the main screen.
+  - The whole Starstone chain is green: Starstone Pile, Crystal Rock, Glow Geode, Star Gem, statue, obelisk and monument.
+  - Star Album: stickers you own sit on clear white cards; missing ones are a soft dashed outline. (Packs can give duplicates; doubles turn into dust.)
+  - Clean-up Bingo: a three-step picture guide at the top, and a pulsing TAP on every square you can hand in now.
+  - Expeditions: no more "Next visitor" placeholders; "Medals & Rewards" is now "Prizes & Medals" with two clear parts: the prize road (points to unlock each prize, ready ones glow) and the medals.
+
 - **v95 (0.95.0)**
   - Star Album: "Open all" opens every pack at once and shows one summary (new stickers, dust from doubles). Packs give one sticker fewer (basic 2, golden 3).
   - Producers only retire once every step of their chains is in your collection; until then they stay and leave by themselves the moment the chain is complete. (The buy-back shop section is gone.)

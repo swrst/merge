@@ -3815,3 +3815,18 @@ html body #app .optNote{margin:8px 0 2px;padding:9px 12px;border-radius:14px;bac
 /* galaxy comets: small, rare, a slow glide that fades in and out */
 html body .app .galComet{width:26px!important;height:27px!important;animation:galCometSoft 22s linear infinite!important;filter:drop-shadow(0 0 5px rgba(255,170,80,.7))}
 @keyframes galCometSoft{0%{transform:translate(0,0) scale(.7);opacity:0}3%{opacity:.9}14%{transform:translate(-340px,300px) scale(.9);opacity:.9}17%{transform:translate(-400px,352px) scale(.9);opacity:0}100%{transform:translate(-400px,352px);opacity:0}}
+.csFig .ufoFig{width:100%;height:100%;object-fit:contain}
+.bgHow{display:flex;align-items:center;justify-content:center;gap:4px;margin:0 0 8px}
+.bgHow span{display:flex;flex-direction:column;align-items:center;padding:4px 8px;border-radius:12px;background:#fff;border:1.5px solid #dfe8d4;min-width:62px}
+.bgHow span :is(img,svg,.uiIc){width:24px;height:24px}
+.bgHow b{font:800 11.5px Fredoka,sans-serif;color:#24331f}.bgHow i{font-style:normal;font-size:10px;color:#4d5f44}
+.bgHow em{font-style:normal;font-weight:800;color:#7aa64a}
+.bgCell{position:relative}
+.bgTap{position:absolute;left:50%;bottom:2px;transform:translateX(-50%);background:#ff8a2a;color:#fff;font:800 9px/1 Fredoka,sans-serif;padding:2px 6px;border-radius:99px;animation:bgTap 1s ease-in-out infinite}
+@keyframes bgTap{50%{transform:translateX(-50%) scale(1.12)}}
+#xpPanel .xpGoalT{font:800 13px Fredoka,sans-serif;color:#ffe9a8;margin:4px 2px 6px;text-align:left}
+#xpPanel .xpTrackList span.ready{box-shadow:0 0 0 2px #ffb84d,0 0 10px rgba(255,180,60,.7)}
+#xpPanel .xpTrackList span.got{opacity:.55}
+#xpPanel .xpMedal span{flex:none;width:34px;height:34px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#xpPanel .xpMedal span :is(img,.uiIc){width:34px!important;height:34px!important;object-fit:contain}
+#xpPanel .xpMedal{gap:8px}

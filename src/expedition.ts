@@ -257,7 +257,7 @@ export function createExpedition(ctx: XpCtx) {
       return `<div class="xpO${ok ? ' ok' : ''}"><span class="xpWho">${ART.char(o.who)}</span>
         <span class="xpWant">${pic(o.id)}</span><i>${info(o.id).name}</i>
         <button class="xpGive" data-give="${k}"${ok ? '' : ' disabled'}>${ok ? 'Give' : `<em>+${5 * info(o.id).t}</em> pts`}</button></div>`;
-    }).join('') + (x.wait || []).map((t: number) => `<div class="xpO wait"><span class="xpWant">${ART.uiIcon('empty_soon', ART.uiIcon('st_wait', '⏳'))}</span><i>Next visitor</i><b class="xpWaitT" data-t="${t}"></b></div>`).join('');
+    }).join('');   // an empty request slot simply stays empty until the next visitor walks in
     // only rebuild when something changed: a rebuild replays the cards' pop-in, which flashed on every tap
     if (h.dataset.h === html) return;
     h.dataset.h = html; h.innerHTML = html;
@@ -300,7 +300,7 @@ export function createExpedition(ctx: XpCtx) {
       <div class="xpOrd" id="xpOrd"></div>
       <div class="xpBoard"><div class="xpGrid" id="xpGrid"></div></div>
       <div class="xpSay" id="xpSay">Tap the <b>${e.producer.name}</b>, then drag two of a kind together.</div>
-      <div class="xpTabs"><button id="xpLog">${ART.uiIcon('sec_collection', '📖')}<span>Log</span></button><button id="xpGoals">${ART.uiIcon('ic_medals', '🏅')}<span>Medals <b>${Object.keys(x.ach).length}/4</b></span></button><button id="xpHelp">${ART.uiIcon('btn_info', 'ℹ️')}<span>How</span></button></div>`;
+      <div class="xpTabs"><button id="xpLog">${ART.uiIcon('sec_collection', '📖')}<span>Log</span></button><button id="xpGoals">${ART.uiIcon('ic_medals', '🏅')}<span>Prizes <b>${Object.keys(x.ach).length}/4</b></span></button><button id="xpHelp">${ART.uiIcon('btn_info', 'ℹ️')}<span>How</span></button></div>`;
     el.className = 'open';
     paintTop(); paintBoard(); bind();
     $('#xpClose').onclick = hide;
@@ -319,13 +319,18 @@ export function createExpedition(ctx: XpCtx) {
     if (kind === 'log') body = e.chains.map(c => `<div class="xpLogC"><b>${c.name}</b><div class="xpLogRow">${c.steps.map(([id, name]) =>
         `<span class="${x.disc[id] ? '' : 'unk'}">${pic(id)}<i>${x.disc[id] ? name : '???'}</i></span>`).join('')}</div></div>`).join('')
       + `<div class="xpNote">${allSteps().filter(s => x.disc[s.id]).length} / ${allSteps().length} discovered</div>`;
-    if (kind === 'goals') body = MEDALS().map(m => `<div class="xpMedal${x.ach[m.k] ? ' got' : ''}"><span>${ART.uiIcon(x.ach[m.k] ? 'medal_gold' : 'medal_silver', '🏅')}</span><div><b>${m.name}</b><i>${m.say}</i></div><em>${x.ach[m.k] ? '✓' : '+' + m.gems + ' ' + '💎'}</em></div>`).join('')
-      + `<div class="xpTrackList">${TRACK.map(([n, r], k) => `<span class="${k < x.got ? 'got' : ''}">${rwIcon(r)}<i>${n}</i></span>`).join('')}</div>`
-      + `<div class="xpNote">Medals from all expeditions: <b>${ctx.S.xpMedals || 0}</b></div>`;
+    if (kind === 'goals') {
+      // two simple parts: the prize road (points unlock each prize), then the four medals
+      const pts = x.pts || 0;
+      body = `<div class="xpGoalT">Prizes · earn points to unlock</div>
+        <div class="xpTrackList">${TRACK.map(([n, r], k) => `<span class="${k < x.got ? 'got' : pts >= n ? 'ready' : ''}">${rwIcon(r)}<i>${k < x.got ? '✓' : n + ' pts'}</i></span>`).join('')}</div>
+        <div class="xpGoalT">Medals · gems for big goals</div>`
+        + MEDALS().map(m => `<div class="xpMedal${x.ach[m.k] ? ' got' : ''}"><span>${ART.uiIcon(x.ach[m.k] ? 'medal_gold' : 'medal_silver', '🏅')}</span><div><b>${m.name}</b><i>${m.say}</i></div><em>${x.ach[m.k] ? '✓' : '+' + m.gems + ' ' + '💎'}</em></div>`).join('');
+    }
     if (kind === 'help') body = `<div class="xpHelpArt">${prodPic()}</div>
       <div class="xpIcons"><span>👆<b>Tap</b></span><span>🔀<b>Merge</b></span><span>📦<b>Fill requests</b></span><span>🏅<b>Win prizes</b></span></div>
       <div class="xpNote">Ends in <b>${dhm(left())}</b></div>`;
-    const title = kind === 'log' ? 'Expedition Log' : kind === 'goals' ? 'Medals & Rewards' : e.name;
+    const title = kind === 'log' ? 'Expedition Log' : kind === 'goals' ? 'Prizes & Medals' : e.name;
     p.innerHTML = `<div class="xpPBox"><div class="xpPT">${title}</div><button class="xpX" id="xpPClose">✕</button><div class="xpPB">${body}</div>
       <button class="big" id="xpPOk">${kind === 'help' ? "Let's go!" : 'Close'}</button></div>`;
     document.getElementById('xpScr')!.appendChild(p);

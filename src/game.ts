@@ -1069,7 +1069,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      the source is one tap away — closing the sheet points at it on the board. */
   function contractSheet(oid: string) {
     // the Star Freighter opens the same sheet as any customer
-    const o: any = oid === 'ship' && S.ship ? { id: 'ship', char: 'grubs', needs: S.ship.needs, coins: S.ship.coins, xp: S.ship.xp, say: 'Fill our hold before we lift off! One of us is in a hurry.' }
+    const o: any = oid === 'ship' && S.ship ? { id: 'ship', char: 'grubs', needs: S.ship.needs, coins: S.ship.coins, xp: S.ship.xp, say: 'Fill the hold before the timer runs out! Big pay and a booster.' }
       : S.orders.find(x => x.id === oid); if (!o) return;
     tutFire('chain');
     const inv = inventory(), ch = CHARS[o.char];
@@ -1084,7 +1084,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     };
     const rew = `<div class="csRew"><span>${ART.icon('coin')}<b>${o.coins}</b></span>
       ${o.give ? `<span title="Gift">${ART.item(o.give)}<b>gift</b></span>` : ''}${o.nrg ? `<span>${ART.icon('energy')}<b>${o.nrg}</b></span>` : ''}</div>`;
-    pop(ch.name, `<div class="csHead"><span class="csFig">${ART.figure(o.char)}</span><div class="csSay">“${o.say}”${rew}</div></div>
+    const isShip = o.id === 'ship', fig = isShip && ART.spriteUi('ufo_freighter') ? `<img class="ufoFig" src="${ART.spriteUi('ufo_freighter')}" alt="">` : ART.figure(o.char);
+    pop(isShip ? '🛸 Star Freighter' : ch.name, `<div class="csHead"><span class="csFig">${fig}</span><div class="csSay">“${o.say}”${rew}</div></div>
       ${o.needs.map(needRow).join('')}
       <div class="noteLine">Two of a kind merge into the next step. Close this and the things you need will light up on the board.</div>
       <button class="big" id="csOk">Got it</button>`, 'csheet', () => pointFor(o));
@@ -2423,7 +2424,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     giveBoost(rnd(['wand', 'bomb', 'rainbow']));
     S.ship = null; S.shipAt = Date.now() + CONFIG.ship.everyMs;
     sfx.big(); haptic('heavy'); confetti(); audio.duck(2, 0.2);
-    toast('🛸 Hold full! The Grub Brothers pay <b>+' + sh.coins + '</b> coins and a booster!');
+    toast('🛸 Hold full! The Star Freighter pays <b>+' + sh.coins + '</b> coins and a booster!');
     addWorldXp(sh.xp);
     prog('ship', 1);
     paintBoard(); renderOrders(); renderHUD(); renderTools(); save();
@@ -5000,9 +5001,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function bingoPop() {
     const bg = bingo();
     const lineDone = (l: number[]) => l.every(k => bg.done[k]);
-    pop('🧩 Clean-up Bingo', `<div class="bgGrid">${bg.cells.map((id: string, k: number) => {
+    pop('🧩 Clean-up Bingo', `<div class="bgHow"><span>${ART.uiIcon('ic_tick', '✅')}<b>Have it?</b><i>tap it</i></span><em>→</em><span>➖<b>3 in a row</b><i>any line</i></span><em>→</em><span>${ART.icon('coin')}<b>Reward</b></span></div><div class="bgGrid">${bg.cells.map((id: string, k: number) => {
         const have = !bg.done[k] && countItem(id) > 0;
-        return `<button class="bgCell${bg.done[k] ? ' done' : ''}${have ? ' have' : ''}" data-bg="${k}">${ART.item(id)}${bg.done[k] ? '<span class="bgTick">✓</span>' : ''}</button>`;
+        return `<button class="bgCell${bg.done[k] ? ' done' : ''}${have ? ' have' : ''}" data-bg="${k}">${ART.item(id)}${bg.done[k] ? '<span class="bgTick">✓</span>' : have ? '<span class="bgTap">TAP</span>' : ''}</button>`;
       }).join('')}</div>
       <div class="bgPay">Line: <b>${ART.icon('coin')}60 · ${ART.icon('energy')}10</b> &nbsp; Full card: <b>${ART.item('chest')} + 💎 5</b></div>
       <div class="noteLine">${LINES.filter(lineDone).length}/8 lines done</div>`, 'bingoPop');
@@ -5341,7 +5342,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (e) bits.push(`<button class="qChip ev" data-q="event">${ART.uiIcon('tok_' + e.theme.id, e.theme.icon)}<b>${S.ev.key === e.key ? S.ev.pts : 0}</b><i>${dhm(e.ends - Date.now())}</i></button>`);
     { const xc = XP.chip(); if (xc) bits.push(xc); }
     if (S.lvl >= SP().unlockLevel && spinsLeft()) bits.push(`<button class="qChip spin" data-q="spin">${ART.uiIcon('ic_spin', '🎡')}<b>${spinsLeft()}</b></button>`);
-    if (S.seen.scrap || pouch('scrap') || pouch('starcore')) bits.push(`<button class="qChip pouch" data-q="pouch">${ART.uiIcon('ic_pouch', ART.item('starcore'))}<b>${pouch('starcore')}</b><i>${pouch('scrap')} scrap</i></button>`);
+    if (false) bits.push(`<button class="qChip pouch" data-q="pouch">${ART.uiIcon('ic_pouch', ART.item('starcore'))}<b>${pouch('starcore')}</b><i>${pouch('scrap')} scrap</i></button>`);
     if (albumOpen()) bits.push(`<button class="qChip album${packsWaiting() ? ' ready' : ''}" data-q="album">${ART.uiIcon('album_book', ART.uiIcon('ic_album', '⭐'))}<b>${packsWaiting() ? '🎴' + packsWaiting() : albumCount() + '/' + albumTotal()}</b></button>`);
     if (stored().length) bits.push(`<button class="qChip store" data-q="store">${ART.uiIcon('ic_box', '📦')}<b>${stored().length}</b></button>`);
     if (petOn()) {

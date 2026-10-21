@@ -73,7 +73,7 @@ const tab = async (v) => {
   // there is no "board" button any more — the rail opens panels, the ✕ closes them
   if (v === 'board') {
     const x = page.locator('.screen.open .scClose');
-    if (await x.count()) await x.first().click({ force: true });
+    if (await x.count()) await x.first().click({ force: true, timeout: 3000 }).catch(() => {});
     await page.waitForTimeout(200);
     if (await page.locator('.screen.open').count()) await page.evaluate(() => window.__game.view('board'));
   } else {
