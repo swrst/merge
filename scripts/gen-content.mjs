@@ -15,6 +15,8 @@ import { ASKS, LIKES } from './content/contracts.mjs';
 import { PROJECTS } from './content/projects.mjs';
 import { MORE } from './content/projects-more.mjs';
 for (const [w, list] of Object.entries(MORE)) PROJECTS[w] = (PROJECTS[w] || []).concat(list);
+import { LUNA_MORE } from './content/projects-luna.mjs';
+PROJECTS.luna = PROJECTS.luna.concat(LUNA_MORE);
 
 const OUT = join(dirname(fileURLToPath(import.meta.url)), '..', 'src', 'content');
 

@@ -3803,3 +3803,15 @@ html body #app .optNote{margin:8px 0 2px;padding:9px 12px;border-radius:14px;bac
 #skFx .fxLit,#skFx .fxPerk{animation:fxRise .7s cubic-bezier(.25,.8,.3,1) forwards!important}
 @keyframes fxRise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 #skFx.out .fxSky,#skFx.out .fxRays,#skFx.out .fxName,#skFx.out .fxLit,#skFx.out .fxPerk{transition:opacity .9s ease!important}
+.pkSum{text-align:center}
+.pkSumN b{display:block;font:800 34px/1 Fredoka,sans-serif;color:#e2780f}
+.pkSumN i{font-style:normal;font-weight:700;font-size:13px}
+.pkSumGrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:10px 0;max-height:45vh;overflow:auto}
+.pkSumIt{position:relative;display:flex;flex-direction:column;align-items:center;padding:4px;border-radius:12px;background:#fff;border:1.5px solid #dfe8d4}
+.pkSumIt .stk :is(img,svg){width:40px;height:40px}
+.pkSumIt em{font-style:normal;font-size:9px;color:#d89a00}
+.pkSumIt.s4,.pkSumIt.s5{border-color:#ffc04d;box-shadow:0 0 8px rgba(255,190,60,.6)}
+.pkSumDust{font-weight:700;font-size:13px;margin-top:4px}
+/* galaxy comets: small, rare, a slow glide that fades in and out */
+html body .app .galComet{width:26px!important;height:27px!important;animation:galCometSoft 22s linear infinite!important;filter:drop-shadow(0 0 5px rgba(255,170,80,.7))}
+@keyframes galCometSoft{0%{transform:translate(0,0) scale(.7);opacity:0}3%{opacity:.9}14%{transform:translate(-340px,300px) scale(.9);opacity:.9}17%{transform:translate(-400px,352px) scale(.9);opacity:0}100%{transform:translate(-400px,352px);opacity:0}}

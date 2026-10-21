@@ -500,3 +500,7 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.pickCell,
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .lxSp b{position:absolute;top:3px;left:3px}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .lxIt .lxQ{color:#6f8a5e!important;text-shadow:none!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.pickCell,.lxSp,.lxIt) :is(img,svg){opacity:1!important;filter:none!important}
+/* expedition badge: small orange pill with white text */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .side .qChip.xp b{background:linear-gradient(180deg,#ffb257,#ff7a1f)!important;color:#fff!important;text-shadow:0 1px 0 #a4480f!important;font-size:9px!important;height:15px!important;line-height:15px!important;min-width:0!important;padding:0 5px!important;top:-5px!important;right:-5px!important;box-shadow:0 0 0 1.5px #fff!important}
+/* the numbers on contract cards a touch smaller */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #orders .order :is(.oNeed b,.oRew b,.oCoin b,.oNeeds b){font-size:10.5px!important}

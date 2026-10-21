@@ -1,5 +1,14 @@
 # Changelog
 
+- **v95 (0.95.0)**
+  - Star Album: "Open all" opens every pack at once and shows one summary (new stickers, dust from doubles). Packs give one sticker fewer (basic 2, golden 3).
+  - Producers only retire once every step of their chains is in your collection; until then they stay and leave by themselves the moment the chain is complete. (The buy-back shop section is gone.)
+  - Crater Camp has 100 chapters (was 30): chapters 31–100 bring the retired Moon producers back one at a time, asks climb slowly from step 3 to step 6. The next planet opens when Crater Camp is restored.
+  - Contracts ask for a little more: tier-3 asks sometimes want two, a second item comes a bit more often, and the reach goes one step higher after chapter 10 and grows a little faster with world level.
+  - Expedition badge: small orange pill with white text. Contract numbers slightly smaller.
+  - Galaxy comets: smaller, rarer, a slow fading glide.
+  - New store screenshots in resources/store/screenshots.
+
 - **v94 (0.94.0)**
   - Fix: tapping an item no longer hides it (the selection frame was drawn on top of it; it sits under the item now).
   - Lab unlock: the chapter card shows the Lab with its price and a "Go to the Lab" button that takes you to its build sheet.

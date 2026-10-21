@@ -20,7 +20,7 @@ const page = await browser.newPage({ viewport: { width: 440, height: 900 } });
 // the sandbox has no route to fonts.googleapis.com; that is not a game bug
 const IGNORE = /ERR_TUNNEL_CONNECTION_FAILED|fonts\.googleapis|ERR_NAME_NOT_RESOLVED/;
 page.on('console', m => { if (m.type() === 'error' && !IGNORE.test(m.text())) errors.push(m.text()); });
-page.on('pageerror', e => errors.push('pageerror: ' + e.message));
+page.on('pageerror', e => errors.push('pageerror: ' + e.message + ' @ ' + (e.stack || '').split('\n').slice(1, 4).join(' | ')));
 await page.goto(URL, { waitUntil: 'domcontentloaded', timeout: 90000 });
 // boot rasterises every item (500+) before the first frame; software GL needs the headroom
 await page.waitForFunction(() => window.__game && window.__board, null, { timeout: 90000 });
@@ -113,7 +113,7 @@ const pop = async (k, title) => {
 const travel = async (world) => {
   await closeModal();
   // new worlds open once the one before has its launch pad restored
-  await set(() => { const st = window.__game.state(); st.fuel = 9; st.proj = { earth: 100, luna: 30, cindra: 30, nerith: 30, vela: 30 }; });
+  await set(() => { const st = window.__game.state(); st.fuel = 9; st.proj = { earth: 100, luna: 100, cindra: 30, nerith: 30, vela: 30 }; });
   await closeModal();
   await tab('map');
   // the galaxy is a sub-view of the World tab, and it remembers which view it
@@ -732,7 +732,7 @@ await set(() => {
   const g = window.__game, s = g.state(), b = g.cells();
   s.stars = {};
   let n = 0;
-  for (let i = 0; i < b.length && n < 6; i++) if (!b[i]) { b[i] = { id: 'starcore' }; n++; }
+  for (let i = 0; i < b.length && n < 10; i++) if (!b[i]) { b[i] = { id: 'starcore' }; n++; }
   window.__board.sync(b);
 });
 await closeModal(); await tab('board');
@@ -1152,6 +1152,8 @@ await set((rot) => {
   const fr = []; for (let i = 0; i < b.length; i++) if (!b[i]) fr.push(i);
   let n = 0;
   rot.retire.forEach(k => { b[fr[n++]] = { p: k, lv: 4 }; });
+  // a producer leaves once its chains are complete: mark them all found
+  rot.retire.forEach(k => g.prods[k].drops.forEach(d => g.chains[g.items[d].chain].items.forEach(id => { s.seen[id] = 1; })));
   const leftover = g.prods[rot.retire[0]].drops[0]; b[fr[n++]] = { id: leftover }; window.__left = leftover;
   rot.needs.forEach(([id, q]) => { for (let j = 0; j < q; j++) b[fr[n++]] = { id }; });
   window.__board.sync(b);

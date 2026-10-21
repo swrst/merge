@@ -875,7 +875,13 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (S.tut) explainFirst(id);
     // a first-ever find is a little present waiting in the Album
     if (!S.seen[id] && ITEMS[id].tier >= 2 && !ITEMS[id].part) { (S.disc = S.disc || []).push(id); }
+    const fresh = !S.seen[id];
     S.seen[id] = 1; S.made[id] = (S.made[id] || 0) + 1;
+    // a producer that was due to retire leaves once its chain is complete
+    if (fresh && S.retireLater && (S.retireLater[S.world] || []).length) {
+      const due = S.retireLater[S.world].filter((k: string) => prodChainsDone(k));
+      if (due.length) setTimeout(() => retireProducers(due), 1500);
+    }
   }
   /** drop an item onto the board near `from`; returns the cell or -1 if the board is full */
   function giveItem(id: string, from?: number) {
@@ -1017,7 +1023,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       + `<div class="recList">${recs.map(r => `<span class="recRow">${ART.item(r.inputs[0])}<b>+</b>${ART.item(r.inputs[1])}<b>→</b>${ART.item(r.result)}</span>`).join('')}</div>`
       + (labOpen() ? '' : `<i>The Lab opens after Meadow chapter 5.</i>`)
       : d.chain === 'bloom' ? `Bloom Essence comes from finishing a merge chain for the first time.`
-        : src ? `Start with <b>${ITEMS[ch.items[0]].name}</b> from the <b>${PRODS[src.k].name}</b>${src.on ? ' on your board' : (S.retired && (S.retired[S.world] || []).includes(src.k)) ? ' — buy it back in the <b>Star Bazaar</b>' : ' — you do not have one here yet'}, then merge two of each into the next.`
+        : src ? `Start with <b>${ITEMS[ch.items[0]].name}</b> from the <b>${PRODS[src.k].name}</b>${src.on ? ' on your board' : ' — you do not have one here yet'}, then merge two of each into the next.`
           : `Merge two of the one before it. ${ITEMS[ch.items[0]].name} is the bottom of this chain.`;
     // what it is for: who wants it right now, and what it can be spent on
     const uses: string[] = [];
@@ -1143,7 +1149,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // one step up every four levels: a tier-7 ask at level 8 was an hour of waiting
     // a producer you have upgraded all the way earns harder (better-paid) asks from its chains
     // the first fifteen Meadow chapters never ask past step 3: you are still learning the chains
-    const reach = (ck: string) => clamp(Math.min((early ? 2 : 3) + Math.floor((wl - 1) / 7) + ((plvOf[ck] || 0) >= PMAX ? 1 : 0), pd < 15 ? (early ? 2 : 3) : 99), 2,
+    const reach = (ck: string) => clamp(Math.min((early ? 2 : 3) + Math.floor((wl - 1) / 6) + ((plvOf[ck] || 0) >= PMAX ? 1 : 0), pd < 10 ? (early ? 2 : 3) : pd < 20 ? 4 : 99), 2,
       Math.max(2, CHAINS[ck].items.length - 1));
     const itemFrom = (ck: string, cap?: number) => {
       const top = Math.min(reach(ck), cap ?? 99), lo = early ? 1 : Math.max(2, top - 1);
@@ -1175,10 +1181,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // those get used up elsewhere, and a contract for one could wait forever.
     if (S.seen.relic1 && Math.random() < 0.08) { pick = 'relic1'; chain = 'relic'; }
     const d = ITEMS[pick];
-    const needs = [{ id: pick, qty: d.tier >= 3 ? 1 : 2 }];
+    const needs = [{ id: pick, qty: d.tier >= 4 ? 1 : d.tier === 3 ? (Math.random() < 0.35 ? 2 : 1) : 2 }];
     // more things from other chains the same person cares about (or any awake one)
     const pool = chains.length > 1 ? chains : open2;
-    const extra = early ? 0 : pd < 15 ? (Math.random() < 0.2 ? 1 : 0) : (Math.random() < Math.min(0.5, 0.2 + S.lvl * 0.02) ? 1 : 0)
+    const extra = early ? 0 : pd < 15 ? (Math.random() < 0.35 ? 1 : 0) : (Math.random() < Math.min(0.6, 0.3 + S.lvl * 0.02) ? 1 : 0)
       + (S.lvl >= 14 && Math.random() < 0.15 ? 1 : 0);
     for (let k = 0; k < extra; k++) {
       const left = pool.filter(c => c !== chain && !needs.some(nd => ITEMS[nd.id].chain === c));
@@ -1895,7 +1901,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   let shopTab = 'deals';
   /** the daily gift picture: the supply chest with its energy bonus pinned on, same on both gift cards */
   const giftArt = () => `<span class="giftArt">${ART.spriteUi('chest_closed') ? ART.uiIcon('chest_closed', '') : ART.item('chest')}<span class="giftNrg">${ART.icon('energy')}+${CFG.shop2.freeGiftEnergy}</span></span>`;
-  const oldPrice = (k: string) => 250 + 50 * Math.max(0, PRODS[k].drops.length - 1);
   function renderShop() {
     const host = $('#shopBody'); if (!host) return;
     $('#shopCoins').textContent = S.coins;
@@ -1930,13 +1935,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         `${CFG.chest[id].items} things from this world${CFG.chest[id].coins ? ' + ' + CFG.chest[id].coins + ' coins' : ''}`,
         `<button class="buyBtn gem" data-chestbuy="${id}" ${S.gems < CFG.shop2.chestGems[id] ? 'disabled' : ''}>${ART.icon('gem')}${CFG.shop2.chestGems[id]}</button>`)).join('')
       + `</div><div class="noteLine">Two Supply Chests merge into a Treasure Chest.</div></div>`;
-
-    // retired producers come back here, so every chain stays completable
-    const olds = (S.retired && S.retired[S.world] || []).filter((k: string) => PRODS[k] && !B().some((c: any) => c && c.p === k) && !stored().some((x: any) => x.p === k));
-    if (olds.length) html += `<div class="sSec" id="sh-old"><div class="sSecT">${ART.uiIcon('sec_build', '🏗️')} Old producers</div><div class="shopGrid">`
-      + olds.map((k: string) => card(ART.producer(PRODS[k].art), PRODS[k].name, 'Back on your board, to finish its chain',
-        `<button class="buyBtn" data-oldp="${k}" ${S.coins < oldPrice(k) ? 'disabled' : ''}>${coin}${oldPrice(k)}</button>`)).join('')
-      + `</div></div>`;
 
     html += `<div class="sSec" id="sh-boost"><div class="sSecT">${ART.uiIcon('sec_boost', '✨')} Boosters</div><div class="shopGrid">`
       + SHOP.boosters.map(bo => card(ART.icon(bo.icon) + (boostN(bo.id) ? `<span class="stock">x${boostN(bo.id)}</span>` : ''), bo.name, bo.desc,
@@ -1984,13 +1982,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       const sec = $('#sh-' + shopTab); if (sec) host.scrollTo({ top: sec.offsetTop - 50, behavior: 'smooth' });
     });
     host.querySelectorAll('[data-gift]').forEach((b: any) => b.onclick = claimGift);
-    host.querySelectorAll('[data-oldp]').forEach((b: any) => b.onclick = () => {
-      const k = b.dataset.oldp, pr = oldPrice(k);
-      if (S.coins < pr) { sfx.no(); return; }
-      if (!freeCells().length) { sfx.no(); toast('Make room on the board first.'); return; }
-      spend(pr); S.retired[S.world] = S.retired[S.world].filter((x: string) => x !== k);
-      setView('board'); setTimeout(() => plantProducer(k, true), 300); toast(`🌱 <b>${PRODS[k].name}</b> is back on your board!`); save();
-    });
     host.querySelectorAll('[data-giftad]').forEach((b: any) => b.onclick = () => watchAd('gift', () => { S.giftAd2 = today(); save(); renderShop();
       rewardCard('blorb', 'Double delivery!', '<b>Postie Blorb:</b> "Another one? Fine. Sign again. Different leg."',
         { item: 'chest', energy: CFG.shop2.freeGiftEnergy }, () => renderShop()); }));
@@ -2858,7 +2849,16 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
   /** the story is done with these: they leave the board (and storage) with a
    *  thank-you, and nobody asks for their things any more */
-  function retireProducers(keys: string[]) {
+  /** a producer only leaves once every step of its chains is in your collection */
+  const prodChainsDone = (k: string) => PRODS[k].drops.every((d: string) => CHAINS[ITEMS[d].chain].items.every(id => S.seen[id]));
+  function retireProducers(keysIn: string[], quiet = false) {
+    S.retireLater = S.retireLater || {};
+    const later = new Set<string>(S.retireLater[S.world] || []);
+    const keys = keysIn.filter(k => PRODS[k] && prodChainsDone(k));
+    keysIn.filter(k => PRODS[k] && !prodChainsDone(k)).forEach(k => later.add(k));
+    keys.forEach(k => later.delete(k));
+    S.retireLater[S.world] = [...later];
+    if (!keys.length) { save(); return; }
     const b = B(); let coins = 0; const names: string[] = [];
     for (let i = 0; i < N; i++) {
       const c = b[i];
@@ -4487,7 +4487,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     analytics.track('album_pack', { kind });
     const a = alb(); if (!a.packs[kind]) return;
     a.packs[kind]--;
-    const n = kind === 'gold' ? 4 : 3;
+    const n = kind === 'gold' ? 3 : 2;
     const got = Array.from({ length: n }, (_, k) => rollSticker(kind === 'gold' && k === 0 ? 3 : 1));
     const res = got.map(id => { const isNew = !a.have[id]; a.have[id] = (a.have[id] || 0) + 1; const d = isNew ? 0 : DUST[stickerStars(id)]; a.dust += d; return { id, isNew, d }; });
     stat('stickers', n); save();
@@ -4498,6 +4498,30 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     sfx.whoosh(); res.forEach((r, k) => setTimeout(() => { (r.isNew ? sfx.discover : sfx.pop)(); }, 450 + k * 350));
     ($('#pkGo') as HTMLElement).onclick = () => { if (packsWaiting()) openPack(a.packs.gold ? 'gold' : 'basic'); else albumPop(); };
     setTimeout(albumCheck, 400 + n * 350);
+  }
+  /** every pack at once, then one summary: what is new, and the dust from doubles */
+  function openAllPacks() {
+    const a = alb(); let packs = 0, dust = 0, total = 0; const fresh: string[] = [];
+    (['gold', 'basic'] as const).forEach(kind => {
+      while (a.packs[kind] > 0) {
+        a.packs[kind]--; packs++;
+        const n = kind === 'gold' ? 3 : 2;
+        for (let k = 0; k < n; k++) {
+          const id = rollSticker(kind === 'gold' && k === 0 ? 3 : 1); total++;
+          if (!a.have[id]) fresh.push(id); else { const d = DUST[stickerStars(id)]; a.dust += d; dust += d; }
+          a.have[id] = (a.have[id] || 0) + 1;
+        }
+      }
+    });
+    stat('stickers', total); analytics.track('album_pack', { kind: 'all', n: packs }); save();
+    sfx.discover(); confetti();
+    pop(`${ART.uiIcon('pack_basic', '🎴')} ${packs} packs opened`, `<div class="pkSum">
+        <div class="pkSumN"><b>${fresh.length}</b><i>new sticker${fresh.length === 1 ? '' : 's'}</i></div>
+        <div class="pkSumGrid">${fresh.map(id => `<span class="pkSumIt s${stickerStars(id)}">${stickerHtml(id)}<em>${'★'.repeat(stickerStars(id))}</em></span>`).join('') || '<i class="noteLine">No new ones this time.</i>'}</div>
+        ${dust ? `<div class="pkSumDust">${ART.uiIcon('star_dust', '✨')} +${dust} dust from doubles</div>` : ''}</div>
+      <button class="big" id="pkGo">To the album</button>`, 'fun album');
+    ($('#pkGo') as HTMLElement).onclick = () => albumPop();
+    setTimeout(albumCheck, 500);
   }
   const stickerHtml = (id: string) => `<span class="stk">${ART.item(id)}</span>`;
   const setReward = (k: number): Reward => ({ coins: 150 + k * 60, gems: 4 + k, energy: 15 });
@@ -4530,6 +4554,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       <div class="albPacks">
         <button class="buyBtn" id="pkBasic" ${a.packs.basic ? '' : 'disabled'}>${ART.uiIcon('pack_basic', '🎴')} Open pack${a.packs.basic ? ' ×' + a.packs.basic : ''}</button>
         <button class="buyBtn gold" id="pkGold" ${a.packs.gold ? '' : 'disabled'}>${ART.uiIcon('pack_gold', '🌟')} Golden${a.packs.gold ? ' ×' + a.packs.gold : ''}</button>
+        ${(a.packs.basic || 0) + (a.packs.gold || 0) > 1 ? `<button class="buyBtn green" id="pkAll">Open all ×${(a.packs.basic || 0) + (a.packs.gold || 0)}</button>` : ''}
         <span class="albDust">${ART.uiIcon('star_dust', '✨')} <b>${a.dust}</b> dust</span></div>
       <div class="albSets">${sets.map((s, k) => {
         const n = s.ids.filter(id => a.have[id]).length, done = !!a.sets[s.key];
@@ -4541,6 +4566,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       <button class="big soft" id="albShare">📤 Share my album</button>`, 'fun album');
     const b1 = $('#pkBasic'); if (b1) b1.onclick = () => openPack('basic');
     const b2 = $('#pkGold'); if (b2) b2.onclick = () => openPack('gold');
+    const b3 = $('#pkAll'); if (b3) b3.onclick = () => openAllPacks();
     document.querySelectorAll<HTMLElement>('[data-dust]').forEach(b => b.onclick = () => {
       const d = DUST_SHOP.find(x => x.id === b.dataset.dust)!; if (a.dust < d.cost) return;
       if (d.id === 'pick') { pickSticker(); return; }
@@ -5901,7 +5927,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       <div class="galScroll" id="galScroll"><div class="galPath" style="height:${H}px">
         <svg class="galSvg" viewBox="0 0 100 ${H}" preserveAspectRatio="none" style="height:${H}px">
           <path d="${path}" class="galRoute"/><path d="${lit}" class="galRoute lit"/></svg>
-        ${ART.spriteUi('meteor') ? [0, 1, 2].map(k => `<img class="galComet" src="${ART.spriteUi('meteor')}" alt="" style="top:${40 + k * Math.round(H / 3)}px;animation-delay:${k * 4.3 + 1}s">`).join('') : ''}
+        ${ART.spriteUi('meteor') ? [0, 1, 2].map(k => `<img class="galComet" src="${ART.spriteUi('meteor')}" alt="" style="top:${40 + k * Math.round(H / 3)}px;animation-delay:${k * 7 + 2}s">`).join('') : ''}
         ${nodes}</div></div>
       <div class="galFoot">A new world costs <b>${CONFIG.rocket.fuelToLaunch} ⛽</b> · flying back is always free</div></div>`;
   }
