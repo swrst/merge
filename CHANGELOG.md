@@ -1,5 +1,13 @@
 # Changelog
 
+- **v102 (1.0.2)**
+  - Pet: happy face when it fetches; chip moved to the right column; simpler popup with clear blue XP and orange Food bars; Play and Feed are greyed out when not available.
+  - Board: items the current chapter needs glow green; the Ch. button shows its needs in a strip beside it.
+  - Chapter progress moved from the Mission Log into the chapter popup.
+  - Star Bazaar redesigned: hero strip with wallet, pill tabs, colour-coded product cards, shorter text.
+  - Collection redesigned: progress hero, glowing sticker-pack button, cleaner tiles; the pack count refreshes after opening.
+  - Lab popups are blue; Star Chart popups are violet with a night-sky window.
+
 - **v101 (1.0.1)**
   - Star Bazaar redrawn with the new store sheets: a hologram market stall sign at the top, glowing section plates, and painted pictures for every pack (gem piles, gem chest, coin stack, coin sack, coin vault, energy crate, starter gift, no-ads badge).
   - One look only: the classic UI and its Settings switch are gone; the old text-colour pass (holofix) is removed.

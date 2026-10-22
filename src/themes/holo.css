@@ -572,11 +572,16 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #orders .o
   border:3px solid #ffc531!important;border-radius:16px!important;box-shadow:0 0 0 1.5px #fff6c8,0 0 16px rgba(255,190,40,.9),inset 0 0 10px rgba(255,230,140,.6)!important;animation:goldGlow 1.4s ease-in-out infinite!important}
 @keyframes goldGlow{0%,100%{box-shadow:0 0 0 1.5px #fff6c8,0 0 10px rgba(255,190,40,.7)}50%{box-shadow:0 0 0 1.5px #fff6c8,0 0 20px rgba(255,200,50,1)}}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #orders .order.ready :is(.oCard,.oNeeds){border:2px solid #f0b41e!important;background:linear-gradient(180deg,#fffdf0,#fff3c6)!important;box-shadow:0 0 6px rgba(255,200,60,.6)!important}
-/* the chapter button lists what it still needs */
-.cwNeeds{display:flex;justify-content:center;gap:1px;margin:1px 0 2px;flex-wrap:wrap}
-.cwNeeds i{position:relative;width:16px;height:16px;display:block;opacity:.95}
-.cwNeeds i :is(img,svg,.art,.uiIc){width:16px!important;height:16px!important}
-.cwNeeds i.ok:after{content:"✓";position:absolute;right:-3px;bottom:-3px;font:800 8px/10px Fredoka,sans-serif;width:10px;height:10px;border-radius:50%;background:#3fae2a;color:#fff;text-align:center}
+/* the chapter button lists what it still needs, in a strip to its right */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .side .sideW.chapW{overflow:visible!important;position:relative}
+.cwNeeds{position:absolute;left:calc(100% + 6px);top:50%;transform:translateY(-50%);display:flex;gap:4px;padding:4px 6px;border-radius:14px;z-index:5;
+  background:rgba(255,255,255,.92);border:1.5px solid #d3ddcc;box-shadow:0 2px 6px rgba(20,40,20,.22);pointer-events:none;white-space:nowrap}
+.cwNeeds i{position:relative;width:34px;display:flex;flex-direction:column;align-items:center;font-style:normal}
+.cwNeeds i :is(img,svg,.art,.uiIc){width:28px!important;height:28px!important}
+.cwNeeds i em{font:800 9.5px/1.1 Fredoka,sans-serif;font-style:normal;color:#24331f!important;text-shadow:none!important}
+.cwNeeds i.ok em{color:#2d7a14!important}
+.cwNeeds i.ok:after{content:"✓";position:absolute;right:0;top:-2px;font:800 8px/11px Fredoka,sans-serif;width:11px;height:11px;border-radius:50%;background:#3fae2a;color:#fff;text-align:center}
+#btnQuests.ready .cwNeeds{display:none}
 
 /* ============================================================ the Star Bazaar: painted stall sign, section plates, product art */
 #sc-shop .shopSign{width:min(60%,210px);aspect-ratio:357/360;margin:-8px auto -30px;background:url(../sprites/ui/sp_sign.webp) center/contain no-repeat;position:relative;z-index:1;pointer-events:none}
@@ -585,3 +590,182 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-shop .
   min-height:44px;display:flex!important;align-items:center;justify-content:center;gap:6px;padding:6px 40px 14px!important;margin:12px auto 8px!important;width:fit-content;max-width:94%;font:400 16px/1 "Lilita One",Fredoka,sans-serif!important;color:#0f4b55!important;text-shadow:0 1px 0 #fff!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-shop .sCArt{height:84px!important;display:flex;align-items:center;justify-content:center}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-shop .sCArt :is(img,svg,.uiIc){max-width:92px!important;max-height:84px!important;width:auto!important;height:auto!important;object-fit:contain;filter:drop-shadow(0 4px 4px rgba(0,0,0,.25))}
+#petChip{margin-top:8px;display:flex;justify-content:center}
+#petChip .qChip.pup{position:relative;width:44px;height:44px;padding:0!important;border-radius:14px!important;display:flex!important;align-items:center;justify-content:center;
+  background:linear-gradient(180deg,#fff,#eef4ec)!important;border:1.5px solid #d3ddcc!important;box-shadow:0 2px 6px rgba(20,40,20,.22)!important}
+#petChip .qChip.pup .pupImg{width:38px;height:38px;object-fit:contain}
+#petChip .qChip.pup b{position:absolute;top:-6px;right:-6px;font-size:11px;background:#fff;border-radius:99px;padding:0 3px;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+#petChip .qChip.pup i{position:absolute;bottom:-12px;left:50%;transform:translateX(-50%);font:800 8.5px/1.3 Fredoka,sans-serif;font-style:normal;background:#fff;color:#24331f;border-radius:99px;padding:0 4px;white-space:nowrap;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+#petChip .qChip.pup.ready{animation:hTick 1.2s ease-in-out infinite;border-color:#ffb257!important;box-shadow:0 0 10px rgba(255,170,60,.7)!important}
+
+/* ============================================================ Collection: chain cards */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .aGrid{gap:10px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .aTile{border-image:none!important;border:3px solid #fff!important;border-radius:16px!important;padding:6px 6px 8px!important;
+  background:linear-gradient(180deg,#ffffff,#f2f6ff)!important;box-shadow:0 3px 8px rgba(20,30,60,.22)!important;display:flex!important;flex-direction:column;align-items:center;gap:4px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .aTile .aArt{width:100%;aspect-ratio:1.25;border-radius:11px;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 42%,#d5f2ff,#79bde8)}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .aTile .aArt :is(svg,img){width:70%!important;height:70%!important;filter:drop-shadow(0 3px 3px rgba(0,0,0,.3))}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .aTile .aArt.unk{background:repeating-linear-gradient(45deg,#c9d0e6 0 6px,#d6dcef 6px 12px)!important;font:400 28px/1 "Lilita One",sans-serif;color:#fff}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .aTile b{font:800 11.5px/1.15 Fredoka,sans-serif!important;color:#24331f!important;text-align:center}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .aTile .aBar{position:relative;width:92%;height:14px;border-radius:99px;background:#e3e8f2;overflow:hidden;display:block}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .aTile .aBar u{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#6fd0ff,#4a9ee8);border-radius:99px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .aTile .aBar em{position:relative;display:block;text-align:center;font:800 9.5px/14px Fredoka,sans-serif;font-style:normal;color:#fff!important;text-shadow:0 1px 1px rgba(0,0,0,.45)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .aTile.done .aArt{background:radial-gradient(circle at 50% 42%,#fff4b8,#f2b120)}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .aTile.done .aBar u{background:linear-gradient(90deg,#ffd23f,#f2a20e)}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .aTile.locked{background:linear-gradient(180deg,#eef1f8,#dfe4f0)!important;border-color:#f4f6fb!important;box-shadow:inset 0 0 0 1px rgba(0,0,0,.05)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .aTile.locked i{font:700 10.5px Fredoka,sans-serif;font-style:normal;color:#6f7896!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .aTile.claim{border-color:#ffb257!important;box-shadow:0 0 0 2px #fff3d6,0 0 14px rgba(255,160,50,.75)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .aTile .aClaim{font:800 11px/1 Fredoka,sans-serif;font-style:normal;background:#ff8a2a;color:#fff!important;padding:4px 12px;border-radius:99px}
+/* v102 pet popup: simple */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .pupStats{display:flex;flex-direction:column;gap:7px;margin:8px 10px 6px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .pupStat{display:grid;grid-template-columns:62px 1fr;align-items:center;gap:8px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .pupStat>span{font-size:12.5px;font-weight:900;color:var(--h-ink)!important;text-align:left}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .pupBar{height:14px;border-radius:8px;background:#e9eef2;box-shadow:inset 0 1px 2px rgba(0,0,0,.25);overflow:hidden;border:1px solid rgba(0,0,0,.12)}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .pupBar>i{display:block;height:100%;border-radius:8px;min-width:6px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .pupBar.xp>i{background:linear-gradient(#7cc4ff,#2f7fe0)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .pupBar.food>i{background:linear-gradient(#ffc56b,#f27a1a)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .pupFacts{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:6px 0}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .pupFacts>span{background:rgba(255,255,255,.75);border:1px solid rgba(70,96,58,.25);border-radius:999px;padding:3px 10px;font-size:12px;font-weight:800;color:var(--h-ink)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .pupPerk{font-size:11.5px;font-weight:700;color:var(--h-ink2);margin:2px 12px 6px;text-align:center}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .petFeed>b{display:block;font-size:12.5px;color:var(--h-ink);margin:4px 0}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app :is(.petFood,.petActs .big)[disabled]{filter:grayscale(1);opacity:.45;pointer-events:none}
+/* v102 Lab popups: blue hologram */
+html[data-ui-theme="buddy"] body #app #pop.labPop{
+  --h-ink:#14325a; --h-ink2:#3c5c80;
+  --h-panel:url(../sprites/ui/lb_panel.webp); --h-tall:url(../sprites/ui/lb_panel_tall.webp);
+  --h-head:url(../sprites/ui/lb_panel_head.webp); --h-title:url(../sprites/ui/lb_title.webp);
+  --h-card:url(../sprites/ui/lb_card.webp); --h-card1:url(../sprites/ui/lb_card_on.webp); --h-cardx:url(../sprites/ui/lb_card_lock.webp);
+  --h-slot:url(../sprites/ui/lb_slot.webp); --h-ribbon:url(../sprites/ui/lb_ribbon.webp);
+  --h-tab1:url(../sprites/ui/lb_tab_on.webp); --h-tab0:url(../sprites/ui/lb_tab_off.webp);
+  --h-bar:url(../sprites/ui/lb_bar.webp); --h-fill:url(../sprites/ui/lb_fill.webp); --h-chip:url(../sprites/ui/lb_chip.webp);
+  --h-green:url(../sprites/ui/lb_green.webp);
+}
+/* v102 Star Chart popups: violet frame, night-sky window */
+html[data-ui-theme="buddy"] body #app #pop.starsheet{
+  --h-ink:#2a1760; --h-ink2:#55408f;
+  --h-panel:url(../sprites/ui/sv_panel.webp); --h-tall:url(../sprites/ui/sv_panel_tall.webp);
+  --h-head:url(../sprites/ui/sv_panel_head.webp); --h-title:url(../sprites/ui/sv_title.webp);
+  --h-card:url(../sprites/ui/sv_card.webp); --h-card1:url(../sprites/ui/sv_card_on.webp); --h-cardx:url(../sprites/ui/sv_card_lock.webp);
+  --h-slot:url(../sprites/ui/sv_slot.webp); --h-ribbon:url(../sprites/ui/sv_ribbon.webp);
+  --h-tab1:url(../sprites/ui/sv_tab_on.webp); --h-tab0:url(../sprites/ui/sv_tab_off.webp);
+  --h-bar:url(../sprites/ui/sv_bar.webp); --h-fill:url(../sprites/ui/sv_fill.webp); --h-chip:url(../sprites/ui/sv_chip.webp);
+  --h-green:url(../sprites/ui/sv_green.webp);
+}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop.starsheet .popBody{
+  background:radial-gradient(1.5px 1.5px at 12% 18%,#fff 60%,transparent),radial-gradient(1px 1px at 78% 12%,#fff 60%,transparent),radial-gradient(1.5px 1.5px at 62% 70%,#fff 60%,transparent),radial-gradient(1px 1px at 30% 82%,#dfe0ff 60%,transparent),radial-gradient(1px 1px at 90% 55%,#fff 60%,transparent),radial-gradient(1.2px 1.2px at 45% 35%,#e8dcff 60%,transparent),
+    radial-gradient(ellipse at 50% 0%,#4a35b0 0%,#231a6e 55%,#120d3d 100%)!important;
+  border-radius:16px;padding:10px 8px 12px!important;box-shadow:inset 0 0 0 1px rgba(190,170,255,.45),inset 0 0 24px rgba(120,90,255,.35);
+}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop.starsheet .popBody :is(p,div,span,b,i,small,em,.noteLine,.skNeed):not(.big *,.big,.skGo,.skGo *){color:#e9e4ff!important;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop.starsheet .popBody b{color:#ffe27a!important}
+/* ===================== v102 Star Bazaar redesign: hero strip, pill tabs, colour-coded product cards */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-shop .scBody{background:linear-gradient(180deg,#f3efff 0%,#fbfaff 40%,#fff 100%)!important;border-radius:14px;padding:8px 8px 16px!important}
+#sc-shop .bzHero{position:relative;display:flex;align-items:center;gap:8px;height:78px;margin:6px 2px 10px;padding:0 12px 0 92px;border-radius:18px;
+  background:radial-gradient(circle at 85% 20%,rgba(255,255,255,.35) 0 2px,transparent 3px),radial-gradient(circle at 60% 75%,rgba(255,255,255,.3) 0 1.5px,transparent 2.5px),linear-gradient(115deg,#6b46e8 0%,#4a5ff0 55%,#2aa6e8 100%);
+  box-shadow:0 4px 0 #3a2aa0,0 8px 18px rgba(60,40,160,.28)}
+#sc-shop .bzStall{position:absolute;left:-2px;bottom:-4px;width:96px;height:96px;object-fit:contain;filter:drop-shadow(0 4px 4px rgba(0,0,0,.3))}
+#sc-shop .bzTx{flex:1;display:flex;flex-direction:column;min-width:0}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-shop .bzTx b{font:400 19px/1.05 "Lilita One",Fredoka,sans-serif!important;color:#fff!important;text-shadow:0 2px 0 rgba(30,20,90,.5)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-shop .bzTx i{font-style:normal;font-size:11.5px;font-weight:800;color:#dfe6ff!important}
+#sc-shop .bzWal{display:flex;flex-direction:column;gap:4px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-shop .bzWal span{display:flex;align-items:center;gap:4px;background:rgba(255,255,255,.92);border-radius:999px;padding:2px 9px 2px 3px;font-size:12.5px;font-weight:900;color:#2b2150!important}
+#sc-shop .bzWal span :is(img,svg){width:18px!important;height:18px!important}
+/* tabs */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-shop .shopTabs{display:flex!important;gap:6px!important;overflow-x:auto;scrollbar-width:none;padding:2px 2px 6px!important;margin:0 0 2px!important;flex-wrap:nowrap!important}
+#sc-shop .shopTabs::-webkit-scrollbar{display:none}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-shop .sTab{flex:0 0 auto!important;display:flex!important;align-items:center;gap:4px;height:32px!important;min-height:0!important;padding:0 11px 0 6px!important;border:2px solid #e3dcf7!important;border-image:none!important;border-radius:999px!important;background:#fff!important;
+  font:800 12.5px/1 Fredoka,sans-serif!important;color:#4a3b7a!important;box-shadow:0 2px 0 #e3dcf7!important;text-shadow:none!important;width:auto!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-shop .sTab.on{background:linear-gradient(#8a6cff,#6142e6)!important;border-color:#5234d0!important;color:#fff!important;box-shadow:0 2px 0 #3d26a8!important}
+#sc-shop .sTab :is(img,svg,.uiIc){width:20px!important;height:20px!important}
+/* section titles */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .sSecT{background:none!important;min-height:0;width:auto;max-width:none;justify-content:flex-start;padding:0 4px!important;margin:14px 2px 8px!important;
+  font:400 16px/1 "Lilita One",Fredoka,sans-serif!important;color:#3b2a7a!important;text-shadow:none!important;gap:6px}
+#sc-shop .sSecT::after{content:"";flex:1;height:2px;border-radius:2px;background:linear-gradient(90deg,#d9cff7,transparent);margin-left:6px}
+#sc-shop .sSecT :is(img,svg,.uiIc){width:22px!important;height:22px!important}
+/* cards */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-shop .shopGrid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .sCard{--c1:#d9fff2;--c2:#7fdcc4;position:relative;display:flex!important;flex-direction:column;align-items:center;gap:0!important;
+  border:0!important;border-image:none!important;border-radius:16px!important;background:#fff!important;padding:0 0 8px!important;overflow:hidden;min-height:0!important;
+  box-shadow:0 3px 0 rgba(70,50,150,.16),0 6px 14px rgba(70,50,150,.12)!important}
+#sc-shop #sh-gems .sCard{--c1:#efe3ff;--c2:#a77cf2}
+#sc-shop #sh-coins .sCard{--c1:#fff4c4;--c2:#f5bf3a}
+#sc-shop #sh-chests .sCard{--c1:#ffe6cc;--c2:#f29a50}
+#sc-shop #sh-boost .sCard{--c1:#dff0ff;--c2:#6aa9f0}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .sCard.hot{box-shadow:0 0 0 2.5px #ffc531,0 0 14px rgba(255,190,40,.7),0 3px 0 rgba(70,50,150,.16)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .sCArt{width:100%;height:74px!important;margin:0 0 6px!important;background:radial-gradient(circle at 50% 38%,var(--c1) 0%,var(--c2) 100%)!important;position:relative}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .sCArt :is(img,svg,.uiIc){max-width:70px!important;max-height:64px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .sCName{font:800 12px/1.1 Fredoka,sans-serif!important;color:#2b2150!important;padding:0 5px;text-align:center}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .sCDesc{font:700 10px/1.2 Fredoka,sans-serif!important;color:#6b6290!important;padding:2px 5px 0;text-align:center;min-height:2.4em;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#sc-shop .sCDesc :is(img,svg){width:12px!important;height:12px!important;vertical-align:-2px}
+/* price buttons */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop :is(.sCard,.shopRow) .buyBtn{position:relative!important;overflow:hidden!important;display:flex!important;align-items:center;justify-content:center;gap:3px;
+  width:calc(100% - 14px)!important;min-width:0!important;height:30px!important;min-height:0!important;margin:6px 7px 0!important;padding:0 4px!important;border:0!important;border-image:none!important;border-radius:11px!important;
+  background:linear-gradient(#ffd45a,#f4a21c)!important;box-shadow:0 3px 0 #c27510!important;font:800 13px/1 Fredoka,sans-serif!important;color:#fff!important;text-shadow:0 1px 0 rgba(0,0,0,.3)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop :is(.sCard,.shopRow) .buyBtn :first-child{position:static!important;margin:0!important;width:16px!important;height:16px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop :is(.sCard,.shopRow) :is(.buyBtn.cash,.buyBtn.green){background:linear-gradient(#7ee35a,#3fae2a)!important;box-shadow:0 3px 0 #2a7d1c!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop :is(.sCard,.shopRow) .buyBtn.gem{background:linear-gradient(#b08cff,#7a4ce8)!important;box-shadow:0 3px 0 #5230b8!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop :is(.sCard,.shopRow) .buyBtn[disabled]{background:#dcd8e6!important;box-shadow:0 3px 0 #b9b3c9!important;color:#fff!important;filter:none!important;opacity:1!important}
+/* tags */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .sCard .gTag{position:absolute!important;top:5px!important;left:5px!important;right:auto!important;z-index:2;background:#ff5d7a!important;border:0!important;border-image:none!important;border-radius:8px!important;
+  padding:2px 6px!important;font:800 9.5px/1.1 Fredoka,sans-serif!important;color:#fff!important;max-width:80%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transform:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .sCard .gBurst{position:absolute!important;top:2px!important;right:2px!important;left:auto!important;z-index:2;width:38px!important;height:38px!important;font-size:10px!important}
+#sc-shop .giftArt{position:relative;display:flex;align-items:center;justify-content:center}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .giftNrg{position:absolute;right:-12px;bottom:-4px;display:flex;align-items:center;background:#fff;border-radius:999px;padding:1px 6px 1px 2px;font:900 11px/1 Fredoka,sans-serif;color:#2b2150!important;box-shadow:0 2px 4px rgba(0,0,0,.2)}
+#sc-shop .giftNrg :is(img,svg){width:14px!important;height:14px!important;max-width:14px!important}
+/* rows (upgrades, rocket) */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .shopRow{display:flex!important;align-items:center;gap:10px;background:#fff!important;border:0!important;border-image:none!important;border-radius:16px!important;padding:8px 10px!important;margin:0 0 8px!important;
+  box-shadow:0 3px 0 rgba(70,50,150,.14),0 5px 12px rgba(70,50,150,.1)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .shopRow .sArt{width:50px;height:50px;flex:0 0 50px;border-radius:14px;background:radial-gradient(circle at 50% 38%,#fff6d0,#ffc85a);display:flex;align-items:center;justify-content:center}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .shopRow .sArt :is(img,svg){width:38px!important;height:38px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .shopRow .sInfo{flex:1;min-width:0;text-align:left}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .shopRow .sName{font:800 13px/1.1 Fredoka,sans-serif!important;color:#2b2150!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .shopRow .sDesc{font:700 10.5px/1.25 Fredoka,sans-serif!important;color:#6b6290!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .shopRow .buyBtn{width:84px!important;flex:0 0 84px;margin:0!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .pip{background:#e3dcf7!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .pip.on{background:#7a4ce8!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .noteLine{font-size:11px!important;color:#7a729a!important;margin:6px 4px 0!important;text-align:center}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .restoreBtn{display:block;margin:8px auto 0;background:none!important;border:0!important;font:700 11px Fredoka,sans-serif;color:#7a729a!important;text-decoration:underline}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #sc-shop .giftNrg :is(img,svg){width:14px!important;height:14px!important;max-width:14px!important;max-height:14px!important;filter:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .giftNrg{width:auto!important;height:auto!important;background:#fff!important;border:0!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .sSec{background:none!important;border:0!important;border-image:none!important;box-shadow:none!important;padding:0!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-shop .bzTx i{color:#fff!important;opacity:.9}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .chTrack .chAll{display:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .chTrack .mlNote{display:flex;align-items:center;justify-content:center;gap:4px;font-size:11.5px!important;margin:6px 0 0!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .chTrack .mlNote img{width:20px;height:20px}
+/* ===================== v102 Collection redesign */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .scBody{background:linear-gradient(180deg,#eefbe8 0%,#fbfff9 45%,#fff 100%)!important;border-radius:14px;padding:8px 8px 16px!important}
+#sc-book .bkHero{display:flex;align-items:center;gap:10px;margin:6px 2px 10px;padding:10px 14px;border-radius:18px;
+  background:radial-gradient(circle at 88% 22%,rgba(255,255,255,.4) 0 2px,transparent 3px),radial-gradient(circle at 70% 80%,rgba(255,255,255,.3) 0 1.5px,transparent 2.5px),linear-gradient(115deg,#2fb4a8 0%,#3f8fe6 60%,#6b56e8 100%);
+  box-shadow:0 4px 0 #2b5fa8,0 8px 18px rgba(40,80,160,.25)}
+#sc-book .bkIc{width:54px;height:54px;flex:0 0 54px;border-radius:16px;background:rgba(255,255,255,.95);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+#sc-book .bkIc :is(img,svg,.uiIc){width:42px!important;height:42px!important}
+#sc-book .bkTx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;text-align:left}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .bkTx b{font:400 24px/1 "Lilita One",Fredoka,sans-serif!important;color:#fff!important;text-shadow:0 2px 0 rgba(20,40,90,.45)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .bkTx b small{font-size:15px;color:#e3f0ff!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .bkTx i{font-style:normal;font-size:11.5px;font-weight:800;color:#fff!important;opacity:.92}
+#sc-book .bkBar{height:10px;border-radius:6px;background:rgba(10,30,70,.35);overflow:hidden;margin-top:3px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .bkBar u{display:block;height:100%;border-radius:6px;background:linear-gradient(#fff3a0,#ffc531)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .bkPack{display:flex;align-items:center;gap:8px;width:calc(100% - 4px);margin:0 2px 10px;padding:8px 10px;border:0!important;border-image:none!important;border-radius:16px!important;
+  background:linear-gradient(#fff6d6,#ffe39a)!important;box-shadow:0 0 0 2px #ffc531,0 3px 0 #d99a12,0 0 14px rgba(255,190,40,.55)!important;animation:bkGlow 2.4s ease-in-out infinite}
+#sc-book .bkPack :is(img,svg,.uiIc){width:36px!important;height:36px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .bkPack b{flex:1;text-align:left;font:800 14px/1.1 Fredoka,sans-serif!important;color:#5a3a06!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .bkPack em{font:800 13px/1 Fredoka,sans-serif!important;font-style:normal;color:#fff!important;background:linear-gradient(#7ee35a,#3fae2a);border-radius:10px;padding:7px 14px;box-shadow:0 3px 0 #2a7d1c}
+@keyframes bkGlow{50%{box-shadow:0 0 0 2px #ffc531,0 3px 0 #d99a12,0 0 22px rgba(255,190,40,.85)}}
+/* new discoveries: one compact card */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .card.disc{border:0!important;border-image:none!important;border-radius:16px!important;background:#fff!important;padding:10px!important;margin:0 2px 10px!important;box-shadow:0 3px 0 rgba(40,90,40,.14),0 5px 12px rgba(40,90,40,.1)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .card.disc .cardTitle{font:800 14px/1.1 Fredoka,sans-serif!important;color:var(--h-ink)!important;display:flex;align-items:center;gap:6px;margin:0 0 6px!important}
+#sc-book .card.disc .cardTitle :is(img,svg,.uiIc){width:22px!important;height:22px!important}
+#sc-book .card.disc .discRow{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:8px}
+#sc-book .card.disc .discIt{width:44px;height:44px;border-radius:12px;background:radial-gradient(circle,#f3ffe9,#cfeec0);display:flex;align-items:center;justify-content:center}
+#sc-book .card.disc .discIt :is(img,svg){width:36px!important;height:36px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .card.disc :is(#claimDisc,.adB){margin:6px auto 0!important;width:100%!important}
+/* world tabs + section title, like the Bazaar */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .shopTabs{display:flex!important;gap:6px!important;overflow-x:auto;scrollbar-width:none;padding:2px 2px 8px!important;margin:4px 0 2px!important;flex-wrap:nowrap!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .sTab{flex:0 0 auto!important;height:32px!important;min-height:0!important;padding:0 14px!important;border:2px solid #d5ecca!important;border-image:none!important;border-radius:999px!important;background:#fff!important;
+  font:800 12.5px/1 Fredoka,sans-serif!important;color:var(--h-ink)!important;box-shadow:0 2px 0 #d5ecca!important;width:auto!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-book .sTab.on{background:linear-gradient(#8fe86a,#4fb933)!important;border-color:#3e9a28!important;color:#fff!important;box-shadow:0 2px 0 #2f7d1e!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-book .sSecT{background:none!important;border:0!important;min-height:0;width:auto;justify-content:flex-start;padding:0 4px!important;margin:14px 2px 8px!important;
+  font:400 16px/1 "Lilita One",Fredoka,sans-serif!important;color:var(--h-ink)!important;text-shadow:none!important;display:flex;gap:6px}
+#sc-book .sSecT::after{content:"";flex:1;height:2px;border-radius:2px;background:linear-gradient(90deg,#cfe8c2,transparent);margin-left:6px;align-self:center}
+html[data-ui-theme="buddy"] body #app #side{position:relative;z-index:8}
+#petChip{margin-bottom:14px}

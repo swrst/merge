@@ -349,12 +349,14 @@ class PixiBoard {
       // the hologram board kit: light and deeper aqua glass in a checkerboard, a
       // padlocked grey-teal tile when locked, the orange-framed tile for what a contract wants
       const want = this.wanted.has(i) && !locked;
-      const tex = this.tex[want ? 'ui:hs_wanted' : locked ? 'ui:hs_locked' : dark ? 'ui:ho_tile' : 'ui:hc_card'] || this.tex['ui:ho_tile'];
+      const forChapter = !want && !locked && this.chapterCells.has(i);
+      const tex = this.tex[want || forChapter ? 'ui:hs_wanted' : locked ? 'ui:hs_locked' : dark ? 'ui:ho_tile' : 'ui:hc_card'] || this.tex['ui:ho_tile'];
       if (tex && art) {
         // frosted white and aqua glass in a checkerboard, drawn a touch larger than the cell so the rims meet
         const o = c * 0.05;
         art.visible = true; art.texture = tex; art.position.set(p.x - o, p.y - o); art.width = c + o * 2; art.height = c + o * 2;
         art.alpha = want || locked ? 1 : dark ? 0.82 : 0.9;
+        (art as any).tint = forChapter ? 0x9dff6a : 0xffffff;   // contract: gold frame · chapter: green frame
         if (this.slots[i] && this.slots[i].key.startsWith('u')) g.roundRect(p.x + 4, p.y + 4, c - 8, c - 8, R).fill({ color: 0x7cc8ff, alpha: 0.3 });
         if (r) g.roundRect(p.x + 3, p.y + 3, c - 6, c - 6, R).stroke({ color: r === 3 ? 0xffb02e : r === 2 ? 0xb58cff : 0x6fd0e8, alpha: .8, width: r === 3 ? 3 : 2 });
         return;
@@ -942,6 +944,14 @@ class PixiBoard {
         this.lFx.addChild(g); s.ring = g;
       } else if (!on && s.ring) { s.ring.destroy(); s.ring = undefined; }
     });
+  }
+  /** items the current chapter needs: their tiles glow green */
+  private chapterCells = new Set<number>();
+  setChapter(list: number[]) {
+    const nw = new Set(list);
+    if (nw.size === this.chapterCells.size && list.every(k => this.chapterCells.has(k))) return;
+    const old = this.chapterCells; this.chapterCells = nw;
+    new Set([...old, ...nw]).forEach(k => this.drawTile(k));
   }
   /** items a ready contract or chapter is about to take: their tiles glow green */
   private wanted = new Set<number>();

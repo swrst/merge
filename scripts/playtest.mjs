@@ -333,7 +333,7 @@ must(await page.evaluate(() => !window.__game.prods.fuelpod), 'the free Fuel Pod
 head('Catalogue');
 await closeModal();
 await tab('book');
-must((await page.locator('#bookBody .catBar').count()) === 1, 'collection bar shown');
+must((await page.locator('#bookBody .bkBar').count()) === 1, 'collection bar shown');
 must((await page.textContent('#bookBody')).includes('Relics'), 'the Relics chain appears once unlocked');
 await shot('book');
 await closeModal(); await page.click('#sc-book .scClose'); await page.waitForTimeout(300);
@@ -590,8 +590,8 @@ await set(() => {
   b[fr[0]] = { id: 'cloudpuff' }; b[fr[1]] = { id: 'aurorasilk' };
   window.__board.sync(b);
 });
-await tab('rocket');
-must(await page.locator('#rocketBody .chRow i.now').count() === 1, 'the Goals screen shows the current project');
+await page.evaluate(() => window.__game.v9.chapterSheet()); await page.waitForTimeout(500);
+must(await page.locator('#popBody .chRow i.now').count() === 1, 'the chapter card shows the current chapter');
 await page.locator('#btnProject').click({ force: true }); await page.waitForTimeout(900);
 s = await S();
 must(s.proj.vela === 1, 'building it moves the world on to the next project');
@@ -1020,7 +1020,7 @@ await set(() => {
   b[fr[0]] = { id: 'branch' }; b[fr[1]] = { id: 'branch' };
   window.__board.sync(b);
 });
-await tab('rocket');
+await page.evaluate(() => window.__game.v9.chapterSheet()); await page.waitForTimeout(400);
 await page.evaluate(() => document.querySelector('#btnProject').click()); await page.waitForTimeout(1600);
 await closeModal(); await tab('board');
 s = await S();
@@ -1039,7 +1039,7 @@ const buildCh = async (n) => {
     let k = 0; pj.needs.forEach(([id, q]) => { for (let j = 0; j < q; j++) b[fr[k++]] = { id }; });
     window.__board.sync(b);
   }, n);
-  await tab('rocket');
+  await page.evaluate(() => window.__game.v9.chapterSheet()); await page.waitForTimeout(300);
   await page.evaluate(() => document.querySelector('#btnProject').click()); await page.waitForTimeout(300);
   if (process.env.DBG) console.log('   [build] ' + await page.evaluate(() => JSON.stringify({ w: window.__game.state().world, p: window.__game.state().proj.earth, t: [...document.querySelectorAll('.toast,#toasts *')].map(e => e.textContent).join('/'), m: document.querySelector('#modal.open #mTitle')?.textContent, view: document.querySelector('.screen.open')?.id })));
   await page.waitForTimeout(1500);

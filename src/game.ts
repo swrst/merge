@@ -786,7 +786,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const pct = Math.round(parts.reduce((a: number, x: number) => a + x, 0) / parts.length * 100);
     btn.innerHTML = `<span class="cwFace">${ART.char(pj.who)}</span>
       <b class="cwT">${ready ? 'BUILD!' : 'Ch. ' + (projDone() + 1)}</b>
-      <span class="cwNeeds">${pj.needs.slice(0, 3).map(([id, q]: [string, number]) => `<i class="${countItem(id) >= q ? 'ok' : ''}">${ART.item(id)}</i>`).join('')}${cNeed(pj) ? `<i class="${cHave() >= cNeed(pj) ? 'ok' : ''}">${ART.uiIcon('cl_tasks', '📋')}</i>` : ''}</span>
+      <span class="cwNeeds">${pj.needs.map(([id, q]: [string, number]) => `<i class="${countItem(id) >= q ? 'ok' : ''}">${ART.item(id)}<em>${Math.min(countItem(id), q)}/${q}</em></i>`).join('')}${cNeed(pj) ? `<i class="${cHave() >= cNeed(pj) ? 'ok' : ''}">${ART.uiIcon('cl_tasks', '📋')}<em>${Math.min(cHave(), cNeed(pj))}/${cNeed(pj)}</em></i>` : ''}</span>
       <span class="cwBar"><i style="width:${pct}%"></i></span>`;
     // the bottom line spells the chapter out: every need, always on screen
     const line = $('#chapLine');
@@ -814,6 +814,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const pj = curProject();
     if (pj && projReady(pj)) pj.needs.forEach(([id, q]: [string, number]) => take(id, q));
     board.setWanted([...used]);
+    // what the chapter needs, as soon as you have it: those tiles glow green
+    const ch: number[] = [];
+    if (pj) pj.needs.forEach(([id, q]: [string, number]) => { let n = q; for (let i = 0; i < N && n; i++) if (b[i] && b[i].id === id && !used.has(i)) { ch.push(i); n--; } });
+    board.setChapter(ch);
   }
   function curMission() { return MISSIONS.find(m => (S.mp[m.id] || 0) < m.need); }
   const allParts = () => S.parts.hull && S.parts.engine && S.parts.nav && S.parts.tank;
@@ -1919,7 +1923,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
   let shopTab = 'deals';
   /** the daily gift picture: the supply chest with its energy bonus pinned on, same on both gift cards */
-  const giftArt = () => `<span class="giftArt">${ART.spriteUi('chest_closed') ? ART.uiIcon('chest_closed', '') : ART.item('chest')}<span class="giftNrg">${ART.icon('energy')}+${CFG.shop2.freeGiftEnergy}</span></span>`;
+  const giftArt = () => `<span class="giftArt">${ART.item('chest')}<span class="giftNrg">${ART.icon('energy')}+${CFG.shop2.freeGiftEnergy}</span></span>`;
   /** the painted store pictures (art/ui/holo/sheets/store_a, store_b) for each product */
   const PACK_ART: Record<string, string> = { starter: 'starter', gems_s: 'gems_s', gems_m: 'gems_m', gems_l: 'gems_l', gems_xl: 'gems_xl',
     energy_pack: 'energy', coins_s: 'coins_s', coins_m: 'coins_m', coins_l: 'coins_l', adfree: 'adfree' };
@@ -1933,22 +1937,22 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const tabs = [['deals', tIc('sec_deals', '🎁') + ' Deals'], ['gems', tIc('icon_gem', '💎') + ' Gems'], ['coins', tIc('icon_coin', '🪙') + ' Coins'], ['chests', tIc('sec_chests', '📦') + ' Chests'], ['boost', tIc('sec_boost', '✨') + ' Boosters'], ['up', tIc('sec_up', '⭐') + ' Upgrades']];
     const rocketBits = (labOffered() && !S.lab.built) || S.seen.scrap;
     if (rocketBits) tabs.push(['rocket', tIc('sec_rocket', '🚀') + ' Rocket']);
-    let html = `<div class="shopSign"><b>Star Bazaar</b></div><div class="shopTabs">${tabs.map(([k, t]) => `<button class="sTab${shopTab === k ? ' on' : ''}" data-jump="${k}">${t}</button>`).join('')}</div>`;
+    let html = `<div class="bzHero"><img class="bzStall" src="${ART.spriteUi('sp_sign')}" alt=""><div class="bzTx"><b>Fresh deals</b><i>New every day</i></div><div class="bzWal"><span>${ART.icon('gem')}${kN(S.gems)}</span><span>${coin}${kN(S.coins)}</span></div></div><div class="shopTabs">${tabs.map(([k, t]) => `<button class="sTab${shopTab === k ? ' on' : ''}" data-jump="${k}">${t}</button>`).join('')}</div>`;
 
     // deals: the daily gift, energy, and the rotating shelf
     html += `<div class="sSec" id="sh-deals"><div class="sSecT">${ART.uiIcon('sec_deals', '🎁')} Today's deals</div><div class="shopGrid">`
-      + card(giftArt(), 'Daily gift', `A Supply Chest and ${CFG.shop2.freeGiftEnergy} ${ART.icon('energy')}`,
+      + card(giftArt(), 'Daily gift', `Chest + ${CFG.shop2.freeGiftEnergy} ⚡`,
         `<button class="buyBtn green" data-gift="1" ${giftReady() ? '' : 'disabled'}>${giftReady() ? 'FREE' : 'Tomorrow'}</button>`, giftReady() ? 'hot' : '')
       + (S.giftAd === today() && S.giftAd2 !== today() ? card(giftArt(), 'Double the gift', `Watch a video for another Supply Chest and ${CFG.shop2.freeGiftEnergy} ${ART.icon('energy')}`,
         `<button class="buyBtn green" data-giftad="1">📺 Watch</button>`, 'hot') : '')
-      + (albumOpen() ? card(ART.uiIcon('ic_album', '🎴'), 'Sticker pack', '2 stickers for your Star Album', `<button class="buyBtn gem" data-pack="basic" ${S.gems < 8 ? 'disabled' : ''}>${ART.icon('gem')}8</button>`)
-        + card(ART.uiIcon('ic_album', '🌟'), 'Golden pack', '3 stickers, one is 3★ or better', `<button class="buyBtn gem" data-pack="gold" ${S.gems < 20 ? 'disabled' : ''}>${ART.icon('gem')}20</button>`) : '')
-      + card(ART.uiIcon('lab_energy', ART.icon('energy')), 'Energy refill', `+${CFG.gems.refill.energy} ⚡ right now`,
+      + (albumOpen() ? card(ART.uiIcon('ic_album', '🎴'), 'Sticker pack', '2 stickers', `<button class="buyBtn gem" data-pack="basic" ${S.gems < 8 ? 'disabled' : ''}>${ART.icon('gem')}8</button>`)
+        + card(ART.uiIcon('ic_album', '🌟'), 'Golden pack', '3 stickers · 3★+', `<button class="buyBtn gem" data-pack="gold" ${S.gems < 20 ? 'disabled' : ''}>${ART.icon('gem')}20</button>`) : '')
+      + card(ART.uiIcon('lab_energy', ART.icon('energy')), 'Energy refill', `+${CFG.gems.refill.energy} ⚡`,
         `<button class="buyBtn gem" data-refill="1" ${S.gems < CFG.gems.refill.gems ? 'disabled' : ''}>${ART.icon('gem')}${CFG.gems.refill.gems}</button>`)
       + (() => { const n = coinSnackN(), left = CFG.shop2.coinSnack.perDay - n, pr = coinSnackPrice();
-        return card(ART.uiIcon('lab_energy', ART.icon('energy')), 'Energy snack', `+${CFG.shop2.coinSnack.energy} ⚡ for coins · ${left} left today`,
+        return card(ART.uiIcon('lab_energy', ART.icon('energy')), 'Energy snack', `+${CFG.shop2.coinSnack.energy} ⚡ · ${left} left`,
           left > 0 ? `<button class="buyBtn" data-csnack="1" ${S.coins < pr ? 'disabled' : ''}>${coin}${pr}</button>` : `<button class="buyBtn" disabled>Tomorrow</button>`); })()
-      + `</div><div class="noteLine">${ART.uiIcon('offer_timer', '🔄')} The free gift resets every day</div></div>`;
+      + `</div></div>`;
 
     html += `<div id="sh-gems">${gemsShop()}</div>`;
     html += coinShop();
@@ -2067,8 +2071,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const ar = achReady(), ql = questsLeft();
     const tile = (id: string, ic: string, emo: string, t: string, sub: string, hot: boolean) =>
       `<button class="mlTile${hot ? ' hot' : ''}" id="${id}"><span class="mlIc">${ART.uiIcon(ic, emo)}</span><b>${t}</b><i>${sub}</i>${hot ? '<em class="dot"></em>' : ''}</button>`;
-    host.innerHTML = projectCard()
-      + `<div class="mlTiles">
+    // the Mission Log is for missions; the chapter lives on the chapter button
+    host.innerHTML = `<div class="mlTiles">
           ${tile('openAch', 'ic_medals', '🏆', 'Medals', ar ? ar + ' to claim!' : 'long-term goals', !!ar)}
           ${tile('openQuests', 'ic_cadet', '🎯', 'Cadet Training', ql ? (MISSIONS.length - ql) + '/' + MISSIONS.length + ' done' : 'all done ✓', false)}
           ${S.seen.relic1 || labOpen() ? tile('openVault', 'ic_vault', '🏛️', 'Relic Vault', 'perks forever', false) : ''}
@@ -2147,9 +2151,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       const best = known.length ? known[known.length - 1] : ch.items[0];
       const done = known.length === ch.items.length;
       const claim = done && !(S.cclaim && S.cclaim[k]);
+      const pct = Math.round(known.length / ch.items.length * 100);
       return `<button class="aTile${locked ? ' locked' : ''}${done ? ' done' : ''}${claim ? ' claim' : ''}" data-chain="${k}">
         <span class="aArt${known.length ? '' : ' unk'}">${known.length ? ART.item(best) : '?'}</span>
-        <b>${ch.name}</b><i>${locked ? '🔒 lv ' + locked : claim ? '🎁 Claim!' : done ? '★ complete' : known.length + '/' + ch.items.length}</i></button>`;
+        <b>${ch.name}</b>${locked ? `<i>🔒 lv ${locked}</i>` : claim ? '<i class="aClaim">Claim!</i>' : `<span class="aBar"><u style="width:${pct}%"></u><em>${done ? '★ done' : known.length + '/' + ch.items.length}</em></span>`}</button>`;
     };
     const here = Object.keys(CHAINS).filter(k => CHAINS[k].world === albumWorld);
     const awake = albumWorld === S.world ? liveChains() : here.filter(k => CHAINS[k].items.some(id => S.seen[id]));
@@ -2163,10 +2168,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     });
     // sticker packs are news on this button too: open them from here
     const pk = albumOpen() ? packsWaiting() : 0;
-    host.innerHTML = (pk ? `<div class="card packNote"><div class="cardTitle">${ART.uiIcon('ic_album', '🎴')} ${pk} sticker pack${pk > 1 ? 's' : ''} to open</div><button class="big" id="bkPacks">Open in the Star Album</button></div>` : '') + discCard() +
-      `<div class="card"><div class="cardTitle">${ART.uiIcon('sec_collection', '🗂️')} Collection <span class="pCount">${found}/${total}</span></div>
-        <div class="catBar"><i style="width:${Math.round(found / total * 100)}%"></i></div>
-        <div class="noteLine">Everything you have ever made is kept here. Tap a chain to see all its steps and where it starts.</div></div>
+    host.innerHTML = `<div class="bkHero"><span class="bkIc">${ART.uiIcon('sec_collection', '🗂️')}</span><div class="bkTx"><b>${found}<small> / ${total}</small></b><i>items discovered</i><div class="bkBar"><u style="width:${Math.max(2, Math.round(found / total * 100))}%"></u></div></div></div>`
+      + (pk ? `<button class="bkPack" id="bkPacks">${ART.uiIcon('ic_album', '🎴')}<b>${pk} sticker pack${pk > 1 ? 's' : ''}</b><em>Open</em></button>` : '') + discCard() + `
       ${Object.keys(S.trophy || {}).length ? `<div class="card"><div class="cardTitle">${ART.uiIcon('ic_trophy', '🏆')} Trophy shelf <span class="pCount">${Object.values(S.trophy).reduce((a: number, n: any) => a + n, 0)}</span></div>
         <div class="trophyRow">${Object.entries(S.trophy).map(([id, n]: [string, any]) => `<span class="trophy">${ART.item(id)}${n > 1 ? `<em>×${n}</em>` : ''}</span>`).join('')}</div></div>` : ''}
       <div class="shopTabs">${worlds.map(w => `<button class="sTab${w === albumWorld ? ' on' : ''}" data-aw="${w}">${WORLDS[w].name}</button>`).join('')}</div>
@@ -3038,7 +3041,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         ${at >= 0 ? `<button class="buyBtn green" data-upg="${at}" ${S.coins < price ? 'disabled' : ''}>⬆ ${price} 🪙</button>`
           : `<button class="buyBtn green" data-upst="${u.k}" ${S.coins < price ? 'disabled' : ''}>⬆ ${price} 🪙</button>`}</div>`;
     }).join('');
-    pop(`Chapter ${projDone() + 1}`, `<div class="chHead2"><span class="pFace">${ART.char(p.who)}</span>
+    const list = projList();
+    pop(`Chapter ${projDone() + 1}`, `<div class="card mlMission chTrack"><div class="mlHead"><b>${W().name}</b><span>${projDone()}/${list.length} chapters</span></div>${chapterBars(list, projDone())}</div>
+      <div class="chHead2"><span class="pFace">${ART.char(p.who)}</span>
         <div class="chTx"><b>${p.name}</b><i>${CHARS[p.who] ? CHARS[p.who].name : ''} needs:</i></div>
         ${p.talk ? `<button class="talkBtn" id="btnTalk" title="Replay the story">${ART.uiIcon('ic_feedback', '💬')}</button>` : ''}</div>
       <div class="pNeeds">${need}${p.coins ? `<span class="pNeed${S.coins >= p.coins ? ' ok' : ''}">${coin}<b>${p.coins}</b></span>` : ''}
@@ -3084,7 +3089,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const li = list.findIndex((p: any) => p.launch);
     return `<div class="chBars"><div class="chRow">${bars}</div>
       <div class="chAll"><span>Chapters ${start + 1}–${end}</span><em><u style="width:${Math.round(done / Math.max(1, total) * 100)}%"></u>${li >= 0 ? `<img src="${rk}" alt="" style="left:${((li + 0.5) / total * 100).toFixed(1)}%">` : ''}</em><span>${done}/${total}</span></div>
-      ${li >= 0 && done <= li ? `<div class="mlNote"><img src="${rk}" alt=""> Chapter ${li + 1} launches the rocket to a new world</div>` : ''}</div>`;
+      ${li >= 0 && done <= li ? `<div class="mlNote"><img src="${rk}" alt=""> Chapter ${li + 1}: rocket launch to a new world</div>` : ''}</div>`;
   }
   function projectCard() {
     const list = projList(), done = projDone(), cur = curProject();
@@ -3677,6 +3682,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function pop(title: string, html: string, cls = '', onClose?: () => void) {
     $('#popTitle').innerHTML = title;
     $('#popBody').innerHTML = html;
+    if (/\b(lab\w*|holo)\b/.test(cls) || (view === 'lab' && !/starsheet/.test(cls))) cls += ' labPop';
     $('#pop').className = 'pop open ' + cls;
     fitRibbon($('#popTitle'));
     popClose = onClose || null;
@@ -4262,7 +4268,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const card = (p: any) => {
       const owned = p.once && S.bought[p.id];
       const what = [p.gems ? p.gems + ' 💎' : '', p.energy ? p.energy + ' ⚡' : '', p.coins ? p.coins + ' 🪙' : '',
-        p.boosts ? Object.entries(p.boosts).map(([k, n]) => n + '× ' + ((SHOP.boosters.find((x: any) => x.id === k) || { name: k }).name)).join(', ') : '', p.item ? ITEMS[p.item].name : '', p.adfree ? 'No ad videos — rewards are instant' : '']
+        p.boosts ? '+ boosters' : '', p.item ? ITEMS[p.item].name : '', p.adfree ? 'No ad videos' : '']
         .filter(Boolean).join(' · ');
       return `<div class="sCard gemCard${p.tag ? ' hot' : ''}${owned ? ' owned' : ''}">${p.tag ? (/-\d+%/.test(p.tag) && ART.spriteUi('offer_burst') ? `<span class="gBurst">${p.tag.match(/-\d+%/)[0]}</span><span class="gTag">${p.tag.replace(/\s*·?\s*-\d+%/, '')}</span>` : `<span class="gTag">${p.tag}</span>`) : ''}
         <div class="sCArt">${ART.spriteUi('sp_' + PACK_ART[p.id]) ? ART.uiIcon('sp_' + PACK_ART[p.id], '') : ART.item('bigchest')}</div>
@@ -4513,7 +4519,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const n = kind === 'gold' ? 3 : 2;
     const got = Array.from({ length: n }, (_, k) => rollSticker(kind === 'gold' && k === 0 ? 3 : 1));
     const res = got.map(id => { const isNew = !a.have[id]; a.have[id] = (a.have[id] || 0) + 1; const d = isNew ? 0 : DUST[stickerStars(id)]; a.dust += d; return { id, isNew, d }; });
-    stat('stickers', n); save();
+    stat('stickers', n); save(); renderBook(); renderQuick();
     // the reveal: cards flip one after the other
     pop(`${kind === 'gold' ? ART.uiIcon('pack_gold', '🌟') + ' Golden pack' : ART.uiIcon('pack_basic', '🎴') + ' Sticker pack'}`, `<div class="packRow">${res.map((r, k) => `<div class="pkCard">
         <div class="pkBack" style="animation-delay:${0.25 + k * 0.35}s"></div><div class="pkFace s${stickerStars(r.id)}" style="animation-delay:${0.45 + k * 0.35}s">${stickerCard(r.id, 1, r.isNew ? '<b class="stkNew">NEW!</b>' : `<b class="stkNew dup">+${r.d} dust</b>`)}</div></div>`).join('')}</div>
@@ -4536,7 +4542,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         }
       }
     });
-    stat('stickers', total); analytics.track('album_pack', { kind: 'all', n: packs }); save();
+    stat('stickers', total); analytics.track('album_pack', { kind: 'all', n: packs }); save(); renderBook(); renderQuick();
     sfx.discover(); confetti();
     pop(`${ART.uiIcon('pack_basic', '🎴')} ${packs} packs opened`, `<div class="pkSum">
         <div class="pkSumN"><b>${fresh.length}</b><i>new sticker${fresh.length === 1 ? '' : 's'}</i></div>
@@ -5143,8 +5149,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const mins = petForm().mins * (petMood() === 'happy' ? 0.8 : petMood() === 'hungry' ? 1.4 : 1);
     return Math.max(0, pet().at + mins * 60000 - Date.now());
   };
-  function pupArt(form = petForm(), cls = '') {
-    const mood = pet() && form === petForm() ? petMood() : '';
+  function pupArt(form = petForm(), cls = '', happy = false) {
+    const mood = !happy && pet() && form === petForm() ? petMood() : '';
     const src = (mood === 'hungry' && ART.spriteChar('pet_' + form.id + '_sad')) || ART.spriteChar('pet_' + form.id);
     return `<img class="pupImg ${cls}" style="--s:${(0.62 + form.stage * 0.1).toFixed(2)}" src="${src}" alt="${form.name}">`;
   }
@@ -5321,7 +5327,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (!pupLeft() && !stay) {
       const r = pupGift();
       pet().at = Date.now(); pet().n = (pet().n || 0) + 1; save(); renderQuick();
-      rewardCard(pupArt(), `${petForm().name} fetched!`, ['Blorp! It spits something out at your feet.', 'It looks very proud of itself.', 'All its eyes blink at you, one after the other.'][Math.floor(Math.random() * 3)], r, () => petGainXp(6));
+      rewardCard(pupArt(petForm(), '', true), `${petForm().name} fetched!`, ['Blorp! It spits something out at your feet.', 'It looks very proud of itself.', 'All its eyes blink at you, one after the other.'][Math.floor(Math.random() * 3)], r, () => petGainXp(6));
       return;
     }
     const p = pet(), f = petForm(), mood = petMood(), food = Math.round(petFood());
@@ -5331,14 +5337,16 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     pop('🐾 ' + (p.name || f.name), `<div class="pupBox">
       <div class="pupStage ${mood}" id="pupStage">${ART.spriteChar('pet_bed') ? `<img class="pupBed" src="${ART.spriteChar('pet_bed')}" alt="">` : ''}${ART.spriteChar('pet_bowl') ? `<img class="pupBowl${food < 30 ? ' empty' : ''}" src="${ART.spriteChar('pet_bowl')}" alt="">` : ''}${pupArt(f)}<span class="pupMood">${ART.spriteUi('emo_heart') ? `<img src="${ART.spriteUi(mood === 'happy' ? 'emo_heart' : mood === 'hungry' ? 'emo_food' : pupLeft() ? 'emo_sleep' : 'emo_spark')}" alt="">` : mood === 'happy' ? '💗' : mood === 'hungry' ? '🍖?' : '🙂'}</span>${pupLeft() && !ART.spriteUi('emo_sleep') ? '<span class="pupZ">z<i>z</i><b>z</b></span>' : ''}</div>
       <b class="pupName">${f.name} <small>Lv ${p.lv}</small></b>
-      <div class="pupBars"><span>XP</span><div class="catBar"><i style="width:${need ? Math.round(p.xp / need * 100) : 100}%"></i></div>
-        <span>Food</span><div class="catBar food"><i style="width:${food}%"></i></div></div>
-      <div class="noteLine">${f.perk} ${evoAt ? `<br><b>Evolves at level ${evoAt}.</b>` : '<br>Final form!'}</div>
-      <div class="noteLine">Next gift in <b>${mmss(pupLeft())}</b>${mood === 'happy' ? ' (fed: faster)' : mood === 'hungry' ? ' — <b>hungry, so slower</b>' : ''}.</div>
-      <div class="petFeed"><b>${food >= PET_FULL ? 'Full! Feed it again later' : 'Feed it a spare item'}</b> <i>(${food >= PET_FULL ? 'it gets hungry over a few hours' : 'a few bites, then it is full'})</i>
-        <div class="petFoods">${feed.length ? feed.map(([id, n]) => `<button class="petFood" data-feed="${id}">${ART.item(id)}<em>×${n}</em><small>+${petFeedXp(ITEMS[id].tier)} XP</small></button>`).join('') : '<div class="evOff">Nothing spare on the board right now.</div>'}</div></div>
-      <div class="petActs"><button class="big soft" id="pupPet">💗 Pet</button><button class="big blue" id="pupPlay">⭐ Play fetch</button></div>
-      ${labOpen() ? `<div class="noteLine">${petGrown() ? 'Fully grown! A rare new kind of pet can hatch in the Lab\'s <b>Pet Incubator</b>, but only one pet can live with you.' : 'Only one pet can live with you. Rare new kinds hatch in the Lab\'s <b>Pet Incubator</b> once this one is fully grown.'}</div>` : ''}</div>`, 'fun');
+      <div class="pupStats">
+        <div class="pupStat"><span>⭐ XP</span><div class="pupBar xp"><i style="width:${need ? Math.round(p.xp / need * 100) : 100}%"></i></div></div>
+        <div class="pupStat"><span>🍖 Food</span><div class="pupBar food"><i style="width:${food}%"></i></div></div>
+      </div>
+      <div class="pupFacts"><span>🎁 <b>${mmss(pupLeft())}</b></span>${evoAt ? `<span>✨ evolves at <b>Lv ${evoAt}</b></span>` : '<span>👑 final form</span>'}</div>
+      <div class="pupPerk">${f.perk}</div>
+      <div class="petFeed"><b>${food >= PET_FULL ? '🍖 Full — feed it later' : '🍖 Feed it'}</b>
+        <div class="petFoods">${feed.length ? feed.map(([id, n]) => `<button class="petFood" data-feed="${id}"${food >= PET_FULL ? ' disabled' : ''}>${ART.item(id)}<em>×${n}</em><small>+${petFeedXp(ITEMS[id].tier)}</small></button>`).join('') : '<div class="evOff">Nothing spare on the board</div>'}</div></div>
+      <div class="petActs"><button class="big soft" id="pupPet">💗 Pet</button><button class="big blue" id="pupPlay"${Date.now() < (p.play || 0) ? ' disabled' : ''}>⭐ ${Date.now() < (p.play || 0) ? mmss((p.play || 0) - Date.now()) : 'Play'}</button></div>
+    </div>`, 'fun');
     ($('#pupPlay') as HTMLElement).onclick = petPlay;
     document.querySelectorAll<HTMLElement>('[data-feed]').forEach(b => b.onclick = () => petFeed(b.dataset.feed!));
     ($('#pupPet') as HTMLElement).onclick = () => {
@@ -5371,7 +5379,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
 
   /* -------------------------------------------- quick chips over the board */
+  let petChipHtml = '';
   function renderQuick() {
+    petChipHtml = '';
     const host = $('#quick'); if (!host) return;
     const e = evNow(), bits: string[] = [];
     // contracts until the next chest: a chip with the others, not a tag stuck on the board frame
@@ -5386,8 +5396,12 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       // the pet says how it is at a glance: a gift waiting, hungry, or full
       const ps = !pupLeft() ? 'gift' : petMood() === 'hungry' ? 'hungry' : petFood() >= PET_FULL ? 'full' : '';
       const pb = { gift: '🎁', hungry: '🍖', full: '💗' }[ps] || '';
-      bits.push(`<button class="qChip pup${ps ? ' ' + ps : ''}${ps === 'gift' ? ' ready' : ''}" data-q="pup">${pupArt()}${pb ? `<b>${pb}</b>` : ''}<i>${pupLeft() ? mmss(pupLeft()) : 'gift!'}</i></button>`);
+      petChipHtml = (`<button class="qChip pup${ps ? ' ' + ps : ''}${ps === 'gift' ? ' ready' : ''}" data-q="pup">${pupArt()}${pb ? `<b>${pb}</b>` : ''}<i>${pupLeft() ? mmss(pupLeft()) : 'gift!'}</i></button>`);
     }
+    // the pet sits on the right, under the helpers
+    { let pc = document.getElementById('petChip'); const col = document.getElementById('sideR');
+      if (!pc && col) { pc = document.createElement('div'); pc.id = 'petChip'; col.appendChild(pc); }
+      if (pc && pc.dataset.h !== petChipHtml) { pc.dataset.h = petChipHtml; pc.innerHTML = petChipHtml; const b = pc.querySelector('button') as HTMLElement | null; if (b) b.onclick = () => { sfx.tap(); pupPop(); }; } }
     if (S.acc) bits.push(`<button class="qChip acc" data-q="acc">${ART.uiIcon('ic_labchip', '⚗️')}<i>${accLeft() ? mmss(accLeft()) : 'done!'}</i></button>`);
     const html = bits.join('');
     if (host.dataset.h === html) return;
@@ -5704,7 +5718,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function starHelp() {
     const n = CONSTS.filter(c => lit(c.id)).length;
     pop('✨ Star Chart', `${flowHTML()}
-      <div class="skExplain">Fill a constellation with <b>Star Cores</b>: it lights up for good and gives a perk in every world.</div>
+      <div class="skExplain"><b>Star Cores</b> light constellations. Each one = a perk.</div>
       ${fuseBtn()}
       <div class="skLitBar"><i style="width:${Math.round(n / CONSTS.length * 100)}%"></i><span>${n}/${CONSTS.length} constellations lit</span></div>`, 'starsheet');
     const f = $('#skFuseH'); if (f) f.onclick = () => { if (fuseScrap()) { starHelp(); skyPage(); } };
@@ -5717,7 +5731,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       : st === 'locked' ? `<div class="skNeed">You can only see it from <b>${WORLDS[c.world].name}</b>. Fly there first.</div>`
       : `<div class="skBar2"><em style="width:${pct}%"></em><span>${ART.item('starcore')} ${Math.min(cores, c.cost)} / ${c.cost} Star Cores</span></div>
          ${st === 'ready' ? `<button class="skLightBig" id="skLight"><img src="${ART.spriteUi('sk_shoot')}" alt=""><b>Light it!</b></button>`
-           : `<div class="skNeed">${c.cost - cores} more Star Core${c.cost - cores > 1 ? 's' : ''}. Dig meteor craters for Star Scrap, then fuse it.</div>${fuseBtn()}`}`;
+           : `<div class="skNeed">${c.cost - cores} more Star Core${c.cost - cores > 1 ? 's' : ''}. Fuse Star Scrap to get them.</div>${fuseBtn()}`}`;
     pop(st === 'locked' ? '✨ Unknown stars' : '✨ ' + c.name, `<div class="skCardBig gc-${st}">${constArt(c)}${constSvg(c, 'cBig')}</div>
       <div class="skPerk">${st === 'locked' ? 'A constellation nobody has charted yet.' : c.perk}</div>${body}`, 'starsheet');
     const l = $('#skLight'); if (l) l.onclick = () => skyLight(c.id);
@@ -6886,7 +6900,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       grow: () => { growProducers(); paintBoard(); }, capOf, plv, dropsOf, liveChains, allMaxed, ecost,
       roll: () => rollOrder(), xpNeed, maxEnergy, orderSlots,
       fly: (w: string) => galaxyTap(w), view: (v: string) => setView(v),
-      curProject: () => curProject(), v9: { levelBanner, checkDaily, labStation, labBuildPop, rewardCard, achOff: () => { achAutoOff = true; }, xp: XP, shopUnlockHint, xpUnlockHint, setView, achPop, profilePop, heartPanel, albumPop, openPack, albumGive, shareCard, alb, storeProducer, startPlacing, paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), coachNow: () => { coachT = 0; calmAt = 0; }, tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
+      curProject: () => curProject(), v9: { levelBanner, checkDaily, labStation, labBuildPop, rewardCard, achOff: () => { achAutoOff = true; }, xp: XP, shopUnlockHint, xpUnlockHint, setView, achPop, profilePop, heartPanel, albumPop, openPack, albumGive, shareCard, alb, storeProducer, startPlacing, paintAll: () => WORLD_ORDER.forEach(w => { paintedCache[w] = true; }), painted, storagePop, producerReveal, plantProducer, funPop, spinPop, eventPop, energyPop, playPairs, chapterIntro, talkScene, closePop, evNow, modal, contractSheet, chapterSheet, buildProject, bingoPop, bingo, upNeeds, upgradeProducer, upCost, stillPop, stillCollect, stillLeft, petHatch: () => petHatch(() => {}), travelTo, chapterFanfare: () => chapterFanfare(projList()[Math.max(0, projDone() - 1)], () => {}), rocketPanel, starsPanel: () => starChart(), starChart, questsPop: () => questPanel(), meteorStory, wreckStory, chainPanel, services: { mockControls, analytics, notify, games }, jitOn: () => !!jit, jitOff: () => coachOff(), coachNow: () => { coachT = 0; calmAt = 0; }, tutState: () => ({ at: tutAt, jit: jit ? jit.id : '', cls: $('#tut').className }), pupPop, labResPop, labAccPop, labHelp, starHelp, constCard, labTab: (t: string) => { labTab = t; setView('lab'); if (t === 'acc') labAccPop(); else if (t === 'research') labResPop(); } },
     };
     setInterval(tick, 500);
     setInterval(() => { if (!document.hidden) S.playMs = (S.playMs || 0) + 5000; }, 5000);
