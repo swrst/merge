@@ -979,3 +979,26 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app .side 
 html[data-ui-theme="buddy"] body #app #sc-rocket{--h-ink:#14325a; --h-ink2:#3c5c80;
   --h-panel:url(../sprites/ui/lb_panel.webp); --h-tall:url(../sprites/ui/lb_panel_tall.webp); --h-head:url(../sprites/ui/lb_panel_head.webp);
   --h-title:url(../sprites/ui/lb_title.webp); --h-banner:url(../sprites/ui/lb_title.webp); --h-card:url(../sprites/ui/lb_card.webp)}
+/* v110: the needs strip is projected out of the Ch. button: a light beam from its edge to a hologram card */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app .side .sideW.chapW .cwNeeds{left:calc(100% + 20px)!important;z-index:5!important;padding:4px 7px!important;border-radius:14px!important;
+  background:linear-gradient(180deg,rgba(255,253,244,.93),rgba(255,241,206,.9))!important;border:1.5px solid rgba(255,186,60,.95)!important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.7),0 0 14px rgba(255,180,40,.65),inset 0 0 10px rgba(255,210,120,.35)!important;
+  transform-origin:left center;animation:cwProj .45s cubic-bezier(.2,1.4,.4,1) both}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app .side .sideW.chapW .cwNeeds::before{content:""!important;position:absolute!important;left:-21px!important;top:-2px!important;bottom:-2px!important;width:21px!important;height:auto!important;margin:0!important;border-radius:0!important;
+  background:linear-gradient(90deg,rgba(255,206,90,.95),rgba(255,226,140,.3))!important;clip-path:polygon(0 40%,100% 0,100% 100%,0 60%);box-shadow:none!important;filter:blur(.3px);animation:cwBeam 2.4s ease-in-out infinite}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app .side .sideW.chapW .cwNeeds::after{content:"";position:absolute;left:-25px;top:50%;width:8px;height:8px;margin-top:-4px;border-radius:50%;background:#fff6c8;box-shadow:0 0 0 2px #f4a21c,0 0 10px 2px rgba(255,180,40,.95)}
+@keyframes cwProj{from{opacity:0;transform:translateY(-50%) scaleX(.2)}to{opacity:1;transform:translateY(-50%) scaleX(1)}}
+@keyframes cwBeam{0%,100%{opacity:.85}50%{opacity:.55}}
+
+/* v110: bottom bar white, storage box grey, bigger Tap it */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app .bottomBar .chapLine{border-image:none!important;border:2px solid #fff!important;border-radius:18px!important;background:linear-gradient(180deg,rgba(255,255,255,.96),rgba(244,248,242,.92))!important;box-shadow:0 2px 6px rgba(20,40,20,.22)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #btnStore{border-image:none!important;border:2px solid #b9c0c6!important;border-radius:16px!important;background:linear-gradient(180deg,#fff,#eef1f3)!important;box-shadow:0 2px 6px rgba(20,30,40,.22)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.csheet .csGo{height:48px!important;padding:0 12px 0 4px!important;gap:6px!important;border-radius:16px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.csheet .csGo :is(img,svg){width:42px!important;height:42px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.csheet .csGo span{font-size:12.5px!important}
+/* v110: item / chain help is blue, no face */
+html[data-ui-theme="buddy"] body #app #modal.blueM{--h-ink:#14325a; --h-ink2:#3c5c80;
+  --h-panel:url(../sprites/ui/lb_panel.webp); --h-tall:url(../sprites/ui/lb_panel_tall.webp); --h-head:url(../sprites/ui/lb_panel_head.webp);
+  --h-title:url(../sprites/ui/lb_title.webp); --h-banner:url(../sprites/ui/lb_title.webp); --h-tip:url(../sprites/ui/lb_tip.webp);
+  --h-card:url(../sprites/ui/lb_card.webp); --h-card1:url(../sprites/ui/lb_card_on.webp); --h-cardx:url(../sprites/ui/lb_card_lock.webp);
+  --h-tab1:url(../sprites/ui/lb_tab_on.webp); --h-tab0:url(../sprites/ui/lb_tab_off.webp); --h-bar:url(../sprites/ui/lb_bar.webp); --h-fill:url(../sprites/ui/lb_fill.webp)}

@@ -1,5 +1,13 @@
 # Changelog
 
+- **v110 (1.0.10)**
+  - The chapter needs strip is projected out of the Ch. button: a gold light beam from its edge to a hologram card on the right.
+  - Contract popup: bigger "Tap it" button and producer picture.
+  - Bottom bar is white and only appears with BUILD! when the chapter is ready; the storage box has a grey border.
+  - Item / chain help popups are blue and show no character; producer popups never show a character.
+  - Chapter popup: tapping the contracts or coins tile says what is left ("Complete 2 more contracts").
+  - Fixed: a contract card drawn as ready could say "you need X first" after the board changed; cards redraw when readiness changes and a tap checks the board at that moment.
+
 - **v109 (1.0.9)**
   - Fixed: the Ch. button was squashed by its new frame (face cut off).
   - The Ch. button and its needs strip are gold like the chapter popup; Missions button and Mission Log are blue.

@@ -801,6 +801,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (line) {
       const ups = upNeeds(pj);
       line.classList.toggle('ready', !!ready);
+      // the needs live on the Ch. strip up top; down here only the BUILD! call
+      line.style.visibility = ready ? '' : 'hidden';
       line.innerHTML = `<b class="clT">${ready ? 'BUILD!' : 'Ch. ' + (projDone() + 1)}</b>`
         + pj.needs.map(([id, q]: [string, number]) => { const h = Math.min(q, countItem(id)); return `<span class="clN${h >= q ? ' ok' : ''}">${ART.item(id)}<em>${h}/${q}</em></span>`; }).join('')
         + (pj.coins ? `<span class="clN${S.coins >= pj.coins ? ' ok' : ''}">${ART.icon('coin')}<em>${pj.coins >= 1000 ? (pj.coins / 1000).toFixed(1) + 'k' : pj.coins}</em></span>` : '')
@@ -810,7 +812,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     }
   }
   /** which board cells a ready contract or a ready chapter is about to take */
+  let readySig = '';
   function updateWanted() {
+    // a card drawn as ready (or not) redraws the moment that changes
+    { const sig = S.orders.map((o: any) => o.id + (canFill(o) ? 1 : 0)).join(','); if (sig !== readySig) { const first = !readySig; readySig = sig; if (!first) renderOrders(); } }
     const b = B(), used = new Set<number>(), take = (id: string, q: number) => {
       for (let i = 0; i < N && q; i++) if (!used.has(i) && b[i] && b[i].id === id) { used.add(i); q--; }
     };
@@ -940,6 +945,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
 
   let ordersMinH = 0;
+  /** right now, at the moment of the tap, not when the card was drawn */
+  const canFill = (o: any) => o.needs.every((nd: any) => countItem(nd.id) >= nd.qty);
   function renderOrders(newIds?: string[]) {
     const host = $('#orders'); host.innerHTML = '';
     if (S.ship) host.appendChild(shipCard());
@@ -971,10 +978,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       // tapping the thing they want explains where it comes from, which is the
       // question a new player actually has
       card.querySelectorAll('[data-need]').forEach((n: any) => n.onclick = (ev: Event) => {
-        ev.stopPropagation(); if (ready) deliver(o.id); else contractSheet(o.id);
+        ev.stopPropagation(); if (canFill(o)) deliver(o.id); else contractSheet(o.id);
       });
       // a ready card gives on any tap; otherwise it points at where to get things
-      card.onclick = () => ready ? deliver(o.id) : contractSheet(o.id);
+      card.onclick = () => canFill(o) ? deliver(o.id) : contractSheet(o.id);
       host.appendChild(card);
     });
     if (!S.orders.length && !S.ship && ART.spriteUi('empty_done')) host.innerHTML = `<div class="ordEmpty"><img src="${ART.spriteUi('empty_done')}" alt=""><span><b>All caught up!</b><i>New contracts are on their way.</i></span></div>`;
@@ -1050,10 +1057,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const cp = curProject(); if (cp && cp.needs.some(([x]: [string, number]) => x === id)) uses.push(`🏗️ Needed for <b>${cp.name}</b> (this chapter).`);
     if (d.chain === 'relic') uses.push('🏛️ Spend it in the <b>Relic Vault</b> (Missions) on perks that last forever.');
     else if (d.chain === 'bloom') uses.push(`💗 Feed it to the <b>${W().heart}</b> in the camp to wake the world.`);
-    else if (d.chain === 'junk') uses.push('🧪 Worth triple Science in the Lab recycler; a Junk Rocket gives Fuel Ore.');
+    else if (d.chain === 'junk') uses.push('🧪 Worth double Science in the Lab recycler; a Junk Rocket gives Fuel Ore.');
     else if (d.fuel || d.chain === 'fuel') uses.push('🚀 Rocket Fuel flies you to new worlds.');
     if (!uses.length) uses.push(`🪙 Sell it for ${sellOf(id)} coins${labOpen() ? ` or recycle it for ${sciOf(id)} 🧪` : ''} — or keep merging: higher steps are worth more.`);
-    modal(S.met ? 'bloop' : 'pip', ITEMS[id].name,
+    modal('~blue', ITEMS[id].name,
       `<div class="chainWrap">${steps}</div>
        <div class="noteLine" style="text-align:left"><b>Where from:</b> ${where}</div>
        <div class="noteLine" style="text-align:left"><b>What for:</b> ${uses.join(' ')}</div>
@@ -1291,9 +1298,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // Never pay out for goods that are not there: check first, then take.
     const short = o.needs.filter(nd => countItem(nd.id) < nd.qty);
     if (short.length) {
-      sfx.no();
-      toast('You need ' + short.map(nd => `${nd.qty}× <b>${ITEMS[nd.id].name}</b>`).join(' and ') + ' first.');
-      renderOrders();
+      // the card was drawn before the board changed: show what is missing instead of a bare "no"
+      renderOrders(); contractSheet(id);
       return;
     }
     const card = document.querySelector(`.order[data-oid="${id}"]`);
@@ -2588,7 +2594,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const full = mmss(evOf(p, c) * cap);
     void per; void cost;
     // a producer refills by waiting, or now for gems or a video — never coins or energy
-    modal(W().folks[0] || 'bloop', p.name + ' is empty',
+    modal('', p.name + ' is empty',
       `<div class="rcArt">${ART.uiIcon('ic_recharge', '')}</div>Full again in about <b>${full}</b> (it fills while the game is shut, too).`
       + `<button class="big gold" id="rechargeGem">Fill it up · 💎 3</button>` + adBtn('recharge', 'Fill it up', 'rechargeAd'),
       'I can wait');
@@ -3067,14 +3073,19 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         <div class="chHTx"><i>${W().name} · ${projDone()}/${list.length}</i><b>${p.name}</b><em>${CHARS[p.who] ? CHARS[p.who].name : ''} needs</em></div>
         ${p.talk ? `<button class="talkBtn" id="btnTalk" title="Replay the story">${ART.uiIcon('ic_feedback', '💬')}</button>` : ''}</div>
       <div class="chTrack2">${chapterBars(list, projDone())}</div>
-      <div class="pNeeds chNeeds">${need2}${p.coins ? `<span class="pNeed chN${S.coins >= p.coins ? ' ok' : ''}"><span class="chNA">${coin}</span><b>${p.coins >= 1000 ? (p.coins / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : p.coins}</b></span>` : ''}
+      <div class="pNeeds chNeeds">${need2}${p.coins ? `<span class="pNeed chN${S.coins >= p.coins ? ' ok' : ''}" data-tip="coins"><span class="chNA">${coin}</span><b>${p.coins >= 1000 ? (p.coins / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : p.coins}</b></span>` : ''}
         ${p.rocket ? `<span class="pNeed chN${allParts() ? ' ok' : ''}"><span class="chNA">🚀</span><b>${PART_KEYS.filter(k => S.parts[k]).length}/4</b></span>` : ''}
-        <span class="pNeed chN${cHave() >= cNeed(p) ? ' ok' : ''}"><span class="chNA">${ART.uiIcon('cl_tasks', '📋')}</span><b>${Math.min(cHave(), cNeed(p))}/${cNeed(p)}</b></span></div>
+        <span class="pNeed chN${cHave() >= cNeed(p) ? ' ok' : ''}" data-tip="tasks"><span class="chNA">${ART.uiIcon('cl_tasks', '📋')}</span><b>${Math.min(cHave(), cNeed(p))}/${cNeed(p)}</b></span></div>
       ${ups ? `<div class="upHead">Upgrade this one step first</div>${ups}` : ''}
       ${chapterPrize(p)}
       <button class="big${ok ? '' : ' off'}" id="btnProject">${ok ? 'Complete the chapter ✨' : 'Gather everything above'}</button>`, 'chapter');
     const host = $('#popBody');
     host.querySelectorAll('.pNeed[data-need]').forEach((n: any) => n.onclick = () => { closePop(); chainPanel(n.dataset.need); });
+    host.querySelectorAll('.pNeed[data-tip]').forEach((n: any) => n.onclick = () => {
+      sfx.tap();
+      if (n.dataset.tip === 'tasks') { const left = Math.max(0, cNeed(p) - cHave()); toast(left ? `📋 Complete <b>${left}</b> more contract${left > 1 ? 's' : ''} for this chapter (${cHave()}/${cNeed(p)} done).` : '📋 Contracts done ✓'); }
+      else { const left = Math.max(0, p.coins - S.coins); toast(left ? `🪙 Save <b>${left}</b> more coins for this chapter.` : '🪙 Coins ready ✓'); }
+    });
     host.querySelectorAll('[data-upg]').forEach((b: any) => b.onclick = () => { upgradeProducer(+b.dataset.upg); chapterSheet(); });
     // one waiting in storage can be grown right there too
     host.querySelectorAll('[data-upst]').forEach((b: any) => b.onclick = () => {
@@ -6494,6 +6505,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     showModal(m.face, m.title, m.body, m.btn); afterModal = m.after;
   }
   function showModal(face: string, title: string, body: string, btn?: string) {
+    // '~blue' = no face, blue frame (item and chain help, linked to chapters and contracts)
+    $('#modal').classList.toggle('blueM', face === '~blue'); if (face === '~blue') face = '';
     $('#mFace').innerHTML = face ? ART.char(face) : ''; $('#mFace').style.display = face ? '' : 'none';
     $('#mTitle').textContent = title;
     $('#mBody').innerHTML = body;
