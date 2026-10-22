@@ -1,5 +1,13 @@
 # Changelog
 
+- **v108 (1.0.8)**
+  - Bottom bar no longer cuts its items.
+  - Contract popup is compact (one small row per item, small "Tap it" pill) and cyan.
+  - Chapter popup redesigned: gold space hero with the character, a dark chapter track, need tiles with ticks, gold prize row.
+  - The Ch. needs strip grows out of the chapter button.
+  - Popup families get their own colours: chapter gold, events pink, contracts cyan, Lab blue, Star Chart violet (recoloured from the new ChatGPT frames).
+  - Expeditions: board, tiles, panels and intro wear the expedition's own colour.
+
 - **v107 (1.0.7)**
   - The old green goggles guide is gone: Zib is the robot companion everywhere, never orders a contract, and producer popups show no character.
   - Mission Log redesigned: space hero with today/week points, colour tiles, aligned medal and chest tracks, short chips instead of long text, clean task rows.

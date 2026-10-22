@@ -1106,8 +1106,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const isShip = o.id === 'ship', fig = isShip && ART.spriteUi('ufo_freighter') ? `<img class="ufoFig" src="${ART.spriteUi('ufo_freighter')}" alt="">` : ART.figure(o.char);
     pop(isShip ? '🛸 Star Freighter' : ch.name, `<div class="csHead"><span class="csFig">${fig}</span><div class="csSay">“${o.say}”${rew}</div></div>
       ${o.needs.map(needRow).join('')}
-      <div class="noteLine">Two of a kind merge into the next step. Close this and the things you need will light up on the board.</div>
-      <button class="big" id="csOk">Got it</button>`, 'csheet', () => pointFor(o));
+`, 'csheet', () => pointFor(o));
     document.querySelectorAll<HTMLElement>('.csGo').forEach(b => b.onclick = () => {
       const i = +(b.dataset.src as string);
       if (i < 0) { toast(`The <b>${PRODS[b.dataset.k as string].name}</b> is not on this board yet — the story brings it.`); return; }
@@ -3062,13 +3061,15 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           : `<button class="buyBtn green" data-upst="${u.k}" ${S.coins < price ? 'disabled' : ''}>⬆ ${price} 🪙</button>`}</div>`;
     }).join('');
     const list = projList();
-    pop(`Chapter ${projDone() + 1}`, `<div class="card mlMission chTrack"><div class="mlHead"><b>${W().name}</b><span>${projDone()}/${list.length} chapters</span></div>${chapterBars(list, projDone())}</div>
-      <div class="chHead2"><span class="pFace">${ART.char(p.who)}</span>
-        <div class="chTx"><b>${p.name}</b><i>${CHARS[p.who] ? CHARS[p.who].name : ''} needs:</i></div>
+    const need2 = p.needs.map(([id, q]: [string, number]) => { const have = Math.min(q, countItem(id));
+      return `<span class="pNeed chN${have >= q ? ' ok' : ''}" data-need="${id}"><span class="chNA">${ART.item(id)}</span><b>${have}/${q}</b></span>`; }).join('');
+    pop(`Chapter ${projDone() + 1}`, `<div class="chHero"><span class="chFace">${ART.char(p.who)}</span>
+        <div class="chHTx"><i>${W().name} · ${projDone()}/${list.length}</i><b>${p.name}</b><em>${CHARS[p.who] ? CHARS[p.who].name : ''} needs</em></div>
         ${p.talk ? `<button class="talkBtn" id="btnTalk" title="Replay the story">${ART.uiIcon('ic_feedback', '💬')}</button>` : ''}</div>
-      <div class="pNeeds">${need}${p.coins ? `<span class="pNeed${S.coins >= p.coins ? ' ok' : ''}">${coin}<b>${p.coins}</b></span>` : ''}
-        ${p.rocket ? `<span class="pNeed${allParts() ? ' ok' : ''}">🚀<b>${PART_KEYS.filter(k => S.parts[k]).length}/4</b></span>` : ''}
-        <span class="pNeed${cHave() >= cNeed(p) ? ' ok' : ''}">${ART.uiIcon('cl_tasks', '📋')}<b>${Math.min(cHave(), cNeed(p))}/${cNeed(p)}</b></span></div>
+      <div class="chTrack2">${chapterBars(list, projDone())}</div>
+      <div class="pNeeds chNeeds">${need2}${p.coins ? `<span class="pNeed chN${S.coins >= p.coins ? ' ok' : ''}"><span class="chNA">${coin}</span><b>${p.coins >= 1000 ? (p.coins / 1000).toFixed(1).replace(/\.0$/, '') + 'k' : p.coins}</b></span>` : ''}
+        ${p.rocket ? `<span class="pNeed chN${allParts() ? ' ok' : ''}"><span class="chNA">🚀</span><b>${PART_KEYS.filter(k => S.parts[k]).length}/4</b></span>` : ''}
+        <span class="pNeed chN${cHave() >= cNeed(p) ? ' ok' : ''}"><span class="chNA">${ART.uiIcon('cl_tasks', '📋')}</span><b>${Math.min(cHave(), cNeed(p))}/${cNeed(p)}</b></span></div>
       ${ups ? `<div class="upHead">Upgrade this one step first</div>${ups}` : ''}
       ${chapterPrize(p)}
       <button class="big${ok ? '' : ' off'}" id="btnProject">${ok ? 'Complete the chapter ✨' : 'Gather everything above'}</button>`, 'chapter');

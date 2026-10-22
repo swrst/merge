@@ -882,5 +882,89 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .hud .chip
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .hud .chip>span:first-child{margin-left:-26px!important;position:relative;z-index:1}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app :is(.side .sideW.chapW:not(.ready),.side .sideW.tab,#btnStore){background:none!important;border-style:solid!important;border-width:9px!important;border-color:transparent!important;
   border-image:url(../sprites/ui/hu_btn.webp) 70 fill / 9px / 0 stretch!important;box-shadow:none!important;filter:drop-shadow(0 2px 4px rgba(20,40,20,.25))!important;border-radius:0!important}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .bottomBar .chapLine:not(.ready){background:none!important;border-style:solid!important;border-width:10px 16px!important;border-color:transparent!important;
-  border-image:url(../sprites/ui/hu_dock.webp) 80 110 fill / 10px 16px / 0 stretch!important;box-shadow:none!important;filter:drop-shadow(0 2px 4px rgba(20,40,20,.25))!important;border-radius:0!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .bottomBar .chapLine:not(.ready){background:none!important;border-style:solid!important;border-width:2px 4px!important;border-color:transparent!important;
+  border-image:url(../sprites/ui/hu_dock.webp) 80 110 fill / 18px 26px / 0 stretch!important;box-shadow:none!important;filter:drop-shadow(0 2px 4px rgba(20,40,20,.25))!important;border-radius:0!important}
+
+/* v108: popup families each get their own colour (chapter gold, events pink, contracts cyan) */
+html[data-ui-theme="buddy"] body #app #pop.chapter{--h-ink:#5a3200; --h-ink2:#8a5a1e;
+  --h-panel:url(../sprites/ui/or_panel.webp); --h-tall:url(../sprites/ui/or_panel_tall.webp); --h-head:url(../sprites/ui/or_panel_head.webp);
+  --h-title:url(../sprites/ui/or_title.webp); --h-banner:url(../sprites/ui/or_title.webp); --h-tip:url(../sprites/ui/or_tip.webp);
+  --h-card:url(../sprites/ui/or_card.webp); --h-card1:url(../sprites/ui/or_card_on.webp); --h-cardx:url(../sprites/ui/or_card_lock.webp);
+  --h-tab1:url(../sprites/ui/or_tab_on.webp); --h-tab0:url(../sprites/ui/or_tab_off.webp); --h-bar:url(../sprites/ui/or_bar.webp); --h-fill:url(../sprites/ui/or_fill.webp)}
+html[data-ui-theme="buddy"] body #app #pop.ev{--h-ink:#5a1240; --h-ink2:#8a3a6e;
+  --h-panel:url(../sprites/ui/pk_panel.webp); --h-tall:url(../sprites/ui/pk_panel_tall.webp); --h-head:url(../sprites/ui/pk_panel_head.webp);
+  --h-title:url(../sprites/ui/pk_title.webp); --h-banner:url(../sprites/ui/pk_title.webp); --h-tip:url(../sprites/ui/pk_tip.webp);
+  --h-card:url(../sprites/ui/pk_card.webp); --h-card1:url(../sprites/ui/pk_card_on.webp); --h-cardx:url(../sprites/ui/pk_card_lock.webp);
+  --h-tab1:url(../sprites/ui/pk_tab_on.webp); --h-tab0:url(../sprites/ui/pk_tab_off.webp); --h-bar:url(../sprites/ui/pk_bar.webp); --h-fill:url(../sprites/ui/pk_fill.webp)}
+html[data-ui-theme="buddy"] body #app #pop.csheet{--h-ink:#0f3f4a; --h-ink2:#3a6670;
+  --h-panel:url(../sprites/ui/cy_panel.webp); --h-tall:url(../sprites/ui/cy_panel_tall.webp); --h-head:url(../sprites/ui/cy_panel_head.webp);
+  --h-title:url(../sprites/ui/cy_title.webp); --h-banner:url(../sprites/ui/cy_title.webp); --h-tip:url(../sprites/ui/cy_tip.webp);
+  --h-card:url(../sprites/ui/cy_card.webp); --h-card1:url(../sprites/ui/cy_card_on.webp); --h-cardx:url(../sprites/ui/cy_card_lock.webp);
+  --h-tab1:url(../sprites/ui/cy_tab_on.webp); --h-tab0:url(../sprites/ui/cy_tab_off.webp); --h-bar:url(../sprites/ui/cy_bar.webp); --h-fill:url(../sprites/ui/cy_fill.webp)}
+
+/* v108: the chapter needs strip grows out of the Ch. button */
+html body #app .side .sideW.chapW .cwNeeds{left:calc(100% - 10px)!important;padding:4px 8px 4px 14px!important;border-radius:0 16px 16px 0!important;z-index:-1!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(236,246,232,.95))!important;border:1.5px solid #c9e2bb!important;border-left:0!important;
+  box-shadow:0 2px 6px rgba(20,40,20,.22),inset 0 1px 0 #fff!important}
+html body #app .side .sideW.chapW{isolation:isolate}
+html body #app .side .sideW.chapW .cwNeeds::before{content:"";position:absolute;left:-2px;top:50%;width:10px;height:10px;margin-top:-5px;border-radius:50%;background:#7fd65a;box-shadow:0 0 6px rgba(110,220,80,.8)}
+/* v108: chapter popup: gold space hero, dot track, need tiles */
+#pop.chapter .chHero{position:relative;display:flex;align-items:center;gap:10px;margin:4px 2px 8px;padding:10px 12px;border-radius:18px;
+  background:radial-gradient(1.5px 1.5px at 70% 25%,#fff 60%,transparent),radial-gradient(1px 1px at 85% 70%,#fff 60%,transparent),radial-gradient(1px 1px at 45% 15%,#fff 60%,transparent),
+    radial-gradient(ellipse at 100% 0%,#ffb84a 0%,transparent 55%),linear-gradient(115deg,#2a1d6b 0%,#5a2a8e 55%,#c2552a 100%);box-shadow:0 4px 0 #23145a,0 8px 16px rgba(60,30,100,.3)}
+#pop.chapter .chFace{width:66px;height:66px;flex:0 0 66px;border-radius:50%;background:radial-gradient(circle,#fff6d6,#ffc94a);box-shadow:0 0 0 3px #fff,0 0 14px rgba(255,200,80,.8);overflow:hidden;display:flex}
+#pop.chapter .chFace :is(svg,img){width:100%;height:100%}
+#pop.chapter .chHTx{flex:1;min-width:0;display:flex;flex-direction:column;text-align:left}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop.chapter .chHTx i{font-style:normal;font-size:10.5px;font-weight:800;color:#ffd98a!important;letter-spacing:.3px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop.chapter .chHTx b{font:400 21px/1.05 "Lilita One",Fredoka,sans-serif!important;color:#fff!important;text-shadow:0 2px 0 rgba(20,10,50,.5)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop.chapter .chHTx em{font-style:normal;font-size:11.5px;font-weight:700;color:#e9e0ff!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop.chapter .chHero .talkBtn{position:static!important;width:40px!important;height:40px!important;border-radius:12px!important;background:rgba(255,255,255,.95)!important;border:0!important;border-image:none!important;box-shadow:0 2px 4px rgba(0,0,0,.3)!important}
+#pop.chapter .chTrack2{margin:0 2px 10px;padding:6px 8px;border-radius:999px;background:#2a1d6b;box-shadow:inset 0 1px 3px rgba(0,0,0,.4)}
+#pop.chapter .chTrack2 .chAll{display:none!important}
+#pop.chapter .chTrack2 .mlNote{display:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop.chapter .chTrack2 .chRow{margin:0!important;background:none!important;border:0!important;box-shadow:none!important;padding:0!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop.chapter .chNeeds{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(64px,1fr))!important;gap:8px!important;margin:0 2px 10px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.chapter .pNeed.chN{display:flex!important;flex-direction:column;align-items:center;gap:3px;padding:6px 4px!important;border:0!important;border-image:none!important;border-radius:14px!important;background:#fff!important;
+  box-shadow:0 3px 0 rgba(120,70,20,.15),0 5px 10px rgba(120,70,20,.1)!important;position:relative}
+#pop.chapter .chNA{width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#fff6d6,#ffd27a);display:flex;align-items:center;justify-content:center;font-size:24px}
+#pop.chapter .chNA :is(img,svg,.uiIc){width:38px!important;height:38px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.chapter .pNeed.chN b{font:900 12.5px/1 Fredoka,sans-serif!important;color:#5a3200!important}
+#pop.chapter .pNeed.chN.ok .chNA{background:radial-gradient(circle at 50% 40%,#e9ffd9,#8fe86a)}
+#pop.chapter .pNeed.chN.ok::after{content:"✓";position:absolute;top:2px;right:6px;width:16px;height:16px;border-radius:50%;background:#3fae2a;color:#fff;font:900 10px/16px Fredoka,sans-serif;text-align:center}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.chapter .przRow{display:flex!important;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;margin:0 2px 10px!important;padding:8px 10px!important;border-radius:14px!important;background:linear-gradient(#fff8e3,#ffefc4)!important;border:0!important;border-image:none!important;box-shadow:0 0 0 1.5px #ffd27a!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.chapter .przRow i{font-style:normal;font-weight:900;font-size:12px;color:#8a5a1e!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.chapter .przRow .prz{display:flex;align-items:center;gap:4px;font-size:12px}
+#pop.chapter .przRow .prz :is(img,svg){width:30px!important;height:30px!important}
+/* v108: contract sheet, compact */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.csheet .csHead{display:flex;align-items:center;gap:8px;margin:2px 2px 6px!important;padding:6px 8px!important;border:0!important;border-image:none!important;border-radius:14px!important;background:linear-gradient(115deg,#e3fbff,#f4feff)!important;box-shadow:0 0 0 1.5px #9fe3ee!important;min-height:0!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.csheet .csFig{width:58px!important;height:58px!important;flex:0 0 58px;overflow:hidden;border-radius:50%;background:radial-gradient(circle,#fff,#bdeef5)}
+#pop.csheet .csFig :is(img,svg){width:100%!important;height:100%!important;object-fit:cover;object-position:top}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.csheet .csSay{flex:1;font-size:13px!important;font-weight:700;text-align:left;display:flex;flex-direction:column;gap:4px;color:var(--h-ink)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.csheet .csNeed{padding:6px 8px!important;margin:6px 2px 0!important;border:0!important;border-image:none!important;border-radius:14px!important;background:#fff!important;box-shadow:0 2px 0 rgba(20,80,100,.12),0 4px 10px rgba(20,80,100,.08)!important;min-height:0!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.csheet .csNeed.ok{box-shadow:0 0 0 2px #7fd65a!important;background:#f3fff0!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.csheet .csTop{display:flex;align-items:center;gap:8px;min-height:0!important}
+#pop.csheet .csArt{width:42px;height:42px;flex:0 0 42px;display:flex}
+#pop.csheet .csArt :is(img,svg){width:42px!important;height:42px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.csheet .csName{flex:1;text-align:left;min-width:0}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.csheet .csName b{font:800 13px/1.1 Fredoka,sans-serif!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.csheet .csName i{font-size:10.5px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.csheet .csGo{display:flex!important;align-items:center;gap:4px;width:auto!important;min-width:0!important;height:34px!important;min-height:0!important;padding:0 10px 0 4px!important;margin:0!important;border:0!important;border-image:none!important;border-radius:999px!important;
+  background:linear-gradient(#ffd45a,#f4a21c)!important;box-shadow:0 2px 0 #c27510!important;filter:none!important;font-size:11px!important}
+#pop.csheet .csGo :is(img,svg){width:28px!important;height:28px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.csheet .csGo span{font:800 11px/1 Fredoka,sans-serif!important;color:#5a3200!important;text-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.csheet .csPath{display:flex;align-items:center;gap:2px;margin:4px 0 0 50px!important;justify-content:flex-start;flex-wrap:wrap}
+#pop.csheet .csStep :is(img,svg){width:22px!important;height:22px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.csheet .csStep{width:26px!important;height:26px!important;min-height:0!important;padding:0!important}
+/* v108: an expedition wears its own colour, board included */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #xpScr .xpBoard{background:linear-gradient(180deg,hsla(var(--xh),80%,94%,.92),hsla(var(--xh),70%,86%,.9))!important;border:3px solid hsl(var(--xh),72%,58%)!important;border-image:none!important;border-radius:20px!important;
+  box-shadow:0 0 0 2px #fff,0 0 18px hsla(var(--xh),90%,60%,.7)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #xpScr :is(.xpBar,.xpSay,.xpO){background:linear-gradient(180deg,hsla(var(--xh),80%,97%,.96),hsla(var(--xh),70%,90%,.94))!important;border:2px solid hsl(var(--xh),70%,62%)!important;border-image:none!important;
+  box-shadow:0 0 10px hsla(var(--xh),90%,60%,.45)!important;color:hsl(var(--xh),60%,20%)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #xpScr :is(.xpBar,.xpSay,.xpO) *{color:hsl(var(--xh),60%,20%)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #xpScr .xpTitle{background:linear-gradient(180deg,hsl(var(--xh),75%,58%),hsl(var(--xh),70%,38%))!important;box-shadow:inset 0 2px 0 rgba(255,255,255,.55),0 0 14px hsla(var(--xh),90%,60%,.6)!important;border:0!important;border-image:none!important;color:#fff!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #xpScr .xpC{background:linear-gradient(160deg,rgba(255,255,255,.95),hsla(var(--xh),70%,93%,.85))!important;border:0!important;border-radius:11px!important;box-shadow:inset 0 0 0 2px hsla(var(--xh),60%,78%,.95),inset 0 2px 0 #fff!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #xpScr .xpC.alt{background:linear-gradient(160deg,hsla(var(--xh),70%,96%,.9),hsla(var(--xh),65%,88%,.85))!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #xpScr .xpC.prod{box-shadow:inset 0 0 0 2.5px #ffc531,0 0 10px rgba(255,200,60,.6)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #xpScr .xpPBox{background:linear-gradient(180deg,#fff,hsla(var(--xh),70%,94%,1))!important;border:3px solid hsl(var(--xh),70%,60%)!important;border-image:none!important;border-radius:22px!important;box-shadow:0 0 0 2px #fff,0 0 22px hsla(var(--xh),90%,60%,.6)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #xpScr .xpPT{background:linear-gradient(180deg,hsl(var(--xh),75%,58%),hsl(var(--xh),70%,40%))!important;border:0!important;border-image:none!important;color:#fff!important;border-radius:14px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #xpScr .xpPBox :is(b,i,span,div,p):not(.big *){color:hsl(var(--xh),55%,22%)!important}
