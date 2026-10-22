@@ -1,5 +1,9 @@
 # Changelog
 
+- **v111 (1.0.11)**
+  - Tutorial: "Your chapter needs these things" spotlights the Ch. button and its strip at the top (not the hidden bottom bar).
+  - Contract customers stand lower so the chapter strip floats above their heads.
+
 - **v110 (1.0.10)**
   - The chapter needs strip is projected out of the Ch. button: a gold light beam from its edge to a hologram card on the right.
   - Contract popup: bigger "Tap it" button and producer picture.

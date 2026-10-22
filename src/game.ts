@@ -6333,8 +6333,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       id: 'hint', say: 'Stuck? Tap here:<br>the next merge <b>blinks</b>.', at: () => '#btnHint',
       when: () => { const h = document.getElementById('btnHint'); return !!h && !!h.offsetParent; },
     },
-    { id: 'story', say: 'Your <b>chapter</b> needs these things.<br>Make them all, then tap <b>Build</b>!', at: () => '#chapLine' },
-    { id: 'story2', say: 'They show here too.<br>Tap for the full list.', at: () => '#btnQuests' },
+    { id: 'story', say: 'Your <b>chapter</b> needs these things.<br>Make them all, then tap <b>Build</b>!', at: () => '#btnQuests, #btnQuests .cwNeeds' },
+    { id: 'story2', say: 'Tap the <b>chapter</b> for the full list.', at: () => '#btnQuests' },
   ];
   /* a one-off spotlight the game raises when a feature first matters (see COACH) */
   let jit: TutStep | null = null;
@@ -6389,10 +6389,12 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       const k = zk();
       return { x: (r.left - app.left) / k + x0, y: (r.top - app.top) / k + y0, w: x1 - x0, h: y1 - y0 };
     }
-    const e = document.querySelector(target as string) as HTMLElement;
-    if (!e || !e.offsetParent) return null;
-    const r = e.getBoundingClientRect(), k = zk();
-    return { x: (r.left - app.left) / k, y: (r.top - app.top) / k, w: r.width / k, h: r.height / k };
+    // several selectors: one spotlight around all of them (the Ch. button and its strip)
+    const els = [...document.querySelectorAll<HTMLElement>(target as string)].filter(e => e.offsetParent || e.getClientRects().length);
+    if (!els.length || !els[0].offsetParent) return null;
+    const rs = els.map(e => e.getBoundingClientRect()), k = zk();
+    const l = Math.min(...rs.map(r => r.left)), t = Math.min(...rs.map(r => r.top)), rr = Math.max(...rs.map(r => r.right)), bb = Math.max(...rs.map(r => r.bottom));
+    return { x: (l - app.left) / k, y: (t - app.top) / k, w: (rr - l) / k, h: (bb - t) / k };
   }
   function tutShow() {
     const st = curStep()!, host = $('#tut');

@@ -1002,3 +1002,7 @@ html[data-ui-theme="buddy"] body #app #modal.blueM{--h-ink:#14325a; --h-ink2:#3c
   --h-title:url(../sprites/ui/lb_title.webp); --h-banner:url(../sprites/ui/lb_title.webp); --h-tip:url(../sprites/ui/lb_tip.webp);
   --h-card:url(../sprites/ui/lb_card.webp); --h-card1:url(../sprites/ui/lb_card_on.webp); --h-cardx:url(../sprites/ui/lb_card_lock.webp);
   --h-tab1:url(../sprites/ui/lb_tab_on.webp); --h-tab0:url(../sprites/ui/lb_tab_off.webp); --h-bar:url(../sprites/ui/lb_bar.webp); --h-fill:url(../sprites/ui/lb_fill.webp)}
+/* v111: customers stand lower, feet behind their card, so the chapter strip floats above their heads */
+html body #app .app .order .oFig,html body #app .order .oFig{position:relative;z-index:0;margin-bottom:-14px!important;transform:translateY(0)}
+html body #app .order .oFig .stand{height:88px!important}
+html body #app .order :is(.oNeeds,.oPay,.oTick){position:relative;z-index:1}
