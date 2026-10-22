@@ -880,8 +880,8 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-ro
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .hud .chip{background:none!important;border-style:solid!important;border-width:4px 12px 4px 30px!important;border-color:transparent!important;
   border-image:url(../sprites/ui/hu_chip_lime.webp) 40 60 40 148 fill / 4px 12px 4px 30px / 0 stretch!important;box-shadow:none!important;filter:drop-shadow(0 2px 3px rgba(20,40,20,.28))!important;border-radius:0!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .hud .chip>span:first-child{margin-left:-26px!important;position:relative;z-index:1}
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app :is(.side .sideW.chapW:not(.ready),.side .sideW.tab,#btnStore){background:none!important;border-style:solid!important;border-width:9px!important;border-color:transparent!important;
-  border-image:url(../sprites/ui/hu_btn.webp) 70 fill / 9px / 0 stretch!important;box-shadow:none!important;filter:drop-shadow(0 2px 4px rgba(20,40,20,.25))!important;border-radius:0!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app :is(.side .sideW.chapW:not(.ready),.side .sideW.tab,#btnStore){background:none!important;border-style:solid!important;border-width:1.5px!important;border-color:transparent!important;
+  border-image:url(../sprites/ui/hu_btn.webp) 70 fill / 10px / 0 stretch!important;box-shadow:none!important;filter:drop-shadow(0 2px 4px rgba(20,40,20,.25))!important;border-radius:0!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .bottomBar .chapLine:not(.ready){background:none!important;border-style:solid!important;border-width:2px 4px!important;border-color:transparent!important;
   border-image:url(../sprites/ui/hu_dock.webp) 80 110 fill / 18px 26px / 0 stretch!important;box-shadow:none!important;filter:drop-shadow(0 2px 4px rgba(20,40,20,.25))!important;border-radius:0!important}
 
@@ -968,3 +968,14 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #xpScr .xp
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #xpScr .xpPBox{background:linear-gradient(180deg,#fff,hsla(var(--xh),70%,94%,1))!important;border:3px solid hsl(var(--xh),70%,60%)!important;border-image:none!important;border-radius:22px!important;box-shadow:0 0 0 2px #fff,0 0 22px hsla(var(--xh),90%,60%,.6)!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #xpScr .xpPT{background:linear-gradient(180deg,hsl(var(--xh),75%,58%),hsl(var(--xh),70%,40%))!important;border:0!important;border-image:none!important;color:#fff!important;border-radius:14px!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #xpScr .xpPBox :is(b,i,span,div,p):not(.big *){color:hsl(var(--xh),55%,22%)!important}
+
+/* v109: the Ch. button is gold like its popup, Missions is blue like the Mission Log */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app .side .sideW.chapW:not(.ready){border-image-source:url(../sprites/ui/or_btn.webp)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app .side .sideW.chapW .cwNeeds{border-color:#f2c46a!important;background:linear-gradient(180deg,rgba(255,252,240,.97),rgba(255,240,205,.95))!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app .side .sideW.chapW .cwNeeds::before{background:#f4a21c!important;box-shadow:0 0 6px rgba(255,170,40,.9)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app .side .sideW.chapW .cwNeeds i.ok{background:radial-gradient(circle,#fff6d6 0%,#ffd27a 100%)!important;box-shadow:0 0 0 1.5px #f4a21c,0 0 8px rgba(255,170,40,.7)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app .side .sideW.chapW .cwBar>i{background:linear-gradient(90deg,#ffd45a,#f4a21c)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app .side #tabRocket{border-image-source:url(../sprites/ui/lb_btn.webp)!important}
+html[data-ui-theme="buddy"] body #app #sc-rocket{--h-ink:#14325a; --h-ink2:#3c5c80;
+  --h-panel:url(../sprites/ui/lb_panel.webp); --h-tall:url(../sprites/ui/lb_panel_tall.webp); --h-head:url(../sprites/ui/lb_panel_head.webp);
+  --h-title:url(../sprites/ui/lb_title.webp); --h-banner:url(../sprites/ui/lb_title.webp); --h-card:url(../sprites/ui/lb_card.webp)}

@@ -1,5 +1,9 @@
 # Changelog
 
+- **v109 (1.0.9)**
+  - Fixed: the Ch. button was squashed by its new frame (face cut off).
+  - The Ch. button and its needs strip are gold like the chapter popup; Missions button and Mission Log are blue.
+
 - **v108 (1.0.8)**
   - Bottom bar no longer cuts its items.
   - Contract popup is compact (one small row per item, small "Tap it" pill) and cyan.
