@@ -1,5 +1,9 @@
 # Changelog
 
+- **v105 (1.0.5)**
+  - Events: the event producer and every event item wear the event token and glow pink on the board.
+  - Event popup: the producer card (Invite / On your board) and its whole chain with points per step sit at the top; the reward track scrolls sideways; the long text is gone.
+
 - **v104 (1.0.4)**
   - A ready chapter is shown in one place, the Ch. button (BUILD!) plus the bottom bar: the side strip hides and the "Chapter ready to build" banner is gone.
   - More producer upgrades are required by chapters: every third chapter from chapter 6, every other chapter from chapter 30.

@@ -817,6 +817,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const ch: number[] = [];
     if (pj) pj.needs.forEach(([id, q]: [string, number]) => { let n = q; for (let i = 0; i < N && n; i++) if (b[i] && b[i].id === id && !used.has(i)) { ch.push(i); n--; } });
     board.setChapter(ch);
+    // the event guest and everything it makes wear the event's token
+    const ev = evNow(), evc: number[] = [], evp: number[] = [];
+    if (ev && S.ev.join === ev.key) for (let i = 0; i < N; i++) { const c = b[i]; if (!c) continue; if (c.ev === ev.key) { evc.push(i); evp.push(i); } else if (c.id && ITEMS[c.id] && ITEMS[c.id].chain.startsWith('ev_')) evc.push(i); }
+    board.setEvent(evc, ev ? 'tok_' + ev.theme.id : '', evp);
   }
   function curMission() { return MISSIONS.find(m => (S.mp[m.id] || 0) < m.need); }
   const allParts = () => S.parts.hull && S.parts.engine && S.parts.nav && S.parts.tank;
@@ -4111,7 +4115,15 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (S.ev.key !== e.key) S.ev = { key: e.key, pts: 0, got: 0 };
     const tr = EV().track, top = tr[tr.length - 1][0];
     pop(`${e.theme.icon} ${e.theme.name}`, `${ART.uiIcon('banner_' + e.theme.id, '').replace('class="uiIc"', 'class="uiIc evBanner"')}<div class="evHead"><span class="evFace">${ART.char(e.theme.who)}</span>
-        <div><b>${S.ev.pts}</b> ${e.theme.token}<i>${e.theme.blurb}</i><em>⏳ ends in ${dhm(e.ends - Date.now())}</em></div></div>
+        <div><b>${S.ev.pts}</b> ${e.theme.token}<em>⏳ ends in ${dhm(e.ends - Date.now())}</em></div></div>
+      ${(() => {
+        const pk = EV_PROD[e.theme.id], pr = PRODS[pk], ch = CHAINS[ITEMS[pr.drops[0]].chain], joined = S.ev.join === e.key;
+        return `<div class="evGuest${joined ? ' on' : ''}"><span class="evGArt">${ART.producer(pr.art)}${ART.uiIcon('tok_' + e.theme.id, e.theme.icon).replace('class="uiIc"', 'class="uiIc evGTok"')}</span>
+          <div class="evGTx"><b>${pr.name}</b><i>${joined ? 'On your board · free taps' : 'Event producer · free taps'}</i></div>
+          ${joined ? '' : `<button class="big" id="evJoin">Invite</button>`}</div>
+          <div class="evChain">${ch.items.map((id: string, k: number) => `<span class="evCI">${ART.item(id)}<em>+${ITEMS[id].tier * 3 + (k === ch.items.length - 1 ? 30 : 0)}</em></span>`).join('<i class="evArr">›</i>')}</div>`;
+      })()}
+      <div class="evWays"><span>🔀 Big merges <b>+1</b></span><span>📋 Contracts <b>+${EV().points.contract}</b></span><span>📖 Chapters <b>+${EV().points.chapter}</b></span></div>
       <div class="evTrack">${tr.map(([need, r]: [number, Reward], k: number) => `<div class="evNode${k < S.ev.got ? ' got' : S.ev.pts >= need ? ' ready' : ''}">
           <span class="evNeed">${need}</span><span class="evArt">${rewardIcon(r)}</span><span class="evRw">${rewardText(r)}</span>
           ${k < S.ev.got ? '<span class="evTick">✓</span>' : ''}</div>`).join('')}</div>
@@ -4123,9 +4135,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         return `<div class="lbBox"><div class="lbHead">🏆 Leaderboard · you are <b>#${me + 1}</b> · prize ${RANK_GEMS(me + 1)} 💎</div>
           ${show.map(x => `<div class="lbRow${x.n === 'You' ? ' me' : ''}"><b>${list.indexOf(x) < 3 ? ART.uiIcon('medal_' + (list.indexOf(x) + 1), '#' + (list.indexOf(x) + 1)) : '#' + (list.indexOf(x) + 1)}</b><span>${x.n}</span><em>${x.pts}</em></div>`).join('')}</div>`;
       })()}
-      ${S.ev.join !== e.key ? `<button class="big" id="evJoin">${e.theme.icon} Invite the ${PRODS[EV_PROD[e.theme.id]].name}</button>
-        <div class="noteLine">It sets up on your board for the event: free taps, and its items are worth big ${e.theme.token}.</div>` : ''}
-      <div class="noteLine">Merge the event guest's items (big points!), merge to tier ${EV().points.mergeFromTier}+ (+1 and up), fill contracts (+${EV().points.contract}+), finish story chapters (+${EV().points.chapter}).</div>`, 'ev');
+`, 'ev');
     const jb = document.getElementById('evJoin');
     if (jb) jb.onclick = () => {
       if (!freeCells().length) { toast('Make a free tile first — the stall needs room.'); return; }

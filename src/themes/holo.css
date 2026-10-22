@@ -782,3 +782,22 @@ html body #app .cwNeeds.go i em{color:#7a4a00!important}
 html body #app .cwNeeds i.ok{background:radial-gradient(circle,#e9ffd9 0%,#bff0a0 100%);border-radius:10px;box-shadow:0 0 0 1.5px #6ccb3a,0 0 8px rgba(110,220,80,.8)}
 html body #app .cwNeeds i.ok:after{width:14px;height:14px;font-size:10px;line-height:14px;right:-4px;top:-5px;box-shadow:0 1px 2px rgba(0,0,0,.3)}
 #btnQuests.ready .cwNeeds{display:none!important}
+/* v105: event popup shows its producer and chain */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop .evGuest{display:flex;align-items:center;gap:10px;margin:10px 4px 6px;padding:8px 10px;border-radius:16px;background:linear-gradient(115deg,#ffe3f2,#fff4d6);box-shadow:0 0 0 2px #ff9fcf,0 0 14px rgba(255,120,190,.45)}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop .evGuest.on{box-shadow:0 0 0 2px #7fdc55,0 0 12px rgba(110,220,80,.5)}
+#pop .evGArt{position:relative;width:64px;height:64px;flex:0 0 64px;display:flex;align-items:center;justify-content:center;animation:readyBob 1.6s ease-in-out infinite}
+#pop .evGArt :is(img,svg){width:60px!important;height:60px!important}
+#pop .evGArt .evGTok{position:absolute;left:-6px;bottom:-4px;width:26px!important;height:26px!important}
+#pop .evGTx{flex:1;display:flex;flex-direction:column;text-align:left;min-width:0}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop .evGTx b{font:800 15px/1.1 Fredoka,sans-serif!important;color:#6a1f4f!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop .evGTx i{font-style:normal;font-size:11.5px;font-weight:700;color:#8a4a72!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop .evGuest .big{width:auto!important;min-width:0!important;padding:0 16px!important;height:38px!important;margin:0!important}
+#pop .evChain{display:flex;align-items:center;justify-content:center;gap:2px;flex-wrap:wrap;margin:4px 0 8px}
+#pop .evCI{display:flex;flex-direction:column;align-items:center;width:44px}
+#pop .evCI :is(img,svg){width:38px!important;height:38px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop .evCI em{font:800 10.5px/1 Fredoka,sans-serif!important;font-style:normal;color:#d6338a!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop .evArr{font-style:normal;font-weight:900;color:#e08ab8!important;font-size:14px}
+#pop .evWays{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin:6px 0 2px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop .evWays span{background:rgba(255,255,255,.85);border:1px solid rgba(70,96,58,.2);border-radius:999px;padding:3px 9px;font-size:11px;font-weight:800;color:var(--h-ink)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop .evTrack{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;gap:6px!important;grid-template-columns:none!important;padding:4px 2px 8px!important;scrollbar-width:none}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop .evTrack .evNode{flex:0 0 78px!important;min-height:0!important}

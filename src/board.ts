@@ -200,7 +200,7 @@ class PixiBoard {
     const tiles = ['tile_light', 'tile_dark', 'tile_locked'];
     const holo = getUITheme() === 'buddy';
     // the hologram look paints every world with the same glass kit; the classic look needs each world's own tiles
-    [...tiles, 'ho_tile', 'ho_tile2', 'hs_locked', 'hs_wanted', 'hm_locked', 'hc_card', 'hs_selected', 'hs_sparkle', 'hs_shadow', 'bubble_film', 'seal_bubble', 'seal_crack', 'meteor', 'ic_star_tag', ...(holo ? [] : Object.keys(THEME).flatMap(w => tiles.map(t => t + '_' + w)))].forEach(k => {
+    [...tiles, 'ho_tile', 'ho_tile2', 'hs_locked', 'hs_wanted', 'hm_locked', 'hc_card', 'hs_selected', 'hs_sparkle', 'hs_shadow', 'bubble_film', 'seal_bubble', 'seal_crack', 'meteor', 'ic_star_tag', 'tok_meteor', 'tok_bloom', 'tok_carnival', ...(holo ? [] : Object.keys(THEME).flatMap(w => tiles.map(t => t + '_' + w)))].forEach(k => {
       const url = ART.spriteUi(k); if (url) add('ui:' + k, '', url);
     });
     await Promise.all(jobs);
@@ -964,6 +964,47 @@ class PixiBoard {
     }
   }
   private chTick = false;
+  /* event guests and their items: a token badge in the corner and a pink glow, so they stand out */
+  private evCells = new Map<number, string>();
+  private evTags: Record<number, Container> = {};
+  private evTick = false;
+  setEvent(list: number[], tok: string, prod: number[] = []) {
+    const nw = new Map<number, string>(); list.forEach(k => nw.set(k, tok));
+    const same = nw.size === this.evCells.size && list.every(k => this.evCells.get(k) === tok);
+    this.evProd = new Set(prod);
+    if (!same) {
+      const old = this.evCells; this.evCells = nw;
+      new Set([...old.keys(), ...nw.keys()]).forEach(k => this.drawTile(k));
+    }
+    Object.keys(this.evTags).forEach(k => { if (!this.evCells.has(+k) || !this.slots[+k] || !this.slots[+k].key) { this.evTags[+k].destroy({ children: true }); delete this.evTags[+k]; } });
+    this.evCells.forEach((t, k) => {
+      if (!this.slots[k] || !this.slots[k].key) return;
+      const r = Math.max(8, this.cell * (this.evProd.has(k) ? 0.2 : 0.15));
+      let tg = this.evTags[k];
+      if (!tg) {
+        tg = new Container();
+        const tx = this.tex['ui:' + t];
+        if (tx) { const sp = new Sprite(tx); sp.anchor.set(0.5); sp.width = sp.height = r * 2.3; tg.addChild(sp); }
+        else { const g = new Graphics(); g.circle(0, 0, r).fill({ color: 0xff5fa8 }).stroke({ color: 0xffffff, width: 2.5 }); tg.addChild(g); }
+        this.lFx.addChild(tg); this.evTags[k] = tg;
+      }
+      const p = this.pos(k);
+      tg.position.set(p.x + r * 0.75, p.y + this.cell - r * 0.75);
+    });
+    if (!this.evTick) {
+      this.evTick = true;
+      this.app.ticker.add(() => {
+        if (!this.evCells.size) return;
+        const t = performance.now() / 1000;
+        this.evCells.forEach((_t, k) => {
+          const a = this.tileArt[k]; const f = 0.5 + 0.5 * Math.sin(t * 2.6 + k * 0.4);
+          if (a && a.visible && !this.wanted.has(k)) (a as any).tint = (0xff << 16) | (Math.round(0xb0 + 0x40 * f) << 8) | Math.round(0xd8 + 0x27 * f);
+          const tg = this.evTags[k]; if (tg) tg.scale.set(1 + (this.evProd.has(k) ? 0.14 : 0.07) * Math.max(0, Math.sin(t * 3 + k)));
+        });
+      });
+    }
+  }
+  private evProd = new Set<number>();
   /** items a ready contract or chapter is about to take: their tiles glow green */
   private wanted = new Set<number>();
   /* Something a customer can take right now is told apart three ways, none of
