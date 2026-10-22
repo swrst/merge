@@ -30,7 +30,7 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW
 /* full screens: the panel with the header strip */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .screen:not(.scene){
   background:none!important;border-style:solid!important;border-width:30px 18px 18px!important;border-radius:0!important;
-  border-image:var(--h-head) 84 56 56 fill / 30px 18px 18px / 0 stretch!important;box-shadow:none!important;
+  border-image:var(--h-head) 64 48 48 fill / 30px 18px 18px / 0 stretch!important;box-shadow:none!important;
   filter:drop-shadow(0 10px 18px rgba(15,38,8,.35));color:var(--h-ink)!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .screen:not(.scene)::before,
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .screen:not(.scene)::after{display:none!important}
@@ -43,7 +43,7 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #npw .npCard{
 /* ============================================================ titles */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popRibbon,.mTitle,.miniTitle,.screen:not(.scene) .scTitle,.xpPT,.npTag,.rwcRib){
   background:none!important;border-style:solid!important;border-width:12px 28px!important;border-radius:0!important;
-  border-image:var(--h-title) 50 95 fill / 12px 28px / 0 stretch!important;box-shadow:none!important;clip-path:none!important;
+  border-image:var(--h-title) 50 56 fill / 12px 28px / 0 stretch!important;box-shadow:none!important;clip-path:none!important;
   color:var(--h-ink)!important;text-shadow:0 1px 0 rgba(255,255,255,.75)!important;padding:1px 4px!important;
   font-family:"Lilita One",Fredoka,sans-serif!important;font-size:clamp(13px,4.2vw,17px)!important;line-height:1.15!important;letter-spacing:0!important;
   white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:calc(100% - 70px)!important;width:max-content!important;min-width:0!important;
@@ -54,22 +54,22 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #rwc .rwcCard .rwc
 /* ============================================================ buttons */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.big,.buyBtn,.csGo,.skGo,.gpGo,.skFuseGo,.xpGive){
   background:none!important;border-style:solid!important;border-width:14px 17px!important;border-radius:0!important;
-  border-image:var(--h-orange) 80 95 fill / 14px 17px / 0 stretch!important;box-shadow:none!important;
+  border-image:var(--h-orange) 54 58 fill / 14px 17px / 0 stretch!important;box-shadow:none!important;
   color:#fff!important;text-shadow:0 1px 0 #a4480f,0 0 3px rgba(140,50,0,.5)!important;padding:1px 6px!important;min-height:44px;
   filter:drop-shadow(0 3px 2px rgba(110,50,0,.3));font-family:Fredoka,sans-serif!important;font-weight:700!important;letter-spacing:0!important;font-size:max(15px,1em)!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.big,.buyBtn) img:is(.emo,.uiIc){width:20px!important;height:20px!important;vertical-align:-4px}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.big,.buyBtn,.csGo,.skGo,.gpGo,.skFuseGo,.xpGive) *{color:#fff!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.big,.buyBtn):active{transform:translateY(2px) scale(.98)}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.big.soft,.big.blue,.big.alt,.buyBtn.soft,.sellBtn,.tSkip){
-  border-image:var(--h-aqua) 80 95 fill / 14px 17px / 0 stretch!important;color:var(--h-ink)!important;text-shadow:0 1px 0 rgba(255,255,255,.7)!important}
+  border-image:url(../sprites/ui/ht_tab_off.webp) 60 70 fill / 14px 17px / 0 stretch!important;color:var(--h-ink)!important;text-shadow:0 1px 0 rgba(255,255,255,.7)!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.big.soft,.big.blue,.big.alt,.buyBtn.soft,.sellBtn,.tSkip) *{color:var(--h-ink)!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.buyBtn.green,.big.green){
-  border-image:var(--h-green) 80 95 fill / 14px 17px / 0 stretch!important;color:#fff!important;text-shadow:0 1px 0 #2b6b12!important}
+  border-image:var(--h-green) 54 58 fill / 14px 17px / 0 stretch!important;color:#fff!important;text-shadow:0 1px 0 #2b6b12!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.buyBtn.gem,.big.gem){
-  border-image:var(--h-violet) 80 95 fill / 14px 17px / 0 stretch!important;color:#fff!important;text-shadow:0 1px 0 #4b1f8f!important}
+  border-image:var(--h-violet) 54 58 fill / 14px 17px / 0 stretch!important;color:#fff!important;text-shadow:0 1px 0 #4b1f8f!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.big,.buyBtn)[disabled],
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.big,.buyBtn).off{
-  border-image:var(--h-grey) 80 95 fill / 14px 17px / 0 stretch!important;color:#f3f6f7!important;text-shadow:0 1px 0 #555c53!important;filter:none;opacity:1!important}
+  border-image:var(--h-grey) 54 58 fill / 14px 17px / 0 stretch!important;color:#f3f6f7!important;text-shadow:0 1px 0 #555c53!important;filter:none;opacity:1!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.big,.buyBtn)[disabled] *,
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.big,.buyBtn).off *{color:#f3f6f7!important}
 /* round buttons: close, info, back */
@@ -83,18 +83,18 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW
 /* ============================================================ tabs, bars, timers */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.sTab,.labTabs>button,.mlTabs>button,.achTabs>button,.tabsRow>button){
   background:none!important;border-style:solid!important;border-width:11px 14px!important;border-radius:0!important;
-  border-image:var(--h-tab0) 70 85 fill / 11px 14px / 0 stretch!important;box-shadow:none!important;color:var(--h-ink)!important;text-shadow:0 1px 0 #fff!important;padding:0 4px!important}
+  border-image:var(--h-tab0) 60 70 fill / 11px 14px / 0 stretch!important;box-shadow:none!important;color:var(--h-ink)!important;text-shadow:0 1px 0 #fff!important;padding:0 4px!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.sTab.on,.labTabs>button.on,.mlTabs>button.on,.achTabs>button.on,.tabsRow>button.on){
-  border-image:var(--h-tab1) 80 95 fill / 11px 14px / 0 stretch!important;color:#f0fffc!important;text-shadow:0 1px 1px #12280b!important}
+  border-image:var(--h-tab1) 60 70 fill / 11px 14px / 0 stretch!important;color:#f0fffc!important;text-shadow:0 1px 1px #12280b!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.sTab,.sTab.on) *{color:inherit!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.catBar,.achBar,.wkBar,.gpBar,.skBar,.skBar2,.qBar,.tBar,.albProg,.skLitBar,.skLit2,.pfXp,.cwBar){
   background:none!important;border-style:solid!important;border-width:4px 8px!important;border-radius:0!important;
-  border-image:var(--h-bar) 40 50 fill / 4px 8px / 0 stretch!important;box-shadow:none!important;overflow:visible!important}
+  border-image:var(--h-bar) 40 46 fill / 4px 8px / 0 stretch!important;box-shadow:none!important;overflow:visible!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.catBar>i,.achBar>em,.albProg>i,.pfXp>i,.skLitBar>i,.skLit2>i,.gpBar>i,.wkBar>i){
   background:var(--h-fill) left center/100% 100% no-repeat!important;box-shadow:none!important;border-radius:6px!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.evTime,.timerPill,.offTimer){
   background:none!important;border-style:solid!important;border-width:4px 8px 4px 16px!important;border-radius:0!important;
-  border-image:var(--h-timer) 45 60 45 120 fill / 4px 8px 4px 16px / 0 stretch!important;box-shadow:none!important;color:var(--h-light)!important}
+  border-image:var(--h-timer) 50 60 fill / 4px 8px 4px 16px / 0 stretch!important;box-shadow:none!important;color:var(--h-light)!important}
 
 /* ============================================================ cards, slots, tags, dots */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) :is(.card,.questRow,.achCard,.enRow,.lxCard,.pfStat,.csNeed,.chHead2,.optRow,.pCard,.srcCard,.funCard,.mlCard,.mlTile,.pfAlb,.albSet,.resRow,.upRow,.evNode,.lbRow,.przRow,.constRow,.accBox,.rechargeBox,.labIntro){
@@ -125,7 +125,7 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .sCard .buyBtn:not
 /* ============================================================ item bar, board messages, tips (the HUD, side buttons, dock and Galaxy button keep the classic look) */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app .infoBar{
   background:none!important;border-style:solid!important;border-width:12px 22px!important;border-radius:0!important;
-  border-image:var(--h-banner) 56 70 fill / 12px 22px / 0 stretch!important;box-shadow:none!important;color:var(--h-ink)!important}
+  border-image:var(--h-banner) 50 56 fill / 12px 22px / 0 stretch!important;box-shadow:none!important;color:var(--h-ink)!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #toast{
   background:none!important;border-style:solid!important;border-width:9px 16px 9px 14px!important;border-radius:0!important;
   border-image:var(--h-notice) 40 80 40 60 fill / 9px 16px 9px 14px / 0 stretch!important;box-shadow:none!important;color:var(--h-light)!important;text-shadow:0 1px 1px #0e1e08!important}
@@ -256,11 +256,11 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #chFan .cfStage{wi
 /* ============================================================ a frame of its own for each kind of popup */
 /* a character speaking (modal): the plain square panel with orange corners (the base rule) */
 /* generic popups: the panel with the darker header strip */
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #pop .popBox{border-width:30px 18px 18px!important;border-image:var(--h-head) 84 56 56 fill / 30px 18px 18px / 0 stretch!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #pop .popBox{border-width:30px 18px 18px!important;border-image:var(--h-head) 64 48 48 fill / 30px 18px 18px / 0 stretch!important}
 /* rewards: the orange-rimmed glass card */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #rwc .rwcCard{border-width:18px!important;border-image:var(--h-card1) 70 fill / 18px / 0 stretch!important}
 /* little prompts: the wide banner */
-html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #mini .miniBox{border-width:14px 22px!important;border-image:var(--h-banner) 56 70 fill / 14px 22px / 0 stretch!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #mini .miniBox{border-width:14px 22px!important;border-image:var(--h-banner) 50 56 fill / 14px 22px / 0 stretch!important}
 /* energy: frosted white glass */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app #pop .popBox:has(.enBig){border-width:16px!important;border-image:var(--h-card) 64 fill / 16px / 0 stretch!important}
 /* quests and tasks: the mission tablet */
@@ -351,7 +351,7 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .bottomBar .ch
 /* ============================================================ tips from a character: hologram banner */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #tipBub{
   background:none!important;border-style:solid!important;border-width:12px 22px!important;border-radius:0!important;
-  border-image:var(--h-banner) 56 70 fill / 12px 22px / 0 stretch!important;box-shadow:none!important;padding:0 26px 0 0!important;
+  border-image:var(--h-banner) 50 56 fill / 12px 22px / 0 stretch!important;box-shadow:none!important;padding:0 26px 0 0!important;
   filter:drop-shadow(0 0 10px rgba(204,255,154,.4)) drop-shadow(0 6px 10px rgba(15,38,8,.35))}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #tipBub .tbTxt,html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #tipBub .tbTxt *{color:var(--h-ink)!important;text-shadow:none!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #tipBub .tbTxt i{color:#c45a12!important;font-style:normal;font-weight:800}
@@ -383,7 +383,7 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #tut .tNext{min-wi
 #tHand.drag{animation:tutDrag 1.6s ease-in-out infinite!important}
 @keyframes tutDrag{0%{transform:translate(-30%,-10%) scale(1);opacity:0}12%{opacity:1;transform:translate(-30%,-10%) scale(.92)}70%{transform:translate(calc(-30% + var(--dx)),calc(-10% + var(--dy))) scale(.92);opacity:1}85%{transform:translate(calc(-30% + var(--dx)),calc(-10% + var(--dy))) scale(1);opacity:1}100%{opacity:0;transform:translate(calc(-30% + var(--dx)),calc(-10% + var(--dy)))}}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #tut .tNext{flex:none!important;background:none!important;border-style:solid!important;border-width:12px 16px!important;border-radius:0!important;
-  border-image:var(--h-orange) 80 95 fill / 12px 16px / 0 stretch!important;box-shadow:none!important;color:#fff!important;text-shadow:0 1px 0 #a4480f!important;font:700 16px Fredoka,sans-serif!important;padding:0 10px!important;min-height:40px}
+  border-image:var(--h-orange) 54 58 fill / 12px 16px / 0 stretch!important;box-shadow:none!important;color:#fff!important;text-shadow:0 1px 0 #a4480f!important;font:700 16px Fredoka,sans-serif!important;padding:0 10px!important;min-height:40px}
 
 /* ============================================================ Lab: the ? button and its short guide */
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app #labInfo{background:url(../sprites/ui/hb_info.webp) center/contain no-repeat!important;border:0!important;box-shadow:none!important;color:transparent!important;font-size:0!important;width:38px!important;height:38px!important;flex:none}
@@ -801,3 +801,13 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop .evAr
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop .evWays span{background:rgba(255,255,255,.85);border:1px solid rgba(70,96,58,.2);border-radius:999px;padding:3px 9px;font-size:11px;font-weight:800;color:var(--h-ink)!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop .evTrack{display:flex!important;flex-wrap:nowrap!important;overflow-x:auto;gap:6px!important;grid-template-columns:none!important;padding:4px 2px 8px!important;scrollbar-width:none}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #pop .evTrack .evNode{flex:0 0 78px!important;min-height:0!important}
+
+/* v106: the new button set: blue is blue, every colour has a pressed look */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) .big.blue{border-image:var(--h-aqua) 54 58 fill / 14px 17px / 0 stretch!important;text-shadow:0 1px 0 #123f8f!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) .big.blue *{color:#fff!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.popBox,.mBoxW,.miniBox,.rwcCard,.screen:not(.scene),.npCard,.tkBox,.infoBar,.coachBub) .big.blue{color:#fff!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.big,.buyBtn,.csGo,.skGo,.gpGo):not([disabled]):not(.off):active{border-image-source:url(../sprites/ui/hb_orange_p.webp)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.big.green,.buyBtn.green):not([disabled]):active{border-image-source:url(../sprites/ui/hb_green_p.webp)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.big.gem,.buyBtn.gem):not([disabled]):active{border-image-source:url(../sprites/ui/hb_violet_p.webp)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app .big.blue:not([disabled]):active{border-image-source:url(../sprites/ui/hb_aqua_p.webp)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app :is(.big.soft,.big.alt,.buyBtn.soft,.sellBtn,.tSkip):not([disabled]):active{border-image-source:url(../sprites/ui/ht_tab_on.webp)!important}

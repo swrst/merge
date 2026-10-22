@@ -1,5 +1,10 @@
 # Changelog
 
+- **v106 (1.0.6)**
+  - New ChatGPT UI set (art/ui/holo/sheets/v2): popup frames in lime, blue (Lab) and violet (Star Chart), glossy buttons with pressed states, tabs, bars, badges, sale burst, ribbon, cards, and the board tile set (normal, selected, wanted, chapter, sealed, locked, sparkle).
+  - Board tiles use the new glass tile; chapter items get their own green chapter tile.
+  - Soft buttons are white glass with dark text; blue buttons are blue with white text.
+
 - **v105 (1.0.5)**
   - Events: the event producer and every event item wear the event token and glow pink on the board.
   - Event popup: the producer card (Invite / On your board) and its whole chain with points per step sit at the top; the reward track scrolls sideways; the long text is gone.
