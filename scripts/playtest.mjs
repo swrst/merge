@@ -1078,7 +1078,7 @@ await tapCell(rcell); await page.waitForTimeout(300);
 must(await page.locator('#btnRecycle').isVisible(), 'a selected item can be recycled once the Lab exists');
 await page.locator('#btnRecycle').click({ force: true }); await page.waitForTimeout(400);
 s = await S();
-must(s.sci === 9 && !s.boards.earth.some(c => c && c.id === 'geode'), `recycling a tier-3 Geode gives 9 Science (${s.sci})`);
+must(s.sci === 3 && !s.boards.earth.some(c => c && c.id === 'geode'), `recycling a tier-3 Geode gives 3 Science (${s.sci})`);
 await set(() => { window.__game.state().sci = 100; });
 const e0 = await page.evaluate(() => window.__game.maxEnergy());
 await tab('lab');

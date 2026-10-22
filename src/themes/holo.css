@@ -581,7 +581,6 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .side .sid
 .cwNeeds i em{font:800 9.5px/1.1 Fredoka,sans-serif;font-style:normal;color:#24331f!important;text-shadow:none!important}
 .cwNeeds i.ok em{color:#2d7a14!important}
 .cwNeeds i.ok:after{content:"✓";position:absolute;right:0;top:-2px;font:800 8px/11px Fredoka,sans-serif;width:11px;height:11px;border-radius:50%;background:#3fae2a;color:#fff;text-align:center}
-#btnQuests.ready .cwNeeds{display:none}
 
 /* ============================================================ the Star Bazaar: painted stall sign, section plates, product art */
 #sc-shop .shopSign{width:min(60%,210px);aspect-ratio:357/360;margin:-8px auto -30px;background:url(../sprites/ui/sp_sign.webp) center/contain no-repeat;position:relative;z-index:1;pointer-events:none}
@@ -769,3 +768,16 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-bo
 #sc-book .sSecT::after{content:"";flex:1;height:2px;border-radius:2px;background:linear-gradient(90deg,#cfe8c2,transparent);margin-left:6px;align-self:center}
 html[data-ui-theme="buddy"] body #app #side{position:relative;z-index:8}
 #petChip{margin-bottom:14px}
+/* v103: side chips stay still; only a pet that is hungry bobs, ready things glow */
+html body #app .qChip{animation:none!important}
+html body #app .qChip.pup.hungry{animation:readyBob 1.3s ease-in-out infinite!important}
+html body #app .qChip.album.ready,html body #app .qChip.xp.ready{animation:claimPulse 1.6s ease-in-out infinite!important}
+html body #app #petChip .qChip.pup.ready .pupImg{animation:none!important}
+/* v103: the chapter strip shouts when it is ready */
+html body #app .cwNeeds.allOk{background:linear-gradient(#f4ffe9,#d6f7c2)!important;box-shadow:0 0 0 2px #7fdc55,0 0 12px rgba(110,220,80,.7)!important}
+html body #app .cwNeeds.go{background:linear-gradient(#fff4c4,#ffd24f)!important;box-shadow:0 0 0 2.5px #ffb21e,0 0 18px rgba(255,190,40,.95)!important;animation:cwGo 1.1s ease-in-out infinite;align-items:center}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app .cwNeeds.go b.cwGo{font:400 18px/1 "Lilita One",Fredoka,sans-serif;color:#e8590c!important;text-shadow:0 1.5px 0 #fff,0 0 6px rgba(255,255,255,.9)!important;padding:0 4px 0 2px;letter-spacing:.5px}
+html body #app .cwNeeds.go i em{color:#7a4a00!important}
+@keyframes cwGo{0%,100%{transform:translateY(-50%) scale(1)}50%{transform:translateY(-50%) scale(1.07)}}
+html body #app .cwNeeds i.ok{background:radial-gradient(circle,#e9ffd9 0%,#bff0a0 100%);border-radius:10px;box-shadow:0 0 0 1.5px #6ccb3a,0 0 8px rgba(110,220,80,.8)}
+html body #app .cwNeeds i.ok:after{width:14px;height:14px;font-size:10px;line-height:14px;right:-4px;top:-5px;box-shadow:0 1px 2px rgba(0,0,0,.3)}

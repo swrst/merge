@@ -786,7 +786,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const pct = Math.round(parts.reduce((a: number, x: number) => a + x, 0) / parts.length * 100);
     btn.innerHTML = `<span class="cwFace">${ART.char(pj.who)}</span>
       <b class="cwT">${ready ? 'BUILD!' : 'Ch. ' + (projDone() + 1)}</b>
-      <span class="cwNeeds">${pj.needs.map(([id, q]: [string, number]) => `<i class="${countItem(id) >= q ? 'ok' : ''}">${ART.item(id)}<em>${Math.min(countItem(id), q)}/${q}</em></i>`).join('')}${cNeed(pj) ? `<i class="${cHave() >= cNeed(pj) ? 'ok' : ''}">${ART.uiIcon('cl_tasks', '📋')}<em>${Math.min(cHave(), cNeed(pj))}/${cNeed(pj)}</em></i>` : ''}</span>
+      <span class="cwNeeds${ready ? ' go' : pj.needs.every(([id, q]: [string, number]) => countItem(id) >= q) ? ' allOk' : ''}">${ready ? '<b class="cwGo">BUILD!</b>' : ''}${pj.needs.map(([id, q]: [string, number]) => `<i class="${countItem(id) >= q ? 'ok' : ''}">${ART.item(id)}<em>${Math.min(countItem(id), q)}/${q}</em></i>`).join('')}${cNeed(pj) ? `<i class="${cHave() >= cNeed(pj) ? 'ok' : ''}">${ART.uiIcon('cl_tasks', '📋')}<em>${Math.min(cHave(), cNeed(pj))}/${cNeed(pj)}</em></i>` : ''}</span>
       <span class="cwBar"><i style="width:${pct}%"></i></span>`;
     // the bottom line spells the chapter out: every need, always on screen
     const line = $('#chapLine');
@@ -3755,7 +3755,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
 
   /* --------------------------------------------------------------- the Lab */
   const L2 = () => CFG.lab2;
-  const sciOf = (id: string) => ITEMS[id].tier * ITEMS[id].tier * (ITEMS[id].chain === 'junk' ? 3 : 1);
+  const sciOf = (id: string) => ITEMS[id].tier * (ITEMS[id].chain === 'junk' ? 2 : 1);   // linear: research is a slow climb, not a few sales
   function recycleItem(i: number) {
     const b = B(), c = b[i]; if (!c || !c.id) return;
     const wanted = S.orders.some(o => o.needs.some(nd => nd.id === c.id))
@@ -5194,10 +5194,13 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function petPeek(now = false) {
     if (!pet() || view !== 'board' || popOpen()) return;
     if (!now && Date.now() < peekAt) return;
-    peekAt = Date.now() + 120000 + Math.random() * 120000;
+    // it only pops out with a real reason, and the bubble says which
+    const p = pet(), why = now ? 'emo_heart' : petMood() === 'hungry' ? 'emo_food' : !pupLeft() ? 'emo_spark' : Date.now() >= (p.play || 0) ? 'emo_play' : '';
+    if (!why) return;
+    peekAt = Date.now() + 240000 + Math.random() * 180000;
     let el = document.getElementById('petPeek');
     if (!el) { el = document.createElement('button'); el.id = 'petPeek'; $('#app').appendChild(el); el.onclick = () => { sfx.boing(); el!.className = ''; pupPop(true); }; }
-    const emo = petMood() === 'hungry' ? 'emo_food' : ['emo_heart', 'emo_play', 'emo_spark', 'emo_what'][Math.floor(Math.random() * 4)];
+    const emo = why;
     el.innerHTML = `${pupArt()}${ART.spriteUi(emo) ? `<img class="peekEmo" src="${ART.spriteUi(emo)}" alt="">` : '<i>Hi!</i>'}`;
     el.className = 'on' + (Math.random() < 0.5 ? ' r' : '');
     setTimeout(() => { if (el) el.className = el.className.replace('on', '').trim(); }, 5200);

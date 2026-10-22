@@ -952,7 +952,18 @@ class PixiBoard {
     if (nw.size === this.chapterCells.size && list.every(k => this.chapterCells.has(k))) return;
     const old = this.chapterCells; this.chapterCells = nw;
     new Set([...old, ...nw]).forEach(k => this.drawTile(k));
+    if (!this.chTick) {
+      this.chTick = true;
+      // the chapter's tiles breathe: a green glow that brightens and fades
+      this.app.ticker.add(() => {
+        if (!this.chapterCells.size) return;
+        const t = performance.now() / 1000, f = 0.5 + 0.5 * Math.sin(t * 3.2);
+        const g = Math.round(0x9d + (0xe0 - 0x9d) * f), r = Math.round(0x6a + (0xc8 - 0x6a) * f);
+        this.chapterCells.forEach(k => { const a = this.tileArt[k]; if (a && a.visible && !this.wanted.has(k)) (a as any).tint = (g << 16) | (0xff << 8) | r; });
+      });
+    }
   }
+  private chTick = false;
   /** items a ready contract or chapter is about to take: their tiles glow green */
   private wanted = new Set<number>();
   /* Something a customer can take right now is told apart three ways, none of

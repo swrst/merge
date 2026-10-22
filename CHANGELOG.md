@@ -1,5 +1,13 @@
 # Changelog
 
+- **v103 (1.0.3)**
+  - Fizz Vent fizz is violet/blue, like the drinks it drops.
+  - Eyeshrooms: every merge step has its own colour (red, purple, blue, pink, gold).
+  - Side chips (Cosmic Wheel, contracts-to-chest, events) no longer bounce; the pet chip bobs only when hungry; ready things glow.
+  - The pet only peeks out with a real reason (hungry, gift ready, ready to play, just helped).
+  - Lab: recycling pays Science by tier (junk ×2) instead of tier², so research is a real climb.
+  - Chapter: needed items breathe green on the board; the chapter strip turns green when all items are there and gold with a pulsing BUILD! when the chapter is ready.
+
 - **v102 (1.0.2)**
   - Pet: happy face when it fetches; chip moved to the right column; simpler popup with clear blue XP and orange Food bars; Play and Feed are greyed out when not available.
   - Board: items the current chapter needs glow green; the Ch. button shows its needs in a strip beside it.
