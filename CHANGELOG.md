@@ -1,5 +1,16 @@
 # Changelog
 
+- **v107 (1.0.7)**
+  - The old green goggles guide is gone: Zib is the robot companion everywhere, never orders a contract, and producer popups show no character.
+  - Mission Log redesigned: space hero with today/week points, colour tiles, aligned medal and chest tracks, short chips instead of long text, clean task rows.
+  - New glass kit on the HUD chips, side buttons and bottom bar.
+  - Star Bazaar: selected tab is orange, teal hero, less purple.
+  - Events: while you host an event guest, contracts ask for its items (and leave when the event ends).
+  - Star Chart text is crisp (no blurry shadows).
+  - Pet Incubator: alien star egg instead of the emoji egg.
+  - The pet no longer merges on its own; its perk is gifts.
+  - When you make the twin of a locked item, a message tells you to drag it on.
+
 - **v106 (1.0.6)**
   - New ChatGPT UI set (art/ui/holo/sheets/v2): popup frames in lime, blue (Lab) and violet (Star Chart), glossy buttons with pressed states, tabs, bars, badges, sale burst, ribbon, cards, and the board tile set (normal, selected, wanted, chapter, sealed, locked, sparkle).
   - Board tiles use the new glass tile; chapter items get their own green chapter tile.

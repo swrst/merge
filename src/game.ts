@@ -612,11 +612,20 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function paintCell(_i?: number, _anim?: string) { board.sync(B()); }
   function paintBoard() { board.sync(B()); board.setSelected(sel); board.setHint(hintPair); }
 
+  const sealSaid = new Set<string>(); let sealPrimed = false;
   function tickProducers() {
     const now = Date.now();
     // a sealed tile whose twin is loose on the board lights up: "drag it here!"
     const loose = new Set<string>(); B().forEach((c: any) => { if (c && c.id) loose.add(c.id); });
-    for (let i = 0; i < N; i++) { const c = B()[i]; if (c && c.f) board.setUnsealable(i, loose.has(c.f)); }
+    for (let i = 0; i < N; i++) {
+      const c = B()[i]; if (!c || !c.f) continue;
+      const ok = loose.has(c.f); board.setUnsealable(i, ok);
+      // the moment its twin appears, say so once: which item, and where to drag it
+      const key = S.world + ':' + i + ':' + c.f;
+      if (ok && !sealSaid.has(key)) { sealSaid.add(key); if (sealPrimed && S.tut && view === 'board' && !tutOn()) { sparkle(i, 16, '#fff3a0'); toast(`🔓 You have a <b>${ITEMS[c.f].name}</b>! Drag it onto the locked one to free it.`); } }
+      if (!ok) sealSaid.delete(key);
+    }
+    sealPrimed = true;
     for (let i = 0; i < N; i++) {
       const c = B()[i]; if (!c || !c.p) continue;
       const p = PRODS[c.p];
@@ -1172,7 +1181,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const metIn = new Set<string>([W().folks[0], W().folks[1]]);
     projList(S.world).forEach((p: any) => { if (S.talked && S.talked[p.id] && p.talk) p.talk.forEach(([who]: [string, string]) => metIn.add(who)); });
     const metFolks = W().folks.filter(f => metIn.has(f) || (S.proj[S.world] || 0) >= projList(S.world).length);
-    const folks = (metFolks.length >= 2 ? metFolks : W().folks).concat(S.met ? ['bloop'] : []);
+    // the robot companion (Zib) guides, it does not place orders
+    const folks = (metFolks.length >= 2 ? metFolks : W().folks).concat(S.met ? ['bloop'] : []).filter(f => f !== 'pip');
     const fans = folks.filter(f => (CHARS[f].likes || []).some(c => open.indexOf(c) >= 0));
     const busy = S.orders.map(o => o.char);
     const pickFrom = (fans.length ? fans : folks).filter(f => busy.indexOf(f) < 0);
@@ -1199,6 +1209,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // the odd special request: a relic. Never a rocket piece or star scrap —
     // those get used up elsewhere, and a contract for one could wait forever.
     if (S.seen.relic1 && Math.random() < 0.08) { pick = 'relic1'; chain = 'relic'; }
+    // during an event you joined, customers want the event guest's things too
+    { const ev = evNow(), ek = ev && S.ev.join === ev.key ? EV_PROD[ev.theme.id] : '';
+      if (ek && B().some((c: any) => c && c.ev === ev!.key) && !S.orders.some((o: any) => o.needs.some((nd: any) => ITEMS[nd.id].chain.startsWith('ev_'))) && Math.random() < 0.45) {
+        const ec = ITEMS[PRODS[ek].drops[0]].chain; pick = rnd(CHAINS[ec].items.slice(0, 3)); chain = ec; } }
     const d = ITEMS[pick];
     const needs = [{ id: pick, qty: d.tier >= 4 ? 1 : d.tier === 3 ? (Math.random() < 0.35 ? 2 : 1) : 2 }];
     // more things from other chains the same person cares about (or any awake one)
@@ -2075,7 +2089,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const tile = (id: string, ic: string, emo: string, t: string, sub: string, hot: boolean) =>
       `<button class="mlTile${hot ? ' hot' : ''}" id="${id}"><span class="mlIc">${ART.uiIcon(ic, emo)}</span><b>${t}</b><i>${sub}</i>${hot ? '<em class="dot"></em>' : ''}</button>`;
     // the Mission Log is for missions; the chapter lives on the chapter button
-    host.innerHTML = `<div class="mlTiles">
+    const dtH = dailyOk(), wkH = projDone('earth') >= 3 ? weekly() : null;
+    host.innerHTML = `<div class="mlHero"><img class="mlRk" src="${ART.spriteUi('rocket_3')}" alt=""><div class="mlHTx"><b>Mission Log</b><i>Captain level ${S.lvl}</i></div>
+        <div class="mlHSt"><span>${ART.uiIcon('ic_dailylog', '📅')}<b>${dtH.pts}</b><em>today</em></span>${wkH ? `<span>${ART.uiIcon('ic_trophy', '🏆')}<b>${wkH.pts}</b><em>week</em></span>` : ''}</div></div>
+      <div class="mlTiles">
           ${tile('openAch', 'ic_medals', '🏆', 'Medals', ar ? ar + ' to claim!' : 'long-term goals', !!ar)}
           ${tile('openQuests', 'ic_cadet', '🎯', 'Cadet Training', ql ? (MISSIONS.length - ql) + '/' + MISSIONS.length + ' done' : 'all done ✓', false)}
           ${S.seen.relic1 || labOpen() ? tile('openVault', 'ic_vault', '🏛️', 'Relic Vault', 'perks forever', false) : ''}
@@ -3182,14 +3199,13 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function dailyCard() {
     const dt = dailyOk(), max = CFG.daily2.marks[CFG.daily2.marks.length - 1];
     return `<div class="card daily"><div class="cardTitle">${ART.uiIcon('ic_dailylog', '📅')} Daily Log<span class="pCount">${dt.pts} pts</span></div>
-      <div class="dTrack"><div class="dFill" style="width:${Math.min(100, dt.pts / max * 100)}%"></div>
-        ${CFG.daily2.marks.map((m: number, k: number) => `<button class="dChest${dt.got[k] ? ' got' : dt.pts >= m ? ' ready' : ''}" data-dchest="${k}"
-          style="left:${m / max * 100}%">${ART.item(k === 0 ? 'chest' : 'bigchest')}<i>${m}</i></button>`).join('')}</div>
+      <div class="mTrack"><div class="mBar"><i style="width:${Math.min(100, dt.pts / max * 100)}%"></i></div>
+        ${CFG.daily2.marks.map((m: number, k: number) => `<button class="mStop dChest${dt.got[k] ? ' got' : dt.pts >= m ? ' ok' : ''}" data-dchest="${k}" style="left:${m / max * 100}%">${ART.item(k === 0 ? 'chest' : 'bigchest')}<em>${m}</em></button>`).join('')}</div>
       ${dt.list.map((t: any) => `<div class="taskRow${t.have >= t.n ? ' done' : ''}">
         <div class="tBar"><i style="width:${Math.round(Math.min(1, t.have / t.n) * 100)}%"></i></div>
         <div class="tTxt">${t.label}<span>${Math.min(t.have, t.n)}/${t.n}</span></div>
         <span class="tPts">${t.have >= t.n ? '✓' : '+' + t.pts}</span></div>`).join('')}
-      <div class="noteLine">New tasks every day. Points fill the chests above.</div></div>`;
+      <div class="mlNote2">🔄 New tasks every day</div></div>`;
   }
 
   /* ----------------------------------------------------------------- chests */
@@ -3833,7 +3849,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       const e = INC_EGGS.find(x => x.sp === inc.sp)!;
       html = `<div class="incEgg${left ? '' : ' ready'}"><img src="${ART.spriteUi('lab_incubator')}" alt=""><span>${pupArt(PET_FORMS[inc.sp + '1'])}</span></div>
         <div class="labIntro">A <b>${e.name}</b> egg is warming up.${cur ? ` When it hatches, <b>${curName}</b> flies home.` : ''}</div>
-        ${left ? `<div class="accTime">${left > 3600000 ? Math.floor(left / 3600000) + 'h ' + Math.floor(left % 3600000 / 60000) + 'm' : mmss(left)}</div><button class="big gold" id="incRush">Hatch now · 💎 ${Math.max(1, Math.ceil(left / 60000 / CFG.gems.rushMinPerGem))}</button>` : `<button class="big" id="incHatch">Hatch it! 🥚</button>`}`;
+        ${left ? `<div class="accTime">${left > 3600000 ? Math.floor(left / 3600000) + 'h ' + Math.floor(left % 3600000 / 60000) + 'm' : mmss(left)}</div><button class="big gold" id="incRush">Hatch now · 💎 ${Math.max(1, Math.ceil(left / 60000 / CFG.gems.rushMinPerGem))}</button>` : `<button class="big" id="incHatch">Hatch it!</button>`}`;
     } else if (confirmSp) {
       const e = INC_EGGS.find(x => x.sp === confirmSp)!;
       html = `<div class="incSwap"><span class="incArt">${cur ? pupArt(petForm()) : ''}</span><b>➜</b><span class="incArt">${pupArt(PET_FORMS[e.sp + '1'])}</span></div>
@@ -3848,7 +3864,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
             ${own ? '<em>✓ yours</em>' : `<button class="buyBtn" data-egg="${e.sp}" ${ok ? '' : 'disabled'}>${lvOk ? '🧪 ' + e.sci : '🔒 Lv ' + e.lvl}</button>`}</div>`;
         }).join('')}</div>`;
     }
-    pop('🥚 Pet Incubator', html, 'holo');
+    pop(`<img class="ttlEgg" src="${ART.spriteItem('stardustegg')}" alt=""> Pet Incubator`, html, 'holo');
     const start = (e: typeof INC_EGGS[number]) => { S.sci -= e.sci; S.inc = { sp: e.sp, until: Date.now() + e.mins * 60000 }; sfx.discover(); save(); renderLab(); incPop(); };
     document.querySelectorAll<HTMLElement>('[data-egg]').forEach(b => b.onclick = () => {
       const e = INC_EGGS.find(x => x.sp === b.dataset.egg)!; if (S.sci < e.sci || S.lvl < e.lvl || !petGrown()) return;
@@ -4391,6 +4407,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     for (let i = 0; i < N; i++) if (b[i] && b[i].ev && (!e || b[i].ev !== e.key || S.ev.join !== e.key)) { b[i] = null; paintBoard(); }
     // when the event is over its souvenirs are no use on the board: they sell themselves
     if (!e || S.ev.join !== e.key) {
+      // contracts for event things leave with the event
+      { const k0 = S.orders.length; S.orders = S.orders.filter((o: any) => !o.needs.some((nd: any) => ITEMS[nd.id] && ITEMS[nd.id].chain.startsWith('ev_'))); if (S.orders.length !== k0) renderOrders(); }
       let n = 0, coins = 0;
       for (let i = 0; i < N; i++) { const c = b[i]; if (c && c.id && /^ev_/.test(ITEMS[c.id].chain)) { n++; coins += 15 * ITEMS[c.id].tier * ITEMS[c.id].tier; b[i] = null; } }
       if (S.bag) { const keep = S.bag.filter((id: string) => !/^ev_/.test(ITEMS[id].chain)); n += S.bag.length - keep.length; S.bag = keep; }
@@ -4869,8 +4887,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const top = WK_TIERS[WK_TIERS.length - 1].pts, pct = Math.min(100, Math.round(w.pts / top * 100));
     return `<div class="card wkCard"><div class="cardTitle">${ART.uiIcon('ic_trophy', '🏆')} Star Challenge<span class="pCount">${dhm(left)} left</span></div>
       <div class="wkFeat">This week: ${w.feat.map((c: string) => `<span>${ART.item(CHAINS[c].items[0])}<b>${CHAINS[c].name}</b></span>`).join('')}</div>
-      <div class="wkHow">Merge featured chains for big points · contracts 8 · chests 3 · finished chains 20</div>
-      <div class="wkBar"><i style="width:${pct}%"></i>${WK_TIERS.map((t, i) => `<button class="wkMed${w.pts >= t.pts ? ' ok' : ''}${w.got.includes(i) ? ' got' : ''}" data-wk="${i}" style="left:${t.pts / top * 100}%">${['🥉', '🥈', '🥇'][i]}<em>${t.pts}</em></button>`).join('')}</div>
+      <div class="wkHow"><span>🔀 featured merges</span><span>📋 +8</span><span>📦 +3</span><span>⭐ chain +20</span></div>
+      <div class="mTrack"><div class="mBar"><i style="width:${pct}%"></i></div>${WK_TIERS.map((t, i) => `<button class="mStop${w.pts >= t.pts ? ' ok' : ''}${w.got.includes(i) ? ' got' : ''}" data-wk="${i}" style="left:${t.pts / top * 100}%"><img src="${ART.spriteUi('medal_' + (3 - i))}" alt=""><em>${t.pts}</em></button>`).join('')}</div>
       <div class="wkPts"><b>${w.pts}</b> points</div>
       <button class="big soft" id="wkBoard">${ART.uiIcon('ic_medals', '📊')} Leaderboard</button></div>`;
   }
@@ -5107,8 +5125,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      Art: chars/pet_<form>.png when painted, the pup growth sprites until then. */
   type PetForm = { id: string; name: string; stage: number; art: string; tint?: string; perk: string; mins: number };
   const PET_FORMS: Record<string, PetForm> = {
-    baby: { id: 'baby', name: 'Gloopling', stage: 1, art: 'pet_baby', perk: 'Board helper: <b>merges a pair</b> for you now and then.', mins: 40 },
-    pup: { id: 'pup', name: 'Glooper', stage: 2, art: 'pet_pup', perk: 'Board helper: <b>merges a pair</b> for you, a bit more often.', mins: 34 },
+    baby: { id: 'baby', name: 'Gloopling', stage: 1, art: 'pet_baby', perk: 'Fetches a <b>gift</b> every 40 min.', mins: 40 },
+    pup: { id: 'pup', name: 'Glooper', stage: 2, art: 'pet_pup', perk: 'Fetches a <b>gift</b> every 34 min.', mins: 34 },
     star: { id: 'star', name: 'Star Pup', stage: 3, art: 'pet_star', perk: 'Brings <b>energy</b>. Your energy refills <b>10% faster</b>.', mins: 28 },
     crater: { id: 'crater', name: 'Crater Pup', stage: 3, art: 'pet_crater', perk: 'Digs up <b>items</b>, sometimes a chest.', mins: 28 },
     comet: { id: 'comet', name: 'Comet Pup', stage: 3, art: 'pet_comet', perk: 'Brings <b>coins and gems</b>. Contracts pay <b>10% more</b>.', mins: 28 },
@@ -5190,6 +5208,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      A fed pet helps on the board now and then: it merges one pair for you.
      And every so often it pops up at the edge of the board to say hello. */
   function petHelp() {
+    return;   // v107: the pet never touches the board on its own
     const p = pet(); if (!p || (p.sp || 'blob') !== 'blob' || view !== 'board' || popOpen() || jit || tutOn()) return;
     if (petMood() === 'hungry' || Date.now() < (p.help || 0)) return;
     const pair = findPair(); if (!pair) return;
@@ -6203,7 +6222,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const now = dropsOf(p, lv), next = lv < PMAX ? dropsOf(p, lv + 1) : now;
     const added = [...new Set(next.filter(d => now.indexOf(d) < 0))];
     const uniq = [...new Set(now)];
-    modal(W().folks[0] || 'bloop', p.name,
+    modal('', p.name,
       `<div class="prodHead">${ART.producer(p.art)}</div>
        <div class="pipsRow">${Array.from({ length: PMAX }, (_, i) => `<i class="pip${i < lv ? ' on' : ''}"></i>`).join('')}
          <span>Level ${lv}${lv >= PMAX ? ' · max' : ''}</span></div>
@@ -6474,7 +6493,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     showModal(m.face, m.title, m.body, m.btn); afterModal = m.after;
   }
   function showModal(face: string, title: string, body: string, btn?: string) {
-    $('#mFace').innerHTML = ART.char(face);
+    $('#mFace').innerHTML = face ? ART.char(face) : ''; $('#mFace').style.display = face ? '' : 'none';
     $('#mTitle').textContent = title;
     $('#mBody').innerHTML = body;
     $('#mBtn').textContent = btn || 'OK';

@@ -55,6 +55,8 @@ export const HOLO_ALIAS: Record<string, string> = {
   ic_sound: 'ic2_sound', ic_music: 'ic2_music', ic_games: 'ic2_games',
 };
 Object.entries(HOLO_ALIAS).forEach(([k, v]) => { if (SPRITE.ui[v]) SPRITE.ui[k] = SPRITE.ui[v]; });
+// v107: Zib is the robot companion now; the old green goggles alien is gone everywhere
+if (SPRITE.ui.bot_idle) { SPRITE.char.pip = SPRITE.ui.bot_idle; delete SPRITE.char.pip_full; }
 
 /* Painted UI pieces are skinned in through CSS: each file becomes a custom
    property (--ui-btn_green) and a class on <html> (ui-btn_green), and
