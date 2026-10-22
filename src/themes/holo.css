@@ -781,3 +781,4 @@ html body #app .cwNeeds.go i em{color:#7a4a00!important}
 @keyframes cwGo{0%,100%{transform:translateY(-50%) scale(1)}50%{transform:translateY(-50%) scale(1.07)}}
 html body #app .cwNeeds i.ok{background:radial-gradient(circle,#e9ffd9 0%,#bff0a0 100%);border-radius:10px;box-shadow:0 0 0 1.5px #6ccb3a,0 0 8px rgba(110,220,80,.8)}
 html body #app .cwNeeds i.ok:after{width:14px;height:14px;font-size:10px;line-height:14px;right:-4px;top:-5px;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+#btnQuests.ready .cwNeeds{display:none!important}

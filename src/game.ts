@@ -697,7 +697,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     add('bloom', 'World', !worldAwake() && essenceOnBoard() > (S.bloomSeen || 0) ? 1 : 0, ART.uiIcon('ic_globe', '🌍'), 'Wake the world with your essence', () => setView('map'));
     add('bingo', 'Fun', bingoReady() > 0 ? 1 : 0, ART.uiIcon('ic_event', '🧩'), 'Bingo: something to hand in', () => funPop(), true);
     add('pup', '', petOn() && !pupLeft() ? 1 : 0, pupArt(), 'Your pet fetched a gift!', () => pupPop());
-    add('chapter', '', projReady(curProject()) ? 1 : 0, ART.uiIcon('cl_build', '🚀'), 'Chapter ready to build!', () => ($('#btnQuests') as HTMLElement).click());
     return out;
   }
   let claimSeen: Record<string, number> | null = null;
@@ -786,7 +785,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const pct = Math.round(parts.reduce((a: number, x: number) => a + x, 0) / parts.length * 100);
     btn.innerHTML = `<span class="cwFace">${ART.char(pj.who)}</span>
       <b class="cwT">${ready ? 'BUILD!' : 'Ch. ' + (projDone() + 1)}</b>
-      <span class="cwNeeds${ready ? ' go' : pj.needs.every(([id, q]: [string, number]) => countItem(id) >= q) ? ' allOk' : ''}">${ready ? '<b class="cwGo">BUILD!</b>' : ''}${pj.needs.map(([id, q]: [string, number]) => `<i class="${countItem(id) >= q ? 'ok' : ''}">${ART.item(id)}<em>${Math.min(countItem(id), q)}/${q}</em></i>`).join('')}${cNeed(pj) ? `<i class="${cHave() >= cNeed(pj) ? 'ok' : ''}">${ART.uiIcon('cl_tasks', '📋')}<em>${Math.min(cHave(), cNeed(pj))}/${cNeed(pj)}</em></i>` : ''}</span>
+      <span class="cwNeeds${pj.needs.every(([id, q]: [string, number]) => countItem(id) >= q) ? ' allOk' : ''}">${pj.needs.map(([id, q]: [string, number]) => `<i class="${countItem(id) >= q ? 'ok' : ''}">${ART.item(id)}<em>${Math.min(countItem(id), q)}/${q}</em></i>`).join('')}${cNeed(pj) ? `<i class="${cHave() >= cNeed(pj) ? 'ok' : ''}">${ART.uiIcon('cl_tasks', '📋')}<em>${Math.min(cHave(), cNeed(pj))}/${cNeed(pj)}</em></i>` : ''}</span>
       <span class="cwBar"><i style="width:${pct}%"></i></span>`;
     // the bottom line spells the chapter out: every need, always on screen
     const line = $('#chapLine');
@@ -2781,7 +2780,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      remembered per chapter, so finishing it never reveals another one. */
   function upNeeds(p: any): { k: string; lv: number }[] {
     if (!p || !scripted()) return [];
-    const k = projList().indexOf(p); if (k < 9 || k % 5 !== 4) return [];   // every fifth chapter, from chapter 10
+    const k = projList().indexOf(p); if (k < 5 || (k < 29 ? k % 3 !== 2 : k % 2 !== 1)) return [];   // every third chapter from 6, every other from 30
     S.upAsk = S.upAsk || {};
     const lvOf = (key: string) => { let lv = 0; B().forEach((c: any) => { if (c && c.p === key && !c.tmp) lv = Math.max(lv, plv(c)); }); stored().forEach((c: any) => { if (c.p === key) lv = Math.max(lv, c.lv || 1); }); return lv; };
     let ask = S.upAsk[p.id];

@@ -1,5 +1,9 @@
 # Changelog
 
+- **v104 (1.0.4)**
+  - A ready chapter is shown in one place, the Ch. button (BUILD!) plus the bottom bar: the side strip hides and the "Chapter ready to build" banner is gone.
+  - More producer upgrades are required by chapters: every third chapter from chapter 6, every other chapter from chapter 30.
+
 - **v103 (1.0.3)**
   - Fizz Vent fizz is violet/blue, like the drinks it drops.
   - Eyeshrooms: every merge step has its own colour (red, purple, blue, pink, gold).

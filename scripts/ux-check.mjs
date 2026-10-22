@@ -156,14 +156,14 @@ await page.evaluate(() => window.__game.view('board')); await page.waitForTimeou
 console.log('\n11. Something to claim is visible');
 await shoo();
 await page.evaluate(() => { const s = window.__game.state(); s.tipsOff = 1; window.__game.v9.jitOff(); window.__game.v9.achOff(); s.pup = s.pup || { at: Date.now(), n: 0 }; s.spin.tok = (s.spin.tok || 0) + 2; s.lvl = Math.max(s.lvl, 10);
-  // a chapter that is ready to build is one of the few things that earns a banner
-  window.__prevWorld = s.world; window.__prevProj = s.proj.earth; s.world = 'earth'; s.proj.earth = 0; s.cSince = { earth: 9 }; const b = s.boards.earth; let n = 0; for (let i = 0; i < b.length && n < 2; i++) if (!b[i]) { b[i] = { id: 'branch' }; n++; } window.__board.sync(b); window.__game.hud(); });
+  // a pet gift earns a banner (a ready chapter does not: the Ch. button says BUILD!)
+  window.__prevWorld = s.world; window.__prevProj = s.proj.earth; s.pup = { at: Date.now() - 86400000, n: 0, pet: 0, form: 'baby', lv: 1, xp: 0, food: Date.now() }; s.petIntro = 1; window.__game.hud(); });
 await page.waitForFunction(() => document.querySelector('#ribbon.show'), null, { timeout: 5000 }).catch(async () => console.log('   state:', await page.evaluate(() => ({ view: document.querySelector('.screen.open')?.id, pop: document.querySelector('#pop.open') ? 1 : 0, modal: document.querySelector('#modal.open') ? 1 : 0, talk: document.querySelector('#talk.open') ? 1 : 0, rwc: document.querySelector('#rwc')?.className, rb: document.querySelector('#ribbon')?.className, claims: window.__claims() }))));
 must(await page.locator('#ribbon.show').count() === 1, 'a new claimable slides in as a ribbon');
 must(await page.locator('#dotWorld').isVisible(), 'and the galaxy button shows a badge');
 for (let k = 0; k < 12 && await page.locator('#talk.open').count(); k++) { await page.click('#talk'); await page.waitForTimeout(250); }
 const rbText = (await page.textContent('#ribbon')).trim(); await page.evaluate(() => { window.__game.v9.closePop(); document.querySelector('#ribbon .rbGo').click(); }); await page.waitForTimeout(700);
-must(await page.locator('#pop.open, .screen.open, #modal.open, #talk.open').count() >= 1, 'tapping the ribbon goes straight there (' + rbText + ')');
+must(await page.locator('#pop.open, .screen.open, #modal.open, #talk.open, #rwc.open, #rwc.show').count() >= 1, 'tapping the ribbon goes straight there (' + rbText + ')');
 await page.evaluate(() => { const s = window.__game.state(); document.querySelectorAll('#modal,#talk').forEach(e => e.classList.remove('open')); s.proj.earth = window.__prevProj; s.world = window.__prevWorld; window.__game.hud(); });
 await page.waitForTimeout(3500); await shoo(); await page.evaluate(() => { document.querySelectorAll('#modal,#talk').forEach(e => e.classList.remove('open')); window.__game.v9.closePop(); }); await shoo();
 await page.evaluate(() => { window.__game.v9.closePop(); window.__game.view('board'); }); await page.waitForTimeout(400);
