@@ -1,4 +1,4 @@
-import { getUITheme, setUITheme } from './themes/theme';
+import { getUITheme } from './themes/theme';
 /* GALAXY ADVENTURE - core game loop. Earth -> rebuild a rocket -> new worlds. */
 import { ART } from './art';
 // the painted backdrops the camp and the lab stand on
@@ -1920,6 +1920,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   let shopTab = 'deals';
   /** the daily gift picture: the supply chest with its energy bonus pinned on, same on both gift cards */
   const giftArt = () => `<span class="giftArt">${ART.spriteUi('chest_closed') ? ART.uiIcon('chest_closed', '') : ART.item('chest')}<span class="giftNrg">${ART.icon('energy')}+${CFG.shop2.freeGiftEnergy}</span></span>`;
+  /** the painted store pictures (art/ui/holo/sheets/store_a, store_b) for each product */
+  const PACK_ART: Record<string, string> = { starter: 'starter', gems_s: 'gems_s', gems_m: 'gems_m', gems_l: 'gems_l', gems_xl: 'gems_xl',
+    energy_pack: 'energy', coins_s: 'coins_s', coins_m: 'coins_m', coins_l: 'coins_l', adfree: 'adfree' };
   function renderShop() {
     const host = $('#shopBody'); if (!host) return;
     $('#shopCoins').textContent = S.coins;
@@ -1930,7 +1933,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const tabs = [['deals', tIc('sec_deals', '🎁') + ' Deals'], ['gems', tIc('icon_gem', '💎') + ' Gems'], ['coins', tIc('icon_coin', '🪙') + ' Coins'], ['chests', tIc('sec_chests', '📦') + ' Chests'], ['boost', tIc('sec_boost', '✨') + ' Boosters'], ['up', tIc('sec_up', '⭐') + ' Upgrades']];
     const rocketBits = (labOffered() && !S.lab.built) || S.seen.scrap;
     if (rocketBits) tabs.push(['rocket', tIc('sec_rocket', '🚀') + ' Rocket']);
-    let html = `<div class="shopTabs">${tabs.map(([k, t]) => `<button class="sTab${shopTab === k ? ' on' : ''}" data-jump="${k}">${t}</button>`).join('')}</div>`;
+    let html = `<div class="shopSign"><b>Star Bazaar</b></div><div class="shopTabs">${tabs.map(([k, t]) => `<button class="sTab${shopTab === k ? ' on' : ''}" data-jump="${k}">${t}</button>`).join('')}</div>`;
 
     // deals: the daily gift, energy, and the rotating shelf
     html += `<div class="sSec" id="sh-deals"><div class="sSecT">${ART.uiIcon('sec_deals', '🎁')} Today's deals</div><div class="shopGrid">`
@@ -1938,8 +1941,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         `<button class="buyBtn green" data-gift="1" ${giftReady() ? '' : 'disabled'}>${giftReady() ? 'FREE' : 'Tomorrow'}</button>`, giftReady() ? 'hot' : '')
       + (S.giftAd === today() && S.giftAd2 !== today() ? card(giftArt(), 'Double the gift', `Watch a video for another Supply Chest and ${CFG.shop2.freeGiftEnergy} ${ART.icon('energy')}`,
         `<button class="buyBtn green" data-giftad="1">📺 Watch</button>`, 'hot') : '')
-      + (albumOpen() ? card(ART.uiIcon('ic_album', '🎴'), 'Sticker pack', '3 stickers for your Star Album', `<button class="buyBtn gem" data-pack="basic" ${S.gems < 8 ? 'disabled' : ''}>${ART.icon('gem')}8</button>`)
-        + card(ART.uiIcon('ic_album', '🌟'), 'Golden pack', '4 stickers, one is 3★ or better', `<button class="buyBtn gem" data-pack="gold" ${S.gems < 20 ? 'disabled' : ''}>${ART.icon('gem')}20</button>`) : '')
+      + (albumOpen() ? card(ART.uiIcon('ic_album', '🎴'), 'Sticker pack', '2 stickers for your Star Album', `<button class="buyBtn gem" data-pack="basic" ${S.gems < 8 ? 'disabled' : ''}>${ART.icon('gem')}8</button>`)
+        + card(ART.uiIcon('ic_album', '🌟'), 'Golden pack', '3 stickers, one is 3★ or better', `<button class="buyBtn gem" data-pack="gold" ${S.gems < 20 ? 'disabled' : ''}>${ART.icon('gem')}20</button>`) : '')
       + card(ART.uiIcon('lab_energy', ART.icon('energy')), 'Energy refill', `+${CFG.gems.refill.energy} ⚡ right now`,
         `<button class="buyBtn gem" data-refill="1" ${S.gems < CFG.gems.refill.gems ? 'disabled' : ''}>${ART.icon('gem')}${CFG.gems.refill.gems}</button>`)
       + (() => { const n = coinSnackN(), left = CFG.shop2.coinSnack.perDay - n, pr = coinSnackPrice();
@@ -4262,9 +4265,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         p.boosts ? Object.entries(p.boosts).map(([k, n]) => n + '× ' + ((SHOP.boosters.find((x: any) => x.id === k) || { name: k }).name)).join(', ') : '', p.item ? ITEMS[p.item].name : '', p.adfree ? 'No ad videos — rewards are instant' : '']
         .filter(Boolean).join(' · ');
       return `<div class="sCard gemCard${p.tag ? ' hot' : ''}${owned ? ' owned' : ''}">${p.tag ? (/-\d+%/.test(p.tag) && ART.spriteUi('offer_burst') ? `<span class="gBurst">${p.tag.match(/-\d+%/)[0]}</span><span class="gTag">${p.tag.replace(/\s*·?\s*-\d+%/, '')}</span>` : `<span class="gTag">${p.tag}</span>`) : ''}
-        <div class="sCArt">${({ gems_s: 'gem_s', gems_m: 'gem_m', gems_l: 'gem_l', gems_xl: 'gem_xl', adfree: 'ic_ad', energy_pack: 'crate_energy' } as Record<string, string>)[p.id]
-          ? ART.uiIcon(({ gems_s: 'gem_s', gems_m: 'gem_m', gems_l: 'gem_l', gems_xl: 'gem_xl', adfree: 'ic_ad', energy_pack: 'crate_energy' } as Record<string, string>)[p.id], p.adfree ? '📺' : p.id === 'energy_pack' ? ART.icon('energy') : ART.icon('gem'))
-          : ART.item('bigchest')}</div>
+        <div class="sCArt">${ART.spriteUi('sp_' + PACK_ART[p.id]) ? ART.uiIcon('sp_' + PACK_ART[p.id], '') : ART.item('bigchest')}</div>
         <div class="sCName">${p.name}</div><div class="sCDesc">${what}</div>
         <button class="buyBtn${owned ? '' : ' cash'}" data-iap="${p.id}"${owned ? ' disabled' : ''}>${owned ? 'Owned' : p.price}</button></div>`;
     };
@@ -4281,7 +4282,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   /* coins for gems, or for money */
   const COIN_GEMS = [{ gems: 20, coins: 600 }, { gems: 50, coins: 1700 }, { gems: 120, coins: 4500 }];
   function coinShop() {
-    const art = (n: number) => ART.spriteUi('coin_s') ? ART.uiIcon(['coin_s', 'coin_m', 'coin_l'][n - 1], '') : `<span class="coinStack">${ART.icon('coin')}${n > 1 ? ART.icon('coin') : ''}${n > 2 ? ART.icon('coin') : ''}</span>`;
+    const art = (n: number) => ART.spriteUi('sp_coins_s') ? ART.uiIcon(['sp_coins_s', 'sp_coins_m', 'sp_coins_l'][n - 1], '') : `<span class="coinStack">${ART.icon('coin')}${n > 1 ? ART.icon('coin') : ''}${n > 2 ? ART.icon('coin') : ''}</span>`;
     return `<div class="sSec" id="sh-coins"><div class="sSecT">🪙 Coins</div><div class="shopGrid">`
       + COIN_GEMS.map((c, k) => `<div class="sCard"><div class="sCArt">${art(k + 1)}</div><div class="sCName">${c.coins.toLocaleString()} coins</div><div class="sCDesc">for gems</div>
           <button class="buyBtn gem" data-coingem="${k}" ${S.gems < c.gems ? 'disabled' : ''}>💎 ${c.gems}</button></div>`).join('')
@@ -6797,7 +6798,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           ${row('sndBtn', ART.uiIcon(S.sound ? 'ic_sound' : 'ic_mute', '🔊'), 'Sound effects', !!S.sound)}
           ${row('musBtn', ART.uiIcon(S.music ? 'ic_music' : 'ic_nomusic', '🎵'), 'Music', !!S.music)}
           ${row('tipBtn', ART.uiIcon('ic_tips', '💡'), 'Tips', !S.tipsOff)}
-          ${row('themeBtn', ART.uiIcon('bot_idle', '🛸'), 'Hologram UI', getUITheme() === 'buddy')}
           <p class="themeNote">Switch off to use the original Space Hologram design.</p>
         </div>
         ${games.live ? (games.signedIn
@@ -6813,8 +6813,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       const bind = () => {
         const sb2 = $('#sndBtn'), mb = $('#musBtn'), tb = $('#tipBtn'), rb = $('#resetBtn');
         const redraw = (saveGame = true) => { $('#mBody').innerHTML = draw(); bind(); if (saveGame) save(); };
-        const themeBtn = $('#themeBtn');
-        if (themeBtn) { themeBtn.setAttribute('aria-pressed', String(getUITheme() === 'buddy')); themeBtn.onclick = () => { setUITheme(getUITheme() === 'buddy' ? 'classic' : 'buddy'); save(); setTimeout(() => location.reload(), 150); }; }
         if (sb2) sb2.onclick = () => { S.sound = S.sound ? 0 : 1; audio.setSfx(!!S.sound); if (S.sound) sfx.tap(); redraw(); };
         if (mb) mb.onclick = () => { S.music = S.music ? 0 : 1; audio.setMusic(!!S.music); redraw(); };
         if (tb) tb.onclick = () => { S.tipsOff = S.tipsOff ? 0 : 1; if (S.tipsOff) coachOff(); else S.coach = {}; redraw(); };

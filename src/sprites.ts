@@ -50,12 +50,11 @@ export const SPRITE = {
    classic look (Settings), which reloads the game. */
 export const HOLO_ALIAS: Record<string, string> = {
   // only art that lives inside popups, rewards and the board: the HUD, side buttons, dock and nav icons keep their own
-  gem_s: 'hq_gems', coin_s: 'hq_coins',
+  gem_s: 'sp_gems_s', gem_m: 'sp_gems_m', gem_l: 'sp_gems_l', gem_xl: 'sp_gems_xl', coin_s: 'sp_coins_s', coin_m: 'sp_coins_m', coin_l: 'sp_coins_l', crate_energy: 'sp_energy', ic_ad: 'sp_adfree',
   chest_opening: 'hx_capsule', complete_stamp: 'hx_seal', victory_banner: 'hx_banner', seal_bubble: 'hs_sealed',
   ic_sound: 'ic2_sound', ic_music: 'ic2_music', ic_games: 'ic2_games',
 };
-export const holoOn = (() => { try { return localStorage.getItem('galaxyAdventure.uiTheme') !== 'classic'; } catch { return true; } })();
-if (holoOn) Object.entries(HOLO_ALIAS).forEach(([k, v]) => { if (SPRITE.ui[v]) SPRITE.ui[k] = SPRITE.ui[v]; });
+Object.entries(HOLO_ALIAS).forEach(([k, v]) => { if (SPRITE.ui[v]) SPRITE.ui[k] = SPRITE.ui[v]; });
 
 /* Painted UI pieces are skinned in through CSS: each file becomes a custom
    property (--ui-btn_green) and a class on <html> (ui-btn_green), and

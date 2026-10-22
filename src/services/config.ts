@@ -11,6 +11,8 @@ import VERSION from '../../version.json';
 
 /** true in the store build (`npm run build:release`): no tester tools, real ads */
 export const RELEASE = import.meta.env.VITE_RELEASE === '1';
+/** internal / closed testing: test ads in the store build too (flip to false for production) */
+export const PRE_LAUNCH = true;
 
 export const SERVICES = {
   /** the app's identity in both stores — must match capacitor.config.ts appId */
@@ -27,7 +29,10 @@ export const SERVICES = {
 
   ads: {
     mode: 'auto' as Mode,
-    testing: !RELEASE,                  // test ads everywhere except the store build
+    /* Google's test ads until the game is live in production: a new AdMob app serves
+       no real ads (no fill) until its Play listing is public and AdMob has reviewed it.
+       Set PRE_LAUNCH to false for the production build. */
+    testing: !RELEASE || PRE_LAUNCH,
     units: {
       // Android: Galaxy Adventure "Rewarded". iOS: still Google's test unit. Test builds always show test ads (ads.testing).
       rewardedAndroid: 'ca-app-pub-9488333769711990/3791200991',

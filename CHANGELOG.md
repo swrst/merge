@@ -1,5 +1,12 @@
 # Changelog
 
+- **v101 (1.0.1)**
+  - Star Bazaar redrawn with the new store sheets: a hologram market stall sign at the top, glowing section plates, and painted pictures for every pack (gem piles, gem chest, coin stack, coin sack, coin vault, energy crate, starter gift, no-ads badge).
+  - One look only: the classic UI and its Settings switch are gone; the old text-colour pass (holofix) is removed.
+  - Art clean-up: removed the classic per-world board tiles and the old gem/coin tray pictures; store sheets archived in art/ui/holo/sheets.
+  - Ads: the store build shows Google's test ads during internal and closed testing (a new AdMob app has no real ads to show yet); switch PRE_LAUNCH off in src/services/config.ts for production.
+  - Sticker pack texts match the new counts (2 and 3).
+
 - **v100 (1.0.0)**
   - Energy shows just what you have; tapping it says when you will be full ("In 41m you will have 66").
   - The chapter button lists what the chapter needs (ticks when done); the first-run guide now points at the chapter strip ("Your chapter needs these things. Make them all, then tap Build!") and then the chapter button.

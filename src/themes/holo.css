@@ -577,3 +577,11 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #orders .o
 .cwNeeds i{position:relative;width:16px;height:16px;display:block;opacity:.95}
 .cwNeeds i :is(img,svg,.art,.uiIc){width:16px!important;height:16px!important}
 .cwNeeds i.ok:after{content:"✓";position:absolute;right:-3px;bottom:-3px;font:800 8px/10px Fredoka,sans-serif;width:10px;height:10px;border-radius:50%;background:#3fae2a;color:#fff;text-align:center}
+
+/* ============================================================ the Star Bazaar: painted stall sign, section plates, product art */
+#sc-shop .shopSign{width:min(60%,210px);aspect-ratio:357/360;margin:-8px auto -30px;background:url(../sprites/ui/sp_sign.webp) center/contain no-repeat;position:relative;z-index:1;pointer-events:none}
+#sc-shop .shopSign b{position:absolute;left:18%;right:18%;top:64%;height:14%;display:flex;align-items:center;justify-content:center;font:400 19px/1 "Lilita One",Fredoka,sans-serif;color:#0f4b55;text-shadow:0 1px 0 #fff}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-shop .sSecT{background:url(../sprites/ui/sp_header.webp) center/100% 100% no-repeat!important;border:0!important;box-shadow:none!important;
+  min-height:44px;display:flex!important;align-items:center;justify-content:center;gap:6px;padding:6px 40px 14px!important;margin:12px auto 8px!important;width:fit-content;max-width:94%;font:400 16px/1 "Lilita One",Fredoka,sans-serif!important;color:#0f4b55!important;text-shadow:0 1px 0 #fff!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-shop .sCArt{height:84px!important;display:flex;align-items:center;justify-content:center}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app #sc-shop .sCArt :is(img,svg,.uiIc){max-width:92px!important;max-height:84px!important;width:auto!important;height:auto!important;object-fit:contain;filter:drop-shadow(0 4px 4px rgba(0,0,0,.25))}
