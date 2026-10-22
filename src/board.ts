@@ -50,6 +50,8 @@ const THEME: Record<string, { tile: number; tileLo: number; lock: number; lockLo
 };
 /** an unknown world falls back to Earth rather than throwing mid-landing */
 const themeOf = (k: string) => THEME[k] || THEME.earth;
+/** destroy a display object together with every tween still running on it or its scale */
+const gone = (o: any) => { if (!o || o.destroyed) return; gsap.killTweensOf(o); if (o.scale) gsap.killTweensOf(o.scale); o.destroy(); };
 
 const TEX = 168;                              // texture resolution per tile art
 
@@ -730,7 +732,7 @@ class PixiBoard {
       this.lDrag.addChild(flyer);
       gsap.killTweensOf(flyer); gsap.killTweensOf(flyer.scale);
       gsap.to(flyer, { x: target.x, y: target.y, rotation: 0, duration: 0.13, ease: 'power2.in' });
-      gsap.to(flyer.scale, { x: flyer.scale.x * 0.5, y: flyer.scale.y * 0.5, duration: 0.13, ease: 'power2.in', onComplete: () => flyer.destroy() });
+      gsap.to(flyer.scale, { x: flyer.scale.x * 0.5, y: flyer.scale.y * 0.5, duration: 0.13, ease: 'power2.in', onComplete: () => gone(flyer) });
     }
     // the partner squashes to take the hit
     if (b.art && !b.art.destroyed) {
@@ -767,7 +769,7 @@ class PixiBoard {
     this.lFx.addChild(g);
     const big = 1.2 + Math.min(tier, 8) * 0.06;
     gsap.fromTo(g.scale, { x: 0.4, y: 0.4 }, { x: big, y: big, duration: 0.3, ease: 'power2.out' });
-    gsap.to(g, { alpha: 0, duration: 0.32, ease: 'power1.in', onComplete: () => g.destroy() });
+    gsap.to(g, { alpha: 0, duration: 0.32, ease: 'power1.in', onComplete: () => gone(g) });
     // rays for the good ones
     if (tier >= 4) {
       const r = new Graphics();
@@ -781,7 +783,7 @@ class PixiBoard {
       r.position.set(p.x, p.y);
       this.lTile.addChild(r);
       gsap.fromTo(r.scale, { x: 0.3, y: 0.3 }, { x: 1.3, y: 1.3, duration: 0.6, ease: 'power2.out' });
-      gsap.to(r, { rotation: 0.6, alpha: 0, duration: 0.7, ease: 'power1.in', onComplete: () => r.destroy() });
+      gsap.to(r, { rotation: 0.6, alpha: 0, duration: 0.7, ease: 'power1.in', onComplete: () => gone(r) });
     }
   }
   /** thin energy streaks shooting out of a good merge */
@@ -793,7 +795,7 @@ class PixiBoard {
       g.rotation = an; g.position.set(p.x, p.y);
       this.lFx.addChild(g);
       const d = this.cell * (0.7 + Math.random() * 0.4);
-      gsap.to(g, { x: p.x + Math.cos(an) * d, y: p.y + Math.sin(an) * d, alpha: 0, duration: 0.42, ease: 'power3.out', onComplete: () => g.destroy() });
+      gsap.to(g, { x: p.x + Math.cos(an) * d, y: p.y + Math.sin(an) * d, alpha: 0, duration: 0.42, ease: 'power3.out', onComplete: () => gone(g) });
       gsap.fromTo(g.scale, { x: 0.3 }, { x: 1.2, duration: 0.42, ease: 'power2.out' });
     }
   }
@@ -812,7 +814,7 @@ class PixiBoard {
       g.position.set(p.x, p.y);
       this.lFx.addChild(g);
       const an = (k / n) * Math.PI * 2 + Math.random() * 0.5, dist = this.cell * (0.6 + Math.random() * 0.5);
-      const tl = gsap.timeline({ onComplete: () => g.destroy() });
+      const tl = gsap.timeline({ onComplete: () => gone(g) });
       tl.to(g, { x: p.x + Math.cos(an) * dist, y: p.y + Math.sin(an) * dist - this.cell * 0.2, duration: 0.5, ease: 'power3.out' })
         .to(g, { y: '+=' + this.cell * 0.3, alpha: 0, duration: 0.35, ease: 'power1.in' });
       gsap.to(g, { rotation: (Math.random() - 0.5) * 6, duration: 0.85 });
@@ -828,7 +830,7 @@ class PixiBoard {
     sp.position.set(p.x, p.y);
     sp.width = sp.height = this.cell * 0.92;
     this.lDrag.addChild(sp);
-    const tl = gsap.timeline({ onComplete: () => sp.destroy() });
+    const tl = gsap.timeline({ onComplete: () => gone(sp) });
     tl.to(sp.scale, { x: sp.scale.x * 1.35, y: sp.scale.y * 1.35, duration: 0.18, ease: 'back.out(3)' })
       .to(sp, { y: -this.cell, alpha: 0, duration: 0.5, ease: 'power2.in' })
       .to(sp.scale, { x: 0.02, y: 0.02, duration: 0.5, ease: 'power2.in' }, '<')
@@ -845,7 +847,7 @@ class PixiBoard {
       this.lFx.addChild(sp);
       const k = sp.scale.x;
       gsap.to(sp.scale, { x: k * 1.9, y: k * 1.9, duration: 0.55, ease: 'power2.out' });
-      gsap.to(sp, { rotation: 0.6, alpha: 0, duration: 0.55, ease: 'power1.in', onComplete: () => sp.destroy() });
+      gsap.to(sp, { rotation: 0.6, alpha: 0, duration: 0.55, ease: 'power1.in', onComplete: () => { gsap.killTweensOf(sp.scale); sp.destroy(); } });
       return;
     }
     const g = new Graphics();
@@ -853,7 +855,7 @@ class PixiBoard {
     g.position.set(p.x, p.y);
     this.lFx.addChild(g);
     gsap.to(g.scale, { x: 2.1, y: 2.1, duration: 0.5, ease: 'power2.out' });
-    gsap.to(g, { alpha: 0, duration: 0.5, ease: 'power1.out', onComplete: () => g.destroy() });
+    gsap.to(g, { alpha: 0, duration: 0.5, ease: 'power1.out', onComplete: () => { gsap.killTweensOf(g.scale); g.destroy(); } });
   }
   burst(i: number, color = 0xffd45e, n = 12) {
     const p = this.center(i);
@@ -867,7 +869,7 @@ class PixiBoard {
       gsap.to(g, {
         x: p.x + Math.cos(ang) * dist, y: p.y + Math.sin(ang) * dist,
         alpha: 0, duration: 0.45 + Math.random() * 0.25, ease: 'power2.out',
-        onComplete: () => g.destroy(),
+        onComplete: () => gone(g),
       });
       gsap.to(g.scale, { x: 0.2, y: 0.2, duration: 0.5 });
     }
@@ -884,7 +886,7 @@ class PixiBoard {
     t.position.set(p.x, p.y - this.cell * 0.1);
     this.lFx.addChild(t);
     gsap.fromTo(t.scale, { x: 0.6, y: 0.6 }, { x: 1, y: 1, duration: 0.3, ease: 'back.out(3)' });
-    gsap.to(t, { y: p.y - this.cell * 1.05, alpha: 0, duration: 0.95, ease: 'power1.out', onComplete: () => t.destroy() });
+    gsap.to(t, { y: p.y - this.cell * 1.05, alpha: 0, duration: 0.95, ease: 'power1.out', onComplete: () => gone(t) });
   }
   shake(power = 1) {
     const r = this.root;

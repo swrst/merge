@@ -3830,3 +3830,79 @@ html body .app .galComet{width:26px!important;height:27px!important;animation:ga
 #xpPanel .xpMedal span{flex:none;width:34px;height:34px;display:flex;align-items:center;justify-content:center;overflow:hidden}
 #xpPanel .xpMedal span :is(img,.uiIc){width:34px!important;height:34px!important;object-fit:contain}
 #xpPanel .xpMedal{gap:8px}
+
+/* ============================================================ pet hatching */
+#evo.phOn{position:absolute;inset:0;z-index:240;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;overflow:hidden}
+#evo.phOn .phSky{position:absolute;inset:0;background:radial-gradient(70% 55% at 50% 45%,rgba(60,40,140,.85),rgba(6,8,28,.95));animation:phFade .5s ease-out both}
+#evo.phOn .phRays{position:absolute;left:50%;top:44%;width:620px;height:620px;margin:-310px 0 0 -310px;background:url(./sprites/ui/hl_rays.webp) center/contain no-repeat;opacity:0;transition:opacity .6s}
+#evo.phOut .phRays{opacity:.9;animation:spinSlow 12s linear infinite}
+#evo.phOn .phFlash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+#evo.phOut .phFlash{animation:phFlash .7s ease-out}
+@keyframes phFlash{0%{opacity:0}15%{opacity:.95}100%{opacity:0}}
+@keyframes phFade{from{opacity:0}}
+#evo .phStage{position:relative;width:220px;height:230px}
+#evo .phPad{position:absolute;left:50%;bottom:0;width:200px;height:70px;margin-left:-100px;background:url(./sprites/ui/hn_platform.webp) center/contain no-repeat}
+#evo .phBeam{position:absolute;left:50%;bottom:28px;width:120px;height:200px;margin-left:-60px;background:url(./sprites/ui/hn_beam.webp) center bottom/100% 100% no-repeat;opacity:.7;animation:npBeam 2s ease-in-out infinite}
+#evo .phEgg,#evo .phHalf{position:absolute;left:50%;bottom:40px;width:110px;height:130px;margin-left:-55px;transform-origin:50% 95%}
+#evo .phEgg img,#evo .phEgg svg,#evo .phHalf img,#evo .phHalf svg{width:100%;height:100%;object-fit:contain}
+#evo.phOn .phEgg{animation:phWobble 2.65s cubic-bezier(.4,0,.6,1) both}
+@keyframes phWobble{0%{transform:translateY(40px) scale(.6);opacity:0}12%{transform:none;opacity:1}25%{transform:rotate(0)}32%{transform:rotate(-7deg)}38%{transform:rotate(7deg)}44%{transform:rotate(0)}55%{transform:rotate(-12deg)}61%{transform:rotate(12deg)}67%{transform:rotate(-10deg)}72%{transform:rotate(0)}80%{transform:rotate(-16deg) scale(1.05)}85%{transform:rotate(16deg) scale(1.08)}90%{transform:rotate(-14deg) scale(1.1)}95%{transform:rotate(0) scale(1.18,1.05)}100%{transform:scale(1.25,.9)}}
+#evo .phHalf{opacity:0;clip-path:inset(0 50% 0 0)}
+#evo .phHalf.r{clip-path:inset(0 0 0 50%)}
+#evo.phOut .phEgg{opacity:0;animation:none}
+#evo.phOut .phHalf.l{animation:phHalfL .8s cubic-bezier(.2,.7,.4,1) both}
+#evo.phOut .phHalf.r{animation:phHalfR .8s cubic-bezier(.2,.7,.4,1) both}
+@keyframes phHalfL{0%{opacity:1;transform:none}100%{opacity:0;transform:translate(-110px,40px) rotate(-70deg)}}
+@keyframes phHalfR{0%{opacity:1;transform:none}100%{opacity:0;transform:translate(110px,40px) rotate(70deg)}}
+#evo .phPet{position:absolute;left:50%;bottom:44px;width:140px;height:140px;margin-left:-70px;opacity:0;transform-origin:50% 100%}
+#evo .phPet>*{width:100%;height:100%}
+#evo.phOut .phPet{animation:phPop .9s .1s cubic-bezier(.3,1.5,.5,1) both,phBob 2.4s 1.1s ease-in-out infinite}
+@keyframes phPop{0%{opacity:0;transform:translateY(20px) scale(.2)}40%{opacity:1;transform:translateY(-34px) scale(1.15,.85)}62%{transform:translateY(0) scale(.88,1.12)}80%{transform:scale(1.06,.94)}100%{opacity:1;transform:none}}
+@keyframes phBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+#evo .phRing{position:absolute;left:50%;top:45%;width:60px;height:60px;margin:-30px 0 0 -30px;border-radius:50%;border:3px solid #c9ff7a;opacity:0}
+#evo.phOut .phRing.a{animation:phRing .9s ease-out both}
+#evo.phOut .phRing.b{animation:phRing .9s .2s ease-out both;border-color:#fff}
+@keyframes phRing{0%{opacity:1;transform:scale(.3)}100%{opacity:0;transform:scale(4.5)}}
+#evo .phStar{position:absolute;left:50%;top:45%;width:14px;height:14px;margin:-7px;background:radial-gradient(circle,#fff 0 25%,#fff6b0 26% 45%,transparent 46%);opacity:0}
+#evo.phOut .phStar{animation:phStar 1.1s var(--d) cubic-bezier(.2,.7,.3,1) both}
+@keyframes phStar{0%{opacity:1;transform:rotate(var(--a)) translateY(0) scale(.4)}100%{opacity:0;transform:rotate(var(--a)) translateY(-150px) scale(1.4)}}
+#evo .phName{position:relative;width:280px;height:72px;background:url(./sprites/ui/hl_ribbon.webp) center/contain no-repeat;display:flex;align-items:center;justify-content:center;opacity:0}
+#evo .phName b{font:400 24px/1 "Lilita One",Fredoka,sans-serif;color:#fff;text-shadow:0 2px 0 #a4480f;margin-top:-6px}
+#evo .phSub{position:relative;font:700 14px Fredoka,sans-serif;color:#fff;text-shadow:0 1px 2px #000;opacity:0}
+#evo.phOn #evoGo{position:relative;opacity:0;pointer-events:none}
+#evo.phOut .phName{animation:luPop .5s .6s cubic-bezier(.2,1.6,.4,1) both}
+#evo.phOut .phSub{animation:fxRise .5s .9s ease-out both}
+#evo.phOut #evoGo{animation:fxRise .5s 1.2s ease-out both;pointer-events:auto}
+
+/* ============================================================ Star Album sticker cards */
+.stkGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:2px}
+.stkGrid.sum{max-height:52vh;overflow:auto;margin:8px 0}
+.stkCard{position:relative;border-radius:12px;padding:5px 5px 4px;background:linear-gradient(180deg,#fff,#eef3ff);border:3px solid #fff;box-shadow:0 3px 6px rgba(20,30,60,.28);display:flex;flex-direction:column;align-items:center;min-width:0}
+.stkCard .stkArt{width:100%;aspect-ratio:1.05;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;
+  background:radial-gradient(circle at 50% 40%,#bfe8ff,#5aa7e8)}
+.stkCard .stkArt>:is(svg,img){width:78%;height:78%;object-fit:contain;filter:drop-shadow(0 3px 3px rgba(0,0,0,.3))}
+.stkCard .stkStars{margin-top:-9px;font-size:13px;letter-spacing:-1px;color:#ffc531;text-shadow:0 1px 0 #a46a00,0 0 3px #fff;line-height:1;z-index:1}
+.stkCard .stkName{width:100%;margin-top:3px;padding:3px 2px;border-radius:6px;font:800 10px/1.15 Fredoka,sans-serif;color:#fff;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:#3d9bd6;text-shadow:0 1px 0 rgba(0,0,0,.3)}
+.stkCard.s2 .stkArt{background:radial-gradient(circle at 50% 40%,#c8ffbf,#4fbf5a)}.stkCard.s2 .stkName{background:#3aa548}
+.stkCard.s3 .stkArt{background:radial-gradient(circle at 50% 40%,#ecd4ff,#9a5ce0)}.stkCard.s3 .stkName{background:#8a4fd4}
+.stkCard.s4 .stkArt{background:radial-gradient(circle at 50% 40%,#ffd9b8,#f07a3a)}.stkCard.s4 .stkName{background:#e2662a}
+.stkCard.s5{border-color:#ffd23f;box-shadow:0 0 0 2px #fff3b0,0 0 12px rgba(255,200,50,.8),0 3px 6px rgba(0,0,0,.25)}
+.stkCard.s5 .stkArt{background:radial-gradient(circle at 50% 40%,#fff4b8,#f2b120)}.stkCard.s5 .stkName{background:linear-gradient(90deg,#e8a20e,#f5c842)}
+.stkCard.miss{background:linear-gradient(180deg,#e9ecf6,#d8ddec);border-color:#f2f4fb;box-shadow:inset 0 0 0 1px rgba(0,0,0,.05)}
+.stkCard.miss .stkArt{background:repeating-linear-gradient(45deg,#c9d0e6 0 6px,#d6dcef 6px 12px)!important}
+.stkCard.miss .stkQ{font:400 30px/1 "Lilita One",Fredoka,sans-serif;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.15)}
+.stkCard.miss .stkName{background:#b6bdd3!important}
+.stkCard.miss .stkStars{opacity:.6}
+.stkCard .stkDup{position:absolute;top:-6px;right:-6px;font-style:normal;font:800 10px/1 Fredoka,sans-serif;background:#ff7a1f;color:#fff;border:2px solid #fff;border-radius:99px;padding:2px 5px}
+.stkCard .stkNew{position:absolute;top:-8px;left:50%;transform:translateX(-50%);font:800 9px/1 Fredoka,sans-serif;background:#ff3d6e;color:#fff;border:2px solid #fff;border-radius:99px;padding:2px 6px;white-space:nowrap}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .albSet{padding-bottom:10px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .stkCard :is(.stkName,.stkName *){color:#fff!important;text-shadow:0 1px 0 rgba(0,0,0,.3)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app .stkCard .stkStars{color:#ffc531!important;text-shadow:0 1px 0 #a46a00,0 0 3px #fff!important}
+/* pack reveal: big cards */
+.packRow{gap:10px!important}
+.pkCard{width:104px!important;height:134px!important}
+.pkFace{background:none!important;box-shadow:none!important;padding:0!important}
+.pkFace .stkCard{width:100%;height:100%;justify-content:flex-start}
+.pkBack{background:linear-gradient(160deg,#ff9a3d,#ff4f8a)!important;box-shadow:inset 0 0 0 4px #fff,0 4px 10px rgba(0,0,0,.3)!important}
+.pkBack:after{content:"★";font:400 40px/1 "Lilita One",sans-serif;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.2)}
+.stkNew.dup{background:#7b6cff!important}

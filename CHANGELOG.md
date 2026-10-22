@@ -1,5 +1,15 @@
 # Changelog
 
+- **v100 (1.0.0)**
+  - Energy shows just what you have; tapping it says when you will be full ("In 41m you will have 66").
+  - The chapter button lists what the chapter needs (ticks when done); the first-run guide now points at the chapter strip ("Your chapter needs these things. Make them all, then tap Build!") and then the chapter button.
+  - Star Album: stickers are collectible cards (art on a rarity colour, stars, name banner; missing ones are card backs). Pack openings and "Open all" show the same big cards.
+  - A contract you can fill glows gold; a ready chapter keeps its green BUILD.
+  - Producer upgrades: the item bar's button upgrades a producer (⬆ price), and a spotlight explains it the first time you can afford one. Chapters ask for an upgrade every fifth chapter from chapter 10 (was every third from 8).
+  - Pets hatch on the projector pad: the egg wobbles harder and harder, cracks, a flash, the shell flies apart and the pet pops out with rings of light and its name on a ribbon.
+  - Music stops when the app goes to the background (home button, app switch) and comes back when you return.
+  - Fix: a rare console error from tweens on removed board sprites.
+
 - **v99 (0.99.0)**
   - Contracts share the work between producers: the chain asked for least lately is picked most often, open contracts never ask for the same item (and avoid the same chain), and the pull toward retiring producers is gentler. In a test at chapter 10 with seven producers, asks spread evenly across all their chains.
   - Every contract you could fill right now shows as ready, even when two want the same item; you choose which one gets it and the other updates at once.

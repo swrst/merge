@@ -644,7 +644,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function renderHUD() {
     $('#coins').textContent = kN(S.coins);
     $('#gems').textContent = kN(S.gems || 0);
-    $('#energy').textContent = S.energy + '/' + maxEnergy();
+    $('#energy').textContent = String(S.energy);   // just what you have; tap it for when it refills
     $('#lvl').textContent = S.lvl;
     const av = $('#avatar');
     if (av && !av.dataset.on && document.documentElement.classList.contains('has-player')) { av.innerHTML = ART.char('player'); av.dataset.on = '1'; }
@@ -786,6 +786,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const pct = Math.round(parts.reduce((a: number, x: number) => a + x, 0) / parts.length * 100);
     btn.innerHTML = `<span class="cwFace">${ART.char(pj.who)}</span>
       <b class="cwT">${ready ? 'BUILD!' : 'Ch. ' + (projDone() + 1)}</b>
+      <span class="cwNeeds">${pj.needs.slice(0, 3).map(([id, q]: [string, number]) => `<i class="${countItem(id) >= q ? 'ok' : ''}">${ART.item(id)}</i>`).join('')}${cNeed(pj) ? `<i class="${cHave() >= cNeed(pj) ? 'ok' : ''}">${ART.uiIcon('cl_tasks', '📋')}</i>` : ''}</span>
       <span class="cwBar"><i style="width:${pct}%"></i></span>`;
     // the bottom line spells the chapter out: every need, always on screen
     const line = $('#chapLine');
@@ -2774,7 +2775,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      remembered per chapter, so finishing it never reveals another one. */
   function upNeeds(p: any): { k: string; lv: number }[] {
     if (!p || !scripted()) return [];
-    const k = projList().indexOf(p); if (k < 7 || k % 3 !== 0) return [];   // v66: every third chapter, from chapter 8
+    const k = projList().indexOf(p); if (k < 9 || k % 5 !== 4) return [];   // every fifth chapter, from chapter 10
     S.upAsk = S.upAsk || {};
     const lvOf = (key: string) => { let lv = 0; B().forEach((c: any) => { if (c && c.p === key && !c.tmp) lv = Math.max(lv, plv(c)); }); stored().forEach((c: any) => { if (c.p === key) lv = Math.max(lv, c.lv || 1); }); return lv; };
     let ask = S.upAsk[p.id];
@@ -4514,7 +4515,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     stat('stickers', n); save();
     // the reveal: cards flip one after the other
     pop(`${kind === 'gold' ? ART.uiIcon('pack_gold', '🌟') + ' Golden pack' : ART.uiIcon('pack_basic', '🎴') + ' Sticker pack'}`, `<div class="packRow">${res.map((r, k) => `<div class="pkCard">
-        <div class="pkBack" style="animation-delay:${0.25 + k * 0.35}s"></div><div class="pkFace s${stickerStars(r.id)}" style="animation-delay:${0.45 + k * 0.35}s">${stickerHtml(r.id)}<em>${'★'.repeat(stickerStars(r.id))}</em>${r.isNew ? '<b class="pkNew">NEW!</b>' : `<b class="pkDup">+${r.d} ✨ dust</b>`}</div></div>`).join('')}</div>
+        <div class="pkBack" style="animation-delay:${0.25 + k * 0.35}s"></div><div class="pkFace s${stickerStars(r.id)}" style="animation-delay:${0.45 + k * 0.35}s">${stickerCard(r.id, 1, r.isNew ? '<b class="stkNew">NEW!</b>' : `<b class="stkNew dup">+${r.d} dust</b>`)}</div></div>`).join('')}</div>
       <button class="big" id="pkGo">${packsWaiting() ? 'Next pack' : 'To the album'}</button>`, 'fun album');
     sfx.whoosh(); res.forEach((r, k) => setTimeout(() => { (r.isNew ? sfx.discover : sfx.pop)(); }, 450 + k * 350));
     ($('#pkGo') as HTMLElement).onclick = () => { if (packsWaiting()) openPack(a.packs.gold ? 'gold' : 'basic'); else albumPop(); };
@@ -4538,12 +4539,17 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     sfx.discover(); confetti();
     pop(`${ART.uiIcon('pack_basic', '🎴')} ${packs} packs opened`, `<div class="pkSum">
         <div class="pkSumN"><b>${fresh.length}</b><i>new sticker${fresh.length === 1 ? '' : 's'}</i></div>
-        <div class="pkSumGrid">${fresh.map(id => `<span class="pkSumIt s${stickerStars(id)}">${stickerHtml(id)}<em>${'★'.repeat(stickerStars(id))}</em></span>`).join('') || '<i class="noteLine">No new ones this time.</i>'}</div>
+        <div class="stkGrid sum">${fresh.map(id => stickerCard(id, 1, '<b class="stkNew">NEW!</b>')).join('') || '<i class="noteLine">No new ones this time.</i>'}</div>
         ${dust ? `<div class="pkSumDust">${ART.uiIcon('star_dust', '✨')} +${dust} dust from doubles</div>` : ''}</div>
       <button class="big" id="pkGo">To the album</button>`, 'fun album');
     ($('#pkGo') as HTMLElement).onclick = () => albumPop();
     setTimeout(albumCheck, 500);
   }
+  /** a sticker as a collectible card: art on a rarity-coloured background, its stars and name; missing ones are the card back */
+  const stickerCard = (id: string, n: number, extra = '') => `<div class="stkCard s${stickerStars(id)}${n ? ' got' : ' miss'}">
+      <div class="stkArt">${n ? ART.item(id) : '<span class="stkQ">?</span>'}</div>
+      <div class="stkStars">${'★'.repeat(stickerStars(id))}</div>
+      <div class="stkName">${n ? ITEMS[id].name : '???'}</div>${n > 1 ? `<em class="stkDup">×${n}</em>` : ''}${extra}</div>`;
   const stickerHtml = (id: string) => `<span class="stk">${ART.item(id)}</span>`;
   const setReward = (k: number): Reward => ({ coins: 150 + k * 60, gems: 4 + k, energy: 15 });
   function albumCheck() {
@@ -4580,7 +4586,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       <div class="albSets">${sets.map((s, k) => {
         const n = s.ids.filter(id => a.have[id]).length, done = !!a.sets[s.key];
         return `<div class="albSet${done ? ' done' : ''}"><div class="albSetH"><b>${s.name}</b><i>${n}/${s.ids.length}</i><span>${done ? '✓ complete' : rewardText(setReward(k))}</span></div>
-          <div class="albGrid">${s.ids.map(id => `<span class="albSlot s${stickerStars(id)}${a.have[id] ? ' got' : ''}">${a.have[id] ? stickerHtml(id) + (a.have[id] > 1 ? `<em>×${a.have[id]}</em>` : '') : '<i>?</i>'}<u>${'★'.repeat(stickerStars(id))}</u></span>`).join('')}</div></div>`;
+          <div class="stkGrid">${s.ids.map(id => stickerCard(id, a.have[id] || 0)).join('')}</div></div>`;
       }).join('')}</div>
       <div class="albShop"><b>Star Dust swap</b>${DUST_SHOP.map(d => `<button class="buyBtn" data-dust="${d.id}" ${a.dust >= d.cost ? '' : 'disabled'}>${d.name} · ✨${d.cost}</button>`).join('')}</div>
       <div class="noteLine">Packs come from contracts, chapters, level-ups, chests and daily tasks. Finish the whole album before the season ends for a permanent badge.</div>
@@ -4876,6 +4882,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     { k: 'contract', at: '#orders .order.ready', say: '<b>Tap</b> to give it!', when: () => !!document.querySelector('#orders .order.ready'), on: 'deliver' },
     { k: 'map', at: '#tabMap', say: 'Your <b>camp</b>: the Lab, Album, games and the way to the Galaxy.', when: () => projDone('earth') >= 2 },
     { k: 'x2b', at: '#btnX2', say: '<b>Power ×2</b><br>Double energy per tap, drops <b>a step higher</b>, sometimes more.', when: () => S.lvl >= BOOST_LV && !!document.getElementById('btnX2') },
+    { k: 'upgP', at: firstCell(c => !!c.p && !c.tmp && plv(c) < PMAX && S.coins >= upCost(PRODS[c.p], plv(c))), say: '<b>Upgrade</b> this producer!<br>Tap it, then <b>⬆</b>: better items, more charges.', when: () => projDone() >= 3 && B().some((c: any) => c && c.p && !c.tmp && plv(c) < PMAX && S.coins >= upCost(PRODS[c.p], plv(c))) },
     { k: 'chapter', at: '#btnQuests', say: '<b>Tap to build</b> the chapter!', when: () => projReady(curProject()) },
     { k: 'chest', at: firstCell(c => !!c.id && isChest(c.id)), say: 'A <b>chest</b>! Tap it to open it.', when: () => B().some((c: any) => c && c.id && isChest(c.id)) },
     { k: 'wreck', at: firstCell(c => c.p === 'wreck'), say: 'Tap the <b>wreck</b> for rocket parts.', when: () => B().some((c: any) => c && c.p === 'wreck') },
@@ -5045,8 +5052,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const per = regenMs(), full = S.energy >= maxEnergy();
     const next = full ? 0 : Math.max(0, per - (Date.now() - (S.eAt || Date.now())));
     const enPic = S.energy <= 0 && ART.spriteUi('empty_energy') ? 'empty_energy' : 'energy_refill';
-    pop('⚡ Energy', `${ART.spriteUi(enPic) ? `<img class="enArt${enPic === 'empty_energy' ? ' wide' : ''}" src="${ART.spriteUi(enPic)}" alt="">` : ''}<div class="enBig">${ART.icon('energy')}<b>${S.energy}</b><i>/ ${maxEnergy()}</i></div>
-      <div class="noteLine" style="margin-top:2px">${full ? 'Full! Go merge something.' : `+1 every ${Math.round(per / 60000 * 10) / 10} min · next in <b>${mmss(next)}</b>`}</div>
+    pop('⚡ Energy', `${ART.spriteUi(enPic) ? `<img class="enArt${enPic === 'empty_energy' ? ' wide' : ''}" src="${ART.spriteUi(enPic)}" alt="">` : ''}<div class="enBig">${ART.icon('energy')}<b>${S.energy}</b></div>
+      <div class="noteLine" style="margin-top:2px">${full ? 'Full! Go merge something.' : `In <b>${dhm(next + per * Math.max(0, maxEnergy() - S.energy - 1))}</b> you will have <b>${maxEnergy()}</b> ⚡<br><span style="opacity:.8">+1 every ${Math.round(per / 60000 * 10) / 10} min · next in ${mmss(next)}</span>`}</div>
       <div class="enRow"><span class="enIc">${ART.uiIcon('energy_cells', ART.icon('gem'))}</span><div><b>Big refill</b><i>+${CFG.gems.refill.energy} energy</i></div>
         <button class="buyBtn gem" id="enGem">💎 ${CFG.gems.refill.gems}</button></div>
       ${adBtn('energy', `+${CFG.ads.energy} ⚡ energy`, 'enAd')}
@@ -5217,26 +5224,35 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const ring = document.createElement('i'); ring.className = 'bstRing' + (ART.spriteUi('fx_ring') ? ' pic' : ''); if (ART.spriteUi('fx_ring')) ring.style.backgroundImage = `url(${ART.spriteUi('fx_ring')})`; host.appendChild(ring); setTimeout(() => ring.remove(), 1000);
   }
   /* The hatch: an egg drops in, wobbles, cracks with a flash and the pet pops out. */
+  /* A hatching is a moment: the egg sits in a beam on the projector pad and
+     wobbles harder and harder, cracks, the screen flashes, the shell halves fly
+     off and the little one pops out with a squash-and-stretch, rings of light
+     and its name on a ribbon. Tap anywhere after it has landed. */
   function petHatch(done: () => void) {
     let el = document.getElementById('evo');
     if (!el) { el = document.createElement('div'); el.id = 'evo'; $('#app').appendChild(el); }
     const egg = ART.spriteChar('pet_egg') ? `<img src="${ART.spriteChar('pet_egg')}" alt="">`
       : ART.spriteItem('petegg') ? `<img src="${ART.spriteItem('petegg')}" alt="">` : ART.item('petegg');
-    el.innerHTML = `<div class="rwcRays"></div><div class="evoTxt">Something is <b>wobbling</b>…</div>
-      <div class="evoStage hatch"><span class="evoEgg">${egg}</span><span class="evoB">${pupArt(PET_FORMS.baby)}</span></div><button class="big" id="evoGo" style="visibility:hidden">Hello, little one!</button>`;
-    el.className = 'open hatching'; sfx.whoosh(); haptic('light');
-    setTimeout(() => { sfx.boing(); haptic('medium'); }, 900);
+    const half = (side: string) => `<span class="phHalf ${side}">${egg}</span>`;
+    el.innerHTML = `<div class="phSky"></div><div class="phRays"></div><div class="phFlash"></div>
+      <div class="phStage"><i class="phPad"></i><i class="phBeam"></i>
+        <span class="phEgg">${egg}</span>${half('l')}${half('r')}
+        <span class="phPet">${pupArt(PET_FORMS.baby)}</span>
+        <i class="phRing a"></i><i class="phRing b"></i>
+        ${Array.from({ length: 10 }, (_, k) => `<i class="phStar" style="--a:${k * 36}deg;--d:${0.05 * k}s"></i>`).join('')}</div>
+      <div class="phName"><b>${PET_FORMS.baby.name}</b></div>
+      <div class="phSub">Your new pet! Feed it and it grows.</div>
+      <button class="big" id="evoGo">Hello, little one!</button>`;
+    el.className = 'open phOn'; sfx.whoosh(); haptic('light');
+    [700, 1300, 1800, 2200].forEach((t, k) => setTimeout(() => { sfx.boing(); haptic(k > 1 ? 'medium' : 'light'); }, t));
     setTimeout(() => {
-      sfx.boing(); haptic('medium');
-      const cr = ART.spriteChar('pet_egg_crack'), im = el!.querySelector('.evoEgg img') as HTMLImageElement;
+      const cr = ART.spriteChar('pet_egg_crack'), im = el!.querySelector('.phEgg img') as HTMLImageElement;
       if (cr && im) im.src = cr;
-    }, 1500);
+    }, 1600);
     setTimeout(() => {
-      el!.classList.add('done'); sfx.discover(); sfx.voice('pup', 3); haptic('heavy'); confetti();
-      burst(el!.querySelector('.evoStage') as HTMLElement, 30);
-      ($('.evoTxt') as HTMLElement).innerHTML = `A <b>${PET_FORMS.baby.name}</b> hatched!<br><small>It is yours now. Feed it and it will grow.</small>`;
-      ($('#evoGo') as HTMLElement).style.visibility = '';
-    }, 2300);
+      el!.classList.add('phOut'); sfx.discover(); sfx.voice('pup', 3); haptic('heavy'); confetti();
+      burst(el!.querySelector('.phStage') as HTMLElement, 30);
+    }, 2650);
     ($('#evoGo') as HTMLElement).onclick = () => { el!.className = ''; done(); };
   }
   function petIntro() {
@@ -6259,7 +6275,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       id: 'hint', say: 'Stuck? Tap here:<br>the next merge <b>blinks</b>.', at: () => '#btnHint',
       when: () => { const h = document.getElementById('btnHint'); return !!h && !!h.offsetParent; },
     },
-    { id: 'story', say: 'Bring what the <b>chapter</b> needs,<br>then <b>Build</b>!', at: () => '#btnQuests' },
+    { id: 'story', say: 'Your <b>chapter</b> needs these things.<br>Make them all, then tap <b>Build</b>!', at: () => '#chapLine' },
+    { id: 'story2', say: 'They show here too.<br>Tap for the full list.', at: () => '#btnQuests' },
   ];
   /* a one-off spotlight the game raises when a feature first matters (see COACH) */
   let jit: TutStep | null = null;
@@ -6536,8 +6553,17 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     $('#infoTxt').innerHTML = `<b>${p.name} <small>lv ${plv(c)}</small> ${ART.spriteUi('btn_info') ? ART.uiIcon('btn_info', '') : '<span class="infoQ">i</span>'}</b><i>tap again to use it · ⓘ more info</i>`;
     ($('#infoTxt') as HTMLElement).onclick = () => { sfx.tap(); producerPanel(i); };
     ['#btnStash', '#btnShow', '#btnRecycle'].forEach(k => { const e = $(k) as HTMLElement; if (e) e.style.display = 'none'; });
-    $('#btnSell').innerHTML = 'Info';
-    $('#btnSell').onclick = () => { sfx.tap(); producerPanel(i); };
+    // the bar's button upgrades it when you can afford it, otherwise shows its info
+    const lv = plv(c), price = lv < PMAX && !c.tmp ? upCost(p, lv) : 0;
+    if (price) {
+      $('#btnSell').innerHTML = `⬆ ${price} ${ART.icon('coin')}`;
+      $('#btnSell').classList.toggle('off', S.coins < price);
+      $('#btnSell').onclick = () => { upgradeProducer(i); tutFire('upgrade'); if (B()[i]) showProdInfo(i); };
+    } else {
+      $('#btnSell').innerHTML = 'Info';
+      $('#btnSell').classList.remove('off');
+      $('#btnSell').onclick = () => { sfx.tap(); producerPanel(i); };
+    }
   }
   function showInfo(i: number) {
     const c = B()[i]; if (!c || !c.id) return;
@@ -6546,7 +6572,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     $('#infoTxt').innerHTML = `<b>${d.name} <small>lv ${d.tier}</small> ${ART.spriteUi('btn_info') ? ART.uiIcon('btn_info', '') : '<span class="infoQ">i</span>'}</b><i>${nx ? `merge 2 → <span class="nxArt">${ART.item(nx)}</span>` : 'top of its chain!'}</i>`;
     ($('#infoTxt') as HTMLElement).onclick = () => { sfx.tap(); chainPanel(c.id); };
     $('#btnSell').innerHTML = `Sell ${sellOf(c.id)} ${ART.icon('coin')}`;
-    $('#btnSell').onclick = () => { sellItem(i); $('#infoBar').classList.remove('on'); };
+    $('#btnSell').classList.remove('off'); $('#btnSell').onclick = () => { sellItem(i); $('#infoBar').classList.remove('on'); };
     const st = $('#btnStash');
     st.style.display = bagHas() ? '' : 'none';
     st.onclick = () => stashItem(i);

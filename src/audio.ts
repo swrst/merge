@@ -41,7 +41,12 @@ class Audio {
   musicOn = true;
 
   /** Safe to call as often as you like — only the first gesture does anything. */
+  /** the app went to the background: everything goes quiet until it comes back */
+  sleep() { this.away = true; if (this.ctx && this.ctx.state === 'running') this.ctx.suspend().catch(() => { }); }
+  wake() { this.away = false; this.unlock(); }
+  private away = false;
   unlock() {
+    if (this.away) return;
     if (this.broken) return;
     if (!this.ctx) {
       const AC = (window as any).AudioContext || (window as any).webkitAudioContext;
@@ -238,7 +243,12 @@ if (typeof window !== 'undefined') {
   const kick = () => audio.unlock();
   ['pointerdown', 'touchstart', 'keydown'].forEach(e =>
     window.addEventListener(e, kick, { passive: true }));
-  document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) audio.unlock();
-  });
+  // the phone's home button or a tab switch: the WebView may keep running, so the music has to stop by hand
+  document.addEventListener('visibilitychange', () => { if (document.hidden) audio.sleep(); else audio.wake(); });
+  window.addEventListener('pagehide', () => audio.sleep());
+  import('@capacitor/app').then(({ App }) => {
+    App.addListener('appStateChange', ({ isActive }) => { if (isActive) audio.wake(); else audio.sleep(); });
+    App.addListener('pause', () => audio.sleep());
+    App.addListener('resume', () => audio.wake());
+  }).catch(() => { });
 }
