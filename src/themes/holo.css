@@ -1146,3 +1146,73 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #p
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.album .packRow .stkCard{position:relative;z-index:1}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.album .packRow .stkArt{height:74px!important}
 #pop.album .packRow .stkArt :is(img,svg){width:66px!important;height:66px!important}
+/* v116: a game you cannot play right now is grey */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop .funCard.wait{filter:grayscale(1) brightness(.95);opacity:.7}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop .funCard.wait i{color:#6b7280!important}
+/* v116: contract path: discovered steps are full colour, only unknown ones fade */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.csheet .csStep.seen{opacity:1!important;filter:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.csheet .csStep.goal{opacity:1!important;filter:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #pop.csheet .csStep.goal:not(.have) :is(img,svg){opacity:.55}
+/* ===================== v116 expeditions: requests like the main contracts, a richer screen */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #xpScr .xpOrd{display:flex!important;gap:8px!important;justify-content:center;min-height:132px;padding-top:16px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #xpScr .xpO{width:104px;padding:10px 6px 8px!important;border-radius:18px!important;cursor:default;
+  background:linear-gradient(180deg,#fff,hsla(var(--xh),70%,95%,1))!important;border:2px solid hsla(var(--xh),60%,75%,1)!important;box-shadow:0 3px 0 hsla(var(--xh),50%,40%,.35),0 6px 14px rgba(0,0,0,.2)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #xpScr .xpO.ok{cursor:pointer;border-color:#ffc531!important;background:linear-gradient(180deg,#fffbe6,#ffe9a6)!important;
+  box-shadow:0 0 0 2px #fff,0 0 18px rgba(255,190,40,.9),0 3px 0 #c27510!important;animation:xpReady 1.3s ease-in-out infinite}
+@keyframes xpReady{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #xpScr .xpWho{width:40px!important;height:40px!important;left:-8px!important;top:-12px!important;box-shadow:0 0 0 2.5px #fff,0 2px 4px rgba(0,0,0,.3)!important;background:radial-gradient(circle,#fff,hsla(var(--xh),70%,85%,1))!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #xpScr .xpWant{position:relative;width:58px!important;height:58px!important;border-radius:50%;background:radial-gradient(circle at 50% 40%,#fff,hsla(var(--xh),70%,88%,1))}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #xpScr .xpO.ok .xpWant{background:radial-gradient(circle at 50% 40%,#fff,#ffd96b)}
+#xpScr .xpTick{position:absolute;right:-6px;top:-4px;width:22px;height:22px;border-radius:50%;background:#3fae2a;color:#fff;font:900 13px/22px Fredoka,sans-serif;text-align:center;box-shadow:0 0 0 2px #fff,0 2px 3px rgba(0,0,0,.3)}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #xpScr .xpO>i{font:800 11px/1.1 Fredoka,sans-serif!important;color:hsl(var(--xh),55%,22%)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #xpScr .xpGive{display:inline-block;margin-top:3px!important;padding:4px 10px!important;border-radius:999px!important;background:hsla(var(--xh),40%,88%,1)!important;box-shadow:none!important;
+  font:800 11px/1 Fredoka,sans-serif!important;color:hsl(var(--xh),40%,30%)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #xpScr .xpGive.on{background:linear-gradient(#8fe86a,#3fae2a)!important;box-shadow:0 2px 0 #2a7d1c!important;color:#fff!important;font:400 13px/1 "Lilita One",Fredoka,sans-serif!important;text-shadow:0 1px 0 #1f6b12}
+/* board: items a request wants carry a star, the ones a ready request will take glow gold */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #xpScr .xpC.take{box-shadow:inset 0 0 0 3px #ffc531,0 0 12px rgba(255,190,40,.85)!important;background:linear-gradient(160deg,#fffbe6,#ffe39a)!important;animation:xpTake 1.2s ease-in-out infinite}
+@keyframes xpTake{50%{box-shadow:inset 0 0 0 3px #ffc531,0 0 20px rgba(255,190,40,1)}}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #xpScr .xpC.want::after{background:#ff9a1c!important;box-shadow:0 0 0 1.5px #fff,0 0 6px rgba(255,150,30,.9)!important}
+/* top: title ribbon, timer and energy pills, prize bar */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #xpScr .xpTitle{font:400 20px/1 "Lilita One",Fredoka,sans-serif!important;padding:10px 26px!important;border-radius:999px!important;text-shadow:0 2px 0 rgba(0,0,0,.3)!important;letter-spacing:.3px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #xpScr .xpSub>span{background:#fff!important;border-radius:999px!important;padding:3px 10px 3px 4px!important;box-shadow:0 2px 4px rgba(0,0,0,.25)!important;color:hsl(var(--xh),50%,25%)!important;font-weight:900!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #xpScr .xpSub>span *{color:hsl(var(--xh),50%,25%)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #xpScr .xpTrack{background:hsla(var(--xh),40%,85%,1)!important;border-radius:999px!important;box-shadow:inset 0 1px 2px rgba(0,0,0,.2)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #xpScr .xpTrack>i{background:linear-gradient(90deg,hsl(var(--xh),80%,62%),#ffd45a)!important;border-radius:999px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #xpScr .xpTabs button{background:#fff!important;border:2px solid hsl(var(--xh),65%,70%)!important;border-image:none!important;border-radius:16px!important;box-shadow:0 3px 0 hsla(var(--xh),50%,40%,.4)!important;color:hsl(var(--xh),50%,25%)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #xpScr .xpTabs button *{color:hsl(var(--xh),50%,25%)!important}
+/* ===================== v116 pet popup: a creature habitat (pink nebula frame) */
+html[data-ui-theme="buddy"] body #app #pop.petpop{--h-ink:#5a1240; --h-ink2:#8a3a6e;
+  --h-panel:url(../sprites/ui/pk_panel.webp); --h-tall:url(../sprites/ui/pk_panel_tall.webp); --h-head:url(../sprites/ui/pk_panel_head.webp);
+  --h-title:url(../sprites/ui/pk_title.webp); --h-banner:url(../sprites/ui/pk_title.webp); --h-card:url(../sprites/ui/pk_card.webp)}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.petpop .pupStage{position:relative;margin:4px 6px 0!important;height:200px!important;border-radius:120px 120px 22px 22px!important;overflow:hidden;
+  box-shadow:0 0 0 3px #fff,0 0 0 6px #ff9fd6,0 0 26px rgba(255,120,210,.7)!important}
+#pop.petpop .pupStage::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:radial-gradient(ellipse at 30% 12%,rgba(255,255,255,.55),transparent 32%),linear-gradient(180deg,transparent 70%,rgba(90,20,70,.25));box-shadow:inset 0 0 22px rgba(255,180,240,.6)}
+#pop.petpop .pupStage .pupImg,#pop.petpop .pupStage>svg,#pop.petpop .pupStage>img:not(.pupBed):not(.pupBowl){filter:drop-shadow(0 0 12px rgba(255,200,255,.9)) drop-shadow(0 6px 6px rgba(0,0,0,.3))}
+#pop.petpop .ptPlate{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;gap:8px;width:fit-content;margin:-20px auto 8px;padding:6px 8px 6px 18px;border-radius:999px;
+  background:linear-gradient(115deg,#ff5fae,#b45cff);box-shadow:0 0 0 2.5px #fff,0 4px 10px rgba(150,40,120,.4)}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.petpop .ptPlate b{font:400 19px/1 "Lilita One",Fredoka,sans-serif!important;color:#fff!important;text-shadow:0 2px 0 rgba(80,10,60,.45)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.petpop .ptLv{font:900 12px/1 Fredoka,sans-serif!important;color:#b4237a!important;background:#fff;border-radius:999px;padding:4px 9px}
+/* three glowing ring gauges */
+#pop.petpop .ptRings{display:flex;justify-content:center;gap:12px;margin:2px 0 6px}
+#pop.petpop .ptRing{--c:#4aa8ff;position:relative;width:78px;height:78px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(circle,#fff 56%,transparent 57%),conic-gradient(var(--c) calc(var(--v)*1%),#f1e3ef 0);box-shadow:0 0 12px color-mix(in srgb,var(--c) 45%,transparent),0 3px 0 rgba(120,40,100,.15)}
+#pop.petpop .ptRing.food{--c:#ff8a2a} #pop.petpop .ptRing.food.low{--c:#ff3d5a;animation:claimPulse 1.4s ease-in-out infinite} #pop.petpop .ptRing.gift{--c:#c86bff} #pop.petpop .ptRing.gift.rdy{--c:#3fae2a}
+#pop.petpop .ptRing span{font-size:17px;line-height:1}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.petpop .ptRing b{font:900 12.5px/1.1 Fredoka,sans-serif!important;color:#3a0f30!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.petpop .ptRing i{font-style:normal;font:800 9.5px/1 Fredoka,sans-serif!important;color:#8a3a6e!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.petpop .ptEvo{text-align:center;font:700 11.5px/1.2 Fredoka,sans-serif!important;color:#8a3a6e!important;margin:2px 0 8px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.petpop .ptEvo b{color:#b4237a!important}
+/* feeding tray */
+#pop.petpop .ptFeed{margin:0 4px 8px;padding:8px;border-radius:18px;background:linear-gradient(180deg,#fff2fa,#ffe1f1);box-shadow:inset 0 0 0 1.5px #ffbfe3}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.petpop .ptFeedT{text-align:center;font:400 14px/1 "Lilita One",Fredoka,sans-serif!important;color:#b4237a!important;margin-bottom:6px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.petpop .petFoods{display:flex!important;gap:6px!important;justify-content:center;flex-wrap:wrap}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.petpop .petFood{position:relative;width:56px!important;height:56px!important;border-radius:50%!important;border:0!important;border-image:none!important;background:radial-gradient(circle at 50% 40%,#fff,#ffd3ec)!important;box-shadow:0 0 0 2px #ff9fd6,0 3px 0 rgba(150,40,120,.25)!important;padding:0!important;display:flex!important;align-items:center;justify-content:center}
+#pop.petpop .petFood :is(img,svg){width:40px!important;height:40px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.petpop .petFood em{position:absolute;top:-4px;right:-4px;font:900 10px/1 Fredoka,sans-serif!important;font-style:normal;color:#fff!important;background:#b4237a;border-radius:999px;padding:2px 5px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.petpop .petFood small{position:absolute;bottom:-6px;font:900 9.5px/1 Fredoka,sans-serif!important;color:#fff!important;background:#4aa8ff;border-radius:999px;padding:2px 5px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.petpop .evOff{color:#8a3a6e!important;font-size:12px}
+/* buttons: pink pet, blue play */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.petpop .petActs{display:flex;gap:8px;margin:0 4px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.petpop .petActs .big{flex:1}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.petpop .big.ptPet{border-image:var(--h-violet) 54 58 fill / 14px 17px / 0 stretch!important;filter:hue-rotate(40deg) drop-shadow(0 3px 2px rgba(110,20,80,.3))!important;color:#fff!important}

@@ -1,5 +1,12 @@
 # Changelog
 
+- **v116 (1.0.16)**
+  - The gem energy refill can be bought once a day (shop, energy popup and gem shelf show "Tomorrow" after).
+  - Fun & Games: a game on cooldown, out of spins or with no event running is greyed out.
+  - Contract popup: merge steps you have discovered show in full colour; only unknown ones fade.
+  - Expeditions: ready requests glow gold, bob and give on a tap of the whole card; the board item a ready request will take glows gold; wanted items carry an orange dot; nicer title, pills, prize bar and tabs in the expedition's colour.
+  - Pet popup redesigned as a pink creature habitat: domed stage, name plate with level, three glowing ring gauges (XP, food, gift), feeding tray of round food chips, pink Pet / blue Play buttons.
+
 - **v115 (1.0.15)**
   - Fizz Drop is pink-violet now, no longer a twin of the Water Drop.
   - Star Album redesigned as a cosmic collector's book: nebula page, season hero with a glowing star trail, foil booster packs with a shine sweep, planet icon per set, holographic sticker cards with rarity-coloured rims (silver, green, blue, violet, gold), starry card backs for missing ones, a light burst behind each card in the pack reveal.

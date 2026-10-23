@@ -1104,7 +1104,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           <div class="csTop"><span class="csArt">${ART.item(nd.id)}</span>
             <div class="csName"><b>${d.name}</b><i>${ok ? 'Ready ✓' : `You have ${have} of ${nd.qty}`}</i></div>
             ${!ok && src ? `<button class="csGo" data-src="${src.on ? src.i : -1}" data-k="${src.k}">${ART.producer(PRODS[src.k].art)}<span>${src.on ? 'Tap it' : 'Not here yet'}</span></button>` : ''}</div>
-          <div class="csPath">${ids.map((x, n) => `<span class="csStep${inv[x] ? ' have' : ''}${x === nd.id ? ' goal' : ''}">${S.seen[x] || x === nd.id ? ART.item(x) : '?'}${inv[x] ? `<em>${inv[x]}</em>` : ''}</span>${n < ids.length - 1 ? '<i>›</i>' : ''}`).join('')}</div></div>`;
+          <div class="csPath">${ids.map((x, n) => `<span class="csStep${inv[x] ? ' have' : S.seen[x] ? ' seen' : ''}${x === nd.id ? ' goal' : ''}">${S.seen[x] || x === nd.id ? ART.item(x) : '?'}${inv[x] ? `<em>${inv[x]}</em>` : ''}</span>${n < ids.length - 1 ? '<i>›</i>' : ''}`).join('')}</div></div>`;
     };
     const rew = `<div class="csRew"><span>${ART.icon('coin')}<b>${o.coins}</b></span>
       ${o.xp ? `<span>${ART.uiIcon('icon_star', '⭐')}<b>${o.xp}</b><i>XP</i></span>` : ''}${o.give ? `<span title="Gift">${ART.item(o.give)}<b>gift</b></span>` : ''}${o.nrg ? `<span>${ART.icon('energy')}<b>${o.nrg}</b></span>` : ''}</div>`;
@@ -1968,7 +1968,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       + (albumOpen() ? card(ART.uiIcon('ic_album', '🎴'), 'Sticker pack', '2 stickers', `<button class="buyBtn gem" data-pack="basic" ${S.gems < 8 ? 'disabled' : ''}>${ART.icon('gem')}8</button>`)
         + card(ART.uiIcon('ic_album', '🌟'), 'Golden pack', '3 stickers · 3★+', `<button class="buyBtn gem" data-pack="gold" ${S.gems < 20 ? 'disabled' : ''}>${ART.icon('gem')}20</button>`) : '')
       + card(ART.uiIcon('lab_energy', ART.icon('energy')), 'Energy refill', `+${CFG.gems.refill.energy} ⚡`,
-        `<button class="buyBtn gem" data-refill="1" ${S.gems < CFG.gems.refill.gems ? 'disabled' : ''}>${ART.icon('gem')}${CFG.gems.refill.gems}</button>`)
+        refillUsed() ? `<button class="buyBtn" disabled>Tomorrow</button>` : `<button class="buyBtn gem" data-refill="1" ${S.gems < CFG.gems.refill.gems ? 'disabled' : ''}>${ART.icon('gem')}${CFG.gems.refill.gems}</button>`)
       + (() => { const n = coinSnackN(), left = CFG.shop2.coinSnack.perDay - n, pr = coinSnackPrice();
         return card(ART.uiIcon('lab_energy', ART.icon('energy')), 'Energy snack', `+${CFG.shop2.coinSnack.energy} ⚡ · ${left} left`,
           left > 0 ? `<button class="buyBtn" data-csnack="1" ${S.coins < pr ? 'disabled' : ''}>${coin}${pr}</button>` : `<button class="buyBtn" disabled>Tomorrow</button>`); })()
@@ -4319,7 +4319,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         <div class="sCard"><div class="sCArt">${ART.item('bigchest')}</div><div class="sCName">Galaxy Chest</div><div class="sCDesc">A Treasure Chest + 2 boosters</div>
           <button class="buyBtn gem" id="gemChest">💎 ${CFG.gems.galaxyChest}</button></div>
         <div class="sCard"><div class="sCArt">${ART.uiIcon('lab_energy', ART.icon('energy'))}</div><div class="sCName">Energy Refill</div><div class="sCDesc">+${CFG.gems.refill.energy} energy now</div>
-          <button class="buyBtn gem" id="gemRefill">💎 ${CFG.gems.refill.gems}</button></div>
+          ${refillUsed() ? '<button class="buyBtn" disabled>Tomorrow</button>' : `<button class="buyBtn gem" id="gemRefill">💎 ${CFG.gems.refill.gems}</button>`}</div>
       </div></div>`;
   }
   /* coins for gems, or for money */
@@ -4352,8 +4352,12 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     confetti(); sfx.discover(); toast(`💎 Thank you! <b>${p.name}</b> is yours.`);
     renderShop(); renderHUD(); save();
   }
+  /** the gem energy refill: once a day */
+  const refillUsed = () => S.gRefill === today();
   function gemRefill() {
+    if (refillUsed()) { sfx.no(); toast('Energy refill used today, back tomorrow!'); return; }
     if (!spendGems(CFG.gems.refill.gems, 'refill')) return;
+    S.gRefill = today();
     S.energy += CFG.gems.refill.energy; bumpChip('#chipEnergy'); sfx.boost(); renderHUD(); save();
   }
 
@@ -5026,8 +5030,10 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   /* ------------------------------------------------------- the fun corner */
   function funPop() {
     const e = evNow();
+    // waiting: on cooldown, out of spins, nothing to hand in: grey until it is ready again
+    const waiting = (k: string) => (['pairs', 'dig', 'brew', 'market'].includes(k) && miniLeft(k) > 0) || (k === 'spin' && !spinsLeft()) || (k === 'event' && !e);
     const card = (k: string, ic: string, name: string, sub: string, lock = '', hot = false) =>
-      `<button class="funCard${lock ? ' locked' : ''}${hot ? ' hot' : ''}" data-fun="${k}"><span class="fIc">${ART.uiIcon('fun_' + k, ic)}</span><b>${name}</b><i>${lock || sub}</i></button>`;
+      `<button class="funCard${lock ? ' locked' : waiting(k) ? ' wait' : ''}${hot ? ' hot' : ''}" data-fun="${k}"><span class="fIc">${ART.uiIcon('fun_' + k, ic)}</span><b>${name}</b><i>${lock || sub}</i></button>`;
     const cd = (k: string) => miniLeft(k) ? '⏳ ' + mmss(miniLeft(k)) : 'Ready!';
     const lockLv = (n: number) => S.lvl < n ? `🔒 Level ${n}` : '';
     pop('🎪 Fun & Games', `<div class="funGrid">
@@ -5104,7 +5110,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     pop('⚡ Energy', `${ART.spriteUi(enPic) ? `<img class="enArt${enPic === 'empty_energy' ? ' wide' : ''}" src="${ART.spriteUi(enPic)}" alt="">` : ''}<div class="enBig">${ART.icon('energy')}<b>${S.energy}</b></div>
       <div class="noteLine" style="margin-top:2px">${full ? 'Full! Go merge something.' : `In <b>${dhm(next + per * Math.max(0, maxEnergy() - S.energy - 1))}</b> you will have <b>${maxEnergy()}</b> ⚡<br><span style="opacity:.8">+1 every ${Math.round(per / 60000 * 10) / 10} min · next in ${mmss(next)}</span>`}</div>
       <div class="enRow"><span class="enIc">${ART.uiIcon('energy_cells', ART.icon('gem'))}</span><div><b>Big refill</b><i>+${CFG.gems.refill.energy} energy</i></div>
-        <button class="buyBtn gem" id="enGem">💎 ${CFG.gems.refill.gems}</button></div>
+        ${refillUsed() ? '<button class="buyBtn" disabled>Tomorrow</button>' : `<button class="buyBtn gem" id="enGem">💎 ${CFG.gems.refill.gems}</button>`}</div>
       ${adBtn('energy', `+${CFG.ads.energy} ⚡ energy`, 'enAd')}
       <div class="noteLine">More energy: daily tasks, the 🎡 wheel, events, and 🔬 Lab research.</div>`, 'energy');
     const eg = $('#enGem'); if (eg) eg.onclick = () => { gemRefill(); energyPop(); };
@@ -5382,17 +5388,17 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const feed = petFoodList();
     pop('🐾 ' + (p.name || f.name), `<div class="pupBox">
       <div class="pupStage ${mood}" id="pupStage">${ART.spriteChar('pet_bed') ? `<img class="pupBed" src="${ART.spriteChar('pet_bed')}" alt="">` : ''}${ART.spriteChar('pet_bowl') ? `<img class="pupBowl${food < 30 ? ' empty' : ''}" src="${ART.spriteChar('pet_bowl')}" alt="">` : ''}${pupArt(f)}<span class="pupMood">${ART.spriteUi('emo_heart') ? `<img src="${ART.spriteUi(mood === 'happy' ? 'emo_heart' : mood === 'hungry' ? 'emo_food' : pupLeft() ? 'emo_sleep' : 'emo_spark')}" alt="">` : mood === 'happy' ? '💗' : mood === 'hungry' ? '🍖?' : '🙂'}</span>${pupLeft() && !ART.spriteUi('emo_sleep') ? '<span class="pupZ">z<i>z</i><b>z</b></span>' : ''}</div>
-      <b class="pupName">${f.name} <small>Lv ${p.lv}</small></b>
-      <div class="pupStats">
-        <div class="pupStat"><span>⭐ XP</span><div class="pupBar xp"><i style="width:${need ? Math.round(p.xp / need * 100) : 100}%"></i></div></div>
-        <div class="pupStat"><span>🍖 Food</span><div class="pupBar food"><i style="width:${food}%"></i></div></div>
+      <div class="ptPlate"><b>${p.name || f.name}</b><span class="ptLv">Lv ${p.lv}</span></div>
+      <div class="ptRings">
+        <div class="ptRing xp" style="--v:${need ? Math.round(p.xp / need * 100) : 100}"><span>⭐</span><b>${need ? Math.round(p.xp / need * 100) + '%' : 'MAX'}</b><i>XP</i></div>
+        <div class="ptRing food${food < 30 ? ' low' : ''}" style="--v:${food}"><span>🍖</span><b>${food}%</b><i>Food</i></div>
+        <div class="ptRing gift${pupLeft() ? '' : ' rdy'}" style="--v:${Math.round((1 - pupLeft() / ((f.mins || 40) * 60000)) * 100)}"><span>🎁</span><b>${pupLeft() ? mmss(pupLeft()) : 'Ready!'}</b><i>Gift</i></div>
       </div>
-      <div class="pupFacts"><span>🎁 <b>${mmss(pupLeft())}</b></span>${evoAt ? `<span>✨ evolves at <b>Lv ${evoAt}</b></span>` : '<span>👑 final form</span>'}</div>
-      <div class="pupPerk">${f.perk}</div>
-      <div class="petFeed"><b>${food >= PET_FULL ? '🍖 Full — feed it later' : '🍖 Feed it'}</b>
+      <div class="ptEvo">${evoAt ? `✨ Evolves at <b>Lv ${evoAt}</b>` : '👑 Final form'}</div>
+      <div class="ptFeed"><div class="ptFeedT">${food >= PET_FULL ? 'Full, feed it later' : 'Feed it'}</div>
         <div class="petFoods">${feed.length ? feed.map(([id, n]) => `<button class="petFood" data-feed="${id}"${food >= PET_FULL ? ' disabled' : ''}>${ART.item(id)}<em>×${n}</em><small>+${petFeedXp(ITEMS[id].tier)}</small></button>`).join('') : '<div class="evOff">Nothing spare on the board</div>'}</div></div>
-      <div class="petActs"><button class="big soft" id="pupPet">💗 Pet</button><button class="big blue" id="pupPlay"${Date.now() < (p.play || 0) ? ' disabled' : ''}>⭐ ${Date.now() < (p.play || 0) ? mmss((p.play || 0) - Date.now()) : 'Play'}</button></div>
-    </div>`, 'fun');
+      <div class="petActs"><button class="big ptPet" id="pupPet">💗 Pet</button><button class="big blue" id="pupPlay"${Date.now() < (p.play || 0) ? ' disabled' : ''}>⭐ ${Date.now() < (p.play || 0) ? mmss((p.play || 0) - Date.now()) : 'Play'}</button></div>
+    </div>`, 'fun petpop');
     ($('#pupPlay') as HTMLElement).onclick = petPlay;
     document.querySelectorAll<HTMLElement>('[data-feed]').forEach(b => b.onclick = () => petFeed(b.dataset.feed!));
     ($('#pupPet') as HTMLElement).onclick = () => {

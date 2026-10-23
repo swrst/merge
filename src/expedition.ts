@@ -243,8 +243,10 @@ export function createExpedition(ctx: XpCtx) {
     const g = document.getElementById('xpGrid'); if (!g) return;
     const x = ctx.S.exped;
     const want = new Set(x.ord.map((o: any) => o.id));
+    // like the main board: the one item a ready request will take glows gold
+    const take = new Set<number>(); x.ord.forEach((o: any) => { for (let i = 0; i < x.b.length; i++) if (x.b[i] === o.id && !take.has(i)) { take.add(i); break; } });
     g.innerHTML = x.b.map((v: string | null, i: number) => {
-      const cls = 'xpC' + ((Math.floor(i / W) + i) % 2 ? ' alt' : '') + (v === 'P' ? ' prod' : '') + (i === sel ? ' sel' : '') + (i === pop ? (big ? ' merged' : ' dropped') : '') + (v && v !== 'P' && want.has(v) ? ' want' : '');
+      const cls = 'xpC' + ((Math.floor(i / W) + i) % 2 ? ' alt' : '') + (v === 'P' ? ' prod' : '') + (i === sel ? ' sel' : '') + (i === pop ? (big ? ' merged' : ' dropped') : '') + (v && v !== 'P' && want.has(v) ? ' want' : '') + (take.has(i) ? ' take' : '');
       return `<div class="${cls}" data-i="${i}">${v === 'P' ? prodPic() + `<b class="xpBolt${x.ch ? '' : ' empty'}">${x.ch ? x.ch + '/' + CHARGE_MAX : mmss(CHARGE_MS - (Date.now() - x.chAt))}</b>` : v ? pic(v) : ''}</div>`;
     }).join('');
     paintOrders();
@@ -254,9 +256,9 @@ export function createExpedition(ctx: XpCtx) {
     const x = ctx.S.exped;
     const html = x.ord.map((o: any, k: number) => {
       const ok = has(o.id) >= 0;
-      return `<div class="xpO${ok ? ' ok' : ''}"><span class="xpWho">${ART.char(o.who)}</span>
-        <span class="xpWant">${pic(o.id)}</span><i>${info(o.id).name}</i>
-        <button class="xpGive" data-give="${k}"${ok ? '' : ' disabled'}>${ok ? 'Give' : `<em>+${5 * info(o.id).t}</em> pts`}</button></div>`;
+      return `<div class="xpO${ok ? ' ok' : ''}"${ok ? ` data-give="${k}"` : ''}><span class="xpWho">${ART.char(o.who)}</span>
+        <span class="xpWant">${pic(o.id)}${ok ? '<b class="xpTick">✓</b>' : ''}</span><i>${info(o.id).name}</i>
+        <span class="xpGive${ok ? ' on' : ''}">${ok ? `Give · +${5 * info(o.id).t}` : `+${5 * info(o.id).t} pts`}</span></div>`;
     }).join('');   // an empty request slot simply stays empty until the next visitor walks in
     // only rebuild when something changed: a rebuild replays the cards' pop-in, which flashed on every tap
     if (h.dataset.h === html) return;
