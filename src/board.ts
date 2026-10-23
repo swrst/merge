@@ -355,8 +355,8 @@ class PixiBoard {
         // frosted white and aqua glass in a checkerboard, drawn a touch larger than the cell so the rims meet
         const o = c * 0.05;
         art.visible = true; art.texture = tex; art.position.set(p.x - o, p.y - o); art.width = c + o * 2; art.height = c + o * 2;
-        art.alpha = want || locked ? 1 : dark ? 0.82 : 0.9;
-        (art as any).tint = 0xffffff;   // contract: gold frame · chapter: green frame
+        art.alpha = want || locked || forChapter ? 1 : dark ? 0.82 : 0.9;
+        (art as any).tint = want ? 0xffd070 : forChapter ? 0xb8f29a : 0xffffff;   // contract: warm gold tile · chapter: green tile
         if (this.slots[i] && this.slots[i].key.startsWith('u')) g.roundRect(p.x + 4, p.y + 4, c - 8, c - 8, R).fill({ color: 0x7cc8ff, alpha: 0.3 });
         if (r) g.roundRect(p.x + 3, p.y + 3, c - 6, c - 6, R).stroke({ color: r === 3 ? 0xffb02e : r === 2 ? 0xb58cff : 0x6fd0e8, alpha: .8, width: r === 3 ? 3 : 2 });
         return;
@@ -960,8 +960,8 @@ class PixiBoard {
       this.app.ticker.add(() => {
         if (!this.chapterCells.size) return;
         const t = performance.now() / 1000, f = 0.5 + 0.5 * Math.sin(t * 3.2);
-        const g = Math.round(0xc8 + (0xff - 0xc8) * f), r = Math.round(0xa0 + (0xff - 0xa0) * f);
-        this.chapterCells.forEach(k => { const a = this.tileArt[k]; if (a && a.visible && !this.wanted.has(k)) (a as any).tint = (g << 16) | (0xff << 8) | r; });
+        const g = 0xf2, r = Math.round(0x8a + (0xc8 - 0x8a) * f);
+        this.chapterCells.forEach(k => { const a = this.tileArt[k]; if (a && a.visible && !this.wanted.has(k)) (a as any).tint = (Math.round(0x90 + (0xc8 - 0x90) * f) << 16) | (g << 8) | r; });
       });
     }
   }
@@ -1026,6 +1026,8 @@ class PixiBoard {
       this.app.ticker.add(() => {
         const t = performance.now() / 1000;
         this.wanted.forEach(k => {
+          // the tile under a ready contract's item breathes warm gold
+          const ta = this.tileArt[k]; if (ta && ta.visible) { const f = 0.5 + 0.5 * Math.sin(t * 3.4 + k * 0.3); (ta as any).tint = (0xff << 16) | (Math.round(0xc0 + 0x28 * f) << 8) | Math.round(0x50 + 0x50 * f); }
           const a = this.slots[k] && this.slots[k].art; if (!a || (this.drag && this.drag.moved && this.drag.i === k)) return;
           const ph = (t + k * 0.13) % 2.2;                 // wiggle for 0.5 s, rest the rest
           a.rotation = ph < 0.5 ? Math.sin(ph / 0.5 * Math.PI * 4) * 0.13 * (1 - ph / 0.5) : 0;

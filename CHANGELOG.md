@@ -1,5 +1,9 @@
 # Changelog
 
+- **v120 (1.0.20)**
+  - Suit Loom is blue like the Star Thread it makes.
+  - Items a ready contract will take sit on a warm gold tile that breathes; items the chapter needs sit on a green tile that breathes (much stronger than before).
+
 - **v119 (1.0.19)**
   - Captain's Log: all text crisp (no outlines or shadows), slightly bigger labels; the Share button is gone; Achievements is a gold card with its ready count.
   - The bottom storage tray is white glass with the Star Pouch on top (Bloom, Star Scrap, Star Core, Relics, Science, Star Dust) and neat slots.
