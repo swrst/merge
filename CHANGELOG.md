@@ -1,5 +1,10 @@
 # Changelog
 
+- **v118 (1.0.18)**
+  - The first Bloom Spark (and the first Relic, Wildcard and Star Core) opens a card with its picture that says what to do with it.
+  - Storage shows a Star Pouch: Bloom, Star Scrap, Star Core, Relics, Science and Star Dust.
+  - Captain's Log redesigned as a starship cockpit: deep blue page, glowing avatar ring, gold XP bar, colour-coded stat tiles, glass cards for the pet and album.
+
 - **v117 (1.0.17)**
   - Contracts know how often a producer drops a chain: a chain that comes one tap in five or rarer is asked one or two steps lower, and never as a "stretch" ask.
   - Pet: a coach mark points at the pet the first time, and the first visit to its habitat is a four-step tour; the habitat is deep space blue now.

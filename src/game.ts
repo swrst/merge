@@ -874,19 +874,21 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     scrap: { who: 'bloop', title: 'Star Scrap', say: 'goes to your Star Pouch. Spend it in the Shop’s Star Forge.' },
     starcore: { who: 'bloop', title: 'Star Core', say: 'goes to your Star Pouch. Light Constellations with it (Games).' },
     relic: { who: 'bloop', title: 'Relic', say: 'buys a forever perk in the Relic Vault (Goals).' },
-    bloom: { who: 'grandma', title: 'Bloom Essence', say: 'merge it up and feed the Heart on the map.' },
+    bloom: { who: 'grandma', title: 'Bloom Essence', say: 'Merge sparks together into bigger essence, then take it to the <b>Heart</b> in your <b>Camp</b> (bottom right). Feeding the Heart wakes this world up and pays big rewards.' },
     rainbow: { who: 'pip', title: 'Wildcard', say: 'drop it on any item to level it up.' },
     fuel: { who: 'bloop', title: 'Fuel', say: 'merge ore into rocket fuel.' },
     part: { who: 'bloop', title: 'Rocket piece', say: 'merge pieces into a whole part.' },
-    junk: { who: 'zib', title: 'Space Junk', say: 'is worth triple 🧪 Science in the Lab recycler — and seven merged up, the Junk Rocket coughs out Fuel Ore every time.' },
+    junk: { who: 'zib', title: 'Space Junk', say: 'is worth double 🧪 Science in the Lab recycler — and seven merged up, the Junk Rocket coughs out Fuel Ore every time.' },
   };
   function explainFirst(id: string) {
     const d = ITEMS[id]; if (!d) return;
     const key = EXPLAIN[id] ? id : (d.part || ['hull', 'engine', 'nav', 'tank'].includes(d.chain)) ? 'part' : EXPLAIN[d.chain] ? d.chain : '';
-    if (!key || S.tipsOff || (S.told || (S.told = {}))[key]) return;
+    if (!key || (S.tipsOff && !['bloom', 'relic', 'rainbow', 'starcore'].includes(key)) || (S.told || (S.told = {}))[key]) return;
     S.told[key] = 1;
     const e = EXPLAIN[key];
-    setTimeout(() => toast(`<b>${e.title}:</b> ${e.say}`), 700);
+    // the strange finds get a proper card with the picture; the rest a one-line toast
+    if (key === 'bloom' || key === 'relic' || key === 'rainbow' || key === 'starcore') setTimeout(() => modal('~blue', 'New: ' + e.title, `<div class="newFind">${ART.item(id)}</div><div class="noteLine">${/^[A-Z]/.test(e.say) ? e.say : 'It ' + e.say}</div>`, 'Got it'), 700);
+    else setTimeout(() => toast(`<b>${e.title}:</b> ${e.say}`), 700);
   }
   function gotItem(id: string) {
     if (S.tut) explainFirst(id);
@@ -4413,7 +4415,20 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
   function storagePop() {
     const list = stored();
-    pop(ART.uiIcon('ic_box', '📦') + ' Storage', `<div class="noteLine" style="margin-top:0">Starters you put away wait here. Pick one, then tap an empty tile — or a starter to swap with.</div>
+    // the things that never sit on the board (or are easy to lose there), counted in one place
+    const bloomN = B().filter((c: any) => c && c.id && ITEMS[c.id].chain === 'bloom').length;
+    const relN = B().filter((c: any) => c && c.id && ITEMS[c.id].chain === 'relic').length;
+    const pc = (art: string, n: number | string, name: string) => `<span class="stPc">${art}<b>${n}</b><i>${name}</i></span>`;
+    const pouchHtml = [
+      S.seen.bloomspark ? pc(ART.item('bloomspark'), bloomN, 'Bloom') : '',
+      S.seen.scrap || pouch('scrap') ? pc(ART.item('scrap'), pouch('scrap'), 'Star Scrap') : '',
+      S.seen.starcore || pouch('starcore') ? pc(ART.item('starcore'), pouch('starcore'), 'Star Core') : '',
+      S.seen.relic1 ? pc(ART.item('relic1'), relN, 'Relics') : '',
+      labOpen() ? pc(ART.icon('flask'), S.sci || 0, 'Science') : '',
+      albumOpen() ? pc(ART.uiIcon('star_dust', '✨'), alb().dust || 0, 'Star Dust') : '',
+    ].filter(Boolean).join('');
+    pop(ART.uiIcon('ic_box', '📦') + ' Storage', `${pouchHtml ? `<div class="stPouch"><div class="stPouchT">Star Pouch</div><div class="stPcs">${pouchHtml}</div></div>` : ''}
+      <div class="stProdT">Producers</div>
       ${list.length ? list.map((s: any, k: number) => `<div class="enRow"><span class="enIc">${ART.producer(PRODS[s.p].art)}</span>
         <div><b>${PRODS[s.p].name}</b><i>Level ${s.lv || 1}</i></div><button class="buyBtn green" data-place="${k}">Place</button></div>`).join('')
         : `<div class="emptyArt">${ART.spriteUi('empty_storage') ? `<img src="${ART.spriteUi('empty_storage')}" alt="">` : ''}<div class="evOff">Nothing in storage. Tap a producer, then <b>Store</b>, to make room.</div></div>`}`, 'energy');
@@ -4799,7 +4814,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       ${p && petPainted() ? `<button class="pfPet" id="pfPet">${pupArt(petForm())}<span><b>${p.name || petForm().name}</b><i>Level ${p.lv} · ${petForm().perk.replace(/<[^>]+>/g, '')}</i></span></button>` : ''}
       ${albumOpen() ? `<button class="pfAlb" id="pfAlb"><span>⭐</span><span><b>${seasonName()} album</b><i>${albumCount()} / ${albumTotal()} stickers${alb().done ? ' · COMPLETE' : ''}</i></span></button>` : ''}
       ${(S.albBadges || []).length ? `<div class="pfBadges"><b>Album badges</b><div>${S.albBadges.map((b: any) => `<span class="pfBadge" title="${b.name}">🏅<i>${b.name}</i></span>`).join('')}</div></div>` : ''}
-      <div class="petActs"><button class="big soft" id="pfAch">${ART.uiIcon('ic_trophy', '🏆')} Achievements${achReady() ? ` <em class="pfDot">${achReady()}</em>` : ''}</button>${albumOpen() ? '<button class="big blue" id="pfShare">📤 Share</button>' : ''}</div>`, 'fun');
+      <div class="petActs"><button class="big soft" id="pfAch">${ART.uiIcon('ic_trophy', '🏆')} Achievements${achReady() ? ` <em class="pfDot">${achReady()}</em>` : ''}</button>${albumOpen() ? '<button class="big blue" id="pfShare">📤 Share</button>' : ''}</div>`, 'fun captlog');
     const nm = $('#pfName') as HTMLInputElement;
     if (nm) nm.onchange = () => { const v = nm.value.trim().slice(0, 16); S.pname = v || 'Captain'; save(); };
     const pb = $('#pfPet'); if (pb) pb.onclick = () => { closePop(); pupPop(true); };
