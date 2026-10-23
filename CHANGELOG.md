@@ -1,5 +1,15 @@
 # Changelog
 
+- **v113 (1.0.13)**
+  - Fixed: tapping a customer could open a different one (a redraw scrolled the contract row back to the start under the finger).
+  - Customers are bigger.
+  - Contract popup: centred character and quote, reward chips with XP, neat need rows.
+  - Collection: completed chains to claim show first, under "Ready to claim".
+  - Ready chapter: the bottom bar turns green with the COMPLETE stamp ("Tap to finish Chapter N"); the Ch. button says Ready!.
+  - A sealed item whose twin is on the board drops its glass: plain item and gold frame, no cracks.
+  - Chapter strip: tap an item for its chain, the contracts chip for what is left; required upgrades show there too.
+  - More required producer upgrades: every other chapter from chapter 3, two in three from chapter 30.
+
 - **v112 (1.0.12)**
   - Sealed items are clear: the glass bubble is only a rim now, no milky film over the item.
   - Locked tiles show a crisp white "🔒 Lv N" pill instead of blurry outlined text.

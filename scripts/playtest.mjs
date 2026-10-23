@@ -1035,6 +1035,7 @@ const buildCh = async (n) => {
     for (let i = 0; i < b.length; i++) if (b[i] && b[i].id) b[i] = null;
     s.proj.earth = n; s.coins = 50000; s.cSince = { earth: 99 }; s.vis = null; s.guestBack = null; s.mp = {};
     const pj = g.curProject();
+    s.upAsk = s.upAsk || {}; s.upAsk[pj.id] = { k: '_none', lv: 1 };   // the producer-upgrade ask is tested on its own
     const fr = []; for (let i = 0; i < b.length; i++) if (!b[i]) fr.push(i);
     let k = 0; pj.needs.forEach(([id, q]) => { for (let j = 0; j < q; j++) b[fr[k++]] = { id }; });
     window.__board.sync(b);

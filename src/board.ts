@@ -1121,8 +1121,9 @@ class PixiBoard {
       g.roundRect(-R, -R, R * 2, R * 2, this.cell * 0.16).fill({ color: 0xffd34d, alpha: 0.28 }).stroke({ color: 0xffe066, width: Math.max(3, this.cell * 0.06) });
       g.position.set(p.x, p.y); this.lFx.addChild(g); s.unseal = g;
       gsap.to(g, { alpha: 0.35, duration: 0.55, repeat: -1, yoyo: true, ease: 'sine.inOut' });
-      s.art.tint = 0xffffff; s.art.alpha = 0.85;
-      if (s.seal && this.tex['ui:seal_crack']) { s.seal.texture = this.tex['ui:seal_crack']; s.seal.alpha = 1; }
+      // its twin is here: the glass goes away so the item is plain to see, only the gold frame stays
+      s.art.tint = 0xffffff; s.art.alpha = 1;
+      if (s.seal) s.seal.visible = false; if (s.timer) (s.timer as any).visible = false;
       if (s.idle) s.idle.kill();
       const sc = this.spriteScale(i);
       s.idle = gsap.to(s.art.scale, { x: sc * 1.12, y: sc * 1.12, duration: 0.45, repeat: -1, yoyo: true, ease: 'sine.inOut' });
@@ -1131,7 +1132,7 @@ class PixiBoard {
     } else if (!on && s.unseal) {
       gsap.killTweensOf(s.unseal); s.unseal.destroy(); s.unseal = null;
       s.art.tint = 0xffffff; s.art.alpha = 1;
-      if (s.seal && this.tex['ui:seal_bubble']) { s.seal.texture = this.tex['ui:seal_bubble']; s.seal.alpha = 0.45; }
+      if (s.seal) { s.seal.visible = true; s.seal.alpha = 0.95; } if (s.timer) (s.timer as any).visible = true;
       if (s.idle) s.idle.kill(); const sc = this.spriteScale(i); s.art.scale.set(sc, sc); this.idleBob(i);
     }
   }

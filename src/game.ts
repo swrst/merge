@@ -793,8 +793,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (pj.rocket) parts.push(PART_KEYS.filter(k => S.parts[k]).length / 4);
     const pct = Math.round(parts.reduce((a: number, x: number) => a + x, 0) / parts.length * 100);
     btn.innerHTML = `<span class="cwFace">${ART.char(pj.who)}</span>
-      <b class="cwT">${ready ? 'BUILD!' : 'Ch. ' + (projDone() + 1)}</b>
-      <span class="cwNeeds${pj.needs.every(([id, q]: [string, number]) => countItem(id) >= q) ? ' allOk' : ''}">${pj.needs.map(([id, q]: [string, number]) => `<i class="${countItem(id) >= q ? 'ok' : ''}">${ART.item(id)}<em>${Math.min(countItem(id), q)}/${q}</em></i>`).join('')}${cNeed(pj) ? `<i class="${cHave() >= cNeed(pj) ? 'ok' : ''}">${ART.uiIcon('cl_tasks', '📋')}<em>${Math.min(cHave(), cNeed(pj))}/${cNeed(pj)}</em></i>` : ''}</span>
+      <b class="cwT">${ready ? 'Ready!' : 'Ch. ' + (projDone() + 1)}</b>
+      <span class="cwNeeds${pj.needs.every(([id, q]: [string, number]) => countItem(id) >= q) ? ' allOk' : ''}">${pj.needs.map(([id, q]: [string, number]) => `<i class="${countItem(id) >= q ? 'ok' : ''}" data-need="${id}">${ART.item(id)}<em>${Math.min(countItem(id), q)}/${q}</em></i>`).join('')}${cNeed(pj) ? `<i class="${cHave() >= cNeed(pj) ? 'ok' : ''}">${ART.uiIcon('cl_tasks', '📋')}<em>${Math.min(cHave(), cNeed(pj))}/${cNeed(pj)}</em></i>` : ''}${upNeeds(pj).map(u => `<i class="cwUp" data-up="1">${ART.producer(PRODS[u.k].art)}<em>⬆ Lv ${u.lv + 1}</em></i>`).join('')}</span>
       <span class="cwBar"><i style="width:${pct}%"></i></span>`;
     // the bottom line spells the chapter out: every need, always on screen
     const line = $('#chapLine');
@@ -803,12 +803,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       line.classList.toggle('ready', !!ready);
       // the needs live on the Ch. strip up top; down here only the BUILD! call
       line.style.visibility = ready ? '' : 'hidden';
-      line.innerHTML = `<b class="clT">${ready ? 'BUILD!' : 'Ch. ' + (projDone() + 1)}</b>`
-        + pj.needs.map(([id, q]: [string, number]) => { const h = Math.min(q, countItem(id)); return `<span class="clN${h >= q ? ' ok' : ''}">${ART.item(id)}<em>${h}/${q}</em></span>`; }).join('')
-        + (pj.coins ? `<span class="clN${S.coins >= pj.coins ? ' ok' : ''}">${ART.icon('coin')}<em>${pj.coins >= 1000 ? (pj.coins / 1000).toFixed(1) + 'k' : pj.coins}</em></span>` : '')
-        + `<span class="clN${cHave() >= cNeed(pj) ? ' ok' : ''}">${ART.uiIcon('cl_tasks', '📋')}<em>${Math.min(cHave(), cNeed(pj))}/${cNeed(pj)}</em></span>`
-        + (ups.length ? `<span class="clN up">⬆<em>${ups.length}</em></span>` : '')
-        + (pj.rocket ? `<span class="clN${allParts() ? ' ok' : ''}">🚀<em>${PART_KEYS.filter(k => S.parts[k]).length}/4</em></span>` : '');
+      line.innerHTML = ready ? `<img class="clStamp" src="${ART.spriteUi('stamp_complete')}" alt=""><b class="clGo">Tap to finish Chapter ${projDone() + 1}</b>` : '';
     }
   }
   /** which board cells a ready contract or a ready chapter is about to take */
@@ -948,7 +943,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   /** right now, at the moment of the tap, not when the card was drawn */
   const canFill = (o: any) => o.needs.every((nd: any) => countItem(nd.id) >= nd.qty);
   function renderOrders(newIds?: string[]) {
-    const host = $('#orders'); host.innerHTML = '';
+    // keep the row where the player scrolled it: a redraw used to jump back to the start,
+    // so a tap landed on a different customer than the one under the finger
+    const host = $('#orders'), keepX = host.scrollLeft; host.innerHTML = '';
     if (S.ship) host.appendChild(shipCard());
     // Two customers can want the same thing. Claim stock card by card so one
     // item never lights up two cards as ready — delivering the first used to
@@ -985,6 +982,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       host.appendChild(card);
     });
     if (!S.orders.length && !S.ship && ART.spriteUi('empty_done')) host.innerHTML = `<div class="ordEmpty"><img src="${ART.spriteUi('empty_done')}" alt=""><span><b>All caught up!</b><i>New contracts are on their way.</i></span></div>`;
+    host.scrollLeft = keepX;
     orderArrows(); updateWanted(); renderStrip();
     // never let the row collapse between contracts: if it shrinks, the whole
     // board jumps up under the player's finger mid-drag
@@ -1109,7 +1107,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           <div class="csPath">${ids.map((x, n) => `<span class="csStep${inv[x] ? ' have' : ''}${x === nd.id ? ' goal' : ''}">${S.seen[x] || x === nd.id ? ART.item(x) : '?'}${inv[x] ? `<em>${inv[x]}</em>` : ''}</span>${n < ids.length - 1 ? '<i>›</i>' : ''}`).join('')}</div></div>`;
     };
     const rew = `<div class="csRew"><span>${ART.icon('coin')}<b>${o.coins}</b></span>
-      ${o.give ? `<span title="Gift">${ART.item(o.give)}<b>gift</b></span>` : ''}${o.nrg ? `<span>${ART.icon('energy')}<b>${o.nrg}</b></span>` : ''}</div>`;
+      ${o.xp ? `<span>${ART.uiIcon('icon_star', '⭐')}<b>${o.xp}</b><i>XP</i></span>` : ''}${o.give ? `<span title="Gift">${ART.item(o.give)}<b>gift</b></span>` : ''}${o.nrg ? `<span>${ART.icon('energy')}<b>${o.nrg}</b></span>` : ''}</div>`;
     const isShip = o.id === 'ship', fig = isShip && ART.spriteUi('ufo_freighter') ? `<img class="ufoFig" src="${ART.spriteUi('ufo_freighter')}" alt="">` : ART.figure(o.char);
     pop(isShip ? '🛸 Star Freighter' : ch.name, `<div class="csHead"><span class="csFig">${fig}</span><div class="csSay">“${o.say}”${rew}</div></div>
       ${o.needs.map(needRow).join('')}
@@ -2194,6 +2192,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // sticker packs are news on this button too: open them from here
     const pk = albumOpen() ? packsWaiting() : 0;
     host.innerHTML = `<div class="bkHero"><span class="bkIc">${ART.uiIcon('sec_collection', '🗂️')}</span><div class="bkTx"><b>${found}<small> / ${total}</small></b><i>items discovered</i><div class="bkBar"><u style="width:${Math.max(2, Math.round(found / total * 100))}%"></u></div></div></div>`
+      + (() => { const ready = Object.keys(CHAINS).filter(k => CHAINS[k].world !== 'ship' && CHAINS[k].items.every(id => S.seen[id]) && !(S.cclaim && S.cclaim[k]));
+          return ready.length ? `<div class="sSecT bkReadyT">🎁 Ready to claim</div><div class="aGrid bkReady">${ready.map(k => tile(k)).join('')}</div>` : ''; })()
       + (pk ? `<button class="bkPack" id="bkPacks">${ART.uiIcon('ic_album', '🎴')}<b>${pk} sticker pack${pk > 1 ? 's' : ''}</b><em>Open</em></button>` : '') + discCard() + `
       ${Object.keys(S.trophy || {}).length ? `<div class="card"><div class="cardTitle">${ART.uiIcon('ic_trophy', '🏆')} Trophy shelf <span class="pCount">${Object.values(S.trophy).reduce((a: number, n: any) => a + n, 0)}</span></div>
         <div class="trophyRow">${Object.entries(S.trophy).map(([id, n]: [string, any]) => `<span class="trophy">${ART.item(id)}${n > 1 ? `<em>×${n}</em>` : ''}</span>`).join('')}</div></div>` : ''}
@@ -2806,7 +2806,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      remembered per chapter, so finishing it never reveals another one. */
   function upNeeds(p: any): { k: string; lv: number }[] {
     if (!p || !scripted()) return [];
-    const k = projList().indexOf(p); if (k < 5 || (k < 29 ? k % 3 !== 2 : k % 2 !== 1)) return [];   // every third chapter from 6, every other from 30
+    const k = projList().indexOf(p); if (k < 2 || (k < 29 ? k % 2 !== 0 : k % 3 === 1)) return [];   // every other chapter from 3, two in three from 30
     S.upAsk = S.upAsk || {};
     const lvOf = (key: string) => { let lv = 0; B().forEach((c: any) => { if (c && c.p === key && !c.tmp) lv = Math.max(lv, plv(c)); }); stored().forEach((c: any) => { if (c.p === key) lv = Math.max(lv, c.lv || 1); }); return lv; };
     let ask = S.upAsk[p.id];
@@ -6933,7 +6933,15 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     applyScene();
     $('#app').style.setProperty('--labbg', `url(${ART.spriteScene('lab')})`);
     $('#miniClose').onclick = closeMini;
-    $('#btnQuests').onclick = () => { tutFire('quests'); const pj = curProject(); if (pj && projReady(pj)) buildProject(); else { sfx.tap(); chapterSheet(); } };
+    $('#btnQuests').onclick = (ev: MouseEvent) => {
+      // a need in the strip opens that item's chain, the contracts chip says what is left
+      const nd = (ev.target as HTMLElement).closest('.cwNeeds [data-need]') as HTMLElement | null;
+      if (nd) { sfx.tap(); chainPanel(nd.dataset.need!); return; }
+      if ((ev.target as HTMLElement).closest('.cwNeeds [data-up]')) { sfx.tap(); chapterSheet(); return; }
+      const tk = (ev.target as HTMLElement).closest('.cwNeeds i:not([data-need])');
+      const pj0 = curProject();
+      if (tk && pj0) { sfx.tap(); const left = Math.max(0, cNeed(pj0) - cHave()); toast(left ? `📋 Complete <b>${left}</b> more contract${left > 1 ? 's' : ''} for this chapter.` : '📋 Contracts done ✓'); return; }
+      tutFire('quests'); const pj = curProject(); if (pj && projReady(pj)) buildProject(); else { sfx.tap(); chapterSheet(); } };
     $('#btnStore').onclick = () => { sfx.tap(); storeTap(); };
     { const gi = $('#goalsIc'); if (gi) gi.innerHTML = ART.uiIcon('ic_goals', '📜'); }
     { const si = document.querySelector('#btnStore .ti') as HTMLElement | null; if (si && ART.spriteUi('ic_box')) si.innerHTML = ART.uiIcon('ic_box', '📦'); }
