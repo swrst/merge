@@ -1,5 +1,14 @@
 # Changelog
 
+- **v121 (1.0.21)**
+  - Customers bigger.
+  - Board: items for a contract you have only part of sit on a soft orange tile; ready contract items gold; a chapter with all its items on the board turns them all green (the chapter claims them first).
+  - Fixed for good: the card your finger goes down on is the one that opens/delivers, even if the row redraws mid-tap.
+  - Pet: feeding updates the food and XP rings at once, in place.
+  - Two-chain producers drop their second chain about a third of the time (was a fifth); contracts know.
+  - Collection: dark starfield, each chain card shows its producer; tapping opens a chain book (producer, progress bar, every step found or ???).
+  - Item bar rebuilt: item picture with an ⓘ badge, name on up to two lines (never cut to nothing), level chip + next step, icon Stash, blue Lab +science, gold Sell with a coin chip; hidden buttons stay hidden.
+
 - **v120 (1.0.20)**
   - Suit Loom is blue like the Star Thread it makes.
   - Items a ready contract will take sit on a warm gold tile that breathes; items the chapter needs sit on a green tile that breathes (much stronger than before).

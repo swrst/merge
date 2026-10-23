@@ -815,17 +815,24 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       for (let i = 0; i < N && q; i++) if (!used.has(i) && b[i] && b[i].id === id) { used.add(i); q--; }
     };
     const stock = inventory(), claim: Record<string, number> = {};
+    // a chapter with every item on the board claims them first: those tiles go green
+    const pj = curProject(), ch: number[] = [];
+    const chAll = !!pj && pj.needs.every(([id, q]: [string, number]) => countItem(id) >= q);
+    const takeCh = () => { if (pj) pj.needs.forEach(([id, q]: [string, number]) => { let n = q; for (let i = 0; i < N && n; i++) if (b[i] && b[i].id === id && !used.has(i) && !ch.includes(i)) { ch.push(i); n--; } }); };
+    if (chAll) { takeCh(); ch.forEach(i => { const id = b[i].id; claim[id] = (claim[id] || 0) + 1; }); }
+    const chSet = new Set(ch);
     S.orders.forEach(o => {
       const ok = o.needs.every(nd => (stock[nd.id] || 0) - (claim[nd.id] || 0) >= nd.qty);
-      if (ok) o.needs.forEach(nd => { claim[nd.id] = (claim[nd.id] || 0) + nd.qty; take(nd.id, nd.qty); });
+      if (ok) o.needs.forEach(nd => { claim[nd.id] = (claim[nd.id] || 0) + nd.qty; for (let i = 0, q = nd.qty; i < N && q; i++) if (!used.has(i) && !chSet.has(i) && b[i] && b[i].id === nd.id) { used.add(i); q--; } });
     });
-    const pj = curProject();
-    if (pj && projReady(pj)) pj.needs.forEach(([id, q]: [string, number]) => take(id, q));
     board.setWanted([...used]);
-    // what the chapter needs, as soon as you have it: those tiles glow green
-    const ch: number[] = [];
-    if (pj) pj.needs.forEach(([id, q]: [string, number]) => { let n = q; for (let i = 0; i < N && n; i++) if (b[i] && b[i].id === id && !used.has(i)) { ch.push(i); n--; } });
-    board.setChapter(ch);
+    // a contract you have part of: those items sit on a soft orange tile
+    const part = new Set<number>();
+    S.orders.forEach(o => { if (canFill(o)) return; o.needs.forEach(nd => { for (let i = 0, q = nd.qty; i < N && q; i++) if (!used.has(i) && !chSet.has(i) && !part.has(i) && b[i] && b[i].id === nd.id) { part.add(i); q--; } }); });
+    board.setPartial([...part]);
+    // the chapter's items as they come in, even before all are there: green too
+    if (!chAll) takeCh();
+    board.setChapter(ch.filter(i => !used.has(i)));
     // the event guest and everything it makes wear the event's token
     const ev = evNow(), evc: number[] = [], evp: number[] = [];
     if (ev && S.ev.join === ev.key) for (let i = 0; i < N; i++) { const c = b[i]; if (!c) continue; if (c.ev === ev.key) { evc.push(i); evp.push(i); } else if (c.id && ITEMS[c.id] && ITEMS[c.id].chain.startsWith('ev_')) evc.push(i); }
@@ -942,6 +949,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
 
   let ordersMinH = 0;
+  const ordDown = { id: '', t: 0 };
   /** right now, at the moment of the tap, not when the card was drawn */
   const canFill = (o: any) => o.needs.every((nd: any) => countItem(nd.id) >= nd.qty);
   function renderOrders(newIds?: string[]) {
@@ -976,11 +984,12 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       if (tick) tick.onclick = (ev: Event) => { ev.stopPropagation(); deliver(o.id); };
       // tapping the thing they want explains where it comes from, which is the
       // question a new player actually has
-      card.querySelectorAll('[data-need]').forEach((n: any) => n.onclick = (ev: Event) => {
-        ev.stopPropagation(); if (canFill(o)) deliver(o.id); else contractSheet(o.id);
-      });
-      // a ready card gives on any tap; otherwise it points at where to get things
-      card.onclick = () => canFill(o) ? deliver(o.id) : contractSheet(o.id);
+      // a ready card gives on any tap; otherwise it points at where to get things.
+      // The card the finger went DOWN on decides (a redraw mid-tap must never hand the tap to a neighbour)
+      const act = (ev: Event) => { ev.stopPropagation(); const id = Date.now() - ordDown.t < 1200 && ordDown.id ? ordDown.id : o.id; ordDown.id = '';
+        const oo: any = S.orders.find((x: any) => x.id === id); if (!oo) return; canFill(oo) ? deliver(oo.id) : contractSheet(oo.id); };
+      card.querySelectorAll('[data-need]').forEach((n: any) => n.onclick = act);
+      card.onclick = act;
       host.appendChild(card);
     });
     if (!S.orders.length && !S.ship && ART.spriteUi('empty_done')) host.innerHTML = `<div class="ordEmpty"><img src="${ART.spriteUi('empty_done')}" alt=""><span><b>All caught up!</b><i>New contracts are on their way.</i></span></div>`;
@@ -1160,7 +1169,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const live: Record<string, boolean> = {}, plvOf: Record<string, number> = {}, share: Record<string, number> = {};
     B().forEach(c => {
       if (!c || !c.p) return;
-      const dr = PRODS[c.p].drops;
+      const dr = baseDrops(PRODS[c.p]);
       dr.forEach((d: string) => { const ch = ITEMS[d].chain; live[ch] = true; if (!c.tmp) plvOf[ch] = Math.max(plvOf[ch] || 0, plv(c)); });
       // how often a tap gives this chain at all: a chain a producer drops one time in five is slow to climb
       const per: Record<string, number> = {}; dr.forEach((d: string) => { const ch = ITEMS[d].chain; per[ch] = (per[ch] || 0) + 1 / dr.length; });
@@ -2184,7 +2193,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       const claim = done && !(S.cclaim && S.cclaim[k]);
       const pct = Math.round(known.length / ch.items.length * 100);
       return `<button class="aTile${locked ? ' locked' : ''}${done ? ' done' : ''}${claim ? ' claim' : ''}" data-chain="${k}">
-        <span class="aArt${known.length ? '' : ' unk'}">${known.length ? ART.item(best) : '?'}</span>
+        <span class="aArt${known.length ? '' : ' unk'}">${known.length ? (PRODS[prodOfChain(k)] ? ART.producer(PRODS[prodOfChain(k)].art) : ART.item(best)) : '?'}</span>
         <b>${ch.name}</b>${locked ? `<i>🔒 lv ${locked}</i>` : claim ? '<i class="aClaim">Claim!</i>' : `<span class="aBar"><u style="width:${pct}%"></u><em>${done ? '★ done' : known.length + '/' + ch.items.length}</em></span>`}</button>`;
     };
     const here = Object.keys(CHAINS).filter(k => CHAINS[k].world === albumWorld);
@@ -2221,8 +2230,19 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           { coins: 40 * ch.items.length, gems: 1 + Math.floor(ch.items.length / 4), energy: 10 });
         return;
       }
-      sfx.tap(); chainPanel(known.length ? known[known.length - 1] : ch.items[0]);
+      sfx.tap(); chainBook(ck);
     });
+  }
+  /** one chain in the collection: its producer, every step (found or not), how far you are */
+  function chainBook(ck: string) {
+    const ch = CHAINS[ck], pk = prodOfChain(ck), pr = PRODS[pk], known = ch.items.filter(id => S.seen[id]);
+    const pct = Math.round(known.length / ch.items.length * 100);
+    pop(ch.name, `<div class="cbHero"><span class="cbProd">${pr ? ART.producer(pr.art) : ART.item(ch.items[0])}</span>
+        <div class="cbTx"><i>${pr ? 'Made by' : 'Found'}</i><b>${pr ? pr.name : 'around the galaxy'}</b>
+          <div class="cbBar"><u style="width:${Math.max(3, pct)}%"></u><em>${known.length} / ${ch.items.length} found</em></div></div></div>
+      <div class="cbSteps">${ch.items.map((id, n) => { const k = !!S.seen[id], top = n === ch.items.length - 1;
+        return `<button class="cbStep${k ? ' got' : ''}${top ? ' top' : ''}" data-cb="${id}"><span class="cbN">${n + 1}</span><span class="cbArt">${k ? ART.item(id) : '?'}</span><b>${k ? ITEMS[id].name : '???'}</b></button>`; }).join('')}</div>`, 'cbook');
+    document.querySelectorAll<HTMLElement>('[data-cb]').forEach(b => b.onclick = () => { if (!S.seen[b.dataset.cb!]) { sfx.no(); toast('Not found yet, keep merging!'); return; } closePop(); chainPanel(b.dataset.cb!); });
   }
   /** every world in the content, in order, plus a teaser for what comes next */
   const WORLD_ORDER = ['earth', 'luna', 'cindra', 'nerith', 'vela'];
@@ -2560,8 +2580,18 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      tier 4 or the last two steps of a chain: upgrading means a fuller battery
      and a little luck, not a board full of finished things. */
   const upCapTier = (ch: string, top: number) => Math.max(top, Math.min(4, CHAINS[ch].items.length - 2));
+  /** what a tap can give. A two-chain producer gives its second chain a bit more often (about a third of taps), still less than the main one */
+  const baseCache = new Map<any, string[]>();
+  function baseDrops(p: any): string[] {
+    const hit = baseCache.get(p); if (hit) return hit;
+    const out = p.drops.slice();
+    { const per: Record<string, string[]> = {}; out.forEach((d: string) => { const c = ITEMS[d] && ITEMS[d].chain; if (c) (per[c] = per[c] || []).push(d); });
+      const ks = Object.keys(per); if (ks.length >= 2) { ks.sort((a, b) => per[b].length - per[a].length); const main = per[ks[0]].length;
+        ks.slice(1).forEach(k => { const want = Math.max(per[k].length, Math.ceil(main / 2)); for (let n = per[k].length; n < want && n < main; n++) out.push(per[k][0]); }); } }
+    baseCache.set(p, out); return out;
+  }
   function rollDrop(p: any, lv: number): string {
-    const base = rnd(p.drops) as string;
+    const base = rnd(baseDrops(p)) as string;
     if (lv <= 1) return base;
     const it = ITEMS[base]; if (!it || it.part) return base;
     const r = Math.random();
@@ -5399,7 +5429,19 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     sfx.pop(); setTimeout(() => sfx.voice('pup', 2), 120); haptic('light');
     const st = $('#pupStage'); if (st) { st.classList.remove('eating'); void (st as HTMLElement).offsetWidth; st.classList.add('eating'); }
     petGainXp(xp); paintBoard(); renderOrders(); save();
-    setTimeout(() => { if (popOpen() && document.getElementById('pupStage')) pupPop(true); }, 650);
+    petRefresh(id);
+  }
+  /** the habitat's numbers change in place the moment it eats: no re-opening, no flicker */
+  function petRefresh(ate?: string) {
+    const box = document.querySelector('#popBody .pupBox'); if (!box || !pet()) return;
+    const p = pet(), food = Math.round(petFood()), need = p.lv >= PET_MAXLV ? 0 : petXpNeed(p.lv);
+    const ring = (sel: string, v: number, txt: string) => { const r = box.querySelector(sel) as HTMLElement | null; if (!r) return; r.style.setProperty('--v', String(v)); const b = r.querySelector('b'); if (b) b.textContent = txt; };
+    ring('.ptRing.food', food, food + '%'); box.querySelector('.ptRing.food')?.classList.toggle('low', food < 30);
+    ring('.ptRing.xp', need ? Math.round(p.xp / need * 100) : 100, need ? Math.round(p.xp / need * 100) + '%' : 'MAX');
+    const lv = box.querySelector('.ptLv'); if (lv) lv.textContent = 'Lv ' + p.lv;
+    if (ate) { const fb = box.querySelector(`[data-feed="${ate}"]`) as HTMLElement | null; const n = countItem(ate); if (fb) { if (!n) fb.remove(); else { const em = fb.querySelector('em'); if (em) em.textContent = '×' + n; } } }
+    const full = food >= PET_FULL; box.querySelectorAll<HTMLButtonElement>('.petFood').forEach(b => b.disabled = full);
+    const ft = box.querySelector('.ptFeedT'); if (ft) ft.textContent = full ? 'Full, feed it later' : 'Feed it';
   }
   function pupPop(stay = false) {
     if (!pet()) return;
@@ -6669,7 +6711,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const c = B()[i]; if (!c || !c.p) return;
     const p = PRODS[c.p];
     $('#infoBar').classList.add('on');
-    $('#infoTxt').innerHTML = `<b>${p.name} <small>lv ${plv(c)}</small> ${ART.spriteUi('btn_info') ? ART.uiIcon('btn_info', '') : '<span class="infoQ">i</span>'}</b><i>tap again to use it · ⓘ more info</i>`;
+    $('#infoTxt').innerHTML = ibHead(ART.producer(p.art), p.name, plv(c), 'tap again to use it');
     ($('#infoTxt') as HTMLElement).onclick = () => { sfx.tap(); producerPanel(i); };
     ['#btnStash', '#btnShow', '#btnRecycle'].forEach(k => { const e = $(k) as HTMLElement; if (e) e.style.display = 'none'; });
     // the bar's button upgrades it when you can afford it, otherwise shows its info
@@ -6684,13 +6726,15 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       $('#btnSell').onclick = () => { sfx.tap(); producerPanel(i); };
     }
   }
+  /** the item bar's left side: picture, name (shortened if long), level chip and the ⓘ that never gets cut off */
+  const ibHead = (art: string, name: string, lv: number, sub: string) => `<span class="ibArt">${art}<span class="ibInfo">${ART.spriteUi('btn_info') ? ART.uiIcon('btn_info', 'i') : 'i'}</span></span><span class="ibTx"><b class="ibName">${name}</b><i class="ibSub"><em class="ibLv">Lv ${lv}</em>${sub}</i></span>`;
   function showInfo(i: number) {
     const c = B()[i]; if (!c || !c.id) return;
     const d = ITEMS[c.id], nx = nextOf(c.id);
     $('#infoBar').classList.add('on');
-    $('#infoTxt').innerHTML = `<b>${d.name} <small>lv ${d.tier}</small> ${ART.spriteUi('btn_info') ? ART.uiIcon('btn_info', '') : '<span class="infoQ">i</span>'}</b><i>${nx ? `merge 2 → <span class="nxArt">${ART.item(nx)}</span>` : 'top of its chain!'}</i>`;
+    $('#infoTxt').innerHTML = ibHead(ART.item(c.id), d.name, d.tier, nx ? `merge 2 → <span class="nxArt">${ART.item(nx)}</span>` : 'top of its chain!');
     ($('#infoTxt') as HTMLElement).onclick = () => { sfx.tap(); chainPanel(c.id); };
-    $('#btnSell').innerHTML = `Sell ${sellOf(c.id)} ${ART.icon('coin')}`;
+    $('#btnSell').innerHTML = `<span class="ibL">Sell</span><span class="ibP">${ART.icon('coin')}${sellOf(c.id)}</span>`;
     $('#btnSell').classList.remove('off', 'upg'); $('#btnSell').onclick = () => { sellItem(i); $('#infoBar').classList.remove('on'); };
     const st = $('#btnStash');
     st.style.display = bagHas() ? '' : 'none';
@@ -6698,11 +6742,11 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // a finished chain has nowhere to go: put it on the trophy shelf instead
     const sh = $('#btnShow');
     sh.style.display = nx ? 'none' : '';
-    sh.innerHTML = ART.uiIcon('ic_trophy', '🏆') + ' Shelf';
+    sh.innerHTML = ART.uiIcon('ic_trophy', '🏆');
     sh.onclick = () => showcase(i);
     const rc = $('#btnRecycle');
     rc.style.display = labOpen() ? '' : 'none';
-    rc.innerHTML = '🧪 +' + sciOf(c.id);
+    rc.innerHTML = `${ART.icon('flask')}<span class="ibP">+${sciOf(c.id)}</span>`;
     rc.onclick = () => { recycleItem(i); $('#infoBar').classList.remove('on'); };
   }
 
@@ -6984,6 +7028,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     $('#oLeft').onclick = () => scrollOrders(-1);
     $('#oRight').onclick = () => scrollOrders(1);
     $('#orders').addEventListener('scroll', orderArrows, { passive: true });
+    $('#orders').addEventListener('pointerdown', (ev: PointerEvent) => { const c = (ev.target as HTMLElement).closest('.order') as HTMLElement | null; ordDown.id = c && c.dataset.oid ? c.dataset.oid : ''; ordDown.t = Date.now(); }, { capture: true });
     renderTools();
     if (bagHas()) renderBag();
     // the painted backdrops, handed to CSS as variables

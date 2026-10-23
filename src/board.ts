@@ -350,13 +350,14 @@ class PixiBoard {
       // padlocked grey-teal tile when locked, the orange-framed tile for what a contract wants
       const want = this.wanted.has(i) && !locked;
       const forChapter = !want && !locked && this.chapterCells.has(i);
+      const forPart = !want && !forChapter && !locked && this.partCells.has(i);
       const tex = this.tex[want ? 'ui:hs_wanted' : forChapter ? 'ui:hs_chapter' : locked ? 'ui:hs_locked' : 'ui:hu_tile'] || this.tex['ui:ho_tile'];
       if (tex && art) {
         // frosted white and aqua glass in a checkerboard, drawn a touch larger than the cell so the rims meet
         const o = c * 0.05;
         art.visible = true; art.texture = tex; art.position.set(p.x - o, p.y - o); art.width = c + o * 2; art.height = c + o * 2;
-        art.alpha = want || locked || forChapter ? 1 : dark ? 0.82 : 0.9;
-        (art as any).tint = want ? 0xffd070 : forChapter ? 0xb8f29a : 0xffffff;   // contract: warm gold tile · chapter: green tile
+        art.alpha = want || locked || forChapter || forPart ? 1 : dark ? 0.82 : 0.9;
+        (art as any).tint = want ? 0xffd070 : forChapter ? 0xb8f29a : forPart ? 0xffe2b8 : 0xffffff;   // contract: warm gold tile · chapter: green tile
         if (this.slots[i] && this.slots[i].key.startsWith('u')) g.roundRect(p.x + 4, p.y + 4, c - 8, c - 8, R).fill({ color: 0x7cc8ff, alpha: 0.3 });
         if (r) g.roundRect(p.x + 3, p.y + 3, c - 6, c - 6, R).stroke({ color: r === 3 ? 0xffb02e : r === 2 ? 0xb58cff : 0x6fd0e8, alpha: .8, width: r === 3 ? 3 : 2 });
         return;
@@ -966,6 +967,14 @@ class PixiBoard {
     }
   }
   private chTick = false;
+  /** items a contract wants that you do not have all of yet: a soft orange tile */
+  private partCells = new Set<number>();
+  setPartial(list: number[]) {
+    const nw = new Set(list);
+    if (nw.size === this.partCells.size && list.every(k => this.partCells.has(k))) return;
+    const old = this.partCells; this.partCells = nw;
+    new Set([...old, ...nw]).forEach(k => this.drawTile(k));
+  }
   /* event guests and their items: a token badge in the corner and a pink glow, so they stand out */
   private evCells = new Map<number, string>();
   private evTags: Record<number, Container> = {};

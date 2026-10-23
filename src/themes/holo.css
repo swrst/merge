@@ -1335,3 +1335,105 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #bagTr
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #bagTray .trayNote{font:700 11px/1.2 Fredoka,sans-serif!important;color:#7a8aa8!important;text-shadow:none!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app #pop.captlog .pfXp em{color:#fff!important;font-weight:900!important}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app #pop.captlog .pfXp{background:#2a3c78!important}
+/* ===================== v121 item bar: picture, name that shortens, ⓘ always visible, tidy pill buttons */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoBar.on{display:flex!important;align-items:center;gap:5px!important;padding:6px 8px!important;border:2px solid #fff!important;border-image:none!important;border-radius:20px!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(240,246,242,.96))!important;box-shadow:0 3px 10px rgba(20,40,30,.28)!important;filter:none!important;min-height:58px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoTxt{flex:1 1 auto;min-width:0;display:flex!important;flex-direction:row!important;max-height:none!important;overflow:visible!important;align-items:center;gap:6px;cursor:pointer;text-align:left}
+#infoTxt .ibArt{width:40px;height:40px;flex:0 0 40px;border-radius:12px;background:radial-gradient(circle at 50% 40%,#fff,#dcefd6);display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1.5px #cfe3c7}
+#infoTxt .ibArt :is(svg,img){width:34px!important;height:34px!important}
+#infoTxt .ibTx{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:2px}
+#infoTxt .ibTop{display:flex;align-items:center;gap:4px;min-width:0}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoTxt .ibName{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:800 13.5px/1.1 Fredoka,sans-serif!important;color:#1f3d16!important;text-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoTxt .ibLv{flex:0 0 auto;font:900 9.5px/1 Fredoka,sans-serif!important;font-style:normal;color:#fff!important;background:#6ccb3a;border-radius:999px;padding:3px 6px;text-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoTxt .ibSub{display:flex;align-items:center;gap:3px;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font:700 10.5px/1.1 Fredoka,sans-serif!important;font-style:normal;color:#5d7350!important;text-shadow:none!important}
+#infoTxt .ibSub .nxArt :is(svg,img){width:18px!important;height:18px!important;vertical-align:-4px}
+#infoTxt .ibInfo{flex:0 0 26px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;font:900 14px/1 Fredoka,sans-serif;color:#fff;background:#3f8fe6}
+#infoTxt .ibInfo :is(img,.uiIc){width:26px!important;height:26px!important}
+#infoTxt .ibInfo:has(img){background:none}
+/* the action buttons: same height, own colour, label + value chip */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoBar .sellBtn{flex:0 0 auto;align-items:center;justify-content:center;gap:4px;height:40px!important;min-height:0!important;min-width:0!important;margin:0!important;padding:0 9px!important;
+  border:0!important;border-image:none!important;border-radius:14px!important;filter:none!important;font:800 12.5px/1 Fredoka,sans-serif!important;color:#fff!important;text-shadow:0 1px 0 rgba(0,0,0,.25)!important;
+  background:linear-gradient(#ffd45a,#f4a21c)!important;box-shadow:0 3px 0 #c27510!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoBar .sellBtn *{color:inherit!important;text-shadow:inherit!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoBar .sellBtn .ibP{display:inline-flex;align-items:center;gap:2px;background:rgba(255,255,255,.95);color:#5a3200!important;text-shadow:none!important;border-radius:999px;padding:2px 6px 2px 2px;font:900 11.5px/1 Fredoka,sans-serif!important}
+#infoBar .sellBtn .ibP :is(img,svg){width:15px!important;height:15px!important}
+#infoBar .sellBtn>:is(img,svg,.uiIc){width:22px!important;height:22px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoBar #btnStash{background:linear-gradient(#ffffff,#e6ecf1)!important;box-shadow:0 3px 0 #b3bec8,inset 0 0 0 1.5px #c9d3dc!important;color:#2f3d4a!important;text-shadow:none!important}
+#infoBar #btnStash .ibBox{width:18px;height:18px;background:url(../sprites/ui/ic_box.webp) center/contain no-repeat}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoBar #btnRecycle{background:linear-gradient(#7cc4ff,#2f7fe0)!important;box-shadow:0 3px 0 #1d5aa8!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoBar #btnRecycle .ibP{color:#14325a!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoBar #btnShow{background:linear-gradient(#c79bff,#7a4ce8)!important;box-shadow:0 3px 0 #5230b8!important;padding:0 7px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoBar .undoBtn{background:linear-gradient(#ffffff,#e6ecf1)!important;box-shadow:0 3px 0 #b3bec8!important;color:#2f3d4a!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoBar #btnSell.upg{height:40px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoBar .sellBtn.off{background:linear-gradient(#e3e7ea,#c7cdd2)!important;box-shadow:0 3px 0 #a3abb2!important;color:#7a838b!important}
+/* ===================== v121 Collection: producer cards on a starfield; chain book popup */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-book .scBody{background:radial-gradient(1.5px 1.5px at 12% 10%,#fff 60%,transparent),radial-gradient(1px 1px at 82% 18%,#fff 60%,transparent),radial-gradient(1.5px 1.5px at 60% 45%,#cfe8ff 60%,transparent),radial-gradient(1px 1px at 30% 70%,#fff 60%,transparent),radial-gradient(1.2px 1.2px at 90% 85%,#fff 60%,transparent),
+  radial-gradient(ellipse at 20% 0%,rgba(36,179,154,.35),transparent 55%),linear-gradient(180deg,#0f3550,#0b2238 60%,#081828)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-book .sSecT{color:#bff6e8!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-book .sSecT::after{background:linear-gradient(90deg,rgba(160,240,220,.5),transparent)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-book .sTab{background:rgba(255,255,255,.1)!important;border-color:rgba(160,240,220,.4)!important;color:#dffaf2!important;box-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-book .sTab.on{background:linear-gradient(#5fe3c0,#24b39a)!important;border-color:#1e8f7c!important;color:#fff!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-book .aGrid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-book .aTile{position:relative;border:0!important;border-radius:18px!important;padding:6px 6px 8px!important;overflow:hidden;
+  background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.06))!important;box-shadow:inset 0 0 0 1.5px rgba(160,240,220,.45),0 4px 12px rgba(0,0,0,.35)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-book .aTile .aArt{background:radial-gradient(circle at 50% 55%,rgba(110,240,210,.45),rgba(20,60,80,0) 70%)!important;aspect-ratio:1.1!important}
+#sc-book .aTile .aArt :is(svg,img){width:78%!important;height:78%!important;filter:drop-shadow(0 4px 6px rgba(0,0,0,.45))}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-book .aTile b{color:#fff!important;font:800 12px/1.1 Fredoka,sans-serif!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-book .aTile .aBar{background:rgba(0,0,0,.35)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-book .aTile .aBar u{background:linear-gradient(90deg,#5fe3c0,#9fe86a)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-book .aTile .aBar em{color:#fff!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-book .aTile.done{box-shadow:inset 0 0 0 2px #ffc531,0 0 14px rgba(255,190,40,.45)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-book .aTile.claim{box-shadow:inset 0 0 0 2.5px #ff9a3d,0 0 18px rgba(255,150,60,.8)!important;animation:claimPulse 1.6s ease-in-out infinite}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-book .aTile.locked{opacity:.55}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-book .aTile.locked *,html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #sc-book .aTile .aArt.unk{color:#bff6e8!important}
+/* chain book */
+html[data-ui-theme="buddy"] body #app #pop.cbook{--h-ink:#e8fbf6; --h-ink2:#a9dcd0;
+  --h-panel:url(../sprites/ui/cy_panel.webp); --h-tall:url(../sprites/ui/cy_panel_tall.webp); --h-head:url(../sprites/ui/cy_panel_head.webp); --h-title:url(../sprites/ui/cy_title.webp); --h-banner:url(../sprites/ui/cy_title.webp)}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.cbook #popTitle{color:#0f3f4a!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.cbook .popBody{border-radius:16px;padding:10px 8px 12px!important;
+  background:radial-gradient(1.5px 1.5px at 15% 20%,#fff 60%,transparent),radial-gradient(1px 1px at 85% 30%,#fff 60%,transparent),radial-gradient(1px 1px at 50% 85%,#cfe8ff 60%,transparent),linear-gradient(180deg,#0f3550,#081828)!important}
+#pop.cbook .cbHero{display:flex;align-items:center;gap:12px;margin:0 2px 10px;padding:10px 12px;border-radius:18px;background:linear-gradient(115deg,rgba(36,179,154,.5),rgba(63,127,230,.4));box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.3)}
+#pop.cbook .cbProd{width:84px;height:84px;flex:0 0 84px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.9),rgba(160,240,220,.4) 70%);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px #fff,0 0 18px rgba(110,240,210,.7)}
+#pop.cbook .cbProd :is(svg,img){width:72px!important;height:72px!important}
+#pop.cbook .cbTx{flex:1;min-width:0;display:flex;flex-direction:column;text-align:left}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.cbook .cbTx i{font-style:normal;font:800 10.5px/1 Fredoka,sans-serif!important;color:#bff6e8!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.cbook .cbTx b{font:400 19px/1.1 "Lilita One",Fredoka,sans-serif!important;color:#fff!important;text-shadow:none!important;margin:2px 0 6px}
+#pop.cbook .cbBar{position:relative;height:16px;border-radius:9px;background:rgba(0,0,0,.4);overflow:hidden}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.cbook .cbBar u{display:block;height:100%;background:linear-gradient(90deg,#5fe3c0,#9fe86a)!important;border-radius:9px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.cbook .cbBar em{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:900 10.5px/1 Fredoka,sans-serif!important;font-style:normal;color:#fff!important;text-shadow:none!important}
+#pop.cbook .cbSteps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 2px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.cbook .cbStep{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px 8px!important;border:0!important;border-image:none!important;border-radius:16px!important;
+  background:rgba(255,255,255,.06)!important;box-shadow:inset 0 0 0 1.5px rgba(160,240,220,.25)!important;min-height:0!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.cbook .cbStep.got{background:linear-gradient(180deg,#fff,#e3fbf4)!important;box-shadow:0 0 0 2px #5fe3c0,0 3px 0 rgba(0,0,0,.3)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.cbook .cbStep.got.top{background:linear-gradient(180deg,#fff8d8,#ffe7a0)!important;box-shadow:0 0 0 2px #ffc531,0 0 14px rgba(255,190,40,.6)!important}
+#pop.cbook .cbArt{height:58px;display:flex;align-items:center;justify-content:center}
+#pop.cbook .cbArt :is(svg,img){width:54px!important;height:54px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.cbook .cbStep:not(.got) .cbArt{font:400 30px/1 "Lilita One",Fredoka,sans-serif;color:rgba(191,246,232,.7)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.cbook .cbStep b{font:800 10.5px/1.1 Fredoka,sans-serif!important;color:#0f3f4a!important;text-align:center}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.cbook .cbStep:not(.got) b{color:#9fd0c4!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.cbook .cbN{position:absolute;top:4px;left:6px;font:900 10px/1 Fredoka,sans-serif;color:#fff;background:#24b39a;border-radius:999px;padding:2px 6px}
+/* v121 bigger customers */
+html body #app#app#app#app#app#app#app#app#app#app#app#app#app .order .oFig .stand{height:138px!important;max-width:108px!important}
+
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoBar.on .sellBtn:not([style*="none"]):not(.undoBtn){display:inline-flex!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoBar .undoBtn{display:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoBar.undo .undoBtn{display:inline-flex!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoBar.undo :is(#btnStash,#btnRecycle,#btnShow){display:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoTxt{min-width:110px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app #infoTxt .ibName{flex:1 1 auto;min-width:40px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app #infoTxt .ibTop{flex-wrap:nowrap}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app #infoBar #btnStash .ibL{display:none}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app #infoBar #btnStash{width:42px!important;padding:0!important}
+#infoBar #btnStash .ibBox{width:26px!important;height:26px!important}
+#infoTxt .ibInfo{flex:0 0 24px!important;width:24px!important;height:24px!important}
+#infoTxt .ibInfo :is(img,.uiIc){width:24px!important;height:24px!important}
+#infoTxt .ibArt{position:relative}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app #infoTxt .ibInfo{position:absolute!important;right:-6px;bottom:-5px;width:20px!important;height:20px!important;box-shadow:0 0 0 2px #fff;border-radius:50%}
+#infoTxt .ibInfo :is(img,.uiIc){width:20px!important;height:20px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app #infoTxt .ibTx{gap:3px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app #infoTxt .ibName{display:block;min-width:0;font-size:13px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app #infoTxt .ibSub{gap:4px!important;opacity:1!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoBar #btnSell .ibL{font-size:12px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app#app #infoTxt .ibName{white-space:normal!important;display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:12.5px!important;line-height:1.05!important;word-break:break-word}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoBar #btnSell{padding:0 7px!important;gap:3px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #infoBar #btnSell .ibL{font-size:11px!important}
