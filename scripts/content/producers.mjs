@@ -35,7 +35,7 @@ export const PRODUCERS = [
   ['earth', 7, 'grubmound|Glowbug Burrow|cocoon:cream/moss|nrg:1|grub grub grub grub chrysalis|a grassy mound with little burrow holes'],
   ['earth', 8, 'vegpatch|Hydro Bed|sprout:leaf/clay|nrg:1|vegseed vegseed vegseed vegseed seedling|a small tilled veggie patch with carrot tops and a watering can'],
   ['earth', 9, 'tinkerbench|Lens Workbench|anvil:copper/wood|nrg:1|lenschip lenschip lenschip clockgear lens|a wooden workbench with a vice, lens grinder and a brass lamp'],
-  ['earth', 10, 'crashsite|Crash Site|planet:steel/clay|bat:10/60|blinky blinky blinky pricetag alienkid|a small silver saucer nose-down in the dirt, dome cracked, little lights still blinking'],
+  ['earth', 10, 'crashsite|Crash Site|planet:steel/clay|bat:10/60|oddegg oddegg oddegg pricetag blinky|a small silver saucer nose-down in the dirt, dome cracked, little lights still blinking'],
 
   /* story guests: never planted by level, only by a chapter of the story */
   ['earth', 99, 'raincloud|Weather Cloud|cloud:water/cloud|bat:10/30|raindrop raindrop raindrop raindrop puffcloud|a fat grey-blue rain cloud drizzling onto a little puddle'],

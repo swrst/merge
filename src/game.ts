@@ -2601,7 +2601,8 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (lv <= 1) return base;
     const it = ITEMS[base]; if (!it || it.part) return base;
     const r = Math.random();
-    const up = lv >= 3 ? (r < 0.04 ? 2 : r < 0.18 ? 1 : 0) : (r < 0.1 ? 1 : 0);
+    // mostly the first step still; an upgrade only nudges the odds: lv 2 → 8% one step up, max → 13% one step, 2% two steps
+    const up = lv >= 3 ? (r < 0.02 ? 2 : r < 0.15 ? 1 : 0) : (r < 0.08 ? 1 : 0);
     if (!up) return base;
     const ids = CHAINS[it.chain].items, t = Math.min(it.tier + up, upCapTier(it.chain, it.tier));
     return ids[t - 1] || base;

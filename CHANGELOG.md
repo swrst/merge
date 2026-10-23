@@ -1,5 +1,10 @@
 # Changelog
 
+- **v123 (1.0.23)**
+  - Alien Explorer is blue now, no longer a twin of Little Alien.
+  - Fixed: the Crash Site never dropped the Odd Egg (the first step of Little Visitors); it now drops Odd Eggs mostly, sometimes a Blinky.
+  - Producer upgrades are gentler: drops stay mostly step 1; level 2 gives 8% one step up, max level 13% one step and 2% two steps (was 10%, and 14% + 4%).
+
 - **v122 (1.0.22)**
   - Star Bazaar, Rocket & lab: each forge button shows what it costs (the item picture and have/need, e.g. 2/3), green "Make" when you can, grey "Need" when not.
   - Chain popups (item info, contract steps, collection): every step you have, have had, or that sits below the one you are looking at shows in full; only real unknowns are ???. Items on the board or in storage count as discovered.
