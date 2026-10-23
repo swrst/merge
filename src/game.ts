@@ -4592,7 +4592,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     setTimeout(albumCheck, 500);
   }
   /** a sticker as a collectible card: art on a rarity-coloured background, its stars and name; missing ones are the card back */
-  const stickerCard = (id: string, n: number, extra = '') => `<div class="stkCard s${stickerStars(id)}${n ? ' got' : ' miss'}">
+  const stickerCard = (id: string, n: number, extra = '') => `<div class="stkCard s${stickerStars(id)}${n ? ' got' : ' miss'}"><i class="stkFoil"></i>
       <div class="stkArt">${n ? ART.item(id) : '<span class="stkQ">?</span>'}</div>
       <div class="stkStars">${'★'.repeat(stickerStars(id))}</div>
       <div class="stkName">${n ? ITEMS[id].name : '???'}</div>${n > 1 ? `<em class="stkDup">×${n}</em>` : ''}${extra}</div>`;
@@ -4622,20 +4622,23 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (!albumOpen()) { toast('The Star Album opens at level 4.'); return; }
     const a = alb(), sets = albumSets(), left = seasonEnds() - Date.now();
     const days = Math.max(0, Math.ceil(left / 86400000));
-    pop(`${ART.uiIcon('album_book', '⭐')} Star Album`, `<div class="albHead"><b>${seasonName()}</b><i>Season ${a.no + 1} · ends in ${days} day${days === 1 ? '' : 's'}</i>
-        <div class="albProg"><i style="width:${Math.round(albumCount() / Math.max(1, albumTotal()) * 100)}%"></i><em>${albumCount()} / ${albumTotal()} stickers</em></div></div>
-      <div class="albPacks">
-        <button class="buyBtn" id="pkBasic" ${a.packs.basic ? '' : 'disabled'}>${ART.uiIcon('pack_basic', '🎴')} Open pack${a.packs.basic ? ' ×' + a.packs.basic : ''}</button>
-        <button class="buyBtn gold" id="pkGold" ${a.packs.gold ? '' : 'disabled'}>${ART.uiIcon('pack_gold', '🌟')} Golden${a.packs.gold ? ' ×' + a.packs.gold : ''}</button>
-        ${(a.packs.basic || 0) + (a.packs.gold || 0) > 1 ? `<button class="buyBtn green" id="pkAll">Open all ×${(a.packs.basic || 0) + (a.packs.gold || 0)}</button>` : ''}
-        <span class="albDust">${ART.uiIcon('star_dust', '✨')} <b>${a.dust}</b> dust</span></div>
+    const SET_ICON: Record<string, string> = { meadow: 'planet_earth', moon: 'planet_luna', ember: 'planet_cindra', tide: 'planet_nerith', aurora: 'planet_vela' };
+    const pct = Math.round(albumCount() / Math.max(1, albumTotal()) * 100);
+    pop(`${ART.uiIcon('album_book', '⭐')} Star Album`, `<div class="aHero"><div class="aHTx"><i>Season ${a.no + 1} · ${days} day${days === 1 ? '' : 's'} left</i><b>${seasonName()}</b>
+          <div class="aTrail"><u style="width:${Math.max(2, pct)}%"></u><em>${albumCount()} / ${albumTotal()}</em></div></div>
+        <span class="aDust">${ART.uiIcon('star_dust', '✨')}<b>${a.dust}</b></span></div>
+      <div class="aPacks">
+        <button class="aPack basic" id="pkBasic" ${a.packs.basic ? '' : 'disabled'}><span class="aPkArt">${ART.uiIcon('pack_basic', '🎴')}</span><b>Star pack</b><i>2 stickers</i>${a.packs.basic ? `<em>×${a.packs.basic}</em>` : ''}</button>
+        <button class="aPack gold" id="pkGold" ${a.packs.gold ? '' : 'disabled'}><span class="aPkArt">${ART.uiIcon('pack_gold', '🌟')}</span><b>Golden pack</b><i>3 · one 3★+</i>${a.packs.gold ? `<em>×${a.packs.gold}</em>` : ''}</button>
+      </div>
+      ${(a.packs.basic || 0) + (a.packs.gold || 0) > 1 ? `<button class="big green aAll" id="pkAll">Open all ×${(a.packs.basic || 0) + (a.packs.gold || 0)}</button>` : ''}
       <div class="albSets">${sets.map((s, k) => {
         const n = s.ids.filter(id => a.have[id]).length, done = !!a.sets[s.key];
-        return `<div class="albSet${done ? ' done' : ''}"><div class="albSetH"><b>${s.name}</b><i>${n}/${s.ids.length}</i><span>${done ? '✓ complete' : rewardText(setReward(k))}</span></div>
+        return `<div class="albSet${done ? ' done' : ''}"><div class="albSetH"><span class="aSetIc">${SET_ICON[s.key] ? ART.uiIcon(SET_ICON[s.key], '🪐') : ART.item(s.ids[s.ids.length - 1])}</span><b>${s.name}</b><i>${n}/${s.ids.length}</i><span>${done ? '✓ complete' : rewardText(setReward(k))}</span></div>
           <div class="stkGrid">${s.ids.map(id => stickerCard(id, a.have[id] || 0)).join('')}</div></div>`;
       }).join('')}</div>
       <div class="albShop"><b>Star Dust swap</b>${DUST_SHOP.map(d => `<button class="buyBtn" data-dust="${d.id}" ${a.dust >= d.cost ? '' : 'disabled'}>${d.name} · ✨${d.cost}</button>`).join('')}</div>
-      <div class="noteLine">Packs come from contracts, chapters, level-ups, chests and daily tasks. Finish the whole album before the season ends for a permanent badge.</div>
+      <div class="noteLine">Packs: contracts, chapters, level-ups, chests.</div>
       <button class="big soft" id="albShare">📤 Share my album</button>`, 'fun album');
     const b1 = $('#pkBasic'); if (b1) b1.onclick = () => openPack('basic');
     const b2 = $('#pkGold'); if (b2) b2.onclick = () => openPack('gold');

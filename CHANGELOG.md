@@ -1,5 +1,9 @@
 # Changelog
 
+- **v115 (1.0.15)**
+  - Fizz Drop is pink-violet now, no longer a twin of the Water Drop.
+  - Star Album redesigned as a cosmic collector's book: nebula page, season hero with a glowing star trail, foil booster packs with a shine sweep, planet icon per set, holographic sticker cards with rarity-coloured rims (silver, green, blue, violet, gold), starry card backs for missing ones, a light burst behind each card in the pack reveal.
+
 - **v114 (1.0.14)**
   - Fixed: the chapter strip could not be tapped (the contract row lay over it); tapping it opens the chapter popup.
   - Chapter strip: every chip the same size, the upgrade chip shows the producer with a small green arrow and "Lv N".
