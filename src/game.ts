@@ -794,7 +794,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const pct = Math.round(parts.reduce((a: number, x: number) => a + x, 0) / parts.length * 100);
     btn.innerHTML = `<span class="cwFace">${ART.char(pj.who)}</span>
       <b class="cwT">${ready ? 'Ready!' : 'Ch. ' + (projDone() + 1)}</b>
-      <span class="cwNeeds${pj.needs.every(([id, q]: [string, number]) => countItem(id) >= q) ? ' allOk' : ''}">${pj.needs.map(([id, q]: [string, number]) => `<i class="${countItem(id) >= q ? 'ok' : ''}" data-need="${id}">${ART.item(id)}<em>${Math.min(countItem(id), q)}/${q}</em></i>`).join('')}${cNeed(pj) ? `<i class="${cHave() >= cNeed(pj) ? 'ok' : ''}">${ART.uiIcon('cl_tasks', '📋')}<em>${Math.min(cHave(), cNeed(pj))}/${cNeed(pj)}</em></i>` : ''}${upNeeds(pj).map(u => `<i class="cwUp" data-up="1">${ART.producer(PRODS[u.k].art)}<em>⬆ Lv ${u.lv + 1}</em></i>`).join('')}</span>
+      <span class="cwNeeds${pj.needs.every(([id, q]: [string, number]) => countItem(id) >= q) ? ' allOk' : ''}">${pj.needs.map(([id, q]: [string, number]) => `<i class="${countItem(id) >= q ? 'ok' : ''}" data-need="${id}">${ART.item(id)}<em>${Math.min(countItem(id), q)}/${q}</em></i>`).join('')}${cNeed(pj) ? `<i class="${cHave() >= cNeed(pj) ? 'ok' : ''}">${ART.uiIcon('cl_tasks', '📋')}<em>${Math.min(cHave(), cNeed(pj))}/${cNeed(pj)}</em></i>` : ''}${upNeeds(pj).map(u => `<i class="cwUp" data-up="1">${ART.producer(PRODS[u.k].art)}<em>Lv ${u.lv + 1}</em></i>`).join('')}</span>
       <span class="cwBar"><i style="width:${pct}%"></i></span>`;
     // the bottom line spells the chapter out: every need, always on screen
     const line = $('#chapLine');
@@ -6618,12 +6618,12 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // the bar's button upgrades it when you can afford it, otherwise shows its info
     const lv = plv(c), price = lv < PMAX && !c.tmp ? upCost(p, lv) : 0;
     if (price) {
-      $('#btnSell').innerHTML = `⬆ ${price} ${ART.icon('coin')}`;
-      $('#btnSell').classList.toggle('off', S.coins < price);
+      $('#btnSell').innerHTML = `${ART.uiIcon('ic_up', '⬆')}<span class="upPr">${ART.icon('coin')}${kN(price)}</span>`;
+      $('#btnSell').classList.toggle('off', S.coins < price); $('#btnSell').classList.add('upg');
       $('#btnSell').onclick = () => { upgradeProducer(i); tutFire('upgrade'); if (B()[i]) showProdInfo(i); };
     } else {
       $('#btnSell').innerHTML = 'Info';
-      $('#btnSell').classList.remove('off');
+      $('#btnSell').classList.remove('off', 'upg');
       $('#btnSell').onclick = () => { sfx.tap(); producerPanel(i); };
     }
   }
@@ -6634,7 +6634,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     $('#infoTxt').innerHTML = `<b>${d.name} <small>lv ${d.tier}</small> ${ART.spriteUi('btn_info') ? ART.uiIcon('btn_info', '') : '<span class="infoQ">i</span>'}</b><i>${nx ? `merge 2 → <span class="nxArt">${ART.item(nx)}</span>` : 'top of its chain!'}</i>`;
     ($('#infoTxt') as HTMLElement).onclick = () => { sfx.tap(); chainPanel(c.id); };
     $('#btnSell').innerHTML = `Sell ${sellOf(c.id)} ${ART.icon('coin')}`;
-    $('#btnSell').classList.remove('off'); $('#btnSell').onclick = () => { sellItem(i); $('#infoBar').classList.remove('on'); };
+    $('#btnSell').classList.remove('off', 'upg'); $('#btnSell').onclick = () => { sellItem(i); $('#infoBar').classList.remove('on'); };
     const st = $('#btnStash');
     st.style.display = bagHas() ? '' : 'none';
     st.onclick = () => stashItem(i);
@@ -6935,12 +6935,6 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     $('#miniClose').onclick = closeMini;
     $('#btnQuests').onclick = (ev: MouseEvent) => {
       // a need in the strip opens that item's chain, the contracts chip says what is left
-      const nd = (ev.target as HTMLElement).closest('.cwNeeds [data-need]') as HTMLElement | null;
-      if (nd) { sfx.tap(); chainPanel(nd.dataset.need!); return; }
-      if ((ev.target as HTMLElement).closest('.cwNeeds [data-up]')) { sfx.tap(); chapterSheet(); return; }
-      const tk = (ev.target as HTMLElement).closest('.cwNeeds i:not([data-need])');
-      const pj0 = curProject();
-      if (tk && pj0) { sfx.tap(); const left = Math.max(0, cNeed(pj0) - cHave()); toast(left ? `📋 Complete <b>${left}</b> more contract${left > 1 ? 's' : ''} for this chapter.` : '📋 Contracts done ✓'); return; }
       tutFire('quests'); const pj = curProject(); if (pj && projReady(pj)) buildProject(); else { sfx.tap(); chapterSheet(); } };
     $('#btnStore').onclick = () => { sfx.tap(); storeTap(); };
     { const gi = $('#goalsIc'); if (gi) gi.innerHTML = ART.uiIcon('ic_goals', '📜'); }

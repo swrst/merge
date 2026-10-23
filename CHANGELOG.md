@@ -1,5 +1,12 @@
 # Changelog
 
+- **v114 (1.0.14)**
+  - Fixed: the chapter strip could not be tapped (the contract row lay over it); tapping it opens the chapter popup.
+  - Chapter strip: every chip the same size, the upgrade chip shows the producer with a small green arrow and "Lv N".
+  - Item bar: the producer upgrade is a green pill with the arrow icon and a coin price chip.
+  - Shop: small labels (+15 energy, descriptions) are plain readable text, no heavy outline.
+  - Customers a bit bigger, their wants a bit smaller.
+
 - **v113 (1.0.13)**
   - Fixed: tapping a customer could open a different one (a redraw scrolled the contract row back to the start under the finger).
   - Customers are bigger.

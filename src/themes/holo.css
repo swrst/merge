@@ -1041,3 +1041,29 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #p
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.csheet .csPath{grid-column:2;grid-row:2;margin:3px 0 0!important;align-self:start}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.csheet .csNeed.ok .csArt{background:radial-gradient(circle at 50% 40%,#f0ffe8,#b9eda0)}
 html body #app .cwNeeds i.cwUp em{color:#c25a00!important;font-weight:900}
+/* v114: item bar upgrade button: green pill, arrow icon, word, price chip */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #btnSell.upg{display:inline-flex!important;align-items:center;gap:5px;height:38px!important;padding:0 6px 0 4px!important;border:0!important;border-image:none!important;border-radius:999px!important;
+  background:linear-gradient(#8fe86a,#3fae2a)!important;box-shadow:0 3px 0 #2a7d1c!important;filter:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #btnSell.upg .uiIc{width:26px!important;height:26px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #btnSell.upg .upTx{font:800 13px/1 Fredoka,sans-serif!important;color:#fff!important;text-shadow:0 1px 0 #1f6b12!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #btnSell.upg .upPr{display:inline-flex;align-items:center;gap:2px;background:#fff;border-radius:999px;padding:2px 7px 2px 2px;font:900 12px/1 Fredoka,sans-serif!important;color:#5a3200!important;text-shadow:none!important}
+#btnSell.upg .upPr :is(img,svg){width:16px!important;height:16px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #btnSell.upg.off{background:linear-gradient(#cfd5d9,#a9b1b7)!important;box-shadow:0 3px 0 #868e94!important}
+/* v114: chapter strip: every chip the same size, upgrade chip too */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app .side .sideW.chapW .cwNeeds{gap:3px!important;padding:3px 6px!important;cursor:pointer}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app .cwNeeds i{width:32px!important;height:38px!important;justify-content:flex-end;padding-bottom:1px}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app .cwNeeds i>:first-child{width:24px!important;height:24px!important;max-width:24px!important;max-height:24px!important;flex:0 0 24px;object-fit:contain}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app .cwNeeds i :is(svg,img) :is(svg,img){width:100%!important;height:100%!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app .cwNeeds i em{font-size:9px!important;white-space:nowrap}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app .cwNeeds i.cwUp::before{content:"";position:absolute;right:-1px;top:0;width:13px;height:13px;border-radius:50%;background:#3fae2a url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'><path d='M5 2 8.5 6H6.2v2H3.8V6H1.5z' fill='white'/></svg>") center/9px no-repeat;box-shadow:0 1px 2px rgba(0,0,0,.3)}
+/* v114: customers a bit bigger, their wants a bit smaller */
+html body #app#app#app#app#app#app#app#app#app#app#app#app .order .oFig .stand{height:122px!important;max-width:96px!important}
+html body #app#app#app#app#app#app#app#app#app#app#app#app .order .oNeed{width:38px!important;min-height:38px!important;height:auto!important}
+html body #app#app#app#app#app#app#app#app#app#app#app#app .order .oNeed :is(.art,img,svg){width:32px!important;height:32px!important}
+/* v114: shop small labels readable */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #sc-shop .giftNrg{font:800 10.5px/1 Fredoka,sans-serif!important;color:#1f3d16!important;-webkit-text-stroke:0!important;text-shadow:none!important;padding:2px 6px 2px 2px!important;border:1px solid #d5ecd9!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #sc-shop .giftNrg *{color:#1f3d16!important;-webkit-text-stroke:0!important;text-shadow:none!important;font-weight:800!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #sc-shop :is(.sCDesc,.sCDesc *){-webkit-text-stroke:0!important;text-shadow:none!important;font-weight:700!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app .cwNeeds i svg.art{position:static!important;transform:none!important;width:24px!important;height:24px!important;margin:0!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app #side{position:relative!important;z-index:30!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app .side .sideW.chapW .cwNeeds,html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app .side .sideW.chapW .cwNeeds *{pointer-events:auto!important}
