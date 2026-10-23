@@ -1300,3 +1300,38 @@ html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #p
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.captlog .petActs .big{flex:1}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.captlog .pfDot{background:#ff3d71;color:#fff!important;border-radius:999px;padding:1px 6px;font-style:normal}
 html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app #pop.captlog .big.soft,html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app #pop.captlog .big.soft *{color:#14325a!important;text-shadow:0 1px 0 rgba(255,255,255,.7)!important}
+/* v119: Captain's Log text is crisp: no outlines or shadows anywhere inside */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app #pop.captlog .popBody *{text-shadow:none!important;-webkit-text-stroke:0!important;filter:none}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app #pop.captlog .pfStat i{font:700 9.5px/1.15 Fredoka,sans-serif!important;color:#d3defa!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app #pop.captlog .pfStat b{font:900 15px/1.1 Fredoka,sans-serif!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.captlog .pfLv{font-size:12.5px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.captlog .pfWho small{font-size:11px!important;color:#c8d6f5!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.captlog :is(.pfPet,.pfAlb) i{font-size:11.5px!important;color:#d3defa!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.captlog .pfXp em{font-size:10.5px!important;color:#1a1000!important}
+/* achievements: a gold card button */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.captlog .pfAchB{display:flex;align-items:center;gap:10px;width:calc(100% - 4px);margin:2px 2px 0;padding:8px 12px 8px 8px;border:0;border-radius:16px;cursor:pointer;
+  background:linear-gradient(115deg,#ffd45a,#f4a21c);box-shadow:0 3px 0 #b86a0a,0 0 16px rgba(255,180,40,.5);text-align:left}
+#pop.captlog .pfAchIc{width:46px;height:46px;flex:0 0 46px;border-radius:50%;background:radial-gradient(circle,#fff8dc,#ffe08a);display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px #fff}
+#pop.captlog .pfAchIc :is(img,.uiIc){width:36px!important;height:36px!important}
+#pop.captlog .pfAchB>span:nth-child(2){flex:1;min-width:0}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.captlog .pfAchB b{display:block;font:400 17px/1.1 "Lilita One",Fredoka,sans-serif!important;color:#5a3200!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.captlog .pfAchB i{display:block;font-style:normal;font:700 11px/1.2 Fredoka,sans-serif!important;color:#7a4a08!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.captlog .pfAchB .pfDot{font:900 13px/1 Fredoka,sans-serif!important;font-style:normal;color:#fff!important;background:#ff3d71;border-radius:999px;padding:5px 9px;box-shadow:0 0 0 2px #fff}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app #pop.captlog .pfAchB .pfGo{font:900 24px/1 Fredoka,sans-serif!important;font-style:normal;color:#7a4a08!important}
+/* v119: bottom storage tray: white glass, star pouch on top, neat slots */
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #bagTray{background:linear-gradient(180deg,#fff,#f2f6fa)!important;border:2px solid #fff!important;border-image:none!important;border-radius:22px!important;box-shadow:0 -4px 18px rgba(20,30,60,.3)!important;padding:10px 12px 12px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #bagTray .trayHead b{display:flex;align-items:center;gap:6px;font:400 17px/1 "Lilita One",Fredoka,sans-serif!important;color:#1d2a50!important;text-shadow:none!important}
+#bagTray .trayHead b .uiIc{width:26px!important;height:26px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #bagTray .bagN{font:900 12px/1 Fredoka,sans-serif!important;color:#fff!important;background:#7a8aa8;border-radius:999px;padding:3px 8px}
+#bagPouch{margin:8px 0 10px;padding:8px;border-radius:16px;background:linear-gradient(115deg,#2a1d6b,#3f2a9e);box-shadow:0 0 12px rgba(120,90,255,.3)}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #bagPouch .stPouchT{font:400 13px/1 "Lilita One",Fredoka,sans-serif!important;color:#ffe27a!important;text-align:center;margin-bottom:6px;text-shadow:none!important}
+#bagPouch .stPcs{display:grid;grid-template-columns:repeat(auto-fit,minmax(56px,1fr));gap:5px}
+#bagPouch .stPc{display:flex;flex-direction:column;align-items:center;padding:5px 2px;border-radius:12px;background:rgba(255,255,255,.1);box-shadow:inset 0 0 0 1px rgba(255,255,255,.2)}
+#bagPouch .stPc :is(img,svg,.uiIc){width:30px!important;height:30px!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #bagPouch .stPc b{font:900 14px/1 Fredoka,sans-serif!important;color:#fff!important;text-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #bagPouch .stPc i{font-style:normal;font:800 9px/1.1 Fredoka,sans-serif!important;color:#cfc6ff!important;text-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #bagTray .bagSlot{width:64px!important;height:64px!important;border:2px dashed #c5cfdb!important;border-image:none!important;border-radius:16px!important;background:#f5f8fb!important;box-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #bagTray .bagSlot.full{border:2px solid #b9c0c6!important;background:linear-gradient(180deg,#fff,#eef2f5)!important;box-shadow:0 2px 4px rgba(20,30,40,.15)!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app #bagTray .trayNote{font:700 11px/1.2 Fredoka,sans-serif!important;color:#7a8aa8!important;text-shadow:none!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app #pop.captlog .pfXp em{color:#fff!important;font-weight:900!important}
+html[data-ui-theme="buddy"] body #app#app#app#app#app#app#app#app#app#app#app#app #pop.captlog .pfXp{background:#2a3c78!important}

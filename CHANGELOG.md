@@ -1,5 +1,9 @@
 # Changelog
 
+- **v119 (1.0.19)**
+  - Captain's Log: all text crisp (no outlines or shadows), slightly bigger labels; the Share button is gone; Achievements is a gold card with its ready count.
+  - The bottom storage tray is white glass with the Star Pouch on top (Bloom, Star Scrap, Star Core, Relics, Science, Star Dust) and neat slots.
+
 - **v118 (1.0.18)**
   - The first Bloom Spark (and the first Relic, Wildcard and Star Core) opens a card with its picture that says what to do with it.
   - Storage shows a Star Pouch: Bloom, Star Scrap, Star Core, Relics, Science and Star Dust.

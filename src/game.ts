@@ -2253,13 +2253,15 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function renderBag() {
     const host = $('#bagSlots'); if (!host) return;
     const cap = bagCap();
-    $('#bagTitle').innerHTML = `📦 Storage <span style="color:#9a7a4e;font-weight:600">${S.bag.length}/${cap}</span>`;
+    $('#bagTitle').innerHTML = `${ART.uiIcon('ic_box', '📦')} Storage <span class="bagN">${S.bag.length}/${cap}</span>`;
     // starters you put away sit right here too, first, with a little "place" tag — tap one, then a tile
     host.innerHTML = stored().map((st: any, k: number) => `<button class="bagSlot full prod" data-sprod="${k}">${ART.producer(PRODS[st.p].art)}<em>Place</em></button>`).join('')
       + Array.from({ length: cap }, (_, k) => {
       const id = S.bag[k];
       return `<button class="bagSlot${id ? ' full' : ''}" data-bag="${k}">${id ? ART.item(id) : ''}</button>`;
     }).join('');
+    { let pp = document.getElementById('bagPouch'); if (!pp) { pp = document.createElement('div'); pp.id = 'bagPouch'; host.parentElement!.insertBefore(pp, host); }
+      const ph = pouchRow(); pp.innerHTML = ph ? `<div class="stPouchT">Star Pouch</div><div class="stPcs">${ph}</div>` : ''; pp.style.display = ph ? '' : 'none'; }
     host.querySelectorAll('[data-bag]').forEach((b: any) => b.onclick = () => unstash(+b.dataset.bag));
     host.querySelectorAll('[data-sprod]').forEach((b: any) => b.onclick = () => { openBag(false); startPlacing(+b.dataset.sprod); });
   }
@@ -4413,13 +4415,12 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     stopPlacing(); board.bump(i); sparkle(i, 18, '#b7f59a'); sfx.build(); haptic('medium');
     paintBoard(); renderOrders(); renderQuick(); save();
   }
-  function storagePop() {
-    const list = stored();
-    // the things that never sit on the board (or are easy to lose there), counted in one place
-    const bloomN = B().filter((c: any) => c && c.id && ITEMS[c.id].chain === 'bloom').length;
+  /** the things that never sit on the board (or are easy to lose there), counted in one place */
+  function pouchRow() {
+    const bloomN = B().filter((c: any) => c && c.id && ITEMS[c.id].chain === 'bloom').length + (S.bag || []).filter((id: string) => ITEMS[id] && ITEMS[id].chain === 'bloom').length;
     const relN = B().filter((c: any) => c && c.id && ITEMS[c.id].chain === 'relic').length;
     const pc = (art: string, n: number | string, name: string) => `<span class="stPc">${art}<b>${n}</b><i>${name}</i></span>`;
-    const pouchHtml = [
+    return [
       S.seen.bloomspark ? pc(ART.item('bloomspark'), bloomN, 'Bloom') : '',
       S.seen.scrap || pouch('scrap') ? pc(ART.item('scrap'), pouch('scrap'), 'Star Scrap') : '',
       S.seen.starcore || pouch('starcore') ? pc(ART.item('starcore'), pouch('starcore'), 'Star Core') : '',
@@ -4427,6 +4428,11 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       labOpen() ? pc(ART.icon('flask'), S.sci || 0, 'Science') : '',
       albumOpen() ? pc(ART.uiIcon('star_dust', '✨'), alb().dust || 0, 'Star Dust') : '',
     ].filter(Boolean).join('');
+  }
+
+  function storagePop() {
+    const list = stored();
+    const pouchHtml = pouchRow();
     pop(ART.uiIcon('ic_box', '📦') + ' Storage', `${pouchHtml ? `<div class="stPouch"><div class="stPouchT">Star Pouch</div><div class="stPcs">${pouchHtml}</div></div>` : ''}
       <div class="stProdT">Producers</div>
       ${list.length ? list.map((s: any, k: number) => `<div class="enRow"><span class="enIc">${ART.producer(PRODS[s.p].art)}</span>
@@ -4814,7 +4820,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
       ${p && petPainted() ? `<button class="pfPet" id="pfPet">${pupArt(petForm())}<span><b>${p.name || petForm().name}</b><i>Level ${p.lv} · ${petForm().perk.replace(/<[^>]+>/g, '')}</i></span></button>` : ''}
       ${albumOpen() ? `<button class="pfAlb" id="pfAlb"><span>⭐</span><span><b>${seasonName()} album</b><i>${albumCount()} / ${albumTotal()} stickers${alb().done ? ' · COMPLETE' : ''}</i></span></button>` : ''}
       ${(S.albBadges || []).length ? `<div class="pfBadges"><b>Album badges</b><div>${S.albBadges.map((b: any) => `<span class="pfBadge" title="${b.name}">🏅<i>${b.name}</i></span>`).join('')}</div></div>` : ''}
-      <div class="petActs"><button class="big soft" id="pfAch">${ART.uiIcon('ic_trophy', '🏆')} Achievements${achReady() ? ` <em class="pfDot">${achReady()}</em>` : ''}</button>${albumOpen() ? '<button class="big blue" id="pfShare">📤 Share</button>' : ''}</div>`, 'fun captlog');
+      <button class="pfAchB" id="pfAch"><span class="pfAchIc">${ART.uiIcon('ic_trophy', '🏆')}</span><span><b>Achievements</b><i>${achReady() ? achReady() + ' ready to claim!' : 'Medals for everything you do'}</i></span>${achReady() ? `<em class="pfDot">${achReady()}</em>` : '<em class="pfGo">›</em>'}</button>`, 'fun captlog');
     const nm = $('#pfName') as HTMLInputElement;
     if (nm) nm.onchange = () => { const v = nm.value.trim().slice(0, 16); S.pname = v || 'Captain'; save(); };
     const pb = $('#pfPet'); if (pb) pb.onclick = () => { closePop(); pupPop(true); };
