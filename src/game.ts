@@ -1155,11 +1155,17 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function rollOrder() {
     // only ask for things the player can actually make right now: a chain counts
     // if one of its producers is sitting on the board
-    const live: Record<string, boolean> = {}, plvOf: Record<string, number> = {};
+    const live: Record<string, boolean> = {}, plvOf: Record<string, number> = {}, share: Record<string, number> = {};
     B().forEach(c => {
       if (!c || !c.p) return;
-      PRODS[c.p].drops.forEach((d: string) => { const ch = ITEMS[d].chain; live[ch] = true; if (!c.tmp) plvOf[ch] = Math.max(plvOf[ch] || 0, plv(c)); });
+      const dr = PRODS[c.p].drops;
+      dr.forEach((d: string) => { const ch = ITEMS[d].chain; live[ch] = true; if (!c.tmp) plvOf[ch] = Math.max(plvOf[ch] || 0, plv(c)); });
+      // how often a tap gives this chain at all: a chain a producer drops one time in five is slow to climb
+      const per: Record<string, number> = {}; dr.forEach((d: string) => { const ch = ITEMS[d].chain; per[ch] = (per[ch] || 0) + 1 / dr.length; });
+      for (const ch in per) share[ch] = Math.max(share[ch] || 0, per[ch]);
     });
+    // every step up a chain doubles the work; a rare chain gets asked one or two steps lower so it costs about the same as a common one
+    const rarePen = (ck: string) => { const sh = share[ck]; if (!sh || sh >= 0.5) return 0; return sh >= 0.3 ? 1 : 2; };
     const awake = liveChains();
     const open = awake.filter(c => live[c]).length ? awake.filter(c => live[c]) : awake;
     /* How far up a chain a contract reaches: it grows with this world's level
@@ -1174,9 +1180,9 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // a producer you have upgraded all the way earns harder (better-paid) asks from its chains
     // the first fifteen Meadow chapters never ask past step 3: you are still learning the chains
     const reach = (ck: string) => clamp(Math.min((early ? 2 : 3) + Math.floor((wl - 1) / 6) + ((plvOf[ck] || 0) >= PMAX ? 1 : 0), pd < 10 ? (early ? 2 : 3) : pd < 20 ? 4 : 99), 2,
-      Math.max(2, CHAINS[ck].items.length - 1));
+      Math.max(2, CHAINS[ck].items.length - 1)) - rarePen(ck);
     const itemFrom = (ck: string, cap?: number) => {
-      const top = Math.min(reach(ck), cap ?? 99), lo = early ? 1 : Math.max(2, top - 1);
+      const top = Math.max(1, Math.min(reach(ck), cap ?? 99)), lo = early ? 1 : Math.max(Math.min(2, top), top - 1);
       const ids = CHAINS[ck].items.filter(id => ITEMS[id].tier >= lo && ITEMS[id].tier <= top);
       return ids.length ? rnd(ids) : CHAINS[ck].items[0];
     };
@@ -1209,7 +1215,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     // now and then a customer wants something a step higher than usual
     const stretch = !early && (Math.random() < 0.18 || farewell.includes(chain)) ? 1 : 0;
     let pick = itemFrom(chain);
-    if (stretch) { const top = Math.min(CHAINS[chain].items.length - 1, reach(chain) + 1); pick = CHAINS[chain].items[Math.max(0, top - 1)]; }
+    if (stretch && !rarePen(chain)) { const top = Math.min(CHAINS[chain].items.length - 1, reach(chain) + 1); pick = CHAINS[chain].items[Math.max(0, top - 1)]; }
     // the odd special request: a relic. Never a rocket piece or star scrap —
     // those get used up elsewhere, and a contract for one could wait forever.
     if (S.seen.relic1 && Math.random() < 0.08) { pick = 'relic1'; chain = 'relic'; }
@@ -4941,6 +4947,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     { k: 'wreck', at: firstCell(c => c.p === 'wreck'), say: 'Tap the <b>wreck</b> for rocket parts.', when: () => B().some((c: any) => c && c.p === 'wreck') },
     { k: 'crater', at: firstCell(c => c.p === 'crater'), say: 'A <b>crater</b>! Tap it to dig.', when: () => B().some((c: any) => c && c.p === 'crater') },
     { k: 'energy', at: '#chipEnergy', say: 'Low energy? <b>Tap here</b>.', when: () => S.energy < 8 },
+    { k: 'pet', at: '#petChip .qChip', say: 'Your <b>pet</b>!<br>Tap it to see, feed and play.', when: () => !!pet() && !S.petTour },
   ];
   let coachOn: string | null = null, coachT = 0;
   /* Just-in-time help: the first time something matters, the screen dims around
@@ -5317,7 +5324,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   function petIntro() {
     talkScene([['bloop', 'Something crawled out of a crater and into my lab coat. It is squishy. It has one enormous eye. It will not stop staring at me.'],
       ['zib', 'A Gloopling! Kix knows these. They fetch things. They eat things. They CHANGE, friend.'],
-      ['bloop', 'Tap it on the left of the board. It brings you a gift every half hour or so.'],
+      ['bloop', 'It lives on the right of the board. Tap it: a gift every half hour or so.'],
       ['bloop', 'Feed it a few spare items when it is hungry. Full bellies are happy bellies. Happy ones grow, and one day they evolve. Into what, nobody knows.']], () => { renderQuick(); setTimeout(pupPop, 600); });
   }
   function petGainXp(n: number) {
@@ -5399,6 +5406,26 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         <div class="petFoods">${feed.length ? feed.map(([id, n]) => `<button class="petFood" data-feed="${id}"${food >= PET_FULL ? ' disabled' : ''}>${ART.item(id)}<em>×${n}</em><small>+${petFeedXp(ITEMS[id].tier)}</small></button>`).join('') : '<div class="evOff">Nothing spare on the board</div>'}</div></div>
       <div class="petActs"><button class="big ptPet" id="pupPet">💗 Pet</button><button class="big blue" id="pupPlay"${Date.now() < (p.play || 0) ? ' disabled' : ''}>⭐ ${Date.now() < (p.play || 0) ? mmss((p.play || 0) - Date.now()) : 'Play'}</button></div>
     </div>`, 'fun petpop');
+    // first visit: a four-step tour of the habitat, one thing lit at a time
+    if (!S.petTour) {
+      const box = $('#popBody .pupBox') as HTMLElement, steps: [string, string][] = [
+        ['.ptRings', '<b>XP</b> grows it, <b>Food</b> keeps it happy, the <b>gift</b> ring fills up to a present.'],
+        ['.ptFeed', '<b>Feed</b> it spare items from your board when it gets hungry.'],
+        ['.petActs', '<b>Pet</b> it for energy, <b>Play</b> for XP.'],
+        ['.ptEvo', 'Keep it growing: at this level it <b>evolves</b>!']];
+      let k = 0;
+      const tip = document.createElement('div'); tip.className = 'ptTip'; box.appendChild(tip);
+      const show = () => {
+        box.querySelectorAll('.ptLit').forEach(e => e.classList.remove('ptLit'));
+        if (k >= steps.length) { tip.remove(); box.classList.remove('ptTour'); S.petTour = 1; save(); return; }
+        const t = box.querySelector(steps[k][0]) as HTMLElement | null; if (t) t.classList.add('ptLit');
+        box.classList.add('ptTour');
+        tip.innerHTML = `<span>${steps[k][1]}</span><button class="big" id="ptNext">${k < steps.length - 1 ? 'Next' : 'Got it'}</button>`;
+        if (t) tip.style.top = (t.offsetTop + t.offsetHeight + 6) + 'px';
+        ($('#ptNext') as HTMLElement).onclick = (ev: Event) => { ev.stopPropagation(); sfx.tap(); k++; show(); };
+      };
+      setTimeout(show, 350);
+    }
     ($('#pupPlay') as HTMLElement).onclick = petPlay;
     document.querySelectorAll<HTMLElement>('[data-feed]').forEach(b => b.onclick = () => petFeed(b.dataset.feed!));
     ($('#pupPet') as HTMLElement).onclick = () => {
@@ -5443,7 +5470,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     if (S.lvl >= SP().unlockLevel && spinsLeft()) bits.push(`<button class="qChip spin" data-q="spin">${ART.uiIcon('ic_spin', '🎡')}<b>${spinsLeft()}</b></button>`);
     if (false) bits.push(`<button class="qChip pouch" data-q="pouch">${ART.uiIcon('ic_pouch', ART.item('starcore'))}<b>${pouch('starcore')}</b><i>${pouch('scrap')} scrap</i></button>`);
     if (albumOpen()) bits.push(`<button class="qChip album${packsWaiting() ? ' ready' : ''}" data-q="album">${ART.uiIcon('album_book', ART.uiIcon('ic_album', '⭐'))}<b>${packsWaiting() ? '🎴' + packsWaiting() : albumCount() + '/' + albumTotal()}</b></button>`);
-    if (stored().length) bits.push(`<button class="qChip store" data-q="store">${ART.uiIcon('ic_box', '📦')}<b>${stored().length}</b></button>`);
+    // storage lives in the box at the bottom left: no chip for it up here
     if (petOn()) {
       // the pet says how it is at a glance: a gift waiting, hungry, or full
       const ps = !pupLeft() ? 'gift' : petMood() === 'hungry' ? 'hungry' : petFood() >= PET_FULL ? 'full' : '';

@@ -1,5 +1,11 @@
 # Changelog
 
+- **v117 (1.0.17)**
+  - Contracts know how often a producer drops a chain: a chain that comes one tap in five or rarer is asked one or two steps lower, and never as a "stretch" ask.
+  - Pet: a coach mark points at the pet the first time, and the first visit to its habitat is a four-step tour; the habitat is deep space blue now.
+  - Removed the stray storage chip next to the album (storage is the box at the bottom).
+  - HUD level, energy, coin and gem bars have white borders.
+
 - **v116 (1.0.16)**
   - The gem energy refill can be bought once a day (shop, energy popup and gem shelf show "Tomorrow" after).
   - Fun & Games: a game on cooldown, out of spins or with no event running is greyed out.
