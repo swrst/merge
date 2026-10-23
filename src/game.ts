@@ -1040,14 +1040,17 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      Tapping the item on a contract opens its whole chain, marks how many of
      each you are holding, and points at the thing on your board that makes the
      first one. It is the single question a new player has, every time. */
+  /** whatever is on the board counts as discovered (older saves missed some) */
+  const markSeen = () => { B().forEach((c: any) => { if (c && c.id && ITEMS[c.id]) S.seen[c.id] = 1; }); (S.bag || []).forEach((id: string) => { if (ITEMS[id]) S.seen[id] = 1; }); };
   function chainPanel(id: string) {
-    const d = ITEMS[id]; if (!d) return;
+    const d = ITEMS[id]; if (!d) return; markSeen();
     tutFire('chain');
     const ch = CHAINS[d.chain], inv = inventory();
     const src = producerFor(id);
     const steps = ch.items.map((x, n) => {
-      const have = inv[x] || 0, known = S.seen[x];
-      return `<div class="chStep${x === id ? ' want' : ''}${n + 1 > d.tier ? ' above' : ''}">
+      // anything below this step, anything on the board and anything ever made is shown in full
+      const have = inv[x] || 0, known = !!(S.seen[x] || have || n < d.tier);
+      return `<div class="chStep${x === id ? ' want' : ''}${known ? ' known' : ' above'}">
         <div class="chArt${known ? '' : ' unk'}">${known ? ART.item(x) : '?'}</div>
         <div class="chLab">${known ? ITEMS[x].name : '???'}</div>
         <span class="chHave${have ? ' on' : ''}">×${have}</span></div>`
@@ -1103,6 +1106,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      it comes from. Every step of the chain is shown with how many you hold, and
      the source is one tap away — closing the sheet points at it on the board. */
   function contractSheet(oid: string) {
+    markSeen();
     // the Star Freighter opens the same sheet as any customer
     const o: any = oid === 'ship' && S.ship ? { id: 'ship', char: 'grubs', needs: S.ship.needs, coins: S.ship.coins, xp: S.ship.xp, say: 'Fill the hold before the timer runs out! Big pay and a booster.' }
       : S.orders.find(x => x.id === oid); if (!o) return;
@@ -1115,7 +1119,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
           <div class="csTop"><span class="csArt">${ART.item(nd.id)}</span>
             <div class="csName"><b>${d.name}</b><i>${ok ? 'Ready ✓' : `You have ${have} of ${nd.qty}`}</i></div>
             ${!ok && src ? `<button class="csGo" data-src="${src.on ? src.i : -1}" data-k="${src.k}">${ART.producer(PRODS[src.k].art)}<span>${src.on ? 'Tap it' : 'Not here yet'}</span></button>` : ''}</div>
-          <div class="csPath">${ids.map((x, n) => `<span class="csStep${inv[x] ? ' have' : S.seen[x] ? ' seen' : ''}${x === nd.id ? ' goal' : ''}">${S.seen[x] || x === nd.id ? ART.item(x) : '?'}${inv[x] ? `<em>${inv[x]}</em>` : ''}</span>${n < ids.length - 1 ? '<i>›</i>' : ''}`).join('')}</div></div>`;
+          <div class="csPath">${ids.map((x, n) => `<span class="csStep${inv[x] ? ' have' : S.seen[x] || n < d.tier - 1 ? ' seen' : ''}${x === nd.id ? ' goal' : ''}">${S.seen[x] || inv[x] || n < d.tier - 1 || x === nd.id ? ART.item(x) : '?'}${inv[x] ? `<em>${inv[x]}</em>` : ''}</span>${n < ids.length - 1 ? '<i>›</i>' : ''}`).join('')}</div></div>`;
     };
     const rew = `<div class="csRew"><span>${ART.icon('coin')}<b>${o.coins}</b></span>
       ${o.xp ? `<span>${ART.uiIcon('icon_star', '⭐')}<b>${o.xp}</b><i>XP</i></span>` : ''}${o.give ? `<span title="Gift">${ART.item(o.give)}<b>gift</b></span>` : ''}${o.nrg ? `<span>${ART.icon('energy')}<b>${o.nrg}</b></span>` : ''}</div>`;
@@ -2030,7 +2034,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
         const ok = countItem(f.item) >= f.qty;
         return `<div class="shopRow"><div class="sArt">${ART.icon(f.icon)}</div>
           <div class="sInfo"><div class="sName">${f.name}</div><div class="sDesc">${f.desc}</div></div>
-          <button class="buyBtn" data-forge="${f.id}"><span class="cost${ok ? ' ok' : ''}">${ART.item(f.item)}${f.qty}</span></button></div>`;
+          <button class="buyBtn fgBtn${ok ? ' green' : ''}" data-forge="${f.id}"${ok ? '' : ' disabled'}><span class="fgCost"><img class="fgImg" src="${ART.spriteItem(f.item)}" alt=""><b>${Math.min(countItem(f.item), f.qty)}/${f.qty}</b></span><span class="fgL">${ok ? 'Make' : 'Need'}</span></button></div>`;
       }).join('');
       r += '</div>';
       // the lab build is the one thing here you are waiting for, so it goes first
@@ -2182,6 +2186,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
      is still asleep. Tap a tile for the whole chain and where it comes from. */
   let albumWorld = '';
   function renderBook() {
+    markSeen();
     const host = $('#bookBody');
     if (!albumWorld || !visited(albumWorld)) albumWorld = S.world;
     const total = ITEM_IDS.length, found = ITEM_IDS.filter(id => S.seen[id]).length;
@@ -2235,6 +2240,7 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
   }
   /** one chain in the collection: its producer, every step (found or not), how far you are */
   function chainBook(ck: string) {
+    markSeen();
     const ch = CHAINS[ck], pk = prodOfChain(ck), pr = PRODS[pk], known = ch.items.filter(id => S.seen[id]);
     const pct = Math.round(known.length / ch.items.length * 100);
     pop(ch.name, `<div class="cbHero"><span class="cbProd">${pr ? ART.producer(pr.art) : ART.item(ch.items[0])}</span>
@@ -5165,12 +5171,15 @@ const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));
     const per = regenMs(), full = S.energy >= maxEnergy();
     const next = full ? 0 : Math.max(0, per - (Date.now() - (S.eAt || Date.now())));
     const enPic = S.energy <= 0 && ART.spriteUi('empty_energy') ? 'empty_energy' : 'energy_refill';
-    pop('⚡ Energy', `${ART.spriteUi(enPic) ? `<img class="enArt${enPic === 'empty_energy' ? ' wide' : ''}" src="${ART.spriteUi(enPic)}" alt="">` : ''}<div class="enBig">${ART.icon('energy')}<b>${S.energy}</b></div>
-      <div class="noteLine" style="margin-top:2px">${full ? 'Full! Go merge something.' : `In <b>${dhm(next + per * Math.max(0, maxEnergy() - S.energy - 1))}</b> you will have <b>${maxEnergy()}</b> ⚡<br><span style="opacity:.8">+1 every ${Math.round(per / 60000 * 10) / 10} min · next in ${mmss(next)}</span>`}</div>
-      <div class="enRow"><span class="enIc">${ART.uiIcon('energy_cells', ART.icon('gem'))}</span><div><b>Big refill</b><i>+${CFG.gems.refill.energy} energy</i></div>
-        ${refillUsed() ? '<button class="buyBtn" disabled>Tomorrow</button>' : `<button class="buyBtn gem" id="enGem">💎 ${CFG.gems.refill.gems}</button>`}</div>
-      ${adBtn('energy', `+${CFG.ads.energy} ⚡ energy`, 'enAd')}
-      <div class="noteLine">More energy: daily tasks, the 🎡 wheel, events, and 🔬 Lab research.</div>`, 'energy');
+    const pctE = Math.min(100, Math.round(S.energy / Math.max(1, maxEnergy()) * 100));
+    pop('⚡ Energy', `<div class="enCore" style="--v:${pctE}"><div class="enRing"><div class="enBig">${ART.icon('energy')}<b>${S.energy}</b><i>/ ${maxEnergy()}</i></div></div>
+        <div class="enTime">${full ? '⚡ Full! Go merge something' : `⏳ Full in <b>${dhm(next + per * Math.max(0, maxEnergy() - S.energy - 1))}</b> · +1 every ${Math.round(per / 60000)} min`}</div></div>
+      <div class="enOpts">
+        <div class="enOpt gem"><span class="enOIc">${ART.uiIcon('energy_cells', ART.icon('energy'))}</span><b>+${CFG.gems.refill.energy}</b><i>Big refill · once a day</i>
+          ${refillUsed() ? '<button class="buyBtn" disabled>Tomorrow</button>' : `<button class="buyBtn gem" id="enGem">${ART.icon('gem')} ${CFG.gems.refill.gems}</button>`}</div>
+        <div class="enOpt ad"><span class="enOIc">${ART.uiIcon('sp_energy', ART.icon('energy'))}</span><b>+${CFG.ads.energy}</b><i>Watch a short video</i>${adBtn('energy', `+${CFG.ads.energy} ⚡ energy`, 'enAd')}</div>
+      </div>
+      <div class="enWays"><span>📅 Daily tasks</span><span>🎡 Wheel</span><span>🎪 Events</span><span>🔬 Lab</span></div>`, 'energy enpop');
     const eg = $('#enGem'); if (eg) eg.onclick = () => { gemRefill(); energyPop(); };
     const ea = $('#enAd'); if (ea) ea.onclick = () => watchAd('energy', () => { S.energy += CFG.ads.energy; bumpChip('#chipEnergy'); sfx.boost(); renderHUD(); save(); energyPop(); });
   }

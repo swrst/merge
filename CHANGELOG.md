@@ -1,5 +1,10 @@
 # Changelog
 
+- **v122 (1.0.22)**
+  - Star Bazaar, Rocket & lab: each forge button shows what it costs (the item picture and have/need, e.g. 2/3), green "Make" when you can, grey "Need" when not.
+  - Chain popups (item info, contract steps, collection): every step you have, have had, or that sits below the one you are looking at shows in full; only real unknowns are ???. Items on the board or in storage count as discovered.
+  - Energy popup redesigned as a power core: deep space page, a glowing ring gauge with your energy, "full in" pill, two cards (big gem refill, video), small chips for other ways to get energy.
+
 - **v121 (1.0.21)**
   - Customers bigger.
   - Board: items for a contract you have only part of sit on a soft orange tile; ready contract items gold; a chapter with all its items on the board turns them all green (the chapter claims them first).
