@@ -1003,6 +1003,15 @@ html[data-ui-theme="buddy"] body #app #modal.blueM{--h-ink:#14325a; --h-ink2:#3c
   --h-card:url(../sprites/ui/lb_card.webp); --h-card1:url(../sprites/ui/lb_card_on.webp); --h-cardx:url(../sprites/ui/lb_card_lock.webp);
   --h-tab1:url(../sprites/ui/lb_tab_on.webp); --h-tab0:url(../sprites/ui/lb_tab_off.webp); --h-bar:url(../sprites/ui/lb_bar.webp); --h-fill:url(../sprites/ui/lb_fill.webp)}
 /* v111: customers stand lower, feet behind their card, so the chapter strip floats above their heads */
-html body #app .app .order .oFig,html body #app .order .oFig{position:relative;z-index:0;margin-bottom:-14px!important;transform:translateY(0)}
-html body #app .order .oFig .stand{height:88px!important}
-html body #app .order :is(.oNeeds,.oPay,.oTick){position:relative;z-index:1}
+
+/* v112: each customer stands to the LEFT of their card, so the chapter strip above never covers them */
+html body #app#app#app#app#app#app#app#app#app#app .order,html body #app#app#app#app#app#app#app#app#app#app .order.ready{display:grid!important;grid-template-columns:auto auto;grid-template-rows:auto auto;grid-template-areas:"fig needs" "fig pay";align-items:end;column-gap:0;justify-items:center;padding:0 3px!important}
+html body #app#app#app#app#app#app#app#app#app#app .order .oFig{grid-area:fig;align-self:end;height:auto!important;margin:0 -6px 0 0!important;position:relative;z-index:0;background:radial-gradient(ellipse at 50% 98%,rgba(60,40,20,.3),rgba(60,40,20,0) 60%)!important}
+html body #app#app#app#app#app#app#app#app#app#app .order .oFig .stand{height:96px!important;width:auto!important;max-width:74px!important}
+html body #app#app#app#app#app#app#app#app#app#app .order .oFig .stand.bust{height:52px!important}
+html body #app#app#app#app#app#app#app#app#app#app .order .oNeeds{grid-area:needs;position:relative;z-index:1;margin:0!important}
+html body #app#app#app#app#app#app#app#app#app#app .order .oPay{grid-area:pay;position:relative;z-index:1}
+html body #app#app#app#app#app#app#app#app#app#app .order .oTick{z-index:2}
+html body #app#app#app#app#app#app#app#app#app#app .topRow{min-height:176px!important}
+html body #app#app#app#app#app#app#app#app#app#app .orders{align-items:flex-end!important}
+html body #app#app#app#app#app#app#app#app#app#app .order .oTick{grid-area:needs!important;position:relative!important;inset:auto!important;justify-self:end;align-self:start;width:30px!important;height:30px!important;transform:translate(35%,-35%)!important;margin:0!important}

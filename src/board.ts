@@ -438,7 +438,7 @@ class PixiBoard {
       if (this.tex['ui:seal_bubble']) {
         // painted glass bubble over the tile (it carries its own little padlock)
         const b = new Sprite(this.tex['ui:seal_bubble']); b.anchor.set(0.5); b.width = b.height = this.cell * 1.0;
-        b.alpha = 0.45; b.position.set(p.x, p.y); this.lItem.addChild(b); (s as any).seal = b; s.timer = undefined;
+        b.alpha = 0.95; b.position.set(p.x, p.y); this.lItem.addChild(b); (s as any).seal = b; s.timer = undefined;
         if (this.tex['ui:hm_locked']) {   // a little padlock on the corner says "sealed" without hiding the item
           const lk = new Sprite(this.tex['ui:hm_locked']); lk.anchor.set(0.5); lk.width = lk.height = this.cell * 0.36;
           lk.position.set(p.x + this.cell * 0.32, p.y + this.cell * 0.32); this.lItem.addChild(lk); s.timer = lk as any;
@@ -456,12 +456,15 @@ class PixiBoard {
       // a painted overgrown tile already carries its weeds
       s.art = this.sprite('w:' + this.theme, i, 0.78);
       s.art.alpha = 0; s.art.visible = false;   // every world has a painted locked tile now: no extra weeds on top
-      const t = new Text({ text: 'Lv ' + c.b, style: { fontFamily: 'Fredoka, sans-serif', fontSize: this.cell * 0.22, fontWeight: '700', fill: 0xffffff, stroke: { color: 0x1b2560, width: Math.max(2, this.cell * 0.05) } } });
+      // a crisp white pill: padlock + level, dark ink, drawn at full resolution
+      const p = this.center(i), tg = new Container();
+      const t = new Text({ text: '🔒 Lv ' + c.b, resolution: 3, style: { fontFamily: 'Fredoka, sans-serif', fontSize: this.cell * 0.2, fontWeight: '800', fill: 0x3a4250 } });
       t.anchor.set(0.5);
-      const p = this.center(i);
-      t.position.set(p.x, p.y);
-      this.lItem.addChild(t);
-      s.timer = t;
+      const w = t.width + this.cell * 0.16, hh = this.cell * 0.32;
+      const bg = new Graphics().roundRect(-w / 2, -hh / 2, w, hh, hh / 2).fill({ color: 0xffffff, alpha: 0.95 }).stroke({ color: 0xb9c0c6, width: 1.5 });
+      tg.addChild(bg, t); tg.position.set(p.x, p.y);
+      this.lItem.addChild(tg);
+      s.timer = tg as any;
     } else if (c.bub) {
       /* A bubble has to read as "not yours yet" from across the board: the
          item sits small and pale inside a bright soap film drawn ON TOP of it,
@@ -591,7 +594,6 @@ class PixiBoard {
     if (s.cost) { gsap.killTweensOf(s.cost); s.cost.destroy({ children: true }); s.cost = undefined; s.costW = undefined; }
     if (!s.art) return;
     if (s.timer && s.key.startsWith('b')) {
-      s.timer.style.fontSize = this.cell * 0.22;
       s.timer.position.set(p.x, p.y);
     } else if ((s as any).seal && s.key.startsWith('f')) {
       (s as any).seal.position.set(p.x, p.y); (s as any).seal.width = (s as any).seal.height = this.cell;

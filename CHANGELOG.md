@@ -1,5 +1,10 @@
 # Changelog
 
+- **v112 (1.0.12)**
+  - Sealed items are clear: the glass bubble is only a rim now, no milky film over the item.
+  - Locked tiles show a crisp white "🔒 Lv N" pill instead of blurry outlined text.
+  - Customers stand to the left of their contract card; the board sits a little lower, so the chapter strip never covers anyone.
+
 - **v111 (1.0.11)**
   - Tutorial: "Your chapter needs these things" spotlights the Ch. button and its strip at the top (not the hidden bottom bar).
   - Contract customers stand lower so the chapter strip floats above their heads.
